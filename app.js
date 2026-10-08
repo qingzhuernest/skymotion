@@ -526,11 +526,11 @@ function drawSunAltitudeChart() {
   const { c, w, h } = resize($('chart')),
     left = 35,
     right = w - 12,
-    top = 14,
-    bottom = h - 27;
+    top = h < 100 ? 10 : 14,
+    bottom = h - (h < 100 ? 22 : 27);
   const xx = (t) => left + (t / 1440) * (right - left),
     yy = (a) => top + ((90 - a) / 180) * (bottom - top);
-  for (let a = -90; a <= 90; a += 45) {
+  for (let a = -90; a <= 90; a += h < 100 ? 90 : 45) {
     const y = yy(a);
     poly(
       c,
@@ -544,9 +544,17 @@ function drawSunAltitudeChart() {
     );
     text(c, a + '°', left - 7, y, '#8fa2b6', 10, 'right');
   }
-  for (let t = 0; t <= 1440; t += 360) {
+  for (let t = 0; t <= 1440; t += w < 260 ? 720 : 360) {
     const x = xx(t);
-    text(c, t === 1440 ? '24:00' : hhmm(t), x, h - 8, '#8fa2b6', 10);
+    text(
+      c,
+      t === 1440 ? '24:00' : hhmm(t),
+      x,
+      h - 8,
+      '#8fa2b6',
+      10,
+      t === 1440 ? 'right' : 'center',
+    );
   }
   function line(d, col, lw, actual = false, positionFn = null) {
     const ps = [];

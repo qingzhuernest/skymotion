@@ -25,8 +25,11 @@ function renderUIWorkspace() {
   if (page === 'diagrams') {
     const allowed = moon
       ? ['contextPanel', 'chartPanel', 'riseSetPanel', 'companionModule']
-      : ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel'];
-    if (!allowed.includes(u.selected)) u.selected = 'contextPanel';
+      : ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel', 'solarCompare'];
+    if (!allowed.includes(u.selected)) {
+      u.selected = 'contextPanel';
+      history.replaceState(null, '', '#contextPanel');
+    }
     u.tabs.querySelectorAll('button').forEach((b) => {
       b.textContent = {
         contextPanel: moon ? '月相与关系' : '直射点与昼夜',
@@ -34,6 +37,7 @@ function renderUIWorkspace() {
         riseSetPanel: moon ? '月出月落' : '日出日落',
         solarGeometryPanel: '地轴与地平面',
         companionModule: '行星伴月',
+        solarCompare: '四图对照',
       }[b.dataset.diagram];
       b.hidden = !allowed.includes(b.dataset.diagram);
       b.setAttribute('aria-selected', String(b.dataset.diagram === u.selected));
@@ -46,10 +50,37 @@ function renderUIWorkspace() {
       solarGeometryPanel: $('earthGeometry'),
       companionModule: $('companionSky'),
     }[u.selected];
-    chosen.hidden = false;
+    const comparing = !moon && u.selected === 'solarCompare';
+    for (const [id, card] of Object.entries(u.cards)) {
+      const visible =
+        comparing || (id === u.selected && (!moon || ['chartPanel', 'riseSetPanel'].includes(id)));
+      card.hidden = !visible;
+      if (visible) card.querySelector('.ui-diagram-surface').firstElementChild.hidden = false;
+    }
+    if (chosen) chosen.hidden = false;
     u.plot.dataset.kind = u.selected;
+    u.plot.closest('.ui-shell').classList.toggle('ui-solar-compare', comparing);
     if ($('uiEarthSettings')) $('uiEarthSettings').hidden = moon;
     u.details.forEach((n) => (n.hidden = n.dataset.for !== u.selected));
+    if ($('uiEarthSettings'))
+      (comparing ? $('uiCompareSettings') : $('contextPanel')).append($('uiEarthSettings'));
+    // This page has diagram-specific controls, rather than the sky laboratory's menu.
+    $('studyMenu').hidden = true;
+    $('seasonMenu').hidden = true; // The shared date slider already covers the full year.
+    $('solarDateModeMenu').hidden = true; // Playback basis is set in the time workbench.
+    $('track').closest('label').hidden = true;
+    $('angles').closest('label').hidden = true;
+    $('shadowMenu').hidden = true;
+    const showOverlay = !moon && (u.selected === 'chartPanel' || comparing);
+    $('displayMenu').hidden = !showOverlay;
+    $('solarOverlayBar').hidden = !showOverlay;
+    $('displayContextNote').hidden = true;
+    $('displayMenu').querySelector('.menu-section-name').textContent = '曲线叠加';
+    $('displaySummary').textContent = '同一地点与时刻的太阳、月球';
+    $('modelMenu').querySelector('.menu-section-name').textContent = '太阳计算方式';
+    $('compareControl').hidden = moon || !(u.selected === 'chartPanel' || comparing);
+    $('modelMenu').querySelector('.menu-divider').hidden = true;
+    $('reset').textContent = '重置当前图解条件';
     u.title.textContent = (moon ? '月球' : '太阳') + ' · 关联图解';
   }
 }
@@ -286,6 +317,7 @@ function renderUIWorkspace() {
       selected: location.hash.slice(1) || 'contextPanel',
       moonPhase: true,
       nodes: [],
+      cards: {},
     };
     if (page === 'lab') {
       bar.append(document.querySelector('.view-tabs'));
@@ -325,6 +357,7 @@ function renderUIWorkspace() {
         ['riseSetPanel', '升落方位'],
         ['solarGeometryPanel', '地轴与地平面'],
         ['companionModule', '行星伴月'],
+        ['solarCompare', '四图对照'],
       ]) {
         const b = document.createElement('button');
         b.type = 'button';
@@ -350,6 +383,47 @@ function renderUIWorkspace() {
         plot.append($(id));
         uiWorkspace.nodes.push($(id));
       }
+      // Reuse the same canvases in single and comparison views; no duplicate pipelines.
+      for (const [id, nodeId, name] of [
+        ['contextPanel', 'sunContextContent', '直射点与昼夜'],
+        ['chartPanel', 'chart', '全天太阳高度'],
+        ['riseSetPanel', 'eventCompass', '日出日落方位'],
+        ['solarGeometryPanel', 'earthGeometry', '地轴与地平面'],
+      ]) {
+        const card = document.createElement('section');
+        card.className = 'ui-diagram-card';
+        card.dataset.diagramCard = id;
+        card.hidden = true;
+        const header = document.createElement('div');
+        header.className = 'ui-diagram-card-head';
+        const heading = document.createElement('h2');
+        heading.textContent = name;
+        header.append(heading);
+        if (id === 'solarGeometryPanel') {
+          card.classList.add('ui-geometry-card');
+          const hint = document.createElement('span');
+          hint.textContent = '拖动旋转 · 双指缩放';
+          const reset = document.createElement('button');
+          reset.type = 'button';
+          reset.id = 'resetGeometryView';
+          reset.textContent = '复位视角';
+          reset.onclick = resetGeometryCamera;
+          header.append(hint, reset);
+        }
+        const surface = document.createElement('div');
+        surface.className = 'ui-diagram-surface';
+        surface.append($(nodeId));
+        card.append(header, surface);
+        plot.append(card);
+        uiWorkspace.cards[id] = card;
+      }
+      const comparisonDetails = document.createElement('div');
+      comparisonDetails.className = 'ui-diagram-details';
+      comparisonDetails.dataset.for = 'solarCompare';
+      comparisonDetails.innerHTML =
+        '<h2>四图对照</h2><p>四张图共用同一地点、日期和观测时刻。拖动下方时间或日期滑块，同时比较太阳高度、升落方位、昼夜分布与当地地平面。</p><p>球面与地轴图可分别拖动旋转；图解旋转不改变天文条件。地轴图中红色为地轴、紫色为赤道面、绿色为地平面、蓝色为天顶、黄色为太阳方向；小图省略部分文字标签。需要放大阅读时，点击上方相应的单图标签。</p><div id="uiCompareSettings"></div>';
+      rail.prepend(comparisonDetails);
+      uiWorkspace.details.push(comparisonDetails);
       for (const id of [
         'contextPanel',
         'chartPanel',

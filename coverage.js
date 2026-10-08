@@ -368,21 +368,105 @@ function geometryModel() {
   }
   return { q, north, east, sun, eclipticNormal, obliquity };
 }
+// Camera state is visual only: it never changes the observer or ephemeris inputs.
+const geometryCamera = { yaw: Math.atan2(0.6, 0.8), pitch: Math.asin(0.3), zoom: 1 };
+function resetGeometryCamera() {
+  Object.assign(geometryCamera, { yaw: Math.atan2(0.6, 0.8), pitch: Math.asin(0.3), zoom: 1 });
+  drawEarthGeometry();
+}
+function initGeometryCamera() {
+  const canvas = $('earthGeometry'),
+    pointers = new Map();
+  let frame = 0;
+  canvas.tabIndex = 0;
+  canvas.setAttribute(
+    'aria-label',
+    '地轴与地平面三维投影；拖动或方向键旋转，双指或加减键缩放，Home复位',
+  );
+  function redraw() {
+    if (!frame)
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        drawEarthGeometry();
+      });
+  }
+  const distance = () => {
+    const [a, b] = [...pointers.values()];
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  };
+  canvas.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    canvas.setPointerCapture(e.pointerId);
+    canvas.focus({ preventScroll: true });
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    const previous = pointers.get(e.pointerId);
+    if (!previous) return;
+    const oldDistance = pointers.size === 2 ? distance() : null;
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (oldDistance !== null) {
+      if (oldDistance > 0)
+        geometryCamera.zoom = clamp((geometryCamera.zoom * distance()) / oldDistance, 0.6, 1.6);
+    } else {
+      geometryCamera.yaw -= (e.clientX - previous.x) * 0.008;
+      geometryCamera.pitch = clamp(
+        geometryCamera.pitch + (e.clientY - previous.y) * 0.008,
+        -1.45,
+        1.45,
+      );
+    }
+    redraw();
+  });
+  for (const event of ['pointerup', 'pointercancel', 'lostpointercapture'])
+    canvas.addEventListener(event, (e) => pointers.delete(e.pointerId));
+  canvas.addEventListener(
+    'wheel',
+    (e) => {
+      e.preventDefault();
+      geometryCamera.zoom = clamp(geometryCamera.zoom * Math.exp(-e.deltaY * 0.001), 0.6, 1.6);
+      redraw();
+    },
+    { passive: false },
+  );
+  canvas.addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', '+', '=', '-', 'Home'].includes(e.key))
+      return;
+    e.preventDefault();
+    if (e.key === 'Home') {
+      resetGeometryCamera();
+      return;
+    }
+    if (e.key === 'ArrowLeft') geometryCamera.yaw -= 0.08;
+    if (e.key === 'ArrowRight') geometryCamera.yaw += 0.08;
+    if (e.key === 'ArrowUp') geometryCamera.pitch -= 0.08;
+    if (e.key === 'ArrowDown') geometryCamera.pitch += 0.08;
+    if (e.key === '+' || e.key === '=') geometryCamera.zoom *= 1.1;
+    if (e.key === '-') geometryCamera.zoom /= 1.1;
+    geometryCamera.pitch = clamp(geometryCamera.pitch, -1.45, 1.45);
+    geometryCamera.zoom = clamp(geometryCamera.zoom, 0.6, 1.6);
+    redraw();
+  });
+}
 function drawEarthGeometry() {
   if (!canPaint($('earthGeometry'))) return;
   const { c, w, h } = resize($('earthGeometry')),
     m = geometryModel(),
-    R = Math.min(w * 0.27, h * 0.29),
+    R = Math.min(w * 0.27, h * 0.29) * geometryCamera.zoom,
     cx = w * 0.45,
     cy = h * 0.53;
-  const dot = (a, b) => a.reduce((s, v, i) => s + v * b[i], 0),
-    eye = [0.6 * Math.sqrt(0.91), 0.3, 0.8 * Math.sqrt(0.91)],
-    project = (v) => ({
-      x: cx + R * (0.8 * v[0] - 0.6 * v[2]),
-      y: cy - R * (-0.18 * v[0] + Math.sqrt(0.91) * v[1] - 0.24 * v[2]),
-    }),
+  const dot = (a, b) => a.reduce((sum, v, i) => sum + v * b[i], 0),
+    yaw = geometryCamera.yaw,
+    pitch = geometryCamera.pitch,
+    eye = [Math.cos(pitch) * Math.sin(yaw), Math.sin(pitch), Math.cos(pitch) * Math.cos(yaw)],
+    right = [Math.cos(yaw), 0, -Math.sin(yaw)],
+    up = [-Math.sin(pitch) * Math.sin(yaw), Math.cos(pitch), -Math.sin(pitch) * Math.cos(yaw)],
+    project = (v) => ({ x: cx + R * dot(v, right), y: cy - R * dot(v, up) }),
     scale = (v, k) => v.map((x) => x * k),
     add = (a, b) => a.map((v, i) => v + b[i]);
+  const compact = w < 240 || h < 260;
+  const label = (value, x, y, color, size = 12, align = 'center') =>
+    text(c, value, x, clamp(y, 10, h - 10), color, compact ? 10 : size, align);
   const fill = c.createRadialGradient(cx - R * 0.4, cy - R * 0.3, R * 0.1, cx, cy, R);
   fill.addColorStop(0, '#436b8f');
   fill.addColorStop(1, '#203b57');
@@ -413,12 +497,12 @@ function drawEarthGeometry() {
   const axisTop = project([0, 1.3, 0]),
     axisBottom = project([0, -1.3, 0]);
   poly(c, [axisBottom, axisTop], '#fa9c89', 2);
-  text(c, '北极 / 地轴', axisTop.x, axisTop.y - 12, '#fac0b0', 12);
-  text(c, '南极', axisBottom.x, axisBottom.y + 13, '#fac0b0', 12);
+  label(compact ? '北极' : '北极 / 地轴', axisTop.x, axisTop.y - 12, '#fac0b0', 12);
+  label('南极', axisBottom.x, axisBottom.y + 13, '#fac0b0', 12);
   if (m.eclipticNormal) {
     const tip = project(scale(m.eclipticNormal, 1.22));
     poly(c, [project(scale(m.eclipticNormal, -1.22)), tip], '#b9a8db88', 1, [4, 4]);
-    text(c, '黄道法线', tip.x + 8, tip.y + 10, '#b9a8db', 11, 'left');
+    if (!compact) label('黄道法线', tip.x + 8, tip.y + 10, '#b9a8db', 11, 'left');
   }
   // The local horizon is an actual tangent plane: every point has dot(q, observer)=1.
   const plane = [];
@@ -440,7 +524,7 @@ function drawEarthGeometry() {
   const observer = project(m.q),
     zenith = project(scale(m.q, 1.55));
   poly(c, [project([0, 0, 0]), zenith], '#82c7ff', 1.5, [4, 4]);
-  text(c, '当地天顶', zenith.x, zenith.y - 13, '#a4d7ff', 12);
+  if (!compact) label('当地天顶', zenith.x, zenith.y - 13, '#a4d7ff', 12);
   const rayEnd = project(add(m.q, scale(m.sun, 0.83)));
   poly(c, [rayEnd, observer], '#ffc35a', 2, bodyPosition().alt < 0 ? [4, 4] : []);
   glow(c, rayEnd.x, rayEnd.y, 5);
@@ -450,8 +534,8 @@ function drawEarthGeometry() {
   c.arc(observer.x, observer.y, 4, 0, Math.PI * 2);
   c.fill();
   c.stroke();
-  text(c, '观察者', observer.x, observer.y + 17, '#c5e6ff', 12);
-  text(c, '太阳', rayEnd.x + 12, rayEnd.y + 7, '#ffda8b', 12, 'left');
+  if (h >= 100) label('观察者', observer.x, observer.y + 17, '#c5e6ff', 12);
+  label('太阳', rayEnd.x + 12, rayEnd.y + 7, '#ffda8b', 12, 'left');
   $('geometryObserver').textContent =
     '观察纬度 ' + coord(state.lat, 'lat') + ' · 太阳高度 ' + bodyPosition().alt.toFixed(1) + '°';
   $('geometryExplanation').textContent =
@@ -482,6 +566,7 @@ function chooseMapObserver(location) {
   schedule();
 }
 function initCoverage() {
+  initGeometryCamera();
   $('solarYearDay').oninput = (e) =>
     setDate(dateAtYearDay(Number(state.date.slice(0, 4)), Number(e.target.value)));
   $('solarYear').onfocus = () => stop();
