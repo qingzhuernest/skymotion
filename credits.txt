@@ -1,0 +1,4 @@
+Earth texture: three.js examples, earth_atmos_2048.jpg.
+Source: https://github.com/mrdoob/three.js/tree/dev/examples/textures/planets
+three.js source is distributed under the MIT license.
+Interface and simulation implementation are original. Astronomy Engine 2.1.19: Don Cross, MIT License (included in astronomy.js).
