@@ -1,0 +1,462 @@
+[
+  {
+    "path": "sunlab/REVIEW.md",
+    "bytes": 53639,
+    "sha256": "86b444bdb5e0d3472a16844db86509ccbd4daafcef8c4d8481f41f43050a370c"
+  },
+  {
+    "path": "sunlab/dist/404.html",
+    "bytes": 953,
+    "sha256": "2602e2376c7291204d1bc6d7f9b70ff93ff3819b31d8d8eeb75ce894c4e6a1c0"
+  },
+  {
+    "path": "sunlab/dist/analemma.html",
+    "bytes": 47935,
+    "sha256": "c090e766c397e0c5a214e797d028321f93266fc3c7050dd87956345032ceb091"
+  },
+  {
+    "path": "sunlab/dist/analemma.js",
+    "bytes": 18218,
+    "sha256": "1d63dbc4c84e2f20c9472dc35c0e26df894d465649a20228a449bf3a8a1c27fe"
+  },
+  {
+    "path": "sunlab/dist/app.js",
+    "bytes": 50872,
+    "sha256": "5d0508a194da17e18102b1ea5a80a8a09d753b528be9feaaf9545feefed677b5"
+  },
+  {
+    "path": "sunlab/dist/astronomy.js",
+    "bytes": 116424,
+    "sha256": "f41139a87941ea017ab902b954c9389fa27ea72083d7fab4971756d7769d14e6"
+  },
+  {
+    "path": "sunlab/dist/companion.js",
+    "bytes": 6596,
+    "sha256": "f1449c47057505346c4899df0bfcfcd2421390b6676c3ac61808008224a56f28"
+  },
+  {
+    "path": "sunlab/dist/contact.html",
+    "bytes": 3400,
+    "sha256": "d73b4f92d56792117906b8f6e27725bc766d674905e520c672a204ec9eb9e250"
+  },
+  {
+    "path": "sunlab/dist/coverage.js",
+    "bytes": 14450,
+    "sha256": "37f4404c03833f02bc6840469d5736495169b9756d96cea1c7842fab61a9ab43"
+  },
+  {
+    "path": "sunlab/dist/credits.txt",
+    "bytes": 318,
+    "sha256": "5e11e70cb4b2e7b61d08e0785319aeac00c9baeb00a0ef870b31cec2ec5891f7"
+  },
+  {
+    "path": "sunlab/dist/development-guide.html",
+    "bytes": 39790,
+    "sha256": "914923644c70f8720b56e941e6b77482d3d7da8d829e56fa1c2b5f0747a52e8b"
+  },
+  {
+    "path": "sunlab/dist/development-guide.md",
+    "bytes": 31096,
+    "sha256": "c8e83d4b5a9978b5bfa77e3a947488d02a3676795177fe4434f44b329b2a15c0"
+  },
+  {
+    "path": "sunlab/dist/diagrams.html",
+    "bytes": 47943,
+    "sha256": "2a04376b8a10f29e8e262cb6fc390be5076fc4b2bffc7f18e37dc76daf5fb296"
+  },
+  {
+    "path": "sunlab/dist/earth.jpg",
+    "bytes": 512606,
+    "sha256": "2faa400d1eade3bc44caf6750d1b772bd9bbb6d87362c02bc7c3304e78fa0a9d"
+  },
+  {
+    "path": "sunlab/dist/favicon.svg",
+    "bytes": 311,
+    "sha256": "829efd0b6a2637e6320615115008d5bda881180d1a39fe920b33a602e409064c"
+  },
+  {
+    "path": "sunlab/dist/geography-review.html",
+    "bytes": 370,
+    "sha256": "4fef408b4641dc46a9de8615a3fc1db73c44ae2cf5b5bee4c5a1a569928b65bd"
+  },
+  {
+    "path": "sunlab/dist/googled6825228ef48cc89.html",
+    "bytes": 53,
+    "sha256": "5b72d02c5bfe3a90ba1c575e8bea4bb71519d713bf9888184b80037d4f428701"
+  },
+  {
+    "path": "sunlab/dist/guide.html",
+    "bytes": 11010,
+    "sha256": "d4b6d9334bf20b8f3a6e704180eed6efb2a4aed290e34793ba394605139f4683"
+  },
+  {
+    "path": "sunlab/dist/index.html",
+    "bytes": 3345,
+    "sha256": "815f84e01ce6db852bdb38a77ef7354df52d519a0cd3fa411489668d67d8160c"
+  },
+  {
+    "path": "sunlab/dist/lab.html",
+    "bytes": 47940,
+    "sha256": "c5ac90e72181880d4679c3e381e42f848e2ed198bd4d4d7b23777c4c752cca55"
+  },
+  {
+    "path": "sunlab/dist/menu.js",
+    "bytes": 3816,
+    "sha256": "c4c9741dae9a8795d6f77159298289e5ee61f9b09212de4d417b04c4ad0f86ca"
+  },
+  {
+    "path": "sunlab/dist/moon.js",
+    "bytes": 9528,
+    "sha256": "437280b964687873f74af73f277464eb842b0c2e1e1a630381e063e750b96725"
+  },
+  {
+    "path": "sunlab/dist/motion.js",
+    "bytes": 8496,
+    "sha256": "60621d5f37c42e868c4dbd2c996f0c53ac0bc61bcdabf86bb9123e3904d52f42"
+  },
+  {
+    "path": "sunlab/dist/observer.js",
+    "bytes": 9241,
+    "sha256": "79c967945c2d15ab7648d8659f9676696bdc69410c6f8dcf95c2f2869c596240"
+  },
+  {
+    "path": "sunlab/dist/page-navigation.js",
+    "bytes": 12632,
+    "sha256": "a7c7b4c952b2cc6dc12cebeeef8d0361764c000f6bec83ff2a992e0ae7421474"
+  },
+  {
+    "path": "sunlab/dist/pages.css",
+    "bytes": 30861,
+    "sha256": "7718ff672922a235323852c4ba2f020bcb8a0de79bea2e7f0bfc69e3aab74c56"
+  },
+  {
+    "path": "sunlab/dist/project-guide.html",
+    "bytes": 21608,
+    "sha256": "5ef50fc4c51340664d2677082b13dda0b5f35edbedec520ab52f3a0aa37709d2"
+  },
+  {
+    "path": "sunlab/dist/robots.txt",
+    "bytes": 77,
+    "sha256": "59e1d548cd8b66dfe004c695c4a8edf5bb920bdb0eb48cb25833b5b2a5f351ed"
+  },
+  {
+    "path": "sunlab/dist/shadow.js",
+    "bytes": 6299,
+    "sha256": "5f0d2389497979d90cdcc8c355038309fc1811aaae3ef0d8016c9d4c2d4b731b"
+  },
+  {
+    "path": "sunlab/dist/sitemap.xml",
+    "bytes": 762,
+    "sha256": "cc1f673c596d5923d3a292111e094ef4ab48bcf87963b3d19b88faa31ef6b6ce"
+  },
+  {
+    "path": "sunlab/dist/solar-date.js",
+    "bytes": 8886,
+    "sha256": "142619593abff593a4b605b29f0722691d978d22d9d7048f515a4d1f6d8aadc0"
+  },
+  {
+    "path": "sunlab/dist/style.css",
+    "bytes": 69460,
+    "sha256": "d440ab4d0551774703ad28adc05c939cc40b40945d546573ba1e760f5ce821fe"
+  },
+  {
+    "path": "sunlab/dist/sundial-device.js",
+    "bytes": 8804,
+    "sha256": "a6ce27e9fa9fb5bd5cbb315fca7a65d592facb34b40d3024896429eb91affced"
+  },
+  {
+    "path": "sunlab/dist/sundial.html",
+    "bytes": 47928,
+    "sha256": "a06a96626e150c2260510ae61ff164400198f9359350ef11192e996448a424fc"
+  },
+  {
+    "path": "sunlab/dist/sundial.js",
+    "bytes": 9723,
+    "sha256": "0160ee8a34dc25948572e56ef5ff0703ec2bcb1f779ba3b25064e1ded589c749"
+  },
+  {
+    "path": "sunlab/dist/time-workbench.js",
+    "bytes": 9308,
+    "sha256": "f05d9c3eebcf588a81793861d54842877374ef1835f5ca3575b4a6c814ce57bc"
+  },
+  {
+    "path": "sunlab/dist/welcome.js",
+    "bytes": 5933,
+    "sha256": "08f34f9c7471957968898f258b224281d41c44aedfb4d3b02d5e4e4ffeea1100"
+  },
+  {
+    "path": "sunlab/dist/workspace.js",
+    "bytes": 3425,
+    "sha256": "5b63d64758e21b47ce6adc497335526c8b18d1c607be87670404536dffd8d6d5"
+  },
+  {
+    "path": "sunlab/tools/app-template.html",
+    "bytes": 50831,
+    "sha256": "b0616f3dbcc7dcc84aef37728d3964fcb48813029b814acbe37846849bfc9284"
+  },
+  {
+    "path": "sunlab/tools/build-development-guide.py",
+    "bytes": 6123,
+    "sha256": "7b99f165f4bcdd5edf0d9b4011274042aff52b9874e499441b26ded338dfb729"
+  },
+  {
+    "path": "sunlab/tools/build-pages.py",
+    "bytes": 4303,
+    "sha256": "bcf55d2b60b0c41f76ed9938ada6d0c877ca5cd1faae1acd72a0ecc2d498adb5"
+  },
+  {
+    "path": "sunlab/tools/development-guide.md",
+    "bytes": 31107,
+    "sha256": "afd501ff2f836d5f6677e3ab2d0c44b18faff0a83b0133f06c36e4452695f0dd"
+  },
+  {
+    "path": "sunlab/tools/googled6825228ef48cc89.html",
+    "bytes": 53,
+    "sha256": "5b72d02c5bfe3a90ba1c575e8bea4bb71519d713bf9888184b80037d4f428701"
+  },
+  {
+    "path": "sunlab/tools/learning-guide.html",
+    "bytes": 11029,
+    "sha256": "27c701ee577445cb3de742390aa46a920af3fcd20a9d8612f627f581ca470057"
+  },
+  {
+    "path": "sunlab/tools/not-found.html",
+    "bytes": 953,
+    "sha256": "2602e2376c7291204d1bc6d7f9b70ff93ff3819b31d8d8eeb75ce894c4e6a1c0"
+  },
+  {
+    "path": "sunlab/tools/project-guide.html",
+    "bytes": 21627,
+    "sha256": "a2f6b719be667e64dcaedf09bcb708e4e876fad97f55bed3aa8e971145e87df1"
+  },
+  {
+    "path": "sunlab/tools/search-config.json",
+    "bytes": 244,
+    "sha256": "c644d7256e56ab00a1033e6db0ebf8d08c103f1413a5a1d9287758394d0876c7"
+  },
+  {
+    "path": "sunlab/tools/search_assets.py",
+    "bytes": 5067,
+    "sha256": "ad4ba9d53f0de31bf594ec84cc24d57e30a406d1bc51ebc7751ee68a61d43227"
+  },
+  {
+    "path": "exports/geography-review.md",
+    "bytes": 22807,
+    "sha256": "77dfb3c95f4e35b39dabd4cc5987f89d475a19c00ac7f971112ea09007012a41"
+  },
+  {
+    "path": "exports/github-project-references.md",
+    "bytes": 3942,
+    "sha256": "aa787ff55e755bb990827bb3f37e69add6c5dc118631bab95a958b53e6aaa4b4"
+  },
+  {
+    "path": "exports/learning-guide.md",
+    "bytes": 7733,
+    "sha256": "a5339d1b592f162c6fad19395eb49218031ad802e5ca96e90ac92cbd75217fdc"
+  },
+  {
+    "path": "exports/project-guide.md",
+    "bytes": 16423,
+    "sha256": "62cb5267301bd2c993bc0411679e3c5019e1193d264e73b081f8cdc281bc9a98"
+  },
+  {
+    "path": "exports/search-engine-submission-guide.md",
+    "bytes": 2762,
+    "sha256": "2ac22d7c70dc32212b88a8e46ea71da2a936859ac34aefaf55b95e4e71bae53b"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-analemma-layout.zip",
+    "bytes": 669188,
+    "sha256": "4911901da1b0ffcb8c19107314b319f2db526afc1570b2dcbe19289c5ac5def4"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-analemma-updated.zip",
+    "bytes": 625043,
+    "sha256": "09b77dacc6d24bb9473f26844d0a83fc02e5bb5f259df65c306140c4642868f0"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-article-refined.zip",
+    "bytes": 755434,
+    "sha256": "ec318d7434a5ba2911f1c3c7c882e36d687c3855062c735d32d9104abee7af8f"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-author-contact.zip",
+    "bytes": 658346,
+    "sha256": "2499e5a321a5024b144b1c956711bc0a9d10552c533ef0aec6381cd83d4e35b7"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-compact-sundial-dialog.zip",
+    "bytes": 659865,
+    "sha256": "320e6cafbcb302b9782d5d288f27ff63b69d1ea80253b5d3dae77438e506ad41"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-confirmed-fixes.zip",
+    "bytes": 731997,
+    "sha256": "fe128fcc5336b390263f9b1a9235182639707e4e8b3ad52074f1ac5ad342fe2f"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-docs-separated.zip",
+    "bytes": 728195,
+    "sha256": "d235d9020daf99d96fa4f501485801d3d5e72b7045df3239ec202dace73e76ec"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-engineering-fixed.zip",
+    "bytes": 754370,
+    "sha256": "58b5a23db374fedbe8e3ad24853c7673aa4a1f0f0c7f4e2ac57c3ffc9976e57a"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-fixed-tracks.zip",
+    "bytes": 609959,
+    "sha256": "20677fe1c561728e9c55c41fde1063adba86f8eb24d05bb9434719d1ed355b78"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-geography-reviewed.zip",
+    "bytes": 614207,
+    "sha256": "f98e380fa9a4938b8df2e0b8f064b26a1bde253058fc601e7c681d49a5b69d1c"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-globe-modes.zip",
+    "bytes": 764689,
+    "sha256": "f8c2adc01417065408e92a6ec00918780c0d21fa36b90eb27e612e14653b7620"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-globe-performance.zip",
+    "bytes": 758051,
+    "sha256": "23f1e6f2800270550abe2c14d878b1b0f172ae5836e12d4e387f0118a4bac56a"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-google-bing.zip",
+    "bytes": 757672,
+    "sha256": "1f4a430d20e5f52da627f70519a81708d92d20e53f49bcc328864c45780c8c04"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-hd-gpu-earth.zip",
+    "bytes": 760922,
+    "sha256": "c22852281f0d626ac81e2ab378e543d2ae38de9e8d13a01824f9089edbd45922"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-interactive-sundials-sky.zip",
+    "bytes": 656664,
+    "sha256": "2b46b41d0d40b1fc78cbcf11859466e86941d8cf31721db2d514534bdf4bd970"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-live-earth-drag.zip",
+    "bytes": 761737,
+    "sha256": "8fdfa519343da6da95499a8959785a651b41c8d0318b69fa38c1729ac31df4e7"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-lunar-orientation.zip",
+    "bytes": 731209,
+    "sha256": "4a40bcc943db94cfad447e75df1919cad9e6a51e5dc9abe35f0f5c0f12fb0650"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-map-antialias.zip",
+    "bytes": 762799,
+    "sha256": "cc24a6dec739f52d64f7dd29a62414078823a3a537945d03672511f0333fa356"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-material-refined.zip",
+    "bytes": 729737,
+    "sha256": "24f59fdfcdc968ef4421648ee9e3783f57d9b3536ad0ee9a0a6b72c190204805"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-moon-endpoints.zip",
+    "bytes": 645995,
+    "sha256": "c53dc8a0e04fd67250827abecb9c51875adacf53eb1841ecdc413699673ab8fc"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-pages-and-paired-ui.zip",
+    "bytes": 722636,
+    "sha256": "d5a68e394332d4fbd04cfca6bd3b50995ed23f9f6d5efbca4c13c2df3b6d2bf2"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-paired-sky-controls.zip",
+    "bytes": 661433,
+    "sha256": "9c60cb6281d627bbef21ceeb029d7a5a34ee218c916c31e6388f712b0cdf54b8"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-readable-ui.zip",
+    "bytes": 766120,
+    "sha256": "cdd00afc13a32162164a2db56833ad1298d923e8367b7347c004c591865d1f68"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-search-ready.zip",
+    "bytes": 757623,
+    "sha256": "adfceee590044171451d02ee96dca6c539b4bbc52a93405810c622c04a60ee8d"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-shadow-updated.zip",
+    "bytes": 629910,
+    "sha256": "44a63d175964867847e33fb7b882a232665920352f1f6177bc8834757bb4c9ce"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-smooth-render.zip",
+    "bytes": 757850,
+    "sha256": "0fb872b8325d41b7bced66e5fec45c287c613a43e9fbfb479316916999bc13dd"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-solar-date.zip",
+    "bytes": 644448,
+    "sha256": "77694a601486afa5cb68a5c2c043b7efe2e28f19fda9e0cc60343d60a84e05d2"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-sundials.zip",
+    "bytes": 638077,
+    "sha256": "9049f40e1c5bf7166f9ba1e7dd9304acb017f4406c56344974cf4238ad1bc00f"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-time-ui-rebuilt.zip",
+    "bytes": 668552,
+    "sha256": "c89b48bdfad7c2825b5bb18d28cb9f241e7358f212f0613b538973c40d8bc68a"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-unified-ui.zip",
+    "bytes": 724311,
+    "sha256": "0e19d20e27e1bead079a68b911c77505a26b7fb2d855966d3f92fd09be6e55a4"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare-with-report.zip",
+    "bytes": 619446,
+    "sha256": "1297dda8b4d37aafed83d707b645547f9b1ea011f57fe47e1c7b0ba15fb0631c"
+  },
+  {
+    "path": "exports/sky-motion-lab-cloudflare.zip",
+    "bytes": 766120,
+    "sha256": "cdd00afc13a32162164a2db56833ad1298d923e8367b7347c004c591865d1f68"
+  },
+  {
+    "path": "exports/sky-motion-lab-development-logic.md",
+    "bytes": 31096,
+    "sha256": "c8e83d4b5a9978b5bfa77e3a947488d02a3676795177fe4434f44b329b2a15c0"
+  },
+  {
+    "path": "exports/skymotion-report-audit.md",
+    "bytes": 6107,
+    "sha256": "bce5a2508b4ff6463401507e7038f918003f30e6d24137931f075a78e2f29208"
+  },
+  {
+    "path": "exports/solar-system-concept/THREE-LICENSE.txt",
+    "bytes": 1081,
+    "sha256": "852e0e8699169bf9f6fdc6bda3e682d078dcbc738b5d33e74df594721bff271d"
+  },
+  {
+    "path": "exports/solar-system-concept/concept.js",
+    "bytes": 9936,
+    "sha256": "b09921528fa4d3d8790c656fb4d211fe61d7071111118e50d1835c670335e7e8"
+  },
+  {
+    "path": "exports/solar-system-concept/earth.jpg",
+    "bytes": 512606,
+    "sha256": "2faa400d1eade3bc44caf6750d1b772bd9bbb6d87362c02bc7c3304e78fa0a9d"
+  },
+  {
+    "path": "exports/solar-system-concept/index.html",
+    "bytes": 8261,
+    "sha256": "e1e66521b435f4e9a7483501fb7c506646170d5caa2a74ca83f051d5104158c2"
+  },
+  {
+    "path": "exports/solar-system-concept/three.min.js",
+    "bytes": 669884,
+    "sha256": "170c6789f43217c96b3170f4b42fafe135de7f7cd48497a4218f9757ee1d49fa"
+  }
+]
