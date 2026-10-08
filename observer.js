@@ -1,36 +1,325 @@
+/**
+ * 地面观察者视角的天空投影与天体朝向。
+ */
 /* Ground observer: front half of the local unit sky, orthographic projection. */
-const observerNames={Sun:'太阳',Moon:'月球',...companionPlanets},observerColors={Sun:'#ffd37a',Moon:'#d6e6ff',Mercury:'#b8c5d0',Venus:'#fff0b8',Mars:'#ffaf91',Jupiter:'#efd2b1',Saturn:'#e5d9a9'};
-const observerMinuteCache=new Map();let observerTimeHome=null;
-function observerPosition(body,time=state.time){if(body==='Sun'&&state.body==='sun'&&state.manual)return solar(state.lat,state.dec,time);const minute=Math.floor(time),key=[body,state.date,state.lat,state.lon,minute].join(':');let pair=observerMinuteCache.get(key);if(!pair){pair=[skyRaw(body,minute,state.date,state.lat,state.lon),skyRaw(body,Math.min(minute+1,1440),state.date,state.lat,state.lon)];if(observerMinuteCache.size>=84)observerMinuteCache.delete(observerMinuteCache.keys().next().value);observerMinuteCache.set(key,pair);}return mixDirection(pair[0],pair[1],time-minute);}
-function observerFrame(w,h,bearing=state.observerAz??180){const a=bearing*rad,base=h*.79,Rx=w*.46,Ry=h*.62;return{base,Rx,Ry,front:p=>p.x*Math.sin(a)+p.z*Math.cos(a),project:p=>({x:w/2+(p.x*Math.cos(a)-p.z*Math.sin(a))*Rx,y:base-p.y*Ry})};}
+const observerNames = { Sun: '太阳', Moon: '月球', ...companionPlanets },
+  observerColors = {
+    Sun: '#ffd37a',
+    Moon: '#d6e6ff',
+    Mercury: '#b8c5d0',
+    Venus: '#fff0b8',
+    Mars: '#ffaf91',
+    Jupiter: '#efd2b1',
+    Saturn: '#e5d9a9',
+  };
+const observerMinuteCache = new Map();
+let observerTimeHome = null;
+function observerPosition(body, time = state.time) {
+  if (body === 'Sun' && state.body === 'sun' && state.manual)
+    return solar(state.lat, state.dec, time);
+  const minute = Math.floor(time),
+    key = [body, state.date, state.lat, state.lon, minute].join(':');
+  let pair = observerMinuteCache.get(key);
+  if (!pair) {
+    pair = [
+      skyRaw(body, minute, state.date, state.lat, state.lon),
+      skyRaw(body, Math.min(minute + 1, 1440), state.date, state.lat, state.lon),
+    ];
+    if (observerMinuteCache.size >= 84)
+      observerMinuteCache.delete(observerMinuteCache.keys().next().value);
+    observerMinuteCache.set(key, pair);
+  }
+  return mixDirection(pair[0], pair[1], time - minute);
+}
+function observerFrame(w, h, bearing = state.observerAz ?? 180) {
+  const a = bearing * rad,
+    base = h * 0.79,
+    Rx = w * 0.46,
+    Ry = h * 0.62;
+  return {
+    base,
+    Rx,
+    Ry,
+    front: (p) => p.x * Math.sin(a) + p.z * Math.cos(a),
+    project: (p) => ({
+      x: w / 2 + (p.x * Math.cos(a) - p.z * Math.sin(a)) * Rx,
+      y: base - p.y * Ry,
+    }),
+  };
+}
 /* The bright limb points toward the Sun in the Moon's tangent plane.
    Project that direction through this view, including its unequal X/Y scales.
    Hemisphere and time enter through the local sky vectors, never a latitude flip. */
-function moonBrightLimbAngle(moon,sun,frame){
- const dot=moon.x*sun.x+moon.y*sun.y+moon.z*sun.z;
- const tangent={x:sun.x-dot*moon.x,y:sun.y-dot*moon.y,z:sun.z-dot*moon.z};
- const origin=frame.project({x:0,y:0,z:0}),tip=frame.project(tangent),dx=tip.x-origin.x,dy=tip.y-origin.y;
- return Math.hypot(dx,dy)>1e-8?Math.atan2(dy,dx):null;
+function moonBrightLimbAngle(moon, sun, frame) {
+  const dot = moon.x * sun.x + moon.y * sun.y + moon.z * sun.z;
+  const tangent = { x: sun.x - dot * moon.x, y: sun.y - dot * moon.y, z: sun.z - dot * moon.z };
+  const origin = frame.project({ x: 0, y: 0, z: 0 }),
+    tip = frame.project(tangent),
+    dx = tip.x - origin.x,
+    dy = tip.y - origin.y;
+  return Math.hypot(dx, dy) > 1e-8 ? Math.atan2(dy, dx) : null;
 }
-function observerBodies(){const bodies=state.body==='sun'&&state.manual?['Sun']:Object.keys(observerNames);return bodies.map(body=>({body,name:observerNames[body],exact:observerPosition(body),position:visualPosition(body,observerPosition(body))}));}
-function observerDayPosition(body,time){if(state.body==='sun'&&state.manual&&body==='Sun')return solar(state.lat,state.dec,time);const day=ephemerisDay(body),t=clamp(time,0,1440)/5,i=Math.min(Math.floor(t),day.samples.length-2);return mixDirection(day.samples[i],day.samples[i+1],t-i);}
-function drawObserverCurve(c,positionAt,frame,color){let run=[],previous=null;const flush=()=>{if(run.length>1)poly(c,run,color,1.4);run=[];};for(let time=0;time<=1440;time+=3){const p=positionAt(time),visible=p.y>=0&&frame.front(p)>=0;if(previous){const a=previous.p,cuts=[0,1];for(const f of [a.y/(a.y-p.y),frame.front(a)/(frame.front(a)-frame.front(p))])if(f>0&&f<1)cuts.push(f);cuts.sort((a,b)=>a-b);for(let i=1;i<cuts.length;i++){const f=cuts[i-1],g=cuts[i],middle=mixDirection(a,p,(f+g)/2);if(middle.y>=0&&frame.front(middle)>=0){const start=frame.project(mixDirection(a,p,f)),end=frame.project(mixDirection(a,p,g));if(!run.length)run.push(start);run.push(end);}else flush();}}previous={p,visible};}flush();}
-function drawObserverTrack(c,body,frame,color){drawObserverCurve(c,t=>visualTrackPosition(t,observerDayPosition(body,t),body),frame,color);}
-function drawObserverSky(){if(!canPaint($('sky')))return;const{c,w,h}=resize($('sky')),frame=observerFrame(w,h),bodies=observerBodies(),sun=bodies.find(p=>p.body==='Sun').position,day=sun.alt>=0,twilight=sun.alt>=-18;
- const sky=c.createLinearGradient(0,0,0,frame.base);sky.addColorStop(0,day?'#427ca9':twilight?'#142844':'#071425');sky.addColorStop(1,day?'#c2ddeb':twilight?'#a07464':'#263c53');c.fillStyle=sky;c.fillRect(0,0,w,frame.base);const ground=c.createLinearGradient(0,frame.base,0,h);ground.addColorStop(0,day?'#52745c':'#263d34');ground.addColorStop(1,day?'#203e35':'#142920');c.fillStyle=ground;c.fillRect(0,frame.base,w,h-frame.base);poly(c,[{x:0,y:frame.base},{x:w,y:frame.base}],day?'#cfdfc8':'#90aba0',1.5);
- for(let i=-3;i<=3;i++)poly(c,[{x:w/2+i*w*.06,y:frame.base+5},{x:w/2+i*w*.23,y:h}],'#b0c5b311',1);
- if(state.angles){for(const alt of [30,60]){const curve=[];for(let d=-90;d<=90;d+=3){const az=((state.observerAz??180)+d)*rad;curve.push(frame.project({x:Math.cos(alt*rad)*Math.sin(az),y:Math.sin(alt*rad),z:Math.cos(alt*rad)*Math.cos(az)}));}poly(c,curve,'#d5e9ff22',1,[3,5]);text(c,alt+'°',w-25,frame.base-Math.sin(alt*rad)*frame.Ry,'#d0e5f2',10);}}
- const bearing=state.observerAz??180;for(const offset of [-60,0,60]){const az=(bearing+offset+360)%360,p=frame.project({x:Math.sin(az*rad),y:0,z:Math.cos(az*rad)});text(c,(Math.abs(state.lat)>89.99?'参考':heading(az))+' '+Math.round(az)+'°',clamp(p.x,35,w-35),frame.base+15,'#d6e3d4',11);}
- text(c,'天顶 90°',w/2,Math.max(55,frame.base-frame.Ry-12),'#dcebf5',11);
- if(state.body==='sun'&&state.solarDateMode&&state.solarDateTrail)drawObserverCurve(c,t=>annualSolarPosition(t/1440),frame,'#e8afff');
- if(state.track){drawObserverTrack(c,'Sun',frame,'#ffd37a77');if(!state.manual||state.body==='moon'){drawObserverTrack(c,'Moon',frame,'#c5ddff77');const project=p=>p.y>=0&&frame.front(p)>=0?frame.project(p):{x:-1e5,y:-1e5};drawMoonDayEndpoints(c,project,w,h,t=>visualTrackPosition(t,observerDayPosition('Moon',t),'Moon'));}}
- const occupied=[];for(const item of bodies){const p=item.position;if(p.y<=0||frame.front(p)<-1e-10)continue;const q=frame.project(p);if(item.body==='Sun')glow(c,q.x,q.y,9);else if(item.body==='Moon')drawMoon(c,q.x,q.y,10,visualPhase(),moonBrightLimbAngle(p,sun,frame));else{c.fillStyle=observerColors[item.body];c.beginPath();c.arc(q.x,q.y,item.body==='Venus'?3.7:2.7,0,Math.PI*2);c.fill();}
- let ly=q.y+19;while(occupied.some(r=>Math.abs(r.x-q.x)<75&&Math.abs(r.y-ly)<15))ly+=16;ly=clamp(ly,62,frame.base-12);occupied.push({x:q.x,y:ly});text(c,item.name,clamp(q.x,25,w-25),ly,observerColors[item.body],12);}
- text(c,'地面观察者 · 面向 '+heading(bearing),w/2,h-26,'#c6ddd0',11);
- $('sky').setAttribute('aria-label','地面观察者仰望天空，面向 '+bearing.toFixed(0)+' 度；只绘制地平线上方及前方的天体');
+function observerBodies() {
+  const bodies = state.body === 'sun' && state.manual ? ['Sun'] : Object.keys(observerNames);
+  return bodies.map((body) => ({
+    body,
+    name: observerNames[body],
+    exact: observerPosition(body),
+    position: visualPosition(body, observerPosition(body)),
+  }));
 }
-function arrangeObserverTime(){const active=state.view==='observer',daily=active&&state.body==='sun'&&!state.solarDateMode,host=$('observerTimeHost'),timeline=$('sunTimeline');if(daily){if(timeline.parentNode!==host)host.append(timeline);}else if(observerTimeHome&&timeline.previousSibling!==observerTimeHome)observerTimeHome.after(timeline);$('observerClockPanel').hidden=daily;$('observerTime').value=state.time;$('observerTimeValue').textContent=hhmm(state.time,true);$('observerTimeLabel').textContent=state.body==='moon'||state.solarDateMode?'固定当地真太阳时':'当地真太阳时';}
-function renderObserverControls(){arrangeObserverTime();const active=state.view==='observer';$('observerControls').hidden=!active;$('solarOverlayBar').hidden=state.body==='moon'||active;$('sky').style.touchAction=['observer','orbit'].includes(state.view)?'none':'pan-y';if(!active)return;const bearing=state.observerAz??180;$('observerAzimuth').value=bearing;$('observerBearing').textContent=Math.round(bearing)+'° · '+heading(bearing);const frame=observerFrame(400,400),items=observerBodies(),box=$('observerBodies');if(!box.children.length)for(const [body,name]of Object.entries(observerNames)){const b=document.createElement('button');b.type='button';b.dataset.skyBody=body;b.onclick=()=>{const p=observerPosition(body);state.observerAz=p.az;schedule();};box.append(b);}for(const button of box.children){const item=items.find(p=>p.body===button.dataset.skyBody);button.hidden=!item;if(!item)continue;const p=item.exact;button.textContent=item.name+' '+p.alt.toFixed(1)+'° · '+(p.y<=0?'地平线下':frame.front(p)<0?'身后':'前方');button.title='转向'+item.name+' · 方位 '+p.az.toFixed(1)+'°';}
- $('modelNote').textContent='仰望天空的月面亮边随当地天空几何方向转动；圆盘大小为示意，照明比例采用地心近似。月相原理图仍采用固定朝向。';const below=items.filter(p=>p.exact.y<=0).map(p=>p.name);$('observerStatus').textContent=state.body==='sun'&&state.manual?'理想太阳实验仅显示太阳；恢复日期观测后可同时查看月球和行星。':state.date+' · '+hhmm(state.time,true)+' 当地真太阳时'+(below.length?'；地平线下：'+below.join('、'):'；所列天体均在地平线上方');$('viewHint').textContent='拖动左右转身 · 下方选择天体';const sunAltitude=items.find(p=>p.body==='Sun').exact.alt;$('dayBadge').textContent=sunAltitude>=0?'白昼 · 标注几何位置':sunAltitude>=-18?'暮光 · 地面观察':'夜空 · 地面观察';$('sky').style.touchAction='none';
+function observerDayPosition(body, time) {
+  if (state.body === 'sun' && state.manual && body === 'Sun')
+    return solar(state.lat, state.dec, time);
+  const day = ephemerisDay(body),
+    t = clamp(time, 0, 1440) / 5,
+    i = Math.min(Math.floor(t), day.samples.length - 2);
+  return mixDirection(day.samples[i], day.samples[i + 1], t - i);
 }
-function initObserver(){const bearingPanel=document.querySelector('.observer-bearing-panel'),bearingLabel=bearingPanel.querySelector('label'),bearingInput=$('observerAzimuth');bearingLabel.htmlFor='observerAzimuth';bearingPanel.prepend(bearingLabel);bearingLabel.after(bearingInput);observerTimeHome=document.createComment('home: observer Sun timeline');$('sunTimeline').before(observerTimeHome);$('observerTime').oninput=e=>{stop();state.time=Number(e.target.value);schedule();};document.querySelectorAll('[data-look]').forEach(b=>b.onclick=()=>{state.observerAz=Number(b.dataset.look);schedule();});$('observerAzimuth').oninput=e=>{state.observerAz=Number(e.target.value);schedule();};}
+function drawObserverCurve(c, positionAt, frame, color) {
+  let run = [],
+    previous = null;
+  const flush = () => {
+    if (run.length > 1) poly(c, run, color, 1.4);
+    run = [];
+  };
+  for (let time = 0; time <= 1440; time += 3) {
+    const p = positionAt(time),
+      visible = p.y >= 0 && frame.front(p) >= 0;
+    if (previous) {
+      const a = previous.p,
+        cuts = [0, 1];
+      for (const f of [a.y / (a.y - p.y), frame.front(a) / (frame.front(a) - frame.front(p))])
+        if (f > 0 && f < 1) cuts.push(f);
+      cuts.sort((a, b) => a - b);
+      for (let i = 1; i < cuts.length; i++) {
+        const f = cuts[i - 1],
+          g = cuts[i],
+          middle = mixDirection(a, p, (f + g) / 2);
+        if (middle.y >= 0 && frame.front(middle) >= 0) {
+          const start = frame.project(mixDirection(a, p, f)),
+            end = frame.project(mixDirection(a, p, g));
+          if (!run.length) run.push(start);
+          run.push(end);
+        } else flush();
+      }
+    }
+    previous = { p, visible };
+  }
+  flush();
+}
+function drawObserverTrack(c, body, frame, color) {
+  drawObserverCurve(
+    c,
+    (t) => visualTrackPosition(t, observerDayPosition(body, t), body),
+    frame,
+    color,
+  );
+}
+function drawObserverSky() {
+  if (!canPaint($('sky'))) return;
+  const { c, w, h } = resize($('sky')),
+    frame = observerFrame(w, h),
+    bodies = observerBodies(),
+    sun = bodies.find((p) => p.body === 'Sun').position,
+    day = sun.alt >= 0,
+    twilight = sun.alt >= -18;
+  const sky = c.createLinearGradient(0, 0, 0, frame.base);
+  sky.addColorStop(0, day ? '#427ca9' : twilight ? '#142844' : '#071425');
+  sky.addColorStop(1, day ? '#c2ddeb' : twilight ? '#a07464' : '#263c53');
+  c.fillStyle = sky;
+  c.fillRect(0, 0, w, frame.base);
+  const ground = c.createLinearGradient(0, frame.base, 0, h);
+  ground.addColorStop(0, day ? '#52745c' : '#263d34');
+  ground.addColorStop(1, day ? '#203e35' : '#142920');
+  c.fillStyle = ground;
+  c.fillRect(0, frame.base, w, h - frame.base);
+  poly(
+    c,
+    [
+      { x: 0, y: frame.base },
+      { x: w, y: frame.base },
+    ],
+    day ? '#cfdfc8' : '#90aba0',
+    1.5,
+  );
+  for (let i = -3; i <= 3; i++)
+    poly(
+      c,
+      [
+        { x: w / 2 + i * w * 0.06, y: frame.base + 5 },
+        { x: w / 2 + i * w * 0.23, y: h },
+      ],
+      '#b0c5b311',
+      1,
+    );
+  if (state.angles) {
+    for (const alt of [30, 60]) {
+      const curve = [];
+      for (let d = -90; d <= 90; d += 3) {
+        const az = ((state.observerAz ?? 180) + d) * rad;
+        curve.push(
+          frame.project({
+            x: Math.cos(alt * rad) * Math.sin(az),
+            y: Math.sin(alt * rad),
+            z: Math.cos(alt * rad) * Math.cos(az),
+          }),
+        );
+      }
+      poly(c, curve, '#d5e9ff22', 1, [3, 5]);
+      text(c, alt + '°', w - 25, frame.base - Math.sin(alt * rad) * frame.Ry, '#d0e5f2', 10);
+    }
+  }
+  const bearing = state.observerAz ?? 180;
+  for (const offset of [-60, 0, 60]) {
+    const az = (bearing + offset + 360) % 360,
+      p = frame.project({ x: Math.sin(az * rad), y: 0, z: Math.cos(az * rad) });
+    text(
+      c,
+      (Math.abs(state.lat) > 89.99 ? '参考' : heading(az)) + ' ' + Math.round(az) + '°',
+      clamp(p.x, 35, w - 35),
+      frame.base + 15,
+      '#d6e3d4',
+      11,
+    );
+  }
+  text(c, '天顶 90°', w / 2, Math.max(55, frame.base - frame.Ry - 12), '#dcebf5', 11);
+  if (state.body === 'sun' && state.solarDateMode && state.solarDateTrail)
+    drawObserverCurve(c, (t) => annualSolarPosition(t / 1440), frame, '#e8afff');
+  if (state.track) {
+    drawObserverTrack(c, 'Sun', frame, '#ffd37a77');
+    if (!state.manual || state.body === 'moon') {
+      drawObserverTrack(c, 'Moon', frame, '#c5ddff77');
+      const project = (p) =>
+        p.y >= 0 && frame.front(p) >= 0 ? frame.project(p) : { x: -1e5, y: -1e5 };
+      drawMoonDayEndpoints(c, project, w, h, (t) =>
+        visualTrackPosition(t, observerDayPosition('Moon', t), 'Moon'),
+      );
+    }
+  }
+  const occupied = [];
+  for (const item of bodies) {
+    const p = item.position;
+    if (p.y <= 0 || frame.front(p) < -1e-10) continue;
+    const q = frame.project(p);
+    if (item.body === 'Sun') glow(c, q.x, q.y, 9);
+    else if (item.body === 'Moon')
+      drawMoon(c, q.x, q.y, 10, visualPhase(), moonBrightLimbAngle(p, sun, frame));
+    else {
+      c.fillStyle = observerColors[item.body];
+      c.beginPath();
+      c.arc(q.x, q.y, item.body === 'Venus' ? 3.7 : 2.7, 0, Math.PI * 2);
+      c.fill();
+    }
+    let ly = q.y + 19;
+    while (occupied.some((r) => Math.abs(r.x - q.x) < 75 && Math.abs(r.y - ly) < 15)) ly += 16;
+    ly = clamp(ly, 62, frame.base - 12);
+    occupied.push({ x: q.x, y: ly });
+    text(c, item.name, clamp(q.x, 25, w - 25), ly, observerColors[item.body], 12);
+  }
+  text(c, '地面观察者 · 面向 ' + heading(bearing), w / 2, h - 26, '#c6ddd0', 11);
+  $('sky').setAttribute(
+    'aria-label',
+    '地面观察者仰望天空，面向 ' + bearing.toFixed(0) + ' 度；只绘制地平线上方及前方的天体',
+  );
+}
+function arrangeObserverTime() {
+  const active = state.view === 'observer',
+    daily = active && state.body === 'sun' && !state.solarDateMode,
+    host = $('observerTimeHost'),
+    timeline = $('sunTimeline');
+  if (daily) {
+    if (timeline.parentNode !== host) host.append(timeline);
+  } else if (observerTimeHome && timeline.previousSibling !== observerTimeHome)
+    observerTimeHome.after(timeline);
+  $('observerClockPanel').hidden = daily;
+  $('observerTime').value = state.time;
+  $('observerTimeValue').textContent = hhmm(state.time, true);
+  $('observerTimeLabel').textContent =
+    state.body === 'moon' || state.solarDateMode ? '固定当地真太阳时' : '当地真太阳时';
+}
+function renderObserverControls() {
+  arrangeObserverTime();
+  const active = state.view === 'observer';
+  $('observerControls').hidden = !active;
+  $('solarOverlayBar').hidden = state.body === 'moon' || active;
+  $('sky').style.touchAction = ['observer', 'orbit'].includes(state.view) ? 'none' : 'pan-y';
+  if (!active) return;
+  const bearing = state.observerAz ?? 180;
+  $('observerAzimuth').value = bearing;
+  $('observerBearing').textContent = Math.round(bearing) + '° · ' + heading(bearing);
+  const frame = observerFrame(400, 400),
+    items = observerBodies(),
+    box = $('observerBodies');
+  if (!box.children.length)
+    for (const [body, name] of Object.entries(observerNames)) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.dataset.skyBody = body;
+      b.onclick = () => {
+        const p = observerPosition(body);
+        state.observerAz = p.az;
+        schedule();
+      };
+      box.append(b);
+    }
+  for (const button of box.children) {
+    const item = items.find((p) => p.body === button.dataset.skyBody);
+    button.hidden = !item;
+    if (!item) continue;
+    const p = item.exact;
+    button.textContent =
+      item.name +
+      ' ' +
+      p.alt.toFixed(1) +
+      '° · ' +
+      (p.y <= 0 ? '地平线下' : frame.front(p) < 0 ? '身后' : '前方');
+    button.title = '转向' + item.name + ' · 方位 ' + p.az.toFixed(1) + '°';
+  }
+  $('modelNote').textContent =
+    '仰望天空的月面亮边随当地天空几何方向转动；圆盘大小为示意，照明比例采用地心近似。月相原理图仍采用固定朝向。';
+  const below = items.filter((p) => p.exact.y <= 0).map((p) => p.name);
+  $('observerStatus').textContent =
+    state.body === 'sun' && state.manual
+      ? '理想太阳实验仅显示太阳；恢复日期观测后可同时查看月球和行星。'
+      : state.date +
+        ' · ' +
+        hhmm(state.time, true) +
+        ' 当地真太阳时' +
+        (below.length ? '；地平线下：' + below.join('、') : '；所列天体均在地平线上方');
+  $('viewHint').textContent = '拖动左右转身 · 下方选择天体';
+  const sunAltitude = items.find((p) => p.body === 'Sun').exact.alt;
+  $('dayBadge').textContent =
+    sunAltitude >= 0
+      ? '白昼 · 标注几何位置'
+      : sunAltitude >= -18
+        ? '暮光 · 地面观察'
+        : '夜空 · 地面观察';
+  $('sky').style.touchAction = 'none';
+}
+function initObserver() {
+  const bearingPanel = document.querySelector('.observer-bearing-panel'),
+    bearingLabel = bearingPanel.querySelector('label'),
+    bearingInput = $('observerAzimuth');
+  bearingLabel.htmlFor = 'observerAzimuth';
+  bearingPanel.prepend(bearingLabel);
+  bearingLabel.after(bearingInput);
+  observerTimeHome = document.createComment('home: observer Sun timeline');
+  $('sunTimeline').before(observerTimeHome);
+  $('observerTime').oninput = (e) => {
+    stop();
+    state.time = Number(e.target.value);
+    schedule();
+  };
+  document.querySelectorAll('[data-look]').forEach(
+    (b) =>
+      (b.onclick = () => {
+        state.observerAz = Number(b.dataset.look);
+        schedule();
+      }),
+  );
+  $('observerAzimuth').oninput = (e) => {
+    state.observerAz = Number(e.target.value);
+    schedule();
+  };
+}

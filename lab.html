@@ -1,53 +1,1376 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="pages.css">
-<!-- search-metadata:start -->
-<title>太阳与月相实验台 · 天体视运动实验室</title>
-<meta name="description" content="调节地点、日期和时刻，比较太阳高度、方位、日影与月相；切换空间、俯视、地平和仰望天空视角。">
-<link rel="canonical" href="https://skymotion-5md.pages.dev/lab">
-<meta property="og:title" content="太阳与月相实验台 · 天体视运动实验室">
-<meta property="og:description" content="调节地点、日期和时刻，比较太阳高度、方位、日影与月相；切换空间、俯视、地平和仰望天空视角。">
-<meta property="og:url" content="https://skymotion-5md.pages.dev/lab">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="zh_CN">
-<!-- search-metadata:end -->
-</head>
-<body data-page="lab">
-<div id="labShell" hidden inert>
-<nav class="page-nav" aria-label="页面导航"><a href="index.html">欢迎页</a><a href="lab.html">实验台</a><a href="guide.html">学习指南</a><a href="diagrams.html">关联图解</a><a href="analemma.html">日行迹</a></nav><header><a class="brand" href="./"><span class="brand-mark">☀</span><span>天体视运动实验室<small>SKY MOTION LAB</small></span></a><div class="header-end"><span class="tag">地理交互实验室</span><button id="helpBtn" class="quiet">学习指南</button><button id="fullBtn" class="quiet" aria-label="切换全屏">⛶ 全屏</button></div></header>
-<main>
-<section class="workspace">
-<div class="controls-dock" id="controlsDock"><aside class="controls" id="controls" aria-label="分层实验菜单"><div class="section-head"><div><span class="eyebrow">实验菜单</span><p class="menu-intro">先选条件，再开始观察</p></div><button id="closeSettings" class="text-button">完成</button></div>
-<details class="menu-section" id="conditionsMenu" open><summary><span class="menu-section-name">日期与地点</span><span class="menu-summary" id="conditionsSummary"></span></summary><div class="menu-content"><label class="field-label" for="place">观察地点</label><select id="place"><option value="39.9,116.4">北京 · 39.9°N</option><option value="23.98,121.6">花莲 · 24.0°N</option><option value="0,0">赤道 · 0°</option><option value="31.2,121.5">上海 · 31.2°N</option><option value="51.5,-0.1">伦敦 · 51.5°N</option><option value="-33.9,151.2">悉尼 · 33.9°S</option><option value="66.56,25.7">北极圈 · 66.6°N</option><option value="90,0">北极 · 90°N</option><option value="-90,0">南极 · 90°S</option><option value="custom">自定义位置</option></select>
-<label class="field-label" for="date">观察日期</label><div class="date-navigation"><button id="prevDay" aria-label="前一天" title="前一天">‹</button><input id="date" type="date" value="2026-06-21" min="1900-01-01" max="2100-12-31"><button id="nextDay" aria-label="后一天" title="后一天">›</button></div><p class="micro" id="idealDateHint" hidden>理想实验不使用日期。<button id="dateObservationRestore" class="text-button">恢复日期观测</button></p><div class="season-buttons" id="seasonButtons"><button data-date="2026-03-20" data-angle="0" data-month="3">春分</button><button data-date="2026-06-21" data-angle="90" data-month="6" class="selected">夏至</button><button data-date="2026-09-23" data-angle="180" data-month="9">秋分</button><button data-date="2026-12-22" data-angle="270" data-month="12">冬至</button></div><details class="menu-subsection" id="coordinatesMenu"><summary>精确调整经纬度<span class="menu-summary" id="coordinatesSummary"></span></summary><div class="menu-content"><div class="label-row"><label for="lat">纬度</label><div class="coordinate-editor"><input id="latInput" type="number" min="-90" max="90" step="0.1" value="39.9" aria-label="纬度，北纬为正南纬为负"><output id="latText"></output></div></div><input id="lat" type="range" min="-90" max="90" step="0.1" value="39.9"><div class="range-labels"><span>南极 90°S</span><span>北极 90°N</span></div>
-<div class="label-row"><label for="lon">经度</label><div class="coordinate-editor"><input id="lonInput" type="number" min="-180" max="180" step="0.1" value="116.4" aria-label="经度，东经为正西经为负"><output id="lonText"></output></div></div><input id="lon" type="range" min="-180" max="180" step="0.1" value="116.4">
-</div></details><details class="menu-subsection" id="seasonMenu"><summary>全年季节比较<span class="menu-summary" id="seasonSummary"></span></summary><div class="menu-content"><div class="solar-year-strip"><div class="year-strip-head"><label for="solarYearDay">全年月份 · 连续比较季节</label><div><input id="solarYear" type="number" min="1900" max="2100" step="1" value="2026" aria-label="观察年份"><span id="solarYearDate"></span></div></div><input id="solarYearDay" type="range" min="1" max="365" step="1" aria-label="全年日期，按天连续变化"><div class="month-ticks" id="solarMonthTicks"></div><p class="micro" id="solarYearHint">拖动日期时保持当前观测时刻。</p></div></div></details><p id="moonDateNote" class="micro" hidden>月球位置由日期、时间与观察地点共同计算。</p></div></details>
-<details class="menu-section" id="modelMenu"><summary><span class="menu-section-name">演示方式</span><span class="menu-summary" id="modelSummary"></span></summary><div class="menu-content"><div id="solarSettings"><div class="model-switch" role="group" aria-label="太阳计算方式"><button data-model="date" class="active" aria-pressed="true">日期观测</button><button data-model="ideal" aria-pressed="false">理想实验</button></div><div class="label-row"><label for="dec">太阳赤纬 / 直射纬度</label><output id="decText"></output></div><input id="dec" type="range" min="-23.44" max="23.44" step="0.01"><p class="micro" id="dateMode">随日期计算 · 可拖动进行理想化实验</p><button id="restoreDate" class="text-button" hidden>恢复日期计算</button></div><div class="menu-divider"></div><details class="menu-subsection" id="solarDateModeMenu"><summary>固定时刻逐日比较</summary><div class="menu-content"><label class="toggle-row"><span>按日期观察太阳与杆影</span><input id="solarDateModeMenuToggle" type="checkbox" role="switch"></label><p class="micro">日期观测下保持当地真太阳时，主界面显示全年日期滑动条；太阳位置与杆影同步变化。</p><button id="solarDateShow" type="button">查看日期滑动条</button></div></details><label class="toggle-row" id="compareControl"><span>理想两至 / 分日对比</span><input id="compare" type="checkbox"></label><p class="micro">日期观测对应实际日期；理想实验用于单独研究纬度和太阳赤纬。</p></div></details>
-<details class="menu-section" id="displayMenu"><summary><span class="menu-section-name">显示辅助</span><span class="menu-summary" id="displaySummary"></span></summary><div class="menu-content"><p id="displayContextNote" class="micro" hidden>这些设置影响辅助天空视图。</p><label class="toggle-row"><span>天体轨迹</span><input id="track" type="checkbox" checked></label><label class="toggle-row"><span>角度辅助线</span><input id="angles" type="checkbox" checked></label><details class="menu-subsection" id="shadowMenu"><summary>日影与杆尖影迹</summary><div class="menu-content"><label class="toggle-row" id="shadowControl"><span>地面影子</span><input id="shadow" type="checkbox" checked></label><div class="label-row" id="heightControl"><label for="height">竖直立杆高度</label><div><input id="height" class="number" type="number" min="0.1" max="10" step="0.1" value="1"> m</div></div><label class="field-label shadow-scale-label" for="shadowZoom">日影地面放大</label><select id="shadowZoom"><option value="1">1× · 查看更长的影子</option><option value="2">2×</option><option value="4" selected>4× · 突出短影</option><option value="8">8× · 观察近正午短影</option><option value="16">16× · 观察微小影长</option></select><label class="toggle-row"><span>全天杆尖影迹</span><input id="shadowTrace" type="checkbox" role="switch"></label><p class="micro">开启影迹会切到俯视日影。杆尖影迹指杆尖的影子在地面上随时间移动的轨迹；太阳在地平线下时不产生直射日影。</p><button id="shadowView" class="shadow-view-button" type="button">查看俯视日影</button><p class="micro">放大只调整画面的地面比例，影长仍按真实米数显示；同一倍率下，比例不随时间或杆高自动变化。模型假设水平地面与竖直杆；圆外轨迹裁切，不沿边缘连线。</p></div></details></div></details>
-<details class="menu-section" id="studyMenu"><summary><span class="menu-section-name">关联图解</span><span class="menu-summary">查看原理与结果</span></summary><nav class="study-navigation" aria-label="教学图解"><button data-study-target="riseSetPanel" id="eventsLink">升落时刻与方位</button><button data-study-target="chartPanel" id="chartLink">全天高度曲线</button><button data-study-target="contextPanel" id="contextLink">太阳直射点与昼夜</button><button data-study-target="solarGeometryPanel" id="geometryLink">地轴与当地地平面</button><details class="menu-subsection" id="lifeDevicesMenu"><summary>生活装置</summary><div class="menu-content"><button data-study-target="sundialPanel" id="sundialLink" aria-haspopup="dialog" aria-controls="sundialPanel">水平日晷与赤道日晷</button></div></details><button data-study-target="analemmaPanel" id="analemmaLink">日行迹 · 全年固定时刻</button></nav></details>
-<div class="menu-footer"><button id="reset" class="text-button">重置当前太阳实验</button></div></aside></div>
-<div class="experiment"><div class="experiment-toolbar"><div class="body-switch" role="group" aria-label="观察天体"><button data-body="sun" aria-pressed="true" class="active">☀ 太阳</button><button data-body="moon" aria-pressed="false">☾ 月相</button></div><button id="settingsBtn" class="settings-button" aria-expanded="false" aria-controls="controls">实验菜单</button></div><div class="view-head"><div><h1 id="bodyTitle">太阳视运动</h1><p id="sceneSubtitle">北京 · 夏至</p></div><div class="view-tabs" role="group" aria-label="观察视角"><button data-view="orbit" aria-pressed="true" class="active">空间视图</button><button data-view="top" aria-pressed="false">俯视日影</button><button data-view="horizon" aria-pressed="false">地平视角</button><button data-view="observer" aria-pressed="false">仰望天空</button></div></div>
-<div id="phasePrimaryHost"></div><div class="solar-overlay-bar" id="solarOverlayBar"><label class="overlay-toggle" for="moonOverlay"><span>叠加月球视运动</span><input id="moonOverlay" type="checkbox" role="switch"></label><span class="micro" id="moonOverlayReadout">同一地点、日期和时刻</span></div><div class="stage" id="stage"><canvas id="sky" aria-label="太阳轨迹交互图，可拖动旋转、滚轮缩放" tabindex="0"></canvas><div class="stage-top"><span class="scene-badge" id="dayBadge">白昼</span><span id="viewHint">拖动旋转 · 滚轮缩放</span></div><div class="stage-key"><span><i class="dot sun-dot"></i><span id="primaryTrackText">太阳轨迹</span></span><span id="moonOverlayKey" hidden><i class="dot moon-dot"></i>月球轨迹</span><span id="solarAnnualKey" hidden><i class="dot solar-annual-dot"></i>全年太阳 <i class="dot shadow-annual-dot"></i>全年影尖</span><span id="shadowTraceKey" hidden><i class="dot shadow-tip-dot"></i>杆尖影迹</span><span id="compareKey" hidden><i class="dot summer-dot"></i>夏至模型 <i class="dot winter-dot"></i>冬至模型 <i class="dot equinox-dot"></i>分日模型</span></div><button id="viewReset" class="view-reset" aria-label="复位视角">⟲ 复位视角</button></div>
-<div class="model-explanation"><div id="observerControls" class="observer-controls" hidden><div class="observer-control-row"><div class="observer-bearing-panel"><div class="observer-directions" role="group" aria-label="仰望天空的朝向"><button data-look="0">北</button><button data-look="90">东</button><button data-look="180">南</button><button data-look="270">西</button></div><label>面向方位 <output id="observerBearing">180°</output><input id="observerAzimuth" type="range" min="0" max="360" step="1" value="180"></label></div><div id="observerTimeHost" class="observer-time-host"><div id="observerClockPanel" class="observer-clock-panel"><label for="observerTime"><span id="observerTimeLabel">当地真太阳时</span><output id="observerTimeValue">12:00</output></label><input id="observerTime" type="range" min="0" max="1440" step="1" value="720" aria-label="仰望天空观测时刻，当地真太阳时"><div class="time-labels"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div></div></div></div><p class="micro" id="observerStatus"></p><p class="micro">面向前方半球的天空正投影：并非照片式透视，圆盘大小便于辨认，不代表真实角直径；白昼也标出行星位置，几何在天空中不代表肉眼可见。点击天体名称可转向它。</p><div id="observerBodies" class="observer-bodies"></div></div><p id="modelNote"></p><p id="plotNote"></p><p id="shadowScale"></p><p id="shadowTraceNote" hidden></p></div><div class="solar-date-mode-bar" id="solarDateModeBar"><label class="overlay-toggle" for="solarDateMode"><span>固定时刻 · 逐日观察</span><input id="solarDateMode" type="checkbox" role="switch" aria-controls="solarDateTimeline"></label><details class="compact-mode-help"><summary aria-label="固定时刻逐日观察的说明">ⓘ</summary><p class="micro" id="solarDateModeHint">开启后保持观测时刻，用全年日期滑动条比较季节变化。</p></details></div><div class="timeline" id="sunTimeline"><div class="time-top"><div><span class="eyebrow">当地真太阳时</span><strong id="timeText">12:00</strong></div><div class="play-controls"><select id="speed" aria-label="播放速度"><option value="20">慢速</option><option value="60" selected>常速</option><option value="180">快速</option></select><label class="loop-control"><input id="loop" type="checkbox" checked>循环当天</label><button id="play" class="play-button">▶ 播放</button></div></div><input id="time" type="range" min="0" max="1440" step="1" value="720" aria-label="当地真太阳时"><div class="time-labels"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div><div class="time-shortcuts"><button id="goRise"><span id="riseLabel">日出</span> <span id="riseInline"></span></button><button id="goNoon"><span id="peakLabel">正午</span> <span id="peakInline">12:00</span></button><button id="goSet"><span id="setLabel">日落</span> <span id="setInline"></span></button></div></div>
-<div class="timeline solar-date-timeline" id="solarDateTimeline" hidden><div class="time-top"><div><span class="eyebrow">太阳逐日观察 · 固定当地真太阳时</span><strong id="solarDateText"></strong></div><div class="play-controls"><select id="solarDateSpeed" aria-label="太阳日期播放速度"><option value="1">1 天/秒</option><option value="3" selected>3 天/秒</option><option value="10">10 天/秒</option></select><label class="loop-control"><input id="solarDateLoop" type="checkbox" checked>循环本年</label><button id="solarDatePlay" class="play-button">▶ 按日期播放</button></div></div><div class="solar-date-year"><label for="solarDateYear">观察年份</label><input id="solarDateYear" type="number" min="1900" max="2100" step="1" value="2026"><span id="solarFixedTimeLabel"></span></div><input id="solarDateDay" type="range" min="1" max="365" step="1" value="172" aria-label="太阳固定时刻的全年日期"><div id="solarDateMonths" class="month-ticks"></div><div class="lunar-day-buttons"><button id="solarDatePrev">前一天</button><button id="solarDateNext">后一天</button></div><p class="micro motion-date-note">相邻日期的太阳与影尖平滑过渡；数值对应选定日期。日期推进不推进一天内的时间。</p><div class="solar-date-options"><label class="overlay-toggle" for="solarDateTrail"><input id="solarDateTrail" type="checkbox" checked><span>全年同一时刻的太阳 / 影尖轨迹</span></label><label class="overlay-toggle" for="solarDateLink"><input id="solarDateLink" type="checkbox" checked><span>联动下方全年日行迹</span></label></div><p id="solarDateResults" class="solar-date-results" aria-live="off"></p><details id="solarFixedObservation"><summary>调整固定观测时刻 <span id="solarFixedTimeText"></span></summary><label class="micro" for="solarFixedTime">当地真太阳时 · 日期变化时保持这个时刻</label><input id="solarFixedTime" type="range" min="0" max="1439" step="1" value="720"><div class="time-labels"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:59</span></div></details><p class="micro">全年轨迹连接每日同一时刻的位置：粉紫色为太阳、绿色为杆尖的影子。只在有直射阳光时绘制影迹，圆外部分裁切。固定真太阳时使太阳时角近似固定，季节轨迹通常不是固定钟表时形成的“8”字。</p></div>
-<div class="timeline lunar-timeline" id="moonTimeline" hidden><div class="time-top"><div><span class="eyebrow">逐日观察 · 固定观测时刻</span><strong id="moonDateText"></strong></div><div class="play-controls"><select id="moonSpeed" aria-label="日期播放速度"><option value="0.5">0.5 天/秒</option><option value="1" selected>1 天/秒</option><option value="3">3 天/秒</option></select><label class="loop-control"><input id="moonLoop" type="checkbox" checked>循环本月</label><button id="moonPlay" class="play-button">▶ 逐日播放</button></div></div><p class="micro motion-date-note">相邻日期的画面平滑过渡；数值以选定日期为准。</p><div class="month-navigation"><button id="moonPrevMonth" aria-label="上个月">‹</button><input id="moonMonth" type="month" min="1900-01" max="2100-12" value="2026-06" aria-label="观察月份"><button id="moonNextMonth" aria-label="下个月">›</button></div><input id="moonDay" type="range" min="1" max="30" step="1" value="21" aria-label="按天选择日期"><div class="time-labels" id="moonDayLabels"></div><div class="lunar-day-buttons"><button id="moonPrevDay">前一天</button><span id="moonFixedClock"></span><button id="moonNextDay">后一天</button></div><details id="moonObservation"><summary>调整一天内的观测时刻 <span id="moonClockText">20:00</span></summary><label class="micro" for="moonClock">当地真太阳时 · 日期推进时保持这个时刻</label><input id="moonClock" type="range" min="0" max="1440" step="1" value="1200"><div class="time-labels"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div><div class="time-shortcuts"><button id="moonRise">月出 <span id="moonRiseTime"></span></button><button id="moonPeak">日内最高 <span id="moonPeakTime"></span></button><button id="moonSet">月落 <span id="moonSetTime"></span></button></div></details></div>
-<section class="panel companion-module" id="companionModule" hidden aria-label="行星伴月演示"><div class="panel-title"><div><span class="eyebrow">拓展观察</span><h2>行星伴月</h2></div><label class="overlay-toggle" for="companionEnabled"><span>演示</span><input id="companionEnabled" type="checkbox" role="switch" aria-label="开启行星伴月演示" aria-controls="companionContent"></label></div><p class="micro">比较月球与行星在天空中的方向。看起来靠近，不代表真实空间距离接近。</p><div id="companionContent" hidden><div class="companion-toolbar"><label for="companionPlanet">选择行星</label><select id="companionPlanet"><option value="Mercury">水星</option><option value="Venus" selected>金星</option><option value="Mars">火星</option><option value="Jupiter">木星</option><option value="Saturn">土星</option></select><button id="companionFind">找未来30天最靠近日</button></div><p class="micro" id="companionObserver"></p><p class="companion-search-status" id="companionSearchStatus" role="status" aria-live="polite"></p><div class="companion-measures"><div><span>月球与行星的角距</span><strong id="companionSeparation"></strong><small id="companionProximity"></small></div><div><span>月球高度</span><strong id="companionMoonAltitude"></strong><small id="companionMoonDirection"></small></div><div><span id="companionPlanetLabel">金星高度</span><strong id="companionPlanetAltitude"></strong><small id="companionPlanetDirection"></small></div></div><canvas id="companionSky" aria-label="月球与所选行星在同一地点和时刻的方位高度展开图"></canvas><p class="companion-visibility" id="companionVisibility"></p><div class="companion-actions"><button id="companionClock">调整观测时刻</button><span class="micro">逐日播放沿用上方日期滑块。</span></div><p class="micro">方位—高度展开图，画面距离不等于球面角距；虚线只用于关联标记。圆点只表示方向位置，不判断遮挡或掩星。靠近时局部放大；月相朝向不代表本地月面朝向。近距参考取 ≤5°，不是“伴月”的统一定义；搜索仅比较每日固定时刻，不是精确合相时刻。</p></div></section>
-</div></section>
-<section class="metrics" aria-label="实时计算结果"><article><span id="altLabel">太阳高度角</span><strong id="altMetric"></strong><small id="altNote"></small></article><article><span id="azLabel">太阳方位角</span><strong id="azMetric"></strong><small>正北 0° · 顺时针计量</small></article><article><details class="metric-definition"><summary><span id="durationLabel">白昼时长</span><span class="metric-info-icon" aria-hidden="true">ⓘ</span><span class="sr-only">，展开计算说明</span></summary><p id="durationDefinition"></p></details><strong id="dayMetric"></strong><small id="dayNote"></small></article><article><span id="fourthLabel">地面影长</span><strong id="shadowMetric"></strong><small id="shadowNote"></small></article></section>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="favicon.svg" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="pages.css" />
+    <!-- search-metadata:start -->
+    <title>太阳与月相实验台 · 天体视运动实验室</title>
+    <meta
+      name="description"
+      content="调节地点、日期和时刻，比较太阳高度、方位、日影与月相；切换空间、俯视、地平和仰望天空视角。"
+    />
+    <link rel="canonical" href="https://skymotion-5md.pages.dev/lab" />
+    <meta property="og:title" content="太阳与月相实验台 · 天体视运动实验室" />
+    <meta
+      property="og:description"
+      content="调节地点、日期和时刻，比较太阳高度、方位、日影与月相；切换空间、俯视、地平和仰望天空视角。"
+    />
+    <meta property="og:url" content="https://skymotion-5md.pages.dev/lab" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <!-- search-metadata:end -->
+  </head>
+  <body data-page="lab">
+    <div id="labShell" hidden inert>
+      <nav class="page-nav" aria-label="页面导航">
+        <a href="index.html">欢迎页</a><a href="lab.html">实验台</a><a href="guide.html">学习指南</a
+        ><a href="diagrams.html">关联图解</a><a href="analemma.html">日行迹</a>
+      </nav>
+      <header>
+        <a class="brand" href="./"
+          ><span class="brand-mark">☀</span
+          ><span>天体视运动实验室<small>SKY MOTION LAB</small></span></a
+        >
+        <div class="header-end">
+          <span class="tag">地理交互实验室</span><button id="helpBtn" class="quiet">学习指南</button
+          ><button id="fullBtn" class="quiet" aria-label="切换全屏">⛶ 全屏</button>
+        </div>
+      </header>
+      <main>
+        <section class="workspace">
+          <div class="controls-dock" id="controlsDock">
+            <aside class="controls" id="controls" aria-label="分层实验菜单">
+              <div class="section-head">
+                <div>
+                  <span class="eyebrow">实验菜单</span>
+                  <p class="menu-intro">先选条件，再开始观察</p>
+                </div>
+                <button id="closeSettings" class="text-button">完成</button>
+              </div>
+              <details class="menu-section" id="conditionsMenu" open>
+                <summary>
+                  <span class="menu-section-name">日期与地点</span
+                  ><span class="menu-summary" id="conditionsSummary"></span>
+                </summary>
+                <div class="menu-content">
+                  <label class="field-label" for="place">观察地点</label
+                  ><select id="place">
+                    <option value="39.9,116.4">北京 · 39.9°N</option>
+                    <option value="23.98,121.6">花莲 · 24.0°N</option>
+                    <option value="0,0">赤道 · 0°</option>
+                    <option value="31.2,121.5">上海 · 31.2°N</option>
+                    <option value="51.5,-0.1">伦敦 · 51.5°N</option>
+                    <option value="-33.9,151.2">悉尼 · 33.9°S</option>
+                    <option value="66.56,25.7">北极圈 · 66.6°N</option>
+                    <option value="90,0">北极 · 90°N</option>
+                    <option value="-90,0">南极 · 90°S</option>
+                    <option value="custom">自定义位置</option>
+                  </select>
+                  <label class="field-label" for="date">观察日期</label>
+                  <div class="date-navigation">
+                    <button id="prevDay" aria-label="前一天" title="前一天">‹</button
+                    ><input
+                      id="date"
+                      type="date"
+                      value="2026-06-21"
+                      min="1900-01-01"
+                      max="2100-12-31"
+                    /><button id="nextDay" aria-label="后一天" title="后一天">›</button>
+                  </div>
+                  <p class="micro" id="idealDateHint" hidden>
+                    理想实验不使用日期。<button id="dateObservationRestore" class="text-button">
+                      恢复日期观测
+                    </button>
+                  </p>
+                  <div class="season-buttons" id="seasonButtons">
+                    <button data-date="2026-03-20" data-angle="0" data-month="3">春分</button
+                    ><button data-date="2026-06-21" data-angle="90" data-month="6" class="selected">
+                      夏至</button
+                    ><button data-date="2026-09-23" data-angle="180" data-month="9">秋分</button
+                    ><button data-date="2026-12-22" data-angle="270" data-month="12">冬至</button>
+                  </div>
+                  <details class="menu-subsection" id="coordinatesMenu">
+                    <summary>
+                      精确调整经纬度<span class="menu-summary" id="coordinatesSummary"></span>
+                    </summary>
+                    <div class="menu-content">
+                      <div class="label-row">
+                        <label for="lat">纬度</label>
+                        <div class="coordinate-editor">
+                          <input
+                            id="latInput"
+                            type="number"
+                            min="-90"
+                            max="90"
+                            step="0.1"
+                            value="39.9"
+                            aria-label="纬度，北纬为正南纬为负"
+                          /><output id="latText"></output>
+                        </div>
+                      </div>
+                      <input id="lat" type="range" min="-90" max="90" step="0.1" value="39.9" />
+                      <div class="range-labels"><span>南极 90°S</span><span>北极 90°N</span></div>
+                      <div class="label-row">
+                        <label for="lon">经度</label>
+                        <div class="coordinate-editor">
+                          <input
+                            id="lonInput"
+                            type="number"
+                            min="-180"
+                            max="180"
+                            step="0.1"
+                            value="116.4"
+                            aria-label="经度，东经为正西经为负"
+                          /><output id="lonText"></output>
+                        </div>
+                      </div>
+                      <input id="lon" type="range" min="-180" max="180" step="0.1" value="116.4" />
+                    </div>
+                  </details>
+                  <details class="menu-subsection" id="seasonMenu">
+                    <summary>
+                      全年季节比较<span class="menu-summary" id="seasonSummary"></span>
+                    </summary>
+                    <div class="menu-content">
+                      <div class="solar-year-strip">
+                        <div class="year-strip-head">
+                          <label for="solarYearDay">全年月份 · 连续比较季节</label>
+                          <div>
+                            <input
+                              id="solarYear"
+                              type="number"
+                              min="1900"
+                              max="2100"
+                              step="1"
+                              value="2026"
+                              aria-label="观察年份"
+                            /><span id="solarYearDate"></span>
+                          </div>
+                        </div>
+                        <input
+                          id="solarYearDay"
+                          type="range"
+                          min="1"
+                          max="365"
+                          step="1"
+                          aria-label="全年日期，按天连续变化"
+                        />
+                        <div class="month-ticks" id="solarMonthTicks"></div>
+                        <p class="micro" id="solarYearHint">拖动日期时保持当前观测时刻。</p>
+                      </div>
+                    </div>
+                  </details>
+                  <p id="moonDateNote" class="micro" hidden>
+                    月球位置由日期、时间与观察地点共同计算。
+                  </p>
+                </div>
+              </details>
+              <details class="menu-section" id="modelMenu">
+                <summary>
+                  <span class="menu-section-name">演示方式</span
+                  ><span class="menu-summary" id="modelSummary"></span>
+                </summary>
+                <div class="menu-content">
+                  <div id="solarSettings">
+                    <div class="model-switch" role="group" aria-label="太阳计算方式">
+                      <button data-model="date" class="active" aria-pressed="true">日期观测</button
+                      ><button data-model="ideal" aria-pressed="false">理想实验</button>
+                    </div>
+                    <div class="label-row">
+                      <label for="dec">太阳赤纬 / 直射纬度</label><output id="decText"></output>
+                    </div>
+                    <input id="dec" type="range" min="-23.44" max="23.44" step="0.01" />
+                    <p class="micro" id="dateMode">随日期计算 · 可拖动进行理想化实验</p>
+                    <button id="restoreDate" class="text-button" hidden>恢复日期计算</button>
+                  </div>
+                  <div class="menu-divider"></div>
+                  <details class="menu-subsection" id="solarDateModeMenu">
+                    <summary>固定时刻逐日比较</summary>
+                    <div class="menu-content">
+                      <label class="toggle-row"
+                        ><span>按日期观察太阳与杆影</span
+                        ><input id="solarDateModeMenuToggle" type="checkbox" role="switch"
+                      /></label>
+                      <p class="micro">
+                        日期观测下保持当地真太阳时，主界面显示全年日期滑动条；太阳位置与杆影同步变化。
+                      </p>
+                      <button id="solarDateShow" type="button">查看日期滑动条</button>
+                    </div>
+                  </details>
+                  <label class="toggle-row" id="compareControl"
+                    ><span>理想两至 / 分日对比</span><input id="compare" type="checkbox"
+                  /></label>
+                  <p class="micro">日期观测对应实际日期；理想实验用于单独研究纬度和太阳赤纬。</p>
+                </div>
+              </details>
+              <details class="menu-section" id="displayMenu">
+                <summary>
+                  <span class="menu-section-name">显示辅助</span
+                  ><span class="menu-summary" id="displaySummary"></span>
+                </summary>
+                <div class="menu-content">
+                  <p id="displayContextNote" class="micro" hidden>这些设置影响辅助天空视图。</p>
+                  <label class="toggle-row"
+                    ><span>天体轨迹</span><input id="track" type="checkbox" checked /></label
+                  ><label class="toggle-row"
+                    ><span>角度辅助线</span><input id="angles" type="checkbox" checked
+                  /></label>
+                  <details class="menu-subsection" id="shadowMenu">
+                    <summary>日影与杆尖影迹</summary>
+                    <div class="menu-content">
+                      <label class="toggle-row" id="shadowControl"
+                        ><span>地面影子</span><input id="shadow" type="checkbox" checked
+                      /></label>
+                      <div class="label-row" id="heightControl">
+                        <label for="height">竖直立杆高度</label>
+                        <div>
+                          <input
+                            id="height"
+                            class="number"
+                            type="number"
+                            min="0.1"
+                            max="10"
+                            step="0.1"
+                            value="1"
+                          />
+                          m
+                        </div>
+                      </div>
+                      <label class="field-label shadow-scale-label" for="shadowZoom"
+                        >日影地面放大</label
+                      ><select id="shadowZoom">
+                        <option value="1">1× · 查看更长的影子</option>
+                        <option value="2">2×</option>
+                        <option value="4" selected>4× · 突出短影</option>
+                        <option value="8">8× · 观察近正午短影</option>
+                        <option value="16">16× · 观察微小影长</option></select
+                      ><label class="toggle-row"
+                        ><span>全天杆尖影迹</span
+                        ><input id="shadowTrace" type="checkbox" role="switch"
+                      /></label>
+                      <p class="micro">
+                        开启影迹会切到俯视日影。杆尖影迹指杆尖的影子在地面上随时间移动的轨迹；太阳在地平线下时不产生直射日影。
+                      </p>
+                      <button id="shadowView" class="shadow-view-button" type="button">
+                        查看俯视日影
+                      </button>
+                      <p class="micro">
+                        放大只调整画面的地面比例，影长仍按真实米数显示；同一倍率下，比例不随时间或杆高自动变化。模型假设水平地面与竖直杆；圆外轨迹裁切，不沿边缘连线。
+                      </p>
+                    </div>
+                  </details>
+                </div>
+              </details>
+              <details class="menu-section" id="studyMenu">
+                <summary>
+                  <span class="menu-section-name">关联图解</span
+                  ><span class="menu-summary">查看原理与结果</span>
+                </summary>
+                <nav class="study-navigation" aria-label="教学图解">
+                  <button data-study-target="riseSetPanel" id="eventsLink">升落时刻与方位</button
+                  ><button data-study-target="chartPanel" id="chartLink">全天高度曲线</button
+                  ><button data-study-target="contextPanel" id="contextLink">
+                    太阳直射点与昼夜</button
+                  ><button data-study-target="solarGeometryPanel" id="geometryLink">
+                    地轴与当地地平面
+                  </button>
+                  <details class="menu-subsection" id="lifeDevicesMenu">
+                    <summary>生活装置</summary>
+                    <div class="menu-content">
+                      <button
+                        data-study-target="sundialPanel"
+                        id="sundialLink"
+                        aria-haspopup="dialog"
+                        aria-controls="sundialPanel"
+                      >
+                        水平日晷与赤道日晷
+                      </button>
+                    </div>
+                  </details>
+                  <button data-study-target="analemmaPanel" id="analemmaLink">
+                    日行迹 · 全年固定时刻
+                  </button>
+                </nav>
+              </details>
+              <div class="menu-footer">
+                <button id="reset" class="text-button">重置当前太阳实验</button>
+              </div>
+            </aside>
+          </div>
+          <div class="experiment">
+            <div class="experiment-toolbar">
+              <div class="body-switch" role="group" aria-label="观察天体">
+                <button data-body="sun" aria-pressed="true" class="active">☀ 太阳</button
+                ><button data-body="moon" aria-pressed="false">☾ 月相</button>
+              </div>
+              <button
+                id="settingsBtn"
+                class="settings-button"
+                aria-expanded="false"
+                aria-controls="controls"
+              >
+                实验菜单
+              </button>
+            </div>
+            <div class="view-head">
+              <div>
+                <h1 id="bodyTitle">太阳视运动</h1>
+                <p id="sceneSubtitle">北京 · 夏至</p>
+              </div>
+              <div class="view-tabs" role="group" aria-label="观察视角">
+                <button data-view="orbit" aria-pressed="true" class="active">空间视图</button
+                ><button data-view="top" aria-pressed="false">俯视日影</button
+                ><button data-view="horizon" aria-pressed="false">地平视角</button
+                ><button data-view="observer" aria-pressed="false">仰望天空</button>
+              </div>
+            </div>
+            <div id="phasePrimaryHost"></div>
+            <div class="solar-overlay-bar" id="solarOverlayBar">
+              <label class="overlay-toggle" for="moonOverlay"
+                ><span>叠加月球视运动</span
+                ><input id="moonOverlay" type="checkbox" role="switch" /></label
+              ><span class="micro" id="moonOverlayReadout">同一地点、日期和时刻</span>
+            </div>
+            <div class="stage" id="stage">
+              <canvas
+                id="sky"
+                aria-label="太阳轨迹交互图，可拖动旋转、滚轮缩放"
+                tabindex="0"
+              ></canvas>
+              <div class="stage-top">
+                <span class="scene-badge" id="dayBadge">白昼</span
+                ><span id="viewHint">拖动旋转 · 滚轮缩放</span>
+              </div>
+              <div class="stage-key">
+                <span><i class="dot sun-dot"></i><span id="primaryTrackText">太阳轨迹</span></span
+                ><span id="moonOverlayKey" hidden><i class="dot moon-dot"></i>月球轨迹</span
+                ><span id="solarAnnualKey" hidden
+                  ><i class="dot solar-annual-dot"></i>全年太阳
+                  <i class="dot shadow-annual-dot"></i>全年影尖</span
+                ><span id="shadowTraceKey" hidden><i class="dot shadow-tip-dot"></i>杆尖影迹</span
+                ><span id="compareKey" hidden
+                  ><i class="dot summer-dot"></i>夏至模型 <i class="dot winter-dot"></i>冬至模型
+                  <i class="dot equinox-dot"></i>分日模型</span
+                >
+              </div>
+              <button id="viewReset" class="view-reset" aria-label="复位视角">⟲ 复位视角</button>
+            </div>
+            <div class="model-explanation">
+              <div id="observerControls" class="observer-controls" hidden>
+                <div class="observer-control-row">
+                  <div class="observer-bearing-panel">
+                    <div class="observer-directions" role="group" aria-label="仰望天空的朝向">
+                      <button data-look="0">北</button><button data-look="90">东</button
+                      ><button data-look="180">南</button><button data-look="270">西</button>
+                    </div>
+                    <label
+                      >面向方位 <output id="observerBearing">180°</output
+                      ><input
+                        id="observerAzimuth"
+                        type="range"
+                        min="0"
+                        max="360"
+                        step="1"
+                        value="180"
+                    /></label>
+                  </div>
+                  <div id="observerTimeHost" class="observer-time-host">
+                    <div id="observerClockPanel" class="observer-clock-panel">
+                      <label for="observerTime"
+                        ><span id="observerTimeLabel">当地真太阳时</span
+                        ><output id="observerTimeValue">12:00</output></label
+                      ><input
+                        id="observerTime"
+                        type="range"
+                        min="0"
+                        max="1440"
+                        step="1"
+                        value="720"
+                        aria-label="仰望天空观测时刻，当地真太阳时"
+                      />
+                      <div class="time-labels">
+                        <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span
+                        ><span>24:00</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="micro" id="observerStatus"></p>
+                <p class="micro">
+                  面向前方半球的天空正投影：并非照片式透视，圆盘大小便于辨认，不代表真实角直径；白昼也标出行星位置，几何在天空中不代表肉眼可见。点击天体名称可转向它。
+                </p>
+                <div id="observerBodies" class="observer-bodies"></div>
+              </div>
+              <p id="modelNote"></p>
+              <p id="plotNote"></p>
+              <p id="shadowScale"></p>
+              <p id="shadowTraceNote" hidden></p>
+            </div>
+            <div class="solar-date-mode-bar" id="solarDateModeBar">
+              <label class="overlay-toggle" for="solarDateMode"
+                ><span>固定时刻 · 逐日观察</span
+                ><input
+                  id="solarDateMode"
+                  type="checkbox"
+                  role="switch"
+                  aria-controls="solarDateTimeline"
+              /></label>
+              <details class="compact-mode-help">
+                <summary aria-label="固定时刻逐日观察的说明">ⓘ</summary>
+                <p class="micro" id="solarDateModeHint">
+                  开启后保持观测时刻，用全年日期滑动条比较季节变化。
+                </p>
+              </details>
+            </div>
+            <div class="timeline" id="sunTimeline">
+              <div class="time-top">
+                <div>
+                  <span class="eyebrow">当地真太阳时</span><strong id="timeText">12:00</strong>
+                </div>
+                <div class="play-controls">
+                  <select id="speed" aria-label="播放速度">
+                    <option value="20">慢速</option>
+                    <option value="60" selected>常速</option>
+                    <option value="180">快速</option></select
+                  ><label class="loop-control"
+                    ><input id="loop" type="checkbox" checked />循环当天</label
+                  ><button id="play" class="play-button">▶ 播放</button>
+                </div>
+              </div>
+              <input
+                id="time"
+                type="range"
+                min="0"
+                max="1440"
+                step="1"
+                value="720"
+                aria-label="当地真太阳时"
+              />
+              <div class="time-labels">
+                <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span
+                ><span>24:00</span>
+              </div>
+              <div class="time-shortcuts">
+                <button id="goRise">
+                  <span id="riseLabel">日出</span> <span id="riseInline"></span></button
+                ><button id="goNoon">
+                  <span id="peakLabel">正午</span> <span id="peakInline">12:00</span></button
+                ><button id="goSet">
+                  <span id="setLabel">日落</span> <span id="setInline"></span>
+                </button>
+              </div>
+            </div>
+            <div class="timeline solar-date-timeline" id="solarDateTimeline" hidden>
+              <div class="time-top">
+                <div>
+                  <span class="eyebrow">太阳逐日观察 · 固定当地真太阳时</span
+                  ><strong id="solarDateText"></strong>
+                </div>
+                <div class="play-controls">
+                  <select id="solarDateSpeed" aria-label="太阳日期播放速度">
+                    <option value="1">1 天/秒</option>
+                    <option value="3" selected>3 天/秒</option>
+                    <option value="10">10 天/秒</option></select
+                  ><label class="loop-control"
+                    ><input id="solarDateLoop" type="checkbox" checked />循环本年</label
+                  ><button id="solarDatePlay" class="play-button">▶ 按日期播放</button>
+                </div>
+              </div>
+              <div class="solar-date-year">
+                <label for="solarDateYear">观察年份</label
+                ><input
+                  id="solarDateYear"
+                  type="number"
+                  min="1900"
+                  max="2100"
+                  step="1"
+                  value="2026"
+                /><span id="solarFixedTimeLabel"></span>
+              </div>
+              <input
+                id="solarDateDay"
+                type="range"
+                min="1"
+                max="365"
+                step="1"
+                value="172"
+                aria-label="太阳固定时刻的全年日期"
+              />
+              <div id="solarDateMonths" class="month-ticks"></div>
+              <div class="lunar-day-buttons">
+                <button id="solarDatePrev">前一天</button><button id="solarDateNext">后一天</button>
+              </div>
+              <p class="micro motion-date-note">
+                相邻日期的太阳与影尖平滑过渡；数值对应选定日期。日期推进不推进一天内的时间。
+              </p>
+              <div class="solar-date-options">
+                <label class="overlay-toggle" for="solarDateTrail"
+                  ><input id="solarDateTrail" type="checkbox" checked /><span
+                    >全年同一时刻的太阳 / 影尖轨迹</span
+                  ></label
+                ><label class="overlay-toggle" for="solarDateLink"
+                  ><input id="solarDateLink" type="checkbox" checked /><span
+                    >联动下方全年日行迹</span
+                  ></label
+                >
+              </div>
+              <p id="solarDateResults" class="solar-date-results" aria-live="off"></p>
+              <details id="solarFixedObservation">
+                <summary>调整固定观测时刻 <span id="solarFixedTimeText"></span></summary>
+                <label class="micro" for="solarFixedTime"
+                  >当地真太阳时 · 日期变化时保持这个时刻</label
+                ><input id="solarFixedTime" type="range" min="0" max="1439" step="1" value="720" />
+                <div class="time-labels">
+                  <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span
+                  ><span>23:59</span>
+                </div>
+              </details>
+              <p class="micro">
+                全年轨迹连接每日同一时刻的位置：粉紫色为太阳、绿色为杆尖的影子。只在有直射阳光时绘制影迹，圆外部分裁切。固定真太阳时使太阳时角近似固定，季节轨迹通常不是固定钟表时形成的“8”字。
+              </p>
+            </div>
+            <div class="timeline lunar-timeline" id="moonTimeline" hidden>
+              <div class="time-top">
+                <div>
+                  <span class="eyebrow">逐日观察 · 固定观测时刻</span
+                  ><strong id="moonDateText"></strong>
+                </div>
+                <div class="play-controls">
+                  <select id="moonSpeed" aria-label="日期播放速度">
+                    <option value="0.5">0.5 天/秒</option>
+                    <option value="1" selected>1 天/秒</option>
+                    <option value="3">3 天/秒</option></select
+                  ><label class="loop-control"
+                    ><input id="moonLoop" type="checkbox" checked />循环本月</label
+                  ><button id="moonPlay" class="play-button">▶ 逐日播放</button>
+                </div>
+              </div>
+              <p class="micro motion-date-note">相邻日期的画面平滑过渡；数值以选定日期为准。</p>
+              <div class="month-navigation">
+                <button id="moonPrevMonth" aria-label="上个月">‹</button
+                ><input
+                  id="moonMonth"
+                  type="month"
+                  min="1900-01"
+                  max="2100-12"
+                  value="2026-06"
+                  aria-label="观察月份"
+                /><button id="moonNextMonth" aria-label="下个月">›</button>
+              </div>
+              <input
+                id="moonDay"
+                type="range"
+                min="1"
+                max="30"
+                step="1"
+                value="21"
+                aria-label="按天选择日期"
+              />
+              <div class="time-labels" id="moonDayLabels"></div>
+              <div class="lunar-day-buttons">
+                <button id="moonPrevDay">前一天</button><span id="moonFixedClock"></span
+                ><button id="moonNextDay">后一天</button>
+              </div>
+              <details id="moonObservation">
+                <summary>调整一天内的观测时刻 <span id="moonClockText">20:00</span></summary>
+                <label class="micro" for="moonClock">当地真太阳时 · 日期推进时保持这个时刻</label
+                ><input id="moonClock" type="range" min="0" max="1440" step="1" value="1200" />
+                <div class="time-labels">
+                  <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span
+                  ><span>24:00</span>
+                </div>
+                <div class="time-shortcuts">
+                  <button id="moonRise">月出 <span id="moonRiseTime"></span></button
+                  ><button id="moonPeak">日内最高 <span id="moonPeakTime"></span></button
+                  ><button id="moonSet">月落 <span id="moonSetTime"></span></button>
+                </div>
+              </details>
+            </div>
+            <section
+              class="panel companion-module"
+              id="companionModule"
+              hidden
+              aria-label="行星伴月演示"
+            >
+              <div class="panel-title">
+                <div>
+                  <span class="eyebrow">拓展观察</span>
+                  <h2>行星伴月</h2>
+                </div>
+                <label class="overlay-toggle" for="companionEnabled"
+                  ><span>演示</span
+                  ><input
+                    id="companionEnabled"
+                    type="checkbox"
+                    role="switch"
+                    aria-label="开启行星伴月演示"
+                    aria-controls="companionContent"
+                /></label>
+              </div>
+              <p class="micro">
+                比较月球与行星在天空中的方向。看起来靠近，不代表真实空间距离接近。
+              </p>
+              <div id="companionContent" hidden>
+                <div class="companion-toolbar">
+                  <label for="companionPlanet">选择行星</label
+                  ><select id="companionPlanet">
+                    <option value="Mercury">水星</option>
+                    <option value="Venus" selected>金星</option>
+                    <option value="Mars">火星</option>
+                    <option value="Jupiter">木星</option>
+                    <option value="Saturn">土星</option></select
+                  ><button id="companionFind">找未来30天最靠近日</button>
+                </div>
+                <p class="micro" id="companionObserver"></p>
+                <p
+                  class="companion-search-status"
+                  id="companionSearchStatus"
+                  role="status"
+                  aria-live="polite"
+                ></p>
+                <div class="companion-measures">
+                  <div>
+                    <span>月球与行星的角距</span><strong id="companionSeparation"></strong
+                    ><small id="companionProximity"></small>
+                  </div>
+                  <div>
+                    <span>月球高度</span><strong id="companionMoonAltitude"></strong
+                    ><small id="companionMoonDirection"></small>
+                  </div>
+                  <div>
+                    <span id="companionPlanetLabel">金星高度</span
+                    ><strong id="companionPlanetAltitude"></strong
+                    ><small id="companionPlanetDirection"></small>
+                  </div>
+                </div>
+                <canvas
+                  id="companionSky"
+                  aria-label="月球与所选行星在同一地点和时刻的方位高度展开图"
+                ></canvas>
+                <p class="companion-visibility" id="companionVisibility"></p>
+                <div class="companion-actions">
+                  <button id="companionClock">调整观测时刻</button
+                  ><span class="micro">逐日播放沿用上方日期滑块。</span>
+                </div>
+                <p class="micro">
+                  方位—高度展开图，画面距离不等于球面角距；虚线只用于关联标记。圆点只表示方向位置，不判断遮挡或掩星。靠近时局部放大；月相朝向不代表本地月面朝向。近距参考取
+                  ≤5°，不是“伴月”的统一定义；搜索仅比较每日固定时刻，不是精确合相时刻。
+                </p>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section class="metrics" aria-label="实时计算结果">
+          <article>
+            <span id="altLabel">太阳高度角</span><strong id="altMetric"></strong
+            ><small id="altNote"></small>
+          </article>
+          <article>
+            <span id="azLabel">太阳方位角</span><strong id="azMetric"></strong
+            ><small>正北 0° · 顺时针计量</small>
+          </article>
+          <article>
+            <details class="metric-definition">
+              <summary>
+                <span id="durationLabel">白昼时长</span
+                ><span class="metric-info-icon" aria-hidden="true">ⓘ</span
+                ><span class="sr-only">，展开计算说明</span>
+              </summary>
+              <p id="durationDefinition"></p>
+            </details>
+            <strong id="dayMetric"></strong><small id="dayNote"></small>
+          </article>
+          <article>
+            <span id="fourthLabel">地面影长</span><strong id="shadowMetric"></strong
+            ><small id="shadowNote"></small>
+          </article>
+        </section>
 
-<section id="riseSetPanel" tabindex="-1" class="panel rise-set-panel" aria-label="天体升落时刻和方位"><div class="panel-title"><div><span class="eyebrow">当日升落 · 同时比较</span><h2 id="eventTitle">日出与日落方位</h2></div><span class="micro">正北 0° · 顺时针</span></div><div class="event-layout"><canvas id="eventCompass" aria-label="升落方向的北向上方位图"></canvas><div class="event-values"><button id="eventRise"><span id="eventRiseLabel">日出</span><strong id="eventRiseAz"></strong><small id="eventRiseClock"></small></button><button id="eventSet"><span id="eventSetLabel">日落</span><strong id="eventSetAz"></strong><small id="eventSetClock"></small></button></div></div><p class="micro" id="eventNote"></p></section>
-<section class="detail-grid"><article id="chartPanel" tabindex="-1" class="panel chart-panel"><div class="panel-title"><div><span class="eyebrow" id="chartEyebrow">全天变化</span><h2 id="chartTitle">太阳高度曲线</h2></div><span class="legend"><i class="dot sun-dot"></i><span id="chartLegend">当前日期</span><span id="moonOverlayChartKey" hidden><i class="dot moon-dot"></i>月球</span></span></div><canvas id="chart" aria-label="全天太阳高度角曲线"></canvas><p class="micro" id="chartHint">点击或拖动曲线切换时间，虚线表示地平线。</p></article><article id="contextPanel" tabindex="-1" class="panel globe-panel"><div class="panel-title"><div><span class="eyebrow" id="contextEyebrow">从地球看</span><h2 id="contextTitle">太阳直射点与昼夜</h2></div><span id="utcLabel" class="micro"></span></div><div id="sunContextContent"><div class="context-view-switch" role="group" aria-label="地球展示方式"><button data-earth-view="globe" class="active" aria-pressed="true">球面视图</button><button data-earth-view="map" aria-pressed="false">全球平面图</button></div><div class="globe-content" id="earthGlobeView"><canvas id="globe" aria-label="地球经纬网、太阳直射点和昼夜区域"></canvas><div class="globe-notes"><span><i class="dot sun-dot"></i>太阳直射点</span><strong id="subsolar"></strong><span><i class="dot observer-dot"></i>观察位置</span><strong id="observerPos"></strong><p>太阳照亮的半球为白昼，背向太阳的一侧为黑夜。</p></div></div><div id="earthMapView" hidden><canvas id="worldMap" tabindex="0" aria-label="全球经纬度平面昼夜图，点击选择观察地点"></canvas><div class="map-key"><span><i class="dot sun-dot"></i>直射点</span><span><i class="dot observer-dot"></i>观察位置</span><span>暗色为夜半球</span></div><p class="micro">经纬度等距展开，面积与形状会变形。点击地图选地点；经纬度也可在实验设置中精确调整。</p><p class="micro" id="mapCoordinates"></p></div></div><div class="phase-content" id="phaseContent" hidden><canvas id="phaseOrbit" aria-label="从北黄极上方俯视的太阳、地球和月球相对位置示意"></canvas><div class="phase-view"><canvas id="phaseDisk" aria-label="从地球看到的月相，固定朝向示意"></canvas><div><span>月相 · 固定朝向示意</span><strong id="phaseName"></strong><span id="phaseFraction"></span><p>亮面朝向为示意，不代表本地观测朝向。</p></div></div></div><p class="micro" id="contextExplanation">经度用于定位与换算 UTC；轨迹使用当地真太阳时。</p></article></section>
-<details class="panel lunar-sky-details" id="lunarSkyDetails" hidden><summary><span>天空位置与升落（辅助）</span><span class="micro">展开观察当天月球视运动</span></summary><div class="moon-sky-head" id="moonSkyHead"><h2>月球天空位置</h2></div><div id="moonSkyHost"></div></details>
-<section class="panel geometry-panel" id="solarGeometryPanel" tabindex="-1"><div class="panel-title"><div><span class="eyebrow">连接全球与当地</span><h2>地轴、观察者与当地地平面</h2></div></div><div class="geometry-layout"><canvas id="earthGeometry" aria-label="地轴、赤道、观察地点、当地地平面和太阳方向的联动三维投影示意"></canvas><div class="geometry-notes"><span><i class="geometry-key axis-key"></i>地轴：连接南北极</span><span><i class="geometry-key equator-key"></i>赤道面：垂直于地轴</span><span><i class="geometry-key horizon-key"></i>当地地平面：球面的切平面</span><span><i class="geometry-key zenith-key"></i>当地天顶：沿地心到观察者方向</span><span><i class="geometry-key sun-key"></i>太阳方向：随日期和时刻变化</span><strong id="geometryObserver"></strong><p class="micro" id="geometryExplanation"></p></div></div><p class="micro" id="geometryNote"></p></section>
-<section class="panel analemma-panel" id="analemmaPanel" tabindex="-1" aria-label="日行迹全年实验"><div class="panel-title"><div><span class="eyebrow">全年观察 · 每天同一时刻</span><h2>日行迹（Analemma）</h2></div><label class="overlay-toggle" for="analemmaEnabled"><span>演示</span><input id="analemmaEnabled" type="checkbox" role="switch" aria-controls="analemmaContent"></label></div><p class="micro">把每天同一时刻的太阳位置叠加在当地天空中；比较不同观测时刻，观察轨迹的位置和倾斜。</p><p id="analemmaDateLinkNote" class="micro" hidden>已与太阳逐日观察联动：使用上方同一当地真太阳时。<button id="solarDateUnlink" type="button">解除联动，独立设置</button></p><div id="analemmaContent" hidden><p id="analemmaIdealNote" hidden>理想实验固定赤纬，无法表示真实的全年日行迹。<button id="analemmaRestore">恢复日期观测</button></p><div id="analemmaLab"><div class="analemma-observation"><div class="analemma-controls"><label>固定时刻的依据<select id="analemmaBasis"><option value="clock">钟表时（固定 UTC 偏移）</option><option value="apparent">当地真太阳时（对比）</option></select></label><label>每日观测时刻<input type="time" id="analemmaClock" value="12:00" required></label><label id="analemmaZoneLabel">UTC 偏移（小时）<input id="analemmaOffset" type="number" min="-12" max="14" step="0.25" value="8"></label><label>图解坐标<select id="analemmaView"><option value="dome">当地天空 · 三维示意</option><option value="sky">当地天空 · 方位展开</option><option value="equatorial">原理图 · 时角—赤纬</option></select></label></div><div class="analemma-comparison"><label class="overlay-toggle" for="analemmaCompare"><input id="analemmaCompare" type="checkbox" role="switch"><span>叠加 09:00 / 12:00 / 15:00 比较</span></label><button id="analemmaResetView" type="button">重置天空视角</button></div><p class="micro">这里的“每日观测时刻”独立于主画面的日内时间轴。比较轨迹使用相同的时间依据和 UTC 偏移，09:00 不一定是当地早晨。</p><div id="analemmaLegend" class="analemma-legend" aria-label="日行迹轨迹图例"></div><p id="analemmaViewHint" class="micro"></p><p id="analemmaConditions" class="micro"></p><canvas id="analemmaCanvas" aria-label="全年固定时刻的太阳位置日行迹，可点击轨迹选择日期"></canvas></div><div class="time-top analemma-date"><strong id="analemmaDate"></strong><button id="analemmaPlay" class="play-button">▶ 逐日播放</button></div><p class="micro motion-date-note">播放时标记平滑移动；数值对应选定日期，暂停后立即对齐。</p><input id="analemmaDay" type="range" min="1" max="365" step="1" value="1" aria-label="日行迹全年日期"><div class="time-labels"><span>1月</span><span>4月</span><span>7月</span><span>10月</span><span>12月</span></div><p id="analemmaResults" class="analemma-results"></p><p id="analemmaExplanation" class="micro"></p><details class="analemma-advanced"><summary>高级实验 · “8”字的成因</summary><p class="micro">独立的理想轨道模型：只改变这个日行迹图，不改变主实验台的真实日期星历。倾角为 0° 可观察偏心率的影响，偏心率为 0 可观察倾角的影响。</p><label class="overlay-toggle" for="analemmaIdeal"><input id="analemmaIdeal" type="checkbox" role="switch"><span>启用理想成因实验</span></label><div id="analemmaIdealControls" hidden><div class="analemma-ideal-controls"><label>地轴倾角 <output id="analemmaTiltValue">23.44°</output><input id="analemmaTilt" type="range" min="0" max="45" step="0.01" value="23.44"></label><label>轨道偏心率 <output id="analemmaEccentricityValue">0.0167</output><input id="analemmaEccentricity" type="range" min="0" max="0.1" step="0.0001" value="0.0167"></label></div><button id="analemmaIdealReset" type="button">恢复地球参考参数</button><p class="micro">近似开普勒轨道，固定倾角和偏心率，不含岁差、章动或地平视差，不用于预报。关闭开关即恢复真实星历。</p></div></details></div></div></section>
-<section class="insight" id="insight"></section>
-<div id="sundialLauncher" class="sundial-launcher"><button id="openSundials" type="button" aria-haspopup="dialog" aria-controls="sundialPanel">☀ 日晷实验台 <span aria-hidden="true">↗</span></button></div>
-<footer><span>◎ 天体视运动实验室</span><span>天文星历 / 理想实验 · 几何地平线 · 未计大气折射</span></footer>
-</main>
+        <section
+          id="riseSetPanel"
+          tabindex="-1"
+          class="panel rise-set-panel"
+          aria-label="天体升落时刻和方位"
+        >
+          <div class="panel-title">
+            <div>
+              <span class="eyebrow">当日升落 · 同时比较</span>
+              <h2 id="eventTitle">日出与日落方位</h2>
+            </div>
+            <span class="micro">正北 0° · 顺时针</span>
+          </div>
+          <div class="event-layout">
+            <canvas id="eventCompass" aria-label="升落方向的北向上方位图"></canvas>
+            <div class="event-values">
+              <button id="eventRise">
+                <span id="eventRiseLabel">日出</span><strong id="eventRiseAz"></strong
+                ><small id="eventRiseClock"></small></button
+              ><button id="eventSet">
+                <span id="eventSetLabel">日落</span><strong id="eventSetAz"></strong
+                ><small id="eventSetClock"></small>
+              </button>
+            </div>
+          </div>
+          <p class="micro" id="eventNote"></p>
+        </section>
+        <section class="detail-grid">
+          <article id="chartPanel" tabindex="-1" class="panel chart-panel">
+            <div class="panel-title">
+              <div>
+                <span class="eyebrow" id="chartEyebrow">全天变化</span>
+                <h2 id="chartTitle">太阳高度曲线</h2>
+              </div>
+              <span class="legend"
+                ><i class="dot sun-dot"></i><span id="chartLegend">当前日期</span
+                ><span id="moonOverlayChartKey" hidden><i class="dot moon-dot"></i>月球</span></span
+              >
+            </div>
+            <canvas id="chart" aria-label="全天太阳高度角曲线"></canvas>
+            <p class="micro" id="chartHint">点击或拖动曲线切换时间，虚线表示地平线。</p>
+          </article>
+          <article id="contextPanel" tabindex="-1" class="panel globe-panel">
+            <div class="panel-title">
+              <div>
+                <span class="eyebrow" id="contextEyebrow">从地球看</span>
+                <h2 id="contextTitle">太阳直射点与昼夜</h2>
+              </div>
+              <span id="utcLabel" class="micro"></span>
+            </div>
+            <div id="sunContextContent">
+              <div class="context-view-switch" role="group" aria-label="地球展示方式">
+                <button data-earth-view="globe" class="active" aria-pressed="true">球面视图</button
+                ><button data-earth-view="map" aria-pressed="false">全球平面图</button>
+              </div>
+              <div class="globe-content" id="earthGlobeView">
+                <canvas id="globe" aria-label="地球经纬网、太阳直射点和昼夜区域"></canvas>
+                <div class="globe-notes">
+                  <span><i class="dot sun-dot"></i>太阳直射点</span><strong id="subsolar"></strong
+                  ><span><i class="dot observer-dot"></i>观察位置</span
+                  ><strong id="observerPos"></strong>
+                  <p>太阳照亮的半球为白昼，背向太阳的一侧为黑夜。</p>
+                </div>
+              </div>
+              <div id="earthMapView" hidden>
+                <canvas
+                  id="worldMap"
+                  tabindex="0"
+                  aria-label="全球经纬度平面昼夜图，点击选择观察地点"
+                ></canvas>
+                <div class="map-key">
+                  <span><i class="dot sun-dot"></i>直射点</span
+                  ><span><i class="dot observer-dot"></i>观察位置</span><span>暗色为夜半球</span>
+                </div>
+                <p class="micro">
+                  经纬度等距展开，面积与形状会变形。点击地图选地点；经纬度也可在实验设置中精确调整。
+                </p>
+                <p class="micro" id="mapCoordinates"></p>
+              </div>
+            </div>
+            <div class="phase-content" id="phaseContent" hidden>
+              <canvas
+                id="phaseOrbit"
+                aria-label="从北黄极上方俯视的太阳、地球和月球相对位置示意"
+              ></canvas>
+              <div class="phase-view">
+                <canvas id="phaseDisk" aria-label="从地球看到的月相，固定朝向示意"></canvas>
+                <div>
+                  <span>月相 · 固定朝向示意</span><strong id="phaseName"></strong
+                  ><span id="phaseFraction"></span>
+                  <p>亮面朝向为示意，不代表本地观测朝向。</p>
+                </div>
+              </div>
+            </div>
+            <p class="micro" id="contextExplanation">
+              经度用于定位与换算 UTC；轨迹使用当地真太阳时。
+            </p>
+          </article>
+        </section>
+        <details class="panel lunar-sky-details" id="lunarSkyDetails" hidden>
+          <summary>
+            <span>天空位置与升落（辅助）</span><span class="micro">展开观察当天月球视运动</span>
+          </summary>
+          <div class="moon-sky-head" id="moonSkyHead"><h2>月球天空位置</h2></div>
+          <div id="moonSkyHost"></div>
+        </details>
+        <section class="panel geometry-panel" id="solarGeometryPanel" tabindex="-1">
+          <div class="panel-title">
+            <div>
+              <span class="eyebrow">连接全球与当地</span>
+              <h2>地轴、观察者与当地地平面</h2>
+            </div>
+          </div>
+          <div class="geometry-layout">
+            <canvas
+              id="earthGeometry"
+              aria-label="地轴、赤道、观察地点、当地地平面和太阳方向的联动三维投影示意"
+            ></canvas>
+            <div class="geometry-notes">
+              <span><i class="geometry-key axis-key"></i>地轴：连接南北极</span
+              ><span><i class="geometry-key equator-key"></i>赤道面：垂直于地轴</span
+              ><span><i class="geometry-key horizon-key"></i>当地地平面：球面的切平面</span
+              ><span><i class="geometry-key zenith-key"></i>当地天顶：沿地心到观察者方向</span
+              ><span><i class="geometry-key sun-key"></i>太阳方向：随日期和时刻变化</span
+              ><strong id="geometryObserver"></strong>
+              <p class="micro" id="geometryExplanation"></p>
+            </div>
+          </div>
+          <p class="micro" id="geometryNote"></p>
+        </section>
+        <section
+          class="panel analemma-panel"
+          id="analemmaPanel"
+          tabindex="-1"
+          aria-label="日行迹全年实验"
+        >
+          <div class="panel-title">
+            <div>
+              <span class="eyebrow">全年观察 · 每天同一时刻</span>
+              <h2>日行迹（Analemma）</h2>
+            </div>
+            <label class="overlay-toggle" for="analemmaEnabled"
+              ><span>演示</span
+              ><input
+                id="analemmaEnabled"
+                type="checkbox"
+                role="switch"
+                aria-controls="analemmaContent"
+            /></label>
+          </div>
+          <p class="micro">
+            把每天同一时刻的太阳位置叠加在当地天空中；比较不同观测时刻，观察轨迹的位置和倾斜。
+          </p>
+          <p id="analemmaDateLinkNote" class="micro" hidden>
+            已与太阳逐日观察联动：使用上方同一当地真太阳时。<button
+              id="solarDateUnlink"
+              type="button"
+            >
+              解除联动，独立设置
+            </button>
+          </p>
+          <div id="analemmaContent" hidden>
+            <p id="analemmaIdealNote" hidden>
+              理想实验固定赤纬，无法表示真实的全年日行迹。<button id="analemmaRestore">
+                恢复日期观测
+              </button>
+            </p>
+            <div id="analemmaLab">
+              <div class="analemma-observation">
+                <div class="analemma-controls">
+                  <label
+                    >固定时刻的依据<select id="analemmaBasis">
+                      <option value="clock">钟表时（固定 UTC 偏移）</option>
+                      <option value="apparent">当地真太阳时（对比）</option>
+                    </select></label
+                  ><label
+                    >每日观测时刻<input
+                      type="time"
+                      id="analemmaClock"
+                      value="12:00"
+                      required /></label
+                  ><label id="analemmaZoneLabel"
+                    >UTC 偏移（小时）<input
+                      id="analemmaOffset"
+                      type="number"
+                      min="-12"
+                      max="14"
+                      step="0.25"
+                      value="8" /></label
+                  ><label
+                    >图解坐标<select id="analemmaView">
+                      <option value="dome">当地天空 · 三维示意</option>
+                      <option value="sky">当地天空 · 方位展开</option>
+                      <option value="equatorial">原理图 · 时角—赤纬</option>
+                    </select></label
+                  >
+                </div>
+                <div class="analemma-comparison">
+                  <label class="overlay-toggle" for="analemmaCompare"
+                    ><input id="analemmaCompare" type="checkbox" role="switch" /><span
+                      >叠加 09:00 / 12:00 / 15:00 比较</span
+                    ></label
+                  ><button id="analemmaResetView" type="button">重置天空视角</button>
+                </div>
+                <p class="micro">
+                  这里的“每日观测时刻”独立于主画面的日内时间轴。比较轨迹使用相同的时间依据和 UTC
+                  偏移，09:00 不一定是当地早晨。
+                </p>
+                <div id="analemmaLegend" class="analemma-legend" aria-label="日行迹轨迹图例"></div>
+                <p id="analemmaViewHint" class="micro"></p>
+                <p id="analemmaConditions" class="micro"></p>
+                <canvas
+                  id="analemmaCanvas"
+                  aria-label="全年固定时刻的太阳位置日行迹，可点击轨迹选择日期"
+                ></canvas>
+              </div>
+              <div class="time-top analemma-date">
+                <strong id="analemmaDate"></strong
+                ><button id="analemmaPlay" class="play-button">▶ 逐日播放</button>
+              </div>
+              <p class="micro motion-date-note">
+                播放时标记平滑移动；数值对应选定日期，暂停后立即对齐。
+              </p>
+              <input
+                id="analemmaDay"
+                type="range"
+                min="1"
+                max="365"
+                step="1"
+                value="1"
+                aria-label="日行迹全年日期"
+              />
+              <div class="time-labels">
+                <span>1月</span><span>4月</span><span>7月</span><span>10月</span><span>12月</span>
+              </div>
+              <p id="analemmaResults" class="analemma-results"></p>
+              <p id="analemmaExplanation" class="micro"></p>
+              <details class="analemma-advanced">
+                <summary>高级实验 · “8”字的成因</summary>
+                <p class="micro">
+                  独立的理想轨道模型：只改变这个日行迹图，不改变主实验台的真实日期星历。倾角为 0°
+                  可观察偏心率的影响，偏心率为 0 可观察倾角的影响。
+                </p>
+                <label class="overlay-toggle" for="analemmaIdeal"
+                  ><input id="analemmaIdeal" type="checkbox" role="switch" /><span
+                    >启用理想成因实验</span
+                  ></label
+                >
+                <div id="analemmaIdealControls" hidden>
+                  <div class="analemma-ideal-controls">
+                    <label
+                      >地轴倾角 <output id="analemmaTiltValue">23.44°</output
+                      ><input
+                        id="analemmaTilt"
+                        type="range"
+                        min="0"
+                        max="45"
+                        step="0.01"
+                        value="23.44" /></label
+                    ><label
+                      >轨道偏心率 <output id="analemmaEccentricityValue">0.0167</output
+                      ><input
+                        id="analemmaEccentricity"
+                        type="range"
+                        min="0"
+                        max="0.1"
+                        step="0.0001"
+                        value="0.0167"
+                    /></label>
+                  </div>
+                  <button id="analemmaIdealReset" type="button">恢复地球参考参数</button>
+                  <p class="micro">
+                    近似开普勒轨道，固定倾角和偏心率，不含岁差、章动或地平视差，不用于预报。关闭开关即恢复真实星历。
+                  </p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </section>
+        <section class="insight" id="insight"></section>
+        <div id="sundialLauncher" class="sundial-launcher">
+          <button
+            id="openSundials"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="sundialPanel"
+          >
+            ☀ 日晷实验台 <span aria-hidden="true">↗</span>
+          </button>
+        </div>
+        <footer>
+          <span>◎ 天体视运动实验室</span
+          ><span>天文星历 / 理想实验 · 几何地平线 · 未计大气折射</span>
+        </footer>
+      </main>
 
-<section id="timeWorkbench" class="time-workbench" aria-label="时间与日期控制台"><div class="workbench-top"><span id="workbenchContext"></span><div class="workbench-calendar"><button id="workbenchPrevDate" type="button" aria-label="前一天">‹</button><input id="workbenchDate" type="date" min="1900-01-01" max="2100-12-31" aria-label="观察日期"><button id="workbenchNextDate" type="button" aria-label="后一天">›</button></div><button id="workbenchPlay" type="button" class="play-button">▶ 播放时刻</button></div><div id="workbenchMain" class="workbench-main"><div id="workbenchBearingPanel" class="workbench-panel" hidden><div class="workbench-panel-head"><label for="workbenchBearing">面向方位</label><output id="workbenchBearingText">180° · 南</output></div><input id="workbenchBearing" type="range" min="0" max="360" step="1" value="180" aria-label="面向方位"><div class="workbench-look-buttons"><button data-workbench-look="0">北</button><button data-workbench-look="90">东</button><button data-workbench-look="180">南</button><button data-workbench-look="270">西</button></div></div><div id="workbenchClockPanel" class="workbench-panel"><div class="workbench-panel-head"><label id="workbenchClockLabel" for="workbenchTime">观测时刻 · 当地真太阳时</label><output id="workbenchClockText">12:00</output></div><input id="workbenchTime" type="range" min="0" max="1440" step="1" value="720" aria-label="观测时刻，当地真太阳时"><div class="workbench-clock-tools"><button id="workbenchTimeBack" type="button" aria-label="提前五分钟">−5分</button><input id="workbenchClockInput" type="time" step="60" value="12:00" aria-label="精确输入当地真太阳时"><button id="workbenchTimeForward" type="button" aria-label="推后五分钟">+5分</button></div></div><div id="workbenchDatePanel" class="workbench-panel"><div class="workbench-panel-head"><label id="workbenchDayLabel" for="workbenchDay">日期 · 本年</label><output id="workbenchDayText">06月21日</output></div><input id="workbenchDay" type="range" min="1" max="365" step="1" value="172" aria-label="选择观察日期"><div class="workbench-date-scale"><span id="workbenchDayStart">1月</span><span id="workbenchDayMiddle">7月</span><span id="workbenchDayEnd">12月</span></div></div></div><details id="workbenchMore" class="workbench-more"><summary>播放设置与快捷时刻</summary><div class="workbench-extra"><label>播放对象<select id="workbenchBasis"><option value="day">一天内的时刻</option><option value="date">日期（固定时刻）</option></select></label><label>速度<select id="workbenchSpeed"></select></label><label class="workbench-loop"><input id="workbenchLoop" type="checkbox" checked><span id="workbenchLoopLabel">循环当天</span></label><div id="workbenchMonthTools" class="workbench-month-tools" hidden><button id="workbenchPrevMonth" type="button" aria-label="上个月">‹</button><input id="workbenchMonth" type="month" min="1900-01" max="2100-12" aria-label="月球观察月份"><button id="workbenchNextMonth" type="button" aria-label="下个月">›</button></div><div class="workbench-events"><button id="workbenchRise" type="button">日出</button><button id="workbenchPeak" type="button">当日最高</button><button id="workbenchSet" type="button">日落</button></div></div><div id="workbenchDateMoreHost"></div><p id="workbenchHint"></p></details></section>
-<dialog class="sundial-panel sundial-dialog" id="sundialPanel" aria-labelledby="sundialDialogTitle"><div class="sundial-dialog-head"><div><span class="eyebrow">生活装置 · 水平日晷与赤道日晷</span><h2 id="sundialDialogTitle">日晷实验台</h2></div><button id="closeSundials" type="button" aria-label="关闭日晷实验台">×</button><div class="sundial-sticky-clock"><label for="sundialStickyTime">当地真太阳时 <output id="sundialStickyClock">12:00</output></label><input id="sundialStickyTime" type="range" min="0" max="1440" step="1" value="720" aria-label="日晷时刻，固定在弹窗顶部"></div></div><div class="sundial-content"><p class="micro">日晷把太阳方向变成时间。这里的晷针与地轴平行，和前面用于观察影长的竖直立杆不同；赤道日晷的晷针穿过盘面，供两面使用。两种装置共用当前地点、日期和当地真太阳时。</p><div class="sundial-toolbar"><div role="group" aria-label="日晷观测时刻"><button data-dial-time="540">上午 09:00</button><button data-dial-time="720">当地正午</button><button data-dial-time="900">下午 15:00</button></div><label for="sundialOffset">对照钟表时 UTC 偏移<input id="sundialOffset" type="number" min="-12" max="14" step="0.25" value="8"></label></div><div class="sundial-lab-controls"><div class="sundial-view-controls" role="group" aria-label="日晷显示方式"><button data-dial-view="device" class="active" aria-pressed="true">立体装置与影子</button><button data-dial-view="plate" aria-pressed="false">盘面读时与安装</button></div><div class="sundial-observation"><label>观测日期<input id="sundialDate" type="date" min="1900-01-01" max="2100-12-31"></label><button id="sundialPlay" class="play-button">▶ 演示一天</button></div><label class="sundial-time-label" for="sundialTime">拖动时间，看晷针投影变化 <output id="sundialTimeValue">12:00</output></label><input id="sundialTime" type="range" min="0" max="1440" step="1" value="720" aria-label="日晷当地真太阳时"><div class="time-labels"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div><label class="sundial-time-label" for="sundialNeedleLength">改变晷针长度 <output id="sundialNeedleValue">18 cm</output></label><input id="sundialNeedleLength" type="range" min="6" max="30" step="1" value="18" aria-label="水平晷针长度与赤道晷针单侧长度，厘米"><p class="micro">改变针长可比较影长；时刻线方向不随针长改变。赤道晷针两侧各取此长度。</p><p id="sundialInteractionHint" class="micro">在盘面拖动影子方向，或点击时刻刻度；两种日晷与主实验台同时更新。夜间无直射日影。</p></div><div class="sundial-clock"><div><span>当地真太阳时</span><strong id="sundialSolarClock"></strong></div><div><span id="sundialWatchLabel">对照钟表时 · UTC+8</span><strong id="sundialWatchClock"></strong></div><p id="sundialClockNote" class="micro"></p></div><div class="sundial-grid"><article class="sundial-card"><div class="sundial-card-title"><span class="sundial-type">01 · 庭院与广场</span><h3>水平日晷</h3><p>晷面水平，晷针指向所在半球的天极。</p></div><canvas id="horizontalDial" tabindex="0" aria-label="水平日晷：晷面俯视与安装侧视图；点击时刻刻度调时，方向键每次调整一小时，Home 回到正午"></canvas><div class="sundial-reading"><span>晷上读时</span><strong id="horizontalDialReading"></strong></div><p id="horizontalDialNote" class="micro"></p><p class="micro">时刻线一般不等距，排列随纬度变化。晷针仰角等于当地纬度的绝对值；此装置搬到其他纬度需要重新校准。</p><details class="sundial-make"><summary>怎样制作和安装？</summary><p>可用硬纸板做水平底板，用直杆做晷针。晷针沿真南北方向安装，按上面的仰角固定，指向所在半球的天极；时刻线参考当前纬度的盘面，不可直接照搬等分的普通钟面。</p></details></article><article class="sundial-card"><div class="sundial-card-title"><span class="sundial-type">02 · 公园与天文教学</span><h3>赤道日晷</h3><p>晷面平行地球赤道面，晷针垂直晷面。</p></div><canvas id="equatorialDial" tabindex="0" aria-label="赤道日晷：受光面的正视图与安装侧视图；点击时刻刻度调时，方向键每次调整一小时，Home 回到正午"></canvas><div class="sundial-reading"><span>晷上读时</span><strong id="equatorialDialReading"></strong></div><p id="equatorialDialNote" class="micro"></p><p class="micro">相邻整点线相差 15°。太阳赤纬改变时，受光面会换到另一面；两面的刻度左右相反。分日前后太阳光接近平行晷面，实际较难读时。</p><details class="sundial-make"><summary>怎样制作和安装？</summary><p>可用双面硬纸圆盘，中心穿入一根与盘面垂直的杆；两面分别画每小时 15° 的时刻线，注意镜像关系。按上面的晷面倾角安装，让杆轴与地轴平行；不要把盘面直接水平摆放。</p></details></article></div><div class="sundial-key"><span><i class="dial-gnomon"></i>晷针 / 俯视投影</span><span><i class="dial-shadow"></i>直射阳光形成的影线</span><span>浅色刻度：当前日期该时刻太阳在地平线下</span></div><p class="micro">点击盘面时刻刻度；聚焦画布后可用键盘：← / → 调整一小时，Home 回到正午。立体装置按同一几何模型投影；“盘面读时与安装”保留正投影图。晷针长度可调（默认水平针长 0.18 m，赤道针两侧各 0.18 m），盘面半径 0.32 m；箭头表示杆尖的影子超出盘面。安装应按真南北定向，普通指南针的磁北需校正磁偏角；极点方位不唯一，图中按选定经线作参考。影子的位置按光线与晷面交点计算；线宽及柔边用于辨识，不模拟真实半影、天气或地形遮挡。</p><details class="sundial-question"><summary>想一想：为什么日晷与手机时间不一定相同？</summary><p>日晷读出当地真太阳时。手机通常显示所在时区的钟表时；地点经度相对时区中央经线的差别，以及全年变化的均时差，都会使二者不同。这里使用固定 UTC 偏移，不自动处理夏令时。</p><p>动手比较：保持日期不变，把经度从 120°E 改到 105°E，观察同一当地真太阳时对应的钟表时；再固定地点改变日期，观察均时差的影响。</p></details></div></dialog>
-<dialog id="settingsDialog" class="settings-dialog" aria-label="实验菜单"><div id="mobileControlsHost"></div></dialog>
-<dialog id="help"><div class="dialog-head"><h2>把天空变成你的实验室</h2><button id="closeHelp" aria-label="关闭学习指南">×</button></div><p>主界面先选太阳或月球；底部时间控制台始终可用，拖动时刻或日期、输入精确时间，或按 5 分钟微调。播放设置中明确选择“一天内的时刻”或“日期（固定时刻）”。实验菜单按日期与地点、演示方式、显示辅助和关联图解分类；精确参数可展开调整。</p><p>可切换太阳和月球。圆点代表地面观察位置。轨迹是在该观察者眼中，天体当天经过的路径。</p><ol><li><strong>固定时刻比较季节：</strong>在太阳界面开启“固定时刻 · 按日期观察”，拖动全年日期或按日期播放，比较太阳与杆影的变化。可叠加全年同一时刻轨迹，并联动下方日行迹。此时固定当地真太阳时，不是固定北京时间。</li><li><strong>探索日行迹：</strong>在太阳的关联图解中开启日行迹，固定钟表时观察全年“8”字，再切到固定真太阳时比较。日行迹可独立设置时刻；启用逐日联动时采用主实验台的真太阳时。UTC 偏移固定，不含夏令时。</li><li><strong>比较季节：</strong>固定北京，依次选夏至、冬至，或拖动全年月份滑块，观察正午高度和昼长。季节主要由地轴倾斜造成太阳高度与昼长的变化，不能用日地距离远近来解释。</li><li><strong>比较纬度：</strong>保持日期不变，把纬度从赤道拖到北极，观察轨迹倾斜和极昼、极夜。</li><li><strong>比较升落方位：</strong>同时查看日出与日落方位；点击结果跳到对应时刻。极昼、极夜和极点要结合提示判读。</li><li><strong>理解日影：</strong>切到俯视日影，拖动时间；在“显示辅助 → 日影与杆尖影迹”中可放大地面、显示全天杆尖影迹并点击轨迹切换时间。水平地面上的竖直立杆影子指向太阳的相反方向；杆高只用于影长，不改变观察地点的海拔。</li><li><strong>生活中的日晷：</strong>在太阳的“关联图解 → 生活装置”中进入日晷独立实验页。拖动时间或盘面上的影子、播放一天，比较两种装置的日影；改变晷针长度，观察影长与读时。日晷的晷针与地轴平行，读的是当地真太阳时，不能直接当作手机钟表时。</li><li><strong>仰望天空：</strong>选择“仰望天空”，从地面观察者的角度查看太阳、月球及五颗行星。拖动转向，点击天体名称可面向它；天空为前方半球的正投影，地平线下和身后的天体用列表说明。白昼显示行星位置并不代表肉眼可见。</li><li><strong>联系地球：</strong>切换球面与全球平面图查看直射点和昼夜；平面图可点击选地点。联动示意显示地轴、观察地点及其当地地平面。</li><li><strong>理解行星伴月：</strong>在月相界面开启演示，选择行星，比较同一地点和时刻的球面角距与高度。可寻找未来 30 天中固定时刻最靠近的一天；伴月并非行星与月球在空间里靠近，几何靠近也不等于适合肉眼观测。</li><li><strong>探索月相：</strong>切到月相界面，先看月面亮暗与日地月关系，按天推进日期，在固定观测时刻比较月相与天空位置；如需查看月球视运动，可选择“月球天空”；太阳界面也可开启月球叠加。月相周期约 29.53 天，不等于一个公历月。月球也可能在白天出现在天空中。</li></ol><p class="micro">时间采用当地真太阳时，太阳上中天约在 12:00（理想实验恰为 12:00）；不是手机的时区时间。日期观测使用天文星历，四季按钮选择当前年份、当地日期的分至日，按钮和季节对比线的名称沿用北半球；南半球季节相反。理想实验固定太阳赤纬，用于分析纬度和季节规律，此时所选日期与 UTC 不参与计算。对比线采用赤纬 0°、±23.44° 的理想模型。月球使用天文星历计算，计入地平视差（观察者位于地面而非地心），两种天体均以中心穿越几何地平线为升落标准，未计大气折射和当地山地遮挡。可见月面照明比例指地球所见月圆盘的亮面比例，采用地心视月相近似；接近四种主要相位标注“附近”，不等同于精确发生时刻；此处未模拟日食、月食的遮挡与亮度变化。日期观测的实际经过时长按 UTC 时间间隔计算，与当地真太阳时的读数间隔略有区别。月相图标采用固定朝向，不表示本地观测时月面亮侧的朝向；北、南半球及观察时间会影响月面朝向。日内最高时刻可能位于当天的 00:00 或 24:00 边界，不一定等于月球上中天时刻。月球方位、高度不等于肉眼一定能看见；新月附近和白天可能难以辨认。极点及天体位于天顶时，部分方位定义不唯一。</p><button id="startExplore" class="play-button">开始探索</button></dialog>
-</div>
-<script src="astronomy.js"></script><script src="moon.js"></script><script src="coverage.js"></script><script src="menu.js"></script><script src="workspace.js"></script><script src="companion.js"></script><script src="analemma.js"></script><script src="shadow.js"></script><script src="sundial-device.js"></script><script src="sundial.js"></script><script src="observer.js"></script><script src="solar-date.js"></script><script src="time-workbench.js"></script><script src="motion.js"></script><script src="app.js"></script><script src="page-navigation.js"></script></body></html>
+      <section id="timeWorkbench" class="time-workbench" aria-label="时间与日期控制台">
+        <div class="workbench-top">
+          <span id="workbenchContext"></span>
+          <div class="workbench-calendar">
+            <button id="workbenchPrevDate" type="button" aria-label="前一天">‹</button
+            ><input
+              id="workbenchDate"
+              type="date"
+              min="1900-01-01"
+              max="2100-12-31"
+              aria-label="观察日期"
+            /><button id="workbenchNextDate" type="button" aria-label="后一天">›</button>
+          </div>
+          <button id="workbenchPlay" type="button" class="play-button">▶ 播放时刻</button>
+        </div>
+        <div id="workbenchMain" class="workbench-main">
+          <div id="workbenchBearingPanel" class="workbench-panel" hidden>
+            <div class="workbench-panel-head">
+              <label for="workbenchBearing">面向方位</label
+              ><output id="workbenchBearingText">180° · 南</output>
+            </div>
+            <input
+              id="workbenchBearing"
+              type="range"
+              min="0"
+              max="360"
+              step="1"
+              value="180"
+              aria-label="面向方位"
+            />
+            <div class="workbench-look-buttons">
+              <button data-workbench-look="0">北</button><button data-workbench-look="90">东</button
+              ><button data-workbench-look="180">南</button
+              ><button data-workbench-look="270">西</button>
+            </div>
+          </div>
+          <div id="workbenchClockPanel" class="workbench-panel">
+            <div class="workbench-panel-head">
+              <label id="workbenchClockLabel" for="workbenchTime">观测时刻 · 当地真太阳时</label
+              ><output id="workbenchClockText">12:00</output>
+            </div>
+            <input
+              id="workbenchTime"
+              type="range"
+              min="0"
+              max="1440"
+              step="1"
+              value="720"
+              aria-label="观测时刻，当地真太阳时"
+            />
+            <div class="workbench-clock-tools">
+              <button id="workbenchTimeBack" type="button" aria-label="提前五分钟">−5分</button
+              ><input
+                id="workbenchClockInput"
+                type="time"
+                step="60"
+                value="12:00"
+                aria-label="精确输入当地真太阳时"
+              /><button id="workbenchTimeForward" type="button" aria-label="推后五分钟">
+                +5分
+              </button>
+            </div>
+          </div>
+          <div id="workbenchDatePanel" class="workbench-panel">
+            <div class="workbench-panel-head">
+              <label id="workbenchDayLabel" for="workbenchDay">日期 · 本年</label
+              ><output id="workbenchDayText">06月21日</output>
+            </div>
+            <input
+              id="workbenchDay"
+              type="range"
+              min="1"
+              max="365"
+              step="1"
+              value="172"
+              aria-label="选择观察日期"
+            />
+            <div class="workbench-date-scale">
+              <span id="workbenchDayStart">1月</span><span id="workbenchDayMiddle">7月</span
+              ><span id="workbenchDayEnd">12月</span>
+            </div>
+          </div>
+        </div>
+        <details id="workbenchMore" class="workbench-more">
+          <summary>播放设置与快捷时刻</summary>
+          <div class="workbench-extra">
+            <label
+              >播放对象<select id="workbenchBasis">
+                <option value="day">一天内的时刻</option>
+                <option value="date">日期（固定时刻）</option>
+              </select></label
+            ><label>速度<select id="workbenchSpeed"></select></label
+            ><label class="workbench-loop"
+              ><input id="workbenchLoop" type="checkbox" checked /><span id="workbenchLoopLabel"
+                >循环当天</span
+              ></label
+            >
+            <div id="workbenchMonthTools" class="workbench-month-tools" hidden>
+              <button id="workbenchPrevMonth" type="button" aria-label="上个月">‹</button
+              ><input
+                id="workbenchMonth"
+                type="month"
+                min="1900-01"
+                max="2100-12"
+                aria-label="月球观察月份"
+              /><button id="workbenchNextMonth" type="button" aria-label="下个月">›</button>
+            </div>
+            <div class="workbench-events">
+              <button id="workbenchRise" type="button">日出</button
+              ><button id="workbenchPeak" type="button">当日最高</button
+              ><button id="workbenchSet" type="button">日落</button>
+            </div>
+          </div>
+          <div id="workbenchDateMoreHost"></div>
+          <p id="workbenchHint"></p>
+        </details>
+      </section>
+      <dialog
+        class="sundial-panel sundial-dialog"
+        id="sundialPanel"
+        aria-labelledby="sundialDialogTitle"
+      >
+        <div class="sundial-dialog-head">
+          <div>
+            <span class="eyebrow">生活装置 · 水平日晷与赤道日晷</span>
+            <h2 id="sundialDialogTitle">日晷实验台</h2>
+          </div>
+          <button id="closeSundials" type="button" aria-label="关闭日晷实验台">×</button>
+          <div class="sundial-sticky-clock">
+            <label for="sundialStickyTime"
+              >当地真太阳时 <output id="sundialStickyClock">12:00</output></label
+            ><input
+              id="sundialStickyTime"
+              type="range"
+              min="0"
+              max="1440"
+              step="1"
+              value="720"
+              aria-label="日晷时刻，固定在弹窗顶部"
+            />
+          </div>
+        </div>
+        <div class="sundial-content">
+          <p class="micro">
+            日晷把太阳方向变成时间。这里的晷针与地轴平行，和前面用于观察影长的竖直立杆不同；赤道日晷的晷针穿过盘面，供两面使用。两种装置共用当前地点、日期和当地真太阳时。
+          </p>
+          <div class="sundial-toolbar">
+            <div role="group" aria-label="日晷观测时刻">
+              <button data-dial-time="540">上午 09:00</button
+              ><button data-dial-time="720">当地正午</button
+              ><button data-dial-time="900">下午 15:00</button>
+            </div>
+            <label for="sundialOffset"
+              >对照钟表时 UTC 偏移<input
+                id="sundialOffset"
+                type="number"
+                min="-12"
+                max="14"
+                step="0.25"
+                value="8"
+            /></label>
+          </div>
+          <div class="sundial-lab-controls">
+            <div class="sundial-view-controls" role="group" aria-label="日晷显示方式">
+              <button data-dial-view="device" class="active" aria-pressed="true">
+                立体装置与影子</button
+              ><button data-dial-view="plate" aria-pressed="false">盘面读时与安装</button>
+            </div>
+            <div class="sundial-observation">
+              <label
+                >观测日期<input
+                  id="sundialDate"
+                  type="date"
+                  min="1900-01-01"
+                  max="2100-12-31" /></label
+              ><button id="sundialPlay" class="play-button">▶ 演示一天</button>
+            </div>
+            <label class="sundial-time-label" for="sundialTime"
+              >拖动时间，看晷针投影变化 <output id="sundialTimeValue">12:00</output></label
+            ><input
+              id="sundialTime"
+              type="range"
+              min="0"
+              max="1440"
+              step="1"
+              value="720"
+              aria-label="日晷当地真太阳时"
+            />
+            <div class="time-labels">
+              <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span
+              ><span>24:00</span>
+            </div>
+            <label class="sundial-time-label" for="sundialNeedleLength"
+              >改变晷针长度 <output id="sundialNeedleValue">18 cm</output></label
+            ><input
+              id="sundialNeedleLength"
+              type="range"
+              min="6"
+              max="30"
+              step="1"
+              value="18"
+              aria-label="水平晷针长度与赤道晷针单侧长度，厘米"
+            />
+            <p class="micro">
+              改变针长可比较影长；时刻线方向不随针长改变。赤道晷针两侧各取此长度。
+            </p>
+            <p id="sundialInteractionHint" class="micro">
+              在盘面拖动影子方向，或点击时刻刻度；两种日晷与主实验台同时更新。夜间无直射日影。
+            </p>
+          </div>
+          <div class="sundial-clock">
+            <div><span>当地真太阳时</span><strong id="sundialSolarClock"></strong></div>
+            <div>
+              <span id="sundialWatchLabel">对照钟表时 · UTC+8</span
+              ><strong id="sundialWatchClock"></strong>
+            </div>
+            <p id="sundialClockNote" class="micro"></p>
+          </div>
+          <div class="sundial-grid">
+            <article class="sundial-card">
+              <div class="sundial-card-title">
+                <span class="sundial-type">01 · 庭院与广场</span>
+                <h3>水平日晷</h3>
+                <p>晷面水平，晷针指向所在半球的天极。</p>
+              </div>
+              <canvas
+                id="horizontalDial"
+                tabindex="0"
+                aria-label="水平日晷：晷面俯视与安装侧视图；点击时刻刻度调时，方向键每次调整一小时，Home 回到正午"
+              ></canvas>
+              <div class="sundial-reading">
+                <span>晷上读时</span><strong id="horizontalDialReading"></strong>
+              </div>
+              <p id="horizontalDialNote" class="micro"></p>
+              <p class="micro">
+                时刻线一般不等距，排列随纬度变化。晷针仰角等于当地纬度的绝对值；此装置搬到其他纬度需要重新校准。
+              </p>
+              <details class="sundial-make">
+                <summary>怎样制作和安装？</summary>
+                <p>
+                  可用硬纸板做水平底板，用直杆做晷针。晷针沿真南北方向安装，按上面的仰角固定，指向所在半球的天极；时刻线参考当前纬度的盘面，不可直接照搬等分的普通钟面。
+                </p>
+              </details>
+            </article>
+            <article class="sundial-card">
+              <div class="sundial-card-title">
+                <span class="sundial-type">02 · 公园与天文教学</span>
+                <h3>赤道日晷</h3>
+                <p>晷面平行地球赤道面，晷针垂直晷面。</p>
+              </div>
+              <canvas
+                id="equatorialDial"
+                tabindex="0"
+                aria-label="赤道日晷：受光面的正视图与安装侧视图；点击时刻刻度调时，方向键每次调整一小时，Home 回到正午"
+              ></canvas>
+              <div class="sundial-reading">
+                <span>晷上读时</span><strong id="equatorialDialReading"></strong>
+              </div>
+              <p id="equatorialDialNote" class="micro"></p>
+              <p class="micro">
+                相邻整点线相差
+                15°。太阳赤纬改变时，受光面会换到另一面；两面的刻度左右相反。分日前后太阳光接近平行晷面，实际较难读时。
+              </p>
+              <details class="sundial-make">
+                <summary>怎样制作和安装？</summary>
+                <p>
+                  可用双面硬纸圆盘，中心穿入一根与盘面垂直的杆；两面分别画每小时 15°
+                  的时刻线，注意镜像关系。按上面的晷面倾角安装，让杆轴与地轴平行；不要把盘面直接水平摆放。
+                </p>
+              </details>
+            </article>
+          </div>
+          <div class="sundial-key">
+            <span><i class="dial-gnomon"></i>晷针 / 俯视投影</span
+            ><span><i class="dial-shadow"></i>直射阳光形成的影线</span
+            ><span>浅色刻度：当前日期该时刻太阳在地平线下</span>
+          </div>
+          <p class="micro">
+            点击盘面时刻刻度；聚焦画布后可用键盘：← / → 调整一小时，Home
+            回到正午。立体装置按同一几何模型投影；“盘面读时与安装”保留正投影图。晷针长度可调（默认水平针长
+            0.18 m，赤道针两侧各 0.18 m），盘面半径 0.32
+            m；箭头表示杆尖的影子超出盘面。安装应按真南北定向，普通指南针的磁北需校正磁偏角；极点方位不唯一，图中按选定经线作参考。影子的位置按光线与晷面交点计算；线宽及柔边用于辨识，不模拟真实半影、天气或地形遮挡。
+          </p>
+          <details class="sundial-question">
+            <summary>想一想：为什么日晷与手机时间不一定相同？</summary>
+            <p>
+              日晷读出当地真太阳时。手机通常显示所在时区的钟表时；地点经度相对时区中央经线的差别，以及全年变化的均时差，都会使二者不同。这里使用固定
+              UTC 偏移，不自动处理夏令时。
+            </p>
+            <p>
+              动手比较：保持日期不变，把经度从 120°E 改到
+              105°E，观察同一当地真太阳时对应的钟表时；再固定地点改变日期，观察均时差的影响。
+            </p>
+          </details>
+        </div>
+      </dialog>
+      <dialog id="settingsDialog" class="settings-dialog" aria-label="实验菜单">
+        <div id="mobileControlsHost"></div>
+      </dialog>
+      <dialog id="help">
+        <div class="dialog-head">
+          <h2>把天空变成你的实验室</h2>
+          <button id="closeHelp" aria-label="关闭学习指南">×</button>
+        </div>
+        <p>
+          主界面先选太阳或月球；底部时间控制台始终可用，拖动时刻或日期、输入精确时间，或按 5
+          分钟微调。播放设置中明确选择“一天内的时刻”或“日期（固定时刻）”。实验菜单按日期与地点、演示方式、显示辅助和关联图解分类；精确参数可展开调整。
+        </p>
+        <p>可切换太阳和月球。圆点代表地面观察位置。轨迹是在该观察者眼中，天体当天经过的路径。</p>
+        <ol>
+          <li>
+            <strong>固定时刻比较季节：</strong>在太阳界面开启“固定时刻 ·
+            按日期观察”，拖动全年日期或按日期播放，比较太阳与杆影的变化。可叠加全年同一时刻轨迹，并联动下方日行迹。此时固定当地真太阳时，不是固定北京时间。
+          </li>
+          <li>
+            <strong>探索日行迹：</strong
+            >在太阳的关联图解中开启日行迹，固定钟表时观察全年“8”字，再切到固定真太阳时比较。日行迹可独立设置时刻；启用逐日联动时采用主实验台的真太阳时。UTC
+            偏移固定，不含夏令时。
+          </li>
+          <li>
+            <strong>比较季节：</strong
+            >固定北京，依次选夏至、冬至，或拖动全年月份滑块，观察正午高度和昼长。季节主要由地轴倾斜造成太阳高度与昼长的变化，不能用日地距离远近来解释。
+          </li>
+          <li>
+            <strong>比较纬度：</strong
+            >保持日期不变，把纬度从赤道拖到北极，观察轨迹倾斜和极昼、极夜。
+          </li>
+          <li>
+            <strong>比较升落方位：</strong
+            >同时查看日出与日落方位；点击结果跳到对应时刻。极昼、极夜和极点要结合提示判读。
+          </li>
+          <li>
+            <strong>理解日影：</strong>切到俯视日影，拖动时间；在“显示辅助 →
+            日影与杆尖影迹”中可放大地面、显示全天杆尖影迹并点击轨迹切换时间。水平地面上的竖直立杆影子指向太阳的相反方向；杆高只用于影长，不改变观察地点的海拔。
+          </li>
+          <li>
+            <strong>生活中的日晷：</strong>在太阳的“关联图解 →
+            生活装置”中进入日晷独立实验页。拖动时间或盘面上的影子、播放一天，比较两种装置的日影；改变晷针长度，观察影长与读时。日晷的晷针与地轴平行，读的是当地真太阳时，不能直接当作手机钟表时。
+          </li>
+          <li>
+            <strong>仰望天空：</strong
+            >选择“仰望天空”，从地面观察者的角度查看太阳、月球及五颗行星。拖动转向，点击天体名称可面向它；天空为前方半球的正投影，地平线下和身后的天体用列表说明。白昼显示行星位置并不代表肉眼可见。
+          </li>
+          <li>
+            <strong>联系地球：</strong
+            >切换球面与全球平面图查看直射点和昼夜；平面图可点击选地点。联动示意显示地轴、观察地点及其当地地平面。
+          </li>
+          <li>
+            <strong>理解行星伴月：</strong
+            >在月相界面开启演示，选择行星，比较同一地点和时刻的球面角距与高度。可寻找未来 30
+            天中固定时刻最靠近的一天；伴月并非行星与月球在空间里靠近，几何靠近也不等于适合肉眼观测。
+          </li>
+          <li>
+            <strong>探索月相：</strong
+            >切到月相界面，先看月面亮暗与日地月关系，按天推进日期，在固定观测时刻比较月相与天空位置；如需查看月球视运动，可选择“月球天空”；太阳界面也可开启月球叠加。月相周期约
+            29.53 天，不等于一个公历月。月球也可能在白天出现在天空中。
+          </li>
+        </ol>
+        <p class="micro">
+          时间采用当地真太阳时，太阳上中天约在 12:00（理想实验恰为
+          12:00）；不是手机的时区时间。日期观测使用天文星历，四季按钮选择当前年份、当地日期的分至日，按钮和季节对比线的名称沿用北半球；南半球季节相反。理想实验固定太阳赤纬，用于分析纬度和季节规律，此时所选日期与
+          UTC 不参与计算。对比线采用赤纬 0°、±23.44°
+          的理想模型。月球使用天文星历计算，计入地平视差（观察者位于地面而非地心），两种天体均以中心穿越几何地平线为升落标准，未计大气折射和当地山地遮挡。可见月面照明比例指地球所见月圆盘的亮面比例，采用地心视月相近似；接近四种主要相位标注“附近”，不等同于精确发生时刻；此处未模拟日食、月食的遮挡与亮度变化。日期观测的实际经过时长按
+          UTC
+          时间间隔计算，与当地真太阳时的读数间隔略有区别。月相图标采用固定朝向，不表示本地观测时月面亮侧的朝向；北、南半球及观察时间会影响月面朝向。日内最高时刻可能位于当天的
+          00:00 或 24:00
+          边界，不一定等于月球上中天时刻。月球方位、高度不等于肉眼一定能看见；新月附近和白天可能难以辨认。极点及天体位于天顶时，部分方位定义不唯一。
+        </p>
+        <button id="startExplore" class="play-button">开始探索</button>
+      </dialog>
+    </div>
+    <script src="astronomy.js"></script>
+    <script src="moon.js"></script>
+    <script src="coverage.js"></script>
+    <script src="menu.js"></script>
+    <script src="workspace.js"></script>
+    <script src="companion.js"></script>
+    <script src="analemma.js"></script>
+    <script src="shadow.js"></script>
+    <script src="sundial-device.js"></script>
+    <script src="sundial.js"></script>
+    <script src="observer.js"></script>
+    <script src="solar-date.js"></script>
+    <script src="time-workbench.js"></script>
+    <script src="motion.js"></script>
+    <script src="app.js"></script>
+    <script src="page-navigation.js"></script>
+  </body>
+</html>

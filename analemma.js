@@ -1,62 +1,674 @@
+/**
+ * 全年固定时刻的太阳位置、日行迹投影与独立成因实验。
+ */
 /* One independently defined observation time per day; shared local sky projection. */
-const analemmaCache=new Map(),analemmaPathCache=new WeakMap();let analemmaPlaying=false,analemmaAccumulator=0,analemmaPlot=null,analemmaMarker=null;
-function analemmaIdealPosition(utc,options){
- const days=(utc.getTime()-Date.UTC(2000,0,1,12))/86400000,T=days/36525,L=(280.46646+36000.76983*T+.0003032*T*T)*rad,M=(357.52911+35999.05029*T-.0001537*T*T)*rad,e=options.analemmaEccentricity??.0167,tilt=(options.analemmaTilt??23.44)*rad;
- let E=M;for(let i=0;i<8;i++)E-=(E-e*Math.sin(E)-M)/(1-e*Math.cos(E));
- const anomaly=Math.atan2(Math.sqrt(1-e*e)*Math.sin(E),Math.cos(E)-e),longitude=L-M+anomaly,ra=Math.atan2(Math.cos(tilt)*Math.sin(longitude),Math.cos(longitude))*deg,dec=Math.asin(Math.sin(tilt)*Math.sin(longitude))*deg,eot=((((L*deg-ra)+180)%360+360)%360-180)*4;
- const minutes=utc.getUTCHours()*60+utc.getUTCMinutes()+utc.getUTCSeconds()/60+utc.getUTCMilliseconds()/60000;
- return{dec,eot,hour:(((minutes+options.lon*4+eot-720)/4+180)%360+360)%360-180};
+const analemmaCache = new Map(),
+  analemmaPathCache = new WeakMap();
+let analemmaPlaying = false,
+  analemmaAccumulator = 0,
+  analemmaPlot = null,
+  analemmaMarker = null;
+function analemmaIdealPosition(utc, options) {
+  const days = (utc.getTime() - Date.UTC(2000, 0, 1, 12)) / 86400000,
+    T = days / 36525,
+    L = (280.46646 + 36000.76983 * T + 0.0003032 * T * T) * rad,
+    M = (357.52911 + 35999.05029 * T - 0.0001537 * T * T) * rad,
+    e = options.analemmaEccentricity ?? 0.0167,
+    tilt = (options.analemmaTilt ?? 23.44) * rad;
+  let E = M;
+  for (let i = 0; i < 8; i++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+  const anomaly = Math.atan2(Math.sqrt(1 - e * e) * Math.sin(E), Math.cos(E) - e),
+    longitude = L - M + anomaly,
+    ra = Math.atan2(Math.cos(tilt) * Math.sin(longitude), Math.cos(longitude)) * deg,
+    dec = Math.asin(Math.sin(tilt) * Math.sin(longitude)) * deg,
+    eot = (((((L * deg - ra + 180) % 360) + 360) % 360) - 180) * 4;
+  const minutes =
+    utc.getUTCHours() * 60 +
+    utc.getUTCMinutes() +
+    utc.getUTCSeconds() / 60 +
+    utc.getUTCMilliseconds() / 60000;
+  return {
+    dec,
+    eot,
+    hour: (((((minutes + options.lon * 4 + eot - 720) / 4 + 180) % 360) + 360) % 360) - 180,
+  };
 }
-function analemmaSample(date,options=state){const clock=options.analemmaClock??720,basis=options.analemmaBasis??'clock',offset=options.analemmaOffset??8,lat=options.lat,lon=options.lon;
- let utc=basis==='apparent'?instantUTC(clock,date,lon):new Date(new Date(date+'T00:00:00Z').getTime()+(clock-offset*60)*60000);
- if(options.analemmaIdeal){if(basis==='apparent'){utc=new Date(new Date(date+'T00:00:00Z').getTime()+(clock-lon*4)*60000);for(let i=0;i<4;i++){const eq=analemmaIdealPosition(utc,options);utc=new Date(new Date(date+'T00:00:00Z').getTime()+(clock-lon*4-eq.eot)*60000);}}
- const eq=analemmaIdealPosition(utc,options),h=solar(lat,eq.dec,720+eq.hour*4);return{date,utc,...eq,alt:h.alt,az:h.az};}
- const eq=sunEquatorial(utc),hour=sunHourAngle(utc,lon),meanMinutes=utc.getUTCHours()*60+utc.getUTCMinutes()+utc.getUTCSeconds()/60+utc.getUTCMilliseconds()/60000+lon*4,meanHour=(meanMinutes-720)/4;
- const eot=(((hour-meanHour+540)%360)-180)*4,observer=new Astronomy.Observer(lat,lon,0),topo=Astronomy.Equator('Sun',utc,observer,true,true),h=Astronomy.Horizon(utc,observer,topo.ra,topo.dec);
- return{date,utc,hour,dec:eq.dec,eot,alt:h.altitude,az:h.azimuth};
+function analemmaSample(date, options = state) {
+  const clock = options.analemmaClock ?? 720,
+    basis = options.analemmaBasis ?? 'clock',
+    offset = options.analemmaOffset ?? 8,
+    lat = options.lat,
+    lon = options.lon;
+  let utc =
+    basis === 'apparent'
+      ? instantUTC(clock, date, lon)
+      : new Date(new Date(date + 'T00:00:00Z').getTime() + (clock - offset * 60) * 60000);
+  if (options.analemmaIdeal) {
+    if (basis === 'apparent') {
+      utc = new Date(new Date(date + 'T00:00:00Z').getTime() + (clock - lon * 4) * 60000);
+      for (let i = 0; i < 4; i++) {
+        const eq = analemmaIdealPosition(utc, options);
+        utc = new Date(
+          new Date(date + 'T00:00:00Z').getTime() + (clock - lon * 4 - eq.eot) * 60000,
+        );
+      }
+    }
+    const eq = analemmaIdealPosition(utc, options),
+      h = solar(lat, eq.dec, 720 + eq.hour * 4);
+    return { date, utc, ...eq, alt: h.alt, az: h.az };
+  }
+  const eq = sunEquatorial(utc),
+    hour = sunHourAngle(utc, lon),
+    meanMinutes =
+      utc.getUTCHours() * 60 +
+      utc.getUTCMinutes() +
+      utc.getUTCSeconds() / 60 +
+      utc.getUTCMilliseconds() / 60000 +
+      lon * 4,
+    meanHour = (meanMinutes - 720) / 4;
+  const eot = (((hour - meanHour + 540) % 360) - 180) * 4,
+    observer = new Astronomy.Observer(lat, lon, 0),
+    topo = Astronomy.Equator('Sun', utc, observer, true, true),
+    h = Astronomy.Horizon(utc, observer, topo.ra, topo.dec);
+  return { date, utc, hour, dec: eq.dec, eot, alt: h.altitude, az: h.azimuth };
 }
-function analemmaYear(options=state){const year=options.date.slice(0,4),key=[year,options.lat,options.lon,options.analemmaClock,options.analemmaBasis,options.analemmaOffset,!!options.analemmaIdeal,options.analemmaTilt,options.analemmaEccentricity].join(':');if(analemmaCache.has(key))return analemmaCache.get(key);const points=[];let d=new Date(year+'-01-01T12:00:00Z');while(d.getUTCFullYear()===Number(year)){points.push(analemmaSample(d.toISOString().slice(0,10),options));d.setUTCDate(d.getUTCDate()+1);}if(analemmaCache.size>=16)analemmaCache.delete(analemmaCache.keys().next().value);analemmaCache.set(key,points);return points;}
-function analemmaTracks(){const tracks=[{clock:state.analemmaClock,color:'#ffd079',primary:true,points:analemmaYear()}];if(state.analemmaCompare)for(const [clock,color] of [[540,'#8bd8ff'],[720,'#c6adff'],[900,'#ffada4']])if(clock!==state.analemmaClock)tracks.push({clock,color,primary:false,points:analemmaYear({...state,analemmaClock:clock})});return tracks;}
-function analemmaVector(p){const alt=p.alt*rad,az=p.az*rad;return{x:Math.cos(alt)*Math.sin(az),y:Math.sin(alt),z:Math.cos(alt)*Math.cos(az)};}
+function analemmaYear(options = state) {
+  const year = options.date.slice(0, 4),
+    key = [
+      year,
+      options.lat,
+      options.lon,
+      options.analemmaClock,
+      options.analemmaBasis,
+      options.analemmaOffset,
+      !!options.analemmaIdeal,
+      options.analemmaTilt,
+      options.analemmaEccentricity,
+    ].join(':');
+  if (analemmaCache.has(key)) return analemmaCache.get(key);
+  const points = [];
+  let d = new Date(year + '-01-01T12:00:00Z');
+  while (d.getUTCFullYear() === Number(year)) {
+    points.push(analemmaSample(d.toISOString().slice(0, 10), options));
+    d.setUTCDate(d.getUTCDate() + 1);
+  }
+  if (analemmaCache.size >= 16) analemmaCache.delete(analemmaCache.keys().next().value);
+  analemmaCache.set(key, points);
+  return points;
+}
+function analemmaTracks() {
+  const tracks = [
+    { clock: state.analemmaClock, color: '#ffd079', primary: true, points: analemmaYear() },
+  ];
+  if (state.analemmaCompare)
+    for (const [clock, color] of [
+      [540, '#8bd8ff'],
+      [720, '#c6adff'],
+      [900, '#ffada4'],
+    ])
+      if (clock !== state.analemmaClock)
+        tracks.push({
+          clock,
+          color,
+          primary: false,
+          points: analemmaYear({ ...state, analemmaClock: clock }),
+        });
+  return tracks;
+}
+function analemmaVector(p) {
+  const alt = p.alt * rad,
+    az = p.az * rad;
+  return { x: Math.cos(alt) * Math.sin(az), y: Math.sin(alt), z: Math.cos(alt) * Math.cos(az) };
+}
 // Split annual paths at geometric horizon and the panorama's north seam.
-function analemmaSegments(points,panorama){const cached=analemmaPathCache.get(points);if(cached?.has(panorama))return cached.get(panorama);const segments=[];for(let i=1;i<points.length;i++){const a=points[i-1],b=points[i],delta=((b.az-a.az+540)%360)-180,az1=a.az+delta,cuts=[0,1];if(a.alt*b.alt<0)cuts.push(a.alt/(a.alt-b.alt));if(panorama&&delta!==0)for(const edge of [0,360]){const f=(edge-a.az)/delta;if(f>1e-10&&f<1-1e-10)cuts.push(f);}cuts.sort((a,b)=>a-b);for(let j=1;j<cuts.length;j++){const f=cuts[j-1],g=cuts[j];if(g-f<1e-10)continue;const mid=a.az+delta*(f+g)/2,shift=panorama?(mid<0?360:mid>360?-360:0):0,at=t=>({az:a.az+delta*t+shift,alt:a.alt+(b.alt-a.alt)*t});segments.push({a:at(f),b:at(g),above:(a.alt+(b.alt-a.alt)*(f+g)/2)>=0});}}const paths=cached||new Map();paths.set(panorama,segments);analemmaPathCache.set(points,paths);return segments;}
-function drawAnalemma(){if(state.body!=='sun'||!state.analemma||state.manual||!canPaint($('analemmaCanvas')))return;
- const tracks=analemmaTracks(),points=tracks[0].points,selected=points.find(p=>p.date===state.date),view=state.analemmaView,dome=view==='dome',sky=view==='sky',{c,w,h}=resize($('analemmaCanvas')),left=w<420?40:54,right=w-20,top=30,bottom=h-42;
- let project,xy,coords;
- if(dome){const R=Math.min(w*.38,h*.35)*(state.analemmaZoom??1),C={x:w*.5,y:h*.52},yaw=state.analemmaYaw??-.55,pitch=state.analemmaPitch??.38;project=p=>{const v=analemmaVector(p),u=v.x*Math.cos(yaw)+v.z*Math.sin(yaw),depth=-v.x*Math.sin(yaw)+v.z*Math.cos(yaw);return{x:C.x+u*R,y:C.y-depth*R*Math.sin(pitch)-v.y*R*Math.cos(pitch)};};xy=p=>({az:p.az,alt:p.alt});
- const ground=[];for(let a=0;a<=360;a+=3)ground.push(project({az:a,alt:0}));c.beginPath();ground.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.closePath();c.fillStyle='#29423d66';c.fill();poly(c,ground,'#9ab5be99',1.4);
- for(let alt of [30,60]){const ring=[];for(let az=0;az<=360;az+=3)ring.push(project({az,alt}));poly(c,ring,'#718ba933',1,[3,4]);}
- for(let az of [0,90,180,270]){const arc=[];for(let alt=0;alt<=90;alt+=3)arc.push(project({az,alt}));poly(c,arc,'#718ba933',1,[3,4]);const p=project({az,alt:0});text(c,heading(az),p.x,p.y+15,'#c6d8eb',12);}
- text(c,'当地天空 · 单位天球正投影',w/2,16,'#c6d8eb',12);text(c,'地平线下方用虚线；投影可能重叠，可旋转查看',w/2,h-14,'#a9bdd4',w<420?10:12);
- }else{let lowX,highX,lowY,highY;if(sky){lowX=0;highX=360;lowY=-90;highY=90;xy=p=>({x:p.az,y:p.alt});}else{const center=points[Math.floor(points.length/2)].hour;xy=p=>({x:center+(((p.hour-center+540)%360)-180),y:p.dec});const all=tracks.flatMap(t=>t.points.map(xy)),xs=all.map(p=>p.x),ys=all.map(p=>p.y);lowX=Math.min(...xs);highX=Math.max(...xs);lowY=Math.min(...ys);highY=Math.max(...ys);const px=Math.max(2,(highX-lowX)*.12),py=Math.max(3,(highY-lowY)*.12);lowX-=px;highX+=px;lowY-=py;highY+=py;}
- project=p=>({x:left+(p.x-lowX)/(highX-lowX)*(right-left),y:bottom-(p.y-lowY)/(highY-lowY)*(bottom-top)});
- if(sky){c.fillStyle='#29423d55';const y=project({x:0,y:0}).y;c.fillRect(left,y,right-left,bottom-y);}
- for(let i=0;i<=4;i++){const x=left+i*(right-left)/4,y=top+i*(bottom-top)/4;poly(c,[{x,y:top},{x,y:bottom}],'#6685a333');poly(c,[{x:left,y},{x:right,y}],'#6685a333');const angle=lowX+i*(highX-lowX)/4;text(c,sky?['北 0°','东 90°','南 180°','西 270°','北 360°'][i]:(((angle+540)%360)-180).toFixed(1)+'°',x,bottom+17,'#b6c8dc',w<420?10:12);text(c,(highY-i*(highY-lowY)/4).toFixed(sky?0:1)+'°',left-7,y,'#b6c8dc',12,'right');}
- if(sky){const y=project({x:0,y:0}).y;poly(c,[{x:left,y},{x:right,y}],'#c6d8eb',1.4);text(c,'地平线',right-4,y-11,'#c8daec',12,'right');}text(c,sky?'方位角 · 北 0°，顺时针':'太阳时角 · 上中天 0°，午后为正',w/2,h-9,'#c6d8eb',12);text(c,sky?'太阳高度角':'太阳赤纬',left,13,'#c6d8eb',12,'left');
- }
- const plot=p=>project(xy(p));coords=points.map(xy);analemmaPlot={points,coords,project,w,h,tracks,view};c.save();c.lineCap='round';c.lineJoin='round';
- for(const track of [...tracks.slice(1),tracks[0]]){if(dome||sky){for(const s of analemmaSegments(track.points,sky)){const map=p=>dome?project(p):project({x:p.az,y:p.alt});poly(c,[map(s.a),map(s.b)],s.above?track.color:track.color+'77',track.primary?2.5:1.6,s.above?[]:[4,4]);}}
- else{const qs=track.points.map(xy);for(let i=1;i<qs.length;i++)if(Math.abs(qs[i].x-qs[i-1].x)<180)poly(c,[project(qs[i-1]),project(qs[i])],track.points[i].alt>=0?track.color:track.color+'77',track.primary?2.5:1.6,track.points[i].alt>=0?[]:[4,4]);}
- const first=track.points[0],last=track.points.at(-1);if(!sky||Math.abs(first.az-last.az)<180){const a=xy(first),b=xy(last);if(dome||sky||Math.abs(a.x-b.x)<180)poly(c,[project(b),project(a)],track.color+'77',1,[2,3]);}
- if(!track.primary){const q=plot(track.points.find(p=>p.date===state.date));c.fillStyle=track.color;c.beginPath();c.arc(q.x,q.y,3.5,0,Math.PI*2);c.fill();}}
- c.restore();for(const p of points){if(!p.date.endsWith('-01'))continue;const q=plot(p);c.fillStyle='#a8caff';c.beginPath();c.arc(q.x,q.y,2.7,0,Math.PI*2);c.fill();if(!state.analemmaCompare)text(c,Number(p.date.slice(5,7))+'月',q.x+6,q.y-8,'#bcd5f4',11,'left');}
- const exact=plot(selected),markerKey=[state.date.slice(0,4),state.lat,state.lon,state.analemmaBasis,state.analemmaClock,state.analemmaOffset,state.analemmaView,state.analemmaCompare,state.analemmaYaw,state.analemmaPitch,state.analemmaZoom,state.analemmaIdeal,state.analemmaTilt,state.analemmaEccentricity,w,h].join(':');let p=exact;if(analemmaPlaying&&!reducedMotion.matches){if(!analemmaMarker||analemmaMarker.key!==markerKey)analemmaMarker={key:markerKey,date:state.date,from:exact,last:exact,start:performance.now()};if(analemmaMarker.date!==state.date){analemmaMarker.from=analemmaMarker.last;analemmaMarker.date=state.date;analemmaMarker.start=performance.now();}if(Math.hypot(analemmaMarker.from.x-exact.x,analemmaMarker.from.y-exact.y)>(w-74)*.5)analemmaMarker.from=exact;const f=clamp((performance.now()-analemmaMarker.start)/60,0,1);p={x:analemmaMarker.from.x+(exact.x-analemmaMarker.from.x)*f,y:analemmaMarker.from.y+(exact.y-analemmaMarker.from.y)*f};analemmaMarker.last=p;}else analemmaMarker=null;glow(c,p.x,p.y,4.5);
+function analemmaSegments(points, panorama) {
+  const cached = analemmaPathCache.get(points);
+  if (cached?.has(panorama)) return cached.get(panorama);
+  const segments = [];
+  for (let i = 1; i < points.length; i++) {
+    const a = points[i - 1],
+      b = points[i],
+      delta = ((b.az - a.az + 540) % 360) - 180,
+      az1 = a.az + delta,
+      cuts = [0, 1];
+    if (a.alt * b.alt < 0) cuts.push(a.alt / (a.alt - b.alt));
+    if (panorama && delta !== 0)
+      for (const edge of [0, 360]) {
+        const f = (edge - a.az) / delta;
+        if (f > 1e-10 && f < 1 - 1e-10) cuts.push(f);
+      }
+    cuts.sort((a, b) => a - b);
+    for (let j = 1; j < cuts.length; j++) {
+      const f = cuts[j - 1],
+        g = cuts[j];
+      if (g - f < 1e-10) continue;
+      const mid = a.az + (delta * (f + g)) / 2,
+        shift = panorama ? (mid < 0 ? 360 : mid > 360 ? -360 : 0) : 0,
+        at = (t) => ({ az: a.az + delta * t + shift, alt: a.alt + (b.alt - a.alt) * t });
+      segments.push({ a: at(f), b: at(g), above: a.alt + ((b.alt - a.alt) * (f + g)) / 2 >= 0 });
+    }
+  }
+  const paths = cached || new Map();
+  paths.set(panorama, segments);
+  analemmaPathCache.set(points, paths);
+  return segments;
 }
-function renderAnalemma(){const sun=state.body==='sun';$('analemmaPanel').hidden=!sun;$('analemmaLink').hidden=!sun;if(!sun){analemmaPlaying=false;return;}$('analemmaEnabled').checked=!!state.analemma;$('analemmaContent').hidden=!state.analemma;if(!state.analemma){analemmaPlaying=false;return;}
- $('analemmaIdealNote').hidden=!state.manual;$('analemmaLab').hidden=state.manual;if(state.manual){analemmaPlaying=false;return;}
- const points=analemmaYear(),index=points.findIndex(p=>p.date===state.date),s=points[index];$('analemmaBasis').value=state.analemmaBasis;$('analemmaClock').value=hhmm(state.analemmaClock);$('analemmaOffset').value=state.analemmaOffset;$('analemmaZoneLabel').hidden=state.analemmaBasis!=='clock';$('analemmaView').value=state.analemmaView;$('analemmaDay').max=points.length;$('analemmaDay').value=index+1;$('analemmaDate').textContent=state.date;$('analemmaPlay').textContent=analemmaPlaying?'Ⅱ 暂停':'▶ 逐日播放';$('analemmaCompare').checked=!!state.analemmaCompare;$('analemmaCanvas').dataset.view=state.analemmaView;$('analemmaCanvas').tabIndex=0;$('analemmaResetView').hidden=state.analemmaView!=='dome';
- $('analemmaIdeal').checked=!!state.analemmaIdeal;$('analemmaIdealControls').hidden=!state.analemmaIdeal;$('analemmaTilt').value=state.analemmaTilt;$('analemmaEccentricity').value=state.analemmaEccentricity;$('analemmaTiltValue').textContent=state.analemmaTilt.toFixed(2)+'°';$('analemmaEccentricityValue').textContent=state.analemmaEccentricity.toFixed(4);
- $('analemmaLegend').replaceChildren(...analemmaTracks().map(t=>{const span=document.createElement('span'),i=document.createElement('i');i.style.setProperty('--track-color',t.color);span.append(i,document.createTextNode(hhmm(t.clock)+(t.primary?' · 当前':'')));return span;}));
- $('analemmaViewHint').textContent=state.analemmaView==='dome'?'拖动旋转 · 滚轮缩放 · 方向键旋转，+/− 缩放，Home 重置。改变观测时刻保持视角不变。':state.analemmaView==='sky'?'固定全景坐标：方位 0°—360°，高度 −90°—90°。改变时刻保持坐标与缩放不变。':'原理图自动缩放：改变观测时刻主要使时角整体平移，“8”字形状可能近似相同；自动居中会隐藏整体位移。';
- $('analemmaConditions').textContent=(state.analemmaIdeal?'理想成因实验 · ':'真实日期星历 · ')+coord(state.lat,'lat')+' · '+coord(state.lon,'lon')+' · 每天 '+hhmm(state.analemmaClock)+(state.analemmaBasis==='clock'?' 钟表时，UTC'+(state.analemmaOffset>=0?'+':'')+state.analemmaOffset+'（固定偏移，无夏令时）':' 当地真太阳时');
- $('analemmaResults').textContent=`${state.analemmaIdeal?'理想模型 · ':''}${state.date}：赤纬 ${s.dec.toFixed(2)}° · 时角 ${s.hour.toFixed(2)}° · 高度 ${s.alt.toFixed(2)}° · ${Math.abs(state.lat)>89.99999999||Math.abs(s.alt)>89.99?'方位在极点或天顶附近不宜判读':'方位 '+s.az.toFixed(2)+'°'} · 均时差 ${s.eot>=0?'+':''}${s.eot.toFixed(2)} 分钟（真太阳时 − 平太阳时）`;
- $('analemmaExplanation').textContent=(state.analemmaBasis==='clock'?'固定钟表时下，地轴倾斜使赤纬随季节变化；地轴倾斜与轨道偏心共同造成均时差，使时角往返变化，通常形成“8”字。':'固定真太阳时消除了均时差带来的时角变化，因此时角基本固定，不形成经典“8”字。')+' 各颜色区分每日观测时刻，实线为地平线上方，虚线为下方；蓝点标出当前时刻轨迹的每月1日，亮点为选定日期。年末与年初以虚线示意连接。'+(state.analemmaView==='dome'?'三维示意将同一当地天空的单位方向球正投影到屏幕，形状受视角影响，不等同于相机照片。':state.analemmaView==='sky'?'方位—高度为角度展开，形状随地点和时刻而变；跨北向连接到两侧边缘，天顶附近方位变化可能很大，不等同于相机照片。':'时角—赤纬采用地心视太阳方向，两轴分别缩放，不表示天空中同等角度的画面长度。')+(state.analemmaIdeal?' 当前仅日行迹使用理想模型；关闭高级实验开关恢复真实星历。':'本地高度和方位计入地平视差；不含大气折射。');
+function drawAnalemma() {
+  if (state.body !== 'sun' || !state.analemma || state.manual || !canPaint($('analemmaCanvas')))
+    return;
+  const tracks = analemmaTracks(),
+    points = tracks[0].points,
+    selected = points.find((p) => p.date === state.date),
+    view = state.analemmaView,
+    dome = view === 'dome',
+    sky = view === 'sky',
+    { c, w, h } = resize($('analemmaCanvas')),
+    left = w < 420 ? 40 : 54,
+    right = w - 20,
+    top = 30,
+    bottom = h - 42;
+  let project, xy, coords;
+  if (dome) {
+    const R = Math.min(w * 0.38, h * 0.35) * (state.analemmaZoom ?? 1),
+      C = { x: w * 0.5, y: h * 0.52 },
+      yaw = state.analemmaYaw ?? -0.55,
+      pitch = state.analemmaPitch ?? 0.38;
+    project = (p) => {
+      const v = analemmaVector(p),
+        u = v.x * Math.cos(yaw) + v.z * Math.sin(yaw),
+        depth = -v.x * Math.sin(yaw) + v.z * Math.cos(yaw);
+      return { x: C.x + u * R, y: C.y - depth * R * Math.sin(pitch) - v.y * R * Math.cos(pitch) };
+    };
+    xy = (p) => ({ az: p.az, alt: p.alt });
+    const ground = [];
+    for (let a = 0; a <= 360; a += 3) ground.push(project({ az: a, alt: 0 }));
+    c.beginPath();
+    ground.forEach((p, i) => (i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)));
+    c.closePath();
+    c.fillStyle = '#29423d66';
+    c.fill();
+    poly(c, ground, '#9ab5be99', 1.4);
+    for (let alt of [30, 60]) {
+      const ring = [];
+      for (let az = 0; az <= 360; az += 3) ring.push(project({ az, alt }));
+      poly(c, ring, '#718ba933', 1, [3, 4]);
+    }
+    for (let az of [0, 90, 180, 270]) {
+      const arc = [];
+      for (let alt = 0; alt <= 90; alt += 3) arc.push(project({ az, alt }));
+      poly(c, arc, '#718ba933', 1, [3, 4]);
+      const p = project({ az, alt: 0 });
+      text(c, heading(az), p.x, p.y + 15, '#c6d8eb', 12);
+    }
+    text(c, '当地天空 · 单位天球正投影', w / 2, 16, '#c6d8eb', 12);
+    text(
+      c,
+      '地平线下方用虚线；投影可能重叠，可旋转查看',
+      w / 2,
+      h - 14,
+      '#a9bdd4',
+      w < 420 ? 10 : 12,
+    );
+  } else {
+    let lowX, highX, lowY, highY;
+    if (sky) {
+      lowX = 0;
+      highX = 360;
+      lowY = -90;
+      highY = 90;
+      xy = (p) => ({ x: p.az, y: p.alt });
+    } else {
+      const center = points[Math.floor(points.length / 2)].hour;
+      xy = (p) => ({ x: center + (((p.hour - center + 540) % 360) - 180), y: p.dec });
+      const all = tracks.flatMap((t) => t.points.map(xy)),
+        xs = all.map((p) => p.x),
+        ys = all.map((p) => p.y);
+      lowX = Math.min(...xs);
+      highX = Math.max(...xs);
+      lowY = Math.min(...ys);
+      highY = Math.max(...ys);
+      const px = Math.max(2, (highX - lowX) * 0.12),
+        py = Math.max(3, (highY - lowY) * 0.12);
+      lowX -= px;
+      highX += px;
+      lowY -= py;
+      highY += py;
+    }
+    project = (p) => ({
+      x: left + ((p.x - lowX) / (highX - lowX)) * (right - left),
+      y: bottom - ((p.y - lowY) / (highY - lowY)) * (bottom - top),
+    });
+    if (sky) {
+      c.fillStyle = '#29423d55';
+      const y = project({ x: 0, y: 0 }).y;
+      c.fillRect(left, y, right - left, bottom - y);
+    }
+    for (let i = 0; i <= 4; i++) {
+      const x = left + (i * (right - left)) / 4,
+        y = top + (i * (bottom - top)) / 4;
+      poly(
+        c,
+        [
+          { x, y: top },
+          { x, y: bottom },
+        ],
+        '#6685a333',
+      );
+      poly(
+        c,
+        [
+          { x: left, y },
+          { x: right, y },
+        ],
+        '#6685a333',
+      );
+      const angle = lowX + (i * (highX - lowX)) / 4;
+      text(
+        c,
+        sky
+          ? ['北 0°', '东 90°', '南 180°', '西 270°', '北 360°'][i]
+          : (((angle + 540) % 360) - 180).toFixed(1) + '°',
+        x,
+        bottom + 17,
+        '#b6c8dc',
+        w < 420 ? 10 : 12,
+      );
+      text(
+        c,
+        (highY - (i * (highY - lowY)) / 4).toFixed(sky ? 0 : 1) + '°',
+        left - 7,
+        y,
+        '#b6c8dc',
+        12,
+        'right',
+      );
+    }
+    if (sky) {
+      const y = project({ x: 0, y: 0 }).y;
+      poly(
+        c,
+        [
+          { x: left, y },
+          { x: right, y },
+        ],
+        '#c6d8eb',
+        1.4,
+      );
+      text(c, '地平线', right - 4, y - 11, '#c8daec', 12, 'right');
+    }
+    text(
+      c,
+      sky ? '方位角 · 北 0°，顺时针' : '太阳时角 · 上中天 0°，午后为正',
+      w / 2,
+      h - 9,
+      '#c6d8eb',
+      12,
+    );
+    text(c, sky ? '太阳高度角' : '太阳赤纬', left, 13, '#c6d8eb', 12, 'left');
+  }
+  const plot = (p) => project(xy(p));
+  coords = points.map(xy);
+  analemmaPlot = { points, coords, project, w, h, tracks, view };
+  c.save();
+  c.lineCap = 'round';
+  c.lineJoin = 'round';
+  for (const track of [...tracks.slice(1), tracks[0]]) {
+    if (dome || sky) {
+      for (const s of analemmaSegments(track.points, sky)) {
+        const map = (p) => (dome ? project(p) : project({ x: p.az, y: p.alt }));
+        poly(
+          c,
+          [map(s.a), map(s.b)],
+          s.above ? track.color : track.color + '77',
+          track.primary ? 2.5 : 1.6,
+          s.above ? [] : [4, 4],
+        );
+      }
+    } else {
+      const qs = track.points.map(xy);
+      for (let i = 1; i < qs.length; i++)
+        if (Math.abs(qs[i].x - qs[i - 1].x) < 180)
+          poly(
+            c,
+            [project(qs[i - 1]), project(qs[i])],
+            track.points[i].alt >= 0 ? track.color : track.color + '77',
+            track.primary ? 2.5 : 1.6,
+            track.points[i].alt >= 0 ? [] : [4, 4],
+          );
+    }
+    const first = track.points[0],
+      last = track.points.at(-1);
+    if (!sky || Math.abs(first.az - last.az) < 180) {
+      const a = xy(first),
+        b = xy(last);
+      if (dome || sky || Math.abs(a.x - b.x) < 180)
+        poly(c, [project(b), project(a)], track.color + '77', 1, [2, 3]);
+    }
+    if (!track.primary) {
+      const q = plot(track.points.find((p) => p.date === state.date));
+      c.fillStyle = track.color;
+      c.beginPath();
+      c.arc(q.x, q.y, 3.5, 0, Math.PI * 2);
+      c.fill();
+    }
+  }
+  c.restore();
+  for (const p of points) {
+    if (!p.date.endsWith('-01')) continue;
+    const q = plot(p);
+    c.fillStyle = '#a8caff';
+    c.beginPath();
+    c.arc(q.x, q.y, 2.7, 0, Math.PI * 2);
+    c.fill();
+    if (!state.analemmaCompare)
+      text(c, Number(p.date.slice(5, 7)) + '月', q.x + 6, q.y - 8, '#bcd5f4', 11, 'left');
+  }
+  const exact = plot(selected),
+    markerKey = [
+      state.date.slice(0, 4),
+      state.lat,
+      state.lon,
+      state.analemmaBasis,
+      state.analemmaClock,
+      state.analemmaOffset,
+      state.analemmaView,
+      state.analemmaCompare,
+      state.analemmaYaw,
+      state.analemmaPitch,
+      state.analemmaZoom,
+      state.analemmaIdeal,
+      state.analemmaTilt,
+      state.analemmaEccentricity,
+      w,
+      h,
+    ].join(':');
+  let p = exact;
+  if (analemmaPlaying && !reducedMotion.matches) {
+    if (!analemmaMarker || analemmaMarker.key !== markerKey)
+      analemmaMarker = {
+        key: markerKey,
+        date: state.date,
+        from: exact,
+        last: exact,
+        start: performance.now(),
+      };
+    if (analemmaMarker.date !== state.date) {
+      analemmaMarker.from = analemmaMarker.last;
+      analemmaMarker.date = state.date;
+      analemmaMarker.start = performance.now();
+    }
+    if (
+      Math.hypot(analemmaMarker.from.x - exact.x, analemmaMarker.from.y - exact.y) >
+      (w - 74) * 0.5
+    )
+      analemmaMarker.from = exact;
+    const f = clamp((performance.now() - analemmaMarker.start) / 60, 0, 1);
+    p = {
+      x: analemmaMarker.from.x + (exact.x - analemmaMarker.from.x) * f,
+      y: analemmaMarker.from.y + (exact.y - analemmaMarker.from.y) * f,
+    };
+    analemmaMarker.last = p;
+  } else analemmaMarker = null;
+  glow(c, p.x, p.y, 4.5);
 }
-function advanceAnalemma(dt){if(!analemmaPlaying||state.body!=='sun'||state.manual||!state.analemma)return false;analemmaAccumulator+=dt*20;const days=Math.floor(analemmaAccumulator);if(!days)return false;analemmaAccumulator-=days;const points=analemmaYear(),index=points.findIndex(p=>p.date===state.date),next=Math.min(index+days,points.length-1);state.date=points[next].date;state.dec=dateDec(state.date);$('date').value=state.date;if(next===points.length-1)analemmaPlaying=false;return true;}
-function resetAnalemmaView(){state.analemmaYaw=-.55;state.analemmaPitch=.38;state.analemmaZoom=1;schedule();}
-function initAnalemma(){for(const [id,key] of [['analemmaEnabled','analemma'],['analemmaCompare','analemmaCompare'],['analemmaIdeal','analemmaIdeal']])$(id).onchange=e=>{stop();state[key]=e.target.checked;schedule();};for(const [id,key] of [['analemmaBasis','analemmaBasis'],['analemmaView','analemmaView']])$(id).onchange=e=>{stop();state[key]=e.target.value;schedule();};$('analemmaOffset').onchange=e=>{stop();const v=Number(e.target.value);state.analemmaOffset=Number.isFinite(v)?clamp(v,-12,14):8;schedule();};$('analemmaClock').onchange=e=>{stop();if(/^\d{2}:\d{2}$/.test(e.target.value)){const [h,m]=e.target.value.split(':').map(Number);state.analemmaClock=clamp(h*60+m,0,1439);}schedule();};$('analemmaRestore').onclick=()=>setDate(state.date);
- for(const [id,key,min,max] of [['analemmaTilt','analemmaTilt',0,45],['analemmaEccentricity','analemmaEccentricity',0,.1]])$(id).oninput=e=>{stop();state[key]=clamp(Number(e.target.value),min,max);schedule();};$('analemmaIdealReset').onclick=()=>{stop();state.analemmaTilt=23.44;state.analemmaEccentricity=.0167;schedule();};$('analemmaResetView').onclick=resetAnalemmaView;
- $('analemmaDay').oninput=e=>{const points=analemmaYear();setDate(points[clamp(Number(e.target.value)-1,0,points.length-1)].date);};$('analemmaPlay').onclick=()=>{if(analemmaPlaying){stop();schedule();return;}stop();if(state.date.endsWith('12-31'))setDate(state.date.slice(0,4)+'-01-01');analemmaPlaying=true;analemmaAccumulator=0;motionLast=0;schedule();};
- const canvas=$('analemmaCanvas');let drag=null,suppressClick=false;canvas.addEventListener('pointerdown',e=>{suppressClick=false;if(state.analemmaView!=='dome'||e.button!==0)return;drag={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY};canvas.setPointerCapture(e.pointerId);});canvas.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(e.clientX-drag.startX,e.clientY-drag.startY)>5)suppressClick=true;if(suppressClick){state.analemmaYaw+=dx*.008;state.analemmaPitch=clamp(state.analemmaPitch+dy*.006,.08,1.45);schedule();}drag.x=e.clientX;drag.y=e.clientY;});for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,()=>{drag=null;});canvas.addEventListener('wheel',e=>{if(state.analemmaView!=='dome')return;e.preventDefault();state.analemmaZoom=clamp(state.analemmaZoom-e.deltaY*.0008,.65,1.15);schedule();},{passive:false});canvas.addEventListener('keydown',e=>{if(state.analemmaView!=='dome')return;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','=','-','Home'].includes(e.key)){e.preventDefault();if(e.key==='Home'){resetAnalemmaView();return;}if(e.key==='ArrowLeft')state.analemmaYaw-=.1;if(e.key==='ArrowRight')state.analemmaYaw+=.1;if(e.key==='ArrowUp')state.analemmaPitch=clamp(state.analemmaPitch-.08,.08,1.45);if(e.key==='ArrowDown')state.analemmaPitch=clamp(state.analemmaPitch+.08,.08,1.45);if(e.key==='+'||e.key==='=')state.analemmaZoom=clamp(state.analemmaZoom+.05,.65,1.15);if(e.key==='-')state.analemmaZoom=clamp(state.analemmaZoom-.05,.65,1.15);schedule();}});
- canvas.onclick=e=>{if(suppressClick||!analemmaPlot)return;const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;let best=Infinity,chosen=null;for(const track of analemmaPlot.tracks)for(const q of track.points){let position;if(analemmaPlot.view==='dome')position=analemmaPlot.project(q);else if(analemmaPlot.view==='sky')position=analemmaPlot.project({x:q.az,y:q.alt});else{const center=analemmaPlot.points[Math.floor(analemmaPlot.points.length/2)].hour;position=analemmaPlot.project({x:center+(((q.hour-center+540)%360)-180),y:q.dec});}const d=Math.hypot(x-position.x,y-position.y);if(d<best){best=d;chosen=q;}}if(best<24&&chosen)setDate(chosen.date);};
+function renderAnalemma() {
+  const sun = state.body === 'sun';
+  $('analemmaPanel').hidden = !sun;
+  $('analemmaLink').hidden = !sun;
+  if (!sun) {
+    analemmaPlaying = false;
+    return;
+  }
+  $('analemmaEnabled').checked = !!state.analemma;
+  $('analemmaContent').hidden = !state.analemma;
+  if (!state.analemma) {
+    analemmaPlaying = false;
+    return;
+  }
+  $('analemmaIdealNote').hidden = !state.manual;
+  $('analemmaLab').hidden = state.manual;
+  if (state.manual) {
+    analemmaPlaying = false;
+    return;
+  }
+  const points = analemmaYear(),
+    index = points.findIndex((p) => p.date === state.date),
+    s = points[index];
+  $('analemmaBasis').value = state.analemmaBasis;
+  $('analemmaClock').value = hhmm(state.analemmaClock);
+  $('analemmaOffset').value = state.analemmaOffset;
+  $('analemmaZoneLabel').hidden = state.analemmaBasis !== 'clock';
+  $('analemmaView').value = state.analemmaView;
+  $('analemmaDay').max = points.length;
+  $('analemmaDay').value = index + 1;
+  $('analemmaDate').textContent = state.date;
+  $('analemmaPlay').textContent = analemmaPlaying ? 'Ⅱ 暂停' : '▶ 逐日播放';
+  $('analemmaCompare').checked = !!state.analemmaCompare;
+  $('analemmaCanvas').dataset.view = state.analemmaView;
+  $('analemmaCanvas').tabIndex = 0;
+  $('analemmaResetView').hidden = state.analemmaView !== 'dome';
+  $('analemmaIdeal').checked = !!state.analemmaIdeal;
+  $('analemmaIdealControls').hidden = !state.analemmaIdeal;
+  $('analemmaTilt').value = state.analemmaTilt;
+  $('analemmaEccentricity').value = state.analemmaEccentricity;
+  $('analemmaTiltValue').textContent = state.analemmaTilt.toFixed(2) + '°';
+  $('analemmaEccentricityValue').textContent = state.analemmaEccentricity.toFixed(4);
+  $('analemmaLegend').replaceChildren(
+    ...analemmaTracks().map((t) => {
+      const span = document.createElement('span'),
+        i = document.createElement('i');
+      i.style.setProperty('--track-color', t.color);
+      span.append(i, document.createTextNode(hhmm(t.clock) + (t.primary ? ' · 当前' : '')));
+      return span;
+    }),
+  );
+  $('analemmaViewHint').textContent =
+    state.analemmaView === 'dome'
+      ? '拖动旋转 · 滚轮缩放 · 方向键旋转，+/− 缩放，Home 重置。改变观测时刻保持视角不变。'
+      : state.analemmaView === 'sky'
+        ? '固定全景坐标：方位 0°—360°，高度 −90°—90°。改变时刻保持坐标与缩放不变。'
+        : '原理图自动缩放：改变观测时刻主要使时角整体平移，“8”字形状可能近似相同；自动居中会隐藏整体位移。';
+  $('analemmaConditions').textContent =
+    (state.analemmaIdeal ? '理想成因实验 · ' : '真实日期星历 · ') +
+    coord(state.lat, 'lat') +
+    ' · ' +
+    coord(state.lon, 'lon') +
+    ' · 每天 ' +
+    hhmm(state.analemmaClock) +
+    (state.analemmaBasis === 'clock'
+      ? ' 钟表时，UTC' +
+        (state.analemmaOffset >= 0 ? '+' : '') +
+        state.analemmaOffset +
+        '（固定偏移，无夏令时）'
+      : ' 当地真太阳时');
+  $('analemmaResults').textContent =
+    `${state.analemmaIdeal ? '理想模型 · ' : ''}${state.date}：赤纬 ${s.dec.toFixed(2)}° · 时角 ${s.hour.toFixed(2)}° · 高度 ${s.alt.toFixed(2)}° · ${Math.abs(state.lat) > 89.99999999 || Math.abs(s.alt) > 89.99 ? '方位在极点或天顶附近不宜判读' : '方位 ' + s.az.toFixed(2) + '°'} · 均时差 ${s.eot >= 0 ? '+' : ''}${s.eot.toFixed(2)} 分钟（真太阳时 − 平太阳时）`;
+  $('analemmaExplanation').textContent =
+    (state.analemmaBasis === 'clock'
+      ? '固定钟表时下，地轴倾斜使赤纬随季节变化；地轴倾斜与轨道偏心共同造成均时差，使时角往返变化，通常形成“8”字。'
+      : '固定真太阳时消除了均时差带来的时角变化，因此时角基本固定，不形成经典“8”字。') +
+    ' 各颜色区分每日观测时刻，实线为地平线上方，虚线为下方；蓝点标出当前时刻轨迹的每月1日，亮点为选定日期。年末与年初以虚线示意连接。' +
+    (state.analemmaView === 'dome'
+      ? '三维示意将同一当地天空的单位方向球正投影到屏幕，形状受视角影响，不等同于相机照片。'
+      : state.analemmaView === 'sky'
+        ? '方位—高度为角度展开，形状随地点和时刻而变；跨北向连接到两侧边缘，天顶附近方位变化可能很大，不等同于相机照片。'
+        : '时角—赤纬采用地心视太阳方向，两轴分别缩放，不表示天空中同等角度的画面长度。') +
+    (state.analemmaIdeal
+      ? ' 当前仅日行迹使用理想模型；关闭高级实验开关恢复真实星历。'
+      : '本地高度和方位计入地平视差；不含大气折射。');
+}
+function advanceAnalemma(dt) {
+  if (!analemmaPlaying || state.body !== 'sun' || state.manual || !state.analemma) return false;
+  analemmaAccumulator += dt * 20;
+  const days = Math.floor(analemmaAccumulator);
+  if (!days) return false;
+  analemmaAccumulator -= days;
+  const points = analemmaYear(),
+    index = points.findIndex((p) => p.date === state.date),
+    next = Math.min(index + days, points.length - 1);
+  state.date = points[next].date;
+  state.dec = dateDec(state.date);
+  $('date').value = state.date;
+  if (next === points.length - 1) analemmaPlaying = false;
+  return true;
+}
+function resetAnalemmaView() {
+  state.analemmaYaw = -0.55;
+  state.analemmaPitch = 0.38;
+  state.analemmaZoom = 1;
+  schedule();
+}
+function initAnalemma() {
+  for (const [id, key] of [
+    ['analemmaEnabled', 'analemma'],
+    ['analemmaCompare', 'analemmaCompare'],
+    ['analemmaIdeal', 'analemmaIdeal'],
+  ])
+    $(id).onchange = (e) => {
+      stop();
+      state[key] = e.target.checked;
+      schedule();
+    };
+  for (const [id, key] of [
+    ['analemmaBasis', 'analemmaBasis'],
+    ['analemmaView', 'analemmaView'],
+  ])
+    $(id).onchange = (e) => {
+      stop();
+      state[key] = e.target.value;
+      schedule();
+    };
+  $('analemmaOffset').onchange = (e) => {
+    stop();
+    const v = Number(e.target.value);
+    state.analemmaOffset = Number.isFinite(v) ? clamp(v, -12, 14) : 8;
+    schedule();
+  };
+  $('analemmaClock').onchange = (e) => {
+    stop();
+    if (/^\d{2}:\d{2}$/.test(e.target.value)) {
+      const [h, m] = e.target.value.split(':').map(Number);
+      state.analemmaClock = clamp(h * 60 + m, 0, 1439);
+    }
+    schedule();
+  };
+  $('analemmaRestore').onclick = () => setDate(state.date);
+  for (const [id, key, min, max] of [
+    ['analemmaTilt', 'analemmaTilt', 0, 45],
+    ['analemmaEccentricity', 'analemmaEccentricity', 0, 0.1],
+  ])
+    $(id).oninput = (e) => {
+      stop();
+      state[key] = clamp(Number(e.target.value), min, max);
+      schedule();
+    };
+  $('analemmaIdealReset').onclick = () => {
+    stop();
+    state.analemmaTilt = 23.44;
+    state.analemmaEccentricity = 0.0167;
+    schedule();
+  };
+  $('analemmaResetView').onclick = resetAnalemmaView;
+  $('analemmaDay').oninput = (e) => {
+    const points = analemmaYear();
+    setDate(points[clamp(Number(e.target.value) - 1, 0, points.length - 1)].date);
+  };
+  $('analemmaPlay').onclick = () => {
+    if (analemmaPlaying) {
+      stop();
+      schedule();
+      return;
+    }
+    stop();
+    if (state.date.endsWith('12-31')) setDate(state.date.slice(0, 4) + '-01-01');
+    analemmaPlaying = true;
+    analemmaAccumulator = 0;
+    motionLast = 0;
+    schedule();
+  };
+  const canvas = $('analemmaCanvas');
+  let drag = null,
+    suppressClick = false;
+  canvas.addEventListener('pointerdown', (e) => {
+    suppressClick = false;
+    if (state.analemmaView !== 'dome' || e.button !== 0) return;
+    drag = { x: e.clientX, y: e.clientY, startX: e.clientX, startY: e.clientY };
+    canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x,
+      dy = e.clientY - drag.y;
+    if (Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY) > 5) suppressClick = true;
+    if (suppressClick) {
+      state.analemmaYaw += dx * 0.008;
+      state.analemmaPitch = clamp(state.analemmaPitch + dy * 0.006, 0.08, 1.45);
+      schedule();
+    }
+    drag.x = e.clientX;
+    drag.y = e.clientY;
+  });
+  for (const event of ['pointerup', 'pointercancel', 'lostpointercapture'])
+    canvas.addEventListener(event, () => {
+      drag = null;
+    });
+  canvas.addEventListener(
+    'wheel',
+    (e) => {
+      if (state.analemmaView !== 'dome') return;
+      e.preventDefault();
+      state.analemmaZoom = clamp(state.analemmaZoom - e.deltaY * 0.0008, 0.65, 1.15);
+      schedule();
+    },
+    { passive: false },
+  );
+  canvas.addEventListener('keydown', (e) => {
+    if (state.analemmaView !== 'dome') return;
+    if (
+      ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', '+', '=', '-', 'Home'].includes(e.key)
+    ) {
+      e.preventDefault();
+      if (e.key === 'Home') {
+        resetAnalemmaView();
+        return;
+      }
+      if (e.key === 'ArrowLeft') state.analemmaYaw -= 0.1;
+      if (e.key === 'ArrowRight') state.analemmaYaw += 0.1;
+      if (e.key === 'ArrowUp') state.analemmaPitch = clamp(state.analemmaPitch - 0.08, 0.08, 1.45);
+      if (e.key === 'ArrowDown')
+        state.analemmaPitch = clamp(state.analemmaPitch + 0.08, 0.08, 1.45);
+      if (e.key === '+' || e.key === '=')
+        state.analemmaZoom = clamp(state.analemmaZoom + 0.05, 0.65, 1.15);
+      if (e.key === '-') state.analemmaZoom = clamp(state.analemmaZoom - 0.05, 0.65, 1.15);
+      schedule();
+    }
+  });
+  canvas.onclick = (e) => {
+    if (suppressClick || !analemmaPlot) return;
+    const r = canvas.getBoundingClientRect(),
+      x = e.clientX - r.left,
+      y = e.clientY - r.top;
+    let best = Infinity,
+      chosen = null;
+    for (const track of analemmaPlot.tracks)
+      for (const q of track.points) {
+        let position;
+        if (analemmaPlot.view === 'dome') position = analemmaPlot.project(q);
+        else if (analemmaPlot.view === 'sky')
+          position = analemmaPlot.project({ x: q.az, y: q.alt });
+        else {
+          const center = analemmaPlot.points[Math.floor(analemmaPlot.points.length / 2)].hour;
+          position = analemmaPlot.project({
+            x: center + (((q.hour - center + 540) % 360) - 180),
+            y: q.dec,
+          });
+        }
+        const d = Math.hypot(x - position.x, y - position.y);
+        if (d < best) {
+          best = d;
+          chosen = q;
+        }
+      }
+    if (best < 24 && chosen) setDate(chosen.date);
+  };
 }

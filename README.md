@@ -36,6 +36,17 @@ python3 -m http.server 8000
 
 部署配置位于 [.github/workflows/deploy.yml](.github/workflows/deploy.yml)。所需的 `CLOUDFLARE_ACCOUNT_ID` 和 `CLOUDFLARE_API_TOKEN` 已通过 GitHub Secrets 配置；凭据不应写入源码。工作流排除 README 和隐藏配置文件。
 
+## 源码格式与维护
+
+应用的 HTML、CSS 和 JavaScript 使用两空格缩进，目标行宽为 100 字符。函数、条件分支和样式规则展开书写，专题脚本顶部标明职责。格式配置保存在 `.prettierrc.json`，由 Prettier 3.6.2 统一处理。
+
+```sh
+npx prettier@3.6.2 --check "*.js" "*.css" "*.html"
+npx prettier@3.6.2 --write "*.js" "*.css" "*.html"
+```
+
+`.prettierignore` 排除第三方 `astronomy.js`，保留其上游代码与许可。本轮只整理格式和职责注释，没有修改天文公式、事件逻辑或页面内容；后续功能改动应单独验证。
+
 ## 科学模型与限制
 
 日期观测采用 **Astronomy Engine 2.1.19**；理想太阳实验使用独立几何模型。主时刻轴是当地真太阳时，固定钟表时实验采用明确的 UTC 偏移，不自动处理夏令时。

@@ -1,0 +1,9 @@
+# Keep the upstream astronomy library and its license intact.
+astronomy.js
+# Documents and retained binary assets are not application source.
+*.md
+*.jpg
+*.zip
+archive/
+.git/
+node_modules/
