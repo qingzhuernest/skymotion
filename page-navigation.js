@@ -129,7 +129,6 @@ function renderUIWorkspace() {
     lifeEntry = document.createElement('div');
   lifeEntry.id = 'lifeDevicesMenu';
   lifeEntry.className = 'life-devices-entry';
-  lifeEntry.innerHTML = '<span>生活装置</span>';
   lifeEntry.append($('sundialLink'));
   life.replaceWith(lifeEntry);
   link('helpBtn', 'guide.html');
