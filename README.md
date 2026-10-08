@@ -17,7 +17,7 @@
 - CLOUDFLARE_ACCOUNT_ID：包含现有项目的 Cloudflare Account ID。
 - CLOUDFLARE_API_TOKEN：仅授予该账号 Account → Cloudflare Pages → Edit 权限的 API Token。
 
-首次运行前须确认 Cloudflare 项目的生产分支为 main。配置缺失时，工作流会停止并提示缺少授权，不会部署。
+现有 Cloudflare 项目的生产分支已核实为 main。配置缺失时，工作流会停止并提示缺少授权，不会部署。
 
 Token 只保存在 GitHub Secrets 中，不要提交到仓库。
 
