@@ -75,10 +75,19 @@ body:is([data-page=lab],[data-page=diagrams],[data-page=analemma],[data-page=sun
 .life-devices-entry{margin:12px 0 0;padding:10px;border-top:1px solid var(--md-outline-variant)}
 .life-devices-entry>span{display:block;font-size:12px;color:var(--md-on-surface-variant);margin-bottom:6px}
 .life-devices-entry .page-link{justify-content:flex-start;width:100%;background:#e7eefb;border:1px solid #c6d6ef;color:var(--md-primary);border-radius:12px;line-height:1.5}
-.ui-heading:has(.ui-solar-shortcuts:not([hidden])){height:auto;min-height:52px;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px 12px}
-.ui-solar-shortcuts{display:flex;align-items:center;gap:8px}
-.ui-solar-shortcuts .page-link{background:var(--md-primary);color:var(--md-on-primary);border-radius:18px;font-size:13px;font-weight:600;min-height:36px;padding:7px 14px;white-space:nowrap}
-.ui-solar-shortcuts .page-link:hover{background:var(--md-primary-hover)}
-@media(max-width:760px){.ui-heading:has(.ui-solar-shortcuts:not([hidden])){grid-template-columns:minmax(0,1fr) auto;min-height:44px}.ui-solar-shortcuts{grid-row:2;grid-column:1/-1;justify-self:start}.ui-solar-shortcuts .page-link{font-size:12px;min-height:32px;padding:5px 12px}}
 /* Keep selected text and its background in sync throughout interaction. */
 .ui-shell :is(.view-tabs,.context-view-switch,.body-switch,.globe-drag-options,.ui-viewbar) button{transition:box-shadow .16s,border-color .16s}
+/* Compact navigation entry and one shape for paired segmented controls. */
+.page-nav .ui-solar-shortcuts{display:contents}.page-nav .ui-solar-shortcuts[hidden]{display:none}
+.ui-shell :is(.context-view-switch,.globe-drag-options){display:inline-flex;align-items:stretch;gap:6px;padding:0;border:0;border-radius:0;background:transparent;flex-wrap:nowrap;max-width:100%;box-sizing:border-box}
+.ui-shell :is(.context-view-switch,.globe-drag-options) button{border-radius:999px;min-height:36px;padding:7px 10px;line-height:1.5;white-space:normal;flex:1;min-width:0;background:var(--md-surface-container)}
+.ui-shell :is(.context-view-switch,.globe-drag-options) button.active{background:var(--md-primary);color:var(--md-on-primary)}
+body[data-page=analemma] .ui-parameters .analemma-controls{background:transparent;margin:0 0 12px;gap:12px}
+body[data-page=analemma] .ui-parameters .analemma-controls :is(select,input){min-height:40px;height:auto;padding:9px 10px;border:1px solid var(--md-outline-variant);border-radius:10px;background:var(--md-surface);color:var(--md-on-surface);font:inherit;box-sizing:border-box}
+body[data-page=analemma] .ui-parameters .analemma-controls label{gap:6px;color:var(--md-on-surface-variant)}
+body[data-page=analemma] .ui-parameters .analemma-comparison{display:flex;flex-direction:column;align-items:stretch;gap:10px}
+body[data-page=analemma] .ui-parameters .analemma-comparison .overlay-toggle{line-height:1.6}
+body[data-page=analemma] .ui-parameters .analemma-comparison button{min-height:36px;align-self:flex-start;font-size:12px;padding:7px 12px}
+body[data-page=analemma] .ui-parameters .analemma-advanced{padding-bottom:0}
+body[data-page=analemma] .ui-parameters .analemma-advanced[open]{padding-bottom:12px}
+body[data-page=analemma] .ui-parameters .analemma-results{margin:10px 0}
