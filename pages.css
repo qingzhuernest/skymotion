@@ -55,3 +55,30 @@ body:is([data-page=lab],[data-page=diagrams],[data-page=analemma],[data-page=sun
 
 /* Camera-only globe rotation is separate from changing the observation site. */
 .globe-drag-settings{border-bottom:1px solid #dce5f2;padding-bottom:12px;margin-bottom:14px;color:#405675}.globe-drag-settings .field-label{color:#405675;font-size:12px;margin-bottom:6px}.globe-drag-options{display:flex;gap:4px;background:#edf2fb;padding:4px;border-radius:14px;flex-wrap:wrap}.globe-drag-options button{flex:1;min-width:80px;border:0;border-radius:10px;padding:7px 5px;font-size:11px;line-height:1.5;background:transparent;color:#526784}.globe-drag-options button.active{background:#315da8;color:#fff}.globe-drag-settings p{font-size:11px!important;color:#526784!important;line-height:1.7;margin:8px 0}.globe-drag-settings #globeRecenter{font-size:11px;border:1px solid #c5d5ee;border-radius:16px;background:#fff;color:#315da8;padding:5px 10px}.globe-drag-settings #globeObserverVisibility:empty{display:none}
+
+/* Shared readable text and selection colors for light Material surfaces. */
+:root{--md-on-primary:#fff;--md-primary-hover:#244d90;--md-surface-container-low:#f5f7fc;--md-on-surface:#253448;--md-on-surface-variant:#52647d}
+.ui-shell{color:var(--md-on-surface)}
+.ui-shell .ui-heading #uiPlaceText,.ui-parameters :is(.range-labels,.time-labels,.coordinate-editor output){color:var(--md-on-surface-variant)}
+.ui-parameters .globe-notes{color:var(--md-on-surface-variant)}
+.ui-parameters .globe-notes :is(p,span){color:var(--md-on-surface-variant)}
+.ui-parameters .globe-notes strong{color:var(--md-primary);font-weight:600;font-variant-numeric:tabular-nums}
+.ui-parameters .globe-notes :is(.sun-dot,.moon-dot){color:inherit}
+.ui-parameters .globe-notes p{max-width:none}
+.ui-shell :is(.view-tabs,.context-view-switch,.body-switch,.globe-drag-options){background:var(--md-surface-container)}
+.ui-shell :is(.view-tabs,.context-view-switch,.body-switch,.globe-drag-options) button{color:var(--md-on-surface-variant)}
+.ui-shell :is(.view-tabs,.context-view-switch,.body-switch,.globe-drag-options) button.active,.ui-shell .ui-viewbar button:is([aria-selected=true],[aria-pressed=true]){background:var(--md-primary);color:var(--md-on-primary);font-weight:600}
+.ui-shell :is(.view-tabs,.context-view-switch,.body-switch,.globe-drag-options) button.active:hover,.ui-shell .ui-viewbar button:is([aria-selected=true],[aria-pressed=true]):hover{background:var(--md-primary-hover);color:var(--md-on-primary)}
+.ui-parameters button:disabled{opacity:1;color:var(--md-on-surface-variant);background:#e9edf3;cursor:default}
+.ui-plot canvas:focus-visible{outline-color:#b5d4ff}
+.author-email-box>span{color:var(--md-on-surface-variant)}
+.life-devices-entry{margin:12px 0 0;padding:10px;border-top:1px solid var(--md-outline-variant)}
+.life-devices-entry>span{display:block;font-size:12px;color:var(--md-on-surface-variant);margin-bottom:6px}
+.life-devices-entry .page-link{justify-content:flex-start;width:100%;background:#e7eefb;border:1px solid #c6d6ef;color:var(--md-primary);border-radius:12px;line-height:1.5}
+.ui-heading:has(.ui-solar-shortcuts:not([hidden])){height:auto;min-height:52px;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px 12px}
+.ui-solar-shortcuts{display:flex;align-items:center;gap:8px}
+.ui-solar-shortcuts .page-link{background:var(--md-primary);color:var(--md-on-primary);border-radius:18px;font-size:13px;font-weight:600;min-height:36px;padding:7px 14px;white-space:nowrap}
+.ui-solar-shortcuts .page-link:hover{background:var(--md-primary-hover)}
+@media(max-width:760px){.ui-heading:has(.ui-solar-shortcuts:not([hidden])){grid-template-columns:minmax(0,1fr) auto;min-height:44px}.ui-solar-shortcuts{grid-row:2;grid-column:1/-1;justify-self:start}.ui-solar-shortcuts .page-link{font-size:12px;min-height:32px;padding:5px 12px}}
+/* Keep selected text and its background in sync throughout interaction. */
+.ui-shell :is(.view-tabs,.context-view-switch,.body-switch,.globe-drag-options,.ui-viewbar) button{transition:box-shadow .16s,border-color .16s}
