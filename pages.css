@@ -1256,11 +1256,19 @@ body[data-page='analemma'] .workbench-events {
   gap: 6px;
 }
 .ui-parameters .study-navigation .page-link {
+  display: flex;
   justify-content: flex-start;
-  text-align: left;
-  background: #f2f5fb;
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 0;
   border-radius: 10px;
-  min-height: 40px;
+  background: #f2f5fb;
+  color: var(--md-primary);
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
   white-space: normal;
 }
 .ui-parameters .study-navigation .page-link:hover {
@@ -1591,25 +1599,44 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 .author-email-box > span {
   color: var(--md-on-surface-variant);
 }
-.life-devices-entry {
-  margin: 12px 0 0;
-  padding: 10px;
-  border-top: 1px solid var(--md-outline-variant);
+/* Category labels organize links without adding a second button treatment. */
+.ui-parameters .study-navigation .life-devices-entry {
+  display: grid;
+  gap: 6px;
+  margin: 6px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
-.life-devices-entry > span {
+.ui-parameters .study-navigation .life-devices-entry > span {
   display: block;
-  font-size: 12px;
+  margin: 0;
+  padding: 4px 12px;
   color: var(--md-on-surface-variant);
-  margin-bottom: 6px;
-}
-.life-devices-entry .page-link {
-  justify-content: flex-start;
-  width: 100%;
-  background: #e7eefb;
-  border: 1px solid #c6d6ef;
-  color: var(--md-primary);
-  border-radius: 12px;
+  font-size: 12px;
   line-height: 1.5;
+}
+/* Nested categories share link geometry; the chevron communicates expansion. */
+.ui-parameters .study-navigation > .menu-subsection {
+  margin: 0;
+  border: 0;
+  border-radius: 10px;
+  background: #f2f5fb;
+}
+.ui-parameters .study-navigation > .menu-subsection > summary {
+  min-height: 44px;
+  padding: 10px 36px 10px 12px;
+  border-radius: 10px;
+  color: var(--md-primary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.ui-parameters .study-navigation > .menu-subsection[open] > summary {
+  background: var(--md-primary-container);
+  color: var(--md-on-primary-container);
+}
+.ui-parameters .study-navigation > .menu-subsection > .menu-content {
+  padding: 6px;
 }
 /* Keep selected text and its background in sync throughout interaction. */
 .ui-shell
