@@ -139,6 +139,7 @@
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const target = new THREE.Vector3();
   const smoothTarget = new THREE.Vector3();
+  let trackedBody = '';
   const orbitGroup = new THREE.Group();
   scene.add(orbitGroup);
 
@@ -873,7 +874,20 @@
         }
       }
     }
+    const previousTarget = target.clone();
     updateObjects();
+    const nextTrackedBody = inspectingMoon
+      ? 'Moon'
+      : view === 'focus'
+        ? Model.bodies[selected].id
+        : '';
+    if (nextTrackedBody && nextTrackedBody === trackedBody) {
+      // Follow physical displacement immediately; only entry into a new closeup is eased.
+      smoothTarget.x += target.x - previousTarget.x;
+      smoothTarget.y += target.y - previousTarget.y;
+      smoothTarget.z += target.z - previousTarget.z;
+    }
+    trackedBody = nextTrackedBody;
     const amount = reducedMotion ? 1 : 1 - Math.exp(-dt * 9);
     smoothTarget.lerp(target, amount);
     distance += (targetDistance - distance) * amount;
@@ -953,6 +967,7 @@
     exposure: renderer.toneMappingExposure,
     inspectingMoon,
     cameraPreset,
+    cameraTargetError: smoothTarget.distanceTo(target),
     referencePlaneVisible: referencePlane.visible,
     history: historyData
       ? {
