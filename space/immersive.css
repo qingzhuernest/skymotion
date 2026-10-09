@@ -1,0 +1,163 @@
+/* One canvas and one timeline; immersive observation changes layout only. */
+body[data-page='space'] .head .head-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+body[data-page='space'].space-immersive {
+  background: #0a1726;
+  color: #e5edf7;
+  overflow: hidden;
+}
+body[data-page='space'].space-immersive .page-nav,
+body[data-page='space'].space-immersive .space-sidebar-host,
+body[data-page='space'].space-immersive .head p,
+body[data-page='space'].space-immersive .footer-note {
+  display: none;
+}
+body[data-page='space'].space-immersive .space-shell {
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: max(8px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right))
+    max(8px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+  gap: 8px;
+}
+body[data-page='space'].space-immersive .head {
+  position: static;
+  grid-row: 1;
+}
+body[data-page='space'].space-immersive .head > div {
+  display: flex;
+}
+body[data-page='space'].space-immersive h1 {
+  font-size: 15px;
+  margin: 0;
+}
+body[data-page='space'].space-immersive #spaceParameters {
+  display: block;
+}
+body[data-page='space'].space-immersive .visual {
+  grid-column: 1;
+  grid-row: 2;
+  border-color: #89aac33d;
+  background: #142638;
+}
+body[data-page='space'].space-immersive .viewbar {
+  background: #102034;
+  border-color: #89aac33d;
+  padding: 6px;
+}
+body[data-page='space'].space-immersive
+  :is(.head button, .viewbar button, .viewbar a, .time-head button) {
+  border-color: #89aac34d;
+  background: #1d3b59;
+  color: #e2edfb;
+  font-size: 12px;
+  min-height: 34px;
+}
+body[data-page='space'].space-immersive :is(.viewbar button.active, .time-head button) {
+  background: #315da8;
+  color: #fff;
+}
+body[data-page='space'].space-immersive .timeline {
+  position: static;
+  grid-column: 1;
+  grid-row: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 16px;
+  padding: 8px 12px;
+  background: #102034;
+  border-color: #89aac33d;
+  color: #d8e7f5;
+}
+body[data-page='space'].space-immersive .time-head {
+  grid-column: 1;
+  grid-row: 1;
+  height: auto;
+  min-height: 34px;
+  gap: 8px;
+}
+body[data-page='space'].space-immersive .time-head label {
+  color: #adc8e6;
+}
+body[data-page='space'].space-immersive .time-head output {
+  display: inline;
+  color: #e5edf7;
+  font-size: 13px;
+  margin-left: 8px;
+}
+body[data-page='space'].space-immersive .timeline > input[type='range'] {
+  grid-column: 1/-1;
+  grid-row: 2;
+  height: 32px;
+}
+body[data-page='space'].space-immersive .scale,
+body[data-page='space'].space-immersive .date-actions :is(label, span) {
+  display: none;
+}
+body[data-page='space'].space-immersive .date-actions {
+  position: static;
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+}
+body[data-page='space'].space-immersive .date-actions input {
+  color-scheme: dark;
+  background: #1d3b59;
+  color: #e5edf7;
+  border-color: #89aac34d;
+  min-height: 34px;
+}
+body[data-page='space'].space-immersive :is(a, button, input, select):focus-visible {
+  outline-color: #b5d6ff;
+}
+@media (max-width: 520px) {
+  body[data-page='space'] .head-actions {
+    gap: 4px;
+  }
+  body[data-page='space'] #spaceImmersive {
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+  body[data-page='space'].space-immersive h1 {
+    font-size: 13px;
+  }
+  body[data-page='space'].space-immersive .head button {
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+  body[data-page='space'].space-immersive .timeline {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 6px 8px;
+  }
+  body[data-page='space'].space-immersive .date-actions {
+    grid-column: 1;
+    grid-row: 3;
+    justify-content: flex-end;
+  }
+  body[data-page='space'].space-immersive .time-head label {
+    font-size: 10px;
+  }
+  body[data-page='space'].space-immersive .time-head label {
+    color: #adc8e6;
+  }
+  body[data-page='space'].space-immersive .time-head output {
+    font-size: 11px;
+    margin-left: 3px;
+  }
+  body[data-page='space'].space-immersive .viewbar :is(button, a) {
+    font-size: 10px;
+    padding: 5px 7px;
+  }
+}
+
+@media (max-height: 330px) and (min-width: 600px) {
+  body[data-page='space']:not(.space-immersive) .viewbar {
+    padding-right: 172px;
+  }
+}

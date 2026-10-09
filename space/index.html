@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="compare.css" />
     <link rel="stylesheet" href="exploration.css" />
     <link rel="stylesheet" href="embed.css" />
+    <link rel="stylesheet" href="immersive.css" />
   </head>
   <body data-page="space">
     <script src="embed.js"></script>
@@ -29,15 +30,18 @@
           <h1>太阳系三维模型</h1>
           <p>八大行星 · 日地月空间关系</p>
         </div>
-        <button
-          id="spaceParameters"
-          type="button"
-          aria-controls="spaceDrawer"
-          aria-expanded="false"
-          aria-haspopup="dialog"
-        >
-          ☷ 参数
-        </button>
+        <div class="head-actions">
+          <button id="spaceImmersive" type="button" aria-pressed="false">沉浸观察</button>
+          <button
+            id="spaceParameters"
+            type="button"
+            aria-controls="spaceDrawer"
+            aria-expanded="false"
+            aria-haspopup="dialog"
+          >
+            ☷ 参数
+          </button>
+        </div>
       </header>
       <div class="space-sidebar-host" id="spaceSidebarHost">
         <aside class="side" aria-label="空间模型参数">
@@ -271,5 +275,6 @@
     <script src="compare.js"></script>
     <script src="observer.js"></script>
     <script src="scene.js"></script>
+    <script src="immersive.js"></script>
   </body>
 </html>

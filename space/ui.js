@@ -9,8 +9,9 @@
     '(max-width:900px), (pointer:coarse) and (max-width:1400px), (max-height:500px) and (max-width:1100px)',
   );
   function sync() {
-    if (!mobile.matches && drawer.open) drawer.close();
-    (mobile.matches ? document.getElementById('spaceDrawerBody') : home).append(panel);
+    const overlay = mobile.matches || document.body.classList.contains('space-immersive');
+    if (!overlay && drawer.open) drawer.close();
+    (overlay ? document.getElementById('spaceDrawerBody') : home).append(panel);
     opener.setAttribute('aria-expanded', String(drawer.open));
   }
   opener.onclick = () => {
@@ -21,7 +22,7 @@
   closer.onclick = () => drawer.close();
   drawer.addEventListener('close', () => {
     opener.setAttribute('aria-expanded', 'false');
-    if (mobile.matches) opener.focus();
+    opener.focus({ preventScroll: true });
   });
   drawer.addEventListener('click', (event) => {
     const r = drawer.getBoundingClientRect();
@@ -53,5 +54,6 @@
     start = null;
   });
   mobile.addEventListener('change', sync);
+  window.addEventListener('space:layout', sync);
   sync();
 })();
