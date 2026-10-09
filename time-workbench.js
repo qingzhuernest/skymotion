@@ -61,6 +61,9 @@ function workbenchPlay() {
     schedule();
   }
 }
+function workbenchIsPlaying() {
+  return document.body.dataset.page === 'analemma' ? analemmaPlaying : state.playing;
+}
 function focusTimeWorkbench() {
   schedule();
   requestAnimationFrame(() => $('workbenchTime').focus({ preventScroll: true }));
@@ -173,13 +176,20 @@ function renderTimeWorkbench() {
     basis === 'day' ? state.loop : moon ? state.monthLoop : state.solarDateLoop;
   $('workbenchLoopLabel').textContent =
     basis === 'day' ? '循环当天' : moon ? '循环本月' : '循环本年';
-  $('workbenchPlay').textContent = state.playing
-    ? '⏸ 暂停'
-    : basis === 'day'
-      ? '▶ 播放时刻'
-      : !moon && state.date.endsWith('12-31') && !state.solarDateLoop
-        ? '▶ 从年初播放'
-        : '▶ 按天播放';
+  const playLabel = analemmaPage
+    ? analemmaPlaying
+      ? '⏸ 暂停'
+      : '▶ 逐日播放'
+    : state.playing
+      ? '⏸ 暂停'
+      : basis === 'day'
+        ? '▶ 播放时刻'
+        : !moon && state.date.endsWith('12-31') && !state.solarDateLoop
+          ? '▶ 从年初播放'
+          : '▶ 按天播放';
+  // Keep the button's text node stable while frames update, including during a pointer press.
+  if ($('workbenchPlay').textContent !== playLabel) $('workbenchPlay').textContent = playLabel;
+  $('workbenchPlay').setAttribute('aria-pressed', String(workbenchIsPlaying()));
   $('workbenchHint').textContent = ideal
     ? '日期不参与理想实验；拖动时刻观察太阳与日影。'
     : basis === 'date'
@@ -189,7 +199,6 @@ function renderTimeWorkbench() {
     $('workbenchContext').textContent =
       '日晷 · ' + (basis === 'date' ? '固定时刻比较日期' : '一天内的影子变化');
   if (analemmaPage) {
-    $('workbenchPlay').textContent = analemmaPlaying ? '⏸ 暂停' : '▶ 逐日播放';
     $('workbenchContext').textContent = '日行迹 · 全年同一时刻';
     $('workbenchBasis').disabled = true;
     $('workbenchHint').textContent =
@@ -265,7 +274,25 @@ function initTimeWorkbench() {
         : dateAtYearDay(Number(state.date.slice(0, 4)), Number(e.target.value)),
     );
   $('workbenchBasis').onchange = (e) => workbenchSetBasis(e.target.value);
-  $('workbenchPlay').onclick = workbenchPlay;
+  const playButton = $('workbenchPlay');
+  let pausedOnPress = false;
+  playButton.addEventListener('pointerdown', (event) => {
+    pausedOnPress = false;
+    if (!event.isPrimary || event.button !== 0 || !workbenchIsPlaying()) return;
+    // Pause immediately; a delayed or cancelled click cannot let the clock keep advancing.
+    stop();
+    renderTimeWorkbench();
+    schedule();
+    pausedOnPress = true;
+  });
+  playButton.onclick = (event) => {
+    if (pausedOnPress && event.detail !== 0) {
+      pausedOnPress = false;
+      return;
+    }
+    pausedOnPress = false;
+    workbenchPlay();
+  };
   $('workbenchSpeed').onchange = (e) => {
     const value = Number(e.target.value);
     if (workbenchBasis() === 'day') state.speed = value;

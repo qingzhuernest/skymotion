@@ -67,7 +67,8 @@ function syncMotionTarget() {
       (next.body === 'moon' || (next.body === 'sun' && next.solarDateMode && !next.manual)) &&
       adjacent &&
       !old.manual &&
-      !reducedMotion.matches
+      !reducedMotion.matches &&
+      !document.querySelector('.ui-linked-scenes.is-linked')
     ) {
       const fromTime = instantUTC(old.time, old.date, old.lon),
         toTime = instantUTC(next.time, next.date, next.lon),

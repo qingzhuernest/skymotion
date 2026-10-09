@@ -40,7 +40,9 @@
   const ambient = new THREE.AmbientLight(0x9ebce8, 0.48);
   const solarLight = new THREE.PointLight(0xfff0de, 2.1, 0, 0);
   const earthLight = new THREE.DirectionalLight(0xfff0de, 2.1);
-  earthLight.visible = false;
+  camera.layers.enable(1);
+  ambient.layers.enable(1);
+  earthLight.layers.set(1);
   scene.add(ambient, solarLight, earthLight, earthLight.target);
 
   // Read only the laboratory's saved date; this module never writes its scientific state.
@@ -176,6 +178,34 @@
     $('labels').append(label);
     return { spec, mesh, orbit, label, path };
   });
+  // Earth and Moon use parallel sunlight independent of the compressed display distance.
+  planets[2].mesh.traverse((object) => object.layers.set(1));
+  const earthReference = new THREE.Group();
+  const earthRadius = Model.bodies[2].size;
+  earthReference.add(
+    line(
+      [
+        { x: 0, y: -earthRadius * 1.55, z: 0 },
+        { x: 0, y: earthRadius * 1.55, z: 0 },
+      ],
+      0xf5a5a5,
+      0.95,
+    ),
+  );
+  earthReference.add(
+    line(
+      Array.from({ length: 129 }, (_, i) => ({
+        x: earthRadius * 1.025 * Math.cos((i * Math.PI) / 64),
+        y: 0,
+        z: earthRadius * 1.025 * Math.sin((i * Math.PI) / 64),
+      })),
+      0x80c8ff,
+      0.85,
+    ),
+  );
+  earthReference.traverse((object) => object.layers.set(1));
+  planets[2].mesh.add(earthReference);
+  let earthFrame;
   const picker = document.createElement('div');
   picker.className = 'planet-picker';
   picker.setAttribute('aria-label', '选择行星');
@@ -214,6 +244,7 @@
   scene.add(sunGlow);
   const lunarAppearance = SolarSpaceAppearance.moon(THREE, renderer, 0.12);
   const moon = new THREE.Mesh(lunarAppearance.geometry, lunarAppearance.material);
+  moon.layers.set(1);
   const lunarOrbit = line([], 0xa4bddb, 0.4);
   const solarArrow = new THREE.ArrowHelper(
     new THREE.Vector3(1, 0, 0),
@@ -240,6 +271,9 @@
   history.frustumCulled = false;
   scene.add(history);
   let historyKey = '';
+  let historyRefreshTime = -Infinity;
+  let historyConfiguration = '';
+  let cameraHasSize = false;
   let historyData = null;
   let historyCalculations = 0;
   const referencePlane = new THREE.GridHelper(80, 16, 0x68869d, 0x375269);
@@ -268,7 +302,7 @@
     }
     $('sceneTools').open = false;
   };
-  for (const id of ['trailEnabled', 'trailDays', 'inspectInfo', 'referencePlane'])
+  for (const id of ['trailEnabled', 'trailDays', 'inspectInfo', 'referencePlane', 'earthReference'])
     $(id).onchange = invalidate;
   for (const button of document.querySelectorAll('[data-camera]')) {
     button.onclick = () => {
@@ -536,6 +570,7 @@
       (-(event.clientY - bounds.top) / bounds.height) * 2 + 1,
     );
     const ray = new THREE.Raycaster();
+    ray.layers.enable(1);
     ray.setFromCamera(mouse, camera);
     const hit = ray.intersectObjects(
       [
@@ -551,6 +586,12 @@
   function updateScience() {
     physical = Model.snapshot(utcDate());
     lastScienceDay = year + ':' + day;
+    earthFrame = SolarSpaceEarthFrame.frame(utcDate(), physical);
+    const vector = (v) => new THREE.Vector3(v.x, v.y, v.z);
+    const basis = earthFrame.localToScene;
+    planets[2].mesh.quaternion.setFromRotationMatrix(
+      new THREE.Matrix4().makeBasis(vector(basis.x), vector(basis.y), vector(basis.z)),
+    );
     // The enlarged Moon is shown only in the local Earth view with parallel solar light.
     moon.position.set(
       physical.moon.x * (2.4 / 0.002569555),
@@ -629,7 +670,19 @@
     }
     if (view === 'earthmoon') planets[2].mesh.position.set(0, 0, 0);
     sun.visible = sunGlow.visible = view === 'overview';
-    moon.visible = solarArrow.visible = earthLight.visible = view === 'earthmoon';
+    moon.visible = solarArrow.visible = view === 'earthmoon';
+    earthLight.visible = true;
+    earthLight.target.position.copy(planets[2].mesh.position);
+    earthLight.position
+      .copy(planets[2].mesh.position)
+      .add(
+        new THREE.Vector3(
+          physical.earthToSun.x,
+          physical.earthToSun.y,
+          physical.earthToSun.z,
+        ).multiplyScalar(10),
+      );
+    earthReference.visible = $('earthReference').checked;
     solarLight.visible = view !== 'earthmoon';
     solarRays.visible = view === 'earthmoon' && $('parallelRays').checked;
     $('parallelRays').closest('label').hidden = view !== 'earthmoon';
@@ -686,6 +739,26 @@
     const bodyId = localMoon ? 'Moon' : Model.bodies[selected].id;
     const key = [year, day, bodyId, days, segments].join(':');
     if (key === historyKey) return;
+    const configuration = [year, bodyId, days, segments].join(':');
+    const now = performance.now();
+    if (playing && configuration === historyConfiguration && now - historyRefreshTime < 100) {
+      // Keep the present endpoint exact while costly historical samples refresh at 10 Hz.
+      const endpoint = localMoon ? moon.position : planets[selected].mesh.position;
+      const positions = history.geometry.getAttribute('position');
+      positions.setXYZ(positions.count - 1, endpoint.x, endpoint.y, endpoint.z);
+      positions.needsUpdate = true;
+      historyData.points[historyData.points.length - 1] = {
+        x: endpoint.x,
+        y: endpoint.y,
+        z: endpoint.z,
+        physical: localMoon ? physical.moon : physical.planets[selected].physical,
+      };
+      historyData.end = utcDate();
+      history.geometry.computeBoundingSphere();
+      return;
+    }
+    historyConfiguration = configuration;
+    historyRefreshTime = now;
     historyData = SolarSpaceExploration.trail({
       date: utcDate(),
       bodyId,
@@ -745,7 +818,13 @@
     $('inspectPhase').hidden = !localMoon;
     if (localMoon)
       $('inspectPhase').textContent =
-        '地心月面照明 ' + (physical.moonIllumination * 100).toFixed(1) + '%';
+        '太阳直射 ' +
+        Math.abs(earthFrame.subsolar.lat).toFixed(1) +
+        '°' +
+        (earthFrame.subsolar.lat >= 0 ? 'N' : 'S') +
+        ' · 月面照明 ' +
+        (physical.moonIllumination * 100).toFixed(1) +
+        '%';
     for (const button of document.querySelectorAll('[data-camera]'))
       button.setAttribute('aria-pressed', String(button.dataset.camera === cameraPreset));
   }
@@ -824,6 +903,8 @@
     const width = stage.clientWidth;
     const height = stage.clientHeight;
     if (!width || !height) return;
+    const pixelRatio = Math.min(devicePixelRatio || 1, 2);
+    if (renderer.getPixelRatio() !== pixelRatio) renderer.setPixelRatio(pixelRatio);
     renderer.setSize(width, height, false);
     const previousFit = overviewDistance();
     const previousMoonFit = earthMoonDistance();
@@ -837,6 +918,10 @@
         : earthMoonDistance() / previousMoonFit;
     if (view === 'focus') targetDistance *= planetDistance(selected) / previousPlanetFit;
     camera.updateProjectionMatrix();
+    if (!cameraHasSize) {
+      distance = targetDistance;
+      cameraHasSize = true;
+    }
     comparison.resize();
     observerDiagram.resize();
     invalidate();
@@ -891,13 +976,24 @@
     const amount = reducedMotion ? 1 : 1 - Math.exp(-dt * 9);
     smoothTarget.lerp(target, amount);
     distance += (targetDistance - distance) * amount;
+    if (Math.abs(distance - targetDistance) < Math.max(0.0001, targetDistance * 0.0001))
+      distance = targetDistance;
+    if (smoothTarget.distanceTo(target) < 0.0001) smoothTarget.copy(target);
     camera.position.set(
       smoothTarget.x + Math.sin(azimuth) * Math.cos(elevation) * distance,
       smoothTarget.y + Math.sin(elevation) * distance,
       smoothTarget.z + Math.cos(azimuth) * Math.cos(elevation) * distance,
     );
     camera.lookAt(smoothTarget);
+    // Two lighting passes share the same depth buffer. Light layers in a single
+    // Three.js pass select lights by camera, not by each receiving mesh.
+    renderer.autoClear = false;
+    renderer.clear();
+    camera.layers.set(0);
     renderer.render(scene, camera);
+    camera.layers.set(1);
+    renderer.render(scene, camera);
+    camera.layers.enable(0);
     if (comparing) {
       if (reference === 'plane')
         comparison.render({

@@ -144,8 +144,16 @@ body[data-page='space'] .tools-note {
   }
 }
 @container (max-height: 160px) {
-  body[data-page='space'] .inspection-readout,
-  body[data-page='space'] .scene-tools {
+  body[data-page='space'] .inspection-readout {
     display: none;
+  }
+  body[data-page='space'] .scene-tools {
+    bottom: 4px;
+    right: 8px;
+  }
+  body[data-page='space'] .scene-tools-panel {
+    bottom: 40px;
+    max-height: calc(100cqh - 48px);
+    padding: 4px 8px;
   }
 }

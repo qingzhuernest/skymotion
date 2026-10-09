@@ -110,7 +110,7 @@
               计算，轨道是星历采样的路径。日心距离采用幂函数压缩，球体大小另行放大；日地月视图单独放大地月距离。屏幕上的大小和距离不是实际比例。
             </p>
             <p class="info">
-              日地月视图的箭头指向远处太阳，照明使用平行光；外部相机所见月面不等同于地球观测月相。地心月面照明比例另用星历计算。表面与云层纹理为外观示意，非当天影像；自转与轴向为示意，不模拟日月食，也不计算本地升落。
+              日地月视图的箭头指向远处太阳，照明使用平行光；外部相机所见月面不等同于地球观测月相。地心月面照明比例另用星历计算。表面与云层纹理为外观示意，非当天影像；地球自转与地轴按UTC计算，其余天体姿态为示意，不模拟日月食，也不计算本地升落。
             </p>
             <p class="info">
               日期轴连续改变 UTC 时刻；日历选择定位当天12:00
@@ -183,6 +183,13 @@
                 <label class="tools-check" for="inspectInfo"
                   >显示真实读数<input type="checkbox" id="inspectInfo" checked
                 /></label>
+                <label class="tools-check" for="earthReference"
+                  >地轴与赤道<input
+                    type="checkbox"
+                    id="earthReference"
+                    checked
+                    title="红线为地轴，蓝圈为赤道；地球姿态按同一UTC计算"
+                /></label>
                 <label class="tools-check" for="referencePlane"
                   >黄道参考面<input
                     type="checkbox"
@@ -212,7 +219,7 @@
           </section>
         </div>
         <div class="footer-note">
-          <span>教学尺度 · 大小与距离分别缩放</span><span>纹理与轴向为示意</span>
+          <span>教学尺度 · 大小与距离分别缩放</span><span>地球姿态按UTC · 纹理为示意</span>
         </div>
       </section>
       <section class="timeline" aria-label="空间模型日期控制">
@@ -258,6 +265,7 @@
     <script src="vendor/three.min.js"></script>
     <script src="../astronomy.js"></script>
     <script src="model.js"></script>
+    <script src="earth-frame.js"></script>
     <script src="exploration.js"></script>
     <script src="appearance.js"></script>
     <script src="compare.js"></script>

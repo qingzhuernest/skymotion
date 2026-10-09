@@ -21,7 +21,7 @@
   wrapper.className = 'ui-linked-scenes';
   const note = document.createElement('p');
   note.className = 'ui-linked-note';
-  note.textContent = '原图解显示当地 / 全球条件；三维说明空间关系，比例与姿态为示意。';
+  note.textContent = '原图解显示当地 / 全球条件；三维说明空间关系，地球姿态按UTC，比例为示意。';
   const pane = document.createElement('section');
   pane.className = 'ui-linked-space';
   pane.setAttribute('aria-label', '同一 UTC 时刻的三维空间关系');
@@ -31,7 +31,7 @@
   const explanation = document.createElement('p');
   explanation.className = 'ui-linked-menu-note';
   explanation.textContent =
-    '三维对照：原图解用于读取当地或全球条件；三维画面解释空间关系，使用同一 UTC。大小、距离与姿态为示意，不代替原图解的地理读数。';
+    '三维对照：原图解用于读取当地或全球条件；三维画面解释空间关系，使用同一 UTC。大小与距离为示意，地球姿态按UTC计算，不代替原图解的地理读数。';
   const rail = document.querySelector('.ui-parameters');
   if (rail) rail.append(explanation);
 
@@ -58,6 +58,7 @@
     if (next && blockReason()) return;
     if (enabled === next) return;
     enabled = next;
+    if (enabled && typeof settleMotion === 'function') settleMotion();
     wrapper.classList.toggle('is-linked', enabled);
     button.setAttribute('aria-pressed', String(enabled));
     lastMessage = '';
