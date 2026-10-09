@@ -9,6 +9,10 @@
   status.setAttribute('role', 'status');
   status.textContent = '正在同步观测时刻…';
   document.body.append(status);
+  window.addEventListener('space:unavailable', () => {
+    document.body.dataset.synchronized = 'true';
+    status.remove();
+  });
   window.addEventListener('message', (event) => {
     if (event.origin !== location.origin || event.source !== window.parent) return;
     if (event.data?.type !== 'skymotion:sync') return;

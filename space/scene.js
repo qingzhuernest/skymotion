@@ -19,6 +19,11 @@
     ))
       element.disabled = true;
     window.spaceState = () => ({ fallback: true });
+    if (embedded) {
+      stage.querySelector('.error').innerHTML =
+        '<strong>无法启动三维画面</strong><p>这个浏览器需要支持 WebGL 2。原图解仍可使用，关闭“三维对照”即可继续。</p>';
+      window.dispatchEvent(new Event('space:unavailable'));
+    }
     return;
   }
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
