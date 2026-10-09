@@ -12,12 +12,17 @@ function openSundialDialog() {
 }
 /* Interactive oblique projection of the same polar-axis needle geometry. */
 let sundialView = 'device';
+let sundialDragMode = 'orbit';
+const sundialCameras = {
+  horizontal: { pitch: 0.65, yaw: -0.34, zoom: 1 },
+  equatorial: { pitch: 0.65, yaw: -0.34, zoom: 1 },
+};
 function sundialDeviceFrame(kind, model, w, h) {
   const center = { x: w * 0.5, y: h * 0.54 },
-    R = Math.min(w * 0.37, h * 0.31),
+    R = Math.min(w * 0.37, h * (h < 180 ? 0.42 : 0.31)) * sundialCameras[kind].zoom,
     scale = R / sundialRadius,
-    pitch = 0.65,
-    yaw = -0.34;
+    pitch = sundialCameras[kind].pitch,
+    yaw = sundialCameras[kind].yaw;
   const local = (p) =>
     kind === 'horizontal'
       ? { u: p.x, v: p.z, n: p.y }
@@ -58,6 +63,24 @@ function drawSundialDevice(kind, model) {
     c.fillStyle = color;
     c.fill();
   };
+  // The same horizontal ground reference makes the installation distinction visible.
+  const ground = [
+    [-0.38, -0.38],
+    [0.38, -0.38],
+    [0.38, 0.38],
+    [-0.38, 0.38],
+  ].map(([x, z]) => project(local({ x, y: -0.02, z })));
+  fill(ground, '#7793ac18');
+  poly(c, [...ground, ground[0]], '#6f879a88', 1, [4, 4]);
+  if (h >= 180)
+    text(
+      c,
+      '水平地面',
+      clamp(ground[0].x, 35, w - 35),
+      clamp(ground[0].y + 14, 55, h - 55),
+      '#536b7c',
+      11,
+    );
   const base = circle(-0.012);
   fill(base, '#a68a5a');
   const face = circle();
@@ -140,16 +163,19 @@ function drawSundialDevice(kind, model) {
         n: local(device.needle).n + sunLocal.n * 0.15,
       });
     poly(c, [start, needle], '#bf852eaa', 1.5, [4, 3]);
-    text(c, '阳光', clamp(start.x, 26, w - 26), clamp(start.y - 12, 52, h - 46), '#8f641d', 11);
+    if (h >= 180)
+      text(c, '阳光', clamp(start.x, 26, w - 26), clamp(start.y - 12, 52, h - 46), '#8f641d', 11);
   }
   if (shadowAnnotation) {
     const { end, label } = shadowAnnotation,
       tx = clamp(end.x - 45, 55, w - 70),
       ty = clamp(end.y + 29, 65, h - 55);
-    poly(c, [end, { x: tx, y: ty - 8 }], '#5e4934aa', 1);
-    c.fillStyle = '#fff6dfee';
-    c.fillRect(tx - 38, ty - 9, 76, 18);
-    text(c, label, tx, ty, '#4f3920', 11);
+    if (h >= 180) {
+      poly(c, [end, { x: tx, y: ty - 8 }], '#5e4934aa', 1);
+      c.fillStyle = '#fff6dfee';
+      c.fillRect(tx - 38, ty - 9, 76, 18);
+      text(c, label, tx, ty, '#4f3920', 11);
+    }
     c.beginPath();
     c.arc(end.x, end.y, 3.5, 0, Math.PI * 2);
     c.fillStyle = '#2e251a';
@@ -158,32 +184,35 @@ function drawSundialDevice(kind, model) {
     c.lineWidth = 1.5;
     c.stroke();
   }
-  text(
-    c,
-    kind === 'horizontal'
-      ? '水平盘面 · 晷针指向天极'
-      : model.equatorial.face > 0
-        ? '赤道盘面 · 朝北天极的受光面'
-        : '赤道盘面 · 朝南天极的受光面',
-    w / 2,
-    22,
-    '#6e5736',
-    w < 340 ? 11 : 12,
-  );
-  text(
-    c,
-    !model.daylight
-      ? '太阳在地平线上或下方 · 无直射日影'
-      : !device.available
-        ? kind === 'horizontal'
-          ? '赤道处经典水平日晷退化'
-          : '阳光平行盘面 · 无法读时'
-        : '拖动盘面上的影子方向 · ' + hhmm(model.trueMinutes),
-    w / 2,
-    h - 22,
-    '#6e5736',
-    11,
-  );
+  if (h >= 180)
+    text(
+      c,
+      kind === 'horizontal'
+        ? '水平盘面 · 晷针指向天极'
+        : model.equatorial.face > 0
+          ? '赤道盘面 · 朝北天极的受光面'
+          : '赤道盘面 · 朝南天极的受光面',
+      w / 2,
+      22,
+      '#6e5736',
+      w < 340 ? 11 : 12,
+    );
+  if (h >= 180)
+    text(
+      c,
+      !model.daylight
+        ? '太阳在地平线上或下方 · 无直射日影'
+        : !device.available
+          ? kind === 'horizontal'
+            ? '赤道处经典水平日晷退化'
+            : '阳光平行盘面 · 无法读时'
+          : (sundialDragMode === 'orbit' ? '拖动旋转装置 · ' : '拖动影子方向 · ') +
+            hhmm(model.trueMinutes),
+      w / 2,
+      h - 22,
+      '#6e5736',
+      11,
+    );
 }
 function sundialSetTime(time) {
   if (state.body !== 'sun') return;
@@ -214,6 +243,18 @@ function sundialDragTime(kind, x, y) {
       ? Math.atan2(u / Math.abs(Math.sin(model.phi)), v / model.hemisphere)
       : Math.atan2(u / model.equatorial.face, v);
   return Math.round((((720 + H * deg * 4) % 1440) + 1440) % 1440);
+}
+function sundialPlateDragTime(kind, x, y) {
+  const plot = sundialPlots.get(kind);
+  if (!plot?.center || (kind === 'horizontal' && plot.model.horizontal.degenerate)) return null;
+  const u = ((x - plot.center.x) * sundialRadius) / plot.R,
+    v = ((plot.center.y - y) * sundialRadius) / plot.R;
+  if (Math.hypot(u, v) < 0.025) return null;
+  const angle =
+    kind === 'horizontal'
+      ? Math.atan2(u / Math.abs(Math.sin(plot.model.phi)), v / plot.model.hemisphere)
+      : Math.atan2(u / plot.model.equatorial.face, v);
+  return Math.round((((720 + angle * deg * 4) % 1440) + 1440) % 1440);
 }
 function initSundialDevice() {
   const panel = $('sundialPanel');
@@ -263,35 +304,110 @@ function initSundialDevice() {
   ]) {
     const canvas = $(id);
     canvas.style.touchAction = 'none';
-    let drag = null;
+    let drag = null,
+      cameraFrame = 0;
+    const pointers = new Map(),
+      camera = sundialCameras[kind];
+    function redrawCamera() {
+      if (!cameraFrame)
+        cameraFrame = requestAnimationFrame(() => {
+          cameraFrame = 0;
+          drawSundialDevice(kind, sundialModel());
+        });
+    }
+    function pinchDistance() {
+      const [a, b] = [...pointers.values()];
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    }
     canvas.addEventListener('pointerdown', (e) => {
-      if (state.body !== 'sun' || sundialView !== 'device') return;
+      if (state.body !== 'sun' || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      if (sundialView === 'device' && sundialDragMode === 'orbit') {
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        canvas.setPointerCapture(e.pointerId);
+        canvas.focus({ preventScroll: true });
+        return;
+      }
       const r = canvas.getBoundingClientRect(),
-        x = e.clientX - r.left,
-        y = e.clientY - r.top,
         plot = sundialPlots.get(kind);
-      if (!plot?.frame) return;
-      const o = plot.frame.project({ u: 0, v: 0, n: 0 });
-      if (Math.hypot(x - o.x, y - o.y) > plot.frame.R + 25) return;
+      if (!plot) return;
+      const o = sundialView === 'device' ? plot.frame?.project({ u: 0, v: 0, n: 0 }) : plot.center;
+      if (!o) return;
+      if (
+        Math.hypot(e.clientX - r.left - o.x, e.clientY - r.top - o.y) >
+        (sundialView === 'device' ? plot.frame.R : plot.R) + 25
+      )
+        return;
       drag = { x: e.clientX, y: e.clientY, moved: false };
       canvas.setPointerCapture(e.pointerId);
     });
     canvas.addEventListener('pointermove', (e) => {
+      const previous = pointers.get(e.pointerId);
+      if (previous) {
+        const before = pointers.size === 2 ? pinchDistance() : null;
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (before !== null && before > 0)
+          camera.zoom = clamp((camera.zoom * pinchDistance()) / before, 0.7, 1.4);
+        else {
+          camera.yaw += (e.clientX - previous.x) * 0.008;
+          camera.pitch = clamp(camera.pitch + (e.clientY - previous.y) * 0.008, 0.18, 1.38);
+        }
+        redrawCamera();
+        return;
+      }
       if (!drag) return;
       if (Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 4 && !drag.moved) return;
       drag.moved = true;
       const r = canvas.getBoundingClientRect(),
-        time = sundialDragTime(kind, e.clientX - r.left, e.clientY - r.top);
+        time =
+          sundialView === 'device'
+            ? sundialDragTime(kind, e.clientX - r.left, e.clientY - r.top)
+            : sundialPlateDragTime(kind, e.clientX - r.left, e.clientY - r.top);
       if (time !== null) sundialSetTime(time);
     });
-    canvas.addEventListener('pointerup', () => {
-      if (drag?.moved) {
-        canvas.dataset.suppressClick = '1';
-        setTimeout(() => delete canvas.dataset.suppressClick, 0);
-      }
-      drag = null;
-    });
-    canvas.addEventListener('pointercancel', () => (drag = null));
+    for (const event of ['pointerup', 'pointercancel', 'lostpointercapture'])
+      canvas.addEventListener(event, (e) => {
+        pointers.delete(e.pointerId);
+        if (drag?.moved) {
+          canvas.dataset.suppressClick = '1';
+          setTimeout(() => delete canvas.dataset.suppressClick, 0);
+        }
+        drag = null;
+      });
+    canvas.addEventListener(
+      'wheel',
+      (e) => {
+        if (sundialView !== 'device' || sundialDragMode !== 'orbit') return;
+        e.preventDefault();
+        camera.zoom = clamp(camera.zoom * Math.exp(-e.deltaY * 0.001), 0.7, 1.4);
+        redrawCamera();
+      },
+      { passive: false },
+    );
+    canvas.addEventListener(
+      'keydown',
+      (e) => {
+        if (
+          sundialDragMode !== 'orbit' ||
+          !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', '+', '=', '-', 'Home'].includes(
+            e.key,
+          )
+        )
+          return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        if (e.key === 'Home') Object.assign(camera, { pitch: 0.65, yaw: -0.34, zoom: 1 });
+        if (e.key === 'ArrowLeft') camera.yaw -= 0.08;
+        if (e.key === 'ArrowRight') camera.yaw += 0.08;
+        if (e.key === 'ArrowUp') camera.pitch -= 0.08;
+        if (e.key === 'ArrowDown') camera.pitch += 0.08;
+        if (e.key === '+' || e.key === '=') camera.zoom *= 1.1;
+        if (e.key === '-') camera.zoom /= 1.1;
+        camera.pitch = clamp(camera.pitch, 0.18, 1.38);
+        camera.zoom = clamp(camera.zoom, 0.7, 1.4);
+        redrawCamera();
+      },
+      true,
+    );
     canvas.addEventListener(
       'click',
       (e) => {
@@ -322,8 +438,33 @@ function renderSundialDeviceControls() {
     b.classList.toggle('active', active);
     b.setAttribute('aria-pressed', String(active));
   });
+  if ($('sundialCameraTools')) {
+    $('sundialCameraTools').hidden = sundialView !== 'device';
+    document
+      .querySelectorAll('[data-sundial-drag]')
+      .forEach((button) =>
+        button.setAttribute('aria-pressed', String(button.dataset.sundialDrag === sundialDragMode)),
+      );
+    for (const [kind, id] of [
+      ['水平', 'horizontalDial'],
+      ['赤道', 'equatorialDial'],
+    ]) {
+      $(id).style.cursor =
+        sundialView === 'device' && sundialDragMode === 'orbit' ? 'grab' : 'crosshair';
+      $(id).setAttribute(
+        'aria-label',
+        kind +
+          '日晷：' +
+          (sundialView === 'device' && sundialDragMode === 'orbit'
+            ? '拖动或方向键旋转视角，双指或加减键缩放，Home复位；不改变观测时刻'
+            : '拖动影子或点击时刻刻度调时，左右方向键调整一小时，Home回到正午'),
+      );
+    }
+  }
   $('sundialInteractionHint').textContent =
     sundialView === 'device'
-      ? '在盘面拖动影子方向，或点击时刻刻度；滑动时间、演示一天均联动两种日晷。夜间没有直射日影。'
-      : '点击盘面刻度调时，或使用上方时间滑动条。安装侧视展示晷针和盘面的实际夹角。';
+      ? sundialDragMode === 'orbit'
+        ? '拖动旋转装置 · 双指或滚轮缩放；相机转动不改变观测条件。'
+        : '在盘面拖动影子，或点击刻度调时；日期与时刻通过下方控制条调整。'
+      : '拖动盘面影子或点击刻度调时；侧视图显示实际安装角度。';
 }

@@ -220,7 +220,7 @@ function drawSundial(kind, model) {
         text(c, String(hour).padStart(2, '0'), label.x, label.y, lit ? '#665332' : '#aa9d84', 11);
       ticks.push({ ...outer, time: hour * 60 });
     }
-  sundialPlots.set(kind, { ticks });
+  sundialPlots.set(kind, { ticks, center, R, model });
   if (kind === 'horizontal') {
     for (const [name, x, v] of [
       ['北', 0, 1],
@@ -380,7 +380,12 @@ function initSundials() {
   ]) {
     const canvas = $(id);
     canvas.onclick = (e) => {
-      if (state.body !== 'sun' || canvas.dataset.suppressClick) return;
+      if (
+        state.body !== 'sun' ||
+        canvas.dataset.suppressClick ||
+        (sundialView === 'device' && sundialDragMode === 'orbit')
+      )
+        return;
       const r = canvas.getBoundingClientRect(),
         x = e.clientX - r.left,
         y = e.clientY - r.top;

@@ -1853,3 +1853,208 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   background-image: none;
   border-radius: 0;
 }
+
+/* Sundial workstation: device choices and readout stay with the visible instrument. */
+.ui-sundial .ui-viewbar {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.ui-sundial .ui-viewbar .sundial-view-controls {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 0 auto;
+  padding: 0;
+  background: transparent;
+  flex-wrap: nowrap;
+}
+.ui-sundial .ui-viewbar .sundial-view-controls button {
+  min-height: 30px;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+.ui-sundial-readout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--ui-border);
+  background: #f5f8fe;
+}
+.ui-sundial-readout .sundial-reading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+.ui-sundial-readout .sundial-reading span {
+  font-size: 12px;
+  color: var(--md-on-surface-variant);
+}
+.ui-sundial-readout .sundial-reading strong {
+  font-size: 20px;
+  color: var(--md-primary);
+}
+.ui-sundial-presets {
+  display: flex;
+  gap: 4px;
+}
+.ui-sundial-presets button,
+.ui-sundial-camera-tools button {
+  border: 0;
+  border-radius: 999px;
+  padding: 5px 10px;
+  min-height: 30px;
+  font-size: 12px;
+  background: #edf2fb;
+  color: var(--md-primary);
+}
+.ui-sundial-camera-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--ui-border);
+  background: white;
+}
+.ui-sundial-camera-tools > div {
+  display: flex;
+  gap: 6px;
+}
+.ui-sundial-camera-tools [aria-pressed='true'] {
+  background: var(--md-primary);
+  color: white;
+}
+.ui-sundial-camera-tools #resetSundialCamera {
+  background: transparent;
+}
+.ui-sundial-hint {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 6px 12px;
+  background: #f5f8fe;
+  color: var(--md-on-surface-variant);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.ui-sundial .ui-parameters .sundial-time-label {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ui-sundial .ui-parameters .sundial-time-label output {
+  color: var(--md-primary);
+}
+.ui-sundial .ui-parameters .sundial-clock {
+  display: grid;
+  grid-template-columns: 1fr;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 10px 0 0;
+}
+.ui-sundial .ui-parameters label[for='sundialOffset'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+}
+.ui-sundial .ui-parameters #sundialOffset {
+  width: 72px;
+}
+.ui-sundial .ui-parameters .sundial-make {
+  border: 0;
+  background: transparent;
+  margin: 8px 0;
+}
+.ui-sundial .ui-parameters .sundial-make summary {
+  font-size: 12px;
+  color: var(--md-primary);
+}
+@media (max-width: 760px), (max-height: 540px) {
+  .ui-sundial .ui-viewbar {
+    gap: 4px;
+  }
+  .ui-sundial .ui-viewbar .sundial-view-controls {
+    gap: 4px;
+  }
+  .ui-sundial .ui-viewbar .sundial-view-controls button {
+    font-size: 11px;
+    min-height: 26px;
+    padding: 4px 8px;
+  }
+  .ui-sundial-readout {
+    padding: 5px 8px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .ui-sundial-readout .sundial-reading span {
+    font-size: 10px;
+  }
+  .ui-sundial-readout .sundial-reading strong {
+    font-size: 16px;
+  }
+  .ui-sundial-presets button {
+    font-size: 10px;
+    padding: 3px 7px;
+    min-height: 25px;
+  }
+  .ui-sundial-camera-tools {
+    padding: 4px 8px;
+  }
+  .ui-sundial-camera-tools button {
+    font-size: 10px;
+    padding: 3px 8px;
+    min-height: 26px;
+  }
+  .ui-sundial-hint {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 760px) and (min-height: 541px) {
+  .ui-sundial .ui-grid {
+    grid-template-rows: minmax(220px, 1fr) auto minmax(64px, 0.35fr);
+  }
+}
+@media (max-height: 540px) {
+  .ui-sundial .ui-sundial-hint {
+    display: none;
+  }
+}
+.ui-sundial .workbench-extra .ui-sundial-presets {
+  flex-wrap: wrap;
+}
+
+.ui-sundial-types {
+  display: flex;
+  gap: 6px;
+}
+@media (max-width: 760px), (max-height: 540px) {
+  .ui-sundial-types {
+    gap: 4px;
+  }
+}
+
+.ui-sundial-readout {
+  flex-wrap: wrap;
+}
+.ui-sundial-readout .ui-sundial-camera-tools {
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.ui-sundial-readout .ui-sundial-camera-tools > div {
+  gap: 4px;
+}
+.ui-sundial-readout .ui-sundial-camera-tools {
+  gap: 4px;
+}

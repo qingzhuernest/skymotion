@@ -183,6 +183,9 @@ function renderTimeWorkbench() {
     : basis === 'date'
       ? '日期播放保持观测时刻不变；拖动时刻滑块可随时调整这个固定时刻。'
       : '时刻播放保持日期不变；日期可用日历或日期滑块单独选择。';
+  if (document.body.dataset.page === 'sundial')
+    $('workbenchContext').textContent =
+      '日晷 · ' + (basis === 'date' ? '固定时刻比较日期' : '一天内的影子变化');
   if (analemmaPage) {
     $('workbenchPlay').textContent = analemmaPlaying ? '⏸ 暂停' : '▶ 逐日播放';
     $('workbenchContext').textContent = '日行迹 · 全年同一时刻';

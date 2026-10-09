@@ -259,16 +259,48 @@ function renderUIWorkspace() {
     panel.close = () => (location.href = 'lab.html');
     bar.classList.add('ui-tabs');
     bar.innerHTML =
-      '<button type="button" data-kind="horizontal" aria-selected="true">水平日晷</button><button type="button" data-kind="equatorial" aria-selected="false">赤道日晷</button>';
+      '<div class="ui-sundial-types" role="tablist" aria-label="日晷类型"><button type="button" role="tab" data-kind="horizontal" aria-controls="horizontalDial" aria-selected="true">水平日晷</button><button type="button" role="tab" data-kind="equatorial" aria-controls="equatorialDial" aria-selected="false">赤道日晷</button></div>';
     plot.append($('horizontalDial'), $('equatorialDial'));
     $('equatorialDial').hidden = true;
     const readings = {
       horizontal: $('horizontalDialReading').closest('.sundial-reading'),
       equatorial: $('equatorialDialReading').closest('.sundial-reading'),
     };
-    readings.horizontal.querySelector('span').textContent = '水平日晷 · 晷上读时';
-    readings.equatorial.querySelector('span').textContent = '赤道日晷 · 晷上读时';
-    rail.prepend(readings.horizontal, readings.equatorial);
+    readings.horizontal.querySelector('span').textContent = '晷上读时';
+    readings.equatorial.querySelector('span').textContent = '晷上读时';
+    shell.classList.add('ui-sundial');
+    const readout = document.createElement('div');
+    readout.className = 'ui-sundial-readout';
+    readout.append(readings.horizontal, readings.equatorial);
+    const presets = document.querySelector('.sundial-toolbar > div');
+    presets.classList.add('ui-sundial-presets');
+    for (const button of presets.querySelectorAll('button'))
+      button.textContent = { 540: '09:00', 720: '正午', 900: '15:00' }[button.dataset.dialTime];
+    $('workbenchMore').querySelector('.workbench-extra').append(presets);
+    plot.before(readout);
+    const views = document.querySelector('.sundial-view-controls');
+    views.querySelector('[data-dial-view=device]').textContent = '立体装置';
+    views.querySelector('[data-dial-view=plate]').textContent = '盘面与安装';
+    bar.append(views);
+    const cameraTools = document.createElement('div');
+    cameraTools.className = 'ui-sundial-camera-tools';
+    cameraTools.id = 'sundialCameraTools';
+    cameraTools.innerHTML =
+      '<div role="group" aria-label="立体装置拖动方式"><button type="button" data-sundial-drag="orbit" aria-pressed="true">旋转装置</button><button type="button" data-sundial-drag="time" aria-pressed="false">拖影调时</button></div><button id="resetSundialCamera" type="button" aria-label="复位装置视角">复位</button>';
+    for (const button of cameraTools.querySelectorAll('[data-sundial-drag]'))
+      button.onclick = () => {
+        sundialDragMode = button.dataset.sundialDrag;
+        schedule();
+      };
+    cameraTools.querySelector('#resetSundialCamera').onclick = () => {
+      for (const camera of Object.values(sundialCameras))
+        Object.assign(camera, { pitch: 0.65, yaw: -0.34, zoom: 1 });
+      schedule();
+    };
+    readout.append(cameraTools);
+    const hint = $('sundialInteractionHint');
+    hint.classList.add('ui-sundial-hint');
+    plot.after(hint);
     function selectDial(kind) {
       for (const k of ['horizontal', 'equatorial']) {
         $(k + 'Dial').hidden = k !== kind;
@@ -276,29 +308,57 @@ function renderUIWorkspace() {
         $(k + 'DialNote').hidden = k !== kind;
       }
       bar
-        .querySelectorAll('button')
+        .querySelectorAll('[data-kind]')
         .forEach((b) => b.setAttribute('aria-selected', String(b.dataset.kind === kind)));
+      shell.dataset.sundialKind = kind;
       schedule();
     }
-    bar.querySelectorAll('button').forEach((b) => (b.onclick = () => selectDial(b.dataset.kind)));
+    bar
+      .querySelectorAll('[data-kind]')
+      .forEach((b) => (b.onclick = () => selectDial(b.dataset.kind)));
     selectDial('horizontal');
+    function sundialGroup(name, open = false) {
+      const group = document.createElement('details');
+      group.className = 'menu-section';
+      group.open = open;
+      const summary = document.createElement('summary');
+      summary.textContent = name;
+      const content = document.createElement('div');
+      content.className = 'menu-content';
+      group.append(summary, content);
+      rail.append(group);
+      return content;
+    }
     addPlace();
-    rail.append(
+    const location = sundialGroup('观测地点', true);
+    location.append(rail.querySelector('.ui-field'), $('coordinatesMenu'));
+    $('coordinatesMenu').open = false;
+    const device = sundialGroup('装置参数', true);
+    device.append(
       document.querySelector('label[for=sundialNeedleLength]'),
       $('sundialNeedleLength'),
-      document.querySelector('.sundial-view-controls'),
-      document.querySelector('.sundial-toolbar'),
-      document.querySelector('.sundial-clock'),
-      $('horizontalDialNote'),
-      $('equatorialDialNote'),
-      $('sundialInteractionHint'),
     );
-    const info = document.createElement('details');
-    info.className = 'ui-information';
-    info.innerHTML = '<summary>制作、安装与模型说明</summary>';
-    for (const n of document.querySelectorAll('.sundial-make,.sundial-question,.sundial-key'))
-      info.append(n);
-    rail.append(info);
+    const lengthNote = document.createElement('p');
+    lengthNote.className = 'micro';
+    lengthNote.textContent = '针长只改变影长，不改变时刻线方向；赤道日晷两侧各取此长度。';
+    device.append(lengthNote, $('horizontalDialNote'), $('equatorialDialNote'));
+    const clocks = sundialGroup('钟表时对照');
+    clocks.append(
+      document.querySelector('label[for=sundialOffset]'),
+      document.querySelector('.sundial-clock'),
+    );
+    const construction = sundialGroup('制作、安装与原理');
+    const distinction = document.createElement('p');
+    distinction.className = 'micro';
+    distinction.textContent =
+      '水平日晷：盘面水平，晷针指向天极，仰角等于当地纬度的绝对值。赤道日晷：盘面平行赤道面，晷针垂直盘面。立体视角中的视觉倾斜不代表盘面的安装倾角；点击上方“盘面与安装”查看侧视。';
+    construction.append(distinction);
+    for (const n of document.querySelectorAll('.sundial-make,.sundial-question,.sundial-key')) {
+      if (n.classList.contains('sundial-make'))
+        n.querySelector('summary').textContent =
+          n.closest('.sundial-card').querySelector('h3').textContent + '的制作与安装';
+      construction.append(n);
+    }
   } else {
     rail.append($('controls'));
     $('controls').querySelector('.section-head').hidden = true;
