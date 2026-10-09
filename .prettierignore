@@ -7,3 +7,6 @@ astronomy.js
 archive/
 .git/
 node_modules/
+
+# Preserve the bundled Three.js upstream implementation.
+space/vendor/

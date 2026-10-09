@@ -6,3 +6,5 @@ Interface and simulation implementation are original. Astronomy Engine 2.1.19: D
 Welcome quote font: Ma Shan Zheng, a local glyph subset distributed under the SIL Open Font License 1.1.
 Source: https://github.com/google/fonts/tree/main/ofl/mashanzheng
 License: fonts/OFL-MaShanZheng.txt
+
+Solar-system space module: Three.js 0.186.1, MIT license, locally bundled in space/vendor/three.min.js. License: space/vendor/THREE-LICENSE.txt. Reuses the existing Astronomy Engine and Earth map; gas-planet bands and decorative star points are procedural.

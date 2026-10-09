@@ -1,0 +1,559 @@
+/* Independent space workspace. The shared site navigation keeps its existing appearance. */
+body[data-page='space'] {
+  margin: 0;
+  background: #f5f7fc;
+  color: #253448;
+  font:
+    14px/1.6 system-ui,
+    -apple-system,
+    sans-serif;
+  --space-primary: #315da8;
+  --space-line: #dce5f2;
+}
+body[data-page='space'] [hidden] {
+  display: none !important;
+}
+body[data-page='space'] * {
+  box-sizing: border-box;
+}
+body[data-page='space'] :is(button, input, select) {
+  font: inherit;
+}
+body[data-page='space'] :is(button, a, input, select):focus-visible {
+  outline: 2px solid #527bd1;
+  outline-offset: 3px;
+}
+body[data-page='space'] :is(button, a) {
+  touch-action: manipulation;
+}
+body[data-page='space'] button {
+  cursor: pointer;
+  border: 1px solid var(--space-line);
+  border-radius: 14px;
+  background: #eaf0fc;
+  color: var(--space-primary);
+  padding: 7px 12px;
+  min-height: 34px;
+}
+body[data-page='space'] button:hover {
+  background: #dbe7fc;
+}
+body[data-page='space'] button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+body[data-page='space'] .space-shell {
+  max-width: 1600px;
+  margin: auto;
+  height: calc(100dvh - var(--ui-nav-height));
+  min-height: 0;
+  padding: 12px 20px 16px;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 12px;
+}
+body[data-page='space'] .head {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+body[data-page='space'] h1 {
+  font-size: 23px;
+  line-height: 1.3;
+  margin: 0 0 3px;
+}
+body[data-page='space'] .head p {
+  font-size: 12px;
+  color: #52647d;
+  margin: 0;
+}
+body[data-page='space'] #spaceParameters {
+  display: none;
+}
+body[data-page='space'] .space-sidebar-host {
+  grid-column: 1;
+  grid-row: 2/4;
+  min-height: 0;
+  overflow: hidden;
+}
+body[data-page='space'] .side {
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 2px;
+}
+body[data-page='space'] .card {
+  border: 1px solid var(--space-line);
+  border-radius: 18px;
+  padding: 16px;
+  background: white;
+  flex: none;
+}
+body[data-page='space'] .card h2 {
+  font-size: 13px;
+  margin: 0 0 12px;
+  color: #52647d;
+}
+body[data-page='space'] .kicker {
+  font-size: 10px;
+  color: #52647d;
+}
+body[data-page='space'] .planet-name {
+  font-size: 23px;
+  margin: 2px 0 0;
+  line-height: 1.4;
+}
+body[data-page='space'] .planet-type {
+  font-size: 11px;
+  color: #52647d;
+  margin: 2px 0;
+}
+body[data-page='space'] .planet-picker {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  margin: 0 0 14px;
+}
+body[data-page='space'] .planet-picker button {
+  padding: 5px 2px;
+  font-size: 11px;
+  border: 0;
+}
+body[data-page='space'] .planet-picker button.active {
+  background: var(--space-primary);
+  color: white;
+}
+body[data-page='space'] .facts {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0;
+}
+body[data-page='space'] .facts div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  border-bottom: 1px solid #edf0f7;
+  padding-bottom: 6px;
+}
+body[data-page='space'] .facts span {
+  font-size: 11px;
+  color: #52647d;
+}
+body[data-page='space'] .facts strong {
+  font-size: 14px;
+  color: var(--space-primary);
+  font-variant-numeric: tabular-nums;
+}
+body[data-page='space'] .focus {
+  width: 100%;
+  background: var(--space-primary);
+  color: white;
+  font-size: 12px;
+  border: 0;
+}
+body[data-page='space'] .info {
+  font-size: 11px;
+  color: #52647d;
+  line-height: 1.8;
+  margin: 12px 0 0;
+}
+body[data-page='space'] .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+body[data-page='space'] select {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid var(--space-line);
+  border-radius: 10px;
+  background: #f5f7fc;
+  color: #253448;
+  padding: 5px 8px;
+}
+body[data-page='space'] .toggles {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+body[data-page='space'] .toggles label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+body[data-page='space'] input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--space-primary);
+}
+body[data-page='space'] details summary {
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--space-primary);
+}
+body[data-page='space'] .card a {
+  font-size: 11px;
+  color: var(--space-primary);
+}
+body[data-page='space'] .visual {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  background: white;
+  border: 1px solid var(--space-line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+body[data-page='space'] .viewbar {
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  flex-shrink: 0;
+}
+body[data-page='space'] .viewbar button {
+  font-size: 12px;
+  border: 0;
+}
+body[data-page='space'] .viewbar button.active {
+  background: var(--space-primary);
+  color: white;
+}
+body[data-page='space'] .stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 45% 44%, #152843, #07111f 78%);
+}
+body[data-page='space'] canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+body[data-page='space'] .stage-note,
+body[data-page='space'] .stage-hint {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  margin: 0;
+  font-size: 11px;
+  color: #b8c9df;
+  pointer-events: none;
+}
+body[data-page='space'] .stage-note {
+  left: 12px;
+  max-width: 60%;
+}
+body[data-page='space'] .stage-hint {
+  right: 12px;
+  text-align: right;
+  max-width: 36%;
+}
+body[data-page='space'] .label {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, 0);
+  border: 0;
+  background: #101f33cc;
+  color: #e1edff;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 11px;
+  min-height: 23px;
+  white-space: nowrap;
+}
+body[data-page='space'] .label:hover,
+body[data-page='space'] .label.selected {
+  background: var(--space-primary);
+  color: white;
+}
+body[data-page='space'] .label[hidden] {
+  display: none;
+}
+body[data-page='space'] .label-leaders {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+body[data-page='space'] .label-leaders line {
+  stroke: #80a5cc;
+  stroke-width: 0.7;
+  opacity: 0.65;
+}
+body[data-page='space'] .footer-note {
+  padding: 5px 12px;
+  font-size: 10px;
+  color: #52647d;
+  border-top: 1px solid var(--space-line);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-shrink: 0;
+}
+body[data-page='space'] .timeline {
+  grid-column: 2;
+  grid-row: 3;
+  background: white;
+  border: 1px solid var(--space-line);
+  border-radius: 18px;
+  padding: 10px 14px;
+  display: grid;
+  gap: 3px;
+}
+body[data-page='space'] .time-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+body[data-page='space'] .time-head label {
+  font-size: 11px;
+  color: #52647d;
+}
+body[data-page='space'] .time-head output {
+  display: inline-block;
+  margin-left: 10px;
+  color: var(--space-primary);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+body[data-page='space'] #play {
+  font-size: 12px;
+  background: var(--space-primary);
+  color: white;
+  border: 0;
+  white-space: nowrap;
+}
+body[data-page='space'] .timeline input[type='range'] {
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  accent-color: var(--space-primary);
+  touch-action: none;
+}
+body[data-page='space'] .scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #52647d;
+}
+body[data-page='space'] .date-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: #52647d;
+}
+body[data-page='space'] .date-actions input {
+  border: 1px solid var(--space-line);
+  border-radius: 10px;
+  background: white;
+  color: #253448;
+  padding: 4px 6px;
+  font-size: 11px;
+  min-height: 30px;
+  max-width: 150px;
+}
+body[data-page='space'] .error {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  padding: 20px;
+  color: #dceaff;
+  text-align: center;
+  background: #102033;
+}
+body[data-page='space'] .error a {
+  color: #b7d5ff;
+}
+body[data-page='space'] #spaceDrawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  margin: 0;
+  width: min(360px, calc(100vw - 28px));
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  border: 1px solid var(--space-line);
+  border-radius: 0 24px 24px 0;
+  padding: 0;
+  background: #edf2fa;
+  color: #253448;
+  overflow: hidden;
+}
+body[data-page='space'] #spaceDrawer[open] {
+  display: flex;
+  flex-direction: column;
+}
+body[data-page='space'] #spaceDrawer::backdrop {
+  background: #14213366;
+}
+body[data-page='space'] .drawer-head {
+  touch-action: pan-y;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: max(16px, env(safe-area-inset-top)) 16px 16px;
+  background: #f8faff;
+  border-bottom: 1px solid var(--space-line);
+  flex: none;
+}
+body[data-page='space'] .drawer-head span {
+  font-size: 11px;
+  color: #52647d;
+}
+body[data-page='space'] .drawer-head h2 {
+  font-size: 17px;
+  margin: 3px 0 0;
+}
+body[data-page='space'] #spaceDrawerClose {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 26px;
+}
+body[data-page='space'] #spaceDrawerBody {
+  min-height: 0;
+  flex: 1;
+  padding: 12px 10px max(12px, env(safe-area-inset-bottom));
+}
+@media (max-width: 900px),
+  (pointer: coarse) and (max-width: 1400px),
+  (max-height: 500px) and (max-width: 1100px) {
+  body[data-page='space'] .space-shell {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 10px;
+    gap: 8px;
+  }
+  body[data-page='space'] .space-sidebar-host {
+    display: none;
+  }
+  body[data-page='space'] #spaceParameters {
+    display: block;
+    font-size: 11px;
+  }
+  body[data-page='space'] .visual,
+  body[data-page='space'] .timeline {
+    grid-column: 1;
+  }
+  body[data-page='space'] h1 {
+    font-size: 18px;
+  }
+  body[data-page='space'] .head p {
+    font-size: 10px;
+  }
+  body[data-page='space'] .viewbar {
+    padding: 6px;
+    gap: 4px;
+  }
+  body[data-page='space'] .viewbar button {
+    font-size: 11px;
+    padding: 5px 8px;
+    min-height: 30px;
+  }
+  body[data-page='space'] .time-head output {
+    display: block;
+    margin: 0;
+    font-size: 14px;
+  }
+  body[data-page='space'] .footer-note {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+  body[data-page='space'] .footer-note span:last-child {
+    display: none;
+  }
+  body[data-page='space'] .stage-note,
+  body[data-page='space'] .stage-hint {
+    font-size: 10px;
+  }
+}
+@media (max-height: 500px) {
+  body[data-page='space'] .space-shell {
+    padding-top: 6px;
+    padding-bottom: 8px;
+    gap: 6px;
+  }
+  body[data-page='space'] .head p {
+    display: none;
+  }
+  body[data-page='space'] .timeline {
+    padding: 6px 10px;
+  }
+  body[data-page='space'] .time-head output {
+    font-size: 12px;
+  }
+
+  body[data-page='space'] .footer-note {
+    display: none;
+  }
+  body[data-page='space'] .stage-hint {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  body[data-page='space'] #spaceDrawer[open] {
+    animation: space-drawer-in 220ms cubic-bezier(0.2, 0, 0, 1);
+  }
+}
+@keyframes space-drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Keep the calendar usable in short landscape windows without adding another control row. */
+@media (max-height: 500px) and (min-width: 600px) {
+  body[data-page='space'] .timeline {
+    position: relative;
+  }
+  body[data-page='space'] .date-actions {
+    position: absolute;
+    top: 6px;
+    right: 112px;
+  }
+  body[data-page='space'] .date-actions :is(label, span) {
+    display: none;
+  }
+  body[data-page='space'] .date-actions input {
+    min-height: 26px;
+    padding: 2px 5px;
+    font-size: 10px;
+  }
+}
+@media (max-width: 360px) {
+  body[data-page='space'] .time-head output {
+    font-size: 12px;
+  }
+  body[data-page='space'] #play {
+    font-size: 10px;
+    padding: 6px 8px;
+  }
+  body[data-page='space'] .date-actions span {
+    font-size: 9px;
+  }
+}
