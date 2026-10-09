@@ -303,28 +303,52 @@ function drawMoon(c, x, y, r, phase, brightAngle = null) {
   c.stroke();
 }
 
+let phaseOrbitLayout = null;
 function drawPhasePanel() {
   if (!canPaint($('phaseOrbit')) && !canPaint($('phaseDisk'))) return;
   const phase = visualPhase(),
     { c, w, h } = resize($('phaseOrbit'));
-  const center = { x: w * 0.43, y: h * 0.53 },
-    r = Math.min(w * 0.27, h * 0.32),
-    sunX = w - 24;
-  text(c, '北黄极上方俯视 · 平面示意', w / 2, 14, '#a3b8cf', 11);
-  // Parallel sunlight comes from the right; each body's right half is illuminated.
-  for (const dy of [-24, 0, 24])
+  if (!w || !h) return;
+  const center = { x: w * 0.37, y: h * 0.52 },
+    sunX = w - 54;
+  const r = Math.max(12, Math.min(w * 0.27, Math.max(12, (h - 62) * 0.4), sunX - center.x - 32));
+  text(c, '北黄极上方俯视 · 尺寸与距离为示意', w / 2, 13, '#b6c8dc', w < 260 ? 9 : 11);
+  // Parallel rays are a local approximation of the distant Sun, not convergent beams.
+  for (const fraction of [-0.8, -0.55, -0.3, 0, 0.3, 0.55, 0.8]) {
+    const y = center.y + fraction * r,
+      right = sunX - 14,
+      left = Math.max(8, center.x - r - 12);
     poly(
       c,
       [
-        { x: sunX - 17, y: center.y + dy },
-        { x: center.x - r - 9, y: center.y + dy },
+        { x: right, y },
+        { x: left, y },
       ],
-      '#ffc35a30',
-      1,
-      [4, 5],
+      '#ebc87870',
+      1.2,
     );
-  glow(c, sunX, center.y, 10);
-  text(c, '太阳', sunX, center.y + 32, '#ffe0a0', 12);
+    const arrowX = center.x + r * 0.62;
+    poly(
+      c,
+      [
+        { x: arrowX + 5, y: y - 3 },
+        { x: arrowX, y },
+        { x: arrowX + 5, y: y + 3 },
+      ],
+      '#f1d18dab',
+      1.4,
+    );
+  }
+  text(
+    c,
+    '← 平行太阳光',
+    (sunX + center.x + r) / 2,
+    center.y - r * 0.8 - 14,
+    '#f1d18d',
+    w < 260 ? 9 : 11,
+  );
+  glow(c, sunX, center.y, 12);
+  text(c, '远处太阳', sunX, center.y + 27, '#ffe0a0', 10);
   c.strokeStyle = '#6789af6b';
   c.lineWidth = 1;
   c.setLineDash([3, 4]);
@@ -343,7 +367,7 @@ function drawPhasePanel() {
     c.closePath();
     c.fill();
   }
-  halfLit(center.x, center.y, 14, '#80bfe8');
+  halfLit(center.x, center.y, Math.min(14, r * 0.28), '#80bfe8');
   text(c, '地球', center.x, center.y + 27, '#badbf5', 12);
   const cardinal = [
     ['新月', 0],
@@ -372,6 +396,96 @@ function drawPhasePanel() {
   c.beginPath();
   c.arc(x, y, 8, 0, Math.PI * 2);
   c.stroke();
+  phaseOrbitLayout = { center, r, moon: { x, y }, sun: { x: sunX, y: center.y }, sunHalo: 48 };
+  text(c, '拖动月球 · 连续调整日期与时刻', w / 2, h - 12, '#a9c4e0', w < 260 ? 9 : 11);
   const disk = resize($('phaseDisk'));
   drawMoon(disk.c, disk.w / 2, disk.h / 2, Math.min(disk.w, disk.h) * 0.43, phase);
+}
+
+/** Dragging changes the real observation instant; no invented phase-angle formula is used. */
+function initPhaseInteraction() {
+  const canvas = $('phaseOrbit');
+  let drag = null,
+    pendingFrame = 0;
+  canvas.tabIndex = 0;
+  canvas.setAttribute(
+    'aria-label',
+    '北黄极上方月相示意：太阳光平行入射；拖动月球连续调整日期与时刻，左右方向键按日调整',
+  );
+  function pointerAngle(event) {
+    const rect = canvas.getBoundingClientRect(),
+      p = phaseOrbitLayout;
+    if (!p) return null;
+    const x = event.clientX - rect.left - p.center.x,
+      y = p.center.y - (event.clientY - rect.top);
+    return Math.hypot(x, y) < p.r * 0.2 ? null : Math.atan2(y, x) * deg;
+  }
+  function applyDrag() {
+    pendingFrame = 0;
+    if (!drag || state.body !== 'moon') return;
+    const angle = (((drag.originPhase + drag.travel) % 360) + 360) % 360;
+    const estimate = drag.originUTC.getTime() + (drag.travel / 360) * 29.530588 * 86400000;
+    const event = Astronomy.SearchMoonPhase(angle, new Date(estimate - 4 * 86400000), 8);
+    if (!event) return;
+    const utc = event.date,
+      hourAngle = sunHourAngle(utc, state.lon);
+    const utcMinutes =
+      utc.getUTCHours() * 60 +
+      utc.getUTCMinutes() +
+      utc.getUTCSeconds() / 60 +
+      utc.getUTCMilliseconds() / 60000;
+    const meanHour = (utcMinutes + state.lon * 4 - 720) / 4;
+    const equationMinutes = (((hourAngle - meanHour + 540) % 360) - 180) * 4;
+    const localDate = new Date(utc.getTime() + (state.lon * 4 + equationMinutes) * 60000)
+      .toISOString()
+      .slice(0, 10);
+    if (localDate < '1900-01-01' || localDate > '2100-12-31') return;
+    state.date = localDate;
+    state.time = clamp(720 + hourAngle * 4, 0, 1440);
+    state.manual = false;
+    motionTransition = null;
+    // Let the shared scheduler paint once after this coalesced input update.
+    schedule();
+  }
+  canvas.addEventListener('pointerdown', (event) => {
+    if (!event.isPrimary || event.button !== 0 || state.body !== 'moon') return;
+    const angle = pointerAngle(event);
+    if (angle === null) return;
+    stop();
+    drag = {
+      id: event.pointerId,
+      originUTC: instantUTC(),
+      originPhase: lunarPhase().angle,
+      lastAngle: angle,
+      travel: 0,
+    };
+    canvas.setPointerCapture(event.pointerId);
+    canvas.classList.add('phase-dragging');
+  });
+  canvas.addEventListener('pointermove', (event) => {
+    if (!drag || drag.id !== event.pointerId) return;
+    const angle = pointerAngle(event);
+    if (angle === null) return;
+    drag.travel += ((angle - drag.lastAngle + 540) % 360) - 180;
+    drag.lastAngle = angle;
+    if (!pendingFrame) pendingFrame = requestAnimationFrame(applyDrag);
+  });
+  function finish(event) {
+    if (!drag || event.pointerId !== drag.id) return;
+    if (pendingFrame) {
+      cancelAnimationFrame(pendingFrame);
+      pendingFrame = 0;
+      applyDrag();
+    }
+    drag = null;
+    canvas.classList.remove('phase-dragging');
+  }
+  for (const name of ['pointerup', 'pointercancel', 'lostpointercapture'])
+    canvas.addEventListener(name, finish);
+  canvas.addEventListener('keydown', (event) => {
+    if (!['ArrowLeft', 'ArrowRight'].includes(event.key) || state.body !== 'moon') return;
+    event.preventDefault();
+    event.stopPropagation();
+    workbenchShiftDate(event.key === 'ArrowRight' ? 1 : -1);
+  });
 }

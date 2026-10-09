@@ -18,7 +18,9 @@
     raf = 0,
     last = 0,
     paintTime = 0,
-    clock = 0;
+    clock = 0,
+    pointerMovedAt = 0,
+    nextMeteor = 0;
   let selected = -1,
     mode = 'connect',
     pointer = null,
@@ -103,12 +105,16 @@
     for (let i = 0; i < stars.length; i++) {
       const star = stars[i],
         p = point(star);
-      if (pointer) {
+      if (pointer && (!gesture || gesture.moved) && now - pointerMovedAt < 180) {
         const dx = p.x - pointer.x,
           dy = p.y - pointer.y,
           distance = Math.hypot(dx, dy);
         if (distance > 0.1 && distance < pointerRadius) {
-          const push = (1 - distance / pointerRadius) * 230 * dt;
+          const push =
+            (1 - distance / pointerRadius) *
+            230 *
+            dt *
+            Math.max(0, 1 - (now - pointerMovedAt) / 180);
           star.vx += (dx / distance) * push;
           star.vy += (dy / distance) * push;
         }
@@ -192,6 +198,13 @@
       clock += dt;
       advance(dt, now);
     }
+    if (!reducedMotion.matches) {
+      if (!nextMeteor) nextMeteor = now + 1500;
+      if (now >= nextMeteor) {
+        if (meteors.length < 6) spawnMeteors(now, 1 + Math.round(random()));
+        nextMeteor = now + 2400 + random() * 2600;
+      }
+    }
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = '#c6ddff';
     for (const mote of dust) {
@@ -215,7 +228,7 @@
     for (let i = 0; i < stars.length; i++) {
       const star = stars[i],
         p = point(star),
-        lit = connected.has(i) || selected === i;
+        lit = connected.has(i) || selected === i || (!gesture?.moved && gesture?.hit.star === i);
       const near = pointer
         ? Math.max(0, 1 - Math.hypot(p.x - pointer.x, p.y - pointer.y) / pointerRadius)
         : 0;
@@ -258,20 +271,41 @@
     }
     for (let i = meteors.length - 1; i >= 0; i--) {
       const meteor = meteors[i],
-        age = (now - meteor.born) / 1100;
+        age = (now - meteor.born) / meteor.life;
+      if (age < 0) continue;
       if (age >= 1) {
         meteors.splice(i, 1);
         continue;
       }
-      const x = meteor.u * width + (reducedMotion.matches ? 0 : age * width * 0.3);
-      const y = meteor.v * height + (reducedMotion.matches ? 0 : age * height * 0.25);
-      ctx.globalAlpha = Math.sin(Math.PI * age);
-      ctx.strokeStyle = '#fbe2b3';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x - (reducedMotion.matches ? 2 : 55), y - (reducedMotion.matches ? 2 : 24));
-      ctx.stroke();
+      const travel = reducedMotion.matches ? 0 : age * Math.min(width, height) * meteor.speed;
+      const x = meteor.u * width + Math.cos(meteor.angle) * travel;
+      const y = meteor.v * height + Math.sin(meteor.angle) * travel;
+      ctx.globalAlpha = Math.sin(Math.PI * age) * meteor.brightness;
+      if (reducedMotion.matches) {
+        ctx.fillStyle = meteor.color;
+        ctx.beginPath();
+        ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        const tail = meteor.tail * Math.min(1, age * 6);
+        const tx = x - Math.cos(meteor.angle) * tail,
+          ty = y - Math.sin(meteor.angle) * tail;
+        const trail = ctx.createLinearGradient(tx, ty, x, y);
+        trail.addColorStop(0, meteor.color + '00');
+        trail.addColorStop(0.7, meteor.color + '65');
+        trail.addColorStop(1, meteor.color);
+        ctx.strokeStyle = trail;
+        ctx.lineWidth = meteor.weight;
+        ctx.beginPath();
+        ctx.moveTo(tx, ty);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.fillStyle = meteor.color;
+        ctx.beginPath();
+        ctx.arc(x, y, meteor.weight, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.drawImage(goldGlow, x - 8, y - 8, 16, 16);
+      }
     }
     ctx.globalAlpha = 1;
     ctx.lineWidth = 1;
@@ -323,9 +357,9 @@
     const t = square ? Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / square)) : 0;
     return Math.hypot(p.x - a.x - t * dx, p.y - a.y - t * dy);
   }
-  function clickAt(p) {
+  function hitTarget(p) {
     let nearest = -1,
-      distance = 28;
+      distance = coarsePointer.matches ? 44 : 32;
     stars.forEach((star, i) => {
       const q = point(star),
         d = Math.hypot(q.x - p.x, q.y - p.y);
@@ -334,11 +368,7 @@
         distance = d;
       }
     });
-    // Favor a precise star hit, then a line, then the larger touch target.
-    if (nearest >= 0 && distance < 12) {
-      interact(nearest);
-      return;
-    }
+    if (nearest >= 0 && distance < 12) return { star: nearest };
     let edge = null,
       best = 9;
     for (const [key, [a, b]] of edges) {
@@ -348,12 +378,16 @@
         edge = key;
       }
     }
-    if (edge) {
-      edges.delete(edge);
-      status.textContent = `连线已拆开 · 还剩 ${edges.size} 条`;
-    } else if (nearest >= 0) {
-      interact(nearest);
+    return edge ? { edge } : nearest >= 0 ? { star: nearest } : {};
+  }
+  function clickAt(p, hit = hitTarget(p)) {
+    if (hit.star !== undefined) {
+      interact(hit.star);
       return;
+    }
+    if (hit.edge && edges.has(hit.edge)) {
+      edges.delete(hit.edge);
+      status.textContent = `连线已拆开 · 还剩 ${edges.size} 条`;
     } else {
       selected = -1;
       status.textContent = '点亮附近的星星，开始一幅新星图';
@@ -368,19 +402,29 @@
   canvas.addEventListener('pointerdown', (event) => {
     if (!width || !height || !event.isPrimary || event.button !== 0) return;
     pointer = pointerPoint(event);
-    gesture = { ...pointer, id: event.pointerId, moved: false };
+    gesture = {
+      ...pointer,
+      id: event.pointerId,
+      moved: false,
+      hit: hitTarget(pointer),
+      tolerance: event.pointerType === 'mouse' ? 8 : 14,
+    };
+    canvas.setPointerCapture(event.pointerId);
     request();
   });
   canvas.addEventListener('pointermove', (event) => {
     if (!width || !height || !event.isPrimary) return;
-    pointer = pointerPoint(event);
-    if (gesture && Math.hypot(pointer.x - gesture.x, pointer.y - gesture.y) > 8)
+    const next = pointerPoint(event);
+    if (!pointer || Math.hypot(next.x - pointer.x, next.y - pointer.y) > 0.5)
+      pointerMovedAt = performance.now();
+    pointer = next;
+    if (gesture && Math.hypot(pointer.x - gesture.x, pointer.y - gesture.y) > gesture.tolerance)
       gesture.moved = true;
     request();
   });
   canvas.addEventListener('pointerup', (event) => {
     if (gesture?.id === event.pointerId) {
-      if (!gesture.moved) clickAt(pointerPoint(event));
+      if (!gesture.moved) clickAt(pointerPoint(event), gesture.hit);
       gesture = null;
     }
     if (event.pointerType !== 'mouse') pointer = null;
@@ -445,14 +489,26 @@
     request();
   }
   $('welcomeClear').onclick = clear;
-  $('welcomeMeteor').onclick = () => {
-    if (meteors.length < 3)
+  function spawnMeteors(now, count) {
+    for (let i = 0; i < count && meteors.length < 10; i++) {
+      const leftward = random() < 0.3;
       meteors.push({
-        u: 0.08 + random() * 0.5,
-        v: 0.06 + random() * 0.55,
-        born: performance.now(),
+        u: leftward ? 0.65 + random() * 0.3 : 0.05 + random() * 0.6,
+        v: 0.04 + random() * 0.6,
+        angle: leftward ? Math.PI - (0.2 + random() * 0.8) : 0.2 + random() * 0.9,
+        speed: 0.6 + random() * 0.65,
+        tail: 28 + random() * 75,
+        weight: 0.8 + random() * 1.3,
+        color: ['#e7d6ae', '#d6e5f4', '#f2e9dc'][Math.floor(random() * 3)],
+        brightness: 0.5 + random() * 0.5,
+        life: 1000 + random() * 800,
+        born: now + i * 180,
       });
-    status.textContent = reducedMotion.matches ? '一颗亮星出现在星空中' : '一颗流星划过整片星空';
+    }
+  }
+  $('welcomeMeteor').onclick = () => {
+    spawnMeteors(performance.now(), reducedMotion.matches ? 1 : 4);
+    status.textContent = reducedMotion.matches ? '一颗亮星出现在星空中' : '几颗流星正划过星空';
     request();
   };
   document.querySelectorAll('[data-sky-mode]').forEach((button) =>
@@ -469,6 +525,7 @@
   );
   document.addEventListener('visibilitychange', () => {
     last = 0;
+    nextMeteor = 0;
     pointer = gesture = null;
     if (document.hidden && raf) {
       cancelAnimationFrame(raf);

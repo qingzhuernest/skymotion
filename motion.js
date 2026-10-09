@@ -78,10 +78,11 @@ function syncMotionTarget() {
         from: old,
         to: next,
         start: performance.now(),
-        duration: Math.min(
-          280,
-          800 / (next.body === 'moon' ? state.daysRate : state.solarDateRate),
-        ),
+        duration:
+          next.body === 'moon' && state.playing && !state.moonDayPlayback
+            ? 1000 / state.daysRate
+            : Math.min(280, 800 / (next.body === 'moon' ? state.daysRate : state.solarDateRate)),
+        linear: next.body === 'moon' && state.playing && !state.moonDayPlayback,
         positions: new Map(),
         previousDay: lunarCache.get(
           [body, old.date, old.lat.toFixed(4), old.lon.toFixed(4)].join(':'),
@@ -111,7 +112,7 @@ function syncMotionTarget() {
 function motionProgress() {
   if (!motionTransition) return 1;
   const t = clamp((motionFrameTime - motionTransition.start) / motionTransition.duration, 0, 1);
-  return t * t * (3 - 2 * t);
+  return motionTransition.linear ? t : t * t * (3 - 2 * t);
 }
 function mixDirection(a, b, f) {
   const x = a.x + (b.x - a.x) * f,

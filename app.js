@@ -1851,6 +1851,7 @@ initSundials();
 initSolarDate();
 initTimeWorkbench();
 initMotion();
+initPhaseInteraction();
 syncControls();
 new ResizeObserver(schedule).observe($('stage'));
 window.addEventListener('resize', schedule);

@@ -103,7 +103,9 @@ function renderTimeWorkbench() {
   const analemmaPage = document.body.dataset.page === 'analemma',
     clock = analemmaPage ? state.analemmaClock : state.time;
   $('workbenchClockLabel').textContent =
-    basis === 'date' ? '固定观测时刻 · 当地真太阳时' : '观测时刻 · 当地真太阳时';
+    basis === 'date' && !(moon && elementVisible($('phaseOrbit')))
+      ? '固定观测时刻 · 当地真太阳时'
+      : '观测时刻 · 当地真太阳时';
   $('workbenchClockText').textContent = hhmm(clock, true);
   const max = workbenchTimeMax();
   $('workbenchTime').max = max;
