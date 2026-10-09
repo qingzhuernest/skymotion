@@ -1568,19 +1568,24 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 .ui-parameters .globe-notes p {
   max-width: none;
 }
-.ui-shell :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options) {
+:is(.ui-shell, .ui-parameter-drawer)
+  :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options) {
   background: var(--md-surface-container);
 }
-.ui-shell :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options) button {
+:is(.ui-shell, .ui-parameter-drawer)
+  :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options)
+  button {
   color: var(--md-on-surface-variant);
 }
-.ui-shell :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options) button.active,
+:is(.ui-shell, .ui-parameter-drawer)
+  :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options)
+  button.active,
 .ui-shell .ui-viewbar button:is([aria-selected='true'], [aria-pressed='true']) {
   background: var(--md-primary);
   color: var(--md-on-primary);
   font-weight: 600;
 }
-.ui-shell
+:is(.ui-shell, .ui-parameter-drawer)
   :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options)
   button.active:hover,
 .ui-shell .ui-viewbar button:is([aria-selected='true'], [aria-pressed='true']):hover {
@@ -1639,7 +1644,7 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   padding: 6px;
 }
 /* Keep selected text and its background in sync throughout interaction. */
-.ui-shell
+:is(.ui-shell, .ui-parameter-drawer)
   :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options, .ui-viewbar)
   button {
   transition:
@@ -1653,7 +1658,7 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 .page-nav .ui-solar-shortcuts[hidden] {
   display: none;
 }
-.ui-shell :is(.context-view-switch, .globe-drag-options) {
+:is(.ui-shell, .ui-parameter-drawer) :is(.context-view-switch, .globe-drag-options) {
   display: inline-flex;
   align-items: stretch;
   gap: 6px;
@@ -1665,17 +1670,17 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   max-width: 100%;
   box-sizing: border-box;
 }
-.ui-shell :is(.context-view-switch, .globe-drag-options) button {
+:is(.ui-shell, .ui-parameter-drawer) :is(.context-view-switch, .globe-drag-options) button {
   border-radius: 999px;
   min-height: 36px;
   padding: 7px 10px;
   line-height: 1.5;
-  white-space: normal;
+  white-space: nowrap;
   flex: 1;
   min-width: 0;
   background: var(--md-surface-container);
 }
-.ui-shell :is(.context-view-switch, .globe-drag-options) button.active {
+:is(.ui-shell, .ui-parameter-drawer) :is(.context-view-switch, .globe-drag-options) button.active {
   background: var(--md-primary);
   color: var(--md-on-primary);
 }
