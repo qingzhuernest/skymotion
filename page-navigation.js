@@ -186,7 +186,7 @@ function renderUIWorkspace() {
   const shell = document.createElement('main');
   shell.className = 'ui-shell';
   shell.innerHTML =
-    '<div class="ui-heading"><div><h1></h1><span id="uiPlaceText"></span></div><div class="ui-body-host"></div><button id="uiParametersButton" type="button">实验参数 ↓</button></div><div class="ui-grid"><section class="ui-visual" aria-label="实验图形"><div class="ui-viewbar"></div><div class="ui-plot"></div></section><aside class="ui-parameters" aria-label="实验参数"><h2>实验参数</h2></aside><div class="ui-timeline-host"></div></div>';
+    '<div class="ui-heading"><div><h1></h1><span id="uiPlaceText"></span></div><div class="ui-body-host"></div><button id="uiParametersButton" type="button" aria-haspopup="dialog" aria-controls="uiParameterDrawer" aria-expanded="false" aria-label="打开实验参数菜单"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16M8 4v4M16 10v4M10 16v4" /></svg><span>参数</span></button></div><div class="ui-grid"><section class="ui-visual" aria-label="实验图形"><div class="ui-viewbar"></div><div class="ui-plot"></div></section><aside class="ui-parameters" aria-label="实验参数"><h2>实验参数</h2></aside><div class="ui-timeline-host"></div></div>';
   const original = $('labShell').querySelector('main');
   $('labShell').querySelector('header').hidden = true;
   original.hidden = true;
@@ -201,10 +201,6 @@ function renderUIWorkspace() {
   const bodySwitch = document.querySelector('.body-switch');
   shell.querySelector('.ui-body-host').append(bodySwitch);
   if (['analemma', 'sundial'].includes(page)) shell.querySelector('.ui-body-host').hidden = true;
-  $('uiParametersButton').onclick = () => {
-    rail.scrollTop = 0;
-    rail.focus({ preventScroll: true });
-  };
   rail.tabIndex = -1;
   function addPlace() {
     const label = document.createElement('label');
@@ -519,6 +515,128 @@ function renderUIWorkspace() {
       window.addEventListener('popstate', restoreDiagram);
     }
   }
+  // A native modal supplies focus trapping and keeps the covered laboratory inert.
+  // The same parameter nodes move between the desktop rail and the mobile drawer.
+  const drawerMedia = matchMedia('(max-width:1024px), (pointer:coarse) and (max-width:1366px)'),
+    drawerHome = document.createComment('desktop parameter rail'),
+    drawer = document.createElement('dialog'),
+    parameterButton = $('uiParametersButton');
+  rail.before(drawerHome);
+  drawer.id = 'uiParameterDrawer';
+  drawer.className = 'ui-parameter-drawer';
+  drawer.setAttribute('aria-labelledby', 'uiDrawerTitle');
+  drawer.innerHTML =
+    '<header class="ui-drawer-header"><div><span>实验参数</span><h2 id="uiDrawerTitle"></h2></div><button type="button" id="uiDrawerClose" aria-label="关闭参数菜单"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button></header>';
+  document.body.append(drawer);
+  let drawerAnimation = null,
+    drawerClosing = false,
+    drawerReturnFocus = null;
+  const lowMotion = matchMedia('(prefers-reduced-motion:reduce)');
+  function animateDrawer(frames, duration) {
+    drawerAnimation?.cancel();
+    drawerAnimation = lowMotion.matches
+      ? null
+      : drawer.animate(frames, { duration, easing: 'cubic-bezier(.2,0,0,1)' });
+    return drawerAnimation?.finished.catch(() => {}) || Promise.resolve();
+  }
+  function finishDrawerClose(restoreFocus = true) {
+    drawerAnimation?.cancel();
+    drawer.style.transform = '';
+    if (drawer.open) drawer.close();
+    drawerClosing = false;
+    parameterButton.setAttribute('aria-expanded', 'false');
+    if (restoreFocus && drawerMedia.matches && drawerReturnFocus?.isConnected)
+      drawerReturnFocus.focus({ preventScroll: true });
+  }
+  function closeParameters(immediate = false) {
+    if (!drawer.open || drawerClosing) return;
+    if (immediate) {
+      finishDrawerClose(false);
+      return;
+    }
+    drawerClosing = true;
+    animateDrawer(
+      [
+        { transform: drawer.style.transform || 'translateX(0)' },
+        { transform: 'translateX(-100%)' },
+      ],
+      180,
+    ).then(() => finishDrawerClose());
+  }
+  function openParameters() {
+    if (!drawerMedia.matches) {
+      rail.focus({ preventScroll: true });
+      return;
+    }
+    if (drawer.open) return;
+    stop();
+    schedule();
+    drawerReturnFocus = document.activeElement;
+    $('uiDrawerTitle').textContent = title.textContent;
+    drawer.showModal();
+    parameterButton.setAttribute('aria-expanded', 'true');
+    animateDrawer([{ transform: 'translateX(-100%)' }, { transform: 'translateX(0)' }], 220);
+    $('uiDrawerClose').focus({ preventScroll: true });
+  }
+  parameterButton.onclick = openParameters;
+  $('settingsBtn').onclick = openParameters;
+  $('uiDrawerClose').onclick = () => closeParameters();
+  drawer.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    closeParameters();
+  });
+  drawer.addEventListener('click', (event) => {
+    if (event.target !== drawer) return;
+    const r = drawer.getBoundingClientRect();
+    if (
+      event.clientX < r.left ||
+      event.clientX > r.right ||
+      event.clientY < r.top ||
+      event.clientY > r.bottom
+    )
+      closeParameters();
+  });
+  drawer.addEventListener('close', () => {
+    parameterButton.setAttribute('aria-expanded', 'false');
+    schedule();
+  });
+  // Swipe only the header: slider drags and vertical parameter scrolling stay independent.
+  const drawerHeader = drawer.querySelector('.ui-drawer-header');
+  let swipe = null;
+  drawerHeader.addEventListener('pointerdown', (event) => {
+    if (event.target.closest('button') || drawerClosing || event.button !== 0) return;
+    drawerAnimation?.cancel();
+    swipe = { id: event.pointerId, x: event.clientX, y: event.clientY, dx: 0, dy: 0 };
+    drawerHeader.setPointerCapture(event.pointerId);
+  });
+  drawerHeader.addEventListener('pointermove', (event) => {
+    if (!swipe || event.pointerId !== swipe.id) return;
+    swipe.dx = event.clientX - swipe.x;
+    swipe.dy = event.clientY - swipe.y;
+    if (Math.abs(swipe.dx) > Math.abs(swipe.dy) * 1.5)
+      drawer.style.transform = `translateX(${Math.min(0, swipe.dx)}px)`;
+  });
+  function endDrawerSwipe(event) {
+    if (!swipe || event.pointerId !== swipe.id) return;
+    const shouldClose = event.type === 'pointerup' && swipe.dx < -65 && Math.abs(swipe.dy) < 40;
+    swipe = null;
+    if (shouldClose) closeParameters();
+    else {
+      const from = drawer.style.transform || 'translateX(0)';
+      drawer.style.transform = '';
+      animateDrawer([{ transform: from }, { transform: 'translateX(0)' }], 150);
+    }
+  }
+  for (const event of ['pointerup', 'pointercancel', 'lostpointercapture'])
+    drawerHeader.addEventListener(event, endDrawerSwipe);
+  function updateParameterPresentation() {
+    finishDrawerClose(false);
+    if (drawerMedia.matches) drawer.append(rail);
+    else drawerHome.after(rail);
+    schedule();
+  }
+  drawerMedia.addEventListener('change', updateParameterPresentation);
+  updateParameterPresentation();
   syncControls();
   render();
   new ResizeObserver(() => {
