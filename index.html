@@ -27,6 +27,11 @@
   </head>
   <body data-page="welcome" class="welcome-open">
     <section id="welcome" class="welcome-screen" aria-labelledby="welcomeTitle">
+      <canvas
+        id="welcomeSky"
+        tabindex="0"
+        aria-label="互动星空：移动鼠标或划过星星使它们散开、碰撞；点击两颗星连线，再次连接可拆线；方向键选星，空格操作，Escape 清空"
+      ></canvas>
       <div class="welcome-brand">
         <span aria-hidden="true">☀</span>
         <div>天体视运动实验室<small>SKY MOTION LAB</small></div>
@@ -35,30 +40,27 @@
         <div class="welcome-intro">
           <span class="welcome-kicker">从一片星空开始</span>
           <h1 id="welcomeTitle">你好，<br />天空探索者。</h1>
-          <p>看看星星，连一幅自己的星图。<br />准备好后，去探索太阳、月相与季节。</p>
+          <p>划过星海，连一幅自己的星图。<br />准备好后，去探索太阳、月相与季节。</p>
           <a id="enterLab" class="welcome-enter" href="lab.html"
             >进入实验台 <span aria-hidden="true">✦</span></a
           ><span class="welcome-entry-note">无需插件，直接开始观察</span>
           <p class="welcome-quote">世界上存在着，唯有不断前行才能传达的事物</p>
         </div>
         <div class="welcome-toy">
-          <div class="welcome-toy-head">
-            <span><i aria-hidden="true"></i>你的星空</span><span>点击星星，连成一幅图</span>
-          </div>
-          <canvas
-            id="welcomeSky"
-            tabindex="0"
-            aria-label="互动星空：点击星星连线；方向键选择星星，空格连接，Escape 清空"
-          ></canvas>
-          <div class="welcome-toy-tools">
-            <span id="welcomeStarStatus" role="status" aria-live="polite">先点亮第一颗星</span>
-            <div>
-              <button id="welcomeMeteor">划过一颗流星</button
-              ><button id="welcomeClear">清空连线</button>
+          <p class="welcome-play-guide">
+            划过星星，让它们散开与碰撞。<span>点两颗星连线，再连一次可拆开。</span>
+          </p>
+          <div class="welcome-sky-actions">
+            <div class="welcome-sky-modes" role="group" aria-label="星空互动方式">
+              <button type="button" data-sky-mode="connect" aria-pressed="true">连线</button>
+              <button type="button" data-sky-mode="separate" aria-pressed="false">分开</button>
             </div>
+            <button type="button" id="welcomeMeteor">一颗流星</button>
+            <button type="button" id="welcomeClear">清空连线</button>
           </div>
+          <p id="welcomeStarStatus" role="status" aria-live="polite">整片星空都可以互动</p>
           <p class="welcome-toy-note">
-            这是可以自由玩耍的星空，不对应真实星座。方向键选星，空格连线。
+            自由星空，不对应真实星座。<span>方向键选星 · 空格操作</span>
           </p>
         </div>
       </div>
