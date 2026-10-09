@@ -40,24 +40,23 @@
         <div class="welcome-intro">
           <span class="welcome-kicker">从一片星空开始</span>
           <h1 id="welcomeTitle">你好，天空探索者。</h1>
-          <p>划过星海，连一幅自己的星图。准备好后，去探索太阳、月相与季节。</p>
+          <p>探索太阳、月相与季节。</p>
           <a id="enterLab" class="welcome-enter" href="lab.html"
             >进入实验台 <span aria-hidden="true">✦</span></a
-          ><span class="welcome-entry-note">无需插件，直接开始观察</span>
-          <p class="welcome-quote">世界上存在着，唯有不断前行才能传达的事物</p>
+          >
         </div>
         <div class="welcome-toy">
-          <p class="welcome-play-guide">划过散开 · 点两颗连线 · 再连一次拆开</p>
           <div class="welcome-sky-actions">
-            <div class="welcome-sky-modes" role="group" aria-label="星空互动方式">
-              <button type="button" data-sky-mode="connect" aria-pressed="true">连线</button>
-              <button type="button" data-sky-mode="separate" aria-pressed="false">分开</button>
-            </div>
+            <button
+              type="button"
+              id="welcomeConnect"
+              aria-label="连线：点两颗星连接，有连线后可清空"
+            >
+              连线
+            </button>
             <button type="button" id="welcomeMeteor">流星</button>
-            <button type="button" id="welcomeClear">清空连线</button>
           </div>
-          <p id="welcomeStarStatus" role="status" aria-live="polite">整片星空都可以互动</p>
-          <p class="welcome-toy-note">自由星空，非真实星图 · 方向键选星，空格操作</p>
+          <p id="welcomeStarStatus" role="status" aria-live="polite"></p>
         </div>
       </div>
       <div class="welcome-footer">
@@ -70,6 +69,7 @@
           >
         </div>
       </div>
+      <p class="welcome-quote">世界上存在着，唯有不断前行才能传达的事物</p>
     </section>
     <script>
       const $ = (id) => document.getElementById(id),

@@ -22,7 +22,6 @@
     pointerMovedAt = 0,
     nextMeteor = 0;
   let selected = -1,
-    mode = 'connect',
     pointer = null,
     gesture = null,
     seed = 431;
@@ -317,20 +316,7 @@
   }
   function interact(i) {
     const p = point(stars[i]);
-    if (mode === 'separate') {
-      let removed = 0;
-      for (const [key, pair] of edges)
-        if (pair.includes(i)) {
-          edges.delete(key);
-          removed++;
-        }
-      selected = -1;
-      status.textContent = removed ? `已拆开 ${removed} 条连线` : '星星散开了，再试试有连线的星';
-      if (!reducedMotion.matches) {
-        stars[i].vx += (random() - 0.5) * 80;
-        stars[i].vy += (random() - 0.5) * 80;
-      }
-    } else if (selected < 0) {
+    if (selected < 0) {
       selected = i;
       status.textContent = '这颗星亮了，再点另一颗连线';
     } else if (selected === i) {
@@ -347,6 +333,7 @@
       }
       selected = i;
     }
+    syncConnectButton();
     pulse(p.x, p.y, '#ffdf9c');
     request();
   }
@@ -392,6 +379,7 @@
       selected = -1;
       status.textContent = '点亮附近的星星，开始一幅新星图';
     }
+    syncConnectButton();
     pulse(p.x, p.y);
     request();
   }
@@ -486,9 +474,26 @@
     sparks.length = 0;
     selected = keyboardStar = -1;
     status.textContent = '连线已清空，星空还在，重新开始吧';
+    syncConnectButton();
     request();
   }
-  $('welcomeClear').onclick = clear;
+  // One control introduces connecting, then becomes clear once the graph has edges.
+  function syncConnectButton() {
+    const button = $('welcomeConnect');
+    button.textContent = edges.size ? '清空连线' : '连线';
+    button.setAttribute(
+      'aria-label',
+      edges.size ? `清空全部 ${edges.size} 条连线` : '连线：点两颗星连接',
+    );
+  }
+  $('welcomeConnect').onclick = () => {
+    if (edges.size) clear();
+    else {
+      selected = -1;
+      status.textContent = '';
+      request();
+    }
+  };
   function spawnMeteors(now, count) {
     for (let i = 0; i < count && meteors.length < 10; i++) {
       const leftward = random() < 0.3;
@@ -511,18 +516,6 @@
     status.textContent = reducedMotion.matches ? '一颗亮星出现在星空中' : '几颗流星正划过星空';
     request();
   };
-  document.querySelectorAll('[data-sky-mode]').forEach((button) =>
-    button.addEventListener('click', () => {
-      mode = button.dataset.skyMode;
-      selected = -1;
-      document
-        .querySelectorAll('[data-sky-mode]')
-        .forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-      status.textContent =
-        mode === 'connect' ? '点两颗星连线，再连一次可拆开' : '点有连线的星星或线段，让它们分开';
-      request();
-    }),
-  );
   document.addEventListener('visibilitychange', () => {
     last = 0;
     nextMeteor = 0;

@@ -2300,10 +2300,11 @@ body[data-page='welcome'] .welcome-intro > p {
   margin-bottom: 24px;
 }
 body[data-page='welcome'] .welcome-enter {
+  border-radius: 14px;
   min-height: 52px;
-  width: auto;
-  padding: 13px 26px;
-  gap: 28px;
+  width: 180px;
+  padding: 13px 18px;
+  gap: 20px;
   font-size: 15px;
   background: #f0d6a5;
   color: #253044;
@@ -2318,12 +2319,26 @@ body[data-page='welcome'] .welcome-entry-note {
   font-size: 11px;
   margin: 12px 0 0;
 }
-body[data-page='welcome'] .welcome-intro .welcome-quote {
-  max-width: 420px;
-  font-size: 12px;
-  line-height: 1.9;
-  margin: 24px 0 0;
-  color: #bdc2cb;
+/* A small locally hosted handwritten subset keeps the closing line light. */
+@font-face {
+  font-family: 'Welcome Hand';
+  src: url('fonts/welcome-hand.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+body[data-page='welcome'] .welcome-quote {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  font-family: 'Welcome Hand', 'Kaiti SC', KaiTi, cursive;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  margin: 12px 0 0;
+  text-align: center;
+  color: #d8c7aa;
   text-wrap: balance;
 }
 body[data-page='welcome'] .welcome-toy {
@@ -2360,7 +2375,7 @@ body[data-page='welcome'] .welcome-toy {
 .welcome-sky-actions button {
   min-height: 36px;
   padding: 6px 12px;
-  border-radius: 999px;
+  border-radius: 14px;
   border: 1px solid #b8c5d329;
   background: #192637c4;
   color: #dce5f1;
@@ -2399,18 +2414,19 @@ body[data-page='welcome'] .welcome-footer {
   font-size: 11px;
 }
 body[data-page='welcome'] .welcome-corner-links {
-  width: min(510px, 100%);
-  gap: 6px;
+  grid-template-columns: minmax(0, 1fr);
+  width: 180px;
+  gap: 4px;
 }
 body[data-page='welcome'] .welcome-corner-links > a,
 body[data-page='welcome'] .welcome-corner-links > a:visited {
-  min-height: 36px;
-  padding: 5px 8px;
-  border-radius: 12px;
+  min-height: 26px;
+  padding: 3px 9px;
+  border-radius: 14px;
   background: #101b2b80;
   color: #d3ddea;
   border-color: #b8c5d329;
-  font-size: 11px !important;
+  font-size: 10px !important;
 }
 body[data-page='welcome'] .welcome-corner-links > a:hover {
   background: #29364b;
@@ -2448,11 +2464,6 @@ body[data-page='welcome'] .welcome-corner-links > a:hover {
     font-size: 13px;
     margin-bottom: 22px;
   }
-  body[data-page='welcome'] .welcome-intro .welcome-quote {
-    max-width: 290px;
-    font-size: 11px;
-    margin-top: 22px;
-  }
   body[data-page='welcome'] .welcome-toy {
     align-self: flex-end;
   }
@@ -2461,13 +2472,13 @@ body[data-page='welcome'] .welcome-corner-links > a:hover {
     margin-left: 0;
   }
   body[data-page='welcome'] .welcome-footer {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: 12px;
   }
   body[data-page='welcome'] .welcome-corner-links {
-    margin: 0;
-    width: 100%;
+    margin-left: auto;
+    width: 180px;
   }
 }
 @media (max-width: 360px) {
@@ -2516,9 +2527,6 @@ body[data-page='welcome'] .welcome-corner-links > a:hover {
   body[data-page='welcome'] .welcome-entry-note {
     margin-top: 8px;
   }
-  body[data-page='welcome'] .welcome-intro .welcome-quote {
-    margin-top: 12px;
-  }
   body[data-page='welcome'] #welcomeStarStatus {
     margin-top: 8px;
     min-height: 18px;
@@ -2548,15 +2556,12 @@ body[data-page='welcome'] .welcome-corner-links > a:hover {
   body[data-page='welcome'] .welcome-entry-note {
     display: none;
   }
-  body[data-page='welcome'] .welcome-intro .welcome-quote {
-    margin: 12px 0 0;
-  }
   body[data-page='welcome'] .welcome-footer {
     flex-direction: row;
     align-items: center;
   }
   body[data-page='welcome'] .welcome-corner-links {
-    width: min(510px, 72%);
+    width: 180px;
     margin-left: auto;
   }
 }
@@ -2627,7 +2632,7 @@ body[data-page='welcome'] .welcome-corner-links > a:hover {
   flex-direction: column;
   align-items: stretch;
   flex-wrap: nowrap;
-  width: 86px;
+  width: 180px;
   margin-left: auto;
   gap: 6px;
 }
@@ -2654,9 +2659,6 @@ body[data-page='welcome'] .welcome-corner-links > a:hover {
   }
   body[data-page='welcome'] .welcome-intro > p {
     margin-bottom: 8px;
-  }
-  body[data-page='welcome'] .welcome-intro .welcome-quote {
-    margin-top: 8px;
   }
   body[data-page='welcome'] .welcome-play-guide {
     margin-bottom: 6px;
