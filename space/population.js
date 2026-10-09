@@ -100,14 +100,27 @@
 
   function create(THREE, renderer, Model, Engine, invalidate) {
     const group = new THREE.Group();
+    // Small bodies are visibility markers, not discs scaled to their physical radii.
+    // A soft circular sprite avoids the default square pixels overwhelming planets.
+    const sprite = document.createElement('canvas');
+    sprite.width = sprite.height = 64;
+    const context = sprite.getContext('2d');
+    const edge = context.createRadialGradient(32, 32, 0, 32, 32, 32);
+    edge.addColorStop(0, 'rgba(255,255,255,1)');
+    edge.addColorStop(0.45, 'rgba(255,255,255,0.85)');
+    edge.addColorStop(1, 'rgba(255,255,255,0)');
+    context.fillStyle = edge;
+    context.fillRect(0, 0, 64, 64);
+    const pointTexture = new THREE.CanvasTexture(sprite);
     const satellites = new THREE.Points(
       new THREE.BufferGeometry(),
       new THREE.PointsMaterial({
         color: 0xd9e4ed,
-        size: 2.4,
+        map: pointTexture,
+        size: 1.6,
         sizeAttenuation: false,
         transparent: true,
-        opacity: 0.85,
+        opacity: 0.7,
         depthWrite: false,
       }),
     );
@@ -115,7 +128,8 @@
       new THREE.BufferGeometry(),
       new THREE.PointsMaterial({
         color: 0xb6a590,
-        size: 1.45,
+        map: pointTexture,
+        size: 1.2,
         sizeAttenuation: false,
         transparent: true,
         opacity: 0.6,
@@ -126,7 +140,8 @@
       new THREE.BufferGeometry(),
       new THREE.PointsMaterial({
         color: 0xb7ddeb,
-        size: 3,
+        map: pointTexture,
+        size: 2.2,
         sizeAttenuation: false,
         transparent: true,
         opacity: 0.9,
