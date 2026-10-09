@@ -404,7 +404,7 @@ python3 -m http.server 8000
 
 ### 原图解与三维的同步桥
 
-`space/lab-compare.js`只在关联图解页运行，保留原uiWorkspace.plot与画布节点，新增“三维对照”布局开关。开启时才创建space/?embed=1的iframe，关闭即删除其浏览上下文。embed.css隐藏三维页自己的导航、菜单和时间条；原图解保留唯一时间工作台。宽屏双列，较高的手机竖屏上下排列，短屏双列；两个画面与时间条各自占位。
+`space/lab-compare.js`只在关联图解页运行，保留原uiWorkspace.plot与画布节点，新增“三维对照”布局开关。开启时才创建space/?embed=1的iframe，关闭即删除其浏览上下文。embed.css隐藏三维页自己的导航、菜单和时间条；原图解保留唯一时间工作台。宽屏双列，较高的手机竖屏上下排列，短屏双列；极矮横屏将日历与滑条排成同一行，保留图形高度。两个画面与时间条各自占位。
 
 app.js原render结束时调用可选的SolarSpaceLabCompare.sync。父页面用instantUTC(state.time,state.date,state.lon)把原当地真太阳时换算为实际UTC，发送日期与太阳系/日地月模式；同一消息去重。两端验证消息来源与同源地址，子页面就绪后再同步；首次同步绘制前显示加载提示，避免闪现另一日期。SolarSpaceView.sync暂停子页面播放并直接应用UTC，只有首次同步或天体模式切换时重置总体视图，后续日期变化保留用户相机。三维不能写回原实验状态；1900/2100日期边界换算产生的相邻UTC日仍保留实际时刻。
 

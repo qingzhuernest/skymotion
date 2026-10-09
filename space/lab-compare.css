@@ -129,3 +129,53 @@ body[data-page='diagrams'] .ui-linked-menu-note {
     padding: 4px 6px;
   }
 }
+
+/* Very short landscape: one control row leaves room for both diagrams. */
+@media (max-height: 330px) and (min-width: 600px) {
+  body[data-page='diagrams'] {
+    --ui-nav-height: 36px;
+    --ui-gap: 6px;
+  }
+  body[data-page='diagrams'] .page-nav {
+    padding: 3px 10px;
+  }
+  body[data-page='diagrams'] .page-nav a {
+    min-height: 28px;
+    padding: 3px 10px;
+  }
+  body[data-page='diagrams'] .ui-heading,
+  body[data-page='diagrams'] #uiParametersButton {
+    min-height: 32px;
+    height: 32px;
+  }
+  body[data-page='diagrams'] .ui-heading #uiParametersButton {
+    padding: 4px 8px;
+  }
+  body[data-page='diagrams'] .ui-timeline-host .time-workbench {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    padding: 4px 8px;
+  }
+  body[data-page='diagrams'] .ui-timeline-host .workbench-calendar {
+    flex: none;
+  }
+  body[data-page='diagrams'] .ui-timeline-host .workbench-main {
+    margin: 0;
+  }
+  body[data-page='diagrams'] .ui-timeline-host .workbench-panel-head {
+    min-height: 22px;
+  }
+  body[data-page='diagrams'] .ui-timeline-host .workbench-panel-head output {
+    font-size: 16px;
+  }
+  body[data-page='diagrams'] .ui-timeline-host .time-workbench input[type='range'] {
+    height: 26px;
+  }
+  body[data-page='diagrams'] .ui-linked-scenes.is-linked > .ui-linked-note {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
