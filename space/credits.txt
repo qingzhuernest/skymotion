@@ -3,3 +3,5 @@ Astronomy Engine 2.1.19: Don Cross, MIT license retained in ../astronomy.js.
 Earth map from three.js examples: earth_atmos_2048.jpg.
 Source: https://github.com/mrdoob/three.js/tree/dev/examples/textures/planets
 Interface and solar-system application are original. Decorative star points and gas planet bands are procedural.
+
+Detailed planet appearance is generated locally: illustrative terrain, cloud bands, rings and granulation. These are original project textures, not current spacecraft images. See assets/credits.txt.

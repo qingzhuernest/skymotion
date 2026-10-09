@@ -1,0 +1,40 @@
+/* One workspace, one scientific clock; the companion is a projection, not a second lab. */
+body[data-page='space'] .space-scenes {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  background: #13283a;
+}
+body[data-page='space'] .space-scenes.is-comparing {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+}
+body[data-page='space'] .space-compare {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-left: 1px solid #607d9866;
+  background: #13283a;
+}
+body[data-page='space'] .space-compare-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+}
+body[data-page='space'] .space-scenes .stage {
+  min-width: 0;
+}
+@media (max-width: 620px) and (orientation: portrait) and (min-height: 700px) {
+  body[data-page='space'] .space-scenes.is-comparing {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  body[data-page='space'] .space-compare {
+    border-left: 0;
+    border-top: 1px solid #607d9866;
+  }
+  body[data-page='space'] .space-scenes.is-comparing .stage-footer {
+    display: none;
+  }
+}

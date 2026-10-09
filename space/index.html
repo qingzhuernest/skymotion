@@ -12,8 +12,11 @@
     <link rel="icon" href="../favicon.svg" />
     <link rel="stylesheet" href="../pages.css" />
     <link rel="stylesheet" href="space.css" />
+    <link rel="stylesheet" href="compare.css" />
+    <link rel="stylesheet" href="embed.css" />
   </head>
   <body data-page="space">
+    <script src="embed.js"></script>
     <nav class="page-nav" aria-label="页面导航">
       <a href="../index.html">欢迎页</a><a href="../lab.html">实验台</a
       ><a href="../guide.html#space">学习指南</a><a href="../diagrams.html">关联图解</a
@@ -67,6 +70,37 @@
               ><label hidden>太阳平行光<input type="checkbox" id="parallelRays" checked /></label>
             </div>
           </section>
+          <section class="card" id="observerSettings" hidden>
+            <h2>本地天空的观察地点</h2>
+            <p class="info">地点只用于右侧天空图；两图共用下方 UTC 时刻，不改原实验台。</p>
+            <div class="observer-fields">
+              <label for="observerLat"
+                >纬度
+                <input
+                  id="observerLat"
+                  type="number"
+                  min="-90"
+                  max="90"
+                  step="0.1"
+                  value="39.9"
+                />°</label
+              >
+              <label for="observerLon"
+                >经度
+                <input
+                  id="observerLon"
+                  type="number"
+                  min="-180"
+                  max="180"
+                  step="0.1"
+                  value="116.4"
+                />°</label
+              >
+            </div>
+            <p class="info">
+              北纬、东经为正。天空位置含地平视差，未计大气折射；地平线下的天体也会注明。
+            </p>
+          </section>
           <details class="card">
             <summary>尺度与模型说明</summary>
             <p class="info">
@@ -74,26 +108,62 @@
               计算，轨道是星历采样的路径。日心距离采用幂函数压缩，球体大小另行放大；日地月视图单独放大地月距离。屏幕上的大小和距离不是实际比例。
             </p>
             <p class="info">
-              日地月视图的箭头指向远处太阳，照明使用平行光；外部相机所见月面不等同于地球观测月相。地心月面照明比例另用星历计算。纹理、自转与轴向为示意，不模拟日月食，也不计算本地升落。
+              日地月视图的箭头指向远处太阳，照明使用平行光；外部相机所见月面不等同于地球观测月相。地心月面照明比例另用星历计算。表面与云层纹理为外观示意，非当天影像；自转与轴向为示意，不模拟日月食，也不计算本地升落。
             </p>
             <p class="info">
               日期轴连续改变 UTC 时刻；日历选择定位当天12:00
               UTC。旋转和缩放只改变相机，不改变天体物理位置。此页面使用独立状态，返回实验台时保留原有观察设置。
             </p>
+            <p class="info">
+              “对照”共用同一 UTC
+              时刻：空间俯视是固定黄道平面的投影，本地天空是所选地点的方位与高度。二维图不会随三维相机旋转，便于分清空间运动和视运动。
+            </p>
             <a href="../project-guide.html#section-12">项目中的空间模型说明</a>
           </details>
         </aside>
       </div>
-      <section class="visual" aria-label="三维太阳系画面">
-        <div class="viewbar" role="group" aria-label="空间视图">
-          <button id="overview" class="active" type="button" aria-pressed="true">太阳系总览</button
-          ><button id="earthmoon" type="button" aria-pressed="false">日地月关系</button
-          ><button id="reset" type="button">复位视角</button>
+      <section class="visual" aria-label="太阳系三维与二维对照">
+        <div class="viewbar">
+          <div class="view-group" role="group" aria-label="观察对象">
+            <button id="overview" class="active" type="button" aria-pressed="true">太阳系</button>
+            <button id="earthmoon" type="button" aria-pressed="false">日地月</button>
+          </div>
+          <div class="view-group" role="group" aria-label="显示方式">
+            <button id="singleView" class="active" type="button" aria-pressed="true">三维</button>
+            <button id="compareView" type="button" aria-pressed="false">参照</button>
+            <a class="existing-compare-link" href="../diagrams.html?compare=1">原图对照</a>
+          </div>
         </div>
-        <div class="stage" id="stage">
-          <p class="stage-note" id="viewTitle">太阳系总览</p>
-          <p class="stage-hint">拖动旋转 · 双指缩放</p>
-          <div id="labels"></div>
+        <div class="space-scenes" id="spaceScenes">
+          <div class="stage" id="stage">
+            <p class="stage-note" id="viewTitle">太阳系总览</p>
+            <p class="stage-hint">拖动旋转 · 双指缩放</p>
+            <button
+              id="reset"
+              class="stage-reset"
+              type="button"
+              aria-label="复位三维视角"
+              title="复位三维视角"
+            >
+              ↺
+            </button>
+            <div id="labels"></div>
+          </div>
+          <section
+            class="companion space-compare"
+            id="companion"
+            aria-label="同一时刻的二维参照"
+            hidden
+          >
+            <div class="compare-tabs" role="group" aria-label="二维参照类型">
+              <button id="planeView" type="button" class="active" aria-pressed="true">
+                空间俯视
+              </button>
+              <button id="observerView" type="button" aria-pressed="false">本地天空</button>
+            </div>
+            <div class="compare-surface" id="planeHost"></div>
+            <div class="compare-surface observer-host" id="observerHost" hidden></div>
+          </section>
         </div>
         <div class="footer-note">
           <span>教学尺度 · 大小与距离分别缩放</span><span>纹理与轴向为示意</span>
@@ -142,6 +212,9 @@
     <script src="vendor/three.min.js"></script>
     <script src="../astronomy.js"></script>
     <script src="model.js"></script>
+    <script src="appearance.js"></script>
+    <script src="compare.js"></script>
+    <script src="observer.js"></script>
     <script src="scene.js"></script>
   </body>
 </html>

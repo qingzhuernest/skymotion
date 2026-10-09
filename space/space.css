@@ -557,3 +557,337 @@ body[data-page='space'] #spaceDrawerBody {
     font-size: 9px;
   }
 }
+
+/* View family and display arrangement are separate choices, without nested color containers. */
+body[data-page='space'] .viewbar {
+  justify-content: space-between;
+  align-items: center;
+}
+body[data-page='space'] .view-group {
+  display: flex;
+  gap: 5px;
+}
+body[data-page='space'] .view-group + .view-group {
+  padding-left: 10px;
+  border-left: 1px solid var(--space-line);
+}
+body[data-page='space'] .space-scenes {
+  flex: 1;
+}
+body[data-page='space'] .space-compare {
+  display: flex;
+  flex-direction: column;
+}
+body[data-page='space'] .compare-tabs {
+  display: flex;
+  gap: 5px;
+  padding: 5px 8px;
+  border-bottom: 1px solid #607d9855;
+  flex: none;
+}
+body[data-page='space'] .compare-tabs button {
+  min-height: 28px;
+  padding: 3px 9px;
+  font-size: 11px;
+  background: transparent;
+  border-color: transparent;
+  color: #b8c9df;
+}
+body[data-page='space'] .compare-tabs button.active {
+  background: #315da8;
+  color: white;
+}
+body[data-page='space'] .compare-surface {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+body[data-page='space'] .stage-reset {
+  position: absolute;
+  right: 10px;
+  top: 9px;
+  z-index: 4;
+  width: 32px;
+  min-height: 32px;
+  padding: 0;
+  color: #d9e8ff;
+  border-color: #6786ac66;
+  background: #101f33cc;
+  font-size: 21px;
+  line-height: 1;
+}
+body[data-page='space'] .stage-hint {
+  right: 52px;
+}
+body[data-page='space'] .is-comparing .stage-hint {
+  display: none;
+}
+body[data-page='space'] .observer-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+body[data-page='space'] .observer-fields label {
+  font-size: 11px;
+  color: #52647d;
+}
+body[data-page='space'] .observer-fields input {
+  width: calc(100% - 12px);
+  min-height: 34px;
+  border: 1px solid var(--space-line);
+  border-radius: 10px;
+  background: #f5f7fc;
+  color: #253448;
+  padding: 5px 7px;
+  margin-top: 4px;
+}
+@media (max-width: 620px) {
+  body[data-page='space'] .viewbar {
+    gap: 5px;
+  }
+  body[data-page='space'] .view-group {
+    gap: 3px;
+  }
+  body[data-page='space'] .view-group + .view-group {
+    padding-left: 5px;
+  }
+  body[data-page='space'] .compare-tabs {
+    padding: 3px 8px;
+  }
+}
+
+body[data-page='space'] .observer-host {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #13283a;
+}
+body[data-page='space'] canvas.observer-canvas {
+  position: static;
+  inset: auto;
+  width: 100%;
+  height: 0;
+  flex: 1;
+  min-height: 0;
+  touch-action: pan-y;
+}
+body[data-page='space'] .observer-readout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  padding: 5px 8px;
+  flex: none;
+  color: #dceaff;
+  font-size: 10px;
+  line-height: 1.4;
+}
+body[data-page='space'] .observer-body-readout :is(strong, span, small) {
+  display: block;
+}
+body[data-page='space'] .observer-body-readout strong {
+  color: #edf4ff;
+}
+body[data-page='space'] .observer-body-readout small {
+  color: #9eb5ce;
+  font-size: 9px;
+}
+body[data-page='space'] .observer-phase-readout {
+  grid-column: 1/-1;
+  font-size: 10px;
+  color: #cbdaf0;
+}
+body[data-page='space'] .observer-note {
+  font-size: 9px;
+  line-height: 1.4;
+  padding: 3px 8px 5px;
+  margin: 0;
+  flex: none;
+  color: #9eb5ce;
+}
+@media (max-width: 620px) {
+  body[data-page='space'] .observer-body-readout small {
+    display: none;
+  }
+}
+
+body[data-page='space'] .is-comparing .stage {
+  background: #13283a;
+}
+body[data-page='space'] .observer-readout button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  min-height: 0;
+  text-align: left;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+body[data-page='space'] .observer-host {
+  container-type: size;
+}
+@container (max-height: 190px) {
+  body[data-page='space'] .observer-note {
+    display: none;
+  }
+  body[data-page='space'] .observer-body-readout small {
+    display: none;
+  }
+  body[data-page='space'] .observer-readout {
+    font-size: 9px;
+    gap: 4px;
+    padding: 3px 5px;
+  }
+}
+
+body[data-page='space'] .compare-tabs button {
+  white-space: nowrap;
+  padding-inline: 6px;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+@container (max-width: 240px) {
+  body[data-page='space'] .observer-note {
+    display: none;
+  }
+  body[data-page='space'] .observer-readout {
+    padding: 4px 6px;
+    gap: 5px;
+  }
+}
+/* In very short windows, fold the title row into the toolbar instead of losing the plots. */
+@media (max-height: 330px) and (min-width: 600px) {
+  body[data-page='space'] {
+    --ui-nav-height: 36px;
+  }
+  body[data-page='space'] .page-nav {
+    padding: 2px 10px;
+  }
+  body[data-page='space'] .page-nav a {
+    min-height: 30px;
+    padding-block: 3px;
+    font-size: 11px;
+  }
+  body[data-page='space'] .space-shell {
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  body[data-page='space'] .head {
+    position: absolute;
+    top: 44px;
+    right: 17px;
+    z-index: 5;
+  }
+  body[data-page='space'] .head > div {
+    display: none;
+  }
+  body[data-page='space'] #spaceParameters {
+    min-height: 26px;
+    padding: 3px 8px;
+  }
+  body[data-page='space'] .visual {
+    grid-row: 1;
+  }
+  body[data-page='space'] .timeline {
+    grid-row: 2;
+    padding: 4px 10px;
+    gap: 0;
+  }
+  body[data-page='space'] .time-head {
+    height: 28px;
+  }
+  body[data-page='space'] .time-head output {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 12px;
+  }
+  body[data-page='space'] .timeline input[type='range'] {
+    height: 26px;
+  }
+  body[data-page='space'] .scale {
+    display: none;
+  }
+  body[data-page='space'] .viewbar {
+    padding: 4px 70px 4px 6px;
+  }
+  body[data-page='space'] .viewbar button {
+    min-height: 26px;
+    padding-block: 3px;
+  }
+  body[data-page='space'] .compare-tabs {
+    padding: 2px 6px;
+  }
+  body[data-page='space'] .compare-tabs button {
+    min-height: 24px;
+    padding-block: 2px;
+  }
+}
+@container (max-height: 120px) {
+  body[data-page='space'] .observer-readout {
+    padding: 2px 8px;
+    font-size: 9px;
+  }
+  body[data-page='space'] .observer-body-readout :is(strong, span) {
+    display: inline;
+  }
+  body[data-page='space'] .observer-body-readout strong {
+    margin-right: 5px;
+  }
+  body[data-page='space'] .observer-phase-readout {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 620px) and (max-height: 699px) {
+  body[data-page='space'] .compare-tabs button {
+    flex: 1;
+    font-size: 10px;
+  }
+}
+/* Hover feedback keeps light text on a dark surface. */
+body[data-page='space'] .focus:hover {
+  background: #244b8f;
+  color: #fff;
+}
+body[data-page='space'] .stage-reset:hover {
+  background: #244b8f;
+  color: #fff;
+}
+body[data-page='space'] .observer-readout button:hover {
+  background: #244b8f;
+}
+
+body[data-page='space'] .existing-compare-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 14px;
+  border: 0;
+  background: #eaf0fc;
+  color: #315da8;
+  font-size: 12px;
+  padding: 7px 12px;
+  min-height: 34px;
+  white-space: nowrap;
+}
+body[data-page='space'] .existing-compare-link:hover {
+  background: #dbe7fc;
+}
+@media (max-width: 900px),
+  (pointer: coarse) and (max-width: 1400px),
+  (max-height: 500px) and (max-width: 1100px) {
+  body[data-page='space'] .existing-compare-link {
+    font-size: 11px;
+    padding: 5px 8px;
+    min-height: 30px;
+  }
+}
+@media (max-height: 330px) and (min-width: 600px) {
+  body[data-page='space'] .existing-compare-link {
+    min-height: 26px;
+    padding-block: 3px;
+  }
+}

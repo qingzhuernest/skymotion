@@ -1,0 +1,21 @@
+PLANET APPEARANCE
+
+space/appearance.js generates original deterministic 1024 x 512 illustrative
+surface textures locally. No external assets or runtime texture service is used.
+Mercury and Moon: illustrative crater relief; Moon includes generic dark maria.
+Mars: illustrative iron-rich terrain and polar caps; not a measured Mars map.
+Venus: illustrative visible-light cloud palette; no visible surface features.
+Jupiter: illustrative cloud belts, turbulence and Great Red Spot appearance.
+Saturn: illustrative pale belts and radially textured rings with a dark division.
+Uranus / Neptune: muted blue-green atmospheric palettes with subtle cloud bands;
+these are visual illustrations, not calibrated multispectral spacecraft images.
+Sun: weak granular visual texture; not a solar observation or activity model.
+
+Earth reuses ../earth.jpg and its existing root credits. Latitude/longitude in
+generated textures do not identify real topography or current weather. Surface
+orientation, polar caps and Saturn ring tilt are not dated pole/rotation models.
+No texture participates in ephemerides, lunar illumination or geometric sunlight
+calculations. Sphere radii and positions are unchanged.
+
+Generated maps are original project material. Rendering uses the locally bundled
+Three.js under MIT; see ../vendor/THREE-LICENSE.txt.

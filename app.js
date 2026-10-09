@@ -1259,6 +1259,7 @@ function render() {
   renderTimeWorkbench();
   if (typeof renderUIWorkspace === 'function') renderUIWorkspace();
   drawMotionCanvases();
+  window.SolarSpaceLabCompare?.sync();
 }
 function schedule() {
   framePending = true;

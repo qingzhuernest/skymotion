@@ -1,0 +1,131 @@
+/* Preserve the original plot/canvas identities and its existing scientific controls. */
+@media (max-width: 1024px), (pointer: coarse) and (max-width: 1366px) {
+  body[data-page='diagrams'] .ui-heading {
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+  }
+}
+@media (max-width: 600px) and (min-height: 541px) {
+  body[data-page='diagrams'] .ui-heading {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 4px 6px;
+  }
+  body[data-page='diagrams'] .ui-heading > div:first-child {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  body[data-page='diagrams'] .ui-heading .ui-body-host {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+  }
+  body[data-page='diagrams'] .ui-heading .ui-linked-toggle {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  body[data-page='diagrams'] .ui-heading #uiParametersButton {
+    grid-column: 3;
+    grid-row: 2;
+    min-height: 32px;
+    padding: 5px 8px;
+    justify-self: end;
+  }
+}
+body[data-page='diagrams'] .ui-linked-toggle {
+  min-height: 32px;
+  flex-shrink: 0;
+  border: 1px solid #c6d5ed;
+  border-radius: 18px;
+  padding: 5px 12px;
+  font-size: 12px;
+  background: #eaf0fb;
+  color: #315da8;
+  touch-action: manipulation;
+}
+body[data-page='diagrams'] .ui-linked-toggle[aria-pressed='true'] {
+  background: #315da8;
+  color: #fff;
+  border-color: #315da8;
+}
+body[data-page='diagrams'] .ui-linked-toggle:disabled {
+  color: #596b80;
+  background: #edf1f7;
+  opacity: 0.72;
+}
+body[data-page='diagrams'] .ui-linked-scenes {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #132438;
+}
+body[data-page='diagrams'] .ui-linked-scenes > .ui-linked-note,
+body[data-page='diagrams'] .ui-linked-scenes > .ui-linked-space {
+  display: none;
+}
+body[data-page='diagrams'] .ui-linked-scenes.is-linked {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+}
+body[data-page='diagrams'] .ui-linked-scenes.is-linked > .ui-plot {
+  grid-column: 1;
+  grid-row: 2;
+}
+body[data-page='diagrams'] .ui-linked-scenes.is-linked > .ui-linked-note {
+  display: block;
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 5px 9px;
+  background: #132438;
+  color: #c9d8e8;
+  border-bottom: 1px solid #718ba355;
+  font-size: 11px;
+  line-height: 1.45;
+}
+body[data-page='diagrams'] .ui-linked-scenes.is-linked > .ui-linked-space {
+  display: block;
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  min-height: 0;
+  border-left: 1px solid #718ba366;
+  overflow: hidden;
+}
+body[data-page='diagrams'] .ui-linked-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #132438;
+}
+body[data-page='diagrams'] .ui-linked-menu-note {
+  margin: 10px 0 0;
+  padding: 8px 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #516681;
+}
+@media (max-width: 620px) and (min-height: 640px) and (orientation: portrait) {
+  body[data-page='diagrams'] .ui-linked-scenes.is-linked {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+  }
+  body[data-page='diagrams'] .ui-linked-scenes.is-linked > .ui-linked-space {
+    grid-column: 1;
+    grid-row: 3;
+    border-left: 0;
+    border-top: 1px solid #718ba366;
+  }
+}
+@media (max-width: 760px), (max-height: 540px) {
+  body[data-page='diagrams'] .ui-linked-toggle {
+    font-size: 10px;
+    padding: 4px 8px;
+    min-height: 28px;
+  }
+  body[data-page='diagrams'] .ui-linked-scenes.is-linked > .ui-linked-note {
+    font-size: 10px;
+    padding: 4px 6px;
+  }
+}

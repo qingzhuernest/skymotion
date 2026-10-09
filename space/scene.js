@@ -4,6 +4,8 @@
   const $ = (id) => document.getElementById(id);
   const stage = $('stage');
   const Model = SolarSpaceModel;
+  const embedded = window.spaceEmbedding?.enabled === true;
+  let linkedView = 'overview';
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -53,6 +55,65 @@
     (Date.UTC(year, initial.getUTCMonth(), initial.getUTCDate(), 12) - Date.UTC(year, 0, 1, 12)) /
     Model.DAY_MS;
   $('day').max = (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / Model.DAY_MS - 1;
+  let comparing = false;
+  let reference = 'plane';
+  const observer = { lat: 39.9, lon: 116.4 };
+  try {
+    const saved = JSON.parse(sessionStorage.getItem('skyLabSession') || 'null');
+    const source = saved?.[saved.body === 'moon' ? 'moon' : 'sun'];
+    if (Number.isFinite(source?.lat)) observer.lat = Math.max(-90, Math.min(90, source.lat));
+    if (Number.isFinite(source?.lon)) observer.lon = Math.max(-180, Math.min(180, source.lon));
+  } catch {}
+  $('observerLat').value = observer.lat;
+  $('observerLon').value = observer.lon;
+  const comparison = SolarSpaceCompare.create({ host: $('planeHost'), onSelect: select });
+  const observerDiagram = SolarSpaceObserver.create({ host: $('observerHost'), onSelect: select });
+  function comparisonLayout() {
+    $('spaceScenes').classList.toggle('is-comparing', comparing);
+    $('companion').hidden = !comparing;
+    $('planeHost').hidden = reference !== 'plane';
+    $('observerHost').hidden = reference !== 'observer';
+    $('observerSettings').hidden = !comparing || reference !== 'observer';
+    for (const [id, active] of [
+      ['singleView', !comparing],
+      ['compareView', comparing],
+      ['planeView', reference === 'plane'],
+      ['observerView', reference === 'observer'],
+    ]) {
+      $(id).classList.toggle('active', active);
+      $(id).setAttribute('aria-pressed', String(active));
+    }
+    resize();
+    invalidate();
+  }
+  $('singleView').onclick = () => {
+    comparing = false;
+    comparisonLayout();
+  };
+  $('compareView').onclick = () => {
+    comparing = true;
+    comparisonLayout();
+  };
+  $('planeView').onclick = () => {
+    reference = 'plane';
+    comparisonLayout();
+  };
+  $('observerView').onclick = () => {
+    reference = 'observer';
+    comparisonLayout();
+  };
+  for (const [id, key, limit] of [
+    ['observerLat', 'lat', 90],
+    ['observerLon', 'lon', 180],
+  ]) {
+    $(id).addEventListener('change', () => {
+      const value = Number($(id).value);
+      if ($(id).value.trim() && Number.isFinite(value))
+        observer[key] = Math.max(-limit, Math.min(limit, value));
+      $(id).value = observer[key];
+      invalidate();
+    });
+  }
   let playing = false;
   let selected = 2;
   let view = 'overview';
@@ -71,7 +132,6 @@
   const smoothTarget = new THREE.Vector3();
   const orbitGroup = new THREE.Group();
   scene.add(orbitGroup);
-  const loader = new THREE.TextureLoader();
 
   function invalidate() {
     if (handle === null && !document.hidden) handle = requestAnimationFrame(frame);
@@ -85,54 +145,26 @@
       new THREE.LineBasicMaterial({ color, transparent: true, opacity }),
     );
   }
-  function bands(base) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 256;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = base;
-    ctx.fillRect(0, 0, 512, 256);
-    for (let i = 0; i < 64; i++) {
-      const tone = Math.sin(i * 1.7) * 20;
-      ctx.fillStyle = `rgba(${tone > 0 ? '255,235,207' : '72,43,30'},${0.1 + Math.abs(tone) / 100})`;
-      ctx.fillRect(0, i * 4, 512, 3 + Math.sin(i) * 2);
-    }
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.colorSpace = THREE.SRGBColorSpace;
-    return texture;
-  }
   const leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   leaders.classList.add('label-leaders');
   stage.append(leaders);
   const planets = Model.bodies.map((spec, i) => {
-    const material = new THREE.MeshStandardMaterial({
-      color: spec.color,
-      roughness: 0.92,
-    });
-    if (spec.id === 'Earth') {
-      material.color.set(0xffffff);
-      material.map = loader.load('../earth.jpg', invalidate);
-      material.map.colorSpace = THREE.SRGBColorSpace;
-      material.map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-    }
-    if (spec.id === 'Jupiter' || spec.id === 'Saturn') {
-      material.color.set(0xffffff);
-      material.map = bands(spec.id === 'Jupiter' ? '#c2a388' : '#d5c193');
-    }
-    const mesh = new THREE.Mesh(new THREE.SphereGeometry(spec.size, 48, 32), material);
+    const appearance = SolarSpaceAppearance.create(spec, THREE, renderer, invalidate);
+    const mesh = new THREE.Mesh(appearance.geometry, appearance.material);
+    appearance.decorate?.(mesh);
     scene.add(mesh);
-    const orbit = line(
-      Model.orbitalPath(spec, utcDate()),
-      i === 2 ? 0x77b9e9 : 0x6383a6,
-      i === 2 ? 0.6 : 0.24,
-    );
+    const path = Model.orbitalPath(spec, utcDate());
+    const orbit = line(path, i === 2 ? 0x77b9e9 : 0x6383a6, i === 2 ? 0.6 : 0.24);
     orbitGroup.add(orbit);
     const label = document.createElement('button');
     label.className = 'label';
     label.textContent = spec.name;
-    label.onclick = () => select(i);
+    label.onclick = () => {
+      select(i);
+      if (embedded) focus(i);
+    };
     $('labels').append(label);
-    return { spec, mesh, orbit, label };
+    return { spec, mesh, orbit, label, path };
   });
   const picker = document.createElement('div');
   picker.className = 'planet-picker';
@@ -147,22 +179,8 @@
   document
     .querySelector('.side .card')
     .insertBefore(picker, document.querySelector('.side .card .kicker'));
-  const ring = new THREE.Mesh(
-    new THREE.RingGeometry(1.08, 1.85, 128),
-    new THREE.MeshStandardMaterial({
-      color: 0xbfac89,
-      transparent: true,
-      opacity: 0.72,
-      side: THREE.DoubleSide,
-      roughness: 1,
-    }),
-  );
-  ring.rotation.x = -Math.PI / 2 + 0.47;
-  planets[5].mesh.add(ring);
-  const sun = new THREE.Mesh(
-    new THREE.SphereGeometry(1.05, 48, 32),
-    new THREE.MeshBasicMaterial({ color: 0xffd489 }),
-  );
+  const solarAppearance = SolarSpaceAppearance.sun(THREE, renderer, 1.05);
+  const sun = new THREE.Mesh(solarAppearance.geometry, solarAppearance.material);
   scene.add(sun);
   const glowCanvas = document.createElement('canvas');
   glowCanvas.width = glowCanvas.height = 256;
@@ -184,10 +202,8 @@
   );
   sunGlow.scale.set(9, 9, 1);
   scene.add(sunGlow);
-  const moon = new THREE.Mesh(
-    new THREE.SphereGeometry(0.12, 32, 24),
-    new THREE.MeshStandardMaterial({ color: 0xc0bcb4, roughness: 1 }),
-  );
+  const lunarAppearance = SolarSpaceAppearance.moon(THREE, renderer, 0.12);
+  const moon = new THREE.Mesh(lunarAppearance.geometry, lunarAppearance.material);
   const lunarOrbit = line([], 0xa4bddb, 0.4);
   const solarArrow = new THREE.ArrowHelper(
     new THREE.Vector3(1, 0, 0),
@@ -270,11 +286,10 @@
   function focus(index) {
     selected = index;
     view = index === 2 ? 'earthmoon' : 'focus';
-    targetDistance =
-      index === 2 ? earthMoonDistance() : Math.max(2.8, Model.bodies[index].size * 6.5);
+    targetDistance = index === 2 ? earthMoonDistance() : planetDistance(index);
     $('viewTitle').textContent =
       index === 2 ? '日地月关系 · 箭头指向太阳' : Model.bodies[index].name + '特写 · 旋转视角';
-    $('overview').classList.remove('active');
+    $('overview').classList.toggle('active', index !== 2);
     $('earthmoon').classList.toggle('active', index === 2);
     invalidate();
   }
@@ -292,6 +307,13 @@
     invalidate();
   };
   $('reset').onclick = () => {
+    if (embedded) {
+      if (linkedView === 'earthmoon') focus(2);
+      else {
+        view = 'overview';
+        $('viewTitle').textContent = '太阳系总览 · 点击天体看近景';
+      }
+    }
     azimuth = -0.22;
     elevation = 0.85;
     targetDistance =
@@ -299,7 +321,7 @@
         ? overviewDistance()
         : view === 'earthmoon'
           ? earthMoonDistance()
-          : Math.max(2.8, Model.bodies[selected].size * 6.5);
+          : planetDistance(selected);
     invalidate();
   };
   $('play').onclick = () => {
@@ -454,6 +476,7 @@
       (physical.moonIllumination * 100).toFixed(1) +
       '%。箭头仅表示太阳方向，不表示太阳距离。';
   }
+  let lunarPoints = [];
   function lunarPath() {
     const date = utcDate();
     const points = [];
@@ -469,6 +492,7 @@
         ),
       );
     }
+    lunarPoints = points;
     lunarOrbit.geometry.dispose();
     lunarOrbit.geometry = new THREE.BufferGeometry().setFromPoints(points);
   }
@@ -507,8 +531,9 @@
     if (year !== orbitEpoch) {
       for (const p of planets) {
         p.orbit.geometry.dispose();
+        p.path = Model.orbitalPath(p.spec, utcDate());
         p.orbit.geometry = new THREE.BufferGeometry().setFromPoints(
-          Model.orbitalPath(p.spec, utcDate()).map((v) => new THREE.Vector3(v.x, v.y, v.z)),
+          p.path.map((v) => new THREE.Vector3(v.x, v.y, v.z)),
         );
       }
       orbitEpoch = year;
@@ -561,6 +586,9 @@
   function overviewDistance() {
     return Math.min(250, 90 / Math.min(1, camera.aspect));
   }
+  function planetDistance(index) {
+    return Math.max(2.8, Model.bodies[index].size * 6.5) / Math.min(1, camera.aspect);
+  }
   function earthMoonDistance() {
     return 9 / Math.min(1, camera.aspect);
   }
@@ -571,10 +599,14 @@
     renderer.setSize(width, height, false);
     const previousFit = overviewDistance();
     const previousMoonFit = earthMoonDistance();
+    const previousPlanetFit = planetDistance(selected);
     camera.aspect = width / height;
     if (view === 'overview') targetDistance *= overviewDistance() / previousFit;
     if (view === 'earthmoon') targetDistance *= earthMoonDistance() / previousMoonFit;
+    if (view === 'focus') targetDistance *= planetDistance(selected) / previousPlanetFit;
     camera.updateProjectionMatrix();
+    comparison.resize();
+    observerDiagram.resize();
     invalidate();
   }
   new ResizeObserver(resize).observe(stage);
@@ -621,6 +653,29 @@
     );
     camera.lookAt(smoothTarget);
     renderer.render(scene, camera);
+    if (comparing) {
+      if (reference === 'plane')
+        comparison.render({
+          snapshot: physical,
+          date: utcDate(),
+          view,
+          selected,
+          orbitPaths: planets.map((p) => p.path),
+          lunarPath: lunarPoints,
+          orbits: $('orbits').checked,
+          names: $('names').checked,
+          parallelRays: $('parallelRays').checked,
+        });
+      else
+        observerDiagram.render({
+          snapshot: physical,
+          date: utcDate(),
+          view,
+          selected,
+          observer,
+          names: $('names').checked,
+        });
+    }
     frames++;
     labelBounds = [];
     leaders.replaceChildren();
@@ -635,7 +690,7 @@
     $('dayText').textContent =
       date.toISOString().slice(0, 10) + ' · ' + date.toISOString().slice(11, 16);
     if (document.activeElement !== $('date')) $('date').value = date.toISOString().slice(0, 10);
-    $('overview').setAttribute('aria-pressed', String(view === 'overview'));
+    $('overview').setAttribute('aria-pressed', String(view !== 'earthmoon'));
     $('earthmoon').setAttribute('aria-pressed', String(view === 'earthmoon'));
     if (
       playing ||
@@ -665,5 +720,43 @@
     ephemeris: physical,
     glCalls: renderer.info.render.calls,
     exposure: renderer.toneMappingExposure,
+    comparing,
+    reference,
+    observer: { ...observer },
+    observerResult: reference === 'observer' ? observerDiagram.state() : null,
   });
+  // A read-only bridge: parent local apparent solar time is converted to UTC before arriving here.
+  let hasLinkedDate = false;
+  window.SolarSpaceView = {
+    sync(input) {
+      if (!embedded || typeof input?.date !== 'string') return false;
+      const date = new Date(input.date);
+      if (!Number.isFinite(date.getTime())) return false;
+      const nextView = input.view === 'earthmoon' ? 'earthmoon' : 'overview';
+      const changeView = !hasLinkedDate || linkedView !== nextView;
+      linkedView = nextView;
+      hasLinkedDate = true;
+      year = date.getUTCFullYear();
+      day = (date.getTime() - Date.UTC(year, 0, 1, 12)) / Model.DAY_MS;
+      $('day').max = (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / Model.DAY_MS - 1;
+      pause();
+      if (changeView) {
+        view = nextView;
+        azimuth = -0.22;
+        elevation = 0.85;
+        select(2);
+        if (view === 'overview') {
+          targetDistance = overviewDistance();
+          $('viewTitle').textContent = '太阳系总览 · 点击天体看近景';
+        }
+      }
+      invalidate();
+      return true;
+    },
+  };
+  if (embedded) {
+    $('reset').setAttribute('aria-label', '回到三维整体视图');
+    $('reset').title = '回到三维整体视图';
+    window.dispatchEvent(new Event('space:ready'));
+  }
 })();
