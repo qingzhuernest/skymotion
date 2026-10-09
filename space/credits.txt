@@ -7,3 +7,5 @@ Interface and solar-system application are original. Gas planet bands are proced
 Detailed planet appearance is generated locally: illustrative terrain, cloud bands, rings and granulation. These are original project textures, not current spacecraft images. See assets/credits.txt.
 
 Observation features: exploration.js samples existing Astronomy Engine vectors for selected-body history and actual distances. The fixed J2000 reference grid and atmosphere edge are illustrations, not new measurement data.
+
+Immersive satellite/small-body layer: local JPL mean elements / SBDB snapshot. Real nebula photographs: NASA Image and Video Library, with original contributor credits. See assets/population-credits.txt and assets/nebulae/catalog.json.

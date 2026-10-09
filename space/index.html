@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="exploration.css" />
     <link rel="stylesheet" href="embed.css" />
     <link rel="stylesheet" href="immersive.css" />
+    <link rel="stylesheet" href="population.css" />
   </head>
   <body data-page="space">
     <script src="embed.js"></script>
@@ -160,6 +161,7 @@
             >
               ↺
             </button>
+            <p class="nebula-hint" id="nebulaHint" hidden>星云背景：观测影像放大示意</p>
             <div id="labels"></div>
             <div class="inspection-readout" id="inspectionReadout" aria-label="当前天体真实读数">
               <strong id="inspectTitle">地球</strong>
@@ -207,6 +209,30 @@
                     id="referencePlane"
                     title="固定J2000黄道平面，并非当地地平面"
                 /></label>
+                <div class="population-tools">
+                  <span class="tools-heading">太阳系与深空细节</span>
+                  <label class="tools-check" for="satellitePoints"
+                    >行星卫星群<input type="checkbox" id="satellitePoints" checked
+                  /></label>
+                  <label class="tools-check" for="asteroidPoints"
+                    >主带小行星<input type="checkbox" id="asteroidPoints" checked
+                  /></label>
+                  <label class="tools-check" for="cometPoints"
+                    >周期彗星<input type="checkbox" id="cometPoints" checked
+                  /></label>
+                  <button id="satelliteView" type="button">观察所选行星卫星群</button>
+                  <label class="tools-check" for="nebulaBackground"
+                    >星云影像背景<input type="checkbox" id="nebulaBackground" checked
+                  /></label>
+                  <button id="nebulaPhotos" type="button" disabled>查看真实星云影像</button>
+                  <p class="tools-note" id="populationStatus">进入沉浸观察时加载本地小天体数据。</p>
+                  <p class="tools-note">
+                    卫星与小天体是无名称的放大点标记。除月球与木星四大卫星外，轨道用JPL平均要素作近似；覆盖当前轨道表，不代表全部新发现对象都有可用轨道。星云背景为放大观测影像，不是实际角直径或肉眼视场。<a
+                      href="assets/population-credits.txt"
+                      >数据与影像来源</a
+                    >
+                  </p>
+                </div>
                 <p class="tools-note" id="trailNote">
                   轨迹按UTC回溯，亮端为当前时刻；距离采用教学尺度。
                 </p>
@@ -272,6 +298,21 @@
       </header>
       <div id="spaceDrawerBody"></div>
     </dialog>
+    <dialog id="nebulaViewer" aria-labelledby="nebulaTitle">
+      <header class="nebula-header">
+        <h2 id="nebulaTitle">真实星云影像</h2>
+        <button id="nebulaClose" type="button" aria-label="关闭星云影像">×</button>
+      </header>
+      <select id="nebulaChoice" aria-label="选择星云影像"></select>
+      <figure class="nebula-photo"><img id="nebulaImage" alt="" /></figure>
+      <p class="nebula-caption">
+        星云远在太阳系之外；这里放大查看观测影像，不能据此判断实际角直径、距离或肉眼可见性。
+      </p>
+      <p class="nebula-caption">
+        <span id="nebulaCredit"></span>
+        <a id="nebulaSource" href="#" target="_blank" rel="noopener">NASA影像来源</a>
+      </p>
+    </dialog>
     <script src="ui.js"></script>
     <script src="vendor/three.min.js"></script>
     <script src="../astronomy.js"></script>
@@ -280,6 +321,8 @@
     <script src="exploration.js"></script>
     <script src="appearance.js"></script>
     <script src="stars.js"></script>
+    <script src="population.js"></script>
+    <script src="nebulae.js"></script>
     <script src="compare.js"></script>
     <script src="observer.js"></script>
     <script src="scene.js"></script>

@@ -126,6 +126,7 @@
   let playing = false;
   let selected = 2;
   let inspectingMoon = false;
+  let satelliteFraming = false;
   let cameraPreset = 'oblique';
   let view = 'overview';
   let azimuth = -0.22;
@@ -339,6 +340,22 @@
       : '恒星背景未加载；行星模型与时间控制仍可使用。';
   });
 
+  const population = SolarSpacePopulation.create(THREE, renderer, Model, Astronomy, invalidate);
+  const nebulae = SolarSpaceNebulae.create(THREE, Model, Astronomy, invalidate);
+  scene.add(population.group, nebulae.group);
+  for (const id of ['satellitePoints', 'asteroidPoints', 'cometPoints', 'nebulaBackground'])
+    $(id).onchange = invalidate;
+  window.addEventListener('space:layout', invalidate);
+  $('satelliteView').onclick = () => {
+    focus(selected);
+    if (selected !== 2) {
+      satelliteFraming = true;
+      targetDistance = planetDistance(selected);
+    }
+    $('sceneTools').open = false;
+    invalidate();
+  };
+
   function select(index) {
     inspectingMoon = false;
     selected = index;
@@ -372,6 +389,7 @@
     invalidate();
   }
   function focus(index) {
+    satelliteFraming = false;
     inspectingMoon = false;
     selected = index;
     view = index === 2 ? 'earthmoon' : 'focus';
@@ -384,6 +402,7 @@
     invalidate();
   }
   function focusMoon() {
+    satelliteFraming = false;
     select(2);
     view = 'earthmoon';
     inspectingMoon = true;
@@ -415,6 +434,7 @@
     focus(2);
   };
   $('overview').onclick = () => {
+    satelliteFraming = false;
     if (inspectingMoon) select(selected);
     view = 'overview';
     if (cameraPreset === 'oblique') elevation = obliqueElevation();
@@ -694,6 +714,18 @@
       }
       orbitEpoch = year;
     }
+    population.update({
+      date: utcDate(),
+      view,
+      selected,
+      hosts: planets.map((p) => ({ position: p.mesh.position, scale: p.mesh.scale.x })),
+      physical,
+      active: document.body.classList.contains('space-immersive'),
+      showSatellites: $('satellitePoints').checked,
+      showAsteroids: $('asteroidPoints').checked,
+      showComets: $('cometPoints').checked,
+    });
+    $('satelliteView').disabled = selected === 0 || selected === 1;
     previousView = view;
     if (inspectingMoon) target.copy(moon.position);
     else if (view === 'overview' || view === 'earthmoon') target.set(0, 0, 0);
@@ -855,6 +887,12 @@
     return Math.min(250, 90 / Math.min(1, camera.aspect));
   }
   function planetDistance(index) {
+    if (satelliteFraming && document.body.classList.contains('space-immersive'))
+      return (
+        (population.extent(index) * 1.15) /
+        Math.tan((camera.fov * Math.PI) / 360) /
+        Math.min(1, camera.aspect)
+      );
     return Math.max(2.8, Model.bodies[index].size * 6.5) / Math.min(1, camera.aspect);
   }
   function earthMoonDistance() {
@@ -964,6 +1002,11 @@
       smoothTarget.z + Math.cos(azimuth) * Math.cos(elevation) * distance,
     );
     camera.lookAt(smoothTarget);
+    nebulae.update(
+      camera,
+      document.body.classList.contains('space-immersive'),
+      $('nebulaBackground').checked,
+    );
     starSky.follow(camera);
     // Two lighting passes share the same depth buffer. Light layers in a single
     // Three.js pass select lights by camera, not by each receiving mesh.
@@ -1046,6 +1089,8 @@
     cameraTargetError: smoothTarget.distanceTo(target),
     referencePlaneVisible: referencePlane.visible,
     referenceStarCount,
+    population: population.state(),
+    nebulae: nebulae.state(),
     history: historyData
       ? {
           bodyId: historyData.bodyId,

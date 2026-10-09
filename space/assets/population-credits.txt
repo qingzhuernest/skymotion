@@ -1,0 +1,54 @@
+SATELLITES AND SMALL BODIES
+Snapshot retrieved 2026-10-09. The included snapshot covers all 455 rows for the
+8 planets in JPL's available mean-orbit table, not a promise of all discoveries.
+Mercury and Venus have no known natural satellites. Pluto is outside the existing
+8-planet workspace. JPL's discovery list and its mean-orbit table have different
+update schedules; do not interpret this snapshot's counts as an IAU census.
+Earth 1; Mars 2; Jupiter 115; Saturn 291; Uranus 30; Neptune 16.
+
+JPL Solar System Dynamics mean satellite elements:
+https://ssd.jpl.nasa.gov/sats/elem/
+JPL SBDB query API:
+https://ssd-api.jpl.nasa.gov/doc/sbdb_query.html
+1,200 main-belt asteroids selected by H<12 and increasing H; 12 bound periodic
+comets with e<1. The full SBDB contains many more objects. Source names/elements
+are retained in population.json; no procedural body catalog is substituted.
+Generator: scripts/build-population-data.py (Python standard library).
+
+Other satellite and minor-body positions use fixed mean elliptic elements,
+J2000 reference-plane conversion and Kepler motion. Laplace-plane poles and
+planet-equatorial poles preserve inclinations and retrograde directions. The
+approximation omits changing elements, perturbations, resonances and precession;
+do not use it for occultations, conjunction times, navigation or precision sky
+coordinates, especially far from the source epoch. Epoch TDB is approximated by
+TT; their millisecond difference is immaterial for this illustrative layer.
+The original Astronomy Engine planetary/Moon models are unchanged. Earth's
+Moon and the four Galilean moons use the existing engine's state vectors.
+Satellite spacing is logarithmically enlarged, independent of parent display
+radius. Markers are enlarged points, not physical sizes or brightness models.
+Only the selected system is shown in closeup; the overview contains all loaded
+planetary satellites without text labels. No new physical clock is introduced.
+
+REAL NEBULA PHOTOGRAPHS
+Images redistributed unchanged from the NASA Image and Video Library:
+Orion: PIA01322, NASA/JPL-Caltech/STScI (Hubble + Spitzer composite).
+https://images.nasa.gov/details/PIA01322
+Ring Nebula: GSFC_20171208_Archive_e001464, NASA, ESA, C.R. Robert O'Dell
+(Vanderbilt University), G.J. Ferland (University of Kentucky), W.J. Henney and
+M. Peimbert (National Autonomous University of Mexico); LBT data: David Thompson
+(University of Arizona). Visible-light Hubble and infrared LBT composite.
+https://images.nasa.gov/details/GSFC_20171208_Archive_e001464
+Carina / Mystic Mountain: GSFC_20171208_Archive_e002076, NASA, ESA, M. Livio and
+the Hubble 20th Anniversary Team (STScI). Hubble observation, released 2010.
+https://images.nasa.gov/details/GSFC_20171208_Archive_e002076
+The complete original metadata is retained in nebulae/catalog.json.
+Image-use guidance: https://www.nasa.gov/nasa-brand-center/images-and-media/
+No endorsement is implied. Respect original agency/contributor credits.
+
+These are processed/multi-band telescope exposures, not naked-eye views or
+current weather. The optional background enlarges the photos, softens their
+edges and places them near the objects' approximate celestial directions for
+illustration. It does not preserve real angular size, image plate solution or
+orientation. The viewer displays the unchanged photograph. Nebulae are remote
+interstellar objects, not bodies inside the solar system. No generated artwork
+is presented as telescope imagery.

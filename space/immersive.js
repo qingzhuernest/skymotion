@@ -15,7 +15,7 @@
   function layout(next) {
     if (active === next) return;
     if (next) previousScroll = window.scrollY;
-    if (drawer.open) drawer.close();
+    for (const openDialog of document.querySelectorAll('dialog[open]')) openDialog.close();
     active = next;
     document.body.classList.toggle('space-immersive', active);
     button.textContent = active ? '退出沉浸' : '沉浸观察';
@@ -71,7 +71,13 @@
     }
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && active && !drawer.open && !fullscreenPending) void exit();
+    if (
+      event.key === 'Escape' &&
+      active &&
+      !document.querySelector('dialog[open]') &&
+      !fullscreenPending
+    )
+      void exit();
   });
   if (new URLSearchParams(location.search).get('immersive') === '1') void enter(false);
 })();
