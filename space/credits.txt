@@ -2,7 +2,7 @@ Three.js 0.186.1: MIT license, included in vendor/THREE-LICENSE.txt.
 Astronomy Engine 2.1.19: Don Cross, MIT license retained in ../astronomy.js.
 Earth map from three.js examples: earth_atmos_2048.jpg.
 Source: https://github.com/mrdoob/three.js/tree/dev/examples/textures/planets
-Interface and solar-system application are original. Decorative star points and gas planet bands are procedural.
+Interface and solar-system application are original. Gas planet bands are procedural. Reference star positions, visual magnitudes and B-V color indices use HYG 4.1 / David Nash and contributors (CC BY-SA 4.0); see assets/stars-license.txt. The catalog subset is licensed CC BY-SA 4.0.
 
 Detailed planet appearance is generated locally: illustrative terrain, cloud bands, rings and granulation. These are original project textures, not current spacecraft images. See assets/credits.txt.
 

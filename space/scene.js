@@ -329,36 +329,15 @@
     }
   });
 
-  let seed = 314159;
-  const random = () => {
-    seed = (seed * 1664525 + 1013904223) >>> 0;
-    return seed / 4294967296;
-  };
-  const starPositions = [];
-  for (let i = 0; i < 650; i++) {
-    const longitude = random() * 2 * Math.PI;
-    const colatitude = Math.acos(2 * random() - 1);
-    const radius = 200 + random() * 50;
-    starPositions.push(
-      radius * Math.sin(colatitude) * Math.cos(longitude),
-      radius * Math.cos(colatitude),
-      radius * Math.sin(colatitude) * Math.sin(longitude),
-    );
-  }
-  const starGeometry = new THREE.BufferGeometry();
-  starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
-  scene.add(
-    new THREE.Points(
-      starGeometry,
-      new THREE.PointsMaterial({
-        color: 0xafbed5,
-        size: 1.1,
-        sizeAttenuation: false,
-        transparent: true,
-        opacity: 0.5,
-      }),
-    ),
-  );
+  const starSky = SolarSpaceStars.create(THREE, renderer, Model, Astronomy, invalidate);
+  scene.add(starSky.group);
+  let referenceStarCount = 0;
+  starSky.ready.then((count) => {
+    referenceStarCount = count;
+    $('starCatalogStatus').textContent = count
+      ? `背景使用HYG目录的${count.toLocaleString('zh-CN')}颗恒星，位置为J2000参考方向。`
+      : '恒星背景未加载；行星模型与时间控制仍可使用。';
+  });
 
   function select(index) {
     inspectingMoon = false;
@@ -985,6 +964,7 @@
       smoothTarget.z + Math.cos(azimuth) * Math.cos(elevation) * distance,
     );
     camera.lookAt(smoothTarget);
+    starSky.follow(camera);
     // Two lighting passes share the same depth buffer. Light layers in a single
     // Three.js pass select lights by camera, not by each receiving mesh.
     renderer.autoClear = false;
@@ -1065,6 +1045,7 @@
     cameraPreset,
     cameraTargetError: smoothTarget.distanceTo(target),
     referencePlaneVisible: referencePlane.visible,
+    referenceStarCount,
     history: historyData
       ? {
           bodyId: historyData.bodyId,

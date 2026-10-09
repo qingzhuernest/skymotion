@@ -1,0 +1,28 @@
+REFERENCE STAR CATALOG
+
+Source: HYG Star Database 4.1, by David Nash / Astronomy Nexus and contributors.
+https://github.com/astronexus/HYG-Database
+Original source file:
+https://github.com/astronexus/HYG-Database/blob/main/hyg/CURRENT/hygdata_v41.csv
+Upstream licensing statement:
+https://github.com/astronexus/HYG-Database/blob/main/hyg/CURRENT/LICENSE
+
+License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0).
+https://creativecommons.org/licenses/by-sa/4.0/
+Legal code: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+The derived space/assets/stars.json catalog is distributed under the same license.
+This data license does not replace licenses of Three.js, Astronomy Engine or the
+application source code. No endorsement by the catalog authors is implied.
+
+Changes: exclude the Sun, retain finite entries with visual magnitude <= 6.5,
+retain J2000 right ascension (hours), declination (degrees), apparent visual
+magnitude and B-V color index; round fields and sort by magnitude. No invented
+stars or positional jitter is added. Generator: scripts/build-star-catalog.py.
+
+Rendering: catalog J2000 directions are converted into the same fixed J2000
+reference frame as the planetary display. B-V approximates blackbody color;
+missing B-V uses neutral white. Magnitude-to-exposure and soft point sizes are
+compressed display choices, not a calibrated observing instrument or stellar
+radius measurement. Stars are a distant reference background; no dated proper
+motion, annual parallax, atmospheric refraction/scintillation or local-horizon
+occlusion is calculated. Do not use this background as a precision sky chart.

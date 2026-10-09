@@ -12,8 +12,8 @@ these are visual illustrations, not calibrated multispectral spacecraft images.
 Sun: weak granular visual texture; not a solar observation or activity model.
 
 Earth reuses ../earth.jpg and its existing root credits. Latitude/longitude in
-generated textures do not identify real topography or current weather. Surface
-orientation, polar caps and Saturn ring tilt are not dated pole/rotation models.
+generated textures do not identify real topography or current weather. Earth orientation is calibrated separately in earth-frame.js. Other generated
+surface orientations, polar caps and Saturn ring tilt are not dated pole/rotation models.
 No texture participates in ephemerides, lunar illumination or geometric sunlight
 calculations. Sphere radii and positions are unchanged.
 

@@ -797,6 +797,16 @@ diagrams.html#chartPanel</code></pre>
             >node tests/space-exploration.cjs</code
           >检查24组行星、3组月球轨迹端点、单位、跨年闰日、采样一致与参数防御；浏览器检查历史缓存、近景读数、相机不改UTC、原图嵌入复位和手机菜单。性能观察仅限当前环境，不能代替真实设备验收。
         </p>
+        <h3>恒星目录与静态点渲染</h3>
+        <p>
+          <code>scripts/build-star-catalog.py</code>从HYG
+          4.1提取视星等≤6.5的8,920颗恒星，排除太阳，保留J2000赤经／赤纬、视星等与B−V。导出<code>space/assets/stars.json</code>为291,416字节的本地数据，无运行时第三方请求；数据子集按CC
+          BY-SA 4.0分发，来源、修改与许可见<code>space/assets/stars-license.txt</code>。
+        </p>
+        <p>
+          <code>space/stars.js</code
+          >将目录方向转换到模型的固定J2000坐标，单一Points绘制全部恒星。B−V近似黑体颜色，星等经压缩映射控制显示亮度；shader用平滑圆形星核与少量柔光消除方块边缘。背景随相机平移但方向不随相机旋转，避免缩放或聚焦时出现近距离星点视差。沿用DPR≤2，开启深度测试、关闭深度写入，不添加闪烁RAF或逐帧星历。目录加载失败仅省略背景，科学模型和时间控制继续工作。恒星自行、周年视差、折射与当地地平遮挡不在此背景模型内。
+        </p>
         <h3>沉浸布局与全屏降级</h3>
         <p>
           <code>space/immersive.js</code>仅切换布局与Fullscreen
