@@ -2439,6 +2439,20 @@ body[data-page='welcome'] .welcome-quote {
     grid-row: 1;
   }
 }
+/* Give the desktop welcome greeting a clear visual hierarchy without enlarging mobile text. */
+@media (min-width: 1024px) and (min-height: 501px) {
+  body[data-page='welcome'] .welcome-intro {
+    max-width: 680px;
+  }
+  body[data-page='welcome'] .welcome-intro h1 {
+    font-size: clamp(36px, 3.8vw, 56px);
+    line-height: 1.25;
+    margin-bottom: 14px;
+  }
+  body[data-page='welcome'] .welcome-intro > p {
+    font-size: 15px;
+  }
+}
 /* Preserve separate rows for the quote and controls even with very little landscape height. */
 @media (max-height: 500px) and (min-width: 600px) {
   body[data-page='welcome'] .welcome-screen {
