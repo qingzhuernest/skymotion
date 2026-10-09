@@ -270,7 +270,8 @@
   function focus(index) {
     selected = index;
     view = index === 2 ? 'earthmoon' : 'focus';
-    targetDistance = index === 2 ? 7 : Math.max(2.8, Model.bodies[index].size * 6.5);
+    targetDistance =
+      index === 2 ? earthMoonDistance() : Math.max(2.8, Model.bodies[index].size * 6.5);
     $('viewTitle').textContent =
       index === 2 ? '日地月关系 · 箭头指向太阳' : Model.bodies[index].name + '特写 · 旋转视角';
     $('overview').classList.remove('active');
@@ -297,7 +298,7 @@
       view === 'overview'
         ? overviewDistance()
         : view === 'earthmoon'
-          ? 7
+          ? earthMoonDistance()
           : Math.max(2.8, Model.bodies[selected].size * 6.5);
     invalidate();
   };
@@ -560,14 +561,19 @@
   function overviewDistance() {
     return Math.min(250, 90 / Math.min(1, camera.aspect));
   }
+  function earthMoonDistance() {
+    return 9 / Math.min(1, camera.aspect);
+  }
   function resize() {
     const width = stage.clientWidth;
     const height = stage.clientHeight;
     if (!width || !height) return;
     renderer.setSize(width, height, false);
     const previousFit = overviewDistance();
+    const previousMoonFit = earthMoonDistance();
     camera.aspect = width / height;
     if (view === 'overview') targetDistance *= overviewDistance() / previousFit;
+    if (view === 'earthmoon') targetDistance *= earthMoonDistance() / previousMoonFit;
     camera.updateProjectionMatrix();
     invalidate();
   }
