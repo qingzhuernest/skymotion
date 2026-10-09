@@ -1,0 +1,151 @@
+/* Compact observation controls stay inside the 3D pane, including linked diagrams. */
+body[data-page='space'] .stage {
+  container-type: size;
+}
+body[data-page='space'] .inspection-readout {
+  position: absolute;
+  z-index: 3;
+  left: 12px;
+  bottom: 12px;
+  max-width: calc(100% - 92px);
+  padding: 8px 12px;
+  border: 1px solid #89aac33d;
+  border-radius: 14px;
+  background: #102034e6;
+  color: #d8e7f5;
+  font-size: 11px;
+  line-height: 1.6;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+body[data-page='space'] .inspection-readout :is(strong, span) {
+  display: block;
+}
+body[data-page='space'] .inspection-readout strong {
+  font-size: 13px;
+  color: #f4d6a0;
+}
+body[data-page='space'] .scene-tools {
+  position: absolute;
+  z-index: 5;
+  right: 12px;
+  bottom: 12px;
+  color: #d8e7f5;
+}
+body[data-page='space'] .scene-tools summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  list-style: none;
+  border: 1px solid #89aac34d;
+  border-radius: 14px;
+  padding: 5px 12px;
+  min-height: 34px;
+  color: #e0ecfa;
+  background: #173451;
+  font-size: 11px;
+  touch-action: manipulation;
+}
+body[data-page='space'] .scene-tools summary::-webkit-details-marker {
+  display: none;
+}
+body[data-page='space'] .scene-tools summary:focus-visible {
+  outline: 2px solid #b5d6ff;
+  outline-offset: 3px;
+}
+body[data-page='space'] .scene-tools[open] summary {
+  background: #315da8;
+}
+body[data-page='space'] .scene-tools-panel {
+  position: absolute;
+  bottom: 44px;
+  right: 0;
+  width: min(232px, calc(100cqw - 24px));
+  max-height: calc(100cqh - 84px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 12px;
+  border: 1px solid #89aac34d;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px #040b1660;
+  background: #122941;
+}
+body[data-page='space'] .tools-heading {
+  font-size: 11px;
+  color: #adc8e6;
+}
+body[data-page='space'] .camera-presets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  margin: 7px 0 12px;
+}
+body[data-page='space'] .camera-presets button {
+  min-height: 32px;
+  padding: 4px 6px;
+  border-radius: 14px;
+  border-color: #89aac33d;
+  background: #1d3b59;
+  color: #e2edfb;
+  font-size: 11px;
+}
+body[data-page='space'] .camera-presets button[aria-pressed='true'],
+body[data-page='space'] .camera-presets button:hover {
+  background: #315da8;
+  color: #fff;
+}
+body[data-page='space'] .tools-field,
+body[data-page='space'] .tools-check {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  margin: 10px 0;
+}
+body[data-page='space'] .tools-field select {
+  width: 125px;
+  min-height: 32px;
+  border-radius: 14px;
+  border-color: #89aac34d;
+  color: #dceafb;
+  background: #1b3653;
+  font-size: 11px;
+}
+body[data-page='space'] .tools-check input {
+  margin: 0;
+}
+body[data-page='space'] .tools-note {
+  color: #adc8e6;
+  font-size: 10px;
+  line-height: 1.7;
+  margin: 12px 0 0;
+}
+@container (max-width: 270px) {
+  body[data-page='space'] .inspection-readout {
+    padding: 5px 8px;
+    font-size: 9px;
+    left: 8px;
+    bottom: 8px;
+    max-width: calc(100% - 74px);
+  }
+  body[data-page='space'] .inspection-readout strong {
+    font-size: 10px;
+  }
+  body[data-page='space'] .scene-tools {
+    right: 8px;
+    bottom: 8px;
+  }
+  body[data-page='space'] .scene-tools summary {
+    padding: 4px 8px;
+    min-height: 30px;
+    font-size: 10px;
+  }
+}
+@container (max-height: 160px) {
+  body[data-page='space'] .inspection-readout,
+  body[data-page='space'] .scene-tools {
+    display: none;
+  }
+}

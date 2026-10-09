@@ -15,9 +15,11 @@
       '<div class="error"><strong>这个浏览器无法启动三维画面</strong><p>这个模型需要 WebGL 2。</p><a href="../lab.html">返回太阳与月球实验台</a></div>',
     );
     for (const element of document.querySelectorAll(
-      '.visual button,.timeline button,.timeline input,.side button,.side input,.side select',
+      '.visual button,.visual input,.visual select,.timeline button,.timeline input,.side button,.side input,.side select',
     ))
       element.disabled = true;
+    $('sceneTools').hidden = true;
+    $('inspectionReadout').hidden = true;
     window.spaceState = () => ({ fallback: true });
     if (embedded) {
       stage.querySelector('.error').innerHTML =
@@ -121,6 +123,8 @@
   }
   let playing = false;
   let selected = 2;
+  let inspectingMoon = false;
+  let cameraPreset = 'oblique';
   let view = 'overview';
   let azimuth = -0.22;
   let elevation = 0.85;
@@ -226,8 +230,69 @@
   const moonLabel = document.createElement('button');
   moonLabel.className = 'label';
   moonLabel.textContent = '月球';
-  moonLabel.onclick = () => select(2);
+  moonLabel.onclick = focusMoon;
   $('labels').append(moonLabel);
+
+  // History is separate from the forward full-orbit guide and uses the same UTC clock.
+  const history = line([], 0xffffff, 0.85);
+  history.material.vertexColors = true;
+  history.frustumCulled = false;
+  scene.add(history);
+  let historyKey = '';
+  let historyData = null;
+  let historyCalculations = 0;
+  const referencePlane = new THREE.GridHelper(80, 16, 0x68869d, 0x375269);
+  referencePlane.material.transparent = true;
+  referencePlane.material.opacity = 0.18;
+  scene.add(referencePlane);
+
+  for (const [index, spec] of Model.bodies.entries()) {
+    const option = document.createElement('option');
+    option.value = String(index);
+    option.textContent = spec.name;
+    $('inspectBody').append(option);
+  }
+  const moonOption = document.createElement('option');
+  moonOption.value = 'moon';
+  moonOption.textContent = '月球';
+  $('inspectBody').append(moonOption);
+  $('inspectBody').onchange = () => {
+    if ($('inspectBody').value === 'moon') focusMoon();
+    else if ($('inspectBody').value !== '') {
+      const index = Number($('inspectBody').value);
+      if (Number.isInteger(index) && index >= 0 && index < planets.length) {
+        select(index);
+        focus(index);
+      }
+    }
+    $('sceneTools').open = false;
+  };
+  for (const id of ['trailEnabled', 'trailDays', 'inspectInfo', 'referencePlane'])
+    $(id).onchange = invalidate;
+  for (const button of document.querySelectorAll('[data-camera]')) {
+    button.onclick = () => {
+      cameraPreset = button.dataset.camera;
+      azimuth = cameraPreset === 'side' ? 0 : -0.22;
+      // Stay just off the pole to preserve a stable camera up vector.
+      elevation =
+        cameraPreset === 'top'
+          ? Math.PI / 2 - 0.001
+          : cameraPreset === 'side'
+            ? 0.06
+            : obliqueElevation();
+      targetDistance = fittedDistance();
+      invalidate();
+    };
+  }
+  document.addEventListener('pointerdown', (event) => {
+    if (!$('sceneTools').contains(event.target)) $('sceneTools').open = false;
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && $('sceneTools').open) {
+      $('sceneTools').open = false;
+      $('sceneTools').querySelector('summary').focus();
+    }
+  });
 
   let seed = 314159;
   const random = () => {
@@ -261,10 +326,14 @@
   );
 
   function select(index) {
+    inspectingMoon = false;
     selected = index;
     const spec = Model.bodies[index];
     $('name').textContent = spec.name;
     $('type').textContent = spec.type;
+    $('distance').previousElementSibling.textContent = '平均太阳距离';
+    $('period').previousElementSibling.textContent = '公转周期';
+    $('actualDistance').previousElementSibling.textContent = '当前太阳距离';
     $('distance').textContent = spec.au.toFixed(spec.au < 10 ? 2 : 1) + ' AU';
     $('period').textContent =
       spec.period < 1000
@@ -289,22 +358,52 @@
     invalidate();
   }
   function focus(index) {
+    inspectingMoon = false;
     selected = index;
     view = index === 2 ? 'earthmoon' : 'focus';
     targetDistance = index === 2 ? earthMoonDistance() : planetDistance(index);
+    if (cameraPreset === 'oblique') elevation = obliqueElevation();
     $('viewTitle').textContent =
       index === 2 ? '日地月关系 · 箭头指向太阳' : Model.bodies[index].name + '特写 · 旋转视角';
     $('overview').classList.toggle('active', index !== 2);
     $('earthmoon').classList.toggle('active', index === 2);
     invalidate();
   }
-  $('focus').onclick = () => focus(selected);
+  function focusMoon() {
+    select(2);
+    view = 'earthmoon';
+    inspectingMoon = true;
+    if (cameraPreset === 'oblique') elevation = obliqueElevation();
+    targetDistance = moonDistance();
+    $('overview').classList.remove('active');
+    $('earthmoon').classList.add('active');
+    $('viewTitle').textContent = '月球近景 · 外部相机视角';
+    $('name').textContent = '月球';
+    $('type').textContent = '地球的天然卫星';
+    $('distance').previousElementSibling.textContent = '平均地球距离';
+    $('distance').textContent = '384,400 km';
+    $('period').previousElementSibling.textContent = '恒星公转周期';
+    $('period').textContent = '27.32 天';
+    $('radius').textContent = '1,737.4 km';
+    $('actualDistance').previousElementSibling.textContent = '当前地球距离';
+    $('focus').textContent = '靠近月球观察';
+    $('info').textContent =
+      '这是外部相机近景，亮面随视角变化；地心月面照明比例以星历读数为准。27.32天为恒星月，不等于约29.53天的月相周期。';
+    for (const button of picker.children) {
+      button.classList.remove('active');
+      button.setAttribute('aria-pressed', 'false');
+    }
+    invalidate();
+  }
+  $('focus').onclick = () => (inspectingMoon ? focusMoon() : focus(selected));
   $('earthmoon').onclick = () => {
     select(2);
     focus(2);
   };
   $('overview').onclick = () => {
+    if (inspectingMoon) select(selected);
     view = 'overview';
+    if (cameraPreset === 'oblique') elevation = obliqueElevation();
     targetDistance = overviewDistance();
     $('overview').classList.add('active');
     $('earthmoon').classList.remove('active');
@@ -313,6 +412,7 @@
   };
   $('reset').onclick = () => {
     if (embedded) {
+      if (inspectingMoon) select(selected);
       if (linkedView === 'earthmoon') focus(2);
       else {
         view = 'overview';
@@ -320,13 +420,9 @@
       }
     }
     azimuth = -0.22;
-    elevation = 0.85;
-    targetDistance =
-      view === 'overview'
-        ? overviewDistance()
-        : view === 'earthmoon'
-          ? earthMoonDistance()
-          : planetDistance(selected);
+    cameraPreset = 'oblique';
+    elevation = obliqueElevation();
+    targetDistance = fittedDistance();
     invalidate();
   };
   $('play').onclick = () => {
@@ -373,6 +469,7 @@
     if (event.pointerType === 'mouse' && event.button !== 0) return;
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (pointers.size === 1) {
+      cameraPreset = 'custom';
       start = { x: event.clientX, y: event.clientY };
       moved = false;
     }
@@ -386,12 +483,15 @@
     if (start && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 5) moved = true;
     if (pointers.size === 1) {
       azimuth -= (event.clientX - before.x) * 0.006;
-      elevation = Math.max(-1.4, Math.min(1.4, elevation + (event.clientY - before.y) * 0.005));
+      elevation = Math.max(
+        -Math.PI / 2 + 0.001,
+        Math.min(Math.PI / 2 - 0.001, elevation + (event.clientY - before.y) * 0.005),
+      );
     } else {
       const [a, b] = [...pointers.values()];
       const separation = Math.hypot(a.x - b.x, a.y - b.y);
       if (lastPinch && separation) targetDistance *= lastPinch / separation;
-      targetDistance = Math.max(view === 'overview' ? 45 : 1.6, Math.min(300, targetDistance));
+      targetDistance = Math.max(minimumDistance(), Math.min(300, targetDistance));
       lastPinch = separation;
     }
     invalidate();
@@ -406,7 +506,7 @@
     (event) => {
       event.preventDefault();
       targetDistance = Math.max(
-        view === 'overview' ? 45 : 1.6,
+        minimumDistance(),
         Math.min(300, targetDistance * Math.exp(event.deltaY * 0.001)),
       );
       invalidate();
@@ -417,13 +517,14 @@
     if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', '+', '-', '='].includes(event.key))
       return;
     event.preventDefault();
-    if (event.key === 'ArrowUp') elevation = Math.min(1.4, elevation + 0.08);
-    if (event.key === 'ArrowDown') elevation = Math.max(-1.4, elevation - 0.08);
+    if (event.key.startsWith('Arrow')) cameraPreset = 'custom';
+    if (event.key === 'ArrowUp') elevation = Math.min(Math.PI / 2 - 0.001, elevation + 0.08);
+    if (event.key === 'ArrowDown') elevation = Math.max(-Math.PI / 2 + 0.001, elevation - 0.08);
     if (event.key === 'ArrowLeft') azimuth -= 0.08;
     if (event.key === 'ArrowRight') azimuth += 0.08;
     if (event.key === '+' || event.key === '=') targetDistance *= 0.9;
     if (event.key === '-') targetDistance *= 1.1;
-    targetDistance = Math.max(view === 'overview' ? 45 : 1.6, Math.min(300, targetDistance));
+    targetDistance = Math.max(minimumDistance(), Math.min(300, targetDistance));
     invalidate();
   });
   surface.addEventListener('click', (event) => {
@@ -436,10 +537,14 @@
     const ray = new THREE.Raycaster();
     ray.setFromCamera(mouse, camera);
     const hit = ray.intersectObjects(
-      planets.filter((p) => p.mesh.visible).map((p) => p.mesh),
+      [
+        ...planets.filter((p) => p.mesh.visible).map((p) => p.mesh),
+        ...(moon.visible ? [moon] : []),
+      ],
       false,
     )[0];
-    if (hit) select(planets.findIndex((p) => p.mesh === hit.object));
+    if (hit?.object === moon) focusMoon();
+    else if (hit) select(planets.findIndex((p) => p.mesh === hit.object));
   });
 
   function updateScience() {
@@ -516,6 +621,10 @@
         (view === 'focus' && i === selected) ||
         (view === 'earthmoon' && i === 2);
       p.orbit.visible = view === 'overview';
+      p.orbit.material.color.setHex(i === selected ? 0xd4b06e : 0x6383a6);
+      p.orbit.material.opacity = i === selected ? 0.55 : 0.2;
+      p.label.classList.toggle('selected', i === selected && !inspectingMoon);
+      p.label.setAttribute('aria-pressed', String(i === selected && !inspectingMoon));
     }
     if (view === 'earthmoon') planets[2].mesh.position.set(0, 0, 0);
     sun.visible = sunGlow.visible = view === 'overview';
@@ -526,6 +635,15 @@
     orbitGroup.visible = $('orbits').checked && view === 'overview';
     lunarOrbit.visible = $('orbits').checked && view === 'earthmoon';
     $('moonReadout').hidden = view !== 'earthmoon';
+    moonLabel.classList.toggle('selected', inspectingMoon);
+    moonLabel.setAttribute('aria-pressed', String(inspectingMoon));
+    referencePlane.visible = $('referencePlane').checked && view !== 'focus';
+    referencePlane.scale.setScalar(view === 'earthmoon' ? 0.15 : 1);
+    const longMoonOption = $('trailDays').querySelector('[value="365"]');
+    longMoonOption.disabled = view === 'earthmoon';
+    if (view === 'earthmoon' && $('trailDays').value === '365') $('trailDays').value = '30';
+    updateHistory();
+    updateInspection();
     const stamp = playing
       ? year + ':' + Math.floor(day / 30)
       : utcDate().toISOString().slice(0, 10);
@@ -544,10 +662,93 @@
       orbitEpoch = year;
     }
     previousView = view;
-    if (view === 'overview' || view === 'earthmoon') target.set(0, 0, 0);
+    if (inspectingMoon) target.copy(moon.position);
+    else if (view === 'overview' || view === 'earthmoon') target.set(0, 0, 0);
     else target.copy(planets[selected].mesh.position);
   }
-  function placeLabel(label, position) {
+
+  function updateHistory() {
+    history.visible = $('trailEnabled').checked;
+    if (!history.visible) {
+      $('trailNote').textContent =
+        '开启后回溯当前UTC；蓝灰端较早，亮端为当前时刻。黄道参考面是固定J2000平面。';
+      return;
+    }
+    const localMoon = view === 'earthmoon';
+    const days = Number($('trailDays').value);
+    const segments = localMoon
+      ? Math.max(96, Math.ceil(days * 4))
+      : Math.min(
+          512,
+          Math.max(playing ? 48 : 96, Math.ceil((days / Model.bodies[selected].period) * 96)),
+        );
+    const bodyId = localMoon ? 'Moon' : Model.bodies[selected].id;
+    const key = [year, day, bodyId, days, segments].join(':');
+    if (key === historyKey) return;
+    historyData = SolarSpaceExploration.trail({
+      date: utcDate(),
+      bodyId,
+      days,
+      segments,
+      frame: localMoon ? 'geocentric' : 'heliocentric',
+    });
+    historyData.bodyId = bodyId;
+    historyCalculations++;
+    historyKey = key;
+    const geometry = new THREE.BufferGeometry().setFromPoints(
+      historyData.points.map((p) => new THREE.Vector3(p.x, p.y, p.z)),
+    );
+    const colors = [];
+    const oldColor = new THREE.Color(0x426887);
+    const nowColor = new THREE.Color(0xffd08a);
+    for (let i = 0; i < historyData.points.length; i++) {
+      const color = oldColor.clone().lerp(nowColor, i / segments);
+      colors.push(color.r, color.g, color.b);
+    }
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    history.geometry.dispose();
+    history.geometry = geometry;
+    $('trailNote').textContent =
+      (localMoon ? '月球地心' : Model.bodies[selected].name + '日心') +
+      '轨迹：过去' +
+      days +
+      '天，亮端为当前UTC。距离按教学尺度显示。';
+  }
+
+  function updateInspection() {
+    if (document.activeElement !== $('inspectBody'))
+      $('inspectBody').value = inspectingMoon
+        ? 'moon'
+        : view === 'overview'
+          ? ''
+          : String(selected);
+    const current = SolarSpaceExploration.actualDistance(
+      physical,
+      inspectingMoon ? 'Moon' : selected,
+    );
+    const formatDistance = (reading) =>
+      reading.unit === 'km'
+        ? Math.round(reading.value).toLocaleString('zh-CN') + ' km'
+        : reading.value.toFixed(3) + ' AU';
+    $('actualDistance').textContent = formatDistance(current);
+    $('inspectionReadout').hidden = !$('inspectInfo').checked;
+    const localMoon = view === 'earthmoon';
+    const reading = localMoon ? SolarSpaceExploration.actualDistance(physical, 'Moon') : current;
+    $('inspectTitle').textContent = inspectingMoon
+      ? '月球'
+      : localMoon
+        ? '日地月'
+        : Model.bodies[selected].name;
+    $('inspectDistance').textContent =
+      (reading.reference === 'earth' ? '月球距地球 ' : '距太阳 ') + formatDistance(reading);
+    $('inspectPhase').hidden = !localMoon;
+    if (localMoon)
+      $('inspectPhase').textContent =
+        '地心月面照明 ' + (physical.moonIllumination * 100).toFixed(1) + '%';
+    for (const button of document.querySelectorAll('[data-camera]'))
+      button.setAttribute('aria-pressed', String(button.dataset.camera === cameraPreset));
+  }
+  function placeLabel(label, position, radius = 0) {
     const projected = position.clone().project(camera);
     const width = stage.clientWidth;
     const height = stage.clientHeight;
@@ -562,9 +763,12 @@
       return;
     }
     let x = ((projected.x + 1) / 2) * width;
-    let y = ((-projected.y + 1) / 2) * height + 13;
+    const up = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 1);
+    const rim = position.clone().addScaledVector(up, radius).project(camera);
+    const radiusPixels = (Math.abs(rim.y - projected.y) * height) / 2;
+    let y = ((-projected.y + 1) / 2) * height + radiusPixels + 10;
     const anchorX = x,
-      anchorY = y - 13;
+      anchorY = y - 10;
     x = Math.max(26, Math.min(width - 26, x));
     for (let attempt = 0; attempt < 5; attempt++) {
       if (!labelBounds.some((b) => Math.abs(b.x - x) < 56 && Math.abs(b.y - y) < 25)) break;
@@ -597,6 +801,24 @@
   function earthMoonDistance() {
     return 9 / Math.min(1, camera.aspect);
   }
+  function moonDistance() {
+    return 0.8 / Math.min(1, camera.aspect);
+  }
+  function obliqueElevation() {
+    return view === 'overview' ? 0.85 : 0.28;
+  }
+  function fittedDistance() {
+    return inspectingMoon
+      ? moonDistance()
+      : view === 'overview'
+        ? overviewDistance()
+        : view === 'earthmoon'
+          ? earthMoonDistance()
+          : planetDistance(selected);
+  }
+  function minimumDistance() {
+    return inspectingMoon ? 0.35 : view === 'overview' ? 45 : 1.6;
+  }
   function resize() {
     const width = stage.clientWidth;
     const height = stage.clientHeight;
@@ -605,9 +827,13 @@
     const previousFit = overviewDistance();
     const previousMoonFit = earthMoonDistance();
     const previousPlanetFit = planetDistance(selected);
+    const previousMoonCloseFit = moonDistance();
     camera.aspect = width / height;
     if (view === 'overview') targetDistance *= overviewDistance() / previousFit;
-    if (view === 'earthmoon') targetDistance *= earthMoonDistance() / previousMoonFit;
+    if (view === 'earthmoon')
+      targetDistance *= inspectingMoon
+        ? moonDistance() / previousMoonCloseFit
+        : earthMoonDistance() / previousMoonFit;
     if (view === 'focus') targetDistance *= planetDistance(selected) / previousPlanetFit;
     camera.updateProjectionMatrix();
     comparison.resize();
@@ -686,10 +912,10 @@
     leaders.replaceChildren();
     for (const p of planets) {
       p.label.hidden = !p.mesh.visible;
-      if (p.mesh.visible) placeLabel(p.label, p.mesh.position);
+      if (p.mesh.visible) placeLabel(p.label, p.mesh.position, p.spec.size * p.mesh.scale.x);
     }
     moonLabel.hidden = !moon.visible;
-    if (moon.visible) placeLabel(moonLabel, moon.position);
+    if (moon.visible) placeLabel(moonLabel, moon.position, 0.12);
     const date = utcDate();
     $('day').value = day;
     $('dayText').textContent =
@@ -725,6 +951,20 @@
     ephemeris: physical,
     glCalls: renderer.info.render.calls,
     exposure: renderer.toneMappingExposure,
+    inspectingMoon,
+    cameraPreset,
+    referencePlaneVisible: referencePlane.visible,
+    history: historyData
+      ? {
+          bodyId: historyData.bodyId,
+          start: historyData.start.toISOString(),
+          end: historyData.end.toISOString(),
+          days: historyData.days,
+          points: historyData.points,
+          visible: history.visible,
+          calculations: historyCalculations,
+        }
+      : null,
     comparing,
     reference,
     observer: { ...observer },

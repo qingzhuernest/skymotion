@@ -5,3 +5,5 @@ Source: https://github.com/mrdoob/three.js/tree/dev/examples/textures/planets
 Interface and solar-system application are original. Decorative star points and gas planet bands are procedural.
 
 Detailed planet appearance is generated locally: illustrative terrain, cloud bands, rings and granulation. These are original project textures, not current spacecraft images. See assets/credits.txt.
+
+Observation features: exploration.js samples existing Astronomy Engine vectors for selected-body history and actual distances. The fixed J2000 reference grid and atmosphere edge are illustrations, not new measurement data.

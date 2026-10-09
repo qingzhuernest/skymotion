@@ -110,7 +110,7 @@
           rgb = mix([177, 176, 168], [73, 78, 78], maria);
           rgb = rgb.map((value) => value + (relief[index] - n) * 65 + fine * 180);
         } else if (id === 'Mars') {
-          rgb = mix([82, 51, 38], [205, 137, 92], 0.63 + n * 0.6 + fine);
+          rgb = mix([82, 51, 38], [205, 137, 92], 0.63 + n * 0.6 + fine * 1.7);
           const cap = clamp((Math.abs(latitude) - 1.33 + n * 0.04) * 14);
           rgb = mix(rgb, [226, 220, 200], cap);
         } else if (id === 'Venus') {
@@ -126,12 +126,15 @@
 
           const band = Math.sin(warp) * 0.25 + Math.sin(warp * 2.7 + n) * 0.1;
           rgb = jupiter
-            ? mix([137, 100, 77], [232, 221, 196], 0.56 + band * 0.77 + n * 0.12 + fine)
-            : mix([168, 146, 103], [230, 217, 178], 0.66 + band * 0.65 + n * 0.1);
+            ? mix([137, 100, 77], [232, 221, 196], 0.56 + band * 0.77 + n * 0.12 + fine * 1.8)
+            : mix([168, 146, 103], [230, 217, 178], 0.66 + band * 0.65 + n * 0.1 + fine * 0.8);
           if (jupiter) {
             const dx = Math.atan2(Math.sin(longitude - 4.85), Math.cos(longitude - 4.85));
             const dy = latitude + 0.37;
-            const storm = Math.hypot(dx / 0.26, dy / 0.115);
+            const storm = Math.hypot(
+              (dx + Math.sin(dy * 39) * 0.013) / 0.26,
+              (dy + Math.sin(dx * 31) * 0.007) / 0.115,
+            );
             const edge = clamp((1.13 - storm + turbulence * 0.25) * 3.2);
             const swirl = Math.sin(storm * 17 + Math.atan2(dy, dx) * 3 + turbulence * 3) * 0.18;
             rgb = mix(rgb, mix([173, 104, 77], [210, 154, 110], 0.4 + swirl), edge);
@@ -207,6 +210,67 @@
     return mesh;
   }
 
+  function atmosphericEdge(radius, THREE) {
+    // A thin visual shell only: Earth geometry, picking and illumination remain intact.
+    // The same active scene lights gate the effect to the lit side. Ambient light is
+    // deliberately excluded so a decorative rim cannot turn the night side into day.
+    const material = new THREE.ShaderMaterial({
+      uniforms: THREE.UniformsUtils.merge([
+        THREE.UniformsLib.lights,
+        { rimColor: { value: new THREE.Color(0x6da8df) } },
+      ]),
+      lights: true,
+      transparent: true,
+      depthWrite: false,
+      side: THREE.FrontSide,
+      vertexShader: `
+        varying vec3 edgeNormal;
+        varying vec3 edgeView;
+        void main() {
+          vec4 positionView = modelViewMatrix * vec4(position, 1.0);
+          edgeNormal = normalize(normalMatrix * normal);
+          edgeView = -positionView.xyz;
+          gl_Position = projectionMatrix * positionView;
+        }
+      `,
+      fragmentShader: `
+        #include <common>
+        #include <lights_pars_begin>
+        uniform vec3 rimColor;
+        varying vec3 edgeNormal;
+        varying vec3 edgeView;
+        void main() {
+          vec3 normalView = normalize(edgeNormal);
+          float daylight = 0.0;
+          #if NUM_POINT_LIGHTS > 0
+          for (int i = 0; i < NUM_POINT_LIGHTS; i++) {
+            vec3 lightDirection = normalize(pointLights[i].position + edgeView);
+            float strength = min(length(pointLights[i].color), 1.0);
+            daylight = max(daylight, max(dot(normalView, lightDirection), 0.0) * strength);
+          }
+          #endif
+          #if NUM_DIR_LIGHTS > 0
+          for (int i = 0; i < NUM_DIR_LIGHTS; i++) {
+            float strength = min(length(directionalLights[i].color), 1.0);
+            daylight = max(daylight, max(dot(normalView, directionalLights[i].direction), 0.0) * strength);
+          }
+          #endif
+          float rim = pow(1.0 - max(dot(normalView, normalize(edgeView)), 0.0), 5.0);
+          float opacity = rim * smoothstep(0.01, 0.32, daylight) * 0.14;
+          if (opacity < 0.001) discard;
+          gl_FragColor = vec4(rimColor, opacity);
+          #include <tonemapping_fragment>
+          #include <colorspace_fragment>
+        }
+      `,
+    });
+    const edge = new THREE.Mesh(new THREE.SphereGeometry(radius * 1.014, 48, 32), material);
+    edge.name = 'illustrative-lit-atmosphere';
+    // Decorations must not intercept existing planet selection raycasts.
+    edge.raycast = () => {};
+    return edge;
+  }
+
   function create(spec, THREE, renderer, invalidate) {
     let maps;
     if (spec.id === 'Earth') {
@@ -229,6 +293,7 @@
       geometry: new THREE.SphereGeometry(spec.size, 72, 48),
       decorate(mesh) {
         if (spec.id === 'Saturn') mesh.add(ring(THREE, renderer));
+        if (spec.id === 'Earth') mesh.add(atmosphericEdge(spec.size, THREE));
       },
     };
   }

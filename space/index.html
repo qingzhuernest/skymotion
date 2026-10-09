@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../pages.css" />
     <link rel="stylesheet" href="space.css" />
     <link rel="stylesheet" href="compare.css" />
+    <link rel="stylesheet" href="exploration.css" />
     <link rel="stylesheet" href="embed.css" />
   </head>
   <body data-page="space">
@@ -49,6 +50,7 @@
               <div><span>平均太阳距离</span><strong id="distance">1.00 AU</strong></div>
               <div><span>公转周期</span><strong id="period">365.26 天</strong></div>
               <div><span>平均半径</span><strong id="radius">6,371 km</strong></div>
+              <div><span>当前太阳距离</span><strong id="actualDistance">—</strong></div>
             </div>
             <button class="focus" id="focus" type="button">靠近地球观察</button>
             <p class="info" id="info"></p>
@@ -115,7 +117,7 @@
               UTC。旋转和缩放只改变相机，不改变天体物理位置。此页面使用独立状态，返回实验台时保留原有观察设置。
             </p>
             <p class="info">
-              “对照”共用同一 UTC
+              “参照”共用同一 UTC
               时刻：空间俯视是固定黄道平面的投影，本地天空是所选地点的方位与高度。二维图不会随三维相机旋转，便于分清空间运动和视运动。
             </p>
             <a href="../project-guide.html#section-12">项目中的空间模型说明</a>
@@ -148,6 +150,50 @@
               ↺
             </button>
             <div id="labels"></div>
+            <div class="inspection-readout" id="inspectionReadout" aria-label="当前天体真实读数">
+              <strong id="inspectTitle">地球</strong>
+              <span id="inspectDistance"></span>
+              <span id="inspectPhase" hidden></span>
+            </div>
+            <details class="scene-tools" id="sceneTools">
+              <summary>观察</summary>
+              <div class="scene-tools-panel">
+                <span class="tools-heading">相机视角</span>
+                <div class="camera-presets" role="group" aria-label="三维相机预设">
+                  <button type="button" data-camera="oblique" aria-pressed="true">立体</button>
+                  <button type="button" data-camera="top" aria-pressed="false">俯视</button>
+                  <button type="button" data-camera="side" aria-pressed="false">侧视</button>
+                </div>
+                <label class="tools-field" for="inspectBody"
+                  >天体近景<select id="inspectBody">
+                    <option value="">选择天体…</option>
+                  </select></label
+                >
+                <label class="tools-check" for="trailEnabled"
+                  >历史轨迹<input type="checkbox" id="trailEnabled"
+                /></label>
+                <label class="tools-field" for="trailDays"
+                  >回看时段<select id="trailDays">
+                    <option value="7">过去7天</option>
+                    <option value="30" selected>过去30天</option>
+                    <option value="90">过去90天</option>
+                    <option value="365">过去365天</option>
+                  </select></label
+                >
+                <label class="tools-check" for="inspectInfo"
+                  >显示真实读数<input type="checkbox" id="inspectInfo" checked
+                /></label>
+                <label class="tools-check" for="referencePlane"
+                  >黄道参考面<input
+                    type="checkbox"
+                    id="referencePlane"
+                    title="固定J2000黄道平面，并非当地地平面"
+                /></label>
+                <p class="tools-note" id="trailNote">
+                  轨迹按UTC回溯，亮端为当前时刻；距离采用教学尺度。
+                </p>
+              </div>
+            </details>
           </div>
           <section
             class="companion space-compare"
@@ -212,6 +258,7 @@
     <script src="vendor/three.min.js"></script>
     <script src="../astronomy.js"></script>
     <script src="model.js"></script>
+    <script src="exploration.js"></script>
     <script src="appearance.js"></script>
     <script src="compare.js"></script>
     <script src="observer.js"></script>
