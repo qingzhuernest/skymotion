@@ -2251,6 +2251,9 @@ body[data-page='welcome'] :is(.welcome-brand, .welcome-layout, .welcome-footer) 
 }
 body[data-page='welcome'] :is(a, button) {
   pointer-events: auto;
+  /* Allow pinch zoom, but keep repeated taps from triggering browser double-tap zoom. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 body[data-page='welcome'] .welcome-brand {
   font-size: 16px;
@@ -2261,19 +2264,20 @@ body[data-page='welcome'] .welcome-brand small {
 }
 body[data-page='welcome'] .welcome-layout {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 24px;
+  justify-content: space-between;
+  gap: 40px;
   flex: 1;
   min-height: 0;
   padding: 24px 0;
-  text-align: center;
+  text-align: left;
 }
 body[data-page='welcome'] .welcome-intro {
-  padding: 8px 24px;
+  padding: 8px 0;
   margin: 0;
-  max-width: 640px;
+  width: min(420px, 55%);
+  max-width: 420px;
   border-radius: 0;
   background: radial-gradient(ellipse, #0c1423c9 15%, #0c142355 65%, transparent 85%);
 }
@@ -2283,7 +2287,7 @@ body[data-page='welcome'] .welcome-kicker {
   font-size: 11px;
 }
 body[data-page='welcome'] .welcome-intro h1 {
-  font-size: clamp(26px, 3.6vw, 44px);
+  font-size: clamp(25px, 2.6vw, 32px);
   font-weight: 500;
   line-height: 1.22;
   letter-spacing: 0;
@@ -2309,6 +2313,7 @@ body[data-page='welcome'] .welcome-enter:hover {
   background: #fbe4bc;
 }
 body[data-page='welcome'] .welcome-entry-note {
+  text-align: left;
   color: #a8b4c5;
   font-size: 11px;
   margin: 12px 0 0;
@@ -2317,14 +2322,14 @@ body[data-page='welcome'] .welcome-intro .welcome-quote {
   max-width: 420px;
   font-size: 12px;
   line-height: 1.9;
-  margin: 24px auto 0;
+  margin: 24px 0 0;
   color: #bdc2cb;
   text-wrap: balance;
 }
 body[data-page='welcome'] .welcome-toy {
   width: 100%;
-  max-width: 440px;
-  align-self: flex-end;
+  max-width: 260px;
+  align-self: center;
   text-align: right;
   padding: 0;
   margin: 0;
@@ -2422,15 +2427,18 @@ body[data-page='welcome'] .welcome-corner-links > a:hover {
     font-size: 28px;
   }
   body[data-page='welcome'] .welcome-layout {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
     gap: 24px;
-    padding: 32px 0 28px;
+    padding: 24px 0;
   }
   body[data-page='welcome'] .welcome-intro {
     padding: 8px 0;
     width: 100%;
   }
   body[data-page='welcome'] .welcome-intro h1 {
-    font-size: clamp(25px, 7vw, 32px);
+    font-size: clamp(24px, 6vw, 28px);
     margin: 16px 0 18px;
   }
   body[data-page='welcome'] .welcome-intro h1 br {
@@ -2444,6 +2452,9 @@ body[data-page='welcome'] .welcome-corner-links > a:hover {
     max-width: 290px;
     font-size: 11px;
     margin-top: 22px;
+  }
+  body[data-page='welcome'] .welcome-toy {
+    align-self: flex-end;
   }
   body[data-page='welcome'] .welcome-toy-note span {
     display: inline;
@@ -2527,6 +2538,7 @@ body[data-page='welcome'] .welcome-corner-links > a:hover {
     padding: 8px 0;
   }
   body[data-page='welcome'] .welcome-intro {
+    width: 100%;
     text-align: left;
   }
   body[data-page='welcome'] .welcome-toy {
