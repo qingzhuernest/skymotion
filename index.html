@@ -44,27 +44,41 @@
             >进入实验台 <span aria-hidden="true">✦</span></a
           >
         </div>
-        <div class="welcome-toy">
-          <div class="welcome-sky-actions">
-            <button
-              type="button"
-              id="welcomeConnect"
-              aria-label="连线：点两颗星连接，有连线后可清空"
-            >
-              连线
-            </button>
-            <button type="button" id="welcomeMeteor">流星</button>
+        <div class="welcome-corner-actions" aria-label="星空互动与资料">
+          <div class="welcome-toy">
+            <div class="welcome-sky-actions">
+              <button
+                type="button"
+                id="welcomeConnect"
+                aria-label="连线：点两颗星连接，有连线后可清空"
+              >
+                星空连线
+              </button>
+              <button type="button" id="welcomeMeteor">召唤流星</button>
+            </div>
+            <p id="welcomeStarStatus" role="status" aria-live="polite"></p>
           </div>
-          <p id="welcomeStarStatus" role="status" aria-live="polite"></p>
-        </div>
-        <div class="welcome-footer">
-          <div class="welcome-corner-links">
-            <a href="guide.html">学习指南</a
-            ><a id="contactAuthor" class="welcome-contact" href="contact.html"
-              >联系作者 · 欢迎反馈</a
-            ><a class="welcome-report" href="project-guide.html" aria-label="项目介绍与地理模型说明"
-              >项目介绍与地理模型说明</a
-            >
+          <div class="welcome-footer">
+            <div class="welcome-corner-links">
+              <a
+                href="guide.html"
+                aria-label="学习指南：操作步骤与观察任务"
+                title="操作步骤与观察任务"
+                >学习指南</a
+              ><a
+                id="contactAuthor"
+                class="welcome-contact"
+                href="contact.html"
+                aria-label="联系作者 · 欢迎反馈"
+                >联系作者</a
+              ><a
+                class="welcome-report"
+                href="project-guide.html"
+                aria-label="项目介绍：项目特点、计算依据与模型局限"
+                title="项目特点、计算依据与模型局限"
+                >项目介绍</a
+              >
+            </div>
           </div>
         </div>
       </div>

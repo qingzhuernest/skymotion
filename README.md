@@ -18,11 +18,11 @@
 
 | 文档 | 主要用途 |
 | --- | --- |
-| [学习指南](https://skymotion-5md.pages.dev/guide.html) | 入口、调节步骤、观察任务和课堂操作 |
-| [项目介绍与地理模型说明](https://skymotion-5md.pages.dev/project-guide.html) | 功能特点、数据来源、模型边界与验证依据 |
-| [完整开发逻辑与维护说明](https://skymotion-5md.pages.dev/development-guide.html) | 页面结构、状态、计算、渲染、测试与发布 |
+| [学习指南](https://skymotion-5md.pages.dev/guide.html) | 详细操作步骤、控制变量、观察任务与问题处理 |
+| [项目介绍与地理模型说明](https://skymotion-5md.pages.dev/project-guide.html) | 开发目的、教学和使用优点、数据依据与适用范围 |
+| [完整开发逻辑与维护说明](https://skymotion-5md.pages.dev/development-guide.html) | 已实现的页面结构、状态、计算、渲染、交互、验证与发布细节 |
 
-三份网页文档共用排版和互相跳转的入口。开发文档的 [Markdown 源文件](development-guide.md) 也保存在仓库中。
+三份网页文档共用排版和互相跳转的入口。对应的 Markdown 版本也保存在仓库中：[学习指南](learning-guide.md)、[项目介绍](project-guide.md)、[开发维护](development-guide.md)。
 
 ## 本地运行与发布
 
@@ -45,7 +45,7 @@ npx prettier@3.6.2 --check "*.js" "*.css" "*.html"
 npx prettier@3.6.2 --write "*.js" "*.css" "*.html"
 ```
 
-`.prettierignore` 排除第三方 `astronomy.js`，保留其上游代码与许可。本轮只整理格式和职责注释，没有修改天文公式、事件逻辑或页面内容；后续功能改动应单独验证。
+`.prettierignore` 排除第三方 `astronomy.js`，保留其上游代码与许可。功能改动按影响范围检查交互、边界和响应式布局，并同步网页说明与Markdown版本。
 
 ## 科学模型与限制
 

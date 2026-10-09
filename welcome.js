@@ -480,7 +480,7 @@
   // One control introduces connecting, then becomes clear once the graph has edges.
   function syncConnectButton() {
     const button = $('welcomeConnect');
-    button.textContent = edges.size ? '清空连线' : '连线';
+    button.textContent = edges.size ? '清空连线' : '星空连线';
     button.setAttribute(
       'aria-label',
       edges.size ? `清空全部 ${edges.size} 条连线` : '连线：点两颗星连接',

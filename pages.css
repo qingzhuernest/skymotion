@@ -2211,7 +2211,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   }
 }
 
-/* Welcome: one left-aligned content rail; the rest of the viewport belongs to the stars. */
+/* Welcome: entry on the left, five compact actions anchored at the lower right. */
 html.welcome-page {
   height: 100%;
   overflow: hidden;
@@ -2266,18 +2266,27 @@ body[data-page='welcome'] .welcome-brand small {
   letter-spacing: 2px;
 }
 body[data-page='welcome'] .welcome-layout {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 88px;
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: 24px;
+  row-gap: 0;
   flex: 1;
   min-height: 0;
   width: 100%;
-  max-width: 340px;
+  max-width: none;
   margin: 0;
-  padding: 20px 0;
+  padding: 16px 0;
   text-align: left;
+}
+body[data-page='welcome'] .welcome-corner-actions {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-self: end;
+  width: 88px;
 }
 body[data-page='welcome'] :is(.welcome-intro, .welcome-toy) {
   padding: 0;
@@ -2289,7 +2298,11 @@ body[data-page='welcome'] :is(.welcome-intro, .welcome-toy) {
   animation: none;
 }
 body[data-page='welcome'] .welcome-intro {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  align-self: center;
   width: 100%;
+  max-width: 340px;
 }
 body[data-page='welcome'] .welcome-intro h1 {
   font-size: clamp(22px, 2.2vw, 26px);
@@ -2319,7 +2332,7 @@ body[data-page='welcome'] .welcome-enter:hover {
   background: #fbe4bc;
 }
 body[data-page='welcome'] .welcome-toy {
-  width: 180px;
+  width: 88px;
   align-self: flex-start;
   text-align: left;
 }
@@ -2328,20 +2341,20 @@ body[data-page='welcome'] .welcome-sky-actions {
   flex-direction: column;
   align-items: stretch;
   gap: 6px;
-  width: 180px;
+  width: 88px;
   margin: 0;
 }
 body[data-page='welcome'] .welcome-footer {
   display: block;
   flex: none;
-  width: 180px;
+  width: 88px;
   margin: 0;
   padding: 0;
 }
 body[data-page='welcome'] .welcome-corner-links {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  width: 180px;
+  width: 88px;
   margin: 0;
   gap: 6px;
 }
@@ -2350,7 +2363,7 @@ body[data-page='welcome']
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 180px;
+  width: 88px;
   min-height: 30px;
   padding: 4px 8px;
   border-radius: 14px;
@@ -2404,7 +2417,6 @@ body[data-page='welcome'] .welcome-quote {
 }
 @media (max-height: 700px) {
   body[data-page='welcome'] .welcome-layout {
-    gap: 12px;
     padding: 12px 0;
   }
   body[data-page='welcome'] .welcome-intro > p {
@@ -2414,44 +2426,30 @@ body[data-page='welcome'] .welcome-quote {
     min-height: 42px;
     padding: 8px 18px;
   }
-  body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links > a) {
+  body[data-page='welcome']
+    :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited) {
     min-height: 26px;
     font-size: 10px !important;
     padding: 3px 8px;
   }
 }
-/* Short landscape viewports keep the two groups in separate grid cells, never overlaid. */
+@media (max-width: 600px) {
+  body[data-page='welcome'] .welcome-intro {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+}
+/* Preserve separate rows for the quote and controls even with very little landscape height. */
 @media (max-height: 500px) and (min-width: 600px) {
   body[data-page='welcome'] .welcome-screen {
     padding: max(10px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-left))
       max(10px, env(safe-area-inset-bottom));
   }
   body[data-page='welcome'] .welcome-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 300px) 180px;
-    grid-template-rows: auto auto;
-    align-content: center;
-    align-items: start;
-    justify-content: start;
-    column-gap: 32px;
-    row-gap: 8px;
-    max-width: 540px;
     padding: 8px 0;
   }
-  body[data-page='welcome'] .welcome-intro {
-    grid-column: 1;
-    grid-row: 1 / 3;
-    align-self: center;
-  }
-  body[data-page='welcome'] .welcome-toy {
-    grid-column: 2;
-    grid-row: 1;
-  }
-  body[data-page='welcome'] .welcome-footer {
-    grid-column: 2;
-    grid-row: 2;
-  }
-  body[data-page='welcome'] :is(.welcome-sky-actions, .welcome-corner-links) {
+  body[data-page='welcome']
+    :is(.welcome-corner-actions, .welcome-sky-actions, .welcome-corner-links) {
     gap: 4px;
   }
 }
