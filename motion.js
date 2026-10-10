@@ -314,6 +314,8 @@ function initMotion() {
   });
   document.querySelectorAll('details').forEach((d) =>
     d.addEventListener('toggle', () => {
+      // Fold animation owns presentation; redraw only if the disclosure reveals a canvas.
+      if (d.closest('.ui-parameters') && !d.querySelector('canvas')) return;
       if (d.open && !d.closest('#controls')) revealMotion([...d.children].slice(1), 200);
       schedule();
     }),

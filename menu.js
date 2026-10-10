@@ -85,8 +85,11 @@ function initMenu() {
     if (!mobile.matches) closeMenu();
     schedule();
   });
+  // Pure parameter disclosures do not change astronomy or the plotted canvas.
   for (const details of controls.querySelectorAll('details'))
-    details.addEventListener('toggle', schedule);
+    details.addEventListener('toggle', () => {
+      if (details.querySelector('canvas')) schedule();
+    });
   document.querySelectorAll('[data-study-target]').forEach(
     (b) =>
       (b.onclick = () => {

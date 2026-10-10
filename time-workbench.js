@@ -326,7 +326,9 @@ function initTimeWorkbench() {
       const time = bodyDay()[key];
       if (time !== null) workbenchSetTime(time);
     };
-  $('workbenchMore').addEventListener('toggle', schedule);
+  $('workbenchMore').addEventListener('toggle', () => {
+    if ($('workbenchMore').open) renderTimeWorkbench();
+  });
   for (const id of ['workbenchClockInput', 'workbenchDate', 'workbenchMonth'])
     $(id).addEventListener('focus', () => {
       if (state.playing || analemmaPlaying) {
