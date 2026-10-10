@@ -1,6 +1,6 @@
 /* Shared motion and geometry; never fade or scale the scientific canvas. */
 .motion-segments { position: relative; isolation: isolate; }
-.motion-segments > button { position: relative; z-index: 1; transition: color 180ms ease, box-shadow 180ms ease !important; }
+.motion-segments > button { position: relative; z-index: 1; transition: color 180ms ease, box-shadow 180ms ease, transform 320ms cubic-bezier(.22,1.3,.36,1) !important; }
 .motion-selection { position: absolute; z-index: 0; pointer-events: none; border-radius: 12px; background: #315da8; }
 .motion-segments > button.motion-selected { background: transparent !important; box-shadow: none !important; color: #fff !important; }
 .motion-segments > button:not(.motion-selected) { background: transparent !important; }
@@ -10,14 +10,13 @@
 .motion-menu-edge { position: absolute; left: 2px; top: 48%; width: 24px; min-width: 24px !important; height: 64px; padding: 0 !important; border: 1px solid #b8cbea; border-radius: 12px; color: #315da8; background: #edf3ff; box-shadow: 0 3px 12px #18345c20; z-index: 5; font-size: 24px; cursor: ew-resize; transition: transform 180ms ease; }
 @media (min-width: 761px) {
   .ui-shell #uiParametersButton, body[data-page='space'] #spaceParameters { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; padding: 8px 12px; border: 1px solid #dce5f2; border-radius: 12px; background: #edf3ff; color: #315da8; font-size: 13px; white-space: nowrap; }
-  .ui-shell .ui-grid, body[data-page='space'] .space-shell { transition: grid-template-columns 280ms cubic-bezier(.2,0,0,1), gap 280ms cubic-bezier(.2,0,0,1); }
-  .ui-shell .ui-parameters, .space-sidebar-host { transition: transform 240ms cubic-bezier(.2,0,0,1), opacity 200ms ease; }
+  .ui-shell .ui-grid, body[data-page='space'] .space-shell { transition: grid-template-columns 360ms cubic-bezier(.22,1.12,.36,1), gap 360ms cubic-bezier(.22,1.12,.36,1); }
+  .ui-shell .ui-parameters, .space-sidebar-host { transition: transform 360ms cubic-bezier(.22,1.12,.36,1), opacity 200ms ease; }
   .ui-shell.motion-rail-collapsed .ui-grid, body[data-page='space'] .space-shell.motion-rail-collapsed { grid-template-columns: 0px minmax(0,1fr); column-gap: 0; }
   .ui-shell.motion-rail-collapsed .ui-parameters, .space-shell.motion-rail-collapsed .space-sidebar-host { transform: translateX(-24px); opacity: 0; pointer-events: none; overflow: hidden; padding: 0; border: 0; }
 }
 .ui-parameters details > summary { transition: background-color 200ms ease, color 200ms ease; }
-.ui-parameters details[open] > :not(summary) { animation: motion-disclosure 220ms cubic-bezier(.2,0,0,1); }
-@keyframes motion-disclosure { from { opacity: .5; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
 @media (prefers-reduced-motion: reduce) {
   .motion-segments > button, .ui-shell .ui-grid, .ui-shell .ui-parameters, body[data-page='space'] .space-shell, .space-sidebar-host, .motion-menu-edge, .motion-menu-grip { transition: none !important; }
   .ui-parameters details[open] > :not(summary) { animation: none; }
@@ -25,3 +24,26 @@
 
 /* Wide screens use the rail handle only; the heading button opens modal menus. */
 #uiParametersButton[hidden], #spaceParameters[hidden] { display: none !important; }
+
+/* Elastic feedback for interactive surfaces, never for physical celestial positions. */
+:is(button, .page-action, .welcome-document-link, .document-links a, .page-nav a) {
+  transition: transform 320ms cubic-bezier(.22,1.3,.36,1), box-shadow 200ms ease;
+}
+:is(button, .page-action, .document-links a, .page-nav a):active { transform: scale(.97); }
+.ui-parameters details > summary::after { transition: transform 320ms cubic-bezier(.22,1.3,.36,1) !important; }
+@media (prefers-reduced-motion: reduce) {
+  :is(button, .page-action, .welcome-document-link, .document-links a, .page-nav a) { transition: none !important; }
+  :is(button, .page-action, .document-links a, .page-nav a):active { transform: none; }
+  .ui-parameters details > summary::after { transition: none !important; }
+}
+
+.motion-menu-grip, .motion-menu-edge { transition: transform 320ms cubic-bezier(.22,1.3,.36,1); }
+
+.scene-tools[open] .scene-tools-panel { animation: motion-tools-pop 320ms cubic-bezier(.2,0,0,1); transform-origin: bottom right; }
+@keyframes motion-tools-pop {
+  0% { opacity: .3; transform: translateY(10px) scale(.94); }
+  70% { opacity: 1; transform: translateY(-1px) scale(1.012); }
+  87% { transform: translateY(.3px) scale(.997); }
+  100% { transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .scene-tools[open] .scene-tools-panel { animation: none; } }

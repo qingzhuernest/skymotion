@@ -22,9 +22,8 @@
     closing = true;
     const token = ++generation;
     animation?.cancel();
-    animation = lowMotion.matches ? null : drawer.animate(
-      [{transform: drawer.style.transform || 'translateX(0)'}, {transform: 'translateX(-100%)'}],
-      {duration: 200, easing: 'cubic-bezier(.2,0,0,1)'});
+    animation = lowMotion.matches ? null : SkyMotionUI.springPanel(drawer,
+      [{transform: drawer.style.transform || 'translateX(0)'}, {transform: 'translateX(-100%)'}]);
     (animation?.finished.catch(() => {}) || Promise.resolve()).then(() => {
       if (token !== generation) return;
       drawer.style.transform = ''; drawer.close(); closing = false;
@@ -36,7 +35,7 @@
     drawer.style.transform = '';
     if (!drawer.open) drawer.showModal();
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
-      animation = drawer.animate([{transform: 'translateX(-100%)'}, {transform: 'translateX(0)'}], {duration: 240, easing: 'cubic-bezier(.2,0,0,1)'});
+      animation = SkyMotionUI.springPanel(drawer, [{transform: 'translateX(-100%)'}, {transform: 'translateX(0)'}]);
     opener.setAttribute('aria-expanded', 'true');
   };
   closer.onclick = closeDrawer;

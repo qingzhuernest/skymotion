@@ -2,6 +2,82 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const easing = 'cubic-bezier(.2,0,0,1)';
+
+  function springFrames(from, to) {
+    const frame = (progress, offset) => Object.fromEntries([
+      ['offset', offset],
+      ...Object.keys(to).map(key => {
+        const start = parseFloat(from[key]), end = parseFloat(to[key]);
+        const value = start + (end - start) * progress;
+        return [key, `${key === 'width' || key === 'height' ? Math.max(1, value) : value}px`];
+      }),
+    ]);
+    return [frame(0, 0), frame(1.065, .68), frame(.985, .86), frame(1, 1)];
+  }
+
+  function springPanel(element, frames, duration = 320) {
+    const width = element.getBoundingClientRect().width;
+    const pixels = transform => {
+      const value = /translateX\(([-.\d]+)(%|px)?\)/.exec(transform);
+      return value ? Number(value[1]) * (value[2] === '%' ? width / 100 : 1) : 0;
+    };
+    const from = pixels(frames[0].transform), to = pixels(frames.at(-1).transform);
+    return element.animate([0, 1.045, .988, 1].map((progress, i) => ({
+      transform: `translateX(${from + (to - from) * progress}px)`,
+      offset: [0, .7, .87, 1][i],
+    })), { duration: Math.max(320, duration), easing });
+  }
+
+  /** Native summary clicks (including keyboard clicks) keep a single, reversible fold. */
+  function installDisclosures() {
+    document.querySelectorAll('.ui-parameters details,.side details,.document-toc').forEach(details => {
+      const summary = [...details.children].find(node => node.tagName === 'SUMMARY');
+      if (!summary) return;
+      let animation = null, targetOpen = details.open, generation = 0;
+      summary.addEventListener('click', event => {
+        if (event.target.closest('a,button,input,select')) return;
+        event.preventDefault();
+        const from = details.getBoundingClientRect().height;
+        animation?.cancel();
+        const token = ++generation;
+        targetOpen = animation ? !targetOpen : !details.open;
+        animation = null;
+        details.style.height = ''; details.style.overflow = '';
+        if (reduced.matches) { details.open = targetOpen; return; }
+        details.open = false;
+        const closedHeight = details.getBoundingClientRect().height;
+        details.open = true;
+        const openedHeight = details.getBoundingClientRect().height;
+        const to = targetOpen ? openedHeight : closedHeight;
+        details.style.overflow = 'hidden';
+        details.style.height = `${to}px`;
+        animation = details.animate([0, 1.045, .988, 1].map((progress, i) => ({
+          height: `${Math.max(closedHeight, from + (to - from) * progress)}px`,
+          offset: [0, .7, .87, 1][i],
+        })), { duration: 320, easing });
+        animation.finished.catch(() => {}).then(() => {
+          if (token !== generation) return;
+          details.open = targetOpen; details.style.height = ''; details.style.overflow = '';
+          animation = null;
+        });
+      });
+    });
+  }
+
+  // Contextual controls emerge beside their parent switch; the canvas never scales.
+  const reveals = new WeakMap();
+  function revealOptions(group) {
+    reveals.get(group)?.cancel();
+    if (reduced.matches || !group.getClientRects().length) return;
+    group.style.transformOrigin = 'left center';
+    const animation = group.animate([
+      { opacity: .35, transform: 'translateX(-12px) scaleX(.88)', offset: 0 },
+      { opacity: 1, transform: 'translateX(2px) scaleX(1.018)', offset: .68 },
+      { opacity: 1, transform: 'translateX(-.5px) scaleX(.996)', offset: .86 },
+      { opacity: 1, transform: 'translateX(0) scaleX(1)', offset: 1 },
+    ], { duration: 380, easing });
+    reveals.set(group, animation);
+  }
   const selected = button => button.classList.contains('active') ||
     button.getAttribute('aria-selected') === 'true' || button.getAttribute('aria-pressed') === 'true';
 
@@ -25,10 +101,9 @@
         });
         if (!button) { marker.hidden = true; previous = null; return; }
         if (animate && previous === button) return;
-        const frame = group.getBoundingClientRect(), box = button.getBoundingClientRect();
-        const next = { left: `${box.left - frame.left - group.clientLeft + group.scrollLeft}px`,
-          top: `${box.top - frame.top - group.clientTop + group.scrollTop}px`,
-          width: `${box.width}px`, height: `${box.height}px` };
+        // Layout coordinates stay stable while the containing options spring into view.
+        const next = { left: `${button.offsetLeft}px`, top: `${button.offsetTop}px`,
+          width: `${button.offsetWidth}px`, height: `${button.offsetHeight}px` };
         if (previous === button && Object.entries(next).every(([key, value]) => marker.style[key] === value)) return;
         const current = getComputedStyle(marker);
         const from = { left: current.left, top: current.top, width: current.width, height: current.height };
@@ -36,7 +111,7 @@
         Object.assign(marker.style, next);
         marker.hidden = false;
         if (animate && previous && previous !== button && !reduced.matches)
-          animation = marker.animate([from, next], { duration: 260, easing });
+          animation = marker.animate(springFrames(from, next), { duration: 360, easing });
         previous = button;
       }
       const observer = new MutationObserver(() => update());
@@ -45,6 +120,19 @@
       // Only our own class mutation changes once; repeated renders do not restart motion.
       new ResizeObserver(() => update(false)).observe(group);
       update(false);
+    });
+    document.querySelectorAll('.view-tabs').forEach(group => {
+      let visible = Boolean(group.getClientRects().length);
+      new MutationObserver(() => {
+        const nextVisible = Boolean(group.getClientRects().length);
+        if (nextVisible && !visible) revealOptions(group);
+        if (!nextVisible) reveals.get(group)?.cancel();
+        visible = nextVisible;
+      }).observe(group, { attributes: true, attributeFilter: ['hidden'] });
+      document.querySelector('.body-switch')?.addEventListener('click', event => {
+        const button = event.target.closest('button');
+        if (button && !selected(button)) requestAnimationFrame(() => revealOptions(group));
+      }, true);
     });
   }
 
@@ -124,6 +212,6 @@
     }, true);
     sync(); return sync;
   }
-  window.SkyMotionUI = { installRail, installSegments };
-  document.addEventListener('DOMContentLoaded', installSegments, { once: true });
+  window.SkyMotionUI = { installRail, installSegments, springPanel };
+  document.addEventListener('DOMContentLoaded', () => { installSegments(); installDisclosures(); }, { once: true });
 })();

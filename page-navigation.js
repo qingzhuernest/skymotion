@@ -546,7 +546,7 @@ function renderUIWorkspace() {
     drawerAnimation?.cancel();
     drawerAnimation = lowMotion.matches
       ? null
-      : drawer.animate(frames, { duration, easing: 'cubic-bezier(.2,0,0,1)' });
+      : SkyMotionUI.springPanel(drawer, frames, duration);
     return drawerAnimation?.finished.catch(() => {}) || Promise.resolve();
   }
   function finishDrawerClose(restoreFocus = true) {
