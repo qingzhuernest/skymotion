@@ -243,7 +243,7 @@
   );
   sunGlow.scale.set(9, 9, 1);
   scene.add(sunGlow);
-  const lunarAppearance = SolarSpaceAppearance.moon(THREE, renderer, 0.12);
+  const lunarAppearance = SolarSpaceAppearance.moon(THREE, renderer, 0.16);
   const moon = new THREE.Mesh(lunarAppearance.geometry, lunarAppearance.material);
   moon.layers.set(1);
   const lunarOrbit = line([], 0xa4bddb, 0.4);
@@ -910,7 +910,7 @@
     return 6.5 / Math.min(1, camera.aspect);
   }
   function moonDistance() {
-    return 0.8 / Math.min(1, camera.aspect);
+    return 0.9 / Math.min(1, camera.aspect);
   }
   function obliqueElevation() {
     return view === 'overview' ? 0.85 : 0.28;
@@ -925,7 +925,7 @@
           : planetDistance(selected);
   }
   function minimumDistance() {
-    return inspectingMoon ? 0.35 : view === 'overview' ? 45 : 1.6;
+    return inspectingMoon ? 0.48 : view === 'overview' ? 45 : 1.6;
   }
   function resize() {
     const width = stage.clientWidth;
