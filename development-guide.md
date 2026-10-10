@@ -81,7 +81,8 @@
 | `interface-motion.js`、`interface-motion.css` | 共享分段选中与关联选项弹出动画、折叠项和抽屉弹性开合、大屏菜单手动收起、边缘手柄和减少动态效果适配；与科学时钟分离 |
 | `documents.css` | 三份阅读文档的统一标题、目录、表格与链接排版 |
 | `tests/`、`scripts/` | 可重复运行的三维模型回归及恒星、轨道数据生成工具 |
-| `.github/workflows/deploy.yml` | 将 main 的受跟踪资源部署到正式 Cloudflare Pages |
+| `.github/workflows/deploy.yml`、`.github/workflows/github-pages.yml` | 分别发布 Cloudflare 正式站与 GitHub Pages 同源镜像 |
+| `.github/scripts/prepare_site.py` | 两个站点共用的静态打包脚本，处理项目子路径下的404链接 |
 | `astronomy.js` | 本地 Astronomy Engine 库 |
 | `earth.jpg`、`credits.txt` | 地球纹理与资源来源说明 |
 
@@ -371,7 +372,7 @@ node tests/space-exploration.cjs
 
 近期菜单浏览器检查覆盖320、390、760、768、960和1366像素宽度，以及四个实验页面和独立三维页的开合；另检查手柄拖动、减少动态效果、窄屏抽屉关闭与旋转屏幕竞争。浏览器采用Chromium，不能替代真实Safari、Firefox或低端GPU验收。部分旧科学对照与浏览器脚本仍在历史记录或临时目录，尚未全部形成仓库测试；交接时要保留输入、断言和运行环境。
 
-## 21. Cloudflare 打包与发布
+## 21. 双站点打包与发布
 
 本地预览可用任意静态服务器，例如：
 
@@ -386,6 +387,10 @@ python3 -m http.server 8000
 根目录包含404.html，使Cloudflare Pages对不存在的路径采用404响应而非首页SPA回退；404文件位于仓库根目录，与其他静态页面一同部署。上线后需检查未知.js路径的实际HTTP状态。
 
 当前正式仓库根目录保存静态网站资源；向 main 分支推送后，GitHub Actions 将受跟踪的网站文件自动部署到现有 Cloudflare Pages 项目 skymotion。README 与隐藏配置不发布，不需要在生产环境运行 Python 或 Node。发布后再次检查首页、实验台、全部专题、资源加载、深链接及移动操作，尤其避免浏览器缓存使新旧脚本混用。
+
+GitHub Pages 镜像目标为 [qingzhuernest.github.io/skymotion/](https://qingzhuernest.github.io/skymotion/)。首次需在仓库 Settings → Pages 将 Source 设为 GitHub Actions，随后运行 Sync SkyMotion to GitHub Pages；私有仓库需要支持 Pages 的套餐。镜像未启用时工作流报告等待配置，不影响 Cloudflare。之后 main 推送触发两个独立发布工作流。
+
+两个工作流共用 `.github/scripts/prepare_site.py`，只复制受跟踪的网站文件并写入 .nojekyll。GitHub 构建传入 /skymotion 基路径，只改写404页的根路径恢复链接；其余页面、脚本和资源字节一致。普通网页已使用相对路径，三维对照仍在同源下工作。镜像保留正式站的 canonical 与站点地图，避免为同一内容建立两个搜索主网址。部署完成后核对两边关键资源，而非只看打包成功。
 
 历史 ZIP 是版本快照，保存于 project-archive 分支的完整归档包，不触发部署。正式版本以 main 为准；GitHub Actions 成功后还要核对线上资源，不能把打包成功等同于上线成功。
 

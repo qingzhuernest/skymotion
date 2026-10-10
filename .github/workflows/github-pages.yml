@@ -1,0 +1,91 @@
+name: Sync SkyMotion to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: skymotion-github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Check Pages activation
+        id: activation
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TASK_REPOSITORY: ${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import urllib.error
+          import urllib.request
+
+          repository = os.environ['TASK_REPOSITORY']
+          request = urllib.request.Request(
+              f'https://api.github.com/repos/{repository}/pages',
+              headers={
+                  'Authorization': 'Bearer ' + os.environ['GH_TOKEN'],
+                  'Accept': 'application/vnd.github+json',
+                  'User-Agent': 'SkyMotion-Pages',
+                  'X-GitHub-Api-Version': '2022-11-28',
+              },
+          )
+          ready = False
+          try:
+              with urllib.request.urlopen(request) as response:
+                  ready = json.load(response).get('build_type') == 'workflow'
+          except urllib.error.HTTPError as error:
+              if error.code not in (403, 404):
+                  raise
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('ready=' + str(ready).lower() + '\n')
+          if not ready:
+              message = (
+                  'GitHub Pages is waiting for activation. In repository Settings > Pages, '
+                  'select GitHub Actions, then run this workflow. '
+                  'A private repository requires a GitHub plan that supports Pages.'
+              )
+              print('::notice::' + message)
+              with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+                  summary.write('## Enable the mirror\n\n' + message + '\n\n')
+                  summary.write(f'[Open Pages settings](https://github.com/{repository}/settings/pages)\n')
+          PY
+
+      - name: Configure GitHub Pages
+        if: steps.activation.outputs.ready == 'true'
+        uses: actions/configure-pages@v5
+
+      - name: Prepare the same website
+        if: steps.activation.outputs.ready == 'true'
+        env:
+          PAGES_BASE_PATH: /${{ github.event.repository.name }}
+        run: python3 .github/scripts/prepare_site.py --base-path "$PAGES_BASE_PATH"
+
+      - name: Upload website
+        if: steps.activation.outputs.ready == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy GitHub Pages
+        if: steps.activation.outputs.ready == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -34,27 +34,7 @@ jobs:
           fi
 
       - name: Prepare website files
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import shutil
-          import subprocess
-
-          output = Path("dist")
-          output.mkdir()
-          tracked = subprocess.check_output(["git", "ls-files", "-z"]).decode().split("\0")
-          for name in tracked:
-              if not name:
-                  continue
-              source = Path(name)
-              if any(part.startswith(".") for part in source.parts) or name == "README.md":
-                  continue
-              target = output / source
-              target.parent.mkdir(parents=True, exist_ok=True)
-              shutil.copy2(source, target)
-          if not (output / "index.html").is_file():
-              raise SystemExit("Missing index.html")
-          PY
+        run: python3 .github/scripts/prepare_site.py
 
       - name: Deploy to existing Cloudflare Pages project
         uses: cloudflare/wrangler-action@v4

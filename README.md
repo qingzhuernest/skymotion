@@ -76,3 +76,9 @@ node tests/space-exploration.cjs
 浏览器返回/前进的集成回归见 `tests/interaction-history.cjs`，检查模式切换、滑条调整合并、图解路由、三维行星与日期撤回，曲线拖动调整、三维标题与标签恢复、嵌入相机选项撤回，以及菜单开合和相机拖动不产生步骤。需启动静态服务器并在测试环境安装Playwright及Chromium；应用部署本身不依赖它们。可通过 `SKY_MOTION_TEST_URL` 指定预览网址，`SKY_MOTION_CHROMIUM` 指定浏览器路径，`SKY_MOTION_PLAYWRIGHT` 指定已安装模块路径。
 
 本次功能总结与核验范围见[网页检查记录（2026-10-10）](BUG-AUDIT-2026-10-10.md)。
+
+## 双站点自动发布
+
+Cloudflare 正式站点：<https://skymotion-5md.pages.dev/>。GitHub Pages 镜像目标：<https://qingzhuernest.github.io/skymotion/>，首次需要在[仓库 Pages 设置](https://github.com/qingzhuernest/skymotion/settings/pages)把 Source 选择为 GitHub Actions，再运行 `Sync SkyMotion to GitHub Pages`。私有仓库需要支持 Pages 的 GitHub 套餐；工作流不会改变仓库可见性。未启用时仅报告等待配置，不影响 Cloudflare 发布。
+
+两个工作流都从 main 的同一次提交调用 `.github/scripts/prepare_site.py` 打包。除 GitHub 项目子路径下的404恢复链接外，网页与资源使用同一份文件；图形、参数、文档、三维功能一致。镜像保留 Cloudflare 的 canonical 链接与站点地图，搜索引擎的主要网址继续指向正式站点。首次启用后，每次推送 main 自动部署两边；必要时可分别在 Actions 中重新运行发布。
