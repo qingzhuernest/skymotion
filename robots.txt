@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://skymotion-5md.pages.dev/sitemap.xml
+Sitemap: https://qingzhuernest.github.io/skymotion/sitemap.xml

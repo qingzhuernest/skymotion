@@ -12,13 +12,16 @@
       name="description"
       content="介绍静态网站的工程结构、状态管理、天文计算、独立渲染管线、交互流程、检查方法和Cloudflare Pages发布方式。"
     />
-    <link rel="canonical" href="https://skymotion-5md.pages.dev/development-guide" />
+    <link rel="canonical" href="https://qingzhuernest.github.io/skymotion/development-guide.html" />
     <meta property="og:title" content="完整开发逻辑与维护说明 · 天体视运动实验室" />
     <meta
       property="og:description"
       content="介绍静态网站的工程结构、状态管理、天文计算、独立渲染管线、交互流程、检查方法和Cloudflare Pages发布方式。"
     />
-    <meta property="og:url" content="https://skymotion-5md.pages.dev/development-guide" />
+    <meta
+      property="og:url"
+      content="https://qingzhuernest.github.io/skymotion/development-guide.html"
+    />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_CN" />
     <!-- search-metadata:end -->
@@ -28,7 +31,7 @@
     <nav class="page-nav" aria-label="页面导航">
       <a href="index.html">欢迎页</a><a href="lab.html">实验台</a><a href="guide.html">学习指南</a
       ><a href="diagrams.html">关联图解</a><a href="analemma.html">日行迹</a>
-    <a href="space/">三维天空</a>
+      <a href="space/">三维天空</a>
     </nav>
     <main class="reading-page document-page">
       <header class="document-header">
@@ -107,7 +110,8 @@
         <h2 id="section-2">2. 技术方案与运行边界</h2>
         <p>
           项目是静态多页面网站：HTML、CSS、原生 JavaScript、Canvas 2D，以及本地分发的 Astronomy
-          Engine 2.1.19；独立三维模块使用本地Three.js。Python用于静态预览与目录数据生成，正式网页无需生成或构建。
+          Engine
+          2.1.19；独立三维模块使用本地Three.js。Python用于静态预览与目录数据生成，正式网页无需生成或构建。
         </p>
         <p>
           没有必需的后端服务、数据库、登录系统或实时星历API。浏览器直接计算天体位置。三维天球和装置主要使用三维坐标投影到Canvas
@@ -179,7 +183,11 @@
                 <td>完整开发逻辑、工程结构与维护说明</td>
                 <td>项目介绍中的开发文档入口</td>
               </tr>
-              <tr><td><code>space/index.html</code></td><td>独立三维太阳系、日地月、辅助参照与沉浸观察</td><td>顶栏“三维天空”、空间模型菜单或 /space/</td></tr>
+              <tr>
+                <td><code>space/index.html</code></td>
+                <td>独立三维太阳系、日地月、辅助参照与沉浸观察</td>
+                <td>顶栏“三维天空”、空间模型菜单或 /space/</td>
+              </tr>
               <tr>
                 <td><code>404.html</code></td>
                 <td>未知地址的错误页</td>
@@ -288,10 +296,24 @@
                 <td><code>pages.css</code></td>
                 <td>当前多页面布局、Material 表面层级、多端适配及修正覆盖</td>
               </tr>
-              <tr><td><code>interface-motion.js</code>、<code>interface-motion.css</code></td><td>共享分段选中与关联选项弹出动画、折叠项和抽屉弹性开合、大屏菜单手动收起、边缘手柄和减少动态效果适配；与科学时钟分离</td></tr>
-              <tr><td><code>documents.css</code></td><td>三份阅读文档的统一标题、目录、表格与链接排版</td></tr>
-              <tr><td><code>tests/</code>、<code>scripts/</code></td><td>可重复运行的三维模型回归及恒星、轨道数据生成工具</td></tr>
-              <tr><td><code>.github/workflows/deploy.yml</code></td><td>将 main 的受跟踪资源部署到正式 Cloudflare Pages</td></tr>
+              <tr>
+                <td><code>interface-motion.js</code>、<code>interface-motion.css</code></td>
+                <td>
+                  共享分段选中与关联选项弹出动画、折叠项和抽屉弹性开合、大屏菜单手动收起、边缘手柄和减少动态效果适配；与科学时钟分离
+                </td>
+              </tr>
+              <tr>
+                <td><code>documents.css</code></td>
+                <td>三份阅读文档的统一标题、目录、表格与链接排版</td>
+              </tr>
+              <tr>
+                <td><code>tests/</code>、<code>scripts/</code></td>
+                <td>可重复运行的三维模型回归及恒星、轨道数据生成工具</td>
+              </tr>
+              <tr>
+                <td><code>.github/workflows/deploy.yml</code></td>
+                <td>将 main 的受跟踪资源部署到正式 Cloudflare Pages</td>
+              </tr>
               <tr>
                 <td><code>astronomy.js</code></td>
                 <td>本地 Astronomy Engine 库</td>
@@ -300,7 +322,6 @@
                 <td><code>earth.jpg</code>、<code>credits.txt</code></td>
                 <td>地球纹理与资源来源说明</td>
               </tr>
-
             </tbody>
           </table>
         </div>
@@ -308,7 +329,10 @@
           现有脚本采用传统全局作用域和有顺序的 script 加载，不是 ES Modules。大量功能通过 DOM ID
           和共享函数连接，因此改名、删除节点或调整加载顺序必须检查所有引用。
         </p>
-        <p>当前 main 不包含旧 tools/ 生成器或 REVIEW.md；这些资料只保存在历史归档中。根目录网页是当前维护源，不能用旧生成器覆盖。</p>
+        <p>
+          当前 main 不包含旧 tools/ 生成器或
+          REVIEW.md；这些资料只保存在历史归档中。根目录网页是当前维护源，不能用旧生成器覆盖。
+        </p>
         <h2 id="section-5">5. 数据、界面与绘图的关系</h2>
         <figure class="development-flow">
           <figcaption>数据与绘图流程</figcaption>
@@ -321,7 +345,9 @@
             <li>确定可见画布</li>
             <li>统一绘图</li>
           </ol>
-          <p>科学播放、相机缓动与控件动画是不同层次：科学播放推进日期或时刻；视觉插值不改写精确读数；interface-motion.js只改变菜单和选中标记的呈现，不修改星历状态。</p>
+          <p>
+            科学播放、相机缓动与控件动画是不同层次：科学播放推进日期或时刻；视觉插值不改写精确读数；interface-motion.js只改变菜单和选中标记的呈现，不修改星历状态。
+          </p>
         </figure>
         <p>
           科学状态决定精确读数，视觉插值改善过渡。插值不覆盖实际选择的日期、时刻或地点。学生读到的科学参数不能随着缓动随意变化。月球逐日播放的相邻日期使用完整步长的线性视觉过渡，避免每一天短暂移动后停顿；整日读数仍对应选定日期，月初重播不伪造月末与月初连续。月相轨道支持指针捕获拖动，以
@@ -505,7 +531,9 @@
         <p>
           仰望天空使用观察者前方半球的正投影，地平面在下方。只有地平线上方、位于前方的天体绘入天空；身后或地平线下的天体通过列表说明。转向改变观察方向，时间滑块改变天体位置，两个控制都必须能直接操作。
         </p>
-        <p>observer.js的地面方位盘使用当地东、北基向量按observerAz旋转后压成水平面椭圆；只作地面方位示意，不参与天空单位向量、地平线高度或升落求解。站位蓝点固定，前方箭头固定向屏幕上侧，方位字和网格随相机朝向移动；极点使用参考方位约定。observer-explanation.js仅在实验台的仰望天空视角提供“轨迹说明”弹窗，监听视角选中态和绘图区类型控制入口可见性。说明区分前方半球边界、当日00:00—24:00端点与高度0°穿越，不改轨迹采样、裁切、星历或投影。弹窗有弹性开合、键盘Esc与遮罩关闭，窄屏内部滚动，遵循减少动态效果偏好。</p>
+        <p>
+          observer.js的地面方位盘使用当地东、北基向量按observerAz旋转后压成水平面椭圆；只作地面方位示意，不参与天空单位向量、地平线高度或升落求解。站位蓝点固定，前方箭头固定向屏幕上侧，方位字和网格随相机朝向移动；极点使用参考方位约定。observer-explanation.js仅在实验台的仰望天空视角提供“轨迹说明”弹窗，监听视角选中态和绘图区类型控制入口可见性。说明区分前方半球边界、当日00:00—24:00端点与高度0°穿越，不改轨迹采样、裁切、星历或投影。弹窗有弹性开合、键盘Esc与遮罩关闭，窄屏内部滚动，遵循减少动态效果偏好。
+        </p>
         <h2 id="section-16">16. 完整更新与动画调度</h2>
         <p>
           用户操作一般执行：停止有关播放、更新字段、调用 <code>schedule()</code>。<code
@@ -563,7 +591,10 @@ diagrams.html#chartPanel</code></pre>
         <p>
           验收不能只看地址改变：还必须检查正确画布可见、标签选中正确、时刻和日期仍可调、浏览器前进后退与刷新有效。
         </p>
-        <p><code>interaction-history.js</code>统一组织用户有意触发的切换、选择及参数调整；<code>lab-history.js</code>读写普通实验的既有状态，<code>space/history.js</code>接入三维页内部适配器。快照放入history.state.skyMotionInteraction，包含版本、页面路径、科学状态与表单值。点击前冻结当前历史项，操作结束后pushState；滑条调整在结束时入栈，短时间连续键入合并为一次记录；第一次输入立即入栈，同一字段650毫秒内的后续输入用replaceState更新该项，避免刚输入就返回时漏掉操作。菜单展开、收起、滚动与相机拖动不建立历史项；超过8px的画布手势若改变时刻、日期或观测地点，仍作为参数调整记录，纯视角手势只更新当前项。画布上的轻点选择仍可记录。恢复时先结束尚未完成的有限控件动画，再写入状态并调用原有渲染，暂停播放；恢复过程不再生成新记录。图解标签把hash交给同一历史事务，避免一次切换产生两条记录。跨页跳转继续使用原生链接；回到带有快照的页面或刷新时恢复该项，而不是另加虚假返回步骤。浏览器返回和前进后再新操作的分支规则保持原生行为。嵌入三维帧不另建历史，天体与相机预设选择委托主页面记录，对照开关和科学时钟也由主页面负责；不记录逐帧播放、菜单或相机拖动。三维恢复后同步对象标题与活动标签，避免画面正确但界面仍显示旧视图。</p>
+        <p>
+          <code>interaction-history.js</code
+          >统一组织用户有意触发的切换、选择及参数调整；<code>lab-history.js</code>读写普通实验的既有状态，<code>space/history.js</code>接入三维页内部适配器。快照放入history.state.skyMotionInteraction，包含版本、页面路径、科学状态与表单值。点击前冻结当前历史项，操作结束后pushState；滑条调整在结束时入栈，短时间连续键入合并为一次记录；第一次输入立即入栈，同一字段650毫秒内的后续输入用replaceState更新该项，避免刚输入就返回时漏掉操作。菜单展开、收起、滚动与相机拖动不建立历史项；超过8px的画布手势若改变时刻、日期或观测地点，仍作为参数调整记录，纯视角手势只更新当前项。画布上的轻点选择仍可记录。恢复时先结束尚未完成的有限控件动画，再写入状态并调用原有渲染，暂停播放；恢复过程不再生成新记录。图解标签把hash交给同一历史事务，避免一次切换产生两条记录。跨页跳转继续使用原生链接；回到带有快照的页面或刷新时恢复该项，而不是另加虚假返回步骤。浏览器返回和前进后再新操作的分支规则保持原生行为。嵌入三维帧不另建历史，天体与相机预设选择委托主页面记录，对照开关和科学时钟也由主页面负责；不记录逐帧播放、菜单或相机拖动。三维恢复后同步对象标题与活动标签，避免画面正确但界面仍显示旧视图。
+        </p>
         <h2 id="section-18">18. 多端布局与交互原则</h2>
         <p>
           正常宽屏默认使用左侧参数区，右侧图形和下方时间条；手动收起后图形与时间条扩展。760像素及以下窄屏的参数移入独立dialog抽屉，主画面只保留图形和时间条，不把参数堆在时间条下面。短横屏依可用高度压缩标题和说明，不单独改变760像素的菜单断点。
@@ -677,12 +708,14 @@ diagrams.html#chartPanel</code></pre>
         </p>
         <p>
           本次重新运行仓库内的六组回归均通过：行星/月球位置、地球姿态、恒星目录、卫星与小天体轨道、本地天空以及历史轨迹。运行命令如下。它们检查输入边界、坐标约定和同库接口一致性，不是独立观测台精度认证。
-        </p><pre><code>node tests/space-model.cjs
+        </p>
+        <pre><code>node tests/space-model.cjs
 node tests/space-earth-frame.cjs
 node tests/space-stars.cjs
 node tests/space-population.cjs
 node tests/space-observer.cjs
-node tests/space-exploration.cjs</code></pre><p>
+node tests/space-exploration.cjs</code></pre>
+        <p>
           近期菜单浏览器检查覆盖320、390、760、768、960和1366像素宽度，以及四个实验页面和独立三维页的开合；另检查手柄拖动、减少动态效果、窄屏抽屉关闭与旋转屏幕竞争。浏览器采用Chromium，不能替代真实Safari、Firefox或低端GPU验收。部分旧科学对照与浏览器脚本仍在历史记录或临时目录，尚未全部形成仓库测试；交接时要保留输入、断言和运行环境。
         </p>
         <h2 id="section-21">21. Cloudflare 打包与发布</h2>

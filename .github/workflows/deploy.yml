@@ -1,4 +1,4 @@
-name: Deploy SkyMotion to Cloudflare Pages
+name: Deploy SkyMotion to GitHub Pages
 
 on:
   push:
@@ -7,31 +7,25 @@ on:
 
 permissions:
   contents: read
-  deployments: write
+  pages: write
+  id-token: write
 
 concurrency:
-  group: skymotion-production
+  group: github-pages
   cancel-in-progress: false
 
 jobs:
   deploy:
-    name: Deploy existing SkyMotion project
+    name: Build and deploy static site
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
         with:
           persist-credentials: false
-
-      - name: Check Cloudflare credentials
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
-            echo "::error::Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in Settings > Secrets and variables > Actions."
-            exit 1
-          fi
 
       - name: Prepare website files
         run: |
@@ -56,10 +50,14 @@ jobs:
               raise SystemExit("Missing index.html")
           PY
 
-      - name: Deploy to existing Cloudflare Pages project
-        uses: cloudflare/wrangler-action@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=skymotion --branch=main
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

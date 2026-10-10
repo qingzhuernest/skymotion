@@ -2,7 +2,7 @@
 
 面向课堂演示与自主探索的中文天文地理网页工具。文档核对日期：**2026年10月10日**。通过地点、日期和时刻，联动太阳、月球、地球昼夜、日影与日晷，让图形、读数和观察任务一起呈现。采用 Material Design 风格，支持桌面、平板和手机，无需 Flash 或浏览器插件。
 
-**[进入网站](https://skymotion-5md.pages.dev/)** · **[进入实验台](https://skymotion-5md.pages.dev/lab.html)**
+**[进入网站](https://qingzhuernest.github.io/skymotion/)** · **[进入实验台](https://qingzhuernest.github.io/skymotion/lab.html)**
 
 ## 可以观察什么
 
@@ -10,7 +10,7 @@
 - **月相与月球**：月相变化、每日天空轨迹、不同日期同一时刻的位置，以及行星伴月。
 - **地球昼夜**：球面与平面地图；拖动可选择仅旋转相机，或联动观察地点。
 - **日影与日晷**：杆影、影尖轨迹，以及可以调节日期、时间和针长的水平日晷与赤道日晷。
-- **太阳系三维模型**：[八大行星与日地月空间关系](https://skymotion-5md.pages.dev/space/)，可旋转、缩放、聚焦和按UTC日期连续播放；细化行星外观，背景采用HYG目录的8,920颗恒星（J2000方向、星等与近似恒星颜色），支持相机预设、月球近景、历史轨迹、真实距离读数、黄道参考面与地轴/赤道；地球自转和光照按同一UTC定向；[原图解与三维对照](https://skymotion-5md.pages.dev/diagrams.html?compare=1)共用原时间工作台，独立三维页另有黄道俯视与本地天空参照，以及[沉浸式满窗口观察](https://skymotion-5md.pages.dev/space/?immersive=1)，保留时间条和侧拉参数菜单，并提供无标签卫星群、主带小行星、周期彗星和真实星云影像；新增轨道近似与影像放大范围有明确说明。
+- **太阳系三维模型**：[八大行星与日地月空间关系](https://qingzhuernest.github.io/skymotion/space/)，可旋转、缩放、聚焦和按UTC日期连续播放；细化行星外观，背景采用HYG目录的8,920颗恒星（J2000方向、星等与近似恒星颜色），支持相机预设、月球近景、历史轨迹、真实距离读数、黄道参考面与地轴/赤道；地球自转和光照按同一UTC定向；[原图解与三维对照](https://qingzhuernest.github.io/skymotion/diagrams.html?compare=1)共用原时间工作台，独立三维页另有黄道俯视与本地天空参照，以及[沉浸式满窗口观察](https://qingzhuernest.github.io/skymotion/space/?immersive=1)，保留时间条和侧拉参数菜单，并提供无标签卫星群、主带小行星、周期彗星和真实星云影像；新增轨道近似与影像放大范围有明确说明。
 - **日行迹**：比较全年固定钟表时或当地真太阳时的太阳位置，独立研究地轴倾角与轨道偏心率对“8”字的影响。
 
 模式切换、选项选择和参数调整支持浏览器返回撤回、前进重做；连续滑条调整合并为一步，菜单开合与旋转或缩放画面不记录，恢复设置暂停播放。图形、时间条和参数区分别占位，避免操作时相互遮挡。宽度大于760像素时默认显示参数侧栏，可通过侧栏顶部“收起菜单”手柄主动收起，点击/向右拖动边缘箭头恢复；窄屏及沉浸三维模式使用侧拉抽屉。菜单显隐选择保存在当前浏览器会话中，控件切换采用共享弹性滑动底色，关联选项、菜单、折叠项与按钮反馈使用一致的小幅回弹，并遵循减少动态效果偏好。浅色参数区和深色天空图采用各自的文字配色。三维太阳系通过顶栏“三维天空”直接进入，也保留“关联图解 → 空间模型”入口，保持原实验台状态与渲染管线；关联图解可以开启三维对照，两边代表同一实际时刻。
@@ -19,9 +19,9 @@
 
 | 文档 | 主要用途 |
 | --- | --- |
-| [学习指南](https://skymotion-5md.pages.dev/guide.html) | 详细操作步骤、控制变量、观察任务与问题处理 |
-| [项目介绍与地理模型说明](https://skymotion-5md.pages.dev/project-guide.html) | 开发目的、教学和使用优点、数据依据与适用范围 |
-| [完整开发逻辑与维护说明](https://skymotion-5md.pages.dev/development-guide.html) | 已实现的页面结构、状态、计算、渲染、交互、验证与发布细节 |
+| [学习指南](https://qingzhuernest.github.io/skymotion/guide.html) | 详细操作步骤、控制变量、观察任务与问题处理 |
+| [项目介绍与地理模型说明](https://qingzhuernest.github.io/skymotion/project-guide.html) | 开发目的、教学和使用优点、数据依据与适用范围 |
+| [完整开发逻辑与维护说明](https://qingzhuernest.github.io/skymotion/development-guide.html) | 已实现的页面结构、状态、计算、渲染、交互、验证与发布细节 |
 
 三份网页文档共用排版和互相跳转的入口。对应的 Markdown 版本也保存在仓库中：[学习指南](learning-guide.md)、[项目介绍](project-guide.md)、[开发维护](development-guide.md)。
 
@@ -33,9 +33,9 @@
 python3 -m http.server 8000
 ```
 
-打开 `http://localhost:8000/`。向 `main` 推送修改后，[GitHub Actions](https://github.com/qingzhuernest/skymotion/actions) 自动部署到现有 Cloudflare Pages 项目 `skymotion`，网站地址保持不变，也可手动触发部署。
+打开 `http://localhost:8000/`。向 `main` 推送修改后，[GitHub Actions](https://github.com/qingzhuernest/skymotion/actions) 自动发布到 GitHub Pages，默认地址为 `https://qingzhuernest.github.io/skymotion/`，也可手动触发部署。
 
-部署配置位于 [.github/workflows/deploy.yml](.github/workflows/deploy.yml)。所需的 `CLOUDFLARE_ACCOUNT_ID` 和 `CLOUDFLARE_API_TOKEN` 已通过 GitHub Secrets 配置；凭据不应写入源码。工作流排除 README 和隐藏配置文件；当前会发布其他受跟踪文件，包括文档、测试和数据生成脚本，若以后收紧部署白名单，需要保留模型数据与许可文件。
+部署配置位于 [.github/workflows/deploy.yml](.github/workflows/deploy.yml)。首次启用时请在仓库 Settings → Pages 中将 Source 设为 GitHub Actions；工作流会打包根目录的受跟踪静态文件（排除隐藏文件与 README）并发布。若以后收紧发布白名单，需要保留模型数据与许可文件。
 
 ## 源码格式与维护
 
@@ -69,7 +69,7 @@ node tests/space-exploration.cjs
 
 [project-archive 分支](https://github.com/qingzhuernest/skymotion/tree/project-archive/archive) 保存截至归档时本地保留的 32 个历史部署 ZIP、文档、生成脚本、开发记录及暂停的预览，附逐文件清单与 SHA-256。归档分支不触发正式网站部署；旧资料未必反映当前版本。
 
-欢迎老师、学生与天文爱好者提出知识疑问、操作问题和教学建议。请附模块、地点、日期、时刻、复现步骤及设备／浏览器信息。可提交 [GitHub Issue](https://github.com/qingzhuernest/skymotion/issues)，或通过 [联系作者](https://skymotion-5md.pages.dev/contact.html) 反馈。
+欢迎老师、学生与天文爱好者提出知识疑问、操作问题和教学建议。请附模块、地点、日期、时刻、复现步骤及设备／浏览器信息。可提交 [GitHub Issue](https://github.com/qingzhuernest/skymotion/issues)，或通过 [联系作者](https://qingzhuernest.github.io/skymotion/contact.html) 反馈。
 
 世界上存在着，唯有不断前行才能传达的事物
 
