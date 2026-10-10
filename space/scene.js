@@ -336,7 +336,7 @@
   starSky.ready.then((count) => {
     referenceStarCount = count;
     $('starCatalogStatus').textContent = count
-      ? `背景使用HYG目录的${count.toLocaleString('zh-CN')}颗恒星，位置为J2000参考方向。`
+      ? `背景使用HYG目录的${count.toLocaleString('zh-CN')}颗恒星，普通模式显示≤6.5等，沉浸模式扩展至≤8.5等；颜色按B−V近似，非肉眼亮度。`
       : '恒星背景未加载；行星模型与时间控制仍可使用。';
   });
 
@@ -604,9 +604,9 @@
     );
     // The enlarged Moon is shown only in the local Earth view with parallel solar light.
     moon.position.set(
-      physical.moon.x * (2.4 / 0.002569555),
-      physical.moon.y * (2.4 / 0.002569555),
-      physical.moon.z * (2.4 / 0.002569555),
+      physical.moon.x * Model.MOON_DISPLAY_SCALE,
+      physical.moon.y * Model.MOON_DISPLAY_SCALE,
+      physical.moon.z * Model.MOON_DISPLAY_SCALE,
     );
     earthLight.position.set(
       physical.earthToSun.x * 10,
@@ -648,9 +648,9 @@
       );
       points.push(
         new THREE.Vector3(
-          vector.x * (2.4 / 0.002569555),
-          vector.y * (2.4 / 0.002569555),
-          vector.z * (2.4 / 0.002569555),
+          vector.x * Model.MOON_DISPLAY_SCALE,
+          vector.y * Model.MOON_DISPLAY_SCALE,
+          vector.z * Model.MOON_DISPLAY_SCALE,
         ),
       );
     }
@@ -907,7 +907,7 @@
     return Math.max(2.8, Model.bodies[index].size * 6.5) / Math.min(1, camera.aspect);
   }
   function earthMoonDistance() {
-    return 9 / Math.min(1, camera.aspect);
+    return 6.5 / Math.min(1, camera.aspect);
   }
   function moonDistance() {
     return 0.8 / Math.min(1, camera.aspect);

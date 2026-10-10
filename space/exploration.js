@@ -4,7 +4,7 @@
   const Model = global.SolarSpaceModel;
   const Engine = global.Astronomy;
   const AU_KM = 149597870.7;
-  const MOON_DISPLAY_SCALE = 2.4 / 0.002569555;
+  const MOON_DISPLAY_SCALE = Model.MOON_DISPLAY_SCALE;
   const planetIds = new Set(Model.bodies.map((body) => body.id));
 
   function validVector(vector) {

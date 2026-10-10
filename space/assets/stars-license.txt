@@ -14,7 +14,7 @@ The derived space/assets/stars.json catalog is distributed under the same licens
 This data license does not replace licenses of Three.js, Astronomy Engine or the
 application source code. No endorsement by the catalog authors is implied.
 
-Changes: exclude the Sun, retain finite entries with visual magnitude <= 6.5,
+Changes: exclude the Sun, retain finite entries with visual magnitude <= 8.5,
 retain J2000 right ascension (hours), declination (degrees), apparent visual
 magnitude and B-V color index; round fields and sort by magnitude. No invented
 stars or positional jitter is added. Generator: scripts/build-star-catalog.py.

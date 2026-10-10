@@ -42,7 +42,7 @@ for (const iso of dates) {
   }
   const moon = Exploration.trail({ date, bodyId: 'Moon', days: 90, frame: 'geocentric' });
   vectorClose(moon.points.at(-1).physical, snapshot.moon);
-  const scale = 2.4 / 0.002569555;
+  const scale = Model.MOON_DISPLAY_SCALE;
   for (const axis of ['x', 'y', 'z']) close(moon.points.at(-1)[axis], snapshot.moon[axis] * scale);
   const distance = Exploration.actualDistance(snapshot, 'Moon');
   close(

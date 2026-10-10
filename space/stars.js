@@ -34,9 +34,12 @@
 
   function create(THREE, renderer, Model, Engine, invalidate) {
     const group = new THREE.Group();
+    let skyGeometry = null,
+      ordinaryCount = 0;
     const uniforms = {
       pixelRatio: { value: renderer.getPixelRatio() },
       skyExposure: { value: 1 },
+      magnitudeLimit: { value: 6.5 },
     };
     const ready = fetch('assets/stars.json')
       .then((response) => {
@@ -49,7 +52,8 @@
         const positions = [],
           colors = [],
           sizes = [],
-          brightness = [];
+          brightness = [],
+          magnitudes = [];
         for (const [ra, dec, magnitude, bv] of catalog.stars) {
           if (
             ![ra, dec, magnitude].every(Number.isFinite) ||
@@ -64,13 +68,17 @@
           const linear = new THREE.Color().setRGB(...rgb, THREE.SRGBColorSpace);
           colors.push(linear.r, linear.g, linear.b);
           // Compress the magnitude range for a readable teaching display.
-          sizes.push(2.4 + 5 * 10 ** (-0.18 * (magnitude + 1.5)));
+          sizes.push(2.6 + 9 * 10 ** (-0.2 * (magnitude + 1.5)));
+          magnitudes.push(magnitude);
           brightness.push(clamp(10 ** (-0.16 * (magnitude - 1.5)), 0.03, 1));
         }
+        ordinaryCount = magnitudes.filter((magnitude) => magnitude <= 6.5).length;
         const geometry = new THREE.BufferGeometry();
+        skyGeometry = geometry;
         geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
         geometry.setAttribute('starColor', new THREE.Float32BufferAttribute(colors, 3));
         geometry.setAttribute('starSize', new THREE.Float32BufferAttribute(sizes, 1));
+        geometry.setAttribute('starMagnitude', new THREE.Float32BufferAttribute(magnitudes, 1));
         geometry.setAttribute('starBrightness', new THREE.Float32BufferAttribute(brightness, 1));
         const material = new THREE.ShaderMaterial({
           uniforms,
@@ -83,12 +91,16 @@
             attribute vec3 starColor;
             attribute float starSize;
             attribute float starBrightness;
+            attribute float starMagnitude;
+            uniform float magnitudeLimit;
             uniform float pixelRatio;
             varying vec3 tint;
             varying float strength;
+            varying float visibleStar;
             void main() {
               tint = starColor;
               strength = starBrightness;
+              visibleStar = step(starMagnitude, magnitudeLimit);
               gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
               gl_PointSize = starSize * pixelRatio;
             }
@@ -97,13 +109,15 @@
             uniform float skyExposure;
             varying vec3 tint;
             varying float strength;
+            varying float visibleStar;
             void main() {
+              if (visibleStar < 0.5) discard;
               vec2 point = gl_PointCoord - vec2(0.5);
               float radius2 = dot(point, point);
               if (radius2 > 0.25) discard;
               float edge = 1.0 - smoothstep(0.15, 0.25, radius2);
               float core = exp(-40.0 * radius2);
-              float halo = exp(-12.0 * radius2) * 0.10;
+              float halo = exp(-14.0 * radius2) * 0.18;
               gl_FragColor = vec4(tint, min(1.0, (core + halo) * strength * skyExposure) * edge);
               #include <colorspace_fragment>
             }
@@ -125,7 +139,11 @@
         uniforms.pixelRatio.value = renderer.getPixelRatio();
         // Raise the display exposure in immersive mode, without inventing
         // extra catalogue stars or changing their J2000 directions/colours.
-        uniforms.skyExposure.value = document.body.classList.contains('space-immersive') ? 2.4 : 1;
+        const immersive = document.body.classList.contains('space-immersive');
+        uniforms.skyExposure.value = immersive ? 4.2 : 1;
+        uniforms.magnitudeLimit.value = immersive ? 8.5 : 6.5;
+        // The catalog is sorted by magnitude: ordinary mode submits only the bright prefix.
+        skyGeometry?.setDrawRange(0, immersive ? Infinity : ordinaryCount);
       },
     };
   }

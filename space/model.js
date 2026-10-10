@@ -128,6 +128,8 @@
   global.SolarSpaceModel = {
     bodies,
     DAY_MS,
+    // Shared teaching scale for Moon, its orbit and historical trail (AU → scene units).
+    MOON_DISPLAY_SCALE: 1.5 / 0.002569555,
     sceneVector,
     compress,
     snapshot,

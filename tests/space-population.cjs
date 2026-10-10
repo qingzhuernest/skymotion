@@ -55,3 +55,18 @@ assert(Math.hypot(t.io.x, t.io.y, t.io.z) * 149597870.7 > 400000);
 console.log(
   'PASS 455 satellite / 1,212 small-body ellipses, epochs, finite bounds, periods, high-e solver, Triton retrograde and Galilean state units',
 );
+
+// The display transform must preserve direction, radial order and zoom scaling.
+for (const host of ['Earth', 'Jupiter', 'Saturn']) {
+  let previous = 0;
+  for (const ratio of [1.1, 2, 6, 60, 1000]) {
+    const v = { x: (ratio * 6371) / 149597870.7, y: 0, z: 0 };
+    const d = P.displaySatellite(v, 1, 6371, host);
+    assert(d.x > previous && d.y === 0 && d.z === 0);
+    assert(d.x > (host === 'Saturn' ? 2.3 : 1));
+    const scaled = P.displaySatellite(v, 2, 6371, host);
+    assert(Math.abs(scaled.x - 2 * d.x) < 1e-12);
+    previous = d.x;
+  }
+}
+console.log('PASS compact satellite order, planet/ring clearance and world-scale zoom');

@@ -11,9 +11,11 @@ const sky = context.SolarSpaceStars;
 const model = context.SolarSpaceModel;
 assert.equal(catalog.epoch, 'J2000');
 assert.equal(catalog.license, 'CC BY-SA 4.0');
-assert.equal(catalog.stars.length, 8920);
+assert.equal(catalog.stars.length, 61816);
+assert.equal(catalog.stars.filter((star) => star[2] <= 6.5).length, 8920);
+assert.equal(catalog.limit, 8.5);
 for (const [ra, dec, mag, bv] of catalog.stars) {
-  assert(ra >= 0 && ra < 24 && dec >= -90 && dec <= 90 && mag <= 6.5);
+  assert(ra >= 0 && ra < 24 && dec >= -90 && dec <= 90 && mag <= 8.5);
   assert(bv === null || Number.isFinite(bv));
   const direction = sky.direction(ra, dec, model, Astronomy);
   assert(Math.abs(Math.hypot(direction.x, direction.y, direction.z) - 1) < 1e-12);
@@ -36,5 +38,5 @@ assert(warm[0] > warm[2] && blue[2] > blue[0], 'B-V determines warm and blue-whi
 assert(sky.temperature(-0.2) > sky.temperature(1.5));
 assert(sky.color(null).every(Number.isFinite));
 console.log(
-  'PASS 8,920 finite catalog stars, J2000 unit directions, Sirius/Polaris, magnitude limit and B-V color mapping',
+  'PASS 61,816 finite catalog stars, J2000 unit directions, Sirius/Polaris, magnitude limit and B-V color mapping',
 );
