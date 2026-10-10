@@ -8,16 +8,39 @@
   const mobile = matchMedia('(max-width:760px)');
   function sync() {
     const overlay = mobile.matches || document.body.classList.contains('space-immersive');
-    if (!overlay && drawer.open) drawer.close();
+    if (!overlay && drawer.open) {
+      generation++; animation?.cancel(); closing = false;
+      drawer.style.transform = ''; drawer.close();
+    }
     (overlay ? document.getElementById('spaceDrawerBody') : home).append(panel);
     opener.setAttribute('aria-expanded', String(drawer.open));
   }
-  opener.onclick = () => {
+  let closing = false, animation = null, generation = 0;
+  const lowMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  function closeDrawer() {
+    if (!drawer.open || closing) return;
+    closing = true;
+    const token = ++generation;
+    animation?.cancel();
+    animation = lowMotion.matches ? null : drawer.animate(
+      [{transform: drawer.style.transform || 'translateX(0)'}, {transform: 'translateX(-100%)'}],
+      {duration: 200, easing: 'cubic-bezier(.2,0,0,1)'});
+    (animation?.finished.catch(() => {}) || Promise.resolve()).then(() => {
+      if (token !== generation) return;
+      drawer.style.transform = ''; drawer.close(); closing = false;
+    });
+  }
+  const openDrawer = () => {
     sync();
-    drawer.showModal();
+    generation++; closing = false; animation?.cancel();
+    drawer.style.transform = '';
+    if (!drawer.open) drawer.showModal();
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
+      animation = drawer.animate([{transform: 'translateX(-100%)'}, {transform: 'translateX(0)'}], {duration: 240, easing: 'cubic-bezier(.2,0,0,1)'});
     opener.setAttribute('aria-expanded', 'true');
   };
-  closer.onclick = () => drawer.close();
+  closer.onclick = closeDrawer;
+  drawer.addEventListener('cancel', event => { event.preventDefault(); closeDrawer(); });
   drawer.addEventListener('close', () => {
     opener.setAttribute('aria-expanded', 'false');
     opener.focus({ preventScroll: true });
@@ -30,7 +53,7 @@
       event.clientY < r.top ||
       event.clientY > r.bottom
     )
-      drawer.close();
+      closeDrawer();
   });
   let start = null;
   const handle = drawer.querySelector('.drawer-head');
@@ -39,19 +62,29 @@
     start = { x: event.clientX, y: event.clientY, id: event.pointerId };
     handle.setPointerCapture(event.pointerId);
   });
+  handle.style.touchAction = 'pan-y';
+  handle.addEventListener('pointermove', event => {
+    if (start?.id !== event.pointerId) return;
+    const dx = event.clientX - start.x, dy = event.clientY - start.y;
+    if (Math.abs(dx) > Math.abs(dy) * 1.5) drawer.style.transform = `translateX(${Math.min(0, dx)}px)`;
+  });
   handle.addEventListener('pointerup', (event) => {
     if (
       start?.id === event.pointerId &&
       event.clientX - start.x < -55 &&
       Math.abs(event.clientY - start.y) < 50
     )
-      drawer.close();
+      closeDrawer();
     start = null;
+    if (!closing) drawer.style.transform = '';
   });
   handle.addEventListener('pointercancel', () => {
     start = null;
+    if (!closing) drawer.style.transform = '';
   });
   mobile.addEventListener('change', sync);
   window.addEventListener('space:layout', sync);
   sync();
+  SkyMotionUI.installRail({ shell: document.querySelector('.space-shell'), rail: panel,
+    button: opener, mobile, openDrawer, overlay: () => document.body.classList.contains('space-immersive') });
 })();

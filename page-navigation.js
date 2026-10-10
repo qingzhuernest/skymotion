@@ -539,7 +539,8 @@ function renderUIWorkspace() {
   document.body.append(drawer);
   let drawerAnimation = null,
     drawerClosing = false,
-    drawerReturnFocus = null;
+    drawerReturnFocus = null,
+    drawerGeneration = 0;
   const lowMotion = matchMedia('(prefers-reduced-motion:reduce)');
   function animateDrawer(frames, duration) {
     drawerAnimation?.cancel();
@@ -549,6 +550,7 @@ function renderUIWorkspace() {
     return drawerAnimation?.finished.catch(() => {}) || Promise.resolve();
   }
   function finishDrawerClose(restoreFocus = true) {
+    drawerGeneration++;
     drawerAnimation?.cancel();
     drawer.style.transform = '';
     if (drawer.open) drawer.close();
@@ -564,13 +566,14 @@ function renderUIWorkspace() {
       return;
     }
     drawerClosing = true;
+    const generation = ++drawerGeneration;
     animateDrawer(
       [
         { transform: drawer.style.transform || 'translateX(0)' },
         { transform: 'translateX(-100%)' },
       ],
       180,
-    ).then(() => finishDrawerClose());
+    ).then(() => { if (generation === drawerGeneration) finishDrawerClose(); });
   }
   function openParameters() {
     if (!drawerMedia.matches) {
@@ -646,6 +649,7 @@ function renderUIWorkspace() {
   }
   drawerMedia.addEventListener('change', updateParameterPresentation);
   updateParameterPresentation();
+  SkyMotionUI.installRail({ shell, rail, button: parameterButton, mobile: drawerMedia, openDrawer: openParameters });
   syncControls();
   render();
   new ResizeObserver(() => {
