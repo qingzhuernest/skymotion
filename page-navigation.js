@@ -10,6 +10,8 @@ function renderUIWorkspace() {
   const u = uiWorkspace,
     moon = state.body === 'moon',
     page = document.body.dataset.page;
+  const solarShortcut = document.querySelector('.page-nav a[href="analemma.html"]');
+  if (solarShortcut && ['lab', 'diagrams'].includes(page)) solarShortcut.hidden = moon;
   if (page === 'lab') {
     u.title.textContent = moon ? '月相与月球视运动' : '太阳视运动';
     u.phaseButton.hidden = !moon;
@@ -524,7 +526,7 @@ function renderUIWorkspace() {
   }
   // A native modal supplies focus trapping and keeps the covered laboratory inert.
   // The same parameter nodes move between the desktop rail and the mobile drawer.
-  const drawerMedia = matchMedia('(max-width:1024px), (pointer:coarse) and (max-width:1366px)'),
+  const drawerMedia = matchMedia('(max-width:760px)'),
     drawerHome = document.createComment('desktop parameter rail'),
     drawer = document.createElement('dialog'),
     parameterButton = $('uiParametersButton');

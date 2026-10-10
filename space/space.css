@@ -9,6 +9,7 @@ body[data-page='space'] {
     sans-serif;
   --space-primary: #315da8;
   --space-line: #dce5f2;
+  --space-control-radius: 12px;
 }
 body[data-page='space'] [hidden] {
   display: none !important;
@@ -29,7 +30,7 @@ body[data-page='space'] :is(button, a) {
 body[data-page='space'] button {
   cursor: pointer;
   border: 1px solid var(--space-line);
-  border-radius: 14px;
+  border-radius: var(--space-control-radius);
   background: #eaf0fc;
   color: var(--space-primary);
   padding: 7px 12px;
@@ -174,7 +175,7 @@ body[data-page='space'] select {
   width: 100%;
   min-height: 34px;
   border: 1px solid var(--space-line);
-  border-radius: 10px;
+  border-radius: var(--space-control-radius);
   background: #f5f7fc;
   color: #253448;
   padding: 5px 8px;
@@ -365,7 +366,7 @@ body[data-page='space'] .date-actions {
 }
 body[data-page='space'] .date-actions input {
   border: 1px solid var(--space-line);
-  border-radius: 10px;
+  border-radius: var(--space-control-radius);
   background: white;
   color: #253448;
   padding: 4px 6px;
@@ -438,9 +439,7 @@ body[data-page='space'] #spaceDrawerBody {
   flex: 1;
   padding: 12px 10px max(12px, env(safe-area-inset-bottom));
 }
-@media (max-width: 900px),
-  (pointer: coarse) and (max-width: 1400px),
-  (max-height: 500px) and (max-width: 1100px) {
+@media (max-width: 760px) {
   body[data-page='space'] .space-shell {
     grid-template-columns: minmax(0, 1fr);
     padding: 10px;
@@ -637,7 +636,7 @@ body[data-page='space'] .observer-fields input {
   width: calc(100% - 12px);
   min-height: 34px;
   border: 1px solid var(--space-line);
-  border-radius: 10px;
+  border-radius: var(--space-control-radius);
   background: #f5f7fc;
   color: #253448;
   padding: 5px 7px;
@@ -876,9 +875,7 @@ body[data-page='space'] .existing-compare-link {
 body[data-page='space'] .existing-compare-link:hover {
   background: #dbe7fc;
 }
-@media (max-width: 900px),
-  (pointer: coarse) and (max-width: 1400px),
-  (max-height: 500px) and (max-width: 1100px) {
+@media (max-width: 760px) {
   body[data-page='space'] .existing-compare-link {
     font-size: 11px;
     padding: 5px 8px;

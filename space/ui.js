@@ -5,9 +5,7 @@
   const closer = document.getElementById('spaceDrawerClose');
   const panel = document.querySelector('.side');
   const home = document.getElementById('spaceSidebarHost');
-  const mobile = matchMedia(
-    '(max-width:900px), (pointer:coarse) and (max-width:1400px), (max-height:500px) and (max-width:1100px)',
-  );
+  const mobile = matchMedia('(max-width:760px)');
   function sync() {
     const overlay = mobile.matches || document.body.classList.contains('space-immersive');
     if (!overlay && drawer.open) drawer.close();

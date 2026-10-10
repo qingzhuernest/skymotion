@@ -4,6 +4,8 @@
   --ui-gap: 12px;
   --ui-border: #dce5f2;
   --ui-nav-height: 48px;
+  --ui-control-radius: 12px;
+  --ui-control-height: 40px;
 }
 .page-nav {
   height: var(--ui-nav-height);
@@ -1005,11 +1007,16 @@ body[data-page='analemma'] .workbench-events {
   margin: 12px 0;
 }
 #uiEarthSettings .context-view-switch {
-  flex-wrap: wrap;
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
 }
 #uiEarthSettings .context-view-switch button {
+  flex: 1;
+  min-width: 0;
   font-size: 12px;
-  padding: 6px 10px;
+  padding: 8px 6px;
+  white-space: nowrap;
 }
 .ui-diagram-details .panel-title {
   flex-wrap: wrap;
@@ -1259,11 +1266,11 @@ body[data-page='analemma'] .workbench-events {
   display: flex;
   justify-content: flex-start;
   width: 100%;
-  min-height: 44px;
+  min-height: var(--ui-control-height);
   box-sizing: border-box;
   padding: 10px 12px;
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--ui-control-radius);
   background: #f2f5fb;
   color: var(--md-primary);
   font-size: 13px;
@@ -1604,7 +1611,7 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 .author-email-box > span {
   color: var(--md-on-surface-variant);
 }
-/* Category labels organize links without adding a second button treatment. */
+/* Related page entries use the same link treatment. */
 .ui-parameters .study-navigation .life-devices-entry {
   display: grid;
   gap: 6px;
@@ -1612,14 +1619,6 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   padding: 0;
   border: 0;
   background: transparent;
-}
-.ui-parameters .study-navigation .life-devices-entry > span {
-  display: block;
-  margin: 0;
-  padding: 4px 12px;
-  color: var(--md-on-surface-variant);
-  font-size: 12px;
-  line-height: 1.5;
 }
 /* Nested categories share link geometry; the chevron communicates expansion. */
 .ui-parameters .study-navigation > .menu-subsection {
@@ -1671,8 +1670,8 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   box-sizing: border-box;
 }
 :is(.ui-shell, .ui-parameter-drawer) :is(.context-view-switch, .globe-drag-options) button {
-  border-radius: 999px;
-  min-height: 36px;
+  border-radius: var(--ui-control-radius);
+  min-height: var(--ui-control-height);
   padding: 7px 10px;
   line-height: 1.5;
   white-space: nowrap;
@@ -1689,17 +1688,7 @@ body[data-page='analemma'] .ui-parameters .analemma-controls {
   margin: 0 0 12px;
   gap: 12px;
 }
-body[data-page='analemma'] .ui-parameters .analemma-controls :is(select, input) {
-  min-height: 40px;
-  height: auto;
-  padding: 9px 10px;
-  border: 1px solid var(--md-outline-variant);
-  border-radius: 10px;
-  background: var(--md-surface);
-  color: var(--md-on-surface);
-  font: inherit;
-  box-sizing: border-box;
-}
+
 body[data-page='analemma'] .ui-parameters .analemma-controls label {
   gap: 6px;
   color: var(--md-on-surface-variant);
@@ -2064,6 +2053,114 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   gap: 4px;
 }
 
+/* Parameter controls: a single treatment across all experiment pages and drawers. */
+.ui-parameters :is(button, a.page-link) {
+  min-height: var(--ui-control-height);
+  border-radius: var(--ui-control-radius);
+  font-size: 13px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  transition:
+    box-shadow 160ms,
+    border-color 160ms;
+}
+:is(.ui-shell, .ui-parameter-drawer)
+  .ui-parameters
+  :is(select, input[type='number'], input[type='date'], input[type='time'], input[type='month']) {
+  height: var(--ui-control-height);
+  min-height: var(--ui-control-height);
+  padding: 8px 10px;
+  border: 1px solid var(--md-outline-variant);
+  border-radius: var(--ui-control-radius);
+  background: var(--md-surface);
+  color: var(--md-on-surface);
+  font-size: 14px;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+.ui-parameters :is(.study-navigation, .menu-content) > a.page-link,
+.ui-parameters .life-devices-entry > a.page-link {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  background: var(--md-surface-container);
+  color: var(--md-primary);
+  text-align: left;
+  white-space: normal;
+}
+.ui-parameters .menu-content:has(> a.page-link) {
+  display: grid;
+  gap: 6px;
+}
+.ui-parameters :is(.context-view-switch, .globe-drag-options, .model-switch) {
+  display: flex;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+.ui-parameters :is(.context-view-switch, .globe-drag-options, .model-switch) button {
+  flex: 1;
+  min-width: 0;
+  padding: 8px;
+  border: 0;
+  border-radius: var(--ui-control-radius);
+  background: var(--md-surface-container);
+  color: var(--md-on-surface-variant);
+  font-size: 12px;
+  white-space: normal;
+}
+.ui-parameters :is(.context-view-switch, .globe-drag-options, .model-switch) button.active,
+.ui-parameters .season-buttons button.selected {
+  background: var(--md-primary) !important;
+  color: var(--md-on-primary) !important;
+}
+.ui-parameters .season-buttons button {
+  flex: 1;
+  padding: 8px 4px;
+  min-width: 0;
+  border-radius: var(--ui-control-radius);
+  background: var(--md-surface-container);
+  color: var(--md-on-surface-variant);
+}
+.ui-parameters #globeRecenter,
+.ui-parameters #analemmaResetView,
+.ui-parameters .workbench-events button,
+.ui-parameters .ui-sundial-presets button {
+  min-height: var(--ui-control-height);
+  padding: 8px 10px;
+  border-radius: var(--ui-control-radius);
+  border: 0;
+  background: var(--md-surface-container);
+  color: var(--md-primary);
+  font-size: 12px;
+}
+.ui-parameters .menu-footer #reset {
+  padding: 8px 12px;
+  border: 1px solid var(--md-outline-variant);
+  background: var(--md-surface);
+  color: var(--md-on-surface-variant);
+  width: 100%;
+}
+@media (min-width: 761px) and (max-width: 1100px) {
+  .ui-shell .ui-grid {
+    grid-template-columns: clamp(232px, 26vw, 280px) minmax(0, 1fr);
+  }
+  .ui-shell {
+    padding: 10px 14px 12px;
+  }
+  .ui-heading h1 {
+    font-size: 19px;
+  }
+  .ui-parameters {
+    padding: 10px;
+  }
+}
+
 /* Unified mobile parameter drawer; desktop keeps its persistent rail. */
 .ui-parameter-drawer {
   display: none;
@@ -2159,7 +2256,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   outline: 2px solid var(--md-primary);
   outline-offset: 2px;
 }
-@media (max-width: 1024px), (pointer: coarse) and (max-width: 1366px) {
+@media (max-width: 760px) {
   .ui-shell .ui-grid {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr) auto;
