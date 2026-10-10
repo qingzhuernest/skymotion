@@ -10,7 +10,7 @@
 .motion-menu-edge { position: absolute; left: 2px; top: 48%; width: 24px; min-width: 24px !important; height: 64px; padding: 0 !important; border: 1px solid #b8cbea; border-radius: 12px; color: #315da8; background: #edf3ff; box-shadow: 0 3px 12px #18345c20; z-index: 5; font-size: 24px; cursor: ew-resize; transition: transform 180ms ease; }
 @media (min-width: 761px) {
   .ui-shell #uiParametersButton, body[data-page='space'] #spaceParameters { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; padding: 8px 12px; border: 1px solid #dce5f2; border-radius: 12px; background: #edf3ff; color: #315da8; font-size: 13px; white-space: nowrap; }
-  .ui-shell .ui-grid, body[data-page='space'] .space-shell { transition: grid-template-columns 360ms cubic-bezier(.22,1.12,.36,1), gap 360ms cubic-bezier(.22,1.12,.36,1); }
+  .ui-shell .ui-grid, body[data-page='space'] .space-shell { transition: none; }
   .ui-shell .ui-parameters, .space-sidebar-host { transition: transform 360ms cubic-bezier(.22,1.12,.36,1), opacity 200ms ease; }
   .ui-shell.motion-rail-collapsed .ui-grid, body[data-page='space'] .space-shell.motion-rail-collapsed { grid-template-columns: 0px minmax(0,1fr); column-gap: 0; }
   .ui-shell.motion-rail-collapsed .ui-parameters, .space-shell.motion-rail-collapsed .space-sidebar-host { transform: translateX(-24px); opacity: 0; pointer-events: none; overflow: hidden; padding: 0; border: 0; }
@@ -59,4 +59,17 @@ body[data-page='space'] .side > .motion-menu-grip {
   background: #fff;
   color: #315da8;
   font: 12px/1.5 system-ui, -apple-system, sans-serif;
+}
+
+/* Allocate canvas space once; panel/content motion runs on compositor transforms. */
+.motion-rail-animating { overflow: clip; }
+.ui-parameter-drawer[open], body[data-page='space'] #spaceDrawer[open] {
+  contain: layout paint;
+  will-change: transform;
+}
+
+/* Do not blur a large scientific canvas for a parameter-only overlay. */
+.ui-parameter-drawer::backdrop, body[data-page='space'] #spaceDrawer::backdrop {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }

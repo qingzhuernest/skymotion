@@ -587,7 +587,8 @@ function renderUIWorkspace() {
     }
     if (drawer.open) return;
     stop();
-    schedule();
+    // Opening controls changes playback UI, not the scientific image.
+    renderTimeWorkbench();
     drawerReturnFocus = document.activeElement;
     $('uiDrawerTitle').textContent = title.textContent;
     drawer.showModal();

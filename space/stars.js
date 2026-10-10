@@ -46,7 +46,7 @@
         if (!response.ok) throw new Error('Star catalog unavailable');
         return response.json();
       })
-      .then((catalog) => {
+      .then(async (catalog) => {
         if (catalog.epoch !== 'J2000' || !Array.isArray(catalog.stars))
           throw new Error('Invalid star catalog');
         const positions = [],
@@ -54,7 +54,10 @@
           sizes = [],
           brightness = [],
           magnitudes = [];
-        for (const [ra, dec, magnitude, bv] of catalog.stars) {
+        for (let index = 0; index < catalog.stars.length; index++) {
+          // Let first-tap menus and input run while preparing the optional dense sky.
+          if (index && index % 2048 === 0) await new Promise((resolve) => setTimeout(resolve, 0));
+          const [ra, dec, magnitude, bv] = catalog.stars[index];
           if (
             ![ra, dec, magnitude].every(Number.isFinite) ||
             ra < 0 ||

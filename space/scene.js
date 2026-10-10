@@ -927,11 +927,22 @@
   function minimumDistance() {
     return inspectingMoon ? 0.48 : view === 'overview' ? 45 : 1.6;
   }
+  let lastStageWidth = 0,
+    lastStageHeight = 0,
+    lastPixelRatio = 0;
   function resize() {
     const width = stage.clientWidth;
     const height = stage.clientHeight;
     if (!width || !height) return;
     const pixelRatio = Math.min(devicePixelRatio || 1, 2);
+    if (width === lastStageWidth && height === lastStageHeight && pixelRatio === lastPixelRatio) {
+      comparison.resize();
+      observerDiagram.resize();
+      return;
+    }
+    lastStageWidth = width;
+    lastStageHeight = height;
+    lastPixelRatio = pixelRatio;
     if (renderer.getPixelRatio() !== pixelRatio) renderer.setPixelRatio(pixelRatio);
     renderer.setSize(width, height, false);
     const previousFit = overviewDistance();
@@ -1059,7 +1070,7 @@
       if (p.mesh.visible) placeLabel(p.label, p.mesh.position, p.spec.size * p.mesh.scale.x);
     }
     moonLabel.hidden = !moon.visible;
-    if (moon.visible) placeLabel(moonLabel, moon.position, 0.12);
+    if (moon.visible) placeLabel(moonLabel, moon.position, 0.16);
     const date = utcDate();
     $('day').value = day;
     $('dayText').textContent =

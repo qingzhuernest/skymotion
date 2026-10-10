@@ -9,37 +9,58 @@
   function sync() {
     const overlay = mobile.matches || document.body.classList.contains('space-immersive');
     if (!overlay && drawer.open) {
-      generation++; animation?.cancel(); closing = false;
-      drawer.style.transform = ''; drawer.close();
+      generation++;
+      animation?.cancel();
+      closing = false;
+      drawer.style.transform = '';
+      drawer.close();
     }
-    (overlay ? document.getElementById('spaceDrawerBody') : home).append(panel);
+    const destination = overlay ? document.getElementById('spaceDrawerBody') : home;
+    // Reopening the same drawer must not detach every control and invalidate its layout.
+    if (panel.parentElement !== destination) destination.append(panel);
     opener.setAttribute('aria-expanded', String(drawer.open));
   }
-  let closing = false, animation = null, generation = 0;
+  let closing = false,
+    animation = null,
+    generation = 0;
   const lowMotion = matchMedia('(prefers-reduced-motion: reduce)');
   function closeDrawer() {
     if (!drawer.open || closing) return;
     closing = true;
     const token = ++generation;
     animation?.cancel();
-    animation = lowMotion.matches ? null : SkyMotionUI.springPanel(drawer,
-      [{transform: drawer.style.transform || 'translateX(0)'}, {transform: 'translateX(-100%)'}]);
+    animation = lowMotion.matches
+      ? null
+      : SkyMotionUI.springPanel(drawer, [
+          { transform: drawer.style.transform || 'translateX(0)' },
+          { transform: 'translateX(-100%)' },
+        ]);
     (animation?.finished.catch(() => {}) || Promise.resolve()).then(() => {
       if (token !== generation) return;
-      drawer.style.transform = ''; drawer.close(); closing = false;
+      drawer.style.transform = '';
+      drawer.close();
+      closing = false;
     });
   }
   const openDrawer = () => {
     sync();
-    generation++; closing = false; animation?.cancel();
+    generation++;
+    closing = false;
+    animation?.cancel();
     drawer.style.transform = '';
     if (!drawer.open) drawer.showModal();
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
-      animation = SkyMotionUI.springPanel(drawer, [{transform: 'translateX(-100%)'}, {transform: 'translateX(0)'}]);
+      animation = SkyMotionUI.springPanel(drawer, [
+        { transform: 'translateX(-100%)' },
+        { transform: 'translateX(0)' },
+      ]);
     opener.setAttribute('aria-expanded', 'true');
   };
   closer.onclick = closeDrawer;
-  drawer.addEventListener('cancel', event => { event.preventDefault(); closeDrawer(); });
+  drawer.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    closeDrawer();
+  });
   drawer.addEventListener('close', () => {
     opener.setAttribute('aria-expanded', 'false');
     opener.focus({ preventScroll: true });
@@ -62,10 +83,12 @@
     handle.setPointerCapture(event.pointerId);
   });
   handle.style.touchAction = 'pan-y';
-  handle.addEventListener('pointermove', event => {
+  handle.addEventListener('pointermove', (event) => {
     if (start?.id !== event.pointerId) return;
-    const dx = event.clientX - start.x, dy = event.clientY - start.y;
-    if (Math.abs(dx) > Math.abs(dy) * 1.5) drawer.style.transform = `translateX(${Math.min(0, dx)}px)`;
+    const dx = event.clientX - start.x,
+      dy = event.clientY - start.y;
+    if (Math.abs(dx) > Math.abs(dy) * 1.5)
+      drawer.style.transform = `translateX(${Math.min(0, dx)}px)`;
   });
   handle.addEventListener('pointerup', (event) => {
     if (
@@ -84,6 +107,12 @@
   mobile.addEventListener('change', sync);
   window.addEventListener('space:layout', sync);
   sync();
-  SkyMotionUI.installRail({ shell: document.querySelector('.space-shell'), rail: panel,
-    button: opener, mobile, openDrawer, overlay: () => document.body.classList.contains('space-immersive') });
+  SkyMotionUI.installRail({
+    shell: document.querySelector('.space-shell'),
+    rail: panel,
+    button: opener,
+    mobile,
+    openDrawer,
+    overlay: () => document.body.classList.contains('space-immersive'),
+  });
 })();
