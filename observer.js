@@ -116,6 +116,42 @@ function drawObserverTrack(c, body, frame, color) {
     color,
   );
 }
+/* Ground compass is an illustrative horizontal reference, not a measured landscape. */
+function observerGroundFrame(w, h, base, bearing = state.observerAz ?? 180) {
+  const a = bearing * rad, depth = h - base;
+  const center = { x: w / 2, y: base + depth * .50 };
+  const Rx = Math.min(w * .29, depth * 2.8), Ry = Math.max(7, depth * .18);
+  return { center, Rx, Ry, project: (east, north) => ({
+    x: center.x + (east * Math.cos(a) - north * Math.sin(a)) * Rx,
+    y: center.y - (east * Math.sin(a) + north * Math.cos(a)) * Ry,
+  }) };
+}
+function drawObserverGround(c, w, h, frame) {
+  const ground = observerGroundFrame(w, h, frame.base), { center, Rx, Ry } = ground;
+  c.save();
+  c.beginPath(); c.ellipse(center.x, center.y, Rx, Ry, 0, 0, Math.PI * 2); c.clip();
+  for (const offset of [-.5, 0, .5]) {
+    poly(c, [ground.project(offset, -1), ground.project(offset, 1)], '#b5dfcf38', 1);
+    poly(c, [ground.project(-1, offset), ground.project(1, offset)], '#b5dfcf38', 1);
+  }
+  c.restore();
+  for (const size of [.65, 1]) {
+    c.beginPath(); c.ellipse(center.x, center.y, Rx * size, Ry * size, 0, 0, Math.PI * 2);
+    c.strokeStyle = '#b5dfcf55'; c.lineWidth = 1; c.stroke();
+  }
+  for (const [az, name] of [[0, '北'], [90, '东'], [180, '南'], [270, '西']]) {
+    const a = az * rad, q = ground.project(Math.sin(a) * 1.14, Math.cos(a) * 1.14);
+    text(c, (Math.abs(state.lat) > 89.99 ? '参考' : '') + name, q.x, q.y + 3,
+      name === '北' ? '#86d7f5' : '#d5e9dc', w < 500 ? 10 : 11);
+  }
+  // Forward stays at the top of the ground disk; world compass directions move with yaw.
+  const tip = { x: center.x, y: center.y - Ry * .82 };
+  poly(c, [center, tip], '#e7c783', 1.5);
+  poly(c, [{ x: tip.x - 3, y: tip.y + 4 }, tip, { x: tip.x + 3, y: tip.y + 4 }], '#e7c783', 1.5);
+  c.beginPath(); c.arc(center.x, center.y, 3, 0, Math.PI * 2);
+  c.fillStyle = '#91d8f4'; c.fill();
+  text(c, '地面方位参考 · 面向 ' + heading(state.observerAz ?? 180), w / 2, h - 9, '#c6ddd0', 10);
+}
 function drawObserverSky() {
   if (!canPaint($('sky'))) return;
   const { c, w, h } = resize($('sky')),
@@ -143,16 +179,7 @@ function drawObserverSky() {
     day ? '#cfdfc8' : '#90aba0',
     1.5,
   );
-  for (let i = -3; i <= 3; i++)
-    poly(
-      c,
-      [
-        { x: w / 2 + i * w * 0.06, y: frame.base + 5 },
-        { x: w / 2 + i * w * 0.23, y: h },
-      ],
-      '#b0c5b311',
-      1,
-    );
+  drawObserverGround(c, w, h, frame);
   if (state.angles) {
     for (const alt of [30, 60]) {
       const curve = [];
@@ -217,7 +244,7 @@ function drawObserverSky() {
     occupied.push({ x: q.x, y: ly });
     text(c, item.name, clamp(q.x, 25, w - 25), ly, observerColors[item.body], 12);
   }
-  text(c, '地面观察者 · 面向 ' + heading(bearing), w / 2, h - 26, '#c6ddd0', 11);
+
   $('sky').setAttribute(
     'aria-label',
     '地面观察者仰望天空，面向 ' + bearing.toFixed(0) + ' 度；只绘制地平线上方及前方的天体',
