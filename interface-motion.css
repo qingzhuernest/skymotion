@@ -47,3 +47,16 @@
   100% { transform: translateY(0) scale(1); }
 }
 @media (prefers-reduced-motion: reduce) { .scene-tools[open] .scene-tools-panel { animation: none; } }
+
+/* Identical collapse control in conventional and three-dimensional parameter rails. */
+.ui-parameters > button.motion-menu-grip,
+body[data-page='space'] .side > .motion-menu-grip {
+  height: 36px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid #dce5f2;
+  border-radius: 12px;
+  background: #fff;
+  color: #315da8;
+  font: 12px/1.5 system-ui, -apple-system, sans-serif;
+}

@@ -888,3 +888,16 @@ body[data-page='space'] .existing-compare-link:hover {
     padding-block: 3px;
   }
 }
+
+/* Match the experiment rail: collapse control sits inside its surface, 14px from the edge. */
+body[data-page='space'] .space-sidebar-host > .side {
+  padding: 14px;
+  border: 1px solid #c5d1e2;
+  border-radius: 18px;
+  background: #eef2f8;
+  scrollbar-gutter: stable;
+  contain: layout paint;
+}
+body[data-page='space'] .side > .motion-menu-grip {
+  margin-bottom: 0; /* The flex rail already supplies the shared 10px gap. */
+}
