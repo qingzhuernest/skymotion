@@ -14,10 +14,10 @@
     const dialog = document.createElement('dialog');
     dialog.id = 'observerExplanation';
     dialog.className = 'observer-explanation';
+    dialog.tabIndex = -1;
     dialog.setAttribute('aria-labelledby', 'observerExplanationTitle');
     dialog.innerHTML = `
-      <header><h2 id="observerExplanationTitle">为什么轨迹没有接到地平线？</h2>
-        <button type="button" aria-label="关闭轨迹说明">×</button></header>
+      <header><h2 id="observerExplanationTitle">为什么轨迹没有接到地平线？</h2></header>
       <p>金黄色是太阳、浅蓝色是月球的当天轨迹。天空与地面的分界线表示<strong>高度0°的地平线</strong>；天体升落是视线方向穿过地平线，并不是天体落到地面。</p>
       <ul>
         <li><strong>转到身后：</strong>这张图只画面向的前方半球。轨迹到达左右侧的视野边界时会截断，此处仍可能高于地平线；左右边界在正投影中呈弧形，不等于图片的竖直边缘。拖动转身，就能看到另一段轨迹。地面的方位盘和网格随视角转动，帮助辨认转向；上方箭头表示正前方，蓝点表示观察者站位。</li>
@@ -52,9 +52,8 @@
         { opacity: 1, transform: 'translateY(.3px) scale(.997)', offset: .87 },
         { opacity: 1, transform: 'translateY(0) scale(1)' },
       ], { duration: 320, easing: 'cubic-bezier(.2,0,0,1)' });
-      dialog.querySelector('button').focus({ preventScroll: true });
+      dialog.focus({ preventScroll: true });
     };
-    dialog.querySelector('button').onclick = close;
     dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
     dialog.addEventListener('click', event => {
       if (event.target !== dialog) return;

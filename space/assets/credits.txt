@@ -2,7 +2,7 @@ PLANET APPEARANCE
 
 space/appearance.js generates original deterministic 1024 x 512 illustrative
 surface textures locally. No external assets or runtime texture service is used.
-Mercury and Moon: illustrative crater relief; Moon includes generic dark maria.
+Mercury and Moon: illustrative crater relief; Moon includes localized generic dark maria; reduced periodic relief noise.
 Mars: illustrative iron-rich terrain and polar caps; not a measured Mars map.
 Venus: illustrative visible-light cloud palette; no visible surface features.
 Jupiter: illustrative cloud belts, turbulence and Great Red Spot appearance.

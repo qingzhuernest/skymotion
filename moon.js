@@ -258,6 +258,31 @@ function seasonDate(angle, month) {
   seasonCache.set(key, value);
   return value;
 }
+// Original lunar face illustration, cached once. Features are not a registered lunar map.
+let lunarFace = null;
+function lunarFaceTexture() {
+  if (lunarFace) return lunarFace;
+  lunarFace = document.createElement('canvas');
+  lunarFace.width = lunarFace.height = 256;
+  const c = lunarFace.getContext('2d');
+  c.fillStyle = '#c8c7c3'; c.fillRect(0, 0, 256, 256);
+  let seed = 2105;
+  const random = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
+  // Irregular, soft basaltic plains avoid the former featureless blue appearance.
+  for (const [x, y, rx, ry] of [[86,76,35,24],[130,59,32,23],[166,86,29,36],
+    [67,117,23,32],[119,107,27,24],[111,145,21,16]]) {
+    const shade = c.createRadialGradient(x,y,3,x,y,Math.max(rx,ry));
+    shade.addColorStop(0,'#777772aa'); shade.addColorStop(1,'#77777200');
+    c.fillStyle=shade; c.beginPath(); c.ellipse(x,y,rx,ry,.25,0,Math.PI*2); c.fill();
+  }
+  for (let i=0;i<220;i++) {
+    const x=12+random()*232,y=12+random()*232,r=.6+random()**3*6;
+    c.fillStyle='#62625d16'; c.beginPath(); c.arc(x,y,r,0,Math.PI*2); c.fill();
+    c.strokeStyle='#f4f2e428'; c.lineWidth=.7;
+    c.beginPath(); c.arc(x,y,r,-2.8,.3); c.stroke();
+  }
+  return lunarFace;
+}
 function drawMoon(c, x, y, r, phase, brightAngle = null) {
   c.save();
   if (Number.isFinite(brightAngle)) {
@@ -269,8 +294,8 @@ function drawMoon(c, x, y, r, phase, brightAngle = null) {
   c.arc(x, y, r, 0, Math.PI * 2);
   c.clip();
   const dark = c.createRadialGradient(x - r * 0.3, y - r * 0.35, r * 0.1, x, y, r);
-  dark.addColorStop(0, '#4e637d');
-  dark.addColorStop(1, '#283b52');
+  dark.addColorStop(0, '#484b50');
+  dark.addColorStop(1, '#24282e');
   c.fillStyle = dark;
   c.fillRect(x - r, y - r, r * 2, r * 2);
   const k = 1 - 2 * phase.fraction,
@@ -290,11 +315,14 @@ function drawMoon(c, x, y, r, phase, brightAngle = null) {
   }
   c.closePath();
   const lit = c.createRadialGradient(x + sign * r * 0.3, y - r * 0.4, 0, x, y, r * 1.5);
-  lit.addColorStop(0, '#f8fbff');
-  lit.addColorStop(0.6, '#d7e5f7');
-  lit.addColorStop(1, '#95afcf');
+  lit.addColorStop(0, '#f5f3eb');
+  lit.addColorStop(0.6, '#dbdad3');
+  lit.addColorStop(1, '#9b9c98');
   c.fillStyle = lit;
   c.fill();
+  // Clip texture to the existing illuminated path; phase area and limb angle stay unchanged.
+  c.save(); c.clip(); c.globalCompositeOperation = 'multiply';
+  c.drawImage(lunarFaceTexture(), x-r, y-r, r*2, r*2); c.restore();
   c.restore();
   c.strokeStyle = '#c6dcf78a';
   c.lineWidth = 1;

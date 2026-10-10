@@ -11,6 +11,7 @@
   const cached = new Map();
   let field;
   let fineField;
+  let rockyField;
 
   function clamp(value, low = 0, high = 1) {
     return Math.min(high, Math.max(low, value));
@@ -19,11 +20,17 @@
     if (field) return field;
     field = new Float32Array(WIDTH * HEIGHT);
     fineField = new Float32Array(WIDTH * HEIGHT);
+    rockyField = new Float32Array(WIDTH * HEIGHT);
     // Integer longitudinal frequencies make the texture continuous across its UV seam.
     for (let y = 0; y < HEIGHT; y++) {
       const latitude = (y / (HEIGHT - 1) - 0.5) * Math.PI;
       for (let x = 0; x < WIDTH; x++) {
         const longitude = (x / WIDTH) * TAU;
+        // Sample in Cartesian sphere coordinates so rocky terrain has no latitude bands or UV seam.
+        const sx = Math.cos(latitude)*Math.cos(longitude), sy = Math.sin(latitude),
+          sz = Math.cos(latitude)*Math.sin(longitude);
+        rockyField[y*WIDTH+x] = (Math.sin(sx*11+sy*7+sz*13) +
+          Math.sin(sx*19-sy*17+sz*9)*.5 + Math.sin(sx*43+sy*31-sz*37)*.25)/1.75;
         let sum = 0;
         for (let octave = 0; octave < 5; octave++) {
           const frequency = 2 ** octave;
@@ -87,10 +94,23 @@
       }
     }
   }
+  // Soft localized plains rather than periodic noise bands. These are illustrative locations.
+  function lunarMaria(longitude, latitude) {
+    let shade = 0;
+    for (const [lon, lat, rx, ry] of [[3.0,.35,.42,.27],[3.55,.55,.34,.24],
+      [3.8,.15,.3,.42],[2.7,-.03,.28,.34],[3.3,-.17,.3,.23],[.8,.1,.23,.2]]) {
+      const dx = Math.atan2(Math.sin(longitude-lon),Math.cos(longitude-lon)) * Math.cos(latitude);
+      const distance = (dx/rx)**2 + ((latitude-lat)/ry)**2;
+      shade = Math.max(shade, Math.exp(-distance*1.8));
+    }
+    return shade;
+  }
   function makeSurface(id, THREE, renderer) {
     if (cached.has(id)) return cached.get(id);
     const noise = noiseField();
-    const relief = new Float32Array(noise);
+    const rockyTerrain = id === 'Mars' || id === 'Mercury';
+    const relief = new Float32Array(rockyTerrain ? rockyField : noise);
+    if (id === 'Moon') for (let i=0;i<relief.length;i++) relief[i] *= .08;
     if (id === 'Moon' || id === 'Mercury') craters(relief, id === 'Moon' ? 2105 : 1021);
     const color = canvasPixels();
     const bump = canvasPixels();
@@ -99,16 +119,16 @@
       for (let x = 0; x < WIDTH; x++) {
         const index = y * WIDTH + x;
         const longitude = (x / WIDTH) * TAU;
-        const n = noise[index];
+        const n = rockyTerrain ? rockyField[index] : noise[index];
         const fine = fineField[index];
         let rgb;
         if (id === 'Mercury') {
           rgb = mix([91, 85, 79], [180, 170, 156], 0.49 + relief[index] * 0.46 + fine);
         } else if (id === 'Moon') {
           // Broad dark basaltic maria are illustrative, not an identified lunar map.
-          const maria = clamp((-n - 0.18) * 3.8);
+          const maria = lunarMaria(longitude, latitude);
           rgb = mix([177, 176, 168], [73, 78, 78], maria);
-          rgb = rgb.map((value) => value + (relief[index] - n) * 65 + fine * 180);
+          rgb = rgb.map((value) => value + (relief[index] - n * .08) * 65 + n * 5 + fine * 120);
         } else if (id === 'Mars') {
           rgb = mix([82, 51, 38], [205, 137, 92], 0.63 + n * 0.6 + fine * 1.7);
           const cap = clamp((Math.abs(latitude) - 1.33 + n * 0.04) * 14);

@@ -44,9 +44,12 @@
         animation = null;
         details.style.height = ''; details.style.overflow = '';
         if (reduced.matches) { details.open = targetOpen; return; }
-        details.open = false;
-        const closedHeight = details.getBoundingClientRect().height;
-        details.open = true;
+        // Measure the summary without toggling closed/open twice: toggles also schedule canvas work.
+        const style = getComputedStyle(details);
+        const closedHeight = summary.getBoundingClientRect().height +
+          ['paddingTop', 'paddingBottom', 'borderTopWidth', 'borderBottomWidth']
+            .reduce((sum, key) => sum + (parseFloat(style[key]) || 0), 0);
+        if (!details.open) details.open = true;
         const openedHeight = details.getBoundingClientRect().height;
         const to = targetOpen ? openedHeight : closedHeight;
         details.style.overflow = 'hidden';
