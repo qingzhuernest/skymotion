@@ -1107,9 +1107,74 @@
     observer: { ...observer },
     observerResult: reference === 'observer' ? observerDiagram.state() : null,
   });
+  if (!embedded)
+    window.SkyMotionSpaceHistory = {
+      read: () => ({
+        year,
+        day,
+        selected,
+        view,
+        inspectingMoon,
+        satelliteFraming,
+        comparing,
+        reference,
+        observer: { ...observer },
+        cameraPreset,
+        azimuth,
+        elevation,
+        distance: targetDistance,
+        playing,
+      }),
+      restore(snapshot) {
+        pause();
+        year = snapshot.year;
+        day = snapshot.day;
+        $('day').max = (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / Model.DAY_MS - 1;
+        comparing = snapshot.comparing;
+        reference = snapshot.reference;
+        Object.assign(observer, snapshot.observer);
+        $('observerLat').value = observer.lat;
+        $('observerLon').value = observer.lon;
+        view = 'overview';
+        select(snapshot.selected);
+        if (snapshot.inspectingMoon) focusMoon();
+        else if (snapshot.view !== 'overview') focus(snapshot.selected);
+        view = snapshot.view;
+        satelliteFraming = snapshot.satelliteFraming;
+        cameraPreset = snapshot.cameraPreset;
+        azimuth = snapshot.azimuth;
+        elevation = snapshot.elevation;
+        distance = targetDistance = snapshot.distance;
+        comparisonLayout();
+        invalidate();
+      },
+    };
   // A read-only bridge: parent local apparent solar time is converted to UTC before arriving here.
   let hasLinkedDate = false;
   window.SolarSpaceView = {
+    readSelection: () => ({
+      selected,
+      view,
+      inspectingMoon,
+      fields: [...document.querySelectorAll('input[id],select[id]')]
+        .filter((node) => !['day', 'date'].includes(node.id))
+        .map((node) => [node.id, node.type === 'checkbox' ? node.checked : node.value]),
+    }),
+    restoreSelection(snapshot) {
+      if (!snapshot) return;
+      for (const [id, value] of snapshot.fields || []) {
+        const node = $(id);
+        if (!node) continue;
+        if (node.type === 'checkbox') node.checked = value;
+        else node.value = value;
+      }
+      view = 'overview';
+      select(snapshot.selected);
+      if (snapshot.inspectingMoon) focusMoon();
+      else if (snapshot.view !== 'overview') focus(snapshot.selected);
+      view = snapshot.view;
+      invalidate();
+    },
     sync(input) {
       if (!embedded || typeof input?.date !== 'string') return false;
       const date = new Date(input.date);

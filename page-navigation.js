@@ -30,7 +30,9 @@ function renderUIWorkspace() {
       : ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel', 'solarCompare'];
     if (!allowed.includes(u.selected)) {
       u.selected = 'contextPanel';
-      history.replaceState(null, '', '#contextPanel');
+      if (window.SkyMotionHistory && !SkyMotionHistory.restoring)
+        SkyMotionHistory.setRoute('#contextPanel');
+      else history.replaceState(history.state, '', '#contextPanel');
     }
     u.tabs.querySelectorAll('button').forEach((b) => {
       b.textContent = {
@@ -432,7 +434,10 @@ function renderUIWorkspace() {
         b.onclick = () => {
           uiWorkspace.selected = id;
           if (id === 'companionModule') state.companion = true;
-          if (location.hash !== '#' + id) history.pushState(null, '', '#' + id);
+          if (location.hash !== '#' + id) {
+            if (window.SkyMotionHistory) SkyMotionHistory.setRoute('#' + id);
+            else history.pushState(null, '', '#' + id);
+          }
           schedule();
         };
         bar.append(b);
@@ -544,9 +549,7 @@ function renderUIWorkspace() {
   const lowMotion = matchMedia('(prefers-reduced-motion:reduce)');
   function animateDrawer(frames, duration) {
     drawerAnimation?.cancel();
-    drawerAnimation = lowMotion.matches
-      ? null
-      : SkyMotionUI.springPanel(drawer, frames, duration);
+    drawerAnimation = lowMotion.matches ? null : SkyMotionUI.springPanel(drawer, frames, duration);
     return drawerAnimation?.finished.catch(() => {}) || Promise.resolve();
   }
   function finishDrawerClose(restoreFocus = true) {
@@ -573,7 +576,9 @@ function renderUIWorkspace() {
         { transform: 'translateX(-100%)' },
       ],
       180,
-    ).then(() => { if (generation === drawerGeneration) finishDrawerClose(); });
+    ).then(() => {
+      if (generation === drawerGeneration) finishDrawerClose();
+    });
   }
   function openParameters() {
     if (!drawerMedia.matches) {
@@ -649,7 +654,13 @@ function renderUIWorkspace() {
   }
   drawerMedia.addEventListener('change', updateParameterPresentation);
   updateParameterPresentation();
-  SkyMotionUI.installRail({ shell, rail, button: parameterButton, mobile: drawerMedia, openDrawer: openParameters });
+  SkyMotionUI.installRail({
+    shell,
+    rail,
+    button: parameterButton,
+    mobile: drawerMedia,
+    openDrawer: openParameters,
+  });
   syncControls();
   render();
   new ResizeObserver(() => {

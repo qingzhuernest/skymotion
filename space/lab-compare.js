@@ -113,6 +113,17 @@
   });
   window.SolarSpaceLabCompare = {
     sync,
+    readSelection: () => frame?.contentWindow?.SolarSpaceView?.readSelection() || null,
+    restore(next, selection) {
+      setEnabled(next);
+      const current = frame;
+      if (!selection || !current) return;
+      const apply = () => {
+        if (frame === current) current.contentWindow?.SolarSpaceView?.restoreSelection(selection);
+      };
+      if (current.contentWindow?.SolarSpaceView) apply();
+      else current.addEventListener('load', apply, { once: true });
+    },
     get enabled() {
       return enabled;
     },

@@ -79,5 +79,12 @@
     )
       void exit();
   });
+  window.SkyMotionImmersiveHistory = {
+    read: () => active,
+    restore: (next) => {
+      if (next) layout(true);
+      else void exit();
+    },
+  };
   if (new URLSearchParams(location.search).get('immersive') === '1') void enter(false);
 })();
