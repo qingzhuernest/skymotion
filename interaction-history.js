@@ -10,24 +10,62 @@
         return null;
       }
     };
+    const actionable = (target) =>
+      target instanceof Element && target.closest('button,input,select,canvas');
+    let pointerStart = null,
+      skipClick = false;
     document.addEventListener(
       'pointerdown',
       (event) => {
-        if (event.target instanceof Element && event.target.closest('button,input,select,canvas'))
-          parentHistory()?.beginExternal();
+        if (!actionable(event.target) || event.button !== 0) return;
+        parentHistory()?.beginExternal();
+        pointerStart = {
+          x: event.clientX,
+          y: event.clientY,
+          canvas: Boolean(event.target.closest('canvas')),
+        };
       },
       true,
     );
     document.addEventListener(
       'keydown',
       (event) => {
-        if (event.key !== 'Tab' && !event.altKey && !event.metaKey && !event.ctrlKey)
+        if (
+          actionable(event.target) &&
+          event.key !== 'Tab' &&
+          !event.altKey &&
+          !event.metaKey &&
+          !event.ctrlKey
+        )
           parentHistory()?.beginExternal();
       },
       true,
     );
+    for (const type of ['pointerup', 'pointercancel'])
+      document.addEventListener(
+        type,
+        (event) => {
+          skipClick =
+            pointerStart?.canvas &&
+            Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y) > 8;
+          pointerStart = null;
+          if (skipClick) {
+            parentHistory()?.replaceExternal();
+            setTimeout(() => {
+              skipClick = false;
+            }, 0);
+          }
+        },
+        true,
+      );
     for (const type of ['click', 'change'])
-      document.addEventListener(type, () => parentHistory()?.endExternal(), true);
+      document.addEventListener(
+        type,
+        (event) => {
+          if (!skipClick && actionable(event.target)) parentHistory()?.endExternal();
+        },
+        true,
+      );
     return;
   }
   let adapter = null,
@@ -147,6 +185,9 @@
     flush: commit,
     beginExternal: begin,
     endExternal: queue,
+    replaceExternal() {
+      if (adapter && !restoring) replace(read());
+    },
   };
   const actionable = (target) =>
     target instanceof Element &&
@@ -165,6 +206,7 @@
         x: event.clientX,
         y: event.clientY,
         canvas: Boolean(event.target.closest('canvas')),
+        snapshot: read(),
       };
     },
     true,
@@ -178,9 +220,12 @@
         skipClick =
           pointerStart?.canvas &&
           Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y) > 8;
+        const parameterGesture =
+          skipClick && adapter.parameterGesture?.(pointerStart.snapshot.model, read().model);
         pointerStart = null;
         if (skipClick) {
-          replace(read());
+          if (parameterGesture) queue();
+          else replace(read());
           setTimeout(() => {
             skipClick = false;
           }, 0);

@@ -80,6 +80,19 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
   await settle();
   if ((await p.evaluate(() => uiWorkspace.selected)) !== 'chartPanel') throw Error('diagram redo');
   console.log('PASS diagram history and URL');
+  const chartTime = await p.evaluate(() => state.time);
+  const chart = await p.locator('#chart').boundingBox();
+  await p.mouse.move(chart.x + chart.width * 0.25, chart.y + chart.height * 0.5);
+  await p.mouse.down();
+  await p.mouse.move(chart.x + chart.width * 0.7, chart.y + chart.height * 0.5, { steps: 6 });
+  await p.mouse.up();
+  await settle();
+  if ((await p.evaluate(() => state.time)) === chartTime)
+    throw Error('chart drag not adjusting time');
+  await p.goBack();
+  await settle();
+  if ((await p.evaluate(() => state.time)) !== chartTime) throw Error('chart drag undo');
+  console.log('PASS chart parameter gesture undo');
   await p.goto(testBase + 'space/');
   await p.waitForSelector('.planet-picker');
   await settle();
@@ -103,7 +116,54 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
   await settle();
   if (Math.abs((await p.evaluate(() => spaceState().day)) - day) > 0.0001)
     throw Error('3d date undo');
+  await p.locator('#earthmoon').click();
+  await settle();
+  await p.goBack();
+  await settle();
+  if (
+    !(await p.evaluate(
+      () =>
+        spaceState().view === 'overview' &&
+        document.getElementById('overview').classList.contains('active') &&
+        !document.getElementById('earthmoon').classList.contains('active') &&
+        document.getElementById('viewTitle').textContent.includes('太阳系总览'),
+    ))
+  )
+    throw Error('3d view title or tabs stale after undo');
   console.log('PASS 3d selected planet and date undo', errors);
+  await p.goto(testBase + 'diagrams.html?compare=1');
+  const frame = await p
+    .locator('.ui-linked-frame')
+    .elementHandle()
+    .then((e) => e.contentFrame());
+  await frame.waitForFunction(() => window.SolarSpaceView);
+  await settle();
+  const beforeMenu = await p.evaluate(() => history.length);
+  await frame.locator('#sceneTools summary').click();
+  await settle();
+  if ((await p.evaluate(() => history.length)) !== beforeMenu)
+    throw Error('embedded disclosure creates history');
+  await frame.locator('[data-camera="top"]').click();
+  await settle();
+  await p.goBack();
+  await settle();
+  if ((await frame.evaluate(() => spaceState().cameraPreset)) !== 'oblique')
+    throw Error('embedded camera selection undo');
+  await p.goForward();
+  await settle();
+  if ((await frame.evaluate(() => spaceState().cameraPreset)) !== 'top')
+    throw Error('embedded camera selection redo');
+  await frame.locator('#sceneTools summary').click();
+  const beforeDrag = await p.evaluate(() => history.length);
+  const canvas = await frame.locator('#stage canvas').boundingBox();
+  await p.mouse.move(canvas.x + canvas.width * 0.5, canvas.y + canvas.height * 0.4);
+  await p.mouse.down();
+  await p.mouse.move(canvas.x + canvas.width * 0.65, canvas.y + canvas.height * 0.45, { steps: 6 });
+  await p.mouse.up();
+  await settle();
+  if ((await p.evaluate(() => history.length)) !== beforeDrag)
+    throw Error('embedded camera drag creates history');
+  console.log('PASS embedded camera selection and excluded menu/camera gestures');
   await b.close();
   if (errors.length) process.exit(1);
 })().catch((e) => {

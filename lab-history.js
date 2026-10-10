@@ -19,6 +19,11 @@
         ),
       );
     SkyMotionHistory.register({
+      parameterGesture(before, after) {
+        return ['lat', 'lon', 'date', 'time', 'dec', 'manual', 'height'].some(
+          (key) => before.active[key] !== after.active[key],
+        );
+      },
       read: () => ({
         active: scientificState(state),
         body: state.body,

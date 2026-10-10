@@ -428,6 +428,17 @@
     }
     invalidate();
   }
+  function syncViewPresentation() {
+    $('overview').classList.toggle('active', view !== 'earthmoon');
+    $('earthmoon').classList.toggle('active', view === 'earthmoon');
+    $('viewTitle').textContent = inspectingMoon
+      ? '月球近景 · 外部相机视角'
+      : view === 'earthmoon'
+        ? '日地月关系 · 箭头指向太阳'
+        : view === 'focus'
+          ? Model.bodies[selected].name + '特写 · 旋转视角'
+          : '太阳系总览 · 点击行星查看';
+  }
   $('focus').onclick = () => (inspectingMoon ? focusMoon() : focus(selected));
   $('earthmoon').onclick = () => {
     select(2);
@@ -1140,6 +1151,7 @@
         if (snapshot.inspectingMoon) focusMoon();
         else if (snapshot.view !== 'overview') focus(snapshot.selected);
         view = snapshot.view;
+        syncViewPresentation();
         satelliteFraming = snapshot.satelliteFraming;
         cameraPreset = snapshot.cameraPreset;
         azimuth = snapshot.azimuth;
@@ -1156,6 +1168,10 @@
       selected,
       view,
       inspectingMoon,
+      cameraPreset,
+      azimuth,
+      elevation,
+      distance: targetDistance,
       fields: [...document.querySelectorAll('input[id],select[id]')]
         .filter((node) => !['day', 'date'].includes(node.id))
         .map((node) => [node.id, node.type === 'checkbox' ? node.checked : node.value]),
@@ -1173,6 +1189,13 @@
       if (snapshot.inspectingMoon) focusMoon();
       else if (snapshot.view !== 'overview') focus(snapshot.selected);
       view = snapshot.view;
+      if (snapshot.cameraPreset) {
+        cameraPreset = snapshot.cameraPreset;
+        azimuth = snapshot.azimuth;
+        elevation = snapshot.elevation;
+        distance = targetDistance = snapshot.distance;
+      }
+      syncViewPresentation();
       invalidate();
     },
     sync(input) {
