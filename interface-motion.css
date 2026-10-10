@@ -22,3 +22,6 @@
   .motion-segments > button, .ui-shell .ui-grid, .ui-shell .ui-parameters, body[data-page='space'] .space-shell, .space-sidebar-host, .motion-menu-edge, .motion-menu-grip { transition: none !important; }
   .ui-parameters details[open] > :not(summary) { animation: none; }
 }
+
+/* Wide screens use the rail handle only; the heading button opens modal menus. */
+#uiParametersButton[hidden], #spaceParameters[hidden] { display: none !important; }

@@ -68,6 +68,7 @@
       rail.inert = collapsed && !modal;
       rail.setAttribute('aria-hidden', String(collapsed && !modal));
       grip.hidden = modal; handle.hidden = modal || !collapsed;
+      button.hidden = !modal;
       button.setAttribute('aria-controls', modal ? (button.id === 'spaceParameters' ? 'spaceDrawer' : 'uiParameterDrawer') : rail.id);
       if (modal) button.setAttribute('aria-haspopup', 'dialog');
       else {
@@ -85,8 +86,8 @@
       sync();
     }
     button.onclick = () => mobile.matches || overlay() ? openDrawer() : setCollapsed(!collapsed);
-    grip.onclick = () => { button.focus({ preventScroll: true }); setCollapsed(true); };
-    handle.onclick = () => setCollapsed(false);
+    grip.onclick = () => { setCollapsed(true); handle.focus({ preventScroll: true }); };
+    handle.onclick = () => { setCollapsed(false); grip.focus({ preventScroll: true }); };
     function gesture(surface, opening) {
       let start = null, dragged = false;
       surface.style.touchAction = 'pan-y';
@@ -108,7 +109,7 @@
         const dx = event.clientX - start.x, dy = event.clientY - start.y;
         start = null; surface.style.transform = '';
         if (event.type === 'pointerup' && Math.abs(dy) < 40 && (opening ? dx > 40 : dx < -40))
-          setCollapsed(!opening);
+          { setCollapsed(!opening); (opening ? grip : handle).focus({ preventScroll: true }); }
       }
       ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => surface.addEventListener(type, end));
       surface.addEventListener('click', event => {

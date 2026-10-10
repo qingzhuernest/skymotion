@@ -1,6 +1,6 @@
 # SkyMotion · 天体视运动实验室
 
-面向课堂演示与自主探索的中文天文地理网页工具。通过地点、日期和时刻，联动太阳、月球、地球昼夜、日影与日晷，让图形、读数和观察任务一起呈现。采用 Material Design 风格，支持桌面、平板和手机，无需 Flash 或浏览器插件。
+面向课堂演示与自主探索的中文天文地理网页工具。文档核对日期：**2026年10月10日**。通过地点、日期和时刻，联动太阳、月球、地球昼夜、日影与日晷，让图形、读数和观察任务一起呈现。采用 Material Design 风格，支持桌面、平板和手机，无需 Flash 或浏览器插件。
 
 **[进入网站](https://skymotion-5md.pages.dev/)** · **[进入实验台](https://skymotion-5md.pages.dev/lab.html)**
 
@@ -13,7 +13,7 @@
 - **太阳系三维模型**：[八大行星与日地月空间关系](https://skymotion-5md.pages.dev/space/)，可旋转、缩放、聚焦和按UTC日期连续播放；细化行星外观，背景采用HYG目录的8,920颗恒星（J2000方向、星等与近似恒星颜色），支持相机预设、月球近景、历史轨迹、真实距离读数、黄道参考面与地轴/赤道；地球自转和光照按同一UTC定向；[原图解与三维对照](https://skymotion-5md.pages.dev/diagrams.html?compare=1)共用原时间工作台，独立三维页另有黄道俯视与本地天空参照，以及[沉浸式满窗口观察](https://skymotion-5md.pages.dev/space/?immersive=1)，保留时间条和侧拉参数菜单，并提供无标签卫星群、主带小行星、周期彗星和真实星云影像；新增轨道近似与影像放大范围有明确说明。
 - **日行迹**：比较全年固定钟表时或当地真太阳时的太阳位置，独立研究地轴倾角与轨道偏心率对“8”字的影响。
 
-图形、时间条和参数区分别占位，避免操作时相互遮挡。浅色参数区和深色天空图采用各自的文字配色。三维太阳系作为独立页面接入“关联图解 → 空间模型”，保持原实验台状态与渲染管线；关联图解可以开启三维对照，两边代表同一实际时刻。
+图形、时间条和参数区分别占位，避免操作时相互遮挡。宽度大于760像素时默认显示参数侧栏，可通过侧栏顶部“收起菜单”手柄主动收起，点击/向右拖动边缘箭头恢复；窄屏及沉浸三维模式使用侧拉抽屉。菜单显隐选择保存在当前浏览器会话中，控件切换采用共享滑动底色，并遵循减少动态效果偏好。浅色参数区和深色天空图采用各自的文字配色。三维太阳系通过顶栏“三维天空”直接进入，也保留“关联图解 → 空间模型”入口，保持原实验台状态与渲染管线；关联图解可以开启三维对照，两边代表同一实际时刻。
 
 ## 三份文档
 
@@ -35,20 +35,20 @@ python3 -m http.server 8000
 
 打开 `http://localhost:8000/`。向 `main` 推送修改后，[GitHub Actions](https://github.com/qingzhuernest/skymotion/actions) 自动部署到现有 Cloudflare Pages 项目 `skymotion`，网站地址保持不变，也可手动触发部署。
 
-部署配置位于 [.github/workflows/deploy.yml](.github/workflows/deploy.yml)。所需的 `CLOUDFLARE_ACCOUNT_ID` 和 `CLOUDFLARE_API_TOKEN` 已通过 GitHub Secrets 配置；凭据不应写入源码。工作流排除 README 和隐藏配置文件。
+部署配置位于 [.github/workflows/deploy.yml](.github/workflows/deploy.yml)。所需的 `CLOUDFLARE_ACCOUNT_ID` 和 `CLOUDFLARE_API_TOKEN` 已通过 GitHub Secrets 配置；凭据不应写入源码。工作流排除 README 和隐藏配置文件；当前会发布其他受跟踪文件，包括文档、测试和数据生成脚本，若以后收紧部署白名单，需要保留模型数据与许可文件。
 
 ## 源码格式与维护
 
-应用的 HTML、CSS 和 JavaScript 使用两空格缩进，目标行宽为 100 字符。函数、条件分支和样式规则展开书写，专题脚本顶部标明职责。格式配置保存在 `.prettierrc.json`，由 Prettier 3.6.2 统一处理。
+应用的 HTML、CSS 和 JavaScript 以两空格缩进、100字符目标行宽为维护规范；部分近期修改尚未全量重新格式化，不应将规范描述理解为所有文件已经通过格式检查。函数、条件分支和样式规则展开书写，专题脚本顶部标明职责。格式配置保存在 `.prettierrc.json`，由 Prettier 3.6.2 统一处理。
 
 ```sh
-npx prettier@3.6.2 --check "*.js" "*.css" "*.html"
-npx prettier@3.6.2 --write "*.js" "*.css" "*.html"
+npx prettier@3.6.2 --check "*.js" "*.css" "*.html" "space/**/*.js" "space/**/*.css" "space/**/*.html"
+npx prettier@3.6.2 --write "*.js" "*.css" "*.html" "space/**/*.js" "space/**/*.css" "space/**/*.html"
 ```
 
-`.prettierignore` 排除第三方 `astronomy.js` 与 `space/vendor/`，保留其上游代码与许可。功能改动按影响范围检查交互、边界和响应式布局，并同步网页说明与Markdown版本。
+`.prettierignore` 排除第三方 `astronomy.js` 与 `space/vendor/`，保留其上游代码与许可。功能改动按影响范围检查交互、边界和响应式布局，并同步三份网页说明与Markdown版本。main直接维护根目录网页；旧模板和生成器在project-archive分支，不能覆盖当前页面。控件动画在interface-motion.js/CSS中维护，科学时钟仍由motion.js及各模块负责。
 
-太阳系模型的坐标、照明和显示尺度回归检查：
+以下六组回归在本次文档核对时重新运行通过，检查坐标、照明、目录数据与显示尺度的内部一致性；它们不是独立观测精度认证：
 
 ```sh
 node tests/space-model.cjs
