@@ -118,6 +118,9 @@
     gesture(handle, true); gesture(grip, false);
     mobile.addEventListener('change', sync);
     window.addEventListener('space:layout', sync);
+    document.addEventListener('close', event => {
+      if (event.target.tagName === 'DIALOG' && !mobile.matches && !overlay()) sync();
+    }, true);
     sync(); return sync;
   }
   window.SkyMotionUI = { installRail, installSegments };
