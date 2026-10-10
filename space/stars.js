@@ -34,7 +34,10 @@
 
   function create(THREE, renderer, Model, Engine, invalidate) {
     const group = new THREE.Group();
-    const uniforms = { pixelRatio: { value: renderer.getPixelRatio() } };
+    const uniforms = {
+      pixelRatio: { value: renderer.getPixelRatio() },
+      skyExposure: { value: 1 },
+    };
     const ready = fetch('assets/stars.json')
       .then((response) => {
         if (!response.ok) throw new Error('Star catalog unavailable');
@@ -91,6 +94,7 @@
             }
           `,
           fragmentShader: `
+            uniform float skyExposure;
             varying vec3 tint;
             varying float strength;
             void main() {
@@ -100,7 +104,7 @@
               float edge = 1.0 - smoothstep(0.15, 0.25, radius2);
               float core = exp(-40.0 * radius2);
               float halo = exp(-12.0 * radius2) * 0.10;
-              gl_FragColor = vec4(tint, (core + halo) * strength * edge);
+              gl_FragColor = vec4(tint, min(1.0, (core + halo) * strength * skyExposure) * edge);
               #include <colorspace_fragment>
             }
           `,
@@ -119,6 +123,9 @@
         // Stars are effectively at infinity: moving/zooming the camera must not create nearby-star parallax.
         group.position.copy(camera.position);
         uniforms.pixelRatio.value = renderer.getPixelRatio();
+        // Raise the display exposure in immersive mode, without inventing
+        // extra catalogue stars or changing their J2000 directions/colours.
+        uniforms.skyExposure.value = document.body.classList.contains('space-immersive') ? 2.4 : 1;
       },
     };
   }

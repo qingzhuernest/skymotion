@@ -93,9 +93,13 @@
   }
   function displaySatellite(vector, hostRadius, planetRadiusKm) {
     const km = Math.hypot(vector.x, vector.y, vector.z) * AU_KM;
-    const length = hostRadius * (1.55 + 0.75 * Math.log1p(km / planetRadiusKm));
+    const length = satelliteDistance(km / planetRadiusKm) * hostRadius;
     const scale = length / Math.hypot(vector.x, vector.y, vector.z);
     return { x: vector.x * scale, y: vector.y * scale, z: vector.z * scale };
+  }
+  function satelliteDistance(radiusRatio) {
+    // Compact display spacing; orbital direction/order remains unchanged.
+    return 1.15 + 0.32 * Math.log1p(radiusRatio);
   }
 
   function create(THREE, renderer, Model, Engine, invalidate) {
@@ -117,13 +121,23 @@
       new THREE.PointsMaterial({
         color: 0xd9e4ed,
         map: pointTexture,
-        size: 1.6,
-        sizeAttenuation: false,
+        size: 1,
+        sizeAttenuation: true,
         transparent: true,
         opacity: 0.7,
         depthWrite: false,
       }),
     );
+    // World-space diameter per host, so satellite dots scale with the camera
+    // just like their planet instead of remaining fixed-size screen markers.
+    satellites.material.onBeforeCompile = (shader) => {
+      shader.vertexShader = 'attribute float markerDiameter;\n' + shader.vertexShader;
+      shader.vertexShader = shader.vertexShader.replace(
+        'gl_PointSize = size;',
+        'gl_PointSize = size * markerDiameter;',
+      );
+    };
+    satellites.geometry.setAttribute('markerDiameter', new THREE.Float32BufferAttribute([], 1));
     const asteroids = new THREE.Points(
       new THREE.BufferGeometry(),
       new THREE.PointsMaterial({
@@ -236,7 +250,7 @@
         if (next === key) return;
         key = next;
         const tt = Engine.MakeTime(date).tt;
-        const counts = [];
+        const counts = [], diameters = [];
         if (showSatellites) {
           const jovian = Engine.JupiterMoons(date);
           for (const row of data.satellites) {
@@ -263,8 +277,16 @@
               hosts[index].position.y + offset.y,
               hosts[index].position.z + offset.z,
             );
+            diameters.push(Model.bodies[index].size * hosts[index].scale * 0.04);
           }
           setPositions(satellites, counts);
+          const previous = satellites.geometry.getAttribute('markerDiameter');
+          if (previous.array.length === diameters.length) {
+            previous.array.set(diameters);
+            previous.needsUpdate = true;
+          } else satellites.geometry.setAttribute(
+            'markerDiameter', new THREE.Float32BufferAttribute(diameters, 1),
+          );
         }
         snapshot.visibleSatellites = counts.length / 3;
         if (view === 'overview') {
@@ -286,7 +308,7 @@
           maximum = Math.max(
             maximum,
             Model.bodies[index].size *
-              (1.55 + 0.75 * Math.log1p((row.a * (1 + row.e)) / Model.bodies[index].radius)),
+              satelliteDistance((row.a * (1 + row.e)) / Model.bodies[index].radius),
           );
         return maximum;
       },
