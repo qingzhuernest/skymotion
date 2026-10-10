@@ -18,7 +18,12 @@ for name in tracked:
     if not name:
         continue
     source = Path(name)
-    if any(part.startswith('.') for part in source.parts) or name == 'README.md':
+    if (
+        any(part.startswith('.') for part in source.parts)
+        or source.parts[0] in ('tests', 'scripts', 'archive')
+        or name == 'README.md'
+        or name.startswith('BUG-AUDIT-')
+    ):
         continue
     target = output / source
     target.parent.mkdir(parents=True, exist_ok=True)

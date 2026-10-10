@@ -79,6 +79,6 @@ node tests/space-exploration.cjs
 
 ## 双站点自动发布
 
-Cloudflare 正式站点：<https://skymotion-5md.pages.dev/>。GitHub Pages 镜像目标：<https://qingzhuernest.github.io/skymotion/>，首次需要在[仓库 Pages 设置](https://github.com/qingzhuernest/skymotion/settings/pages)把 Source 选择为 GitHub Actions，再运行 `Sync SkyMotion to GitHub Pages`。私有仓库需要支持 Pages 的 GitHub 套餐；工作流不会改变仓库可见性。未启用时仅报告等待配置，不影响 Cloudflare 发布。
+Cloudflare 正式站点：<https://skymotion-5md.pages.dev/>。GitHub Pages 镜像：<https://qingzhuernest.github.io/skymotion/>，Pages 已启用，main 推送自动更新；若重新配置，在[仓库 Pages 设置](https://github.com/qingzhuernest/skymotion/settings/pages)把 Source 选择为 GitHub Actions，再运行 `Sync SkyMotion to GitHub Pages`。私有仓库需要支持 Pages 的 GitHub 套餐；工作流不会改变仓库可见性。未启用时仅报告等待配置，不影响 Cloudflare 发布。
 
-两个工作流都从 main 的同一次提交调用 `.github/scripts/prepare_site.py` 打包。除 GitHub 项目子路径下的404恢复链接外，网页与资源使用同一份文件；图形、参数、文档、三维功能一致。镜像保留 Cloudflare 的 canonical 链接与站点地图，搜索引擎的主要网址继续指向正式站点。首次启用后，每次推送 main 自动部署两边；必要时可分别在 Actions 中重新运行发布。
+两个工作流都从 main 的同一次提交调用 `.github/scripts/prepare_site.py` 打包。发布包排除测试、数据生成脚本、内部检查记录、历史归档和隐藏配置；这些维护文件保留在仓库。仅保留一份 GitHub Pages 发布工作流，避免与自动生成的 static.yml 重复部署。除 GitHub 项目子路径下的404恢复链接外，网页与资源使用同一份文件；图形、参数、文档、三维功能一致。镜像保留 Cloudflare 的 canonical 链接与站点地图，搜索引擎的主要网址继续指向正式站点。首次启用后，每次推送 main 自动部署两边；必要时可分别在 Actions 中重新运行发布。

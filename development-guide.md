@@ -390,7 +390,7 @@ python3 -m http.server 8000
 
 GitHub Pages 镜像目标为 [qingzhuernest.github.io/skymotion/](https://qingzhuernest.github.io/skymotion/)。首次需在仓库 Settings → Pages 将 Source 设为 GitHub Actions，随后运行 Sync SkyMotion to GitHub Pages；私有仓库需要支持 Pages 的套餐。镜像未启用时工作流报告等待配置，不影响 Cloudflare。之后 main 推送触发两个独立发布工作流。
 
-两个工作流共用 `.github/scripts/prepare_site.py`，只复制受跟踪的网站文件并写入 .nojekyll。GitHub 构建传入 /skymotion 基路径，只改写404页的根路径恢复链接；其余页面、脚本和资源字节一致。普通网页已使用相对路径，三维对照仍在同源下工作。镜像保留正式站的 canonical 与站点地图，避免为同一内容建立两个搜索主网址。部署完成后核对两边关键资源，而非只看打包成功。
+两个工作流共用 `.github/scripts/prepare_site.py`，只复制受跟踪的网站文件并写入 .nojekyll；测试、数据生成脚本、内部审查记录、历史归档、README与隐藏配置不进入发布包。仓库保留维护与版权文件，GitHub Pages只用一份发布工作流，避免重复上传覆盖。GitHub 构建传入 /skymotion 基路径，只改写404页的根路径恢复链接；其余页面、脚本和资源字节一致。普通网页已使用相对路径，三维对照仍在同源下工作。镜像保留正式站的 canonical 与站点地图，避免为同一内容建立两个搜索主网址。部署完成后核对两边关键资源，而非只看打包成功。
 
 历史 ZIP 是版本快照，保存于 project-archive 分支的完整归档包，不触发部署。正式版本以 main 为准；GitHub Actions 成功后还要核对线上资源，不能把打包成功等同于上线成功。
 
