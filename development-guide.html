@@ -1,84 +1,88 @@
 <!doctype html>
+
 <html lang="zh-CN">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="icon" href="favicon.svg" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="pages.css" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <link href="favicon.svg" rel="icon" />
+    <link href="style.css" rel="stylesheet" />
+    <link href="pages.css" rel="stylesheet" />
     <!-- search-metadata:start -->
-    <title>完整开发逻辑与维护说明 · 天体视运动实验室</title>
+    <title>开发说明：完整开发逻辑与维护 · 天体视运动实验室</title>
     <meta
+      content="供开发和维护者使用：源码职责、状态和时间约定、天文模型、渲染与控件动画、回归测试、AGPLv3及双站点发布。"
       name="description"
-      content="介绍静态网站的工程结构、状态管理、天文计算、独立渲染管线、交互流程、检查方法和Cloudflare Pages与GitHub Pages发布方式。"
     />
-    <link rel="canonical" href="https://skymotion-5md.pages.dev/development-guide" />
-    <meta property="og:title" content="完整开发逻辑与维护说明 · 天体视运动实验室" />
+    <link href="https://skymotion-5md.pages.dev/development-guide" rel="canonical" />
+    <meta content="开发说明：完整开发逻辑与维护 · 天体视运动实验室" property="og:title" />
     <meta
+      content="供开发和维护者使用：源码职责、状态和时间约定、天文模型、渲染与控件动画、回归测试、AGPLv3及双站点发布。"
       property="og:description"
-      content="介绍静态网站的工程结构、状态管理、天文计算、独立渲染管线、交互流程、检查方法和Cloudflare Pages与GitHub Pages发布方式。"
     />
-    <meta property="og:url" content="https://skymotion-5md.pages.dev/development-guide" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="zh_CN" />
+    <meta content="https://skymotion-5md.pages.dev/development-guide" property="og:url" />
+    <meta content="website" property="og:type" />
+    <meta content="zh_CN" property="og:locale" />
     <!-- search-metadata:end -->
-    <link rel="stylesheet" href="documents.css" />
+    <link href="documents.css" rel="stylesheet" />
   </head>
   <body data-page="development">
-    <nav class="page-nav" aria-label="页面导航">
+    <nav aria-label="页面导航" class="page-nav">
       <a href="index.html">欢迎页</a><a href="lab.html">实验台</a><a href="guide.html">学习指南</a
       ><a href="diagrams.html">关联图解</a><a href="analemma.html">日行迹</a>
-    <a href="space/">三维天空</a>
+      <a href="space/">三维天空</a>
     </nav>
     <main class="reading-page document-page">
       <header class="document-header">
         <p class="document-kicker">SKY MOTION LAB · 开发与维护</p>
-        <h1>完整开发逻辑与维护说明</h1>
+        <h1>开发说明：完整开发逻辑与维护</h1>
         <p class="document-lead">
-          面向开发与维护者。说明页面结构、状态管理、科学计算、渲染、验证与发布。
+          供开发和维护者使用：源码职责、状态和时间约定、天文模型、渲染与控件动画、回归测试、AGPLv3及双站点发布。
         </p>
-        <nav class="document-links" aria-label="三份文档">
+        <nav aria-label="三份文档" class="document-links">
           <a href="guide.html">学习指南</a><a href="project-guide.html">项目介绍</a
-          ><a href="development-guide.html" aria-current="page">开发维护</a>
+          ><a aria-current="page" href="development-guide.html">开发说明</a>
         </nav>
-        <a class="document-download" href="development-guide.md" download>下载 Markdown 源文档</a>
+        <a class="document-download" download="" href="development-guide.md">下载本文 Markdown</a>
       </header>
       <details class="document-toc">
         <summary>本页目录</summary>
         <ol>
-          <li><a href="#section-1">项目目标与规划顺序</a></li>
-          <li><a href="#section-2">技术方案与运行边界</a></li>
-          <li><a href="#section-3">页面与信息架构</a></li>
-          <li><a href="#section-4">当前文件职责</a></li>
-          <li><a href="#section-5">数据、界面与绘图的关系</a></li>
-          <li><a href="#section-6">太阳与月球的状态逻辑</a></li>
-          <li><a href="#section-7">时间标准与日期处理</a></li>
-          <li><a href="#section-8">坐标与太阳计算</a></li>
-          <li><a href="#section-9">升落与时长计算</a></li>
-          <li><a href="#section-10">月相与月面朝向</a></li>
-          <li><a href="#section-11">轨迹连续性与视图投影</a></li>
-          <li><a href="#section-12">日影、影尖轨迹与全年观察</a></li>
-          <li><a href="#section-13">两种互动日晷</a></li>
-          <li><a href="#section-14">日行迹与“8”字成因</a></li>
-          <li><a href="#section-15">行星伴月与仰望天空</a></li>
-          <li><a href="#section-16">完整更新与动画调度</a></li>
-          <li><a href="#section-17">路由、链接与浏览器历史</a></li>
-          <li><a href="#section-18">多端布局与交互原则</a></li>
-          <li><a href="#section-19">当前初始化和生成方式</a></li>
-          <li><a href="#section-20">测试和验收逻辑</a></li>
-          <li><a href="#section-21">双站点打包与发布</a></li>
-          <li><a href="#section-22">已修复事项与后续维护边界</a></li>
-          <li><a href="#section-24">太阳系三维模块的实现与验证</a></li>
-          <li><a href="#section-23">后续增加功能的标准流程</a></li>
+          <li><a href="#section-1">1. 项目目标与规划顺序</a></li>
+          <li><a href="#section-2">2. 技术方案与运行边界</a></li>
+          <li><a href="#section-3">3. 页面与信息架构</a></li>
+          <li><a href="#section-4">4. 当前文件职责</a></li>
+          <li><a href="#section-5">5. 数据、界面与绘图的关系</a></li>
+          <li><a href="#section-6">6. 太阳与月球的状态逻辑</a></li>
+          <li><a href="#section-7">7. 时间标准与日期处理</a></li>
+          <li><a href="#section-8">8. 坐标与太阳计算</a></li>
+          <li><a href="#section-9">9. 升落与时长计算</a></li>
+          <li><a href="#section-10">10. 月相与月面朝向</a></li>
+          <li><a href="#section-11">11. 轨迹连续性与视图投影</a></li>
+          <li><a href="#section-12">12. 日影、影尖轨迹与全年观察</a></li>
+          <li><a href="#section-13">13. 两种互动日晷</a></li>
+          <li><a href="#section-14">14. 日行迹与“8”字成因</a></li>
+          <li><a href="#section-15">15. 行星伴月与仰望天空</a></li>
+          <li><a href="#section-24">16. 太阳系三维模块的实现与验证</a></li>
+          <li><a href="#section-16">17. 完整更新与动画调度</a></li>
+          <li><a href="#section-17">18. 路由、链接与浏览器历史</a></li>
+          <li><a href="#section-18">19. 多端布局与交互原则</a></li>
+          <li><a href="#shared-controls">20. 共享控件与首次展开动画</a></li>
+          <li><a href="#section-19">21. 当前初始化和生成方式</a></li>
+          <li><a href="#section-20">22. 测试和验收逻辑</a></li>
+          <li><a href="#section-21">23. 双站点打包与发布</a></li>
+          <li><a href="#section-22">24. 已修复事项与后续维护边界</a></li>
+          <li><a href="#section-23">25. 后续增加功能的标准流程</a></li>
         </ol>
       </details>
       <div class="document-content">
-        <p>
-          维护基准：GitHub main 正式分支。最近更新：2026年10月10日。历史生成脚本与 ZIP
-          归档保留其对应版本的信息。
+        <p class="document-updated">
+          更新：2026年10月11日。功能核对基准为文档更新前main提交f8313cf；模型回归在本次核对时重新运行。历史记录保留原测试日期。
         </p>
         <p>
-          本文描述当前实际实现，并解释每个关键设计的目的。它是一份开发与交接文档；《学习指南》面向学生的操作任务，《项目介绍与地理模型说明》面向使用者的项目特点、计算依据和模型限制，三者用途不同。
+          本文供继续开发与维护使用。先看文件与数据流程，再查相关模型、状态和渲染章节；实现细节按职责归档。学生操作见<a
+            href="guide.html"
+            >学习指南</a
+          >，开发目的和优点见<a href="project-guide.html">项目介绍</a>。
         </p>
         <h2 id="section-1">1. 项目目标与规划顺序</h2>
         <p>
@@ -107,7 +111,8 @@
         <h2 id="section-2">2. 技术方案与运行边界</h2>
         <p>
           项目是静态多页面网站：HTML、CSS、原生 JavaScript、Canvas 2D，以及本地分发的 Astronomy
-          Engine 2.1.19；独立三维模块使用本地Three.js。Python用于静态预览与目录数据生成，正式网页无需生成或构建。
+          Engine
+          2.1.19；独立三维模块使用本地Three.js。Python用于静态预览与目录数据生成，正式网页无需生成或构建。
         </p>
         <p>
           没有必需的后端服务、数据库、登录系统或实时星历API。浏览器直接计算天体位置。三维天球和装置主要使用三维坐标投影到Canvas
@@ -179,7 +184,11 @@
                 <td>完整开发逻辑、工程结构与维护说明</td>
                 <td>项目介绍中的开发文档入口</td>
               </tr>
-              <tr><td><code>space/index.html</code></td><td>独立三维太阳系、日地月、辅助参照与沉浸观察</td><td>顶栏“三维天空”、空间模型菜单或 /space/</td></tr>
+              <tr>
+                <td><code>space/index.html</code></td>
+                <td>独立三维太阳系、日地月、辅助参照与沉浸观察</td>
+                <td>顶栏“三维天空”、空间模型菜单或 /space/</td>
+              </tr>
               <tr>
                 <td><code>404.html</code></td>
                 <td>未知地址的错误页</td>
@@ -288,11 +297,32 @@
                 <td><code>pages.css</code></td>
                 <td>当前多页面布局、Material 表面层级、多端适配及修正覆盖</td>
               </tr>
-              <tr><td><code>interface-motion.js</code>、<code>interface-motion.css</code></td><td>共享分段选中与关联选项弹出动画、折叠项和抽屉弹性开合、大屏菜单手动收起、边缘手柄和减少动态效果适配；与科学时钟分离</td></tr>
-              <tr><td><code>documents.css</code></td><td>三份阅读文档的统一标题、目录、表格与链接排版</td></tr>
-              <tr><td><code>tests/</code>、<code>scripts/</code></td><td>可重复运行的三维模型回归及恒星、轨道数据生成工具</td></tr>
-              <tr><td><code>.github/workflows/deploy.yml</code>、<code>.github/workflows/github-pages.yml</code></td><td>分别发布 Cloudflare 正式站与 GitHub Pages 同源镜像</td></tr>
-              <tr><td><code>.github/scripts/prepare_site.py</code></td><td>两个站点共用的静态打包脚本，处理项目子路径下的404链接</td></tr>
+              <tr>
+                <td><code>interface-motion.js</code>、<code>interface-motion.css</code></td>
+                <td>
+                  共享分段选中与关联选项弹出动画、折叠项和抽屉弹性开合、大屏菜单手动收起、边缘手柄和减少动态效果适配；与科学时钟分离
+                </td>
+              </tr>
+              <tr>
+                <td><code>documents.css</code></td>
+                <td>三份阅读文档的统一标题、目录、表格与链接排版</td>
+              </tr>
+              <tr>
+                <td><code>tests/</code>、<code>scripts/</code></td>
+                <td>可重复运行的三维模型回归及恒星、轨道数据生成工具</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>.github/workflows/deploy.yml</code>、<code
+                    >.github/workflows/github-pages.yml</code
+                  >
+                </td>
+                <td>分别发布 Cloudflare 正式站与 GitHub Pages 同源镜像</td>
+              </tr>
+              <tr>
+                <td><code>.github/scripts/prepare_site.py</code></td>
+                <td>两个站点共用的静态打包脚本，处理项目子路径下的404链接</td>
+              </tr>
               <tr>
                 <td><code>astronomy.js</code></td>
                 <td>本地 Astronomy Engine 库</td>
@@ -301,7 +331,14 @@
                 <td><code>earth.jpg</code>、<code>credits.txt</code></td>
                 <td>地球纹理与资源来源说明</td>
               </tr>
-
+              <tr>
+                <td><code>controls.css</code></td>
+                <td>参数行、开关与字段对齐；关联入口等距；与科学状态无关的共享几何样式</td>
+              </tr>
+              <tr>
+                <td><code>interaction-history.js、lab-history.js、space/history.js</code></td>
+                <td>浏览器撤回／重做事务与普通实验、三维适配器</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -309,7 +346,10 @@
           现有脚本采用传统全局作用域和有顺序的 script 加载，不是 ES Modules。大量功能通过 DOM ID
           和共享函数连接，因此改名、删除节点或调整加载顺序必须检查所有引用。
         </p>
-        <p>当前 main 不包含旧 tools/ 生成器或 REVIEW.md；这些资料只保存在历史归档中。根目录网页是当前维护源，不能用旧生成器覆盖。</p>
+        <p>
+          当前 main 不包含旧 tools/ 生成器或
+          REVIEW.md；这些资料只保存在历史归档中。根目录网页是当前维护源，不能用旧生成器覆盖。
+        </p>
         <h2 id="section-5">5. 数据、界面与绘图的关系</h2>
         <figure class="development-flow">
           <figcaption>数据与绘图流程</figcaption>
@@ -322,7 +362,9 @@
             <li>确定可见画布</li>
             <li>统一绘图</li>
           </ol>
-          <p>科学播放、相机缓动与控件动画是不同层次：科学播放推进日期或时刻；视觉插值不改写精确读数；interface-motion.js只改变菜单和选中标记的呈现，不修改星历状态。</p>
+          <p>
+            科学播放、相机缓动与控件动画是不同层次：科学播放推进日期或时刻；视觉插值不改写精确读数；interface-motion.js只改变菜单和选中标记的呈现，不修改星历状态。
+          </p>
         </figure>
         <p>
           科学状态决定精确读数，视觉插值改善过渡。插值不覆盖实际选择的日期、时刻或地点。学生读到的科学参数不能随着缓动随意变化。月球逐日播放的相邻日期使用完整步长的线性视觉过渡，避免每一天短暂移动后停顿；整日读数仍对应选定日期，月初重播不伪造月末与月初连续。月相轨道支持指针捕获拖动，以
@@ -432,7 +474,7 @@
         <p>后一种做法取月球方向单位向量m和太阳方向s，计算朝向太阳的切向分量：</p>
         <pre><code>tangent = s − (s · m)m</code></pre>
         <p>
-          再将这一切向方向经过当前天空投影，求屏幕上的角度并旋转月相图。地点、时间和视图方向都通过向量及投影参与结果。圆盘仍是放大示意，不模拟月面纹理、天平动或食的遮挡；新月／满月附近亮边朝向也不易辨认。
+          再将这一切向方向经过当前天空投影，求屏幕上的角度并旋转月相图。地点、时间和视图方向都通过向量及投影参与结果。圆盘仍是放大示意，月面采用缓存的原创外观纹理，不是登记的实测月表；不模拟天平动或食的遮挡；新月／满月附近亮边朝向也不易辨认。
         </p>
         <h2 id="section-11">11. 轨迹连续性与视图投影</h2>
         <p>
@@ -506,238 +548,10 @@
         <p>
           仰望天空使用观察者前方半球的正投影，地平面在下方。只有地平线上方、位于前方的天体绘入天空；身后或地平线下的天体通过列表说明。转向改变观察方向，时间滑块改变天体位置，两个控制都必须能直接操作。
         </p>
-        <p>observer.js的地面方位盘使用当地东、北基向量按observerAz旋转后压成水平面椭圆；只作地面方位示意，不参与天空单位向量、地平线高度或升落求解。站位蓝点固定，前方箭头固定向屏幕上侧，方位字和网格随相机朝向移动；极点使用参考方位约定。observer-explanation.js仅在实验台的仰望天空视角提供“轨迹说明”弹窗，监听视角选中态和绘图区类型控制入口可见性。说明区分前方半球边界、当日00:00—24:00端点与高度0°穿越，不改轨迹采样、裁切、星历或投影。弹窗有弹性开合、键盘Esc与遮罩关闭，窄屏内部滚动，遵循减少动态效果偏好。</p>
-        <h2 id="section-16">16. 完整更新与动画调度</h2>
         <p>
-          用户操作一般执行：停止有关播放、更新字段、调用 <code>schedule()</code>。<code
-            >schedule()</code
-          >
-          置更新标志，并请求主要
-          <code>requestAnimationFrame</code> 调度。多个相邻操作可以合并到下一帧。
+          observer.js的地面方位盘使用当地东、北基向量按observerAz旋转后压成水平面椭圆；只作地面方位示意，不参与天空单位向量、地平线高度或升落求解。站位蓝点固定，前方箭头固定向屏幕上侧，方位字和网格随相机朝向移动；极点使用参考方位约定。observer-explanation.js仅在实验台的仰望天空视角提供“轨迹说明”弹窗，监听视角选中态和绘图区类型控制入口可见性。说明区分前方半球边界、当日00:00—24:00端点与高度0°穿越，不改轨迹采样、裁切、星历或投影。弹窗有弹性开合、键盘Esc与遮罩关闭，窄屏内部滚动，遵循减少动态效果偏好。
         </p>
-        <p>当前一次完整 <code>render()</code> 的顺序是：</p>
-        <pre><code>准备太阳跨日与联动状态
-→ 同步视觉过渡目标
-→ 更新工作区布局
-→ 太阳或月球读数与控件
-→ 菜单、日影、叠加、伴月、观察者、逐日、日行迹、日晷
-→ 时间工作台
-→ 最终页面可见性
-→ drawMotionCanvases()</code></pre>
-        <p>
-          完整更新的 UI
-          函数不再启动第二轮绘图。最终绘图入口依据天体及可见性绘制天空、图表、地球、月相、升落方位、日行迹和日晷。
-        </p>
-        <p>
-          普通连续播放可在多数动画帧只更新画面，按约100毫秒间隔更新需要的完整
-          UI；按日推进或有新的用户输入时触发完整更新。相机和相邻日期位置使用缓动，精确科学状态与过渡画面分离。
-        </p>
-        <p>
-          <code>IntersectionObserver</code> 跟踪画布可见性，<code>ResizeObserver</code>
-          跟踪容器尺寸；隐藏画布不做无意义的实际绘制。实验画布像素比限制到2，欢迎页限制到2，控制高分辨率设备的负担。
-        </p>
-        <p>
-          球形地球优先使用WebGL着色器绘制正射球面：2048×1024原始纹理只上传一次，按显示尺寸与最高2倍像素比生成画面，单边上限2048像素，避免放大固定160×160栅格。方向变换、纹理采样与昼夜着色在GPU执行，数学方向约定保持不变。球面用Pointer
-          Events和指针捕获接收鼠标、触屏拖动。默认“仅旋转视角”更新独立的globeCameraLat／globeCameraLon，保留观察经纬度、日期、当地真太阳时和对应UTC，因此太阳直射点的地理坐标不变；屏幕上的太阳标记与昼夜轮廓按相机投影变化。“联动观察地点”则更新观察经纬度，固定当地真太阳时，对应UTC与太阳直射经度随观察经度变化。两种模式都在移动时排入下一绘制帧，松手后不再重复执行点击选点；观察标记用真实观察地点投影，远侧不绘制，可用“对准观察地点”复位相机。单击仍按球面反投影选择地点，取消触控时清理拖动状态。纹理使用线性过滤与多级纹理，减轻缩小时的闪烁；相同参数复用渲染结果。WebGL不可用或上下文丢失时使用320×320
-          CPU备用栅格，备用缓冲区仅在需要时创建；上下文恢复后重新建立GPU资源。球面关系图不再计算未显示的全天升落数据，切到升落图或打开快捷时刻时按当前状态计算。硬件性能和浏览器实现仍会影响流畅度，本次使用Chromium及软件WebGL核验，未完成Safari实机性能验证。
-        </p>
-        <p>
-          全球平面图的昼夜边界使用几何条件
-          <code>illuminationAt(lat, lon) = 0</code>
-          求得的矢量轮廓，并由Canvas按像素密度抗锯齿，不再放大360×180二值明暗遮罩。低分辨率遮罩仅用于连续的白昼亮度渐变；夜半球叠加独立矢量填充，保持原有深浅。零赤纬使用经度分段处理垂直边界，其他赤纬按纬度边界绘制，加入经度接缝与临界经线节点；抗锯齿不代表大气折射或晨昏蒙影。
-        </p>
-        <p>
-          页面进入后台时暂停发起动画帧，返回时重置帧时间，避免把后台停留时间当成一个巨大的播放步长。尊重减少动态效果偏好，降低或取消非必要过渡。
-        </p>
-        <h2 id="section-17">17. 路由、链接与浏览器历史</h2>
-        <p>普通页面使用真实 HTML 链接。关联图解页另外使用 hash 标识当前图，例如：</p>
-        <pre><code>diagrams.html#riseSetPanel
-diagrams.html#chartPanel</code></pre>
-        <p>
-          初次加载读取 hash。点击同页菜单时，<code>hashchange</code>
-          将地址同步到选中图解；点击顶部标签时，<code>pushState</code>
-          建立历史记录并更新选中项；前进后退通过 <code>popstate</code> 恢复画面。
-        </p>
-        <p>
-          改变当前天体后，再校验该天体允许的图解。伴月图解在月球模式下启用相应内容。链接、标签、可见画布和详情应在一次完整更新中保持一致。
-        </p>
-        <p>
-          验收不能只看地址改变：还必须检查正确画布可见、标签选中正确、时刻和日期仍可调、浏览器前进后退与刷新有效。
-        </p>
-        <p><code>interaction-history.js</code>统一组织用户有意触发的切换、选择及参数调整；<code>lab-history.js</code>读写普通实验的既有状态，<code>space/history.js</code>接入三维页内部适配器。快照放入history.state.skyMotionInteraction，包含版本、页面路径、科学状态与表单值。点击前冻结当前历史项，操作结束后pushState；滑条调整在结束时入栈，短时间连续键入合并为一次记录；第一次输入立即入栈，同一字段650毫秒内的后续输入用replaceState更新该项，避免刚输入就返回时漏掉操作。菜单展开、收起、滚动与相机拖动不建立历史项；超过8px的画布手势若改变时刻、日期或观测地点，仍作为参数调整记录，纯视角手势只更新当前项。画布上的轻点选择仍可记录。恢复时先结束尚未完成的有限控件动画，再写入状态并调用原有渲染，暂停播放；恢复过程不再生成新记录。图解标签把hash交给同一历史事务，避免一次切换产生两条记录。跨页跳转继续使用原生链接；回到带有快照的页面或刷新时恢复该项，而不是另加虚假返回步骤。浏览器返回和前进后再新操作的分支规则保持原生行为。嵌入三维帧不另建历史，天体与相机预设选择委托主页面记录，对照开关和科学时钟也由主页面负责；不记录逐帧播放、菜单或相机拖动。三维恢复后同步对象标题与活动标签，避免画面正确但界面仍显示旧视图。</p>
-        <h2 id="section-18">18. 多端布局与交互原则</h2>
-        <p>
-          正常宽屏默认使用左侧参数区，右侧图形和下方时间条；手动收起后图形与时间条扩展。760像素及以下窄屏的参数移入独立dialog抽屉，主画面只保留图形和时间条，不把参数堆在时间条下面。短横屏依可用高度压缩标题和说明，不单独改变760像素的菜单断点。
-        </p>
-        <p>
-          实验页面固定在视口内，参数区内部滚动。图形与时间条使用独立网格区域，避免悬浮时间台盖住画面。常用时刻、日期和观察方向优先放在可见控制区；低频参数放在分层折叠菜单中。
-        </p>
-        <p>
-          用统一的卡片宽度、边界与表面颜色区分结果和输入；展开菜单与收起菜单有不同背景、文字及箭头颜色。焦点状态可见，原生
-          details 可用键盘展开，时长说明也采用可展开结构。
-        </p>
-        <p>
-          触屏操作的画布和滑块必须按目的设置
-          <code>touch-action</code
-          >：三维旋转不能保留浏览器的纵向滚动接管，参数阅读区域则应正常滚动。通过单一事件更新状态，不能先展示临时选中态再由旧状态覆盖回来。
-        </p>
-        <p>
-          欢迎页不读取科学实验状态。<code>.welcome-corner-actions</code>统一容纳右下角五个窄按钮，入口和底部句子分别正常占位；网格显式清除旧行间距，短横屏压缩间距。按钮使用<code
-            >touch-action: manipulation</code
-          >防止双击放大，星空画布使用<code>touch-action: none</code
-          >处理拖动。操作提示保留aria-live但不占可见文字区；底部手写字体使用本地子集及OFL许可证。
-        </p>
-        <p>
-          欢迎星空根据面积生成160—520颗互动星星，连线保存为无向边，同一对星或线段可拆线；连线与清空共用一个按钮，没有“分开”模式或八颗重置限制。指针按下锁定目标，移动后施加推动；空间分桶检查碰撞，光晕复用贴图，流星限制同时数量。隐藏标签页暂停，减少动态效果时保留操作与导航。配色参考深场，图案不是实际星座图。
-        </p>
-        <h2 id="section-19">19. 当前初始化和生成方式</h2>
-        <p>
-          实验页加载基础样式和公共 HTML，再按有序 script 定义科学、交互与动画函数。<code
-            >app.js</code
-          >
-          建立默认状态并初始化旧公共节点；之后
-          <code>page-navigation.js</code>
-          恢复会话、选择专属页面的太阳状态、重组节点为当前工作区，调用同步与完整更新。
-        </p>
-        <p>
-          实验页面生成时已排除欢迎页和作者联系弹窗，欢迎页只保留星空互动与原生跳转；联系内容用于独立联系页。完整开发文档通过项目介绍中的入口进入独立阅读页，也提供Markdown下载。其他旧实验结构仍有共享初始化依赖，清理前需检查引用。
-        </p>
-        <p>
-          当前GitHub
-          main直接维护仓库根目录的静态HTML、CSS、JavaScript及资源，无需构建即可部署。旧的<code>sunlab/tools/build-pages.py</code>等生成脚本保存在历史归档分支，不是当前正式分支的运行前置条件；不要按旧路径运行后覆盖新版页面。修改页面与样式应直接维护根目录文件，同时更新三份网页文档与对应Markdown版本。后续若重新引入模板生成，必须先把现有页面行为纳入模板与验收。
-        </p>
-        <h2 id="section-20">20. 测试和验收逻辑</h2>
-        <p>每次修改按影响范围选择检查，不以“页面能打开”作为唯一通过标准。</p>
-        <div class="document-table">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">层面</th>
-                <th scope="col">应检查的内容</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>数学与数据</td>
-                <td>理想太阳高度、极昼极夜、相切、单位向量、影长、星历时间换算</td>
-              </tr>
-              <tr>
-                <td>时间边界</td>
-                <td>00:00／24:00、月末、闰年、年末、日期上下界、钟表时与真太阳时</td>
-              </tr>
-              <tr>
-                <td>天体显示</td>
-                <td>南北纬、赤道附近、天顶和极点、月相比例与亮边朝向</td>
-              </tr>
-              <tr>
-                <td>轨迹</td>
-                <td>地平线衔接、0°／360°接缝、月球日轨迹端点、影迹真实裁切</td>
-              </tr>
-              <tr>
-                <td>交互</td>
-                <td>滑块实际拖动、读数更新、类型切换、播放／暂停、真实触摸事件</td>
-              </tr>
-              <tr>
-                <td>路由</td>
-                <td>同页菜单、顶部标签、深链接、前进后退、刷新、跨页面状态恢复</td>
-              </tr>
-              <tr>
-                <td>布局</td>
-                <td>图形与控制同时可见、无遮挡、参数内部滚动、窄屏和短横屏</td>
-              </tr>
-              <tr>
-                <td>渲染</td>
-                <td>可见画布完整更新绘制一次、隐藏画布跳过、切换后不空白</td>
-              </tr>
-              <tr>
-                <td>打包</td>
-                <td>index 位于根目录、相对资源完整、ZIP可解压、文档与代码同步</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>历史开发记录中的验证包括（以下并非全部在本次文档更新中重跑）：</p>
-        <ul>
-          <li>
-            7种纬度、4个日期、3个时刻，共84组月面亮边方向公式对照，以及4个旋转方向的实际像素明暗检查。
-          </li>
-          <li>春分附近与跨年推进日期后，立即更新赤纬。</li>
-          <li>日晷两种类型在600、900、0分钟的读数、说明及夜间状态。</li>
-          <li>图解四个太阳菜单链接、浏览器前进后退、刷新与月球伴月切换。</li>
-          <li>Chromium移动触屏纵向拖动产生连续 pointermove 与 pointerup，没有 pointercancel。</li>
-          <li>对真实画布绘制入口计数，每个可见画布在一次完整更新中绘制一次。</li>
-          <li>320×568、390×667、844×390、1280×720的视图、滑块、菜单和独立页面回归。</li>
-          <li>
-            欢迎页七种尺寸的右下角布局、五个88px按钮、四字名称、清空状态切换，以及12次连续触屏流星点击不改变页面缩放比例。
-          </li>
-          <li>8组内部科学回归：最大高度对照差约0.00125°，升落时刻对照差约0.00030分钟。</li>
-        </ul>
-        <p>
-          这些数值是特定样本的内部一致性结果，不是与独立观测台对照得到的全范围精度认证。当前实际浏览器验证使用
-          Chromium；没有完成 Safari、Firefox、所有真实手机或低端设备性能测量。
-        </p>
-        <p>
-          本次重新运行仓库内的六组回归均通过：行星/月球位置、地球姿态、恒星目录、卫星与小天体轨道、本地天空以及历史轨迹。运行命令如下。它们检查输入边界、坐标约定和同库接口一致性，不是独立观测台精度认证。
-        </p><pre><code>node tests/space-model.cjs
-node tests/space-earth-frame.cjs
-node tests/space-stars.cjs
-node tests/space-population.cjs
-node tests/space-observer.cjs
-node tests/space-exploration.cjs</code></pre><p>
-          近期菜单浏览器检查覆盖320、390、760、768、960和1366像素宽度，以及四个实验页面和独立三维页的开合；另检查手柄拖动、减少动态效果、窄屏抽屉关闭与旋转屏幕竞争。浏览器采用Chromium，不能替代真实Safari、Firefox或低端GPU验收。部分旧科学对照与浏览器脚本仍在历史记录或临时目录，尚未全部形成仓库测试；交接时要保留输入、断言和运行环境。
-        </p>
-        <h2 id="section-21">21. 双站点打包与发布</h2>
-        <p>本地预览可用任意静态服务器，例如：</p>
-        <pre><code>python3 -m http.server 8000</code></pre>
-        <p>
-          浏览器访问 <code>http://localhost:8000/</code>。用静态服务器预览比直接打开 file
-          地址更接近托管环境。
-        </p>
-        <p>
-          打包必须让 <code>index.html</code> 位于 ZIP 根目录，同时包含全部
-          HTML、JS、CSS、图片、图标和版权信息，不能把整个项目目录再包成一层顶级文件夹。当前交付包还附带三份文档的
-          Markdown。
-        </p>
-        <p>
-          根目录包含404.html，使Cloudflare
-          Pages对不存在的路径采用404响应而非首页SPA回退；404文件位于仓库根目录，与其他静态页面一同部署。上线后需检查未知.js路径的实际HTTP状态。
-        </p>
-        <p>
-          当前正式仓库根目录保存静态网站资源；向 main 分支推送后，GitHub Actions
-          将受跟踪的网站文件自动部署到现有 Cloudflare Pages 项目 skymotion。README
-          与隐藏配置不发布，不需要在生产环境运行 Python 或
-          Node。发布后再次检查首页、实验台、全部专题、资源加载、深链接及移动操作，尤其避免浏览器缓存使新旧脚本混用。
-        </p>
-        <p>
-          GitHub Pages 镜像目标为 <a href="https://qingzhuernest.github.io/skymotion/">qingzhuernest.github.io/skymotion/</a>。首次需在仓库 Settings → Pages 将 Source 设为 GitHub Actions，随后运行 Sync SkyMotion to GitHub Pages；私有仓库需要支持 Pages 的套餐。镜像未启用时工作流报告等待配置，不影响 Cloudflare。之后 main 推送触发两个独立发布工作流。
-        </p>
-        <p>
-          两个工作流共用 <code>.github/scripts/prepare_site.py</code>，只复制受跟踪的网站文件并写入 .nojekyll；测试、数据生成脚本、内部审查记录、历史归档、README与隐藏配置不进入发布包。仓库保留维护与版权文件，GitHub Pages只用一份发布工作流，避免重复上传覆盖。GitHub 构建传入 /skymotion 基路径，只改写404页的根路径恢复链接；其余页面、脚本和资源字节一致。普通网页已使用相对路径，三维对照仍在同源下工作。镜像保留正式站的 canonical 与站点地图，避免为同一内容建立两个搜索主网址。部署完成后核对两边关键资源，而非只看打包成功。
-        </p>
-        <p>
-          历史 ZIP 是版本快照，保存于 project-archive 分支的完整归档包，不触发部署。正式版本以 main
-          为准；GitHub Actions 成功后还要核对线上资源，不能把打包成功等同于上线成功。
-        </p>
-        <h2 id="section-22">22. 已修复事项与后续维护边界</h2>
-        <p>
-          本版已修复日晷读数遗漏及说明联动、图解Hash与画面脱节、日行迹三维触屏手势冲突、时间工作台冗余绘图，并保留此前月面朝向、时长解释及跨日状态修正。
-        </p>
-        <p>
-          已额外修复无效地点选项的安全回退、零尺寸欢迎画布保护、重复的无保护位置标签赋值、键盘俯仰方向不一致；清理欢迎及联系死DOM和旧单页过渡逻辑，并增加根目录404页。还应继续维护的项目包括：清理其他旧实验DOM依赖、将临时测试归档、真实Safari／Firefox与低端设备测试，以及发布后的缓存和404状态核验。它们不能在没有实际检查的情况下写成“全部已解决”。
-        </p>
-        <p>
-          目前没有实现大气折射与视半径的完整观测升落模型、地形遮挡、海拔调整、食的真实遮挡、实测月面纹理、天平动与按日期定向的月表姿态、自动夏令时、精确连续合相搜索、按标准星座边界或连线组织的星座数据库和离线安装支持。
-        </p>
-        <p>
-          资源归属保留在 <code>credits.txt</code> 中：Astronomy Engine 2.1.19由Don
-          Cross提供，MIT许可；地球纹理来源于three.js示例资源，原实验台保持原有渲染实现；新增太阳系模块单独使用Three.js
-          0.186.1，MIT许可文件保存在space/vendor/。分发时保留已有版权与许可说明。原创应用代码采用
-          <a href="LICENSE">GNU AGPLv3</a>（AGPL-3.0-only）；授权范围见
-          <a href="NOTICE">NOTICE</a>，第三方例外见
-          <a href="THIRD-PARTY-NOTICES.md">第三方声明</a>。发布包保留这些文件，项目介绍提供
-          <a href="https://github.com/qingzhuernest/skymotion" target="_blank" rel="noopener">对应源码入口</a>；修改后分发或提供网络交互服务时，应按许可提供该修改版本的对应源码，并保留适用声明。
-        </p>
-        <h2 id="section-24">23. 太阳系三维模块的实现与验证</h2>
+        <h2 id="section-24">16. 太阳系三维模块的实现与验证</h2>
         <p>
           <code>space/index.html</code> 是独立入口，<code>space/model.js</code>
           只负责模型结果，<code>space/scene.js</code> 负责 Three.js 场景和交互，<code
@@ -768,7 +582,6 @@ node tests/space-exploration.cjs</code></pre><p>
           <code>node tests/space-model.cjs</code
           >：检查右手坐标、向量长度和方向、40个行星样本、5个月球照明样本、轨道有限性与无效日期。它是同库内部一致性回归，不是独立星历精度认证。浏览器检查使用Chromium的WebGL软件渲染，覆盖1440×900、390×844和844×390布局、真实触摸事件的旋转及双指缩放、侧拉菜单、闰年、非循环停止、实际UTC读数和WebGL不可用返回。真实Safari与低端GPU性能仍需设备验证。
         </p>
-
         <h3>外观与科学数据分离</h3>
         <p>
           <code>space/appearance.js</code
@@ -851,26 +664,286 @@ node tests/space-exploration.cjs</code></pre><p>
           新增回归运行<code>node tests/space-observer.cjs</code
           >，覆盖805个高度与方位值、地平线下读数、35个月面照明情况、1900/2100边界、南北极、闰日及无效输入。它检验不同接口口径一致性，不能当作独立星历精度认证。浏览器进一步检查多种画幅的两图与日期条同屏、模式切换、同期科学状态、相机不改本地读数、停止绘制和原页面状态保留；硬件与真实Safari性能仍需要实际设备验证。外观资源说明位于space/assets/credits.txt。
         </p>
-        <h2 id="section-23">24. 后续增加功能的标准流程</h2>
+        <h2 id="section-16">17. 完整更新与动画调度</h2>
         <p>
-          新增功能先写清变量、时间依据、物理输出和边界条件，再决定入口属于太阳、月球、公共观察或独立专题。不能先增加一个开关，再寻找它的科学含义。
+          用户操作一般执行：停止有关播放、更新字段、调用 <code>schedule()</code>。<code
+            >schedule()</code
+          >
+          置更新标志，并请求主要
+          <code>requestAnimationFrame</code> 调度。多个相邻操作可以合并到下一帧。
+        </p>
+        <p>当前一次完整 <code>render()</code> 的顺序是：</p>
+        <pre><code>准备太阳跨日与联动状态
+→ 同步视觉过渡目标
+→ 更新工作区布局
+→ 太阳或月球读数与控件
+→ 菜单、日影、叠加、伴月、观察者、逐日、日行迹、日晷
+→ 时间工作台
+→ 最终页面可见性
+→ drawMotionCanvases()</code></pre>
+        <p>
+          完整更新的 UI
+          函数不再启动第二轮绘图。最终绘图入口依据天体及可见性绘制天空、图表、地球、月相、升落方位、日行迹和日晷。
         </p>
         <p>
-          把新的科学计算写成可独立调用的模型函数；读数、图解和轨迹消费同一结果；在对应天体状态中添加字段，并更新会话保存与恢复。先做输入和可用性处理，再接入完整更新，最后接入统一绘图与需要的视觉过渡。
+          普通连续播放可在多数动画帧只更新画面，按约100毫秒间隔更新需要的完整
+          UI；按日推进或有新的用户输入时触发完整更新。相机和相邻日期位置使用缓动，精确科学状态与过渡画面分离。
         </p>
         <p>
-          交互必须说明拖动会改变日期、时刻、方向还是相机；菜单层级聚焦任务，避免重复日期控件。浅色面板和深色图形的文字配色分别限定作用域，浅色读数使用主色、说明使用on-surface-variant；分段选中底色由独立标记连续滑动并轻微回弹，隐藏的view-tabs重新出现时从所属切换按钮旁展开；动画作用于控件而不缩放画布。选中标记使用offset布局坐标，避免展开变换造成定位偏差。桌面侧栏开合先一次分配最终网格宽度，再以可取消的位移动画移动菜单与内容，不对画布缩放或逐帧改变网格列宽。三维ResizeObserver跳过未改变的尺寸与DPR，减少WebGL缓冲重设；抽屉只在桌面／移动／沉浸容器改变时移动同一参数节点，反复打开不重新挂载。原实验台打开抽屉仅同步暂停后的时间按钮，不发起整套天文绘图；参数抽屉使用遮罩而不模糊整张画布。抽屉和折叠项使用可取消的弹性动画；折叠项支持中途反向；受共享控制器管理的折叠项使用motion-disclosure标记，关闭原生::details-content高度过渡，仅由外层弹性动画控制高度，保证第一次打开时能够立即测到完整内容高度，避免原生和JavaScript两套动画竞争造成停顿及末尾跳变；播放与快捷时刻在motion-disclosure-opening事件中同步填入读数，再测量展开高度，toggle事件仍负责程序化打开后的更新；通过summary与容器边框测量关闭高度，不再为测量额外关闭再打开，减少toggle引起的布局和绘图；纯参数折叠不调用天文绘图，只有包含画布的展开项请求刷新；侧栏使用layout与paint包含性隔离展开布局，参数值改变仍由原有input/change调度刷新；轨迹说明弹窗不显示关闭叉号，支持点击外部空白区域或Esc关闭并返回入口焦点；抽屉用代次检查防止旧动画回调干扰新布局，按钮按下/释放与箭头旋转使用相同的小幅回弹语言；减少动态效果时跳过这些动效。文字反馈随选中项更新；科学状态立即更新，不等待动画结束。标记不参与点击，快速连续切换从当前显示位置继续；控件尺寸改变时重新定位。日晷入口直接显示为链接，与其他图解入口使用相同样式；日行迹入口放在太阳页面顶部的小字导航中，月相模式隐藏。普通实验与三维天空的收起入口都位于侧栏内部顶部，距边框14px；共享36px高度、12px圆角和白色按钮样式，三维侧栏使用相同浅色容器。手机抽屉保持原有关闭入口。参数区按钮和字段共享圆角与高度变量，同类选中项统一使用主色和白字。菜单展示按实际可用宽度决定：760像素以上默认显示侧栏，可手动收起，窄屏使用侧拉抽屉，CSS和JavaScript使用相同阈值，不因触屏属性隐藏平板侧栏。多端验收时实际拖动控制，检查展开、收起和旋转屏幕后的状态，而不是只检查截图尺寸。
+          <code>IntersectionObserver</code> 跟踪画布可见性，<code>ResizeObserver</code>
+          跟踪容器尺寸；隐藏画布不做无意义的实际绘制。实验画布像素比限制到2，欢迎页限制到2，控制高分辨率设备的负担。
         </p>
         <p>
-          参数控件的最终样式由controls.css共享，覆盖实验台、关联图解、日晷、日行迹和三维天空。开关行使用文字列与44像素控制列，不依赖HTML中input的先后顺序；开关44×26像素，整行最小44像素，文字可换行而开关不缩小。浅色参数区与深色观察浮层分别指定文字颜色；保留原始input和label的点击、键盘、禁用及隐藏语义。图解入口列表统一8像素gap，日晷外层不再叠加margin；同一栏先排列平级开关与入口，子级折叠入口位于末尾，显示辅助中的日影设置不再隔开轨迹、辅助线与月球叠加开关，固定时刻逐日比较位于太阳计算方式的底部；普通入口与折叠入口均至少44像素高。宽度变化时数字字段与选择器留在各自列内。回归运行node tests/parameter-controls.cjs，在1280、960、390、320像素宽度下检查九个页面的开关尺寸及右端对齐、入口间距、隐藏设置和水平溢出；标签点击、空格键、太阳／月球可用性与沉浸模式另经浏览器验证。
+          球形地球优先使用WebGL着色器绘制正射球面：2048×1024原始纹理只上传一次，按显示尺寸与最高2倍像素比生成画面，单边上限2048像素，避免放大固定160×160栅格。方向变换、纹理采样与昼夜着色在GPU执行，数学方向约定保持不变。球面用Pointer
+          Events和指针捕获接收鼠标、触屏拖动。默认“仅旋转视角”更新独立的globeCameraLat／globeCameraLon，保留观察经纬度、日期、当地真太阳时和对应UTC，因此太阳直射点的地理坐标不变；屏幕上的太阳标记与昼夜轮廓按相机投影变化。“联动观察地点”则更新观察经纬度，固定当地真太阳时，对应UTC与太阳直射经度随观察经度变化。两种模式都在移动时排入下一绘制帧，松手后不再重复执行点击选点；观察标记用真实观察地点投影，远侧不绘制，可用“对准观察地点”复位相机。单击仍按球面反投影选择地点，取消触控时清理拖动状态。纹理使用线性过滤与多级纹理，减轻缩小时的闪烁；相同参数复用渲染结果。WebGL不可用或上下文丢失时使用320×320
+          CPU备用栅格，备用缓冲区仅在需要时创建；上下文恢复后重新建立GPU资源。球面关系图不再计算未显示的全天升落数据，切到升落图或打开快捷时刻时按当前状态计算。硬件性能和浏览器实现仍会影响流畅度，本次使用Chromium及软件WebGL核验，未完成Safari实机性能验证。
         </p>
         <p>
-          首次折叠动画回归运行node tests/disclosure-motion.cjs（需要本地静态服务器、Playwright和Chromium），在1280和390像素宽度下检查实验台、日行迹和关联图解共44个首次展开场景：动画目标高度与最终自然高度一致、关闭后的高度复原、中途反向不受旧回调影响，以及减少动态效果设置下立即展开，无浏览器异常。这验证了高度测量和动画状态，不等于真实Safari设备的帧率认证。
+          全球平面图的昼夜边界使用几何条件
+          <code>illuminationAt(lat, lon) = 0</code>
+          求得的矢量轮廓，并由Canvas按像素密度抗锯齿，不再放大360×180二值明暗遮罩。低分辨率遮罩仅用于连续的白昼亮度渐变；夜半球叠加独立矢量填充，保持原有深浅。零赤纬使用经度分段处理垂直边界，其他赤纬按纬度边界绘制，加入经度接缝与临界经线节点；抗锯齿不代表大气折射或晨昏蒙影。
         </p>
         <p>
-          完成验证后，学生操作更新到学习指南，模型限制和项目特点更新到项目说明，实现细节和验收记录更新到开发文档与内部记录。最后生成页面、核对资源、打包、发布并验证公开版本。
+          页面进入后台时暂停发起动画帧，返回时重置帧时间，避免把后台停留时间当成一个巨大的播放步长。尊重减少动态效果偏好，降低或取消非必要过渡。
         </p>
+        <h2 id="section-17">18. 路由、链接与浏览器历史</h2>
+        <p>普通页面使用真实 HTML 链接。关联图解页另外使用 hash 标识当前图，例如：</p>
+        <pre><code>diagrams.html#riseSetPanel
+diagrams.html#chartPanel</code></pre>
+        <p>
+          初次加载读取 hash。点击同页菜单时，<code>hashchange</code>
+          将地址同步到选中图解；点击顶部标签时，<code>pushState</code>
+          建立历史记录并更新选中项；前进后退通过 <code>popstate</code> 恢复画面。
+        </p>
+        <p>
+          改变当前天体后，再校验该天体允许的图解。伴月图解在月球模式下启用相应内容。链接、标签、可见画布和详情应在一次完整更新中保持一致。
+        </p>
+        <p>
+          验收不能只看地址改变：还必须检查正确画布可见、标签选中正确、时刻和日期仍可调、浏览器前进后退与刷新有效。
+        </p>
+        <p>
+          <code>interaction-history.js</code
+          >统一组织用户有意触发的切换、选择及参数调整；<code>lab-history.js</code>读写普通实验的既有状态，<code>space/history.js</code>接入三维页内部适配器。快照放入history.state.skyMotionInteraction，包含版本、页面路径、科学状态与表单值。点击前冻结当前历史项，操作结束后pushState；滑条调整在结束时入栈，短时间连续键入合并为一次记录；第一次输入立即入栈，同一字段650毫秒内的后续输入用replaceState更新该项，避免刚输入就返回时漏掉操作。菜单展开、收起、滚动与相机拖动不建立历史项；超过8px的画布手势若改变时刻、日期或观测地点，仍作为参数调整记录，纯视角手势只更新当前项。画布上的轻点选择仍可记录。恢复时先结束尚未完成的有限控件动画，再写入状态并调用原有渲染，暂停播放；恢复过程不再生成新记录。图解标签把hash交给同一历史事务，避免一次切换产生两条记录。跨页跳转继续使用原生链接；回到带有快照的页面或刷新时恢复该项，而不是另加虚假返回步骤。浏览器返回和前进后再新操作的分支规则保持原生行为。嵌入三维帧不另建历史，天体与相机预设选择委托主页面记录，对照开关和科学时钟也由主页面负责；不记录逐帧播放、菜单或相机拖动。三维恢复后同步对象标题与活动标签，避免画面正确但界面仍显示旧视图。
+        </p>
+        <h2 id="section-18">19. 多端布局与交互原则</h2>
+        <p>
+          布局按实际可用宽度判断：大于760像素默认显示左侧参数栏，760像素及以下使用原生dialog抽屉；触屏属性不单独决定隐藏侧栏。图形与时间条占独立网格区域，参数区内部滚动，避免浮动控制遮住画布。独立三维遵循相同分区，沉浸布局使用抽屉。
+        </p>
+        <p>
+          page-navigation.js与space/ui.js移动同一组参数节点，不复制控件和监听器。只在桌面、窄屏或沉浸容器改变时重新挂载；退出抽屉归还原节点。遮罩、关闭、Esc与标题处左滑使用同一关闭流程，隐藏区域使用inert限制焦点，恢复入口保持可见。
+        </p>
+        <p>
+          普通实验与三维页的宽屏收起入口位于侧栏顶部，手机与沉浸模式使用标题“参数”按钮。弹窗支持键盘与外部点击关闭；轨迹说明取消关闭叉号，保留Esc与遮罩关闭。短屏压缩辅助文字但保留关键日期、时刻和退出控件。
+        </p>
+        <p>
+          CSS负责显示几何与配色；JavaScript负责科学状态、可用性和事件。修改菜单层级应移动原节点并保留ID、label与input关联、disabled、hidden和既有监听器，不能通过复制HTML制造第二套状态。
+        </p>
+        <h2 id="shared-controls">20. 共享控件与首次展开动画</h2>
+        <h3>统一参数行与菜单顺序</h3>
+        <p>
+          controls.css在页面已有样式后加载，限定于普通参数区、三维侧栏与观察浮层。开关行使用minmax(0,1fr)文字列和44像素控制列；input与span明确指定列与行，兼容原HTML中input在文字前后的两种顺序。开关44×26像素、圆形滑块18像素、整行最小44像素；保留原生label点击、Tab和空格行为，使用role="switch"表达二元设置。
+        </p>
+        <p>
+          长文字换行而控制器不缩小；浅色参数区与深色浮层分别指定文字颜色。关联图解列表统一8像素gap，日晷外层margin归零，普通链接与折叠入口至少44像素高。page-navigation.js先放平级开关与入口，再放可用的子级折叠设置；图解页仍隐藏不相关控制。数字行使用文字与值两列，观察浮层选择器在自身列内缩放。
+        </p>
+        <h3>一套控制器负责一次折叠</h3>
+        <p>
+          interface-motion.js为受控details添加motion-disclosure。controls的几何样式不负责折叠；interface-motion.css关闭这些节点的原生::details-content高度过渡，仅由外层Web
+          Animations弹性高度动画控制。此前原生过渡尚在关闭高度时，JavaScript立即测量得到错误终点，导致首次展开末尾跳变；现在测量时可直接得到自然展开高度。
+        </p>
+        <p>
+          首次打开前需要更新内容的“播放与快捷时刻”监听motion-disclosure-opening：先同步快捷读数，再测量展开高度；toggle仍处理程序化打开后的更新。关闭高度由summary、边框和padding求得，避免为测量重复关开。320毫秒动画支持中途反向，代次标记阻止旧回调覆盖新状态，结束后清除固定高度与overflow。减少动态效果时直接切换。
+        </p>
+        <h3>侧栏、分段选中与渲染隔离</h3>
+        <p>
+          侧栏先一次分配最终网格宽度，再使用可取消的位移动画，不逐帧调整网格宽度或缩放科学画布。分段底色使用offset布局坐标并轻微回弹；隐藏的关联选项出现时独立展开。ResizeObserver跳过未改变的尺寸和DPR，避免重复重设WebGL缓冲。
+        </p>
+        <p>
+          菜单开合、控件反馈和星历播放互相独立。普通抽屉打开仅同步暂停后的时间按钮；纯参数折叠不重新计算天文绘图，含画布的展开项才请求相应刷新。抽屉不模糊整张三维画布，采用遮罩与布局／绘制包含性。初始化恒星目录每2,048颗让出一次主线程；这些措施不能代替真实设备性能测量。
+        </p>
+        <h2 id="section-19">21. 当前初始化和生成方式</h2>
+        <p>
+          实验页加载基础样式和公共 HTML，再按有序 script 定义科学、交互与动画函数。<code
+            >app.js</code
+          >
+          建立默认状态并初始化旧公共节点；之后
+          <code>page-navigation.js</code>
+          恢复会话、选择专属页面的太阳状态、重组节点为当前工作区，调用同步与完整更新。
+        </p>
+        <p>
+          实验页面生成时已排除欢迎页和作者联系弹窗，欢迎页只保留星空互动与原生跳转；联系内容用于独立联系页。完整开发文档通过项目介绍中的入口进入独立阅读页，也提供Markdown下载。其他旧实验结构仍有共享初始化依赖，清理前需检查引用。
+        </p>
+        <p>
+          当前GitHub
+          main直接维护仓库根目录的静态HTML、CSS、JavaScript及资源，无需构建即可部署。旧的<code>sunlab/tools/build-pages.py</code>等生成脚本保存在历史归档分支，不是当前正式分支的运行前置条件；不要按旧路径运行后覆盖新版页面。修改页面与样式应直接维护根目录文件，同时更新三份网页文档与对应Markdown版本。后续若重新引入模板生成，必须先把现有页面行为纳入模板与验收。
+        </p>
+        <h2 id="section-20">22. 测试和验收逻辑</h2>
+        <p>
+          核验分三层：模型数值与输入边界、浏览器状态和交互、真实设备性能。每项结论应附输入、断言和运行环境，不能从一次截图推出所有浏览器正确。
+        </p>
+        <div class="document-table">
+          <table>
+            <thead>
+              <tr>
+                <th>回归脚本</th>
+                <th>覆盖重点</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>tests/space-model.cjs</td>
+                <td>40组行星向量、月球照明、右手坐标、采样与无效日期</td>
+              </tr>
+              <tr>
+                <td>tests/space-earth-frame.cjs</td>
+                <td>地球右手姿态、格林尼治恒星时、分至日与自转</td>
+              </tr>
+              <tr>
+                <td>tests/space-stars.cjs</td>
+                <td>61,816颗目录星、方向、星等与B−V颜色</td>
+              </tr>
+              <tr>
+                <td>tests/space-population.cjs</td>
+                <td>455条卫星与1,212条小天体轨道、逆行、求解和显示尺度</td>
+              </tr>
+              <tr>
+                <td>tests/space-observer.cjs</td>
+                <td>805组地平坐标、35组照明、极点及日期边界</td>
+              </tr>
+              <tr>
+                <td>tests/space-exploration.cjs</td>
+                <td>24条行星与3条月球历史路径、真实距离、跨年与不可变快照</td>
+              </tr>
+              <tr>
+                <td>tests/interaction-history.cjs</td>
+                <td>切换、选择、参数调整、分组滑条与跨图解历史恢复</td>
+              </tr>
+              <tr>
+                <td>tests/disclosure-motion.cjs</td>
+                <td>首次自然高度、收起、中途反向与减少动态效果</td>
+              </tr>
+              <tr>
+                <td>tests/parameter-controls.cjs</td>
+                <td>九个页面、四种宽度的开关尺寸／对齐、入口间距、隐藏和溢出</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>运行方式</h3>
+        <p>
+          六组space模型脚本可直接用Node运行；浏览器脚本需要发布文件预览服务器、Playwright与Chromium。应用本身不依赖测试工具。命令示例：
+        </p>
+        <pre><code>node tests/space-model.cjs
+node tests/space-earth-frame.cjs
+node tests/space-stars.cjs
+node tests/space-population.cjs
+node tests/space-observer.cjs
+node tests/space-exploration.cjs
+
+SKY_MOTION_TEST_URL=http://127.0.0.1:8000/ node tests/disclosure-motion.cjs
+SKY_MOTION_TEST_URL=http://127.0.0.1:8000/ node tests/parameter-controls.cjs
+SKY_MOTION_TEST_URL=http://127.0.0.1:8000/ node tests/interaction-history.cjs</code></pre>
+        <p>
+          浏览器路径可通过SKY_MOTION_CHROMIUM指定，Playwright模块路径通过SKY_MOTION_PLAYWRIGHT指定；默认使用playwright模块和/usr/bin/chromium。运行环境不同时需要对应调整。
+        </p>
+        <h3>当前结论与证据范围</h3>
+        <p>
+          2026年10月11日文档核对时重新运行六组space回归，全部通过。此前同日控件修复的布局检查覆盖1280、960、390和320像素宽度的九个页面，共36组；折叠动画检查覆盖1280与390像素宽度的实验台、日行迹和关联图解共44个首次展开场景。另检查文字点击、空格键、月球模式隐藏太阳设置与沉浸控制。
+        </p>
+        <p>
+          这些检查使用Chromium及软件WebGL，验证状态、几何和内部一致性；不证明M5、iPad或Safari的真实帧率。下一步性能核验应记录首次／重复操作、长任务、布局与绘制耗时，并在实际设备比较，不以设备规格替代诊断。
+        </p>
+        <p>
+          历史Meeus／NOAA太阳近似公式与USNO月相对照、轨迹裁切和旧页面检查属于当时样本证据。部分脚本只存在历史记录，未全部归档为可复现测试；不重新宣称其最大差值是当前全日期范围的精度。历史记录见<a
+            href="https://github.com/qingzhuernest/skymotion/blob/main/BUG-AUDIT-2026-10-10.md"
+            >2026年10月10日检查记录</a
+          >。
+        </p>
+        <h2 id="section-21">23. 双站点打包与发布</h2>
+        <h3>本地预览发布文件</h3>
+        <p>
+          main根目录是当前静态源码，不运行旧模板生成器。共享打包器只复制Git跟踪的网站文件；新增网页资源先纳入版本控制，否则不会进入发布包。选择一个尚不存在的输出目录：
+        </p>
+        <pre><code>python3 .github/scripts/prepare_site.py --output /tmp/skymotion-preview
+python3 -m http.server 8000 --bind 127.0.0.1 --directory /tmp/skymotion-preview</code></pre>
+        <p>
+          访问http://127.0.0.1:8000/。输出目录不能已存在；重建时更换目录或清理自己的旧预览。该方式仅服务发布文件，避免把仓库配置当作网站公开。
+        </p>
+        <h3>main推送自动发布两个站点</h3>
+        <p>
+          <a href="https://skymotion-5md.pages.dev/">Cloudflare正式站</a
+          >由.github/workflows/deploy.yml发布到已有项目skymotion；<a
+            href="https://qingzhuernest.github.io/skymotion/"
+            >GitHub Pages镜像</a
+          >由.github/workflows/github-pages.yml发布，两边已启用。仓库源为<a
+            href="https://github.com/qingzhuernest/skymotion"
+            >qingzhuernest/skymotion</a
+          >，维护者提交到main后自动触发，也可在Actions手动重跑。
+        </p>
+        <p>
+          Cloudflare凭据由GitHub
+          Secrets提供，不写入源码或文档。两个工作流复用prepare_site.py：排除README、隐藏配置、tests、scripts、archive和内部检查记录，保留网页、三份Markdown、模型数据与LICENSE、NOTICE、第三方声明。GitHub镜像传入/skymotion基路径，仅改写404恢复链接，其余发布文件来自同一份源码。
+        </p>
+        <h3>资源、搜索与发布验收</h3>
+        <p>
+          根目录404.html使未知路径有独立错误承接页；不要把丢失的JavaScript资源回退成首页HTML。相对路径支持镜像子目录；canonical与站点地图继续以Cloudflare为主网址。sitemap.xml、robots.txt与搜索验证文件随站点发布，提交和收录状态由搜索平台处理，部署成功不等于已收录。
+        </p>
+        <p>
+          发布后分别看两个工作流结论，并核对线上关键资源与当前提交一致、各专题链接、深链接、未知.js的HTTP状态和手机操作。若工具环境被403阻止，应明确说明无法直接核验该站点，不能把工作流成功表述为已验证真实设备表现。手动ZIP上传时index.html应位于包根，不套额外顶级目录。
+        </p>
+        <p>
+          project-archive分支保留历史ZIP、生成器和检查记录，不触发正式部署。历史资料只描述对应版本，不能用旧生成器覆盖main。
+        </p>
+        <h2 id="section-22">24. 已修复事项与后续维护边界</h2>
+        <h3>维护现有边界</h3>
+        <p>
+          已有修正包括日晷读数与类型说明、图解Hash与可见画面同步、日行迹触控、工作台重复绘图、无效地点恢复、零尺寸欢迎画布保护和统一键盘俯仰。2026年10月11日进一步修正折叠高度的双重动画冲突、快捷内容晚于测量，以及开关与图解入口的对齐、间距和层级。详细机制分别记录在共享控件、调度与路由章节。
+        </p>
+        <p>
+          仍需实际Safari、Firefox及不同GPU的性能和交互检查；部分旧DOM依赖与临时科学对照也待继续整理。没有完成的范围不能写成“全站无BUG”或“所有科学计算完全正确”。
+        </p>
+        <h3>未实现的观测模型</h3>
+        <p>
+          当前没有完整折射和视半径升落模型、海拔／地形遮挡、气象、真实食遮挡、登记月表定向与天平动、自动夏令时、连续合相精确搜索、按标准星座边界组织的数据库或Service
+          Worker离线安装。原创表面纹理与真实星历应继续独立维护。
+        </p>
+        <h3>许可与资源责任</h3>
+        <p>
+          原创应用代码采用<a href="LICENSE">GNU AGPLv3</a
+          >（AGPL-3.0-only），允许商业使用；分发和修改后提供网络服务须遵守源码与声明义务，网络修改版须向远程用户明确提供获取对应源码的机会。范围见<a
+            href="NOTICE"
+            >NOTICE</a
+          >，第三方例外见<a href="THIRD-PARTY-NOTICES.md">第三方声明</a>。
+        </p>
+        <p>
+          Astronomy Engine与本地Three.js保留MIT许可；HYG子集按CC BY-SA
+          4.0、字体按其OFL等原许可分发。NASA来源影像逐项保留作者、处理配色与来源；不能把“NASA来源”统一当作任何用途均无条件授权。地球纹理也保留原来源说明。相关credits和许可文件进入发布包，项目介绍保留源码入口。
+        </p>
+        <h2 id="section-23">25. 后续增加功能的标准流程</h2>
+        <ol>
+          <li>
+            <strong>先写教学与模型约定：</strong
+            >确定要改变的变量、保持的条件、时间依据、输出单位和边界；选择对应专题入口。
+          </li>
+          <li>
+            <strong>实现可独立调用的计算：</strong
+            >读数与多张图消费同一结果，真实模型与理想演示分开，不让外观缩放改写科学向量。
+          </li>
+          <li>
+            <strong>接入状态与交互：</strong
+            >更新会话、历史恢复、可用性和暂停逻辑；保留单一控件节点、原生输入语义与可撤回的参数手势。
+          </li>
+          <li>
+            <strong>验证再完善视觉：</strong
+            >先做模型边界与状态断言，再检查首次操作、快速反向、各宽度、减少动态效果和实际触屏；控件动画不能延迟科学读数。
+          </li>
+          <li>
+            <strong>按职责同步文档与发布：</strong
+            >学习指南更新任务步骤，项目介绍更新目的与能力，开发说明更新文件、计算和验证。同步Markdown与README，核对文档锚点、版权和发布包，提交main后检查双站点部署与资源。
+          </li>
+        </ol>
       </div>
     </main>
+    <script src="interface-motion.js"></script>
   </body>
 </html>
