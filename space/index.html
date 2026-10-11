@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="immersive.css" />
     <link rel="stylesheet" href="population.css" />
     <link rel="stylesheet" href="../interface-motion.css" />
+    <link rel="stylesheet" href="../controls.css" />
   </head>
   <body data-page="space">
     <script src="embed.js"></script>
@@ -73,10 +74,10 @@
               </select></label
             >
             <div class="toggles">
-              <label>循环本年<input type="checkbox" id="spaceLoop" checked /></label>
-              <label>轨道线<input type="checkbox" id="orbits" checked /></label>
-              <label>天体名称<input type="checkbox" id="names" checked /></label
-              ><label hidden>太阳平行光<input type="checkbox" id="parallelRays" checked /></label>
+              <label>循环本年<input type="checkbox" id="spaceLoop" checked role="switch" /></label>
+              <label>轨道线<input type="checkbox" id="orbits" checked role="switch" /></label>
+              <label>天体名称<input type="checkbox" id="names" checked role="switch" /></label
+              ><label hidden>太阳平行光<input type="checkbox" id="parallelRays" checked role="switch" /></label>
             </div>
           </section>
           <section class="card" id="observerSettings" hidden>
@@ -185,8 +186,7 @@
                   </select></label
                 >
                 <label class="tools-check" for="trailEnabled"
-                  >历史轨迹<input type="checkbox" id="trailEnabled"
-                /></label>
+                  >历史轨迹<input type="checkbox" id="trailEnabled" role="switch" /></label>
                 <label class="tools-field" for="trailDays"
                   >回看时段<select id="trailDays">
                     <option value="7">过去7天</option>
@@ -196,36 +196,29 @@
                   </select></label
                 >
                 <label class="tools-check" for="inspectInfo"
-                  >显示真实读数<input type="checkbox" id="inspectInfo" checked
-                /></label>
+                  >显示真实读数<input type="checkbox" id="inspectInfo" checked role="switch" /></label>
                 <label class="tools-check" for="earthReference"
                   >地轴与赤道<input
                     type="checkbox"
                     id="earthReference"
                     checked
-                    title="红线为地轴，蓝圈为赤道；地球姿态按同一UTC计算"
-                /></label>
+                    title="红线为地轴，蓝圈为赤道；地球姿态按同一UTC计算" role="switch" /></label>
                 <label class="tools-check" for="referencePlane"
                   >黄道参考面<input
                     type="checkbox"
                     id="referencePlane"
-                    title="固定J2000黄道平面，并非当地地平面"
-                /></label>
+                    title="固定J2000黄道平面，并非当地地平面" role="switch" /></label>
                 <div class="population-tools">
                   <span class="tools-heading">太阳系与深空细节</span>
                   <label class="tools-check" for="satellitePoints"
-                    >行星卫星群<input type="checkbox" id="satellitePoints" checked
-                  /></label>
+                    >行星卫星群<input type="checkbox" id="satellitePoints" checked role="switch" /></label>
                   <label class="tools-check" for="asteroidPoints"
-                    >主带小行星<input type="checkbox" id="asteroidPoints" checked
-                  /></label>
+                    >主带小行星<input type="checkbox" id="asteroidPoints" checked role="switch" /></label>
                   <label class="tools-check" for="cometPoints"
-                    >周期彗星<input type="checkbox" id="cometPoints" checked
-                  /></label>
+                    >周期彗星<input type="checkbox" id="cometPoints" checked role="switch" /></label>
                   <button id="satelliteView" type="button">观察所选行星卫星群</button>
                   <label class="tools-check" for="nebulaBackground"
-                    >星云影像背景<input type="checkbox" id="nebulaBackground"
-                  /></label>
+                    >星云影像背景<input type="checkbox" id="nebulaBackground" role="switch" /></label>
                   <button id="nebulaPhotos" type="button" disabled>查看真实星云影像</button>
                   <p class="tools-note" id="populationStatus">进入沉浸观察时加载本地小天体数据。</p>
                   <p class="tools-note">

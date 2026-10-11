@@ -24,6 +24,7 @@
     <!-- search-metadata:end -->
     <link rel="stylesheet" href="space/lab-compare.css" />
     <link rel="stylesheet" href="interface-motion.css" />
+    <link rel="stylesheet" href="controls.css" />
   </head>
   <body data-page="diagrams">
     <div id="labShell" hidden inert>
@@ -204,8 +205,7 @@
                     </div>
                   </details>
                   <label class="toggle-row" id="compareControl"
-                    ><span>理想两至 / 分日对比</span><input id="compare" type="checkbox"
-                  /></label>
+                    ><span>理想两至 / 分日对比</span><input id="compare" type="checkbox" role="switch" /></label>
                   <p class="micro">日期观测对应实际日期；理想实验用于单独研究纬度和太阳赤纬。</p>
                 </div>
               </details>
@@ -217,16 +217,14 @@
                 <div class="menu-content">
                   <p id="displayContextNote" class="micro" hidden>这些设置影响辅助天空视图。</p>
                   <label class="toggle-row"
-                    ><span>天体轨迹</span><input id="track" type="checkbox" checked /></label
+                    ><span>天体轨迹</span><input id="track" type="checkbox" checked role="switch" /></label
                   ><label class="toggle-row"
-                    ><span>角度辅助线</span><input id="angles" type="checkbox" checked
-                  /></label>
+                    ><span>角度辅助线</span><input id="angles" type="checkbox" checked role="switch" /></label>
                   <details class="menu-subsection" id="shadowMenu">
                     <summary>日影与杆尖影迹</summary>
                     <div class="menu-content">
                       <label class="toggle-row" id="shadowControl"
-                        ><span>地面影子</span><input id="shadow" type="checkbox" checked
-                      /></label>
+                        ><span>地面影子</span><input id="shadow" type="checkbox" checked role="switch" /></label>
                       <div class="label-row" id="heightControl">
                         <label for="height">竖直立杆高度</label>
                         <div>
@@ -510,11 +508,11 @@
               </p>
               <div class="solar-date-options">
                 <label class="overlay-toggle" for="solarDateTrail"
-                  ><input id="solarDateTrail" type="checkbox" checked /><span
+                  ><input id="solarDateTrail" type="checkbox" checked role="switch" /><span
                     >全年同一时刻的太阳 / 影尖轨迹</span
                   ></label
                 ><label class="overlay-toggle" for="solarDateLink"
-                  ><input id="solarDateLink" type="checkbox" checked /><span
+                  ><input id="solarDateLink" type="checkbox" checked role="switch" /><span
                     >联动下方全年日行迹</span
                   ></label
                 >

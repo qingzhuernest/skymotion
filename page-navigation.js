@@ -376,6 +376,10 @@ function renderUIWorkspace() {
       .append(document.querySelector('.solar-date-options'));
     document.querySelector('label[for=solarDateLink] span').textContent = '日行迹采用当前真太阳时';
     document.querySelector('#displayMenu .menu-content').append($('solarOverlayBar'));
+    // Keep the flat switches together; expandable settings follow at the bottom.
+    document.querySelector('#displayMenu .menu-content').append($('shadowMenu'));
+    const modelContent = document.querySelector('#modelMenu > .menu-content');
+    modelContent.append(modelContent.querySelector('.menu-divider'), $('solarDateModeMenu'));
     uiWorkspace = {
       title,
       plot,
