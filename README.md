@@ -1,8 +1,14 @@
 # SkyMotion · 天体视运动实验室
 
-面向课堂演示与自主探索的中文天文地理网页工具。文档核对日期：**2026年10月10日**。通过地点、日期和时刻，联动太阳、月球、地球昼夜、日影与日晷，让图形、读数和观察任务一起呈现。采用 Material Design 风格，支持桌面、平板和手机，无需 Flash 或浏览器插件。
+面向课堂演示与自主探索的中文天文地理网页工具。文档核对日期：**2026年10月11日**。通过地点、日期和时刻，联动太阳、月球、地球昼夜、日影与日晷，让图形、读数和观察任务一起呈现。采用 Material Design 风格，支持桌面、平板和手机，无需 Flash 或浏览器插件。
 
 **[进入网站](https://skymotion-5md.pages.dev/)** · **[进入实验台](https://skymotion-5md.pages.dev/lab.html)**
+
+## 开源许可
+
+原创应用代码采用 **[GNU AGPLv3](LICENSE)**（`AGPL-3.0-only`），允许商业使用。分发时须遵守对应源码和声明要求；修改后通过网络向用户提供交互服务时，须按第13条向这些用户明确提供修改版的对应源码。软件不提供许可条款以外的保证。
+
+版权与适用范围见 [NOTICE](NOTICE)。第三方库、数据、字体和影像保留原许可及来源条件，见 [第三方声明](THIRD-PARTY-NOTICES.md)，不能统一重新授权为 AGPL。网页中的说明位于 [项目介绍](https://skymotion-5md.pages.dev/project-guide.html#license)。
 
 ## 可以观察什么
 
@@ -35,7 +41,7 @@ python3 -m http.server 8000
 
 打开 `http://localhost:8000/`。向 `main` 推送修改后，[GitHub Actions](https://github.com/qingzhuernest/skymotion/actions) 自动部署到现有 Cloudflare Pages 项目 `skymotion`，网站地址保持不变，也可手动触发部署。
 
-部署配置位于 [.github/workflows/deploy.yml](.github/workflows/deploy.yml)。所需的 `CLOUDFLARE_ACCOUNT_ID` 和 `CLOUDFLARE_API_TOKEN` 已通过 GitHub Secrets 配置；凭据不应写入源码。工作流排除 README 和隐藏配置文件；当前会发布其他受跟踪文件，包括文档、测试和数据生成脚本，若以后收紧部署白名单，需要保留模型数据与许可文件。
+部署配置位于 [.github/workflows/deploy.yml](.github/workflows/deploy.yml)。所需的 `CLOUDFLARE_ACCOUNT_ID` 和 `CLOUDFLARE_API_TOKEN` 已通过 GitHub Secrets 配置；凭据不应写入源码。两个站点共用 `.github/scripts/prepare_site.py`，排除 README、隐藏配置、测试、数据生成脚本和历史归档；保留网页文档、模型数据及 LICENSE、NOTICE 和第三方许可文件。
 
 ## 源码格式与维护
 

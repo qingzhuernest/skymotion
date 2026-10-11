@@ -402,7 +402,7 @@ GitHub Pages 镜像目标为 [qingzhuernest.github.io/skymotion/](https://qingzh
 
 目前没有实现大气折射与视半径的完整观测升落模型、地形遮挡、海拔调整、食的真实遮挡、实测月面纹理、天平动与按日期定向的月表姿态、自动夏令时、精确连续合相搜索、按标准星座边界或连线组织的星座数据库和离线安装支持。
 
-资源归属保留在 `credits.txt` 中：Astronomy Engine 2.1.19由Don Cross提供，MIT许可；地球纹理来源于three.js示例资源，原实验台保持原有渲染实现；新增太阳系模块单独使用Three.js 0.186.1，MIT许可文件保存在space/vendor/。分发时保留已有版权与许可说明。
+资源归属保留在 `credits.txt` 中：Astronomy Engine 2.1.19由Don Cross提供，MIT许可；地球纹理来源于three.js示例资源，原实验台保持原有渲染实现；新增太阳系模块单独使用Three.js 0.186.1，MIT许可文件保存在space/vendor/。分发时保留已有版权与许可说明。原创应用代码采用 [GNU AGPLv3](LICENSE)（AGPL-3.0-only）；授权范围见 <NOTICE>，第三方例外见 [第三方声明](THIRD-PARTY-NOTICES.md)。发布包保留这些文件，项目介绍提供 [对应源码入口](https://github.com/qingzhuernest/skymotion)；修改后分发或提供网络交互服务时，应按许可提供该修改版本的对应源码，并保留适用声明。
 
 ## 23. 太阳系三维模块的实现与验证
 

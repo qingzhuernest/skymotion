@@ -1,4 +1,7 @@
 Three.js 0.186.1: MIT license, included in vendor/THREE-LICENSE.txt.
+Original application source code: GNU AGPL version 3 only (AGPL-3.0-only).
+See ../LICENSE, ../NOTICE and ../THIRD-PARTY-NOTICES.md.
+Source: https://github.com/qingzhuernest/skymotion
 Astronomy Engine 2.1.19: Don Cross, MIT license retained in ../astronomy.js.
 Earth map from three.js examples: earth_atmos_2048.jpg.
 Source: https://github.com/mrdoob/three.js/tree/dev/examples/textures/planets
