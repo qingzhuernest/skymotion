@@ -41,6 +41,9 @@
       .forEach((details) => {
         const summary = [...details.children].find((node) => node.tagName === 'SUMMARY');
         if (!summary) return;
+        // Only this controller owns the fold. Native ::details-content height
+        // transitions would otherwise run underneath the measured spring.
+        details.classList.add('motion-disclosure');
         let animation = null,
           targetOpen = details.open,
           generation = 0;
@@ -67,6 +70,8 @@
               0,
             );
           if (!details.open) details.open = true;
+          // Lazy labels/controls must be ready before measuring the spring target.
+          if (targetOpen) details.dispatchEvent(new Event('motion-disclosure-opening'));
           const openedHeight = details.getBoundingClientRect().height;
           const to = targetOpen ? openedHeight : closedHeight;
           details.style.overflow = 'hidden';

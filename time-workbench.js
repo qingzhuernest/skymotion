@@ -329,6 +329,8 @@ function initTimeWorkbench() {
   $('workbenchMore').addEventListener('toggle', () => {
     if ($('workbenchMore').open) renderTimeWorkbench();
   });
+  // Populate shortcuts before the fold controller measures its expanded height.
+  $('workbenchMore').addEventListener('motion-disclosure-opening', renderTimeWorkbench);
   for (const id of ['workbenchClockInput', 'workbenchDate', 'workbenchMonth'])
     $(id).addEventListener('focus', () => {
       if (state.playing || analemmaPlaying) {
