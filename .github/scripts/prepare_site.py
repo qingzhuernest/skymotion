@@ -1,6 +1,7 @@
 """Package the same tracked website for Cloudflare and GitHub project Pages."""
 from pathlib import Path
 import argparse
+import re
 import shutil
 import subprocess
 
@@ -33,7 +34,9 @@ if not (output / 'index.html').is_file():
 # An unknown nested URL still needs the project's root assets and recovery links.
 # Other pages already use relative links and remain byte-for-byte identical.
 if base:
-    error_page = output / '404.html'
-    error_page.write_text(error_page.read_text().replace('href="/', f'href="{base}/'))
+    for name in ('404.html', '404.en.html'):
+        error_page = output / name
+        if error_page.exists():
+            error_page.write_text(re.sub(r'((?:href|src)=")/(?!/)', lambda match: match.group(1) + base + '/', error_page.read_text()))
 (output / '.nojekyll').touch()
 print(f'Prepared website in {output}; base path: {base or "/"}')

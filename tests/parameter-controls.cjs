@@ -40,7 +40,10 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
           if (tools) tools.open = true;
           return document.querySelectorAll('.ui-parameters,.side,.scene-tools-panel').length;
         });
-        await page.waitForTimeout(350);
+        await page.evaluate(async () => {
+          const animations = document.getAnimations().filter(a => a.effect?.target instanceof Element && a.effect.target.closest('.ui-parameters,.side,.scene-tools-panel') && Number.isFinite(a.effect.getComputedTiming().endTime));
+          await Promise.all(animations.map(a => a.finished.catch(() => {})));
+        });
         const result = await page.evaluate(() => {
           const visible = (e) =>
             e.getBoundingClientRect().width > 0 && getComputedStyle(e).visibility !== 'hidden';

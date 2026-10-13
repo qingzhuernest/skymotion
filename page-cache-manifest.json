@@ -114,8 +114,8 @@
     "workspace.js"
   ],
   "sizes": {
-    "404.en.html": 2956,
-    "404.html": 1764,
+    "404.en.html": 2959,
+    "404.html": 1767,
     "analemma.en.html": 119211,
     "analemma.html": 71325,
     "contact.en.html": 8007,
@@ -139,6 +139,6 @@
     "sundial.en.html": 119178,
     "sundial.html": 71298
   },
-  "totalBytes": 1498137,
+  "totalBytes": 1498143,
   "assetBytes": 8310450
 }
