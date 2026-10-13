@@ -1897,3 +1897,107 @@ body .author-email-box > span,
 body #authorCopyStatus {
   color: var(--design-muted);
 }
+/* Site-owned calendars replace the unthemeable Safari date popup. */
+body dialog.site-calendar {
+  width: min(360px, calc(100vw - 24px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 16px;
+  box-sizing: border-box;
+  border: 1px solid var(--design-line);
+  border-radius: var(--design-radius-surface);
+  background: #fff;
+  color: #20323e;
+  font-family: var(--design-font);
+  box-shadow: 0 12px 36px #101e2c26;
+  overflow-y: auto;
+}
+.site-calendar::backdrop { background: #101e2c66; }
+body .site-calendar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 6px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font: inherit;
+  color: #20323e;
+  background: transparent;
+  cursor: pointer;
+}
+body .site-calendar button:hover { background: #ecf2f4; }
+body .site-calendar button[aria-pressed="true"] {
+  background: #dcebf0;
+  border-color: #8caebc;
+  color: #174558;
+  font-weight: 700;
+}
+body .site-calendar button:disabled { opacity: .4; cursor: default; }
+.site-calendar-head { display: grid; grid-template-columns: 40px minmax(0,1fr) 40px; gap: 4px; align-items: center; }
+.site-calendar-head svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.site-calendar-year { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 0; font-size: 13px; color: #536975; }
+body .site-calendar-year input { width: 88px; min-height: 36px; border: 1px solid #cdd9de; border-radius: 8px; padding: 4px 8px; font: inherit; color: #20323e; background: white; }
+.site-calendar-grid { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 4px; }
+.site-calendar-grid.site-calendar-months { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.site-calendar-weekday { text-align: center; padding: 6px 0; font-size: 12px; color: #536975; }
+.site-calendar-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #cdd9de; }
+body .site-calendar-actions button { padding: 6px 16px; border-color: #cdd9de; background: white; color: #24576b; }
+body .site-calendar-actions button:hover { background: #dcebf0; }
+body input.site-date-field {
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid var(--design-line);
+  border-radius: var(--design-radius-control);
+  background: var(--design-surface);
+  color: var(--design-ink);
+  font-family: var(--design-font);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+body dialog.site-calendar:not([open]) { display: none; }
+body dialog.site-calendar[open] { display: block; }
+body .site-calendar-year button {
+  min-width: 80px;
+  min-height: 36px;
+  padding: 4px 12px;
+  border: 1px solid #cdd9de;
+  background: white;
+  color: #24576b;
+}
+body dialog.site-calendar:not([open]) { pointer-events: none; }
+body[data-page="space"] #spaceDrawerClose {
+  background: transparent;
+  color: var(--design-ink);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  padding: 10px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+body[data-page="space"].space-immersive #spaceDrawerClose { color: #e4eef3; }
+body[data-page="space"] #spaceDrawerClose:hover { background: var(--design-inset); }
+body[data-page="space"].space-immersive #spaceDrawerClose:hover { background: #203b4c; }
+#spaceDrawerClose svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+body :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#workbenchNextMonth,#moonPrevMonth,#moonNextMonth) {
+  font-size: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+body :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#workbenchNextMonth,#moonPrevMonth,#moonNextMonth)::before {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 18px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m14 5-7 7 7 7' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m14 5-7 7 7 7' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+body :is(#workbenchNextDate,#workbenchNextMonth,#moonNextMonth)::before { transform: rotate(180deg); }
+body .ui-shell :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#workbenchNextMonth,#moonPrevMonth,#moonNextMonth) { font-size: 0; }

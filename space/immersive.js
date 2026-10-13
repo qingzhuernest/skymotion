@@ -8,9 +8,7 @@
     return;
   }
   let active = false;
-  let ownsFullscreen = false;
   let previousScroll = 0;
-  let fullscreenPending = false;
 
   function layout(next) {
     if (active === next) return;
@@ -27,55 +25,17 @@
     }
   }
 
-  async function enter(requestFullscreen) {
-    layout(true);
-    if (
-      !requestFullscreen ||
-      !document.documentElement.requestFullscreen ||
-      document.fullscreenElement
-    )
-      return;
-    fullscreenPending = true;
-    button.disabled = true;
-    try {
-      await document.documentElement.requestFullscreen();
-      ownsFullscreen = true;
-    } catch {
-      // Safari/iOS or browser restrictions: the same full-window layout remains usable.
-      ownsFullscreen = false;
-    } finally {
-      fullscreenPending = false;
-      button.disabled = false;
-    }
-  }
-  async function exit() {
-    layout(false);
-    if (ownsFullscreen && document.fullscreenElement) {
-      ownsFullscreen = false;
-      try {
-        await document.exitFullscreen();
-      } catch {
-        /* The viewport layout has already restored. */
-      }
-    }
-  }
+  function enter() { layout(true); }
+  function exit() { layout(false); }
   button.addEventListener('click', () => {
-    if (fullscreenPending) return;
-    if (active) void exit();
-    else void enter(true);
-  });
-  document.addEventListener('fullscreenchange', () => {
-    if (ownsFullscreen && !document.fullscreenElement) {
-      ownsFullscreen = false;
-      layout(false);
-    }
+    if (active) exit();
+    else enter();
   });
   document.addEventListener('keydown', (event) => {
     if (
       event.key === 'Escape' &&
       active &&
-      !document.querySelector('dialog[open]') &&
-      !fullscreenPending
+      !document.querySelector('dialog[open]')
     )
       void exit();
   });
@@ -86,5 +46,5 @@
       else void exit();
     },
   };
-  if (new URLSearchParams(location.search).get('immersive') === '1') void enter(false);
+  if (new URLSearchParams(location.search).get('immersive') === '1') enter();
 })();
