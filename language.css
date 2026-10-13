@@ -194,3 +194,17 @@ body[data-page="welcome"] .welcome-brand {
 body[data-page="welcome"] .welcome-brand .language-toggle {
   margin-left: auto;
 }
+/* English resource labels wrap within the compact welcome action column. */
+html:lang(en) body[data-page="welcome"] :is(.welcome-sky-actions button,.welcome-corner-links > a) {
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  min-height: 48px;
+  line-height: 1.3;
+}
+@media (max-height: 700px) {
+  html:lang(en) body[data-page="welcome"] :is(.welcome-sky-actions button,.welcome-corner-links > a) {
+    min-height: 40px;
+  }
+}
