@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
 
-<script src="page-boot.js?v=20261013-font2"></script>
+<script src="page-boot.js?v=20261013-ui4"></script>
 
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="icon" href="favicon.svg" />
-    <link rel="stylesheet" href="style.css?v=20261013-font2" />
-    <link rel="stylesheet" href="pages.css?v=20261013-font2" />
+    <link rel="stylesheet" href="style.css?v=20261013-ui4" />
+    <link rel="stylesheet" href="pages.css?v=20261013-ui4" />
     <!-- search-metadata:start -->
     <title data-i18n-cn="{&quot;Sun and Moon Phase Lab · Sky Motion Lab&quot;:&quot;太阳与月相实验台 · 天体视运动实验室&quot;}">Sun and Moon Phase Lab · Sky Motion Lab</title>
     <meta name="description" content="调节地点、日期和时刻，比较太阳高度、方位、日影与月相；切换空间、俯视、地平和仰望天空视角。" />
@@ -19,13 +19,13 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_CN" />
     <!-- search-metadata:end -->
-    <link rel="stylesheet" href="interface-motion.css?v=20261013-font2" />
-    <link rel="stylesheet" href="controls.css?v=20261013-font2" />
-      <link rel="stylesheet" href="design-system.css?v=20261013-font2" />
-  <link rel="stylesheet" href="language.css?v=20261013-font2" />
-<script src="language-data.js?v=20261013-font2"></script>
-<script src="language.js?v=20261013-font2"></script>
-<script src="page-cache.js?v=20261013-font2" defer></script>
+    <link rel="stylesheet" href="interface-motion.css?v=20261013-ui4" />
+    <link rel="stylesheet" href="controls.css?v=20261013-ui4" />
+      <link rel="stylesheet" href="design-system.css?v=20261013-ui4" />
+  <link rel="stylesheet" href="language.css?v=20261013-ui4" />
+<script src="language-data.js?v=20261013-ui4"></script>
+<script src="language.js?v=20261013-ui4"></script>
+<script src="page-cache.js?v=20261013-ui4" defer></script>
 </head>
   <body data-page="lab">
     <div id="labShell" hidden inert>
@@ -269,7 +269,7 @@
                   <select id="speed" aria-label="Playback speed" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;播放速度&quot;}">
                     <option value="20" data-i18n-cn="{&quot;Slow&quot;:&quot;慢速&quot;}">Slow</option>
                     <option value="60" selected data-i18n-cn="{&quot;Normal&quot;:&quot;常速&quot;}">Normal</option>
-                    <option value="180" data-i18n-cn="{&quot;Fast&quot;:&quot;快速&quot;}">Fast</option></select><label class="loop-control" data-i18n-cn="{&quot;Loop day&quot;:&quot;循环当天&quot;}"><input id="loop" type="checkbox" checked />Loop day</label><button id="play" class="play-button" data-i18n-cn="{&quot;▶ Play&quot;:&quot;▶ 播放&quot;}">▶ Play</button>
+                    <option value="180" data-i18n-cn="{&quot;Fast&quot;:&quot;快速&quot;}">Fast</option></select><label class="loop-control" data-i18n-cn="{&quot;Loop day&quot;:&quot;循环当天&quot;}"><input id="loop" type="checkbox" checked />Loop day</label><button id="play" class="play-button">播放</button>
                 </div>
               </div>
               <input id="time" type="range" min="0" max="1440" step="1" value="720" aria-label="Local apparent solar time" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;当地真太阳时&quot;}" />
@@ -293,7 +293,7 @@
                   <select id="solarDateSpeed" aria-label="Solar date playback speed" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;太阳日期播放速度&quot;}">
                     <option value="1" data-i18n-cn="{&quot;1 day/s&quot;:&quot;1 天/秒&quot;}">1 day/s</option>
                     <option value="3" selected data-i18n-cn="{&quot;3 days/s&quot;:&quot;3 天/秒&quot;}">3 days/s</option>
-                    <option value="10" data-i18n-cn="{&quot;10 days/s&quot;:&quot;10 天/秒&quot;}">10 days/s</option></select><label class="loop-control" data-i18n-cn="{&quot;Loop this year&quot;:&quot;循环本年&quot;}"><input id="solarDateLoop" type="checkbox" checked />Loop this year</label><button id="solarDatePlay" class="play-button" data-i18n-cn="{&quot;▶ Play dates&quot;:&quot;▶ 按日期播放&quot;}">▶ Play dates</button>
+                    <option value="10" data-i18n-cn="{&quot;10 days/s&quot;:&quot;10 天/秒&quot;}">10 days/s</option></select><label class="loop-control" data-i18n-cn="{&quot;Loop this year&quot;:&quot;循环本年&quot;}"><input id="solarDateLoop" type="checkbox" checked />Loop this year</label><button id="solarDatePlay" class="play-button" data-i18n-cn="{&quot;按day期播放&quot;:&quot;按日期播放&quot;}">按day期播放</button>
                 </div>
               </div>
               <div class="solar-date-year">
@@ -327,7 +327,7 @@
                   <select id="moonSpeed" aria-label="Date playback speed" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;日期播放速度&quot;}">
                     <option value="0.5" data-i18n-cn="{&quot;0.5 days/s&quot;:&quot;0.5 天/秒&quot;}">0.5 days/s</option>
                     <option value="1" selected data-i18n-cn="{&quot;1 day/s&quot;:&quot;1 天/秒&quot;}">1 day/s</option>
-                    <option value="3" data-i18n-cn="{&quot;3 days/s&quot;:&quot;3 天/秒&quot;}">3 days/s</option></select><label class="loop-control" data-i18n-cn="{&quot;Loop month&quot;:&quot;循环本月&quot;}"><input id="moonLoop" type="checkbox" checked />Loop month</label><button id="moonPlay" class="play-button" data-i18n-cn="{&quot;▶ Play dates&quot;:&quot;▶ 逐日播放&quot;}">▶ Play dates</button>
+                    <option value="3" data-i18n-cn="{&quot;3 days/s&quot;:&quot;3 天/秒&quot;}">3 days/s</option></select><label class="loop-control" data-i18n-cn="{&quot;Loop month&quot;:&quot;循环本月&quot;}"><input id="moonLoop" type="checkbox" checked />Loop month</label><button id="moonPlay" class="play-button" data-i18n-cn="{&quot;Play daily&quot;:&quot;逐日播放&quot;}">Play daily</button>
                 </div>
               </div>
               <p class="micro motion-date-note" data-i18n-cn="{&quot;The view transitions smoothly between dates; values refer to the selected date.&quot;:&quot;相邻日期的画面平滑过渡；数值以选定日期为准。&quot;}">The view transitions smoothly between dates; values refer to the selected date.</p>
@@ -543,7 +543,7 @@
                 <canvas id="analemmaCanvas" aria-label="Annual solar analemma at a fixed time; click the curve to select a date" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;全年固定时刻的太阳位置日行迹，可点击轨迹选择日期&quot;}"></canvas>
               </div>
               <div class="time-top analemma-date">
-                <strong id="analemmaDate"></strong><button id="analemmaPlay" class="play-button" data-i18n-cn="{&quot;▶ Play dates&quot;:&quot;▶ 逐日播放&quot;}">▶ Play dates</button>
+                <strong id="analemmaDate"></strong><button id="analemmaPlay" class="play-button" data-i18n-cn="{&quot;Play daily&quot;:&quot;逐日播放&quot;}">Play daily</button>
               </div>
               <p class="micro motion-date-note" data-i18n-cn="{&quot;Markers move smoothly during playback. Values refer to the selected date; pausing aligns the markers immediately.&quot;:&quot;\n                播放时标记平滑移动；数值对应选定日期，暂停后立即对齐。\n              &quot;}">Markers move smoothly during playback. Values refer to the selected date; pausing aligns the markers immediately.</p>
               <input id="analemmaDay" type="range" min="1" max="365" step="1" value="1" aria-label="Annual analemma date" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;日行迹全年日期&quot;}" />
@@ -583,7 +583,7 @@
           <div class="workbench-calendar">
             <button id="workbenchPrevDate" type="button" aria-label="Previous day" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;前一天&quot;}">‹</button><input id="workbenchDate" type="date" min="1900-01-01" max="2100-12-31" aria-label="Observation date" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观察日期&quot;}" /><button id="workbenchNextDate" type="button" aria-label="Next day" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;后一天&quot;}">›</button>
           </div>
-          <button id="workbenchPlay" type="button" class="play-button" data-i18n-cn="{&quot;▶ Play time&quot;:&quot;▶ 播放时刻&quot;}">▶ Play time</button>
+          <button id="workbenchPlay" type="button" class="play-button" data-i18n-cn="{&quot;Play time&quot;:&quot;播放时刻&quot;}">Play time</button>
         </div>
         <div id="workbenchMain" class="workbench-main">
           <div id="workbenchBearingPanel" class="workbench-panel" hidden>
@@ -656,7 +656,7 @@
               <button data-dial-view="device" class="active" aria-pressed="true" data-i18n-cn="{&quot;3D instrument and shadow&quot;:&quot;\n                立体装置与影子&quot;}">3D instrument and shadow</button><button data-dial-view="plate" aria-pressed="false" data-i18n-cn="{&quot;Dial reading and installation&quot;:&quot;盘面读时与安装&quot;}">Dial reading and installation</button>
             </div>
             <div class="sundial-observation">
-              <label data-i18n-cn="{&quot;Observation date&quot;:&quot;观测日期&quot;}">Observation date<input id="sundialDate" type="date" min="1900-01-01" max="2100-12-31" /></label><button id="sundialPlay" class="play-button" data-i18n-cn="{&quot;▶ Play a day&quot;:&quot;▶ 演示一天&quot;}">▶ Play a day</button>
+              <label data-i18n-cn="{&quot;Observation date&quot;:&quot;观测日期&quot;}">Observation date<input id="sundialDate" type="date" min="1900-01-01" max="2100-12-31" /></label><button id="sundialPlay" class="play-button" data-i18n-cn="{&quot;Demonstration一days&quot;:&quot;演示一天&quot;}">Demonstration一days</button>
             </div>
             <label class="sundial-time-label" for="sundialTime" data-i18n-cn="{&quot;Drag the time slider to watch the gnomon&#x27;s shadow change &quot;:&quot;拖动时间，看晷针投影变化 &quot;}">Drag the time slider to watch the gnomon's shadow change <output id="sundialTimeValue">12:00</output></label><input id="sundialTime" type="range" min="0" max="1440" step="1" value="720" aria-label="Sundial local apparent solar time" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;日晷当地真太阳时&quot;}" />
             <div class="time-labels">
@@ -758,25 +758,25 @@
         <button id="startExplore" class="play-button" data-i18n-cn="{&quot;Start exploring&quot;:&quot;开始探索&quot;}">Start exploring</button>
       </dialog>
     </div>
-    <script src="astronomy.js?v=20261013-font2"></script>
-    <script src="moon.js?v=20261013-font2"></script>
-    <script src="coverage.js?v=20261013-font2"></script>
-    <script src="menu.js?v=20261013-font2"></script>
-    <script src="workspace.js?v=20261013-font2"></script>
-    <script src="companion.js?v=20261013-font2"></script>
-    <script src="analemma.js?v=20261013-font2"></script>
-    <script src="shadow.js?v=20261013-font2"></script>
-    <script src="sundial-device.js?v=20261013-font2"></script>
-    <script src="sundial.js?v=20261013-font2"></script>
-    <script src="observer.js?v=20261013-font2"></script>
-    <script src="solar-date.js?v=20261013-font2"></script>
-    <script src="time-workbench.js?v=20261013-font2"></script>
-    <script src="motion.js?v=20261013-font2"></script>
-    <script src="app.js?v=20261013-font2"></script>
-    <script src="interface-motion.js?v=20261013-font2"></script>
-    <script src="page-navigation.js?v=20261013-font2"></script>
-    <script src="observer-explanation.js?v=20261013-font2"></script>
-    <script src="interaction-history.js?v=20261013-font2"></script>
-    <script src="lab-history.js?v=20261013-font2"></script>
+    <script src="astronomy.js?v=20261013-ui4"></script>
+    <script src="moon.js?v=20261013-ui4"></script>
+    <script src="coverage.js?v=20261013-ui4"></script>
+    <script src="menu.js?v=20261013-ui4"></script>
+    <script src="workspace.js?v=20261013-ui4"></script>
+    <script src="companion.js?v=20261013-ui4"></script>
+    <script src="analemma.js?v=20261013-ui4"></script>
+    <script src="shadow.js?v=20261013-ui4"></script>
+    <script src="sundial-device.js?v=20261013-ui4"></script>
+    <script src="sundial.js?v=20261013-ui4"></script>
+    <script src="observer.js?v=20261013-ui4"></script>
+    <script src="solar-date.js?v=20261013-ui4"></script>
+    <script src="time-workbench.js?v=20261013-ui4"></script>
+    <script src="motion.js?v=20261013-ui4"></script>
+    <script src="app.js?v=20261013-ui4"></script>
+    <script src="interface-motion.js?v=20261013-ui4"></script>
+    <script src="page-navigation.js?v=20261013-ui4"></script>
+    <script src="observer-explanation.js?v=20261013-ui4"></script>
+    <script src="interaction-history.js?v=20261013-ui4"></script>
+    <script src="lab-history.js?v=20261013-ui4"></script>
   </body>
 </html>

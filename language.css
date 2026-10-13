@@ -215,3 +215,10 @@ html:lang(en) .ui-parameters .season-buttons button {
 html:lang(en) .document-page h1 {
   text-wrap: balance;
 }
+/* Brand at left, language action at the right edge of the welcome header. */
+body[data-page="welcome"] .welcome-brand {
+  width: 100%;
+}
+body[data-page="welcome"] .welcome-brand .language-toggle {
+  margin-left: auto;
+}

@@ -472,13 +472,15 @@
   };
   $('play').onclick = () => {
     playing = !playing;
-    $('play').textContent = playing ? '⏸ 暂停' : '▶ 播放日期';
+    $('play').textContent = playing ? '暂停' : '播放日期';
+    $('play').setAttribute('aria-pressed', String(playing));
     previous = 0;
     invalidate();
   };
   function pause() {
     playing = false;
-    $('play').textContent = '▶ 播放日期';
+    $('play').setAttribute('aria-pressed', 'false');
+    $('play').textContent = '播放日期';
   }
   $('day').oninput = (event) => {
     day = +event.target.value;

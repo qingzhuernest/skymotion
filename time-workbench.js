@@ -188,7 +188,7 @@ function renderTimeWorkbench() {
           ? '▶ 从年初播放'
           : '▶ 按天播放';
   // Keep the button's text node stable while frames update, including during a pointer press.
-  const displayPlayLabel = window.skyTranslate ? window.skyTranslate(playLabel) : playLabel;
+  const displayPlayLabel = (window.skyTranslate ? window.skyTranslate(playLabel) : playLabel).replace(/^[▶⏸]\s*/, "");
   if ($('workbenchPlay').textContent !== displayPlayLabel)
     $('workbenchPlay').textContent = displayPlayLabel;
   $('workbenchPlay').setAttribute('aria-pressed', String(workbenchIsPlaying()));

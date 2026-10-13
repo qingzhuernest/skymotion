@@ -722,8 +722,9 @@ body .scene-tools-panel input[type="checkbox"]:checked {
   background: var(--design-inset);
 }
 .document-page pre {
-  background: var(--design-night);
-  color: #e4eef3;
+  background: var(--design-paper);
+  color: var(--design-ink);
+  border: 1px solid var(--design-line);
 }
 .document-page pre code {
   background: none;
@@ -1758,4 +1759,83 @@ body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchN
   background: var(--design-inset);
   color: var(--design-muted);
   border-color: var(--design-line);
+}
+/* Development flow is a sequence, not an uneven grid of independent cards. */
+.document-page .development-flow {
+  padding: 20px 24px;
+  background: var(--design-paper);
+  border: 1px solid var(--design-line);
+  border-radius: var(--design-radius-surface);
+}
+.document-page .development-flow figcaption {
+  margin-bottom: 16px;
+  color: var(--design-ink);
+}
+.document-page .development-flow ol {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+.document-page .development-flow li,
+.document-page .development-flow li + li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  margin: 0;
+  padding: 10px 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  line-height: 1.65;
+  color: var(--design-ink);
+}
+.document-page .development-flow li + li {
+  border-top: 1px solid var(--design-line);
+}
+.document-page .development-flow li::before {
+  content: counter(flow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  min-height: 28px;
+  border: 1px solid var(--design-line);
+  border-radius: 8px;
+  background: var(--design-surface);
+  color: var(--design-primary);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+}
+.document-page .development-flow p {
+  margin: 16px 0 0;
+  color: var(--design-muted);
+  line-height: 1.8;
+}
+@media (max-width: 600px) {
+  .document-page .development-flow {
+    padding: 16px;
+  }
+}
+/* Authored monochrome SVG silhouettes, independent of OS emoji rendering. */
+body :is(#workbenchPlay, body[data-page="space"] #play) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+body :is(#workbenchPlay, body[data-page="space"] #play)::before {
+  content: "";
+  flex: 0 0 14px;
+  width: 14px;
+  height: 14px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 2.5 13 8l-9 5.5Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 2.5 13 8l-9 5.5Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+body :is(#workbenchPlay, body[data-page="space"] #play)[aria-pressed="true"]::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 3h3v10H3zm7 0h3v10h-3z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 3h3v10H3zm7 0h3v10h-3z'/%3E%3C/svg%3E");
 }
