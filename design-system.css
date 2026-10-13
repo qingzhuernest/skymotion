@@ -1839,3 +1839,75 @@ body :is(#workbenchPlay, body[data-page="space"] #play)[aria-pressed="true"]::be
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 3h3v10H3zm7 0h3v10h-3z'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 3h3v10H3zm7 0h3v10h-3z'/%3E%3C/svg%3E");
 }
+/* Auxiliary states share the palette, including contact overlays and lazy tools. */
+body .author-email-actions > *,
+body .author-email-actions .author-mail-button,
+body .ui-parameters :is(#shadowView, #solarDateShow) {
+  background: var(--design-surface);
+  color: var(--design-primary);
+  border: 1px solid var(--design-line);
+  border-radius: var(--design-radius-control);
+  box-shadow: none;
+}
+body .author-email-actions > *:hover,
+body .ui-parameters :is(#shadowView, #solarDateShow):hover {
+  background: var(--design-selected);
+  color: var(--design-hover);
+  border-color: #8caebc;
+}
+body .author-email-actions > *:active,
+body .ui-parameters :is(#shadowView, #solarDateShow):active {
+  background: var(--design-inset);
+  color: var(--design-hover);
+}
+body .ui-parameters .month-ticks button {
+  color: var(--design-muted);
+}
+body .ui-parameters .month-ticks button.selected-month {
+  color: var(--design-primary);
+}
+body .ui-parameters .sundial-question summary {
+  color: var(--design-primary);
+}
+body .ui-sundial-hint {
+  background: var(--design-paper);
+  color: var(--design-muted);
+}
+body[data-page="space"] .language-nav > .language-toggle {
+  background: var(--design-surface);
+  color: var(--design-primary);
+  border-color: var(--design-line);
+}
+body[data-page="space"] .language-nav > .language-toggle:hover {
+  background: var(--design-selected);
+}
+body[data-page="space"] .scene-tools-panel button[data-camera] {
+  background: transparent;
+  color: #e4eef3;
+  border-color: #3d5b6d;
+}
+body[data-page="space"] .scene-tools-panel button[data-camera][aria-pressed="true"] {
+  background: var(--design-action);
+  color: #fff;
+  border-color: var(--design-action);
+}
+body[data-page="space"] .scene-tools-panel button[data-camera]:hover {
+  background: #203b4c;
+}
+body[data-page="space"] button.label {
+  background: #142b3ccc;
+  color: #e4eef3;
+  border-color: #3d5b6d;
+}
+body[data-page="space"] button.label:hover {
+  background: #203b4c;
+  color: #e4eef3;
+}
+body .author-feedback-note {
+  color: var(--design-muted);
+  border-color: var(--design-line);
+}
+body .author-email-box > span,
+body #authorCopyStatus {
+  color: var(--design-muted);
+}
