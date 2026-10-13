@@ -4,35 +4,35 @@ SKY MOTION LAB · DEVELOPMENT AND MAINTENANCE
 
 For developers and maintainers: source-code responsibilities, state and time conventions, astronomical models, rendering and control animations, regression testing, AGPLv3, and publishing to both sites.
 
-1. [1. Project Goals and Planning Order](#section-1)
-2. [2. Technical Approach and Runtime Limitations](#section-2)
-3. [3. Pages and Information Architecture](#section-3)
-4. [4. Current File Responsibilities](#section-4)
-5. [5. How Data, the Interface, and Drawing Relate](#section-5)
-6. [6. Sun and Moon State Logic](#section-6)
-7. [7. Time Standards and Date Handling](#section-7)
-8. [8. Coordinates and Solar Calculations](#section-8)
-9. [9. Rise, Set, and Duration Calculations](#section-9)
-10. [10. Lunar Phase and Lunar Disk Orientation](#section-10)
-11. [11. Path Continuity and View Projections](#section-11)
-12. [12. Shadows, Shadow-Tip Paths, and Annual Observations](#section-12)
-13. [13. Two Interactive Sundial Types](#section-13)
-14. [14. The Analemma and the Causes of Its Figure Eight](#section-14)
-15. [15. Planet–Moon Comparisons and Looking Up](#section-15)
-16. [16. Implementation and Verification of the 3D Solar System Module](#section-24)
-17. [17. Complete Updates and Animation Scheduling](#section-16)
-18. [18. Routing, Links, and Browser History](#section-17)
-19. [19. Layout and Interaction Principles Across Devices](#section-18)
-20. [20. Shared Controls and First-Opening Animations](#shared-controls)
-21. [21. Current Initialization and Generation Methods](#section-19)
-22. [22. Testing and Acceptance Logic](#section-20)
-23. [23. Packaging and Publishing to Both Sites](#section-21)
-24. [24. Resolved Issues and Ongoing Maintenance Boundaries](#section-22)
-25. [25. Standard Workflow for Adding Features](#section-23)
+1. [1. Project Goals and Planning Order](development-guide.en.html?lang=en#section-1)
+2. [2. Technical Approach and Runtime Limitations](development-guide.en.html?lang=en#section-2)
+3. [3. Pages and Information Architecture](development-guide.en.html?lang=en#section-3)
+4. [4. Current File Responsibilities](development-guide.en.html?lang=en#section-4)
+5. [5. How Data, the Interface, and Drawing Relate](development-guide.en.html?lang=en#section-5)
+6. [6. Sun and Moon State Logic](development-guide.en.html?lang=en#section-6)
+7. [7. Time Standards and Date Handling](development-guide.en.html?lang=en#section-7)
+8. [8. Coordinates and Solar Calculations](development-guide.en.html?lang=en#section-8)
+9. [9. Rise, Set, and Duration Calculations](development-guide.en.html?lang=en#section-9)
+10. [10. Lunar Phase and Lunar Disk Orientation](development-guide.en.html?lang=en#section-10)
+11. [11. Path Continuity and View Projections](development-guide.en.html?lang=en#section-11)
+12. [12. Shadows, Shadow-Tip Paths, and Annual Observations](development-guide.en.html?lang=en#section-12)
+13. [13. Two Interactive Sundial Types](development-guide.en.html?lang=en#section-13)
+14. [14. The Analemma and the Causes of Its Figure Eight](development-guide.en.html?lang=en#section-14)
+15. [15. Planet–Moon Comparisons and Looking Up](development-guide.en.html?lang=en#section-15)
+16. [16. Implementation and Verification of the 3D Solar System Module](development-guide.en.html?lang=en#section-24)
+17. [17. Complete Updates and Animation Scheduling](development-guide.en.html?lang=en#section-16)
+18. [18. Routing, Links, and Browser History](development-guide.en.html?lang=en#section-17)
+19. [19. Layout and Interaction Principles Across Devices](development-guide.en.html?lang=en#section-18)
+20. [20. Shared Controls and First-Opening Animations](development-guide.en.html?lang=en#shared-controls)
+21. [21. Current Initialization and Generation Methods](development-guide.en.html?lang=en#section-19)
+22. [22. Testing and Acceptance Logic](development-guide.en.html?lang=en#section-20)
+23. [23. Packaging and Publishing to Both Sites](development-guide.en.html?lang=en#section-21)
+24. [24. Resolved Issues and Ongoing Maintenance Boundaries](development-guide.en.html?lang=en#section-22)
+25. [25. Standard Workflow for Adding Features](development-guide.en.html?lang=en#section-23)
 
-Updated October 11, 2026. Feature checks use main commit f8313cf, from before this documentation update, as their baseline. Model regressions were rerun during this review. Historical records retain their original test dates.
+Updated October 13, 2026. The production release uses the reviewed bilingual interface. Comparison with original main commit 4390ab1 confirms that the astronomy engine and core model data are unchanged. Historical checks retain their original dates; new release checks appear at the end of this guide.
 
-This document supports continued development and maintenance. Start with the files and data flow, then consult the relevant model, state, and rendering sections. Implementation details are organized by responsibility. For student instructions, see[Learning Guide](guide.html); for the development purpose and strengths, see[Project Overview](project-guide.html)。
+This document supports continued development and maintenance. Start with the files and data flow, then consult the relevant model, state, and rendering sections. Implementation details are organized by responsibility. For student instructions, see [Learning Guide](guide.en.html?lang=en); for the development purpose and strengths, see [Project Overview](project-guide.en.html?lang=en)。
 
 ## 1. Project Goals and Planning Order
 
@@ -59,7 +59,7 @@ The project is a static multipage website using HTML, CSS, vanilla JavaScript, C
 
 There is no required backend service, database, login system, or live ephemeris API. Celestial positions are calculated directly in the browser. The 3D celestial sphere and devices mainly project three-dimensional coordinates onto Canvas 2D. The spherical Earth view prefers WebGL shaders and falls back to Canvas 2D when WebGL is unavailable. The separate space/ Solar System page uses local Three.js 0.186.1 without replacing the original workbench’s rendering pipeline.
 
-The interface adopts Material Design concepts such as surface hierarchy, primary-color containers, rounded corners, selected and expanded states, and focus feedback. It does not import a complete Material component library and must not be described as a component implementation certified against all Material specifications.
+design-system.css unifies colors, typography, borders and control hierarchy while preserving native forms and existing interactions. Light control areas support classroom reading and dark canvases support astronomical observation. Supporting actions use white surfaces and fine borders; playback and selected states retain an accent. No complete UI component framework is introduced.
 
 Resources use relative paths suitable for Cloudflare Pages static hosting. Core scripts, styles, and textures are included in the delivery package and do not depend on externally loaded fonts. There is currently no Service Worker, so opening the site offline for the first time or installing it as an offline application cannot be promised.
 
@@ -337,9 +337,9 @@ Earth’s thin limb in appearance.js uses a low-detail outer shell whose lit sid
 
 ### Immersive layout and fullscreen fallback
 
-`space/immersive.js` Only the layout and Fullscreen API are switched; no new renderer, RAF loop, or scientific state is created;`space/immersive.css` retains a full-window graphic, a single UTC timeline, and an exit button. The standalone page uses`?immersive=1` to open directly in the full-window layout. System fullscreen is requested only after a user click; if denied or unsupported, the layout is retained. The parameter panel continues to use the original dialog, with `space:layout` notifying ui.js to move the same DOM nodes. Exiting, the browser ending fullscreen, and Esc restore the normal layout; an open parameter menu takes priority and closes first. This mode is disabled in the 3D page embedded beside the original diagram to preserve the parent page’s single time controller.
+space/immersive.js only changes the viewport-filling page layout. It does not call the Fullscreen API or create another renderer, RAF loop or scientific state. space/immersive.css preserves the canvas, the single UTC timeline and the exit control; ?immersive=1 opens this layout directly. Parameters reuse the existing dialog and input nodes. Escape closes an open parameter menu first, then exits immersive view. Exiting leaves dates, camera and playback unchanged. Embedded 3D comparison pages disable this layout.
 
-Layout regression covers 1440×900, 390×844, 320×568, 844×390, and 844×270, checking date/play/exit controls, restoration of the side drawer, fallback after fullscreen refusal, unchanged UTC, and embedded isolation. This mode does not change astronomical formulas.
+Earlier layout regression covered 1440×900, 390×844, 320×568, 844×390, and 844×270, checking date/play/exit controls, restoration of the side drawer, the then-current fullscreen-refusal fallback, unchanged UTC, and embedded isolation. This mode does not change astronomical formulas.
 
 ### Synchronization bridge between the original diagrams and 3D
 
@@ -415,15 +415,17 @@ CSS controls display geometry and colors; JavaScript controls scientific state, 
 
 ## 20. Shared Controls and First-Opening Animations
 
-This GPT Site preview uses Impeccable to unify the UI: design-system.css loads after the original page styles, sharing light control areas, deep teal-blue selected states, 12 px control corners, and 16 px surface corners. Local regular and bold SkyMotion Reading fonts are used consistently for headings, body text, parameters, buttons, numbers, and graphic annotations; the welcome page’s footer retains its original handwritten font. Fonts are subsetted to page text and published locally under SIL OFL 1.1. Shared control and animation styles use the same color variables; immersive mode separately maps dark surfaces and text. Playback and selected items retain the deep teal-blue accent. Date-direction, reset, body-jump, menu, and auxiliary 3D actions use white backgrounds, teal-blue text, and fine borders; hover adds only a light background, while tools on dark canvases remain neutral dark. Narrow workbenches arrange time, date, and bearing into compact complete rows according to their own width, while landscape screens retain the original compact layout. Sky-view annotations adjust text contrast for light and dark backgrounds and avoid lunar endpoint markers without changing body positions. Ideal-experiment notices, declination readouts, and restore actions share theme colors. The playback loop switch matches other parameter switches in size and is right-aligned; immersive tools use unified dark surfaces. This preview does not change astronomical calculations, ephemeris data, state logic, or formal website deployment.
+This production release uses Impeccable to unify the UI: design-system.css loads after the original page styles, sharing light control areas, deep teal-blue selected states, 12 px control corners, and 16 px surface corners. Local regular and bold SkyMotion Reading fonts are used consistently for headings, body text, parameters, buttons, numbers, and graphic annotations; the welcome page’s footer retains its original handwritten font. Fonts are subsetted to page text and published locally under SIL OFL 1.1. Shared control and animation styles use the same color variables; immersive mode separately maps dark surfaces and text. Playback and selected items retain the deep teal-blue accent. Date-direction, reset, body-jump, menu, and auxiliary 3D actions use white backgrounds, teal-blue text, and fine borders; hover adds only a light background, while tools on dark canvases remain neutral dark. Narrow workbenches arrange time, date, and bearing into compact complete rows according to their own width, while landscape screens retain the original compact layout. Sky-view annotations adjust text contrast for light and dark backgrounds and avoid lunar endpoint markers without changing body positions. Ideal-experiment notices, declination readouts, and restore actions share theme colors. The playback loop switch matches other parameter switches in size and is right-aligned; immersive tools use unified dark surfaces. This release preserves astronomical calculations, ephemeris data and scientific state. Rise/set readout cards and document actions share white surfaces and fine borders instead of yellow or blue blocks.
 
 ### Bilingual Presentation and Local Fonts
 
-language.js manages the shared language state and stores the preference in localStorage under skymotion-language. Switching updates presentation only, preserving scientific state, input values and astronomical calculations. Translation dictionaries cover DOM text and attributes such as aria-label and title. Canvas measureText, fillText and strokeText use the same translations and English font so measurement and drawing agree; code examples retain their original text. Complete translated documents are exported as .en.md files, and download links select the file for the current language.
-
 Font requests have an eight-second deadline. Normal loading waits for the selected fonts before displaying the page. A failure or timeout releases the hidden page and offers Retry fonts, using fallback fonts temporarily so the application remains accessible. Explicit language parameters persist through site navigation. Calendar month and year changes update the draft date and handle month ends and leap years; rerenders retain keyboard focus. Only confirmation updates the experiment and browser history.
 
-Chinese retains the local SkyMotion Reading font. English uses four local SkyMotion Charter styles: regular, bold, italic and bold italic. The original Bitstream notice permits Charter to be used, copied, modified, sublicensed, sold and redistributed for any purpose, provided the notice is retained in copies and the trademark is acknowledged as required. The complete notice ships in fonts/LICENSE-Charter.txt. Language switching, fonts and document exports apply only to the GPT Site preview; the formal Cloudflare and GitHub websites remain unchanged.
+language.js manages the shared language state and stores the preference in localStorage under skymotion-language. Switching updates presentation only, preserving scientific state, input values and astronomical calculations. Translation dictionaries cover DOM text and attributes such as aria-label and title. Canvas measureText, fillText and strokeText use the same translations and English font so measurement and drawing agree; code examples retain their original text. Complete translated documents are exported as .en.md files, and download links select the file for the current language.
+
+Chinese uses locally hosted SkyMotion Reading; English uses locally hosted SkyMotion Charter. The initial page preloads regular and bold faces for the current language. Charter italic and bold italic files are also distributed, although current styles may use browser-synthesized italics. Charter use and redistribution follow the original Bitstream notice in fonts/LICENSE-Charter.txt; Reading retains its OFL notice. Language switching, fonts and document downloads are included on both production sites.
+
+Static English entries are generated by scripts/prerender-pages.py from source HTML and translation dictionaries, producing twelve English siblings while preserving IDs, numerical and form values and scientific scripts. The 24 Chinese/English HTML pages total about 1.5 MB, depending on content; styles, scripts, fonts and images are shared. language-data.js supplies dynamic translations, and data-i18n-cn metadata restores Chinese in place while preserving experiment state. page-boot.js selects the static language entry and immediately loads the regular and bold fonts for that language; the page can display once those fonts are ready, without waiting for experiment initialization. After first-screen fonts and the current page finish loading, page-cache.js warms all HTML, scripts, styles, fonts, images, data and document downloads through two concurrent requests using the normal HTTP cache. No hidden experiments, WebGL scenes or service worker are started, and hosting access checks remain intact. These changes are included in production. Warming requires network access and time; the first visit does not guarantee that all resources are cached, and offline availability is not guaranteed.
 
 ### Unified parameter rows and menu order
 
@@ -435,7 +437,7 @@ Long text wraps without shrinking the control. Light parameter areas and dark ov
 
 interface-motion.js adds motion-disclosure to managed details elements. Control geometry styles do not handle disclosure animation. interface-motion.css disables the native ::details-content height transition on these nodes, leaving the outer Web Animations elastic height animation as the sole controller. Previously, JavaScript measured an incorrect endpoint while the native transition was still closing the height, causing a jump at the end of the first expansion. Measurements now directly obtain the natural expanded height.
 
-“Playback and quick times,” whose contents must update before first opening, listens for motion-disclosure-opening: quick readouts synchronize before the expanded height is measured. toggle still updates content after programmatic opening. Collapsed height is derived from the summary, border, and padding, avoiding repeated closing and reopening for measurement. The 320-millisecond animation supports reversal mid-flight; generation markers prevent stale callbacks from overwriting new state. Fixed height and overflow are cleared at completion. Reduced-motion mode switches directly.
+“Playback and quick times,” whose contents must update before first opening, listens for motion-disclosure-opening: quick readouts synchronize before the expanded height is measured. toggle still updates content after programmatic opening. Collapsed height is derived from the summary, border, and padding, avoiding repeated closing and reopening for measurement. The 420-millisecond animation supports reversal mid-flight; generation markers prevent stale callbacks from overwriting new state. Fixed height and overflow are cleared at completion. Reduced-motion mode switches directly.
 
 ### Separating the rail, segmented selection, and rendering
 
@@ -535,7 +537,7 @@ The current application has no complete refraction and angular-radius rise/set m
 
 ### Licensing and asset responsibilities
 
-The original application code is licensed under [GNU AGPLv3](LICENSE)(AGPL-3.0-only), permitting commercial use. Distribution and modified versions providing network services must comply with source-code and notice obligations. Modified network versions must explicitly offer remote users the opportunity to obtain corresponding source code. See the scope in [NOTICE](NOTICE) and third-party exceptions in[Third-Party Notices](THIRD-PARTY-NOTICES.md)。
+The original application code is licensed under [GNU AGPLv3](LICENSE)(AGPL-3.0-only), permitting commercial use. Distribution and modified versions providing network services must comply with source-code and notice obligations. Modified network versions must explicitly offer remote users the opportunity to obtain corresponding source code. See the scope in [NOTICE](NOTICE) and third-party exceptions in [Third-Party Notices](THIRD-PARTY-NOTICES.md)。
 
 Astronomy Engine and local Three.js retain their MIT licenses. The HYG subset is distributed under CC BY-SA 4.0, and fonts under their original licenses such as OFL. NASA-sourced imagery retains item-specific authorship, processing/color information, and sources. “NASA-sourced” must not be treated as unconditional authorization for every use. The Earth texture also retains its original source information. Relevant credits and license files are included in the publication package, and the project overview retains access to source code.
 
@@ -546,3 +548,11 @@ Astronomy Engine and local Three.js retain their MIT licenses. The HYG subset is
 3. **Connect state and interaction:**Update session persistence, history restoration, availability, and pause logic. Retain a single control node, native input semantics, and reversible parameter gestures.
 4. **Validate before refining visuals:**Start with model-boundary and state assertions, then check first interactions, rapid reversals, different widths, reduced motion, and real touch input. Control animation must not delay scientific readouts.
 5. **Synchronize documentation and publication by role:**Update task steps in the learning guide, purpose and capabilities in the project overview, and files, calculations, and validation in the developer notes. Synchronize Markdown and README, check documentation anchors, copyright, and the publication package, then inspect deployment and assets on both sites after committing to main.
+
+## Production release notes — October 13, 2026
+
+This release unifies light control surfaces, serif typography and supporting actions, and provides 24 static Chinese and English pages. Language switching preserves experiment state. Spring menu transitions respect reduced-motion preferences. The calendar supports month/year selection, leap years, confirm and cancel. Original astronomy calculations, ephemerides, model data and scientific limitations remain unchanged.
+
+Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.
+
+Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.

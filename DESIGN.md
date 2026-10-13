@@ -194,7 +194,7 @@ components:
 
 SkyMotion frames scientific observation with cool paper, clear ink and restrained blue controls. Light operation and document surfaces surround a dark astronomical canvas; the canvas remains a distinct scientific space with its existing data colors.
 
-The Chinese locale uses one Song-style serif family across headings, text, controls and annotations; the English locale uses locally hosted Bitstream Charter in the same roles. Tabular numbers support repeated changes to location and time, while the welcome page retains its interactive stars and handwritten sentence. The design records the shipped preview rather than making claims about astronomical accuracy or device performance.
+The Chinese locale uses one Song-style serif family across headings, text, controls and annotations; the English locale uses locally hosted Bitstream Charter in the same roles. Tabular numbers support repeated changes to location and time, while the welcome page retains its interactive stars and handwritten sentence. The design records the production interface rather than making claims about astronomical accuracy or device performance.
 
 **Key Characteristics:**
 
@@ -356,3 +356,7 @@ Critical font requests have an eight-second deadline. A failure releases the vis
 ## Quiet result cards and reading actions
 
 升落读数卡片使用相同白底、细边框、深青蓝数值和柔和辅助文字；不以黄蓝色块区分事件。文档入口链接沿用白底细边框操作，悬停为纸色底。实心强调仅保留播放和选中状态。
+
+## Production release — 2026-10-13
+
+正式站与镜像采用当前统一设计。语言、字体就绪／超时恢复、日期选择器和资源预热随正式版本发布；辅助文档入口和升落读数使用白底细边框。部署由 main 工作流执行，旧版通过生产回滚标签保留。

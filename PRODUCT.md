@@ -16,7 +16,7 @@ web
 
 ## Capabilities and Constraints
 保留太阳、月球、关联图解、日晷、日行迹、三维太阳系、浏览器历史、播放与星空互动。
-只更新 GPT Site，正式 Cloudflare/GitHub 网站不得更改。
+2026年10月13日用户授权正式发布：main 推送部署 Cloudflare 与 GitHub Pages；GPT Site 保留同版预览。
 天文模型、星历数据、计算语义与物理时刻不改变。
 原应用是原生 HTML/CSS/JavaScript、Canvas 与 WebGL，不引入 UI 框架。
 

@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
 
-<script src="page-boot.js?v=20261013-quiet11"></script>
+<script src="page-boot.js?v=20261013-release12"></script>
 
     <meta content="width=device-width,initial-scale=1" name="viewport" />
     <link href="favicon.svg" rel="icon" />
-    <link href="style.css?v=20261013-quiet11" rel="stylesheet" />
-    <link href="pages.css?v=20261013-quiet11" rel="stylesheet" />
+    <link href="style.css?v=20261013-release12" rel="stylesheet" />
+    <link href="pages.css?v=20261013-release12" rel="stylesheet" />
     <!-- search-metadata:start -->
     <title>开发说明：完整开发逻辑与维护 · 天体视运动实验室</title>
     <meta
@@ -35,13 +35,13 @@
     <meta content="website" property="og:type" />
     <meta content="zh_CN" property="og:locale" />
     <!-- search-metadata:end -->
-    <link href="documents.css?v=20261013-quiet11" rel="stylesheet" />
-    <link rel="stylesheet" href="design-system.css?v=20261013-quiet11" />
-    <link rel="stylesheet" href="language.css?v=20261013-quiet11" />
-    <script src="language-data.js?v=20261013-quiet11"></script>
-<script src="language.js?v=20261013-quiet11"></script>
-<script src="page-cache.js?v=20261013-quiet11" defer></script>
-  <script src="date-picker.js?v=20261013-quiet11" defer></script>
+    <link href="documents.css?v=20261013-release12" rel="stylesheet" />
+    <link rel="stylesheet" href="design-system.css?v=20261013-release12" />
+    <link rel="stylesheet" href="language.css?v=20261013-release12" />
+    <script src="language-data.js?v=20261013-release12"></script>
+<script src="language.js?v=20261013-release12"></script>
+<script src="page-cache.js?v=20261013-release12" defer></script>
+  <script src="date-picker.js?v=20261013-release12" defer></script>
 </head>
   <body data-page="development">
     <nav aria-label="页面导航" class="page-nav">
@@ -98,7 +98,7 @@
       </details>
       <div class="document-content">
         <p class="document-updated">
-          更新：2026年10月11日。功能核对基准为文档更新前main提交f8313cf；模型回归在本次核对时重新运行。历史记录保留原测试日期。
+          更新：2026年10月13日。正式版采用已审查的双语界面；与原版 main 提交4390ab1比较，天文引擎与核心模型数据未变。历史核验保留原日期，新增发布检查见本文末尾。
         </p>
         <p>
           本文供继续开发与维护使用。先看文件与数据流程，再查相关模型、状态和渲染章节；实现细节按职责归档。学生操作见<a
@@ -142,9 +142,7 @@
           space/ 太阳系页面使用本地 Three.js 0.186.1，不替换原实验台的渲染管线。
         </p>
         <p>
-          界面采用 Material Design
-          的表面层级、主色容器、圆角、选中态、展开态和焦点反馈；没有引入完整
-          Material 组件库，不能称为经过全部 Material 规范认证的组件实现。
+          界面通过 design-system.css 统一颜色、字体、边框与控件层级，保留原生表单和现有交互。浅色操作区用于课堂阅读，深色画布用于天体观察；辅助操作以白底细边框呈现，播放与选中状态保留强调色。没有引入完整 UI 组件框架。
         </p>
         <p>
           资源使用相对路径，适合 Cloudflare Pages
@@ -696,11 +694,10 @@
         </p>
         <h3>沉浸布局与全屏降级</h3>
         <p>
-          <code>space/immersive.js</code>仅切换布局与Fullscreen
-          API，不创建新renderer、RAF或科学状态；<code>space/immersive.css</code>保留满窗口图形、唯一UTC时间条和退出按钮。独立页面用<code>?immersive=1</code>直接打开满窗口；系统全屏仅在用户点击时请求，拒绝或不支持时保留布局。参数面板继续使用原dialog，由<code>space:layout</code>通知ui.js移动同一DOM节点。退出、浏览器结束全屏与Esc恢复正常布局，已打开参数菜单时优先关闭菜单。嵌入原图对照的三维页禁用此模式，以免破坏父页面的唯一时间控制。
+          space/immersive.js 只切换网页内满窗口布局，不调用 Fullscreen API，不创建新 renderer、RAF 或科学状态。space/immersive.css 保留图形、唯一 UTC 时间条和退出按钮；?immersive=1 可直接打开。参数菜单继续复用原 dialog 与输入节点。Esc 优先关闭参数菜单，然后退出沉浸；退出不改变日期、相机或播放状态。嵌入三维对照页禁用该布局。
         </p>
         <p>
-          布局回归覆盖1440×900、390×844、320×568、844×390及844×270，检查日期／播放／退出控件、侧抽屉归位、全屏拒绝回退、UTC不变和嵌入隔离；本模式不改变天文公式。
+          早期布局回归覆盖1440×900、390×844、320×568、844×390及844×270，检查日期／播放／退出控件、侧抽屉归位、当时的全屏拒绝回退、UTC不变和嵌入隔离；本模式不改变天文公式。
         </p>
         <h3>原图解与三维的同步桥</h3>
         <p>
@@ -806,12 +803,7 @@ diagrams.html#chartPanel</code></pre>
         </p>
         <h2 id="shared-controls">20. 共享控件与首次展开动画</h2>
         <p>
-          本 GPT Site 预览版使用 Impeccable 统一 UI：design-system.css
-          在原页面样式之后加载，共享浅色操作区、深青蓝选中状态、12px
-          控件圆角和16px 表面圆角。SkyMotion Reading
-          的本地常规与粗体字库统一用于标题、正文、参数、按钮、数字及图形注释，欢迎页底部保留原手写字体；字库按页面文字裁剪并本地发布，遵循
-          SIL OFL
-          1.1。共享控件与动画样式消费同一套颜色变量，沉浸模式单独映射深色表面与文字。播放与选中项保留深青蓝强调色；日期方向、复位、天体跳转、菜单和三维辅助操作使用白底、青蓝文字与细边框，悬停仅加浅色底，深色画布上的工具保持中性深色；窄控制台按自身宽度将时间、日期与方位排为紧凑完整行，横屏保持原紧凑布局。仰望天空注释按明暗调整文字对比度并避让月球端点标记，不改变天体位置。理想实验提示、赤纬读数与恢复操作共享主题颜色；播放设置里的循环开关与其他参数开关同尺寸并靠右对齐，沉浸工具使用统一深色表面。该预览未改天文计算、星历数据、状态逻辑或正式网站部署。
+          本正式版使用 Impeccable 统一 UI：design-system.css 在原页面样式之后加载，共享浅色操作区、深青蓝选中状态、12px 控件圆角和16px 表面圆角。SkyMotion Reading 的本地常规与粗体字库统一用于标题、正文、参数、按钮、数字及图形注释，欢迎页底部保留原手写字体；字库按页面文字裁剪并本地发布，遵循 SIL OFL 1.1。共享控件与动画样式消费同一套颜色变量，沉浸模式单独映射深色表面与文字。播放与选中项保留深青蓝强调色；日期方向、复位、天体跳转、菜单和三维辅助操作使用白底、青蓝文字与细边框，悬停仅加浅色底，深色画布上的工具保持中性深色；窄控制台按自身宽度将时间、日期与方位排为紧凑完整行，横屏保持原紧凑布局。仰望天空注释按明暗调整文字对比度并避让月球端点标记，不改变天体位置。理想实验提示、赤纬读数与恢复操作共享主题颜色；播放设置里的循环开关与其他参数开关同尺寸并靠右对齐，沉浸工具使用统一深色表面。此次发布保留原天文计算、星历数据与科学状态逻辑；升落读数卡片、文档入口统一白底细边框，不用黄蓝色块区分事件。
         </p>
         <h3>中英文呈现与本地字体</h3>
         <p>字体请求设有8秒超时。正常加载仍在指定字体就绪后显示页面；失败或超时会解除页面隐藏并提供“重试字体”，暂用备用字体，防止整页一直卡住。显式语言参数会保留到站内导航。日期选择器切换年月时同步更新草稿日期，并处理月底与闰年；重绘后保留键盘焦点，只有确认才更新实验与返回历史。</p>
@@ -824,14 +816,10 @@ diagrams.html#chartPanel</code></pre>
           .en.md，下载入口随语言选择对应文件。
         </p>
         <p>
-          中文沿用本地 SkyMotion Reading，英文使用本地 SkyMotion Charter
-          的常规、粗体、斜体和粗斜体四种样式。Charter 按 Bitstream
-          原始通知允许为任何目的使用、复制、修改、再许可、出售和再分发，须在副本中保留通知并按要求确认商标；完整通知随
-          fonts/LICENSE-Charter.txt 发布。中英文切换、字体和文档导出仅用于 GPT
-          Site 预览，正式 Cloudflare 与 GitHub 网站保持原状。
+          中文使用本地 SkyMotion Reading；英文使用本地 SkyMotion Charter。首屏预加载当前语言的常规和粗体；Charter 的斜体与粗斜体文件也随站点分发，当前样式中的斜体可由浏览器合成。Charter 按 Bitstream 原始通知允许使用和再分发，完整通知在 fonts/LICENSE-Charter.txt；Reading 的 OFL 通知随字体保留。语言、字体和文档下载同时用于正式站与镜像。
         </p>
         <p>
-          静态英文入口由 scripts/prerender-pages.py 从原始 HTML 与翻译字典生成，共有12个 .en.html 对应页；生成过程保留节点 ID、数字与表单值，以及原科学脚本。中英文共24份页面 HTML 合计约1.5MB，体积会随内容变化，样式、脚本、字体和影像仍共享。language-data.js 同步提供动态标签字典，data-i18n-cn 元数据支持原位恢复中文并保留实验状态；page-boot.js 选择静态语言入口。page-boot.js 在文档头部立即加载所选语言的常规与粗体字体，字体就绪即可显示静态页面，不等待实验初始化；page-cache.js 在首屏字体与当前页面加载完成后，以最多两路并发预热整站 HTML、脚本、样式、字体、图片、数据和文档下载的普通 HTTP 缓存，不运行隐藏实验或三维场景，也不使用 Service Worker；常规托管的访问要求不变。这套预渲染与缓存安排仅用于 GPT Site 预览，正式网站未改。
+          静态英文入口由 scripts/prerender-pages.py 从原始 HTML 与翻译字典生成，共有12个 .en.html 对应页；生成过程保留节点 ID、数字与表单值，以及原科学脚本。中英文共24份页面 HTML 合计约1.5MB，体积会随内容变化，样式、脚本、字体和影像仍共享。language-data.js 同步提供动态标签字典，data-i18n-cn 元数据支持原位恢复中文并保留实验状态；page-boot.js 选择静态语言入口。page-boot.js 在文档头部立即加载所选语言的常规与粗体字体，字体就绪即可显示静态页面，不等待实验初始化；page-cache.js 在首屏字体与当前页面加载完成后，以最多两路并发预热整站 HTML、脚本、样式、字体、图片、数据和文档下载的普通 HTTP 缓存，不运行隐藏实验或三维场景，也不使用 Service Worker；常规托管的访问要求不变。这套预渲染与缓存安排用于正式发布。预热需要网络与时间，不能保证首次访问时全部资源已在缓存，也不保证离线可用。
         </p>
         <h3>统一参数行与菜单顺序</h3>
         <p>
@@ -846,7 +834,7 @@ diagrams.html#chartPanel</code></pre>
           Animations弹性高度动画控制。此前原生过渡尚在关闭高度时，JavaScript立即测量得到错误终点，导致首次展开末尾跳变；现在测量时可直接得到自然展开高度。
         </p>
         <p>
-          首次打开前需要更新内容的“播放与快捷时刻”监听motion-disclosure-opening：先同步快捷读数，再测量展开高度；toggle仍处理程序化打开后的更新。关闭高度由summary、边框和padding求得，避免为测量重复关开。320毫秒动画支持中途反向，代次标记阻止旧回调覆盖新状态，结束后清除固定高度与overflow。减少动态效果时直接切换。
+          首次打开前需要更新内容的“播放与快捷时刻”监听motion-disclosure-opening：先同步快捷读数，再测量展开高度；toggle仍处理程序化打开后的更新。关闭高度由summary、边框和padding求得，避免为测量重复关开。420毫秒动画支持中途反向，代次标记阻止旧回调覆盖新状态，结束后清除固定高度与overflow。减少动态效果时直接切换。
         </p>
         <h3>侧栏、分段选中与渲染隔离</h3>
         <p>
@@ -1038,7 +1026,8 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory /tmp/skymotion-preview<
           </li>
         </ol>
       </div>
-    </main>
-    <script src="interface-motion.js?v=20261013-quiet11"></script>
+    <section class="release-notes"><h2>2026年10月13日正式发布说明</h2><p>本版统一浅色操作区、衬线字体和辅助按钮样式，提供24份中英文静态页面；切换语言保留实验状态。菜单弹性展开尊重减少动态效果设置。日期选择器支持年月、闰年、确认与取消；原天文计算、星历、模型数据和科学限制不变。</p><p>发布核对包含六组模型回归、36组控件布局、44个首次展开场景、参数历史、字体超时恢复、语言导航、日期与键盘操作，以及根路径和 GitHub 项目路径打包。检查以 Chromium 自动化为主，不代表完整 Safari、Firefox 或所有 GPU 实机认证。</p><p>正式站为 Cloudflare Pages，GitHub Pages 提供同内容镜像。main 推送触发两个独立工作流；维护者应分别核对部署结论。更新前版本保留为 production-before-impeccable-20261013 标签；需要回滚时从该标签创建恢复提交，不改写主分支历史。</p></section>
+        </main>
+    <script src="interface-motion.js?v=20261013-release12"></script>
   </body>
 </html>

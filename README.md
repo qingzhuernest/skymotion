@@ -1,8 +1,8 @@
-# SkyMotion — Impeccable preview
+# SkyMotion — bilingual astronomy laboratory
 
-This branch contains the bilingual Impeccable UI preview. It is independent of `main`; pushing this branch does not publish the Cloudflare or GitHub Pages production sites. Deployment jobs are restricted to `refs/heads/main`, including manual runs.
+The production release includes the reviewed bilingual Impeccable interface. [Cloudflare Pages](https://skymotion-5md.pages.dev/) is the primary site; [GitHub Pages](https://qingzhuernest.github.io/skymotion/) mirrors the same tracked content. Pushing `main` triggers both deployment workflows. Other branches do not deploy production, including manual runs.
 
-The astronomy engine, ephemerides and scientific models retain the production implementation. The preview adds unified serif typography and color tokens, English Charter fonts, state-preserving language switching, twelve generated English pages, and idle browser caching of twenty-four HTML pages.
+The astronomy engine, ephemerides and scientific models retain the production implementation. The interface adds unified serif typography and color tokens, English Charter fonts, state-preserving language switching, twelve generated English pages, and idle browser caching of twenty-four HTML pages.
 
 ## Run locally
 
@@ -27,8 +27,16 @@ Edit the Chinese HTML and `i18n-*.json` dictionaries, then regenerate the Englis
 - [Development guide](development-guide.md) · [English](development-guide.en.md)
 - Application: [AGPLv3](LICENSE). Font, image and library licenses: [third-party notices](THIRD-PARTY-NOTICES.md).
 
-This branch does not include GPT Site hosting configuration, temporary credentials, review screenshots or local plugin installations.
+The repository does not include GPT Site hosting configuration, temporary credentials, review screenshots or local plugin installations.
 
 ## Review regressions
 
 With a local server running and Playwright available, run `node tests/review-regressions.cjs`. Optional `SKY_MOTION_TEST_URL`, `SKY_MOTION_PLAYWRIGHT` and `SKY_MOTION_CHROMIUM` select the test server, module and browser executable. The suite covers stalled-font recovery and retry, explicit-language navigation, calendar month/year values, leap-day clamping, browser undo and keyboard focus at phone/tablet widths.
+
+## Release and rollback — October 13, 2026
+
+Core astronomy libraries and model data are unchanged from production baseline `4390ab1`. UI checks cover 36 control layouts, 44 first disclosures, interaction history, language navigation, font timeout recovery and calendar keyboard use. These are primarily Chromium checks; complete Safari/Firefox and GPU certification remains outside the verified scope.
+
+Regenerate English pages after editing Chinese HTML or dictionaries. Keep all three Chinese and English Markdown downloads synchronized with the reading pages. Font readiness has an eight-second timeout and explicit retry. Cache warming starts after the foreground page is ready, using two low-priority requests; this is not an offline application or a guarantee that all pages are cached immediately.
+
+The previous production commit is tagged `production-before-impeccable-20261013`. Restore it with a new commit if necessary; do not force-push main. Check both deployment workflows before calling the release successful. `tests/deployment-paths.cjs` validates root and GitHub project-path packaging.

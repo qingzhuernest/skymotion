@@ -1,6 +1,24 @@
+SKY MOTION LAB · 项目与模型
+
 # 项目介绍：目的、特点与地理模型
 
-更新：2026年10月11日。依据当前main功能与本地数据核对。
+为地理课堂和自主探索而开发：介绍控制变量观察、多图对照、多端适配、太阳系空间观察，以及数据依据和模型范围。
+
+1. [为什么开发这个项目](project-guide.html?lang=zh#section-0)
+2. [项目的主要优点](project-guide.html?lang=zh#section-1)
+3. [多端适配：图形和调节都要可用](project-guide.html?lang=zh#section-2)
+4. [太阳：比较一天、一年与纬度](project-guide.html?lang=zh#section-3)
+5. [月球：区分月相、位置与可见性](project-guide.html?lang=zh#section-4)
+6. [仰望天空：建立观察者的方向感](project-guide.html?lang=zh#section-5)
+7. [日影与日晷：方向、长度和测时](project-guide.html?lang=zh#section-6)
+8. [日行迹：把时间定义也作为条件](project-guide.html?lang=zh#section-7)
+9. [三维太阳系：补充空间关系，保留原有地理读数](project-guide.html?lang=zh#section-12)
+10. [地理数据与计算依据](project-guide.html?lang=zh#section-8)
+11. [模型范围与核验结论](project-guide.html?lang=zh#section-9)
+12. [三份文档分别解决什么问题](project-guide.html?lang=zh#section-10)
+13. [开源、资料与反馈](project-guide.html?lang=zh#section-11)
+
+更新：2026年10月13日。依据正式发布的双语界面、当前功能与本地模型数据核对；原天文计算引擎和模型数据保持不变。
 
 ## 为什么开发这个项目
 
@@ -8,7 +26,7 @@
 
 项目面向地理课堂演示、学生自主探究和天空爱好者。目标是让一次观察有明确的问题、固定条件、改变变量与可记录结果：先预测，再调节，再用另一张图或读数核对，而不是只观看动画。
 
-这篇介绍回答“为什么值得使用、能帮助理解什么”。[学习指南](guide.html)给出完整观察步骤；[开发说明](development-guide.html)记录当前技术实现、维护与发布。更新日期：2026年10月11日。
+这篇介绍回答“为什么值得使用、能帮助理解什么”。[学习指南](guide.html?lang=zh)给出完整观察步骤；[开发说明](development-guide.html?lang=zh)记录当前技术实现、维护与发布。更新日期：2026年10月11日。
 
 ## 项目的主要优点
 
@@ -70,13 +88,13 @@
 
 独立三维天空展示八大行星与日地月关系，可旋转、缩放、选中天体、观察近景和历史轨迹。原图解与三维对照共用父页面的时间控制；当地真太阳时换算为同一UTC后驱动三维，相机变化不改变观察条件。独立三维页另用自己的UTC时钟，并可配合空间俯视或本地天空参照。
 
-沉浸观察让图形占据窗口，保留日期轴、播放、退出和参数入口。系统全屏不可用时仍有满窗口布局。背景采用HYG目录中的恒星方向、星等与近似颜色；行星表面、陨坑、云带和土星环用于辨认，除地球沿用纹理外，新增外观是本地生成的示意，不是实测地形或当天云图。
+沉浸观察让图形占据窗口，保留日期轴、播放、退出和参数入口；采用网页内满窗口布局，不调用浏览器系统全屏。背景采用HYG目录中的恒星方向、星等与近似颜色；行星表面、陨坑、云带和土星环用于辨认，除地球沿用纹理外，新增外观是本地生成的示意，不是实测地形或当天云图。
 
 沉浸模式可显示卫星群、主带小行星、周期彗星与真实星云影像。光点没有密集名称，随所属行星和透视缩放变化；更紧凑的卫星布局便于观察，但仍是教学尺度。真实距离读数、放大圆盘和屏幕像素必须区分。星云保留原始影像和来源，其多波段处理配色及放大背景不等于肉眼所见。
 
 太阳方向来自科学模型。日地月采用平行光近似；地轴、赤道和固定黄道参考面帮助判断受光位置，不能只凭画面上下推断直射赤道。本页不模拟食的遮挡。
 
-[进入三维天空](space/) · [三维观察任务](guide.html#space) · [三维技术实现](development-guide.html#section-24)
+[进入三维天空](space/index.html?lang=zh) · [三维观察任务](guide.html?lang=zh#space) · [三维技术实现](development-guide.html?lang=zh#section-24)
 
 ## 地理数据与计算依据
 
@@ -100,21 +118,21 @@
 
 2026年10月11日重新运行六组仓库模型回归，覆盖行星与月球向量、地球姿态、恒星目录、卫星和小天体轨道、本地天空与历史轨迹，均通过内部一致性及输入边界断言。同日控件检查覆盖九个页面、四种宽度，并核验首次展开高度、点击和键盘行为。它们不构成独立实测精度或所有设备兼容性认证。
 
-此前Meeus／NOAA太阳近似公式与USNO月相资料的比较属于历史样本记录，未全部形成可重复运行脚本；不把这些差值扩展为全部日期的精度保证。可复现命令、历史证据与待检查项集中在[开发说明的验证章节](development-guide.html#section-20)。
+此前Meeus／NOAA太阳近似公式与USNO月相资料的比较属于历史样本记录，未全部形成可重复运行脚本；不把这些差值扩展为全部日期的精度保证。可复现命令、历史证据与待检查项集中在[开发说明的验证章节](development-guide.html?lang=zh#section-20)。
 
 ## 三份文档分别解决什么问题
 
 | 文档 | 读者要解决的问题 | 内容边界 |
 | --- | --- | --- |
-| [学习指南](guide.html) | 从哪里进入、如何调节、固定什么、观察什么 | 详细操作、任务单、记录表与常见问题 |
-| [项目介绍](project-guide.html) | 为什么开发、有哪些优点、结果适合怎样使用 | 目的、能力、多端适配、数据依据和模型范围 |
-| [开发说明](development-guide.html) | 怎样实现、怎样核验、怎样维护和发布 | 源码职责、状态、时间、计算、渲染、交互、测试与部署 |
+| [学习指南](guide.html?lang=zh) | 从哪里进入、如何调节、固定什么、观察什么 | 详细操作、任务单、记录表与常见问题 |
+| [项目介绍](project-guide.html?lang=zh) | 为什么开发、有哪些优点、结果适合怎样使用 | 目的、能力、多端适配、数据依据和模型范围 |
+| [开发说明](development-guide.html?lang=zh) | 怎样实现、怎样核验、怎样维护和发布 | 源码职责、状态、时间、计算、渲染、交互、测试与部署 |
 
 开发细节与故障修复按实现章节归档，不在本篇重复完整操作步骤，也不把首页星空互动作为项目主要教学能力。
 
 ## 开源、资料与反馈
 
-原创应用代码采用[GNU AGPLv3](LICENSE)（AGPL-3.0-only），允许商业使用。分发及修改后提供网络交互服务时，须按许可提供对应源码及适用声明；第13条要求修改版网络服务向远程使用者明确提供获取对应源码的机会。[查看GitHub源码](https://github.com/qingzhuernest/skymotion)。授权范围见<NOTICE>；第三方库、数据、字体和影像保留原许可，见[第三方声明](THIRD-PARTY-NOTICES.md)。
+原创应用代码采用[GNU AGPLv3](LICENSE)（AGPL-3.0-only），允许商业使用。分发及修改后提供网络交互服务时，须按许可提供对应源码及适用声明；第13条要求修改版网络服务向远程使用者明确提供获取对应源码的机会。[查看GitHub源码](https://github.com/qingzhuernest/skymotion)。授权范围见[NOTICE](NOTICE)；第三方库、数据、字体和影像保留原许可，见[第三方声明](THIRD-PARTY-NOTICES.md)。
 
 - [NASA：Moon Phases](https://science.nasa.gov/moon/moon-phases/)
 - [NOAA：太阳计算算法说明](https://gml.noaa.gov/grad/solcalc/calcdetails.html)
@@ -123,6 +141,12 @@
 
 交互呈现参考包括[Helios](https://github.com/joaopedroalbq/helios)、[Analemma](https://github.com/benlansdell/analemma)和[RotatingSky](https://github.com/OpenLyceum/RotatingSky)；引用交互参考不等于采用其全部计算模型。NOAA此处链接为公开算法说明。
 
-正式站点为[Cloudflare Pages](https://skymotion-5md.pages.dev/)，同内容镜像为[GitHub Pages](https://qingzhuernest.github.io/skymotion/)；main推送触发两边发布。教学问题、功能建议与故障可通过[联系作者](contact.html)或[GitHub Issue](https://github.com/qingzhuernest/skymotion/issues)反馈，请附模块、地点、日期、时刻、复现步骤和浏览器信息。
+正式站点为[Cloudflare Pages](https://skymotion-5md.pages.dev/)，同内容镜像为[GitHub Pages](https://qingzhuernest.github.io/skymotion/)；main推送触发两边发布。教学问题、功能建议与故障可通过[联系作者](contact.html?lang=zh)或[GitHub Issue](https://github.com/qingzhuernest/skymotion/issues)反馈，请附模块、地点、日期、时刻、复现步骤和浏览器信息。
 
-[进入实验台](lab.html)[学习指南](guide.html)[开发说明](development-guide.html)
+## 2026年10月13日正式发布说明
+
+本版统一浅色操作区、衬线字体和辅助按钮样式，提供24份中英文静态页面；切换语言保留实验状态。菜单弹性展开尊重减少动态效果设置。日期选择器支持年月、闰年、确认与取消；原天文计算、星历、模型数据和科学限制不变。
+
+发布核对包含六组模型回归、36组控件布局、44个首次展开场景、参数历史、字体超时恢复、语言导航、日期与键盘操作，以及根路径和 GitHub 项目路径打包。检查以 Chromium 自动化为主，不代表完整 Safari、Firefox 或所有 GPU 实机认证。
+
+正式站为 Cloudflare Pages，GitHub Pages 提供同内容镜像。main 推送触发两个独立工作流；维护者应分别核对部署结论。更新前版本保留为 production-before-impeccable-20261013 标签；需要回滚时从该标签创建恢复提交，不改写主分支历史。

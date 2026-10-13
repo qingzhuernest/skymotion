@@ -1,8 +1,38 @@
+SKY MOTION LAB · 开发与维护
+
 # 开发说明：完整开发逻辑与维护
 
-更新：2026年10月11日。功能核对基准为文档更新前main提交f8313cf；模型回归在本次核对时重新运行。历史记录保留原测试日期。
+供开发和维护者使用：源码职责、状态和时间约定、天文模型、渲染与控件动画、回归测试、AGPLv3及双站点发布。
 
-本文供继续开发与维护使用。先看文件与数据流程，再查相关模型、状态和渲染章节；实现细节按职责归档。学生操作见[学习指南](guide.html)，开发目的和优点见[项目介绍](project-guide.html)。
+1. [1. 项目目标与规划顺序](development-guide.html?lang=zh#section-1)
+2. [2. 技术方案与运行边界](development-guide.html?lang=zh#section-2)
+3. [3. 页面与信息架构](development-guide.html?lang=zh#section-3)
+4. [4. 当前文件职责](development-guide.html?lang=zh#section-4)
+5. [5. 数据、界面与绘图的关系](development-guide.html?lang=zh#section-5)
+6. [6. 太阳与月球的状态逻辑](development-guide.html?lang=zh#section-6)
+7. [7. 时间标准与日期处理](development-guide.html?lang=zh#section-7)
+8. [8. 坐标与太阳计算](development-guide.html?lang=zh#section-8)
+9. [9. 升落与时长计算](development-guide.html?lang=zh#section-9)
+10. [10. 月相与月面朝向](development-guide.html?lang=zh#section-10)
+11. [11. 轨迹连续性与视图投影](development-guide.html?lang=zh#section-11)
+12. [12. 日影、影尖轨迹与全年观察](development-guide.html?lang=zh#section-12)
+13. [13. 两种互动日晷](development-guide.html?lang=zh#section-13)
+14. [14. 日行迹与“8”字成因](development-guide.html?lang=zh#section-14)
+15. [15. 行星伴月与仰望天空](development-guide.html?lang=zh#section-15)
+16. [16. 太阳系三维模块的实现与验证](development-guide.html?lang=zh#section-24)
+17. [17. 完整更新与动画调度](development-guide.html?lang=zh#section-16)
+18. [18. 路由、链接与浏览器历史](development-guide.html?lang=zh#section-17)
+19. [19. 多端布局与交互原则](development-guide.html?lang=zh#section-18)
+20. [20. 共享控件与首次展开动画](development-guide.html?lang=zh#shared-controls)
+21. [21. 当前初始化和生成方式](development-guide.html?lang=zh#section-19)
+22. [22. 测试和验收逻辑](development-guide.html?lang=zh#section-20)
+23. [23. 双站点打包与发布](development-guide.html?lang=zh#section-21)
+24. [24. 已修复事项与后续维护边界](development-guide.html?lang=zh#section-22)
+25. [25. 后续增加功能的标准流程](development-guide.html?lang=zh#section-23)
+
+更新：2026年10月13日。正式版采用已审查的双语界面；与原版 main 提交4390ab1比较，天文引擎与核心模型数据未变。历史核验保留原日期，新增发布检查见本文末尾。
+
+本文供继续开发与维护使用。先看文件与数据流程，再查相关模型、状态和渲染章节；实现细节按职责归档。学生操作见[学习指南](guide.html?lang=zh)，开发目的和优点见[项目介绍](project-guide.html?lang=zh)。
 
 ## 1. 项目目标与规划顺序
 
@@ -29,7 +59,7 @@
 
 没有必需的后端服务、数据库、登录系统或实时星历API。浏览器直接计算天体位置。三维天球和装置主要使用三维坐标投影到Canvas 2D；球形地球优先使用WebGL着色器，在不可用时回退到Canvas 2D。独立的 space/ 太阳系页面使用本地 Three.js 0.186.1，不替换原实验台的渲染管线。
 
-界面采用 Material Design 的表面层级、主色容器、圆角、选中态、展开态和焦点反馈；没有引入完整 Material 组件库，不能称为经过全部 Material 规范认证的组件实现。
+界面通过 design-system.css 统一颜色、字体、边框与控件层级，保留原生表单和现有交互。浅色操作区用于课堂阅读，深色画布用于天体观察；辅助操作以白底细边框呈现，播放与选中状态保留强调色。没有引入完整 UI 组件框架。
 
 资源使用相对路径，适合 Cloudflare Pages 静态托管。核心脚本、样式和纹理在交付包内，不依赖外部字体加载。当前没有 Service Worker，不能承诺首次断网打开或安装为离线应用。
 
@@ -93,10 +123,6 @@
 当前 main 不包含旧 tools/ 生成器或 REVIEW.md；这些资料只保存在历史归档中。根目录网页是当前维护源，不能用旧生成器覆盖。
 
 ## 5. 数据、界面与绘图的关系
-
-
-
-数据与绘图流程
 
 1. 用户操作
 2. 更新对应实验状态
@@ -267,7 +293,7 @@ observer.js的地面方位盘使用当地东、北基向量按observerAz旋转�
 
 `space/index.html` 是独立入口，`space/model.js` 只负责模型结果，`space/scene.js` 负责 Three.js 场景和交互，`space/ui.js` 管理侧拉参数菜单，`space/space.css` 限定页面样式。第三方库固定到0.186.1，本地保留MIT许可；复用根目录Astronomy Engine与地球纹理，避免重复下载库和图片。
 
-模型取 HelioVector、GeoMoon 和 Illumination，使用 Rotation\_EQJ\_ECL 转到固定 J2000 黄道系，再以(x,z,-y)映射到Three.js右手坐标。物理向量保留AU；总览显示距离采用6.8×r^0.45压缩，球体半径独立选定；日地月采用独立距离比例。轨道采样一段平均周期，不强制闭合采样端点。独立播放时历史轨迹最多每秒重建10次，当前亮端每帧仍用真实星历位置更新；暂停和手动调节恢复精确完整采样。初次相机直接拟合，微小收敛误差精确吸附后停绘，避免肉眼静止时持续消耗。地月太阳方向来自真实地球日心向量，DirectionalLight与平行线共用该方向；不加入食遮挡。earth-frame.js使用GAST与EQD→EQJ→J2000黄道变换构造地球右手基，Greenwich为局部+X、北极为+Y、西经90°为+Z，设置地球quaternion。红色地轴和蓝色赤道附着于地球。地球/月球和其他对象分两次渲染，共用深度缓冲，独立隔离平行光与点光源；射线拾取包含两层。
+模型取 HelioVector、GeoMoon 和 Illumination，使用 Rotation_EQJ_ECL 转到固定 J2000 黄道系，再以(x,z,-y)映射到Three.js右手坐标。物理向量保留AU；总览显示距离采用6.8×r^0.45压缩，球体半径独立选定；日地月采用独立距离比例。轨道采样一段平均周期，不强制闭合采样端点。独立播放时历史轨迹最多每秒重建10次，当前亮端每帧仍用真实星历位置更新；暂停和手动调节恢复精确完整采样。初次相机直接拟合，微小收敛误差精确吸附后停绘，避免肉眼静止时持续消耗。地月太阳方向来自真实地球日心向量，DirectionalLight与平行线共用该方向；不加入食遮挡。earth-frame.js使用GAST与EQD→EQJ→J2000黄道变换构造地球右手基，Greenwich为局部+X、北极为+Y、西经90°为+Z，设置地球quaternion。红色地轴和蓝色赤道附着于地球。地球/月球和其他对象分两次渲染，共用深度缓冲，独立隔离平行光与点光源；射线拾取包含两层。
 
 本页只读 skyLabSession 的有效日期作为初始日历，不写回太阳或月球状态。独立日期限制为1900—2100年；日历定位12:00 UTC，日期轴保留小数天，读数同步显示实际UTC时刻。闰年更新日期轴上限。播放速度以天／秒表示，非循环播放在本年轴末端停止。相机操作不改科学时间。
 
@@ -311,9 +337,9 @@ exploration.css把读数和可滚动的“观察”菜单限定在三维画布�
 
 ### 沉浸布局与全屏降级
 
-`space/immersive.js`仅切换布局与Fullscreen API，不创建新renderer、RAF或科学状态；`space/immersive.css`保留满窗口图形、唯一UTC时间条和退出按钮。独立页面用`?immersive=1`直接打开满窗口；系统全屏仅在用户点击时请求，拒绝或不支持时保留布局。参数面板继续使用原dialog，由`space:layout`通知ui.js移动同一DOM节点。退出、浏览器结束全屏与Esc恢复正常布局，已打开参数菜单时优先关闭菜单。嵌入原图对照的三维页禁用此模式，以免破坏父页面的唯一时间控制。
+space/immersive.js 只切换网页内满窗口布局，不调用 Fullscreen API，不创建新 renderer、RAF 或科学状态。space/immersive.css 保留图形、唯一 UTC 时间条和退出按钮；?immersive=1 可直接打开。参数菜单继续复用原 dialog 与输入节点。Esc 优先关闭参数菜单，然后退出沉浸；退出不改变日期、相机或播放状态。嵌入三维对照页禁用该布局。
 
-布局回归覆盖1440×900、390×844、320×568、844×390及844×270，检查日期／播放／退出控件、侧抽屉归位、全屏拒绝回退、UTC不变和嵌入隔离；本模式不改变天文公式。
+早期布局回归覆盖1440×900、390×844、320×568、844×390及844×270，检查日期／播放／退出控件、侧抽屉归位、当时的全屏拒绝回退、UTC不变和嵌入隔离；本模式不改变天文公式。
 
 ### 原图解与三维的同步桥
 
@@ -389,7 +415,7 @@ CSS负责显示几何与配色；JavaScript负责科学状态、可用性和事�
 
 ## 20. 共享控件与首次展开动画
 
-本 GPT Site 预览版使用 Impeccable 统一 UI：design-system.css 在原页面样式之后加载，共享浅色操作区、深青蓝选中状态、12px 控件圆角和16px 表面圆角。SkyMotion Reading 的本地常规与粗体字库统一用于标题、正文、参数、按钮、数字及图形注释，欢迎页底部保留原手写字体；字库按页面文字裁剪并本地发布，遵循 SIL OFL 1.1。共享控件与动画样式消费同一套颜色变量，沉浸模式单独映射深色表面与文字。播放与选中项保留深青蓝强调色；日期方向、复位、天体跳转、菜单和三维辅助操作使用白底、青蓝文字与细边框，悬停仅加浅色底，深色画布上的工具保持中性深色；窄控制台按自身宽度将时间、日期与方位排为紧凑完整行，横屏保持原紧凑布局。仰望天空注释按明暗调整文字对比度并避让月球端点标记，不改变天体位置。理想实验提示、赤纬读数与恢复操作共享主题颜色；播放设置里的循环开关与其他参数开关同尺寸并靠右对齐，沉浸工具使用统一深色表面。该预览未改天文计算、星历数据、状态逻辑或正式网站部署。
+本正式版使用 Impeccable 统一 UI：design-system.css 在原页面样式之后加载，共享浅色操作区、深青蓝选中状态、12px 控件圆角和16px 表面圆角。SkyMotion Reading 的本地常规与粗体字库统一用于标题、正文、参数、按钮、数字及图形注释，欢迎页底部保留原手写字体；字库按页面文字裁剪并本地发布，遵循 SIL OFL 1.1。共享控件与动画样式消费同一套颜色变量，沉浸模式单独映射深色表面与文字。播放与选中项保留深青蓝强调色；日期方向、复位、天体跳转、菜单和三维辅助操作使用白底、青蓝文字与细边框，悬停仅加浅色底，深色画布上的工具保持中性深色；窄控制台按自身宽度将时间、日期与方位排为紧凑完整行，横屏保持原紧凑布局。仰望天空注释按明暗调整文字对比度并避让月球端点标记，不改变天体位置。理想实验提示、赤纬读数与恢复操作共享主题颜色；播放设置里的循环开关与其他参数开关同尺寸并靠右对齐，沉浸工具使用统一深色表面。此次发布保留原天文计算、星历数据与科学状态逻辑；升落读数卡片、文档入口统一白底细边框，不用黄蓝色块区分事件。
 
 ### 中英文呈现与本地字体
 
@@ -397,9 +423,9 @@ CSS负责显示几何与配色；JavaScript负责科学状态、可用性和事�
 
 language.js 负责共享语言状态，以 skymotion-language 为 localStorage 偏好键；切换只更新呈现，不改科学状态、输入值或天文计算。翻译字典覆盖 DOM 正文及 aria-label、title 等属性，Canvas 的 measureText、fillText 与 strokeText 使用同一翻译与英文字体，使测量和绘制保持一致；代码示例保留原文。英文文档由完整译文导出为 .en.md，下载入口随语言选择对应文件。
 
-中文沿用本地 SkyMotion Reading，英文使用本地 SkyMotion Charter 的常规、粗体、斜体和粗斜体四种样式。Charter 按 Bitstream 原始通知允许为任何目的使用、复制、修改、再许可、出售和再分发，须在副本中保留通知并按要求确认商标；完整通知随 fonts/LICENSE-Charter.txt 发布。中英文切换、字体和文档导出仅用于 GPT Site 预览，正式 Cloudflare 与 GitHub 网站保持原状。
+中文使用本地 SkyMotion Reading；英文使用本地 SkyMotion Charter。首屏预加载当前语言的常规和粗体；Charter 的斜体与粗斜体文件也随站点分发，当前样式中的斜体可由浏览器合成。Charter 按 Bitstream 原始通知允许使用和再分发，完整通知在 fonts/LICENSE-Charter.txt；Reading 的 OFL 通知随字体保留。语言、字体和文档下载同时用于正式站与镜像。
 
-静态英文入口由 scripts/prerender-pages.py 从原始 HTML 与翻译字典生成，共有12个 .en.html 对应页；生成过程保留节点 ID、数字与表单值，以及原科学脚本。中英文共24份页面 HTML 合计约1.5MB，体积会随内容变化，样式、脚本、字体和影像仍共享。language-data.js 同步提供动态标签字典，data-i18n-cn 元数据支持原位恢复中文并保留实验状态；page-boot.js 选择静态语言入口。page-boot.js 在文档头部立即加载所选语言的常规与粗体字体，字体就绪即可显示静态页面，不等待实验初始化；page-cache.js 在首屏字体与当前页面加载完成后，以最多两路并发预热整站 HTML、脚本、样式、字体、图片、数据和文档下载的普通 HTTP 缓存，不运行隐藏实验或三维场景，也不使用 Service Worker；常规托管的访问要求不变。这套预渲染与缓存安排仅用于 GPT Site 预览，正式网站未改。
+静态英文入口由 scripts/prerender-pages.py 从原始 HTML 与翻译字典生成，共有12个 .en.html 对应页；生成过程保留节点 ID、数字与表单值，以及原科学脚本。中英文共24份页面 HTML 合计约1.5MB，体积会随内容变化，样式、脚本、字体和影像仍共享。language-data.js 同步提供动态标签字典，data-i18n-cn 元数据支持原位恢复中文并保留实验状态；page-boot.js 选择静态语言入口。page-boot.js 在文档头部立即加载所选语言的常规与粗体字体，字体就绪即可显示静态页面，不等待实验初始化；page-cache.js 在首屏字体与当前页面加载完成后，以最多两路并发预热整站 HTML、脚本、样式、字体、图片、数据和文档下载的普通 HTTP 缓存，不运行隐藏实验或三维场景，也不使用 Service Worker；常规托管的访问要求不变。这套预渲染与缓存安排用于正式发布。预热需要网络与时间，不能保证首次访问时全部资源已在缓存，也不保证离线可用。
 
 ### 统一参数行与菜单顺序
 
@@ -411,7 +437,7 @@ controls.css在页面已有样式后加载，限定于普通参数区、三维�
 
 interface-motion.js为受控details添加motion-disclosure。controls的几何样式不负责折叠；interface-motion.css关闭这些节点的原生::details-content高度过渡，仅由外层Web Animations弹性高度动画控制。此前原生过渡尚在关闭高度时，JavaScript立即测量得到错误终点，导致首次展开末尾跳变；现在测量时可直接得到自然展开高度。
 
-首次打开前需要更新内容的“播放与快捷时刻”监听motion-disclosure-opening：先同步快捷读数，再测量展开高度；toggle仍处理程序化打开后的更新。关闭高度由summary、边框和padding求得，避免为测量重复关开。320毫秒动画支持中途反向，代次标记阻止旧回调覆盖新状态，结束后清除固定高度与overflow。减少动态效果时直接切换。
+首次打开前需要更新内容的“播放与快捷时刻”监听motion-disclosure-opening：先同步快捷读数，再测量展开高度；toggle仍处理程序化打开后的更新。关闭高度由summary、边框和padding求得，避免为测量重复关开。420毫秒动画支持中途反向，代次标记阻止旧回调覆盖新状态，结束后清除固定高度与overflow。减少动态效果时直接切换。
 
 ### 侧栏、分段选中与渲染隔离
 
@@ -460,7 +486,7 @@ SKY_MOTION_TEST_URL=http://127.0.0.1:8000/ node tests/parameter-controls.cjs
 SKY_MOTION_TEST_URL=http://127.0.0.1:8000/ node tests/interaction-history.cjs
 ```
 
-浏览器路径可通过SKY\_MOTION\_CHROMIUM指定，Playwright模块路径通过SKY\_MOTION\_PLAYWRIGHT指定；默认使用playwright模块和/usr/bin/chromium。运行环境不同时需要对应调整。
+浏览器路径可通过SKY_MOTION_CHROMIUM指定，Playwright模块路径通过SKY_MOTION_PLAYWRIGHT指定；默认使用playwright模块和/usr/bin/chromium。运行环境不同时需要对应调整。
 
 ### 当前结论与证据范围
 
@@ -487,7 +513,7 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory /tmp/skymotion-preview
 
 [Cloudflare正式站](https://skymotion-5md.pages.dev/)由.github/workflows/deploy.yml发布到已有项目skymotion；[GitHub Pages镜像](https://qingzhuernest.github.io/skymotion/)由.github/workflows/github-pages.yml发布，两边已启用。仓库源为[qingzhuernest/skymotion](https://github.com/qingzhuernest/skymotion)，维护者提交到main后自动触发，也可在Actions手动重跑。
 
-Cloudflare凭据由GitHub Secrets提供，不写入源码或文档。两个工作流复用prepare\_site.py：排除README、隐藏配置、tests、scripts、archive和内部检查记录，保留网页、三份Markdown、模型数据与LICENSE、NOTICE、第三方声明。GitHub镜像传入/skymotion基路径，仅改写404恢复链接，其余发布文件来自同一份源码。
+Cloudflare凭据由GitHub Secrets提供，不写入源码或文档。两个工作流复用prepare_site.py：排除README、隐藏配置、tests、scripts、archive和内部检查记录，保留网页、三份Markdown、模型数据与LICENSE、NOTICE、第三方声明。GitHub镜像传入/skymotion基路径，仅改写404恢复链接，其余发布文件来自同一份源码。
 
 ### 资源、搜索与发布验收
 
@@ -511,7 +537,7 @@ project-archive分支保留历史ZIP、生成器和检查记录，不触发正�
 
 ### 许可与资源责任
 
-原创应用代码采用[GNU AGPLv3](LICENSE)（AGPL-3.0-only），允许商业使用；分发和修改后提供网络服务须遵守源码与声明义务，网络修改版须向远程用户明确提供获取对应源码的机会。范围见<NOTICE>，第三方例外见[第三方声明](THIRD-PARTY-NOTICES.md)。
+原创应用代码采用[GNU AGPLv3](LICENSE)（AGPL-3.0-only），允许商业使用；分发和修改后提供网络服务须遵守源码与声明义务，网络修改版须向远程用户明确提供获取对应源码的机会。范围见[NOTICE](NOTICE)，第三方例外见[第三方声明](THIRD-PARTY-NOTICES.md)。
 
 Astronomy Engine与本地Three.js保留MIT许可；HYG子集按CC BY-SA 4.0、字体按其OFL等原许可分发。NASA来源影像逐项保留作者、处理配色与来源；不能把“NASA来源”统一当作任何用途均无条件授权。地球纹理也保留原来源说明。相关credits和许可文件进入发布包，项目介绍保留源码入口。
 
@@ -522,3 +548,11 @@ Astronomy Engine与本地Three.js保留MIT许可；HYG子集按CC BY-SA 4.0、�
 3. **接入状态与交互：**更新会话、历史恢复、可用性和暂停逻辑；保留单一控件节点、原生输入语义与可撤回的参数手势。
 4. **验证再完善视觉：**先做模型边界与状态断言，再检查首次操作、快速反向、各宽度、减少动态效果和实际触屏；控件动画不能延迟科学读数。
 5. **按职责同步文档与发布：**学习指南更新任务步骤，项目介绍更新目的与能力，开发说明更新文件、计算和验证。同步Markdown与README，核对文档锚点、版权和发布包，提交main后检查双站点部署与资源。
+
+## 2026年10月13日正式发布说明
+
+本版统一浅色操作区、衬线字体和辅助按钮样式，提供24份中英文静态页面；切换语言保留实验状态。菜单弹性展开尊重减少动态效果设置。日期选择器支持年月、闰年、确认与取消；原天文计算、星历、模型数据和科学限制不变。
+
+发布核对包含六组模型回归、36组控件布局、44个首次展开场景、参数历史、字体超时恢复、语言导航、日期与键盘操作，以及根路径和 GitHub 项目路径打包。检查以 Chromium 自动化为主，不代表完整 Safari、Firefox 或所有 GPU 实机认证。
+
+正式站为 Cloudflare Pages，GitHub Pages 提供同内容镜像。main 推送触发两个独立工作流；维护者应分别核对部署结论。更新前版本保留为 production-before-impeccable-20261013 标签；需要回滚时从该标签创建恢复提交，不改写主分支历史。

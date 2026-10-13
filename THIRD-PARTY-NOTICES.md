@@ -29,3 +29,7 @@ SkyMotion 原创应用代码采用 [AGPLv3](LICENSE)。这项许可不替换下�
 ## Bitstream Charter
 
 The English interface uses locally hosted Bitstream Charter regular, bold, italic and bold italic WOFF2 files, distributed via https://practicaltypography.com/charter.html. Copyright 1989–1992 Bitstream Inc., Cambridge, MA. BITSTREAM CHARTER is a registered trademark of Bitstream Inc. Its unrestricted redistribution notice is preserved in `fonts/LICENSE-Charter.txt`; the font license is separate from the application’s AGPLv3 license.
+
+## 2026-10-13 production distribution
+
+The bilingual production release distributes the same original astronomy libraries, catalogs and license notices. Reading and Charter fonts are hosted locally with their bundled license files; interface refinement does not change third-party attribution or data licensing.

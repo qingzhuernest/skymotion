@@ -4,27 +4,27 @@ SKY MOTION LAB · OPERATIONS AND OBSERVATION
 
 Follow the entry points, operating steps, controlled variables and recording methods to observe the Sun, Moon, shadows, sundials, analemmas and 3D Solar System. Start with the five-minute task, then choose a topic.
 
-1. [Complete your first observation](#start)
-2. [Controls, menus and undo](#controls)
-3. [Classroom and independent-learning routes](#lesson)
-4. [Sun tasks: a day, seasons and latitude](#sun)
-5. [Shadow tasks: make shadows and shadow-tip paths clearer](#shadow)
-6. [Moon tasks: follow phases by date and the sky by time](#moon)
-7. [Looking Up tasks: adjust direction and time together](#sky)
-8. [Sundial tasks: compare two instruments](#sundial)
-9. [Analemma tasks: the annual path and the origin of the figure eight](#analemma)
-10. [3D Solar System tasks: distinguish spatial motion from apparent motion in the sky](#space)
-11. [When an operation does not work as expected](#help)
+1. [Complete your first observation](guide.en.html?lang=en#start)
+2. [Controls, menus and undo](guide.en.html?lang=en#controls)
+3. [Classroom and independent-learning routes](guide.en.html?lang=en#lesson)
+4. [Sun tasks: a day, seasons and latitude](guide.en.html?lang=en#sun)
+5. [Shadow tasks: make shadows and shadow-tip paths clearer](guide.en.html?lang=en#shadow)
+6. [Moon tasks: follow phases by date and the sky by time](guide.en.html?lang=en#moon)
+7. [Looking Up tasks: adjust direction and time together](guide.en.html?lang=en#sky)
+8. [Sundial tasks: compare two instruments](guide.en.html?lang=en#sundial)
+9. [Analemma tasks: the annual path and the origin of the figure eight](guide.en.html?lang=en#analemma)
+10. [3D Solar System tasks: distinguish spatial motion from apparent motion in the sky](guide.en.html?lang=en#space)
+11. [When an operation does not work as expected](guide.en.html?lang=en#help)
 
-Updated October 11, 2026. Checked against the menus, time controls and 3D features on the current main branch. See Project Overview for model foundations and Development Guide for implementation details.
+Updated October 13, 2026. The production release uses a unified interface, Chinese and English pages, and locally hosted fonts. These instructions describe the current release. See Project Overview for model foundations and Development Guide for implementation and verification limits.
 
-This GPT Site preview supports Chinese and English. Use the language button in the top navigation to switch menus, reading explanations, diagram annotations and complete documents together; the current location, date, time and experiment settings remain unchanged. This browser remembers your language preference, and Markdown downloads in English mode provide the complete English document. This feature updates the preview only and does not change the formal website.
+The production version supports Chinese and English. The top navigation language button switches menus, reading explanations, diagram annotations and documents without changing location, date, time or experiment settings. This browser remembers your language preference; English mode provides complete English Markdown downloads. The calendar applies a date only when confirmed; cancelling leaves the experiment unchanged.
 
 ## Complete your first observation
 
 Before an experiment, write a question and decide what to hold constant, what single variable to change and which reading will determine the result. This guide provides operating routes, worksheets and recording tables. Project Overview explains the purpose, data sources and scope; Development Guide describes the code and validation for maintainers.
 
-1. Open the[Lab](lab.html) and choose “Sun” or “Moon Phases” beside the title. Confirm the title, location, date and time.
+1. Open the [Lab](lab.en.html?lang=en) and choose “Sun” or “Moon Phases” beside the title. Confirm the title, location, date and time.
 2. Choose a location under “Parameters → Date and Location.” For exact coordinates, expand “Fine-tune Latitude and Longitude.” Latitude is positive north and negative south; longitude is positive east and negative west.
 3. Pause playback. Choose a full date in the calendar below the diagram, then set the time using the slider, input field or ±5-minute buttons. The main experiment uses local apparent solar time.
 4. Record the initial readings and change only one condition. Check the result in another diagram, then state the location, date and time basis for which your conclusion holds.
@@ -129,7 +129,7 @@ Ideal Experiment lets you adjust solar declination separately; Date-based Observ
 
 ### Compare four related diagrams together
 
-1. Choose a location, real date and local apparent solar time, pause playback and enter[Related Diagrams](diagrams.html) in Sun mode.
+1. Choose a location, real date and local apparent solar time, pause playback and enter [Related Diagrams](diagrams.en.html?lang=en) in Sun mode.
 2. Choose “Four-diagram Comparison” to view the subsolar point and day/night, daily altitude curve, rise/set azimuths and Earth's axis/horizon together under the same conditions.
 3. Change only time and record which diagrams vary with it and which quantities depend mainly on date and latitude. Then fix time and change only the date.
 4. When small diagrams omit text, switch to the corresponding single diagram. The globe and axis diagram rotate independently; confirm that globe dragging is set to “Rotate View Only” to avoid accidentally changing the observation location.
@@ -267,9 +267,9 @@ Enter through “Lab → Related Diagrams → Spatial Models,” the Spatial Mod
 
 ### Immersive full-window observation: keep controls while prioritizing the view
 
-[Enter the immersive Solar System](space/?immersive=1)
+[Enter the immersive Solar System](space/index.en.html?immersive=1&lang=en)
 
-1. opens a full-window layout. Selecting Immersive Observation on the 3D page also requests system fullscreen in supporting browsers. If Safari or another browser does not support or allows no fullscreen, the full-window layout remains usable.
+1. The link opens a viewport-filling layout. Immersive view on the 3D page uses the page layout and does not request browser fullscreen, so it does not trigger a system fullscreen banner. Exiting immersive view restores the layout.
 2. Solar System / Sun–Earth–Moon selectors remain at the top; UTC, playback, date and slider remain at the bottom. Open detailed settings with Parameters at the upper right, then close them to rotate and zoom again. There is no second set of time controls.
 3. Pause first and rotate the camera to find your object, then select its name or use “Observe → Body Close-ups.” For a gentler demonstration of position changes, choose 2 days/second in Parameters. This is accelerated time, not real-time celestial motion.
 4. Enable orbits to identify orbital paths; turn off orbits or names for a clearer view. In Sun–Earth–Moon, enable Axis and Equator to distinguish the red axis, blue equator ring and ecliptic reference plane.
@@ -364,4 +364,12 @@ The main 3D view illustrates spatial relationships; Local Sky supplies altitude 
 
 Use the same record when reporting a problem, adding device, browser, click/drag sequence and screenshots. Describe model questions separately from interaction failures so they can be reproduced and checked.
 
-[Enter the Lab](lab.html) · [Contact the Author](contact.html)
+[Enter the Lab](lab.en.html?lang=en) · [Contact the Author](contact.en.html?lang=en)
+
+## Production release notes — October 13, 2026
+
+This release unifies light control surfaces, serif typography and supporting actions, and provides 24 static Chinese and English pages. Language switching preserves experiment state. Spring menu transitions respect reduced-motion preferences. The calendar supports month/year selection, leap years, confirm and cancel. Original astronomy calculations, ephemerides, model data and scientific limitations remain unchanged.
+
+Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.
+
+Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.

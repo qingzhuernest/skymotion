@@ -4,21 +4,21 @@ SKY MOTION LAB · PROJECT AND MODELS
 
 Developed for geography lessons and independent exploration: controlled-variable observations, comparisons across diagrams, support for different devices, spatial exploration of the Solar System, data sources, and model scope.
 
-1. [Why This Project Was Developed](#section-0)
-2. [The Project’s Main Strengths](#section-1)
-3. [Across Devices: Both Diagrams and Controls Must Remain Usable](#section-2)
-4. [The Sun: Compare a Day, a Year, and Different Latitudes](#section-3)
-5. [The Moon: Distinguish Phase, Position, and Visibility](#section-4)
-6. [Looking Up: Build an Observer’s Sense of Direction](#section-5)
-7. [Shadows and Sundials: Direction, Length, and Timekeeping](#section-6)
-8. [The Analemma: Treat the Definition of Time as a Condition](#section-7)
-9. [The 3D Solar System: Add Spatial Context While Preserving Geographic Readouts](#section-12)
-10. [Geographic Data and Calculation Sources](#section-8)
-11. [Model Scope and Verification Findings](#section-9)
-12. [What Each of the Three Documents Addresses](#section-10)
-13. [Open Source, Resources, and Feedback](#section-11)
+1. [Why This Project Was Developed](project-guide.en.html?lang=en#section-0)
+2. [The Project’s Main Strengths](project-guide.en.html?lang=en#section-1)
+3. [Across Devices: Both Diagrams and Controls Must Remain Usable](project-guide.en.html?lang=en#section-2)
+4. [The Sun: Compare a Day, a Year, and Different Latitudes](project-guide.en.html?lang=en#section-3)
+5. [The Moon: Distinguish Phase, Position, and Visibility](project-guide.en.html?lang=en#section-4)
+6. [Looking Up: Build an Observer’s Sense of Direction](project-guide.en.html?lang=en#section-5)
+7. [Shadows and Sundials: Direction, Length, and Timekeeping](project-guide.en.html?lang=en#section-6)
+8. [The Analemma: Treat the Definition of Time as a Condition](project-guide.en.html?lang=en#section-7)
+9. [The 3D Solar System: Add Spatial Context While Preserving Geographic Readouts](project-guide.en.html?lang=en#section-12)
+10. [Geographic Data and Calculation Sources](project-guide.en.html?lang=en#section-8)
+11. [Model Scope and Verification Findings](project-guide.en.html?lang=en#section-9)
+12. [What Each of the Three Documents Addresses](project-guide.en.html?lang=en#section-10)
+13. [Open Source, Resources, and Feedback](project-guide.en.html?lang=en#section-11)
 
-Updated October 11, 2026. Checked against the current main-branch features and local data.
+Updated October 13, 2026. Checked against the production bilingual interface, current features and local model data. The original astronomical engine and model data remain unchanged.
 
 ## Why This Project Was Developed
 
@@ -26,7 +26,7 @@ Why does the Sun’s position change with the seasons? How are lunar phases rela
 
 The project is intended for geography classroom demonstrations, students’ independent investigations, and sky enthusiasts. Each observation should have a clear question, fixed conditions, a variable to change, and results to record: predict first, adjust the conditions, then check another diagram or readout, rather than simply watching an animation.
 
-This introduction explains why the project is useful and what it can help you understand.[Learning Guide](guide.html) provides complete observation steps;[Development Guide](development-guide.html) records the current technical implementation, maintenance, and publishing process. Updated October 11, 2026.
+This introduction explains why the project is useful and what it can help you understand.[Learning Guide](guide.en.html?lang=en) provides complete observation steps;[Development Guide](development-guide.en.html?lang=en) records the current technical implementation, maintenance, and publishing process. Updated October 11, 2026.
 
 ## The Project’s Main Strengths
 
@@ -88,13 +88,13 @@ Actual-date mode provides annual positions and different projections. A separate
 
 The separate 3D sky module displays the eight planets and Sun–Earth–Moon relationships. You can rotate, zoom, select bodies, inspect close-up views, and explore historical paths. Original diagrams and their 3D comparisons share the parent page’s time controls: local apparent solar time is converted to the same UTC instant to drive the 3D scene, while camera changes leave observation conditions unchanged. The separate 3D page has its own UTC clock and can be paired with a top-down spatial view or local-sky reference.
 
-Immersive observation expands the scene to fill the window while retaining the date axis, playback, exit, and parameter controls. A full-window layout remains available when system fullscreen is unsupported. The background uses stellar directions, magnitudes, and approximate colors from the HYG catalog. Planetary surfaces, craters, cloud bands, and Saturn’s rings aid identification. Except for Earth’s existing texture, the added appearances are locally generated illustrations, not measured terrain or cloud maps for the selected date.
+Immersive view fills the viewport while keeping the date axis, playback, exit and parameter controls. It uses a page layout without requesting browser fullscreen. The background uses stellar directions, magnitudes and approximate colors from the HYG catalog. Planet surfaces, craters, cloud bands and Saturn’s rings aid recognition; apart from the retained Earth texture, added appearances are locally generated illustrations rather than measured terrain or current cloud imagery.
 
 Immersive mode can show satellite populations, main-belt asteroids, periodic comets, and actual nebula imagery. Points of light avoid dense labels and change with their parent planet and perspective scaling. More compact satellite layouts aid observation but still use a teaching scale. Actual distance readouts, enlarged disks, and screen pixels must be distinguished. Nebulae retain their original imagery and sources; their processed multiband colors and enlarged background scale do not represent the unaided-eye view.
 
 The Sun’s direction comes from the scientific model. The Sun–Earth–Moon scene uses the parallel-light approximation. Earth’s axis, equator, and a fixed ecliptic reference plane help identify illumination geometry; the subsolar point cannot be inferred to lie on the equator simply from its vertical position on screen. This page does not simulate eclipse occlusion.
 
-[Enter the 3D Sky](space/) · [3D Observation Tasks](guide.html#space) · [3D Technical Implementation](development-guide.html#section-24)
+[Enter the 3D Sky](space/index.en.html?lang=en) · [3D Observation Tasks](guide.en.html?lang=en#space) · [3D Technical Implementation](development-guide.en.html?lang=en#section-24)
 
 ## Geographic Data and Calculation Sources
 
@@ -118,21 +118,21 @@ Distances between planets in 3D are compressed, while sphere and satellite-point
 
 On October 11, 2026, six sets of repository model regressions were rerun, covering planetary and lunar vectors, Earth’s orientation, the stellar catalog, satellite and small-body orbits, local sky positions, and historical paths. All passed internal-consistency and input-boundary assertions. Control checks on the same day covered nine pages at four widths and verified first-opening height, click behavior, and keyboard behavior. These checks are not certification of independently measured accuracy or compatibility with every device.
 
-Earlier comparisons with the Meeus/NOAA approximate solar formulas and USNO lunar-phase data are historical sample records; not all have been converted into reproducible scripts. Their differences are not extended into an accuracy guarantee for every date. Reproducible commands, historical evidence, and remaining checks are collected in[the verification section of the Development Guide](development-guide.html#section-20)。
+Earlier comparisons with the Meeus/NOAA approximate solar formulas and USNO lunar-phase data are historical sample records; not all have been converted into reproducible scripts. Their differences are not extended into an accuracy guarantee for every date. Reproducible commands, historical evidence, and remaining checks are collected in [the verification section of the Development Guide](development-guide.en.html?lang=en#section-20)。
 
 ## What Each of the Three Documents Addresses
 
 | Document | The Reader’s Question | Scope |
 | --- | --- | --- |
-| [Learning Guide](guide.html) | Where to enter, how to adjust, what to hold fixed, and what to observe | Detailed instructions, task sheets, observation records, and common questions |
-| [Project Overview](project-guide.html) | Why it was developed, what its strengths are, and how its results should be used | Purpose, capabilities, support for different devices, data sources, and model scope |
-| [Development Guide](development-guide.html) | How it is implemented, verified, maintained, and published | Source-code responsibilities, state, time, calculation, rendering, interaction, tests, and deployment |
+| [Learning Guide](guide.en.html?lang=en) | Where to enter, how to adjust, what to hold fixed, and what to observe | Detailed instructions, task sheets, observation records, and common questions |
+| [Project Overview](project-guide.en.html?lang=en) | Why it was developed, what its strengths are, and how its results should be used | Purpose, capabilities, support for different devices, data sources, and model scope |
+| [Development Guide](development-guide.en.html?lang=en) | How it is implemented, verified, maintained, and published | Source-code responsibilities, state, time, calculation, rendering, interaction, tests, and deployment |
 
 Development details and bug fixes are organized by implementation topic. This introduction does not repeat the complete operating instructions or present the homepage’s interactive star field as a principal teaching capability.
 
 ## Open Source, Resources, and Feedback
 
-The original application code is licensed under [GNU AGPLv3](LICENSE)(AGPL-3.0-only), which permits commercial use. Distribution and modified versions offering interactive network services must provide the corresponding source code and applicable notices as required by the license. Section 13 requires modified network services to clearly offer remote users an opportunity to obtain the corresponding source code.[View the Source on GitHub](https://github.com/qingzhuernest/skymotion). For the scope of licensing, see [NOTICE](NOTICE); third-party libraries, data, fonts, and imagery retain their original licenses. See[Third-Party Notices](THIRD-PARTY-NOTICES.md)。
+The original application code is licensed under [GNU AGPLv3](LICENSE)(AGPL-3.0-only), which permits commercial use. Distribution and modified versions offering interactive network services must provide the corresponding source code and applicable notices as required by the license. Section 13 requires modified network services to clearly offer remote users an opportunity to obtain the corresponding source code.[View the Source on GitHub](https://github.com/qingzhuernest/skymotion). For the scope of licensing, see [NOTICE](NOTICE); third-party libraries, data, fonts, and imagery retain their original licenses. See [Third-Party Notices](THIRD-PARTY-NOTICES.md)。
 
 - [NASA：Moon Phases](https://science.nasa.gov/moon/moon-phases/)
 - [NOAA: Solar Calculation Algorithm Details](https://gml.noaa.gov/grad/solcalc/calcdetails.html)
@@ -141,4 +141,12 @@ The original application code is licensed under [GNU AGPLv3](LICENSE)(AGPL-3.0-o
 
 Interaction references include [Helios](https://github.com/joaopedroalbq/helios)、[Analemma](https://github.com/benlansdell/analemma) and [RotatingSky](https://github.com/OpenLyceum/RotatingSky); citing an interaction reference does not mean adopting all of its calculation models. The NOAA link here points to its publicly available algorithm description.
 
-The production site is [Cloudflare Pages](https://skymotion-5md.pages.dev/), with an identical-content mirror at [GitHub Pages](https://qingzhuernest.github.io/skymotion/); pushes to main trigger publication to both. Teaching questions, feature suggestions, and bugs can be reported through[Contact the Author](contact.html) or [GitHub Issue](https://github.com/qingzhuernest/skymotion/issues). Please include the module, location, date, time, reproduction steps, and browser information.
+The production site is [Cloudflare Pages](https://skymotion-5md.pages.dev/), with an identical-content mirror at [GitHub Pages](https://qingzhuernest.github.io/skymotion/); pushes to main trigger publication to both. Teaching questions, feature suggestions, and bugs can be reported through [Contact the Author](contact.en.html?lang=en) or [GitHub Issue](https://github.com/qingzhuernest/skymotion/issues). Please include the module, location, date, time, reproduction steps, and browser information.
+
+## Production release notes — October 13, 2026
+
+This release unifies light control surfaces, serif typography and supporting actions, and provides 24 static Chinese and English pages. Language switching preserves experiment state. Spring menu transitions respect reduced-motion preferences. The calendar supports month/year selection, leap years, confirm and cancel. Original astronomy calculations, ephemerides, model data and scientific limitations remain unchanged.
+
+Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.
+
+Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.
