@@ -397,7 +397,7 @@ language.js 负责共享语言状态，以 skymotion-language 为 localStorage �
 
 中文沿用本地 SkyMotion Reading，英文使用本地 SkyMotion Charter 的常规、粗体、斜体和粗斜体四种样式。Charter 按 Bitstream 原始通知允许为任何目的使用、复制、修改、再许可、出售和再分发，须在副本中保留通知并按要求确认商标；完整通知随 fonts/LICENSE-Charter.txt 发布。中英文切换、字体和文档导出仅用于 GPT Site 预览，正式 Cloudflare 与 GitHub 网站保持原状。
 
-静态英文入口由 scripts/prerender-pages.py 从原始 HTML 与翻译字典生成，共有12个 .en.html 对应页；生成过程保留节点 ID、数字与表单值，以及原科学脚本。中英文共24份页面 HTML 合计约1.5MB，体积会随内容变化，样式、脚本、字体和影像仍共享。language-data.js 同步提供动态标签字典，data-i18n-cn 元数据支持原位恢复中文并保留实验状态；page-boot.js 选择静态语言入口。page-cache.js 在空闲时以最多两路并发预热 HTML 和字体的普通 HTTP 缓存，不运行隐藏实验或三维场景，也不使用 Service Worker；常规托管的访问要求不变。这套预渲染与缓存安排仅用于 GPT Site 预览，正式网站未改。
+静态英文入口由 scripts/prerender-pages.py 从原始 HTML 与翻译字典生成，共有12个 .en.html 对应页；生成过程保留节点 ID、数字与表单值，以及原科学脚本。中英文共24份页面 HTML 合计约1.5MB，体积会随内容变化，样式、脚本、字体和影像仍共享。language-data.js 同步提供动态标签字典，data-i18n-cn 元数据支持原位恢复中文并保留实验状态；page-boot.js 选择静态语言入口。page-boot.js 在文档头部立即加载所选语言的常规与粗体字体，字体就绪即可显示静态页面，不等待实验初始化；page-cache.js 在首屏字体与当前页面加载完成后，以最多两路并发预热整站 HTML、脚本、样式、字体、图片、数据和文档下载的普通 HTTP 缓存，不运行隐藏实验或三维场景，也不使用 Service Worker；常规托管的访问要求不变。这套预渲染与缓存安排仅用于 GPT Site 预览，正式网站未改。
 
 ### 统一参数行与菜单顺序
 

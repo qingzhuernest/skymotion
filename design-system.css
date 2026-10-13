@@ -848,13 +848,6 @@ body[data-page="welcome"] .welcome-screen ::selection {
 }
 
 /* Reading headings have a distinct, self-hosted Song face; controls stay sans. */
-@font-face {
-  font-family: "SkyMotion Reading";
-  src: url("fonts/reading-regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: block;
-}
 .document-page :is(h1, h2) {
   font-family: "SkyMotion Reading", "Songti SC", "SimSun", serif;
   font-weight: 400;
@@ -960,13 +953,6 @@ body[data-page="welcome"]
 }
 
 /* Unified Song typography: full UI, native fields and plot annotations. */
-@font-face {
-  font-family: "SkyMotion Reading";
-  src: url("fonts/reading-bold.woff2") format("woff2");
-  font-weight: 600 800;
-  font-style: normal;
-  font-display: block;
-}
 body
   :is(
     .page-nav,

@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
 
-<script src="page-boot.js?v=20261013-palette5"></script>
+<script src="page-boot.js?v=20261013-speed6"></script>
 
     <meta content="width=device-width,initial-scale=1" name="viewport" />
     <link href="favicon.svg" rel="icon" />
-    <link href="style.css?v=20261013-palette5" rel="stylesheet" />
-    <link href="pages.css?v=20261013-palette5" rel="stylesheet" />
+    <link href="style.css?v=20261013-speed6" rel="stylesheet" />
+    <link href="pages.css?v=20261013-speed6" rel="stylesheet" />
     <!-- search-metadata:start -->
     <title>开发说明：完整开发逻辑与维护 · 天体视运动实验室</title>
     <meta
@@ -35,12 +35,12 @@
     <meta content="website" property="og:type" />
     <meta content="zh_CN" property="og:locale" />
     <!-- search-metadata:end -->
-    <link href="documents.css?v=20261013-palette5" rel="stylesheet" />
-    <link rel="stylesheet" href="design-system.css?v=20261013-palette5" />
-    <link rel="stylesheet" href="language.css?v=20261013-palette5" />
-    <script src="language-data.js?v=20261013-palette5"></script>
-<script src="language.js?v=20261013-palette5"></script>
-<script src="page-cache.js?v=20261013-palette5" defer></script>
+    <link href="documents.css?v=20261013-speed6" rel="stylesheet" />
+    <link rel="stylesheet" href="design-system.css?v=20261013-speed6" />
+    <link rel="stylesheet" href="language.css?v=20261013-speed6" />
+    <script src="language-data.js?v=20261013-speed6"></script>
+<script src="language.js?v=20261013-speed6"></script>
+<script src="page-cache.js?v=20261013-speed6" defer></script>
   </head>
   <body data-page="development">
     <nav aria-label="页面导航" class="page-nav">
@@ -829,7 +829,7 @@ diagrams.html#chartPanel</code></pre>
           Site 预览，正式 Cloudflare 与 GitHub 网站保持原状。
         </p>
         <p>
-          静态英文入口由 scripts/prerender-pages.py 从原始 HTML 与翻译字典生成，共有12个 .en.html 对应页；生成过程保留节点 ID、数字与表单值，以及原科学脚本。中英文共24份页面 HTML 合计约1.5MB，体积会随内容变化，样式、脚本、字体和影像仍共享。language-data.js 同步提供动态标签字典，data-i18n-cn 元数据支持原位恢复中文并保留实验状态；page-boot.js 选择静态语言入口。page-cache.js 在空闲时以最多两路并发预热 HTML 和字体的普通 HTTP 缓存，不运行隐藏实验或三维场景，也不使用 Service Worker；常规托管的访问要求不变。这套预渲染与缓存安排仅用于 GPT Site 预览，正式网站未改。
+          静态英文入口由 scripts/prerender-pages.py 从原始 HTML 与翻译字典生成，共有12个 .en.html 对应页；生成过程保留节点 ID、数字与表单值，以及原科学脚本。中英文共24份页面 HTML 合计约1.5MB，体积会随内容变化，样式、脚本、字体和影像仍共享。language-data.js 同步提供动态标签字典，data-i18n-cn 元数据支持原位恢复中文并保留实验状态；page-boot.js 选择静态语言入口。page-boot.js 在文档头部立即加载所选语言的常规与粗体字体，字体就绪即可显示静态页面，不等待实验初始化；page-cache.js 在首屏字体与当前页面加载完成后，以最多两路并发预热整站 HTML、脚本、样式、字体、图片、数据和文档下载的普通 HTTP 缓存，不运行隐藏实验或三维场景，也不使用 Service Worker；常规托管的访问要求不变。这套预渲染与缓存安排仅用于 GPT Site 预览，正式网站未改。
         </p>
         <h3>统一参数行与菜单顺序</h3>
         <p>
@@ -1037,6 +1037,6 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory /tmp/skymotion-preview<
         </ol>
       </div>
     </main>
-    <script src="interface-motion.js?v=20261013-palette5"></script>
+    <script src="interface-motion.js?v=20261013-speed6"></script>
   </body>
 </html>

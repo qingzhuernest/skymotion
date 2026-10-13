@@ -200,6 +200,7 @@
   }
   const fontPromises = new Map();
   function prepareFonts(next) {
+    if (window.skyPrepareFonts) return window.skyPrepareFonts(next);
     const locale = next === "en" ? "en" : "zh";
     if (!fontPromises.has(locale)) {
       const family =
