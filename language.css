@@ -150,3 +150,68 @@ body[data-embedded="true"] .language-nav {
   opacity: 0.65;
   cursor: wait;
 }
+
+/* Charter needs a readable body size, not the compact Chinese caption scale. */
+html:lang(en) .page-nav a {
+  font-size: 13px;
+}
+html:lang(en) .ui-parameters :is(.micro, .globe-drag-help, .globe-notes, .geometry-notes, .menu-summary) {
+  font-size: 13px;
+  line-height: 1.7;
+}
+html:lang(en) .ui-information :is(p, li),
+html:lang(en) .side .card > p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+html:lang(en) .ui-information h2 {
+  font-size: 18px;
+}
+html:lang(en) .ui-timeline-host .workbench-panel-head label {
+  font-size: 12px;
+}
+html:lang(en) .document-page {
+  max-width: 880px;
+  font-size: 18px;
+  line-height: 1.75;
+}
+html:lang(en) .document-content > :is(p, ul, ol, blockquote),
+html:lang(en) .document-lead {
+  max-width: 72ch;
+}
+html:lang(en) .document-page h1 {
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.2;
+}
+html:lang(en) .document-content h2 {
+  font-size: 26px;
+  line-height: 1.3;
+}
+@media (max-width: 760px) {
+  html:lang(en) .document-page {
+    font-size: 16px;
+  }
+  html:lang(en) .document-content h2 {
+    font-size: 22px;
+  }
+  html:lang(en) .ui-viewbar .view-tabs > button {
+    min-height: 40px;
+  }
+}
+html:lang(en) .ui-parameters .season-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+html:lang(en) .ui-parameters .season-buttons button {
+  min-width: 0;
+  min-height: 48px;
+  padding: 8px;
+  line-height: 1.4;
+  overflow-wrap: normal;
+  word-break: normal;
+  text-wrap: balance;
+}
+html:lang(en) .document-page h1 {
+  text-wrap: balance;
+}

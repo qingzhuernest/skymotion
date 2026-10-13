@@ -1673,3 +1673,72 @@ body[data-page="space"]
   background: var(--design-selected);
   color: var(--design-ink);
 }
+
+/* Reading rhythm: the canvas leads; controls form a quiet, legible frame. */
+body :is(.ui-heading, .space-shell .head) h1 {
+  line-height: 1.3;
+  text-wrap: balance;
+}
+body .ui-heading #uiPlaceText {
+  margin-top: 4px;
+}
+body .ui-information :is(p, li),
+body .side .card > p {
+  text-wrap: pretty;
+}
+body .ui-information :is(p, li) {
+  line-height: 1.8;
+}
+body .ui-information h2 {
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+body .ui-viewbar .view-tabs {
+  align-items: stretch;
+  gap: 4px;
+}
+body .ui-viewbar .view-tabs > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  text-align: center;
+  text-wrap: balance;
+}
+body .ui-timeline-host .workbench-panel-head {
+  column-gap: 12px;
+}
+body .ui-timeline-host .workbench-panel-head label {
+  min-width: 0;
+  line-height: 1.5;
+}
+body .ui-timeline-host .workbench-panel-head output {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.document-content :is(p, li) {
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+}
+.document-content :is(h2, h3, h4) {
+  text-wrap: balance;
+  scroll-margin-top: 80px;
+}
+.document-content h2 {
+  margin-bottom: 16px;
+}
+.document-content h3 {
+  margin-bottom: 12px;
+}
+.document-content li + li {
+  margin-top: 8px;
+}
+@media (min-width: 761px) {
+  body .ui-heading {
+    padding-block: 4px;
+  }
+  body .ui-timeline-host .workbench-main {
+    column-gap: 24px;
+  }
+}
