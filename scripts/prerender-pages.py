@@ -301,7 +301,8 @@ def main() -> None:
         print(f'{relative} -> {generated_paths[-1]} ({text_count} text nodes, {attr_count} attributes)')
     all_paths = sorted(paths | set(generated_paths))
     sizes = {path: (dist / path).stat().st_size for path in all_paths}
-    manifest = {'version': 1, 'pages': all_paths, 'sizes': sizes, 'totalBytes': sum(sizes.values())}
+    assets = sorted(p.relative_to(dist).as_posix() for p in dist.rglob('*') if p.is_file() and p.suffix in {'.js', '.css', '.json', '.jpg', '.jpeg', '.png', '.webp', '.svg', '.woff', '.woff2', '.md'} and p.name != 'page-cache-manifest.json')
+    manifest = {'version': 2, 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
     (dist / 'page-cache-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(f'Validated structure, IDs, input/option values, scripts, and numerical attributes for {len(pages)} page pairs.')
     print(f'Cached HTML estimate: {manifest["totalBytes"]:,} bytes; dictionary: {len(dictionary):,} entries.')

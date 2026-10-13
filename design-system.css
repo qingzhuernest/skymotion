@@ -1742,3 +1742,20 @@ body .ui-timeline-host .workbench-panel-head output {
     column-gap: 24px;
   }
 }
+/* Calendar steps share the quiet action treatment in both rail and timeline. */
+body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate) {
+  background: var(--design-surface);
+  color: var(--design-primary);
+  border: 1px solid var(--design-line);
+  box-shadow: none;
+}
+body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate):hover {
+  background: var(--design-selected);
+  color: var(--design-hover);
+  border-color: #8caebc;
+}
+body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate):disabled {
+  background: var(--design-inset);
+  color: var(--design-muted);
+  border-color: var(--design-line);
+}

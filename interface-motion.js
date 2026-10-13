@@ -2,6 +2,7 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const easing = 'cubic-bezier(.2,0,0,1)';
+  const springEasing = 'linear';
 
   function springFrames(from, to) {
     const frame = (progress, offset) =>
@@ -17,7 +18,7 @@
     return [frame(0, 0), frame(1.065, 0.68), frame(0.985, 0.86), frame(1, 1)];
   }
 
-  function springPanel(element, frames, duration = 320) {
+  function springPanel(element, frames, duration = 420) {
     const width = element.getBoundingClientRect().width;
     const pixels = (transform) => {
       const value = /translateX\(([-.\d]+)(%|px)?\)/.exec(transform);
@@ -26,11 +27,12 @@
     const from = pixels(frames[0].transform),
       to = pixels(frames.at(-1).transform);
     return element.animate(
-      [0, 1.045, 0.988, 1].map((progress, i) => ({
+      [0, 1.085, 0.975, 1].map((progress, i) => ({
         transform: `translateX(${from + (to - from) * progress}px)`,
-        offset: [0, 0.7, 0.87, 1][i],
+        offset: [0, 0.55, 0.79, 1][i],
+        easing: i === 0 ? easing : 'ease-in-out',
       })),
-      { duration: Math.max(320, duration), easing },
+      { duration: Math.max(420, duration), easing: springEasing },
     );
   }
 
@@ -77,11 +79,12 @@
           details.style.overflow = 'hidden';
           details.style.height = `${to}px`;
           animation = details.animate(
-            [0, 1.045, 0.988, 1].map((progress, i) => ({
+            [0, 1.085, 0.975, 1].map((progress, i) => ({
               height: `${Math.max(closedHeight, from + (to - from) * progress)}px`,
-              offset: [0, 0.7, 0.87, 1][i],
+              offset: [0, 0.55, 0.79, 1][i],
+        easing: i === 0 ? easing : 'ease-in-out',
             })),
-            { duration: 320, easing },
+            { duration: 420, easing: springEasing },
           );
           animation.finished
             .catch(() => {})

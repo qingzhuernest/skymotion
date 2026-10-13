@@ -6,7 +6,7 @@
   if (!window.skyPageLanguage) {
     try { language = new URLSearchParams(location.search).get("lang") || localStorage.getItem(storageKey) || language; } catch {}
   }
-  language = !window.skyLanguageBootExpired && language === "en" ? "en" : "zh";
+  language = language === "en" ? "en" : "zh";
   let dictionary = {},
     fragments = null;
   const cache = new Map(),
@@ -332,12 +332,11 @@
   }
   async function failure(error) {
     console.error(error);
-    language = "zh";
     cache.clear();
     try {
-      await prepareFonts("zh");
+      await prepareFonts(language);
     } catch {}
-    apply("zh", false);
+    apply(language, false);
     reveal();
     button.disabled = false;
     button.title = "English could not load. Click to retry.";

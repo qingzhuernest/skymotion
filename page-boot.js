@@ -17,9 +17,9 @@
   }
   window.skyLocaleUrl = localeUrl;
   const rendered = root.dataset.renderedLanguage || 'zh';
-  let preferred = 'zh';
-  try { preferred = localStorage.getItem('skymotion-language') || 'zh'; } catch {}
-  let language = new URLSearchParams(location.search).get('lang') || (rendered === 'en' ? 'en' : preferred);
+  let preferred = null;
+  try { preferred = localStorage.getItem('skymotion-language'); } catch {}
+  let language = new URLSearchParams(location.search).get('lang') || preferred || rendered;
   language = language === 'en' ? 'en' : 'zh';
   root.dataset.languagePending = '';
   if (rendered !== language) {
@@ -41,6 +41,6 @@
   window.skyLanguageBoot = setTimeout(() => {
     window.skyLanguageBootExpired = true;
     if (window.skyLanguageStartupFallback) window.skyLanguageStartupFallback();
-    else { root.lang = 'zh-CN'; delete root.dataset.languagePending; }
+    else { delete root.dataset.languagePending; }
   },8000);
 })();
