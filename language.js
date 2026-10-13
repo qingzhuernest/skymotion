@@ -264,7 +264,7 @@
     });
   }
   let initGeneration = 0;
-  let startupAborted = Boolean(window.skyLanguageBootExpired);
+  let startupAborted = false;
   window.skyLanguageStartupFallback = () => {
     startupAborted = true;
     initGeneration++;
@@ -301,7 +301,7 @@
         );
       }
     }
-    button.disabled = true;
+    button.disabled = false;
     const maps = window.skyEnglishDictionary ? [window.skyEnglishDictionary] : await Promise.all(
       ["i18n-lab.json", "i18n-space.json", "i18n-docs.json"].map(
         async (file) => {
@@ -322,7 +322,7 @@
     observePresentation();
     await prepareFonts(language);
     if (attempt !== initGeneration) return;
-    if (!startupAborted) apply(language, false);
+    apply(language, false);
     clearTimeout(window.skyLanguageBoot);
     // Let translated controls, text measurements and the astronomy canvas settle before first paint.
     await new Promise(requestAnimationFrame);

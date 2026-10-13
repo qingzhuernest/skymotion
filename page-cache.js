@@ -15,7 +15,9 @@
         while (cursor < files.length) {
           const file = files[cursor++];
           try {
-            const result = await fetch(new URL(file, base), { cache: 'force-cache', credentials: 'same-origin', priority: 'low' });
+            const assetUrl = new URL(file, base);
+            if (/\.(js|css)$/.test(file) && manifest.resourceVersion) assetUrl.searchParams.set('v', manifest.resourceVersion);
+            const result = await fetch(assetUrl, { cache: 'force-cache', credentials: 'same-origin', priority: 'low' });
             if (!result.ok) throw new Error(String(result.status));
             await result.arrayBuffer();
           } catch { status.failed.push(file); }

@@ -32,15 +32,13 @@
   window.skyPageLanguage = language;
   root.lang = language === 'en' ? 'en' : 'zh-CN';
   root.dataset.languagePending = '';
+  const guard = document.createElement('style');
+  guard.textContent = 'html[data-language-pending] body,html[data-language-pending] body *{visibility:hidden!important}html[data-language-pending]{background:#f4f7f8}html[data-language-pending]::after{content:"";position:fixed;left:calc(50% - 12px);top:calc(50% - 12px);width:24px;height:24px;border:2px solid #cdd9de;border-top-color:#24576b;border-radius:50%;animation:sky-font-loading 1s linear infinite}@keyframes sky-font-loading{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){html[data-language-pending]::after{animation:none}}';
+  document.head.append(guard);
   const files = language === 'en' ? ['charter_regular.woff2','charter_bold.woff2','charter_italic.woff2','charter_bold_italic.woff2'] : ['reading-regular.woff2','reading-bold.woff2'];
   for (const file of files) {
     const link = document.createElement('link');
     link.rel = 'preload'; link.as = 'font'; link.type = 'font/woff2'; link.crossOrigin = 'anonymous';
     link.href = new URL('fonts/'+file,base); document.head.append(link);
   }
-  window.skyLanguageBoot = setTimeout(() => {
-    window.skyLanguageBootExpired = true;
-    if (window.skyLanguageStartupFallback) window.skyLanguageStartupFallback();
-    else { delete root.dataset.languagePending; }
-  },8000);
 })();
