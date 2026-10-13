@@ -141,7 +141,7 @@
       const y = (altitude) => bottom - ((altitude + 30) / 120) * (bottom - top);
       ctx.fillStyle = '#18333c';
       ctx.fillRect(left, y(0), right - left, bottom - y(0));
-      ctx.font = `${compact ? 10 : 11}px system-ui, sans-serif`;
+      ctx.font = `${compact ? 10 : 11}px "SkyMotion Reading", serif`;
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'right';
       (tiny ? [0, 90] : [-30, 0, 30, 60, 90]).forEach((altitude) => {

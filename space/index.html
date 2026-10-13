@@ -1,7 +1,10 @@
 <!doctype html>
-<html lang="zh-CN">
+<html data-rendered-language="zh" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
+
+<script src="../page-boot.js"></script>
+
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>太阳系三维模型 · 天体视运动实验室</title>
     <meta
@@ -19,14 +22,20 @@
     <link rel="stylesheet" href="population.css" />
     <link rel="stylesheet" href="../interface-motion.css" />
     <link rel="stylesheet" href="../controls.css" />
-  </head>
+    <link rel="stylesheet" href="../design-system.css" />
+  <link rel="stylesheet" href="../language.css" />
+<script src="../language-data.js"></script>
+<script src="../language.js"></script>
+<script src="../page-cache.js" defer></script>
+</head>
   <body data-page="space">
     <script src="embed.js"></script>
     <nav class="page-nav" aria-label="页面导航">
       <a href="../index.html">欢迎页</a><a href="../lab.html">实验台</a
-      ><a href="../guide.html#space">学习指南</a><a href="../diagrams.html">关联图解</a
+      ><a href="../guide.html#space">学习指南</a
+      ><a href="../diagrams.html">关联图解</a
       ><a href="../analemma.html">日行迹</a>
-    <a href="./" aria-current="page">三维天空</a>
+      <a href="./" aria-current="page">三维天空</a>
     </nav>
     <main class="space-shell">
       <header class="head">
@@ -35,7 +44,9 @@
           <p>八大行星 · 日地月空间关系</p>
         </div>
         <div class="head-actions">
-          <button id="spaceImmersive" type="button" aria-pressed="false">沉浸观察</button>
+          <button id="spaceImmersive" type="button" aria-pressed="false">
+            沉浸观察
+          </button>
           <button
             id="spaceParameters"
             type="button"
@@ -55,10 +66,18 @@
             <h3 class="planet-name" id="name">地球</h3>
             <p class="planet-type" id="type">类地行星</p>
             <div class="facts">
-              <div><span>平均太阳距离</span><strong id="distance">1.00 AU</strong></div>
-              <div><span>公转周期</span><strong id="period">365.26 天</strong></div>
-              <div><span>平均半径</span><strong id="radius">6,371 km</strong></div>
-              <div><span>当前太阳距离</span><strong id="actualDistance">—</strong></div>
+              <div>
+                <span>平均太阳距离</span><strong id="distance">1.00 AU</strong>
+              </div>
+              <div>
+                <span>公转周期</span><strong id="period">365.26 天</strong>
+              </div>
+              <div>
+                <span>平均半径</span><strong id="radius">6,371 km</strong>
+              </div>
+              <div>
+                <span>当前太阳距离</span><strong id="actualDistance">—</strong>
+              </div>
             </div>
             <button class="focus" id="focus" type="button">靠近地球观察</button>
             <p class="info" id="info"></p>
@@ -74,15 +93,36 @@
               </select></label
             >
             <div class="toggles">
-              <label>循环本年<input type="checkbox" id="spaceLoop" checked role="switch" /></label>
-              <label>轨道线<input type="checkbox" id="orbits" checked role="switch" /></label>
-              <label>天体名称<input type="checkbox" id="names" checked role="switch" /></label
-              ><label hidden>太阳平行光<input type="checkbox" id="parallelRays" checked role="switch" /></label>
+              <label
+                >循环本年<input
+                  type="checkbox"
+                  id="spaceLoop"
+                  checked
+                  role="switch"
+              /></label>
+              <label
+                >轨道线<input type="checkbox" id="orbits" checked role="switch"
+              /></label>
+              <label
+                >天体名称<input
+                  type="checkbox"
+                  id="names"
+                  checked
+                  role="switch" /></label
+              ><label hidden
+                >太阳平行光<input
+                  type="checkbox"
+                  id="parallelRays"
+                  checked
+                  role="switch"
+              /></label>
             </div>
           </section>
           <section class="card" id="observerSettings" hidden>
             <h2>本地天空的观察地点</h2>
-            <p class="info">地点只用于右侧天空图；两图共用下方 UTC 时刻，不改原实验台。</p>
+            <p class="info">
+              地点只用于右侧天空图；两图共用下方 UTC 时刻，不改原实验台。
+            </p>
             <div class="observer-fields">
               <label for="observerLat"
                 >纬度
@@ -142,13 +182,33 @@
       <section class="visual" aria-label="太阳系三维与二维对照">
         <div class="viewbar">
           <div class="view-group" role="group" aria-label="观察对象">
-            <button id="overview" class="active" type="button" aria-pressed="true">太阳系</button>
-            <button id="earthmoon" type="button" aria-pressed="false">日地月</button>
+            <button
+              id="overview"
+              class="active"
+              type="button"
+              aria-pressed="true"
+            >
+              太阳系
+            </button>
+            <button id="earthmoon" type="button" aria-pressed="false">
+              日地月
+            </button>
           </div>
           <div class="view-group" role="group" aria-label="显示方式">
-            <button id="singleView" class="active" type="button" aria-pressed="true">三维</button>
-            <button id="compareView" type="button" aria-pressed="false">参照</button>
-            <a class="existing-compare-link" href="../diagrams.html?compare=1">原图对照</a>
+            <button
+              id="singleView"
+              class="active"
+              type="button"
+              aria-pressed="true"
+            >
+              三维
+            </button>
+            <button id="compareView" type="button" aria-pressed="false">
+              参照
+            </button>
+            <a class="existing-compare-link" href="../diagrams.html?compare=1"
+              >原图对照</a
+            >
           </div>
         </div>
         <div class="space-scenes" id="spaceScenes">
@@ -162,11 +222,27 @@
               aria-label="复位三维视角"
               title="复位三维视角"
             >
-              ↺
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M4 9a8 8 0 1 1 .4 7M4 9V4m0 5h5" />
+              </svg>
             </button>
-            <p class="nebula-hint" id="nebulaHint" hidden>星云背景：观测影像放大示意</p>
+            <p class="nebula-hint" id="nebulaHint" hidden>
+              星云背景：观测影像放大示意
+            </p>
             <div id="labels"></div>
-            <div class="inspection-readout" id="inspectionReadout" aria-label="当前天体真实读数">
+            <div
+              class="inspection-readout"
+              id="inspectionReadout"
+              aria-label="当前天体真实读数"
+            >
               <strong id="inspectTitle">地球</strong>
               <span id="inspectDistance"></span>
               <span id="inspectPhase" hidden></span>
@@ -175,10 +251,24 @@
               <summary>观察</summary>
               <div class="scene-tools-panel">
                 <span class="tools-heading">相机视角</span>
-                <div class="camera-presets" role="group" aria-label="三维相机预设">
-                  <button type="button" data-camera="oblique" aria-pressed="true">立体</button>
-                  <button type="button" data-camera="top" aria-pressed="false">俯视</button>
-                  <button type="button" data-camera="side" aria-pressed="false">侧视</button>
+                <div
+                  class="camera-presets"
+                  role="group"
+                  aria-label="三维相机预设"
+                >
+                  <button
+                    type="button"
+                    data-camera="oblique"
+                    aria-pressed="true"
+                  >
+                    立体
+                  </button>
+                  <button type="button" data-camera="top" aria-pressed="false">
+                    俯视
+                  </button>
+                  <button type="button" data-camera="side" aria-pressed="false">
+                    侧视
+                  </button>
                 </div>
                 <label class="tools-field" for="inspectBody"
                   >天体近景<select id="inspectBody">
@@ -186,7 +276,11 @@
                   </select></label
                 >
                 <label class="tools-check" for="trailEnabled"
-                  >历史轨迹<input type="checkbox" id="trailEnabled" role="switch" /></label>
+                  >历史轨迹<input
+                    type="checkbox"
+                    id="trailEnabled"
+                    role="switch"
+                /></label>
                 <label class="tools-field" for="trailDays"
                   >回看时段<select id="trailDays">
                     <option value="7">过去7天</option>
@@ -196,31 +290,65 @@
                   </select></label
                 >
                 <label class="tools-check" for="inspectInfo"
-                  >显示真实读数<input type="checkbox" id="inspectInfo" checked role="switch" /></label>
+                  >显示真实读数<input
+                    type="checkbox"
+                    id="inspectInfo"
+                    checked
+                    role="switch"
+                /></label>
                 <label class="tools-check" for="earthReference"
                   >地轴与赤道<input
                     type="checkbox"
                     id="earthReference"
                     checked
-                    title="红线为地轴，蓝圈为赤道；地球姿态按同一UTC计算" role="switch" /></label>
+                    title="红线为地轴，蓝圈为赤道；地球姿态按同一UTC计算"
+                    role="switch"
+                /></label>
                 <label class="tools-check" for="referencePlane"
                   >黄道参考面<input
                     type="checkbox"
                     id="referencePlane"
-                    title="固定J2000黄道平面，并非当地地平面" role="switch" /></label>
+                    title="固定J2000黄道平面，并非当地地平面"
+                    role="switch"
+                /></label>
                 <div class="population-tools">
                   <span class="tools-heading">太阳系与深空细节</span>
                   <label class="tools-check" for="satellitePoints"
-                    >行星卫星群<input type="checkbox" id="satellitePoints" checked role="switch" /></label>
+                    >行星卫星群<input
+                      type="checkbox"
+                      id="satellitePoints"
+                      checked
+                      role="switch"
+                  /></label>
                   <label class="tools-check" for="asteroidPoints"
-                    >主带小行星<input type="checkbox" id="asteroidPoints" checked role="switch" /></label>
+                    >主带小行星<input
+                      type="checkbox"
+                      id="asteroidPoints"
+                      checked
+                      role="switch"
+                  /></label>
                   <label class="tools-check" for="cometPoints"
-                    >周期彗星<input type="checkbox" id="cometPoints" checked role="switch" /></label>
-                  <button id="satelliteView" type="button">观察所选行星卫星群</button>
+                    >周期彗星<input
+                      type="checkbox"
+                      id="cometPoints"
+                      checked
+                      role="switch"
+                  /></label>
+                  <button id="satelliteView" type="button">
+                    观察所选行星卫星群
+                  </button>
                   <label class="tools-check" for="nebulaBackground"
-                    >星云影像背景<input type="checkbox" id="nebulaBackground" role="switch" /></label>
-                  <button id="nebulaPhotos" type="button" disabled>查看真实星云影像</button>
-                  <p class="tools-note" id="populationStatus">进入沉浸观察时加载本地小天体数据。</p>
+                    >星云影像背景<input
+                      type="checkbox"
+                      id="nebulaBackground"
+                      role="switch"
+                  /></label>
+                  <button id="nebulaPhotos" type="button" disabled>
+                    查看真实星云影像
+                  </button>
+                  <p class="tools-note" id="populationStatus">
+                    进入沉浸观察时加载本地小天体数据。
+                  </p>
                   <p class="tools-note">
                     卫星与小天体是无名称的放大点标记。除月球与木星四大卫星外，轨道用JPL平均要素作近似；覆盖当前轨道表，不代表全部新发现对象都有可用轨道。星云背景为放大观测影像，不是实际角直径或肉眼视场。<a
                       href="assets/population-credits.txt"
@@ -241,22 +369,35 @@
             hidden
           >
             <div class="compare-tabs" role="group" aria-label="二维参照类型">
-              <button id="planeView" type="button" class="active" aria-pressed="true">
+              <button
+                id="planeView"
+                type="button"
+                class="active"
+                aria-pressed="true"
+              >
                 空间俯视
               </button>
-              <button id="observerView" type="button" aria-pressed="false">本地天空</button>
+              <button id="observerView" type="button" aria-pressed="false">
+                本地天空
+              </button>
             </div>
             <div class="compare-surface" id="planeHost"></div>
-            <div class="compare-surface observer-host" id="observerHost" hidden></div>
+            <div
+              class="compare-surface observer-host"
+              id="observerHost"
+              hidden
+            ></div>
           </section>
         </div>
         <div class="footer-note">
-          <span>教学尺度 · 大小与距离分别缩放</span><span>地球姿态按UTC · 纹理为示意</span>
+          <span>教学尺度 · 大小与距离分别缩放</span
+          ><span>地球姿态按UTC · 纹理为示意</span>
         </div>
       </section>
       <section class="timeline" aria-label="空间模型日期控制">
         <div class="time-head">
-          <label for="day">观测时刻 · UTC <output id="dayText" for="day"></output></label
+          <label for="day"
+            >观测时刻 · UTC <output id="dayText" for="day"></output></label
           ><button id="play" type="button">▶ 播放日期</button>
         </div>
         <input
@@ -269,7 +410,8 @@
           aria-label="连续调整UTC观测日期与时刻"
         />
         <div class="scale">
-          <span>1月</span><span>4月</span><span>7月</span><span>10月</span><span>12月</span>
+          <span>1月</span><span>4月</span><span>7月</span><span>10月</span
+          ><span>12月</span>
         </div>
         <div class="date-actions">
           <label for="date">选择日期</label
@@ -289,14 +431,18 @@
           <span>实验参数</span>
           <h2 id="spaceDrawerTitle">太阳系空间模型</h2>
         </div>
-        <button id="spaceDrawerClose" type="button" aria-label="关闭参数菜单">×</button>
+        <button id="spaceDrawerClose" type="button" aria-label="关闭参数菜单">
+          ×
+        </button>
       </header>
       <div id="spaceDrawerBody"></div>
     </dialog>
     <dialog id="nebulaViewer" aria-labelledby="nebulaTitle">
       <header class="nebula-header">
         <h2 id="nebulaTitle">真实星云影像</h2>
-        <button id="nebulaClose" type="button" aria-label="关闭星云影像">×</button>
+        <button id="nebulaClose" type="button" aria-label="关闭星云影像">
+          ×
+        </button>
       </header>
       <select id="nebulaChoice" aria-label="选择星云影像"></select>
       <figure class="nebula-photo"><img id="nebulaImage" alt="" /></figure>
@@ -305,7 +451,9 @@
       </p>
       <p class="nebula-caption">
         <span id="nebulaCredit"></span>
-        <a id="nebulaSource" href="#" target="_blank" rel="noopener">NASA影像来源</a>
+        <a id="nebulaSource" href="#" target="_blank" rel="noopener"
+          >NASA影像来源</a
+        >
       </p>
     </dialog>
     <script src="../interface-motion.js"></script>

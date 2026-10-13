@@ -13,3 +13,19 @@ SkyMotion 原创应用代码采用 [AGPLv3](LICENSE)。这项许可不替换下�
 | 星云观测影像 | NASA 影像资料库；各图保留其机构、摄影作者与原始来源，不统一声明为 AGPL 或公有领域 | [影像目录](space/assets/nebulae/catalog.json)、[三维素材说明](space/credits.txt) |
 
 新加入依赖或素材时，应核验其许可条件和兼容性，并更新此表及对应资源的说明。素材来自公开网站，不等于可以任意重新授权。
+
+## Welcome typography
+
+`fonts/welcome-sans.woff` is a renamed glyph-subset derivative of Noto Sans CJK SC (Adobe / Noto CJK), licensed under SIL OFL 1.1. See `fonts/OFL-Noto-CJK.txt` and https://github.com/notofonts/noto-cjk. The original hand-lettered footer font is preserved.
+
+## Interface font subsets
+
+`fonts/interface-regular.woff` and `fonts/interface-bold.woff` are renamed glyph-subset derivatives of Noto Sans CJK SC (Adobe / Noto CJK), SIL OFL 1.1. See `fonts/OFL-Noto-CJK.txt`. All fonts are served locally.
+
+`fonts/reading-regular.woff` is a renamed glyph-subset derivative of Noto Serif CJK SC (Adobe / Noto CJK), also SIL OFL 1.1; see `fonts/OFL-Noto-CJK.txt`.
+
+`fonts/reading-regular.woff2` and `fonts/reading-bold.woff2` are renamed, text-subset Noto Serif CJK SC derivatives (Adobe / Noto CJK), SIL OFL 1.1. They provide the unified interface and Canvas annotation typography; existing Ma Shan Zheng quote remains separate.
+
+## Bitstream Charter
+
+The English interface uses locally hosted Bitstream Charter regular, bold, italic and bold italic WOFF2 files, distributed via https://practicaltypography.com/charter.html. Copyright 1989–1992 Bitstream Inc., Cambridge, MA. BITSTREAM CHARTER is a registered trademark of Bitstream Inc. Its unrestricted redistribution notice is preserved in `fonts/LICENSE-Charter.txt`; the font license is separate from the application’s AGPLv3 license.

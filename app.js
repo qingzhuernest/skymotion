@@ -153,7 +153,7 @@ function poly(c, points, color, width = 1, dash = []) {
   c.setLineDash([]);
 }
 function text(c, s, x, y, color = '#9cacc0', size = 12, align = 'center') {
-  c.font = `${size}px system-ui,sans-serif`;
+  c.font = `${size}px "SkyMotion Reading", serif`;
   c.fillStyle = color;
   c.textAlign = align;
   c.textBaseline = 'middle';
@@ -236,8 +236,9 @@ function drawMoonDayEndpoints(c, project, w, h, positionAt) {
   for (const e of ends) e.point = project(e.position);
   const close =
     Math.hypot(ends[0].point.x - ends[1].point.x, ends[0].point.y - ends[1].point.y) < 80;
+  const boxes = [];
   c.save();
-  c.font = '11px system-ui,sans-serif';
+  c.font = '11px "SkyMotion Reading", serif';
   ends.forEach((e, i) => {
     const p = e.point;
     if (p.x < 12 || p.x > w - 12 || p.y < 65 || p.y > h - 38) return;
@@ -248,6 +249,7 @@ function drawMoonDayEndpoints(c, project, w, h, positionAt) {
     const bx = clamp(side < 0 ? p.x - 12 - bw : p.x + 12, 8, w - bw - 8),
       by = clamp(p.y + (close ? (i ? 12 : -30) : -26), 58, h - 38);
     poly(c, [p, { x: side < 0 ? bx + bw : bx, y: by + 10 }], e.color + '99', 1);
+    boxes.push({ x: bx + bw / 2, y: by + 10, width: bw });
     c.fillStyle = '#102337ee';
     c.beginPath();
     c.roundRect(bx, by, bw, 20, 6);
@@ -262,6 +264,7 @@ function drawMoonDayEndpoints(c, project, w, h, positionAt) {
     c.stroke();
   });
   c.restore();
+  return boxes;
 }
 const skyTrackCache = new Map();
 function drawSkyScene(kind) {
@@ -829,7 +832,7 @@ function renderGlobeOptions() {
   const label = linked
     ? '地球昼夜图；拖动改变观察地点，单击选择地点'
     : '地球昼夜图；拖动仅旋转视角，单击选择地点';
-  $('globe').title = label;
+  $('globe').removeAttribute('title');
   $('globe').setAttribute('aria-label', label);
 }
 function initGlobeOptions() {
@@ -1476,7 +1479,7 @@ initGlobeOptions();
 const globe = $('globe');
 let globeDrag = null,
   globeMoved = false;
-globe.title = '拖动旋转并改变观察地点；点击地球选择地点';
+globe.removeAttribute('title');
 globe.style.cursor = 'grab';
 globe.style.touchAction = 'none';
 globe.setAttribute('aria-label', '地球昼夜图；拖动旋转并同步改变观察地点，点击选择地点');

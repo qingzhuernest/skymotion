@@ -1,0 +1,1675 @@
+/* SkyMotion / Impeccable: one interface language, separate scientific drawing.
+ * Loaded last on every route. Geometry for switches, history and motion is owned
+ * by existing modules; this layer owns typography, surfaces and visual states.
+ */
+@font-face {
+  font-family: "SkyMotion Interface";
+  src: url("fonts/interface-regular.woff") format("woff");
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: optional;
+}
+@font-face {
+  font-family: "SkyMotion Interface";
+  src: url("fonts/interface-bold.woff") format("woff");
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: optional;
+}
+:root {
+  --design-paper: #f4f7f8;
+  --design-surface: #ffffff;
+  --design-inset: #ecf2f4;
+  --design-line: #cdd9de;
+  --design-ink: #20323e;
+  --design-muted: #536975;
+  --design-primary: #24576b;
+  --design-hover: #174558;
+  --design-selected: #dcebf0;
+  --design-sun: #f2d7a3;
+  --design-night: #101e2c;
+  --design-font: "SkyMotion Reading", "Songti SC", "SimSun", serif;
+  --design-radius-control: 12px;
+  --design-radius-surface: 16px;
+  --design-space-tight: 8px;
+  --design-space-group: 16px;
+  --bg: var(--design-paper);
+  --panel: var(--design-surface);
+  --line: var(--design-line);
+  --text: var(--design-ink);
+  --muted: var(--design-muted);
+  --blue: var(--design-primary);
+  --gold: var(--design-primary);
+  --ui-border: var(--design-line);
+  --ui-radius: var(--design-radius-surface);
+  --ui-control-radius: var(--design-radius-control);
+  --md-primary: var(--design-primary);
+  --md-primary-hover: var(--design-hover);
+  --md-on-primary: #fff;
+  --md-primary-container: var(--design-selected);
+  --md-on-primary-container: #183e50;
+  --md-surface: var(--design-surface);
+  --md-surface-container: var(--design-inset);
+  --md-surface-container-low: var(--design-paper);
+  --md-outline-variant: var(--design-line);
+  --md-on-surface: var(--design-ink);
+  --md-on-surface-variant: var(--design-muted);
+}
+body {
+  color: var(--design-ink);
+  background: var(--design-paper);
+  font-family: var(--design-font);
+  font-size: 14px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  accent-color: var(--design-primary);
+  caret-color: var(--design-primary);
+  scrollbar-color: #9eb1bb var(--design-inset);
+  scrollbar-width: thin;
+}
+body :is(button, input, select, textarea) {
+  font-family: var(--design-font);
+}
+body
+  :is(
+    output,
+    input[type="number"],
+    input[type="time"],
+    input[type="date"],
+    .facts strong
+  ) {
+  font-variant-numeric: tabular-nums;
+}
+::selection {
+  background: var(--design-selected);
+  color: var(--design-ink);
+}
+body :is(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--design-primary);
+  outline-offset: 3px;
+}
+body a {
+  text-underline-offset: 0.22em;
+}
+body
+  :is(
+    .page-nav,
+    .ui-shell,
+    .space-shell,
+    .reading-page,
+    .ui-parameter-drawer,
+    #spaceDrawer,
+    .scene-tools-panel
+  ) {
+  font-family: var(--design-font);
+}
+.page-nav {
+  background: var(--design-paper);
+  border-color: var(--design-line);
+  gap: 4px;
+  padding-inline: 20px;
+}
+.page-nav a {
+  border-radius: 10px;
+  min-height: 36px;
+  padding-inline: 12px;
+  color: var(--design-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.page-nav a:hover {
+  color: var(--design-primary);
+  background: var(--design-selected);
+}
+.page-nav a[aria-current="page"] {
+  color: var(--design-primary);
+  background: var(--design-selected);
+  font-weight: 600;
+}
+:is(.ui-heading, body[data-page="space"] .head) h1 {
+  color: var(--design-ink);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+}
+:is(.ui-heading #uiPlaceText, body[data-page="space"] .head p) {
+  color: var(--design-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.ui-parameters {
+  background: var(--design-inset);
+  border-color: var(--design-line);
+}
+.ui-parameters > h2 {
+  color: var(--design-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+.ui-parameters > h2::before {
+  display: none;
+}
+.ui-parameters
+  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information) {
+  border-color: var(--design-line);
+  border-radius: var(--design-radius-control);
+  background: var(--design-surface);
+  box-shadow: none;
+}
+.ui-parameters
+  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
+  > summary {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--design-ink);
+  background: var(--design-surface);
+  border-radius: 11px;
+  padding: 12px 38px 12px 14px;
+}
+.ui-parameters
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information
+  )[open] {
+  border-color: #8caebc;
+  box-shadow: none;
+}
+.ui-parameters
+  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open]
+  > summary {
+  background: var(--design-selected);
+  color: #183e50;
+  border-color: var(--design-line);
+  border-radius: 11px 11px 0 0;
+}
+.ui-parameters
+  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
+  > summary:hover {
+  background: var(--design-inset);
+}
+.ui-parameters
+  :is(
+    .menu-summary,
+    .range-labels,
+    .time-labels,
+    .micro,
+    .label-row,
+    .globe-drag-help,
+    .sundial-help,
+    .globe-notes
+  ) {
+  color: var(--design-muted);
+  font-size: 12px;
+  line-height: 1.75;
+}
+.ui-parameters .menu-section[open] > summary .menu-summary {
+  color: #42616f;
+}
+.ui-parameters :is(.menu-subsection, .sun-side-summary) {
+  background: var(--design-paper);
+  border-color: var(--design-line);
+  border-radius: var(--design-radius-control);
+  box-shadow: none;
+}
+.ui-parameters .menu-subsection > summary {
+  color: var(--design-primary);
+  background: var(--design-paper);
+  font-size: 12px;
+  border-radius: 11px;
+}
+.ui-parameters .menu-subsection[open] > summary {
+  color: var(--design-ink);
+  background: var(--design-selected);
+  border-radius: 11px 11px 0 0;
+}
+.ui-parameters
+  :is(.menu-content, .coordinate-editor, .analemma-controls, .ui-field) {
+  color: var(--design-ink);
+  font-size: 13px;
+}
+body
+  :is(.ui-parameters, .ui-timeline-host, .side, .timeline, .scene-tools-panel)
+  :is(
+    select,
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    input[type="text"]
+  ) {
+  color: var(--design-ink);
+  border-color: var(--design-line);
+  border-radius: var(--design-radius-control);
+  background: var(--design-surface);
+  font-size: 13px;
+  line-height: 1.5;
+}
+body :is(.ui-parameters, .ui-timeline-host, .side, .timeline) select {
+  min-height: 38px;
+}
+body
+  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  ) {
+  color: var(--design-ink);
+  font-size: 13px;
+}
+body
+  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  )
+  > input[type="checkbox"] {
+  border-color: #8297a3;
+  background: #c7d4db;
+}
+body
+  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  )
+  > input[type="checkbox"]:checked {
+  border-color: var(--design-primary);
+  background: var(--design-primary);
+}
+body
+  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  )
+  > input[type="checkbox"]::after {
+  background: #506b79;
+}
+body
+  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  )
+  > input[type="checkbox"]:checked::after {
+  background: #fff;
+}
+.ui-parameters .study-navigation .page-link {
+  color: var(--design-primary);
+  background: var(--design-paper);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--design-radius-control);
+}
+.ui-parameters .study-navigation .page-link:hover {
+  background: var(--design-selected);
+}
+.ui-parameters .study-navigation .page-link[aria-current="page"] {
+  background: var(--design-selected);
+}
+body
+  :is(
+    .ui-viewbar,
+    .view-tabs,
+    .context-view-switch,
+    .globe-drag-options,
+    .body-switch,
+    .space-shell .viewbar
+  )
+  button {
+  border-radius: var(--design-radius-control);
+  background: var(--design-inset);
+  color: var(--design-muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+body
+  :is(
+    .ui-viewbar,
+    .view-tabs,
+    .context-view-switch,
+    .globe-drag-options,
+    .body-switch,
+    .space-shell .viewbar
+  )
+  button:is(.active, [aria-selected="true"], [aria-pressed="true"]) {
+  background: var(--design-primary);
+  color: #fff;
+  font-weight: 600;
+}
+body
+  :is(
+    .ui-viewbar,
+    .view-tabs,
+    .context-view-switch,
+    .globe-drag-options,
+    .body-switch,
+    .space-shell .viewbar
+  )
+  button:hover {
+  background: var(--design-selected);
+  color: var(--design-primary);
+}
+body
+  :is(
+    .ui-viewbar,
+    .view-tabs,
+    .context-view-switch,
+    .globe-drag-options,
+    .body-switch,
+    .space-shell .viewbar
+  )
+  button:is(.active, [aria-selected="true"], [aria-pressed="true"]):hover {
+  background: var(--design-hover);
+  color: #fff;
+}
+:is(.ui-shell, .ui-parameter-drawer)
+  :is(.context-view-switch, .globe-drag-options, .body-switch) {
+  border-color: var(--design-line);
+  background: transparent;
+}
+.ui-viewbar {
+  background: var(--design-surface);
+  border-color: var(--design-line);
+}
+body :is(.ui-parameters, .ui-heading, .ui-timeline-host) button {
+  border-color: var(--design-line);
+  box-shadow: none;
+}
+body
+  :is(.ui-parameters, .ui-timeline-host)
+  :is(
+    .preset-grid button,
+    .workbench-events button,
+    .workbench-clock-tools button,
+    .workbench-look-buttons button
+  ) {
+  background: var(--design-inset);
+  color: var(--design-primary);
+  border-radius: var(--design-radius-control);
+}
+body
+  :is(.ui-parameters, .ui-timeline-host)
+  :is(.preset-grid button, .workbench-events button).active {
+  background: var(--design-primary);
+  color: #fff;
+}
+body
+  :is(.ui-parameters, .ui-heading)
+  :is(.ui-sidebar-collapse, .ui-parameters-trigger, .ui-compare-trigger) {
+  color: var(--design-primary);
+  background: var(--design-surface);
+  border-color: var(--design-line);
+  border-radius: var(--design-radius-control);
+}
+.ui-timeline-host .time-workbench {
+  border-color: var(--design-line);
+  border-radius: var(--design-radius-surface);
+  background: var(--design-surface);
+  box-shadow: none;
+}
+.ui-timeline-host
+  :is(
+    .workbench-top > span,
+    .workbench-panel-head label,
+    .workbench-date-scale,
+    .workbench-panel-head span
+  ) {
+  color: var(--design-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.ui-timeline-host .workbench-panel-head output {
+  color: var(--design-primary);
+  font-size: 20px;
+  font-weight: 500;
+}
+body
+  .ui-timeline-host
+  :is(.play-button, .workbench-calendar button:last-child) {
+  background: var(--design-primary);
+  color: #fff;
+  border-radius: var(--design-radius-control);
+  font-size: 12px;
+}
+body .ui-timeline-host .workbench-calendar input {
+  color: var(--design-ink);
+}
+.ui-parameter-drawer,
+.ui-drawer-header,
+body[data-page="space"] #spaceDrawer {
+  background: var(--design-paper);
+  color: var(--design-ink);
+  border-color: var(--design-line);
+}
+.ui-drawer-header h2 {
+  color: var(--design-ink);
+  font-size: 18px;
+  font-weight: 600;
+}
+.ui-drawer-header span {
+  color: var(--design-muted);
+}
+.ui-drawer-header button {
+  color: var(--design-primary);
+  background: var(--design-selected);
+}
+body
+  :is(.ui-parameters, .ui-viewbar, .side, .timeline)
+  :is(button, input, select):disabled {
+  color: #637985;
+  background-color: #e8eef1;
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+/* Three-dimensional workspace shares the same controls, not a separate theme. */
+body[data-page="space"] {
+  --space-primary: var(--design-primary);
+  --space-line: var(--design-line);
+  --space-control-radius: var(--design-radius-control);
+  font-family: var(--design-font);
+  background: var(--design-paper);
+  color: var(--design-ink);
+}
+body[data-page="space"] :is(.card, .visual, .timeline) {
+  border-color: var(--design-line);
+  border-radius: var(--design-radius-surface);
+  background: var(--design-surface);
+  box-shadow: none;
+}
+body[data-page="space"] .card {
+  padding: 16px;
+}
+body[data-page="space"] .card h2 {
+  color: var(--design-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+body[data-page="space"] .planet-name {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--design-ink);
+}
+body[data-page="space"]
+  :is(
+    .planet-type,
+    .facts span,
+    .info,
+    .footer-note,
+    .scale,
+    .time-head label,
+    .date-actions
+  ) {
+  color: var(--design-muted);
+}
+body[data-page="space"] .info {
+  font-size: 12px;
+  line-height: 1.8;
+}
+body[data-page="space"] .facts strong {
+  color: var(--design-primary);
+  font-weight: 600;
+}
+body[data-page="space"] .facts div {
+  border-color: var(--design-line);
+  padding-bottom: 8px;
+}
+body[data-page="space"] .planet-picker {
+  gap: 6px;
+}
+body[data-page="space"] .planet-picker button {
+  background: var(--design-inset);
+  color: var(--design-muted);
+  border-radius: 10px;
+}
+body[data-page="space"] .planet-picker button.active {
+  background: var(--design-primary);
+  color: #fff;
+}
+body[data-page="space"] .head-actions button {
+  border-radius: var(--design-radius-control);
+  background: var(--design-inset);
+  color: var(--design-primary);
+}
+body[data-page="space"] :is(.focus, #play) {
+  background: var(--design-primary);
+  color: #fff;
+  border-radius: var(--design-radius-control);
+}
+body[data-page="space"] .time-head output {
+  color: var(--design-primary);
+  font-size: 18px;
+}
+body[data-page="space"] .existing-compare-link {
+  color: var(--design-primary);
+  background: var(--design-inset);
+  border-radius: var(--design-radius-control);
+}
+/* A dark observation surface needs its own legible foreground, including drawers. */
+body[data-page="space"].space-immersive {
+  --design-paper: #101e2c;
+  --design-surface: #142b3c;
+  --design-inset: #203b4c;
+  --design-line: #3d5b6d;
+  --design-ink: #e4eef3;
+  --design-muted: #b7ceda;
+  --design-primary: #a9d5e6;
+  --design-hover: #bce0ec;
+  --design-selected: #284c61;
+  color: var(--design-ink);
+  background: var(--design-paper);
+}
+body[data-page="space"].space-immersive :is(.head, .viewbar, .timeline) {
+  background: var(--design-paper);
+  color: var(--design-ink);
+}
+body[data-page="space"].space-immersive
+  :is(.viewbar button.active, #play, .planet-picker button.active, .focus) {
+  background: var(--design-action);
+  color: #fff;
+}
+body[data-page="space"].space-immersive h1 {
+  font-size: 16px;
+  color: var(--design-ink);
+}
+body[data-page="space"].space-immersive .stage .label {
+  color: #e4eef3;
+  background: #142b3ce6;
+}
+body[data-page="space"].space-immersive .time-head output {
+  color: var(--design-ink);
+}
+body[data-page="space"].space-immersive input[type="date"] {
+  color-scheme: dark;
+}
+/* Dark canvas annotation tools are deliberately outside the light controls scope. */
+.scene-tools-panel {
+  background: #142b3c;
+  color: #e4eef3;
+  border-color: #3d5b6d;
+  border-radius: var(--design-radius-surface);
+  box-shadow: none;
+}
+body .scene-tools-panel :is(.tools-check, .tools-field, p, label, span) {
+  color: #c7dde8;
+}
+body .scene-tools-panel :is(select, input[type="number"]) {
+  background: #203b4c;
+  color: #e4eef3;
+  border-color: #3d5b6d;
+}
+body .scene-tools-panel input[type="checkbox"]:checked {
+  background: #39748c;
+  border-color: #39748c;
+}
+/* Reading: one typographic system, generous paragraph rhythm and narrow measure. */
+.reading-page {
+  background: var(--design-surface);
+  color: var(--design-ink);
+  border-radius: var(--design-radius-surface);
+}
+.document-page {
+  max-width: 960px;
+  padding: 40px 48px;
+  font-family: var(--design-font);
+  font-size: 16px;
+  line-height: 1.9;
+  border-color: var(--design-line);
+}
+.document-kicker {
+  display: none;
+}
+.document-header {
+  border-color: var(--design-line);
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+}
+.document-page h1 {
+  color: var(--design-ink);
+  font-size: 30px;
+  line-height: 1.45;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.document-lead {
+  color: var(--design-muted);
+  max-width: 68ch;
+}
+.document-page a {
+  color: var(--design-primary);
+}
+.document-links a {
+  border-radius: var(--design-radius-control);
+  min-height: 36px;
+  color: var(--design-primary);
+  background: var(--design-inset);
+  font-size: 12px;
+}
+.document-links a[aria-current="page"] {
+  background: var(--design-primary);
+  color: #fff;
+}
+.document-toc {
+  background: var(--design-paper);
+  border-color: var(--design-line);
+  border-radius: var(--design-radius-control);
+}
+.document-toc summary {
+  color: var(--design-primary);
+  font-size: 14px;
+}
+.document-toc[open] summary {
+  background: var(--design-selected);
+  border-color: var(--design-line);
+}
+.document-toc li {
+  font-size: 13px;
+  line-height: 1.8;
+}
+.document-content h2 {
+  color: var(--design-ink);
+  font-size: 22px;
+  line-height: 1.5;
+  font-weight: 600;
+  border-color: var(--design-line);
+  margin-top: 40px;
+}
+.document-content h3 {
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 600;
+  margin-top: 28px;
+}
+.document-content p {
+  margin: 16px 0;
+}
+.document-content blockquote {
+  border: 0;
+  border-radius: var(--design-radius-control);
+  background: var(--design-inset);
+  color: var(--design-muted);
+}
+.document-page :is(th, td) {
+  border-color: var(--design-line);
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.document-page th {
+  background: var(--design-selected);
+  color: var(--design-ink);
+}
+.document-page code {
+  background: var(--design-inset);
+}
+.document-page pre {
+  background: var(--design-night);
+  color: #e4eef3;
+}
+.document-page pre code {
+  background: none;
+  color: inherit;
+}
+.document-page .micro {
+  color: var(--design-muted);
+  font-size: 13px;
+}
+.development-flow {
+  background: var(--design-inset);
+}
+.development-flow li {
+  border-color: var(--design-line);
+  border-radius: var(--design-radius-control);
+}
+.document-page .article-actions {
+  border-color: var(--design-line);
+}
+body :is(.page-action, .author-mail-button) {
+  background: var(--design-primary);
+  color: #fff;
+  border-radius: var(--design-radius-control);
+}
+.document-page .page-action {
+  color: #fff;
+}
+body[data-page="contact"] .reading-page {
+  max-width: 880px;
+  padding: 36px;
+  font-size: 15px;
+  line-height: 1.85;
+}
+.author-email-box {
+  background: var(--design-paper);
+  border-color: var(--design-line);
+  border-radius: var(--design-radius-control);
+}
+.author-email-box > a {
+  color: var(--design-primary);
+}
+body[data-page="contact"] :is(h2, h3) {
+  color: var(--design-ink);
+  line-height: 1.5;
+}
+/* Welcome retains its original composition and existing star toy. */
+body[data-page="welcome"] .welcome-screen {
+  font-family: var(--design-font);
+}
+body[data-page="welcome"] .welcome-intro h1 {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+body[data-page="welcome"] :is(button, a) {
+  font-family: var(--design-font);
+}
+body[data-page="welcome"] .welcome-enter {
+  background: var(--design-sun);
+  color: #20323e;
+}
+body[data-page="welcome"] .welcome-screen ::selection {
+  background: var(--design-sun);
+  color: #20323e;
+}
+/* Preserve the existing drawer breakpoint and animation machinery. */
+@media (max-width: 760px) {
+  .page-nav {
+    padding-inline: 12px;
+  }
+  .page-nav a {
+    padding-inline: 10px;
+    font-size: 11px;
+  }
+  :is(.ui-heading, body[data-page="space"] .head) h1 {
+    font-size: 19px;
+  }
+  .document-page {
+    padding: 24px 20px;
+    font-size: 15px;
+  }
+  .document-page h1 {
+    font-size: 24px;
+  }
+  .document-content h2 {
+    font-size: 20px;
+    margin-top: 32px;
+  }
+  .document-content h3 {
+    font-size: 17px;
+  }
+  .ui-timeline-host .workbench-panel-head output {
+    font-size: 18px;
+  }
+  body[data-page="contact"] .reading-page {
+    padding: 24px 20px;
+    margin: 12px;
+  }
+}
+@media (max-width: 420px) {
+  :is(.ui-heading, body[data-page="space"] .head) h1 {
+    font-size: 17px;
+  }
+  .ui-parameters :is(.menu-summary, .micro) {
+    font-size: 11px;
+  }
+  body[data-page="space"] .head-actions button {
+    padding-inline: 8px;
+    font-size: 11px;
+  }
+}
+@media print {
+  body {
+    color: #000;
+    background: #fff;
+  }
+  .document-page {
+    border: 0;
+    padding: 0;
+    max-width: none;
+  }
+}
+
+/* Reading headings have a distinct, self-hosted Song face; controls stay sans. */
+@font-face {
+  font-family: "SkyMotion Reading";
+  src: url("fonts/reading-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: optional;
+}
+.document-page :is(h1, h2) {
+  font-family: "SkyMotion Reading", "Songti SC", "SimSun", serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.motion-selection {
+  background: var(--design-primary);
+  border-radius: var(--design-radius-control);
+}
+.motion-menu-grip,
+.motion-menu-edge {
+  color: var(--design-primary);
+  background: var(--design-surface);
+  border-color: var(--design-line);
+  box-shadow: none;
+}
+body[data-page="space"] .drawer-head {
+  background: var(--design-paper);
+  border-color: var(--design-line);
+}
+body[data-page="space"] .drawer-head h2 {
+  color: var(--design-ink);
+}
+body[data-page="space"] .drawer-head span {
+  color: var(--design-muted);
+}
+body[data-page="space"] .side .kicker {
+  display: none;
+}
+body[data-page="space"] .side .toggles > label {
+  color: var(--design-ink);
+}
+body[data-page="space"]
+  .side
+  .toggles
+  > label
+  > input[type="checkbox"]:checked {
+  background: var(--design-action);
+  border-color: var(--design-action);
+}
+body[data-page="space"].space-immersive .motion-selection {
+  background: var(--design-action);
+}
+body
+  :is(.ui-parameters, .time-workbench)
+  input[type="range"]::-webkit-slider-runnable-track {
+  background: #c3d8e0;
+}
+body
+  :is(.ui-parameters, .time-workbench)
+  input[type="range"]::-webkit-slider-thumb {
+  background: var(--design-primary);
+  border-color: var(--design-surface);
+  box-shadow: none;
+}
+body
+  :is(.ui-parameters, .time-workbench)
+  input[type="range"]::-moz-range-track {
+  background: #c3d8e0;
+}
+body
+  :is(.ui-parameters, .time-workbench)
+  input[type="range"]::-moz-range-thumb {
+  background: var(--design-primary);
+  border-color: var(--design-surface);
+}
+body[data-page="space"] .timeline input[type="range"] {
+  accent-color: var(--design-primary);
+}
+body .ui-timeline-host .workbench-calendar button {
+  background: var(--design-inset);
+  color: var(--design-primary);
+  border-radius: var(--design-radius-control);
+}
+body .ui-timeline-host .play-button {
+  background: var(--design-primary);
+  color: #fff;
+}
+/* The user's type direction: Song display titles, sans controls and tabular data. */
+body :is(.ui-heading, .space-shell .head, .welcome-intro, .document-header) h1,
+body[data-page="contact"] .reading-page > .dialog-head h2 {
+  font-family: "SkyMotion Reading", "Songti SC", "SimSun", serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Review corrections: headings carry identity without redundant eyebrows. */
+.ui-drawer-header > div > span,
+body[data-page="space"] .drawer-head > div > span,
+#contextEyebrow {
+  display: none;
+}
+body[data-page="space"] .stage-reset svg {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
+/* Welcome actions use the same control radius as the rest of the site. */
+body[data-page="welcome"]
+  :is(.welcome-enter, .welcome-sky-actions button, .welcome-corner-links > a) {
+  border-radius: var(--design-radius-control);
+}
+
+/* Unified Song typography: full UI, native fields and plot annotations. */
+@font-face {
+  font-family: "SkyMotion Reading";
+  src: url("fonts/reading-bold.woff2") format("woff2");
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: optional;
+}
+body
+  :is(
+    .page-nav,
+    .ui-shell,
+    .space-shell,
+    .reading-page,
+    dialog,
+    .ui-parameters,
+    .ui-timeline-host
+  ),
+body :is(button, input, select, textarea, output) {
+  font-family: var(--design-font);
+}
+body .page-nav,
+body .ui-viewbar {
+  scrollbar-width: none;
+}
+body .page-nav::-webkit-scrollbar,
+body .ui-viewbar::-webkit-scrollbar {
+  display: none;
+}
+body .ui-heading .body-switch {
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+body .ui-heading .body-switch button {
+  min-height: 36px;
+  border-radius: 12px;
+}
+body .ui-heading #uiParametersButton {
+  min-height: 36px;
+  border-radius: 12px;
+  background: var(--design-inset);
+  color: var(--design-primary);
+  border-color: var(--design-line);
+}
+body
+  .ui-timeline-host
+  :is(.workbench-clock-tools, .workbench-look-buttons)
+  button {
+  min-height: 36px;
+  border: 1px solid var(--design-line);
+  border-radius: 12px;
+  background: var(--design-inset);
+  color: var(--design-primary);
+}
+body .ui-timeline-host :is(input[type="time"], .workbench-calendar input) {
+  height: 36px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+.ui-plot > .observer-explanation-button {
+  position: absolute;
+  z-index: 8;
+  bottom: 14px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #73919f;
+  border-radius: 12px;
+  color: #e4eef3;
+  background: #163245;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ui-plot > .observer-explanation-button[hidden] {
+  display: none;
+}
+.observer-explanation-button svg {
+  width: 18px;
+  height: 18px;
+}
+.observer-explanation {
+  font-family: var(--design-font);
+  color: var(--design-ink);
+  border-color: var(--design-line);
+  background: var(--design-surface);
+}
+.observer-explanation-example {
+  background: var(--design-inset);
+}
+@media (max-width: 760px) and (min-height: 501px) {
+  .ui-shell {
+    padding: 8px 12px 12px;
+    gap: 8px;
+  }
+  .ui-heading {
+    gap: 8px;
+  }
+  .ui-heading h1 {
+    font-size: 19px;
+  }
+  .ui-heading .body-switch button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .ui-heading #uiParametersButton {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+  .ui-viewbar {
+    padding: 6px;
+    gap: 6px;
+    min-height: 44px;
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+  .ui-viewbar .view-tabs {
+    gap: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .ui-viewbar .view-tabs > button {
+    flex: 1 1 64px;
+    min-height: 32px;
+    padding: 5px 6px;
+    font-size: 12px;
+  }
+  .ui-timeline-host .time-workbench {
+    padding: 10px 12px;
+  }
+  .ui-timeline-host .workbench-top {
+    gap: 8px;
+  }
+  .ui-timeline-host .workbench-calendar {
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+  .ui-timeline-host .workbench-calendar input {
+    width: 100%;
+    min-width: 0;
+    flex: 1;
+    padding: 4px;
+    font-size: 12px;
+  }
+  .ui-timeline-host .workbench-calendar button {
+    width: 28px;
+    min-width: 28px;
+    height: 36px;
+  }
+  .ui-timeline-host .workbench-top > .play-button {
+    min-height: 36px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .ui-timeline-host .workbench-main,
+  .ui-timeline-host .time-workbench[data-observer="true"] .workbench-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 10px;
+    gap: 10px;
+  }
+  .ui-timeline-host .workbench-panel,
+  .ui-timeline-host .time-workbench[data-observer="true"] #workbenchDatePanel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0 8px;
+    grid-column: auto;
+    min-width: 0;
+  }
+  .ui-timeline-host .workbench-panel-head,
+  .ui-timeline-host
+    .time-workbench[data-observer="true"]
+    #workbenchDatePanel
+    .workbench-panel-head {
+    grid-column: 1 / -1;
+    min-height: 26px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .ui-timeline-host .workbench-panel-head label {
+    font-size: 11px;
+    color: var(--design-muted);
+  }
+  .ui-timeline-host .workbench-panel-head output {
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  .ui-timeline-host #workbenchBearingPanel output,
+  .ui-timeline-host #workbenchDatePanel output {
+    font-size: 13px;
+  }
+  .ui-timeline-host .workbench-panel > input[type="range"] {
+    grid-column: 1;
+    width: 100%;
+    height: 36px;
+    margin: 0;
+  }
+  .ui-timeline-host :is(.workbench-clock-tools, .workbench-look-buttons) {
+    grid-column: 2;
+    gap: 4px;
+    min-height: 36px;
+    margin: 0;
+  }
+  .ui-timeline-host .workbench-clock-tools input {
+    width: 82px;
+    height: 36px;
+    padding: 2px 4px;
+    font-size: 12px;
+  }
+  .ui-timeline-host .workbench-clock-tools button {
+    min-height: 36px;
+    padding: 4px 6px;
+    font-size: 11px;
+  }
+  .ui-timeline-host .workbench-look-buttons button {
+    min-width: 28px;
+    min-height: 36px;
+    padding: 4px 6px;
+    font-size: 11px;
+  }
+  .ui-timeline-host #workbenchDatePanel > input[type="range"] {
+    grid-column: 1 / -1;
+  }
+  .ui-timeline-host .workbench-date-scale {
+    display: none;
+  }
+  .ui-timeline-host
+    .time-workbench[data-ideal="true"]
+    #workbenchDatePanel[hidden] {
+    display: none;
+  }
+}
+
+/* Keep the selection strip free of an extra enclosing pill. */
+body .ui-viewbar .view-tabs {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+body .ui-plot #resetView {
+  border-radius: 12px;
+}
+@media (max-width: 360px) and (min-height: 501px) {
+  .ui-shell .ui-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+  .ui-shell .ui-heading > div:first-child {
+    grid-column: 1 / -1;
+  }
+  .ui-shell .ui-heading .ui-body-host {
+    grid-column: 1;
+    margin: 0;
+  }
+  .ui-shell .ui-heading #uiParametersButton {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+/* On compact canvases, place help in the free upper corner, away from azimuths. */
+@media (max-width: 600px) {
+  .ui-plot > .observer-explanation-button {
+    top: 12px;
+    right: 12px;
+    left: auto;
+    bottom: auto;
+  }
+  .ui-plot #viewHint {
+    display: none;
+  }
+}
+/* One action treatment, including both date directions and the canvas reset. */
+body .ui-timeline-host #workbenchPrevDate,
+body .ui-timeline-host #workbenchNextDate,
+body .ui-timeline-host #workbenchPlay,
+body .ui-plot #resetView,
+body[data-page="space"] #play,
+body[data-page="space"] #reset {
+  background: var(--design-action);
+  color: #fff;
+  border: 1px solid var(--design-action);
+  border-radius: 12px;
+  box-shadow: none;
+}
+body .ui-timeline-host #workbenchPrevDate:hover,
+body .ui-timeline-host #workbenchNextDate:hover,
+body .ui-timeline-host #workbenchPlay:hover,
+body .ui-plot #resetView:hover {
+  background: var(--design-action-hover);
+  color: #fff;
+  border-color: var(--design-action-hover);
+}
+body .ui-timeline-host #workbenchPrevDate:disabled,
+body .ui-timeline-host #workbenchNextDate:disabled,
+body .ui-timeline-host #workbenchPlay:disabled {
+  background: #e8eef1;
+  color: #637985;
+  border-color: #cdd9de;
+}
+/* Complete the surface audit: legacy cards, body shortcuts and 3D overlays. */
+.ui-parameters .metrics article,
+.ui-parameters .metrics article:first-child {
+  background: var(--design-surface);
+  border: 1px solid var(--design-line);
+  border-radius: 16px;
+  box-shadow: none;
+}
+.ui-parameters .metrics :is(strong, article:first-child strong) {
+  color: var(--design-primary);
+  font-family: var(--design-font);
+}
+.ui-parameters .metrics :is(article > span, small, .metric-definition summary) {
+  color: var(--design-muted);
+}
+.ui-parameters #observerControls,
+.ui-parameters .model-explanation {
+  background: var(--design-paper);
+  border-color: var(--design-line);
+  border-radius: 12px;
+  color: var(--design-ink);
+  box-shadow: none;
+}
+.ui-parameters .observer-bodies button,
+.ui-parameters #reset,
+.ui-heading .ui-linked-toggle {
+  background: var(--design-action);
+  color: #fff;
+  border: 1px solid var(--design-action);
+  border-radius: 12px;
+  font-family: var(--design-font);
+  box-shadow: none;
+}
+.ui-heading .ui-linked-toggle {
+  min-height: 36px;
+}
+.ui-heading .ui-linked-toggle:disabled {
+  background: #e8eef1;
+  color: #637985;
+  border-color: #cdd9de;
+}
+body[data-page="space"] .space-sidebar-host > .side {
+  background: var(--design-inset);
+  border-color: var(--design-line);
+  border-radius: 16px;
+}
+body[data-page="space"] .inspection-readout {
+  background: #142b3c;
+  color: #e4eef3;
+  border: 1px solid #3d5b6d;
+  border-radius: 12px;
+  font-family: var(--design-font);
+}
+body[data-page="space"] .inspection-readout strong {
+  color: #e4eef3;
+  font-family: var(--design-font);
+}
+body[data-page="space"] .scene-tools summary,
+body .ui-plot #viewReset {
+  background: var(--design-action);
+  color: #fff;
+  border: 1px solid var(--design-action);
+  border-radius: 12px;
+  font-family: var(--design-font);
+  box-shadow: none;
+}
+.observer-explanation:focus {
+  outline: none;
+}
+.observer-explanation {
+  border: 1px solid var(--design-line);
+  color: var(--design-ink);
+}
+body[data-page="diagrams"] .ui-heading .ui-linked-toggle,
+body[data-page="diagrams"] .ui-heading .ui-linked-toggle[aria-pressed="true"],
+body[data-page="space"] .scene-tools[open] summary {
+  background: var(--design-action);
+  color: #fff;
+  border-color: var(--design-action);
+  border-radius: 12px;
+}
+body[data-page="diagrams"] .ui-heading .ui-linked-toggle:disabled {
+  background: #e8eef1;
+  color: #637985;
+  border-color: #cdd9de;
+}
+
+.ui-timeline-host {
+  container-type: inline-size;
+  container-name: time-controls;
+}
+@media (min-height: 501px) {
+  @container time-controls (max-width: 700px) {
+    .ui-timeline-host .time-workbench {
+      padding: 10px 12px;
+    }
+    .ui-timeline-host .workbench-top {
+      gap: 8px;
+    }
+    .ui-timeline-host .workbench-calendar {
+      gap: 4px;
+      flex: 1;
+      min-width: 0;
+    }
+    .ui-timeline-host .workbench-calendar input {
+      width: 100%;
+      min-width: 0;
+      flex: 1;
+      padding: 4px;
+      font-size: 12px;
+    }
+    .ui-timeline-host .workbench-calendar button {
+      width: 28px;
+      min-width: 28px;
+      height: 36px;
+    }
+    .ui-timeline-host .workbench-top > .play-button {
+      min-height: 36px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .ui-timeline-host .workbench-main,
+    .ui-timeline-host .time-workbench[data-observer="true"] .workbench-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      margin-top: 10px;
+      gap: 10px;
+    }
+    .ui-timeline-host .workbench-panel,
+    .ui-timeline-host
+      .time-workbench[data-observer="true"]
+      #workbenchDatePanel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 0 8px;
+      grid-column: auto;
+      min-width: 0;
+    }
+    .ui-timeline-host .workbench-panel-head,
+    .ui-timeline-host
+      .time-workbench[data-observer="true"]
+      #workbenchDatePanel
+      .workbench-panel-head {
+      grid-column: 1 / -1;
+      min-height: 26px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .ui-timeline-host .workbench-panel-head label {
+      font-size: 11px;
+      color: var(--design-muted);
+    }
+    .ui-timeline-host .workbench-panel-head output {
+      font-size: 18px;
+      line-height: 1.5;
+    }
+    .ui-timeline-host #workbenchBearingPanel output,
+    .ui-timeline-host #workbenchDatePanel output {
+      font-size: 13px;
+    }
+    .ui-timeline-host .workbench-panel > input[type="range"] {
+      grid-column: 1;
+      width: 100%;
+      height: 36px;
+      margin: 0;
+    }
+    .ui-timeline-host :is(.workbench-clock-tools, .workbench-look-buttons) {
+      grid-column: 2;
+      gap: 4px;
+      min-height: 36px;
+      margin: 0;
+    }
+    .ui-timeline-host .workbench-clock-tools input {
+      width: 82px;
+      height: 36px;
+      padding: 2px 4px;
+      font-size: 12px;
+    }
+    .ui-timeline-host .workbench-clock-tools button {
+      min-height: 36px;
+      padding: 4px 6px;
+      font-size: 11px;
+    }
+    .ui-timeline-host .workbench-look-buttons button {
+      min-width: 28px;
+      min-height: 36px;
+      padding: 4px 6px;
+      font-size: 11px;
+    }
+    .ui-timeline-host #workbenchDatePanel > input[type="range"] {
+      grid-column: 1 / -1;
+    }
+    .ui-timeline-host .workbench-date-scale {
+      display: none;
+    }
+    .ui-timeline-host
+      .time-workbench[data-ideal="true"]
+      #workbenchDatePanel[hidden] {
+      display: none;
+    }
+  }
+}
+
+/* Matching row baselines when the workbench has room for multiple columns. */
+.ui-timeline-host .workbench-panel-head {
+  align-items: center;
+  min-height: 36px;
+}
+.ui-timeline-host .workbench-calendar {
+  align-items: center;
+}
+.ui-timeline-host .workbench-top {
+  align-items: center;
+}
+.ui-timeline-host .workbench-clock-tools,
+.ui-timeline-host .workbench-look-buttons {
+  align-items: center;
+  min-height: 36px;
+}
+body .ui-timeline-host .workbench-clock-tools button,
+body .ui-timeline-host .workbench-look-buttons button {
+  background: var(--design-action);
+  color: #fff;
+  border-color: var(--design-action);
+}
+body .ui-parameters .menu-footer #reset {
+  background: var(--design-action);
+  color: #fff;
+  border-color: var(--design-action);
+  border-radius: 12px;
+}
+
+@media (min-height: 501px) {
+  @container time-controls (max-width: 700px) {
+    .ui-timeline-host .time-workbench .workbench-panel-head {
+      min-height: 26px;
+    }
+  }
+}
+
+:root {
+  --design-action: #24576b;
+  --design-action-hover: #174558;
+}
+body .motion-menu-edge,
+body .ui-parameters > button.motion-menu-grip,
+body[data-page="space"] .side > button.motion-menu-grip {
+  background: var(--design-action);
+  color: #fff;
+  border-color: var(--design-action);
+  border-radius: 12px;
+}
+body .motion-menu-edge:hover,
+body .ui-parameters > button.motion-menu-grip:hover,
+body[data-page="space"] .side > button.motion-menu-grip:hover,
+body .motion-menu-edge:active {
+  background: var(--design-action-hover);
+  color: #fff;
+  border-color: var(--design-action-hover);
+}
+body .motion-menu-edge:focus-visible {
+  outline: 2px solid var(--design-action);
+  outline-offset: 3px;
+}
+/* Quiet supporting actions: same teal identity without large filled surfaces. */
+body .ui-timeline-host #workbenchPrevDate,
+body .ui-timeline-host #workbenchNextDate,
+body .ui-timeline-host .workbench-clock-tools button,
+body .ui-timeline-host .workbench-look-buttons button,
+body .ui-parameters .observer-bodies button,
+body .ui-parameters .menu-footer #reset,
+body .ui-parameters > button.motion-menu-grip,
+body[data-page="space"] .side > button.motion-menu-grip,
+body .motion-menu-edge,
+body[data-page="diagrams"] .ui-heading .ui-linked-toggle,
+body[data-page="space"] .focus {
+  background: var(--design-surface);
+  color: var(--design-action);
+  border: 1px solid var(--design-line);
+  box-shadow: none;
+}
+body .ui-timeline-host #workbenchPrevDate:hover,
+body .ui-timeline-host #workbenchNextDate:hover,
+body .ui-timeline-host .workbench-clock-tools button:hover,
+body .ui-timeline-host .workbench-look-buttons button:hover,
+body .ui-parameters .observer-bodies button:hover,
+body .ui-parameters .menu-footer #reset:hover,
+body .ui-parameters > button.motion-menu-grip:hover,
+body[data-page="space"] .side > button.motion-menu-grip:hover,
+body .motion-menu-edge:hover,
+body .motion-menu-edge:active,
+body[data-page="diagrams"] .ui-heading .ui-linked-toggle:hover,
+body[data-page="space"] .focus:hover {
+  background: var(--design-selected);
+  color: var(--design-action-hover);
+  border-color: #8caebc;
+}
+body[data-page="diagrams"] .ui-heading .ui-linked-toggle[aria-pressed="true"] {
+  background: var(--design-selected);
+  color: var(--design-action);
+  border-color: #8caebc;
+}
+body .ui-timeline-host #workbenchPrevDate:disabled,
+body .ui-timeline-host #workbenchNextDate:disabled {
+  background: #e8eef1;
+  color: #637985;
+  border-color: var(--design-line);
+}
+/* Canvas actions stay readable without becoming solid accent blocks. */
+body .ui-plot #viewReset,
+body .ui-plot #viewReset:hover,
+body[data-page="space"] #reset,
+body[data-page="space"] .scene-tools summary,
+body[data-page="space"] .scene-tools[open] summary {
+  background: #142b3c;
+  color: #e4eef3;
+  border-color: #3d5b6d;
+}
+
+/* Manual-mode and playback states use the same interface palette. */
+body
+  :is(.ui-parameters, .ui-timeline-host)
+  :is(
+    .label-row output,
+    .menu-summary,
+    .text-button,
+    #restoreDate,
+    #dateObservationRestore
+  ) {
+  color: var(--design-primary);
+}
+body :is(.ui-parameters, .ui-timeline-host) .text-button:hover {
+  color: var(--design-hover);
+  background: var(--design-selected);
+}
+body #idealDateHint {
+  background: var(--design-inset);
+  color: var(--design-muted);
+  border: 1px solid var(--design-line);
+  border-radius: var(--design-radius-control);
+  padding: 10px 12px;
+}
+body #dateObservationRestore {
+  padding: 4px 0;
+  margin-top: 4px;
+  background: transparent;
+}
+body input[type="checkbox"] {
+  accent-color: var(--design-primary);
+}
+body :is(.ui-parameters, .ui-timeline-host) .workbench-loop {
+  grid-column: 1 / -1;
+  justify-self: stretch;
+}
+/* Every parameter note and auxiliary reset shares the same quiet treatment. */
+body
+  .ui-parameters
+  :is(.analemma-results, #analemmaDateLinkNote, .model-explanation) {
+  background: var(--design-inset);
+  color: var(--design-muted);
+  border-radius: var(--design-radius-control);
+}
+body
+  .ui-parameters
+  :is(
+    #analemmaIdealReset,
+    #analemmaIdealNote button,
+    #solarDateUnlink,
+    #analemmaResetView,
+    #globeRecenter
+  ) {
+  background: var(--design-surface);
+  color: var(--design-primary);
+  border: 1px solid var(--design-line);
+  border-radius: var(--design-radius-control);
+}
+body
+  .ui-parameters
+  :is(
+    #analemmaIdealReset,
+    #analemmaIdealNote button,
+    #solarDateUnlink,
+    #analemmaResetView,
+    #globeRecenter
+  ):hover {
+  background: var(--design-selected);
+  color: var(--design-hover);
+}
+body[data-page="space"]
+  :is(#spaceImmersive, #spaceParameters, .existing-compare-link) {
+  background: var(--design-surface);
+  color: var(--design-primary);
+  border: 1px solid var(--design-line);
+  border-radius: var(--design-radius-control);
+}
+body[data-page="space"]
+  :is(#spaceImmersive, #spaceParameters, .existing-compare-link):hover {
+  background: var(--design-selected);
+  color: var(--design-ink);
+}

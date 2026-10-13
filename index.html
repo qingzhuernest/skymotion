@@ -1,7 +1,10 @@
 <!doctype html>
-<html lang="zh-CN" class="welcome-page">
+<html data-rendered-language="zh" lang="zh-CN" class="welcome-page">
   <head>
     <meta charset="UTF-8" />
+
+<script src="page-boot.js"></script>
+
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="icon" href="favicon.svg" />
     <link rel="stylesheet" href="style.css" />
@@ -25,7 +28,12 @@
     <meta name="msvalidate.01" content="0FFE399A3AFD0D7EAF8336CCF9F3603A" />
     <!-- search-metadata:end -->
     <link rel="stylesheet" href="interface-motion.css" />
-  </head>
+      <link rel="stylesheet" href="design-system.css" />
+  <link rel="stylesheet" href="language.css" />
+<script src="language-data.js"></script>
+<script src="language.js"></script>
+<script src="page-cache.js" defer></script>
+</head>
   <body data-page="welcome" class="welcome-open">
     <section id="welcome" class="welcome-screen" aria-labelledby="welcomeTitle">
       <canvas
@@ -34,7 +42,19 @@
         aria-label="互动星空：移动鼠标或划过星星使它们散开、碰撞；点击两颗星连线，再次连接可拆线；方向键选星，空格操作，Escape 清空"
       ></canvas>
       <div class="welcome-brand">
-        <span aria-hidden="true">☀</span>
+        <svg
+          aria-hidden="true"
+          width="28"
+          height="28"
+          viewBox="0 0 28 28"
+          fill="none"
+          stroke="#f2d7a3"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        >
+          <circle cx="14" cy="14" r="5" />
+          <path d="M14 2v3m0 18v3M2 14h3m18 0h3M5.5 5.5l2 2m13 13 2 2M22.5 5.5l-2 2m-13 13-2 2" />
+        </svg>
         <div>天体视运动实验室<small>SKY MOTION LAB</small></div>
       </div>
       <div class="welcome-layout">
@@ -42,8 +62,18 @@
           <h1 id="welcomeTitle">你好，天空探索者。</h1>
           <p>探索太阳、月相与季节。</p>
           <a id="enterLab" class="welcome-enter" href="lab.html"
-            >进入实验台 <span aria-hidden="true">✦</span></a
-          >
+            >进入实验台
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M4 12h15m-6-6 6 6-6 6" /></svg
+          ></a>
         </div>
         <div class="welcome-corner-actions" aria-label="星空互动与资料">
           <div class="welcome-toy">

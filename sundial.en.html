@@ -1,0 +1,781 @@
+<!doctype html>
+<html data-rendered-language="en" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+<script src="page-boot.js"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="favicon.svg" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="pages.css" />
+    <!-- search-metadata:start -->
+    <title data-i18n-cn="{&quot;Interactive Sundials · Sky Motion Lab&quot;:&quot;互动日晷 · 天体视运动实验室&quot;}">Interactive Sundials · Sky Motion Lab</title>
+    <meta name="description" content="互动操作地平式与赤道式日晷，改变观测时刻和晷针长度，观察投影并理解当地真太阳时与钟表时间。" />
+    <link rel="canonical" href="https://skymotion-5md.pages.dev/sundial" />
+    <meta property="og:title" content="互动日晷 · 天体视运动实验室" />
+    <meta property="og:description" content="互动操作地平式与赤道式日晷，改变观测时刻和晷针长度，观察投影并理解当地真太阳时与钟表时间。" />
+    <meta property="og:url" content="https://skymotion-5md.pages.dev/sundial" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <!-- search-metadata:end -->
+    <link rel="stylesheet" href="interface-motion.css" />
+    <link rel="stylesheet" href="controls.css" />
+      <link rel="stylesheet" href="design-system.css" />
+  <link rel="stylesheet" href="language.css" />
+<script src="language-data.js"></script>
+<script src="language.js"></script>
+<script src="page-cache.js" defer></script>
+</head>
+  <body data-page="sundial">
+    <div id="labShell" hidden inert>
+      <nav class="page-nav" aria-label="Page navigation" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;页面导航&quot;}">
+        <a href="index.en.html" data-cn-href="index.html" data-i18n-cn="{&quot;Welcome&quot;:&quot;欢迎页&quot;}">Welcome</a><a href="lab.en.html" data-cn-href="lab.html" data-i18n-cn="{&quot;Lab&quot;:&quot;实验台&quot;}">Lab</a><a href="guide.en.html" data-cn-href="guide.html" data-i18n-cn="{&quot;Learning Guide&quot;:&quot;学习指南&quot;}">Learning Guide</a><a href="diagrams.en.html" data-cn-href="diagrams.html" data-i18n-cn="{&quot;Related Diagrams&quot;:&quot;关联图解&quot;}">Related Diagrams</a><a href="analemma.en.html" data-cn-href="analemma.html" data-i18n-cn="{&quot;Analemma&quot;:&quot;日行迹&quot;}">Analemma</a>
+      <a href="space/index.en.html" data-cn-href="space/" data-i18n-cn="{&quot;3D Sky&quot;:&quot;三维天空&quot;}">3D Sky</a>
+    </nav>
+      <header>
+        <a class="brand" href="./"><span class="brand-mark">☀</span><span data-i18n-cn="{&quot;Sky Motion Lab &quot;:&quot;天体视运动实验室&quot;}">Sky Motion Lab <small>SKY MOTION LAB</small></span></a>
+        <div class="header-end">
+          <span class="tag" data-i18n-cn="{&quot;Interactive geography lab&quot;:&quot;地理交互实验室&quot;}">Interactive geography lab</span><button id="helpBtn" class="quiet" data-i18n-cn="{&quot;Learning Guide&quot;:&quot;学习指南&quot;}">Learning Guide</button><button id="fullBtn" class="quiet" aria-label="Toggle full screen" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;切换全屏&quot;}" data-i18n-cn="{&quot;⛶ Full screen&quot;:&quot;⛶ 全屏&quot;}">⛶ Full screen</button>
+        </div>
+      </header>
+      <main>
+        <section class="workspace">
+          <div class="controls-dock" id="controlsDock">
+            <aside class="controls" id="controls" aria-label="Grouped experiment menu" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;分层实验菜单&quot;}">
+              <div class="section-head">
+                <div>
+                  <span class="eyebrow" data-i18n-cn="{&quot;Experiment menu&quot;:&quot;实验菜单&quot;}">Experiment menu</span>
+                  <p class="menu-intro" data-i18n-cn="{&quot;Set conditions, then observe&quot;:&quot;先选条件，再开始观察&quot;}">Set conditions, then observe</p>
+                </div>
+                <button id="closeSettings" class="text-button" data-i18n-cn="{&quot;Done&quot;:&quot;完成&quot;}">Done</button>
+              </div>
+              <details class="menu-section" id="conditionsMenu" open>
+                <summary>
+                  <span class="menu-section-name" data-i18n-cn="{&quot;Date and location&quot;:&quot;日期与地点&quot;}">Date and location</span><span class="menu-summary" id="conditionsSummary"></span>
+                </summary>
+                <div class="menu-content">
+                  <label class="field-label" for="place" data-i18n-cn="{&quot;Observation location&quot;:&quot;观察地点&quot;}">Observation location</label><select id="place">
+                    <option value="39.9,116.4" data-i18n-cn="{&quot;Beijing · 39.9°N&quot;:&quot;北京 · 39.9°N&quot;}">Beijing · 39.9°N</option>
+                    <option value="23.98,121.6" data-i18n-cn="{&quot;Hualien · 24.0°N&quot;:&quot;花莲 · 24.0°N&quot;}">Hualien · 24.0°N</option>
+                    <option value="0,0" data-i18n-cn="{&quot;Equator · 0°&quot;:&quot;赤道 · 0°&quot;}">Equator · 0°</option>
+                    <option value="31.2,121.5" data-i18n-cn="{&quot;Shanghai · 31.2°N&quot;:&quot;上海 · 31.2°N&quot;}">Shanghai · 31.2°N</option>
+                    <option value="51.5,-0.1" data-i18n-cn="{&quot;London · 51.5°N&quot;:&quot;伦敦 · 51.5°N&quot;}">London · 51.5°N</option>
+                    <option value="-33.9,151.2" data-i18n-cn="{&quot;Sydney · 33.9°S&quot;:&quot;悉尼 · 33.9°S&quot;}">Sydney · 33.9°S</option>
+                    <option value="66.56,25.7" data-i18n-cn="{&quot;Arctic Circle · 66.6°N&quot;:&quot;北极圈 · 66.6°N&quot;}">Arctic Circle · 66.6°N</option>
+                    <option value="90,0" data-i18n-cn="{&quot;North Pole · 90°N&quot;:&quot;北极 · 90°N&quot;}">North Pole · 90°N</option>
+                    <option value="-90,0" data-i18n-cn="{&quot;South Pole · 90°S&quot;:&quot;南极 · 90°S&quot;}">South Pole · 90°S</option>
+                    <option value="custom" data-i18n-cn="{&quot;Custom location&quot;:&quot;自定义位置&quot;}">Custom location</option>
+                  </select>
+                  <label class="field-label" for="date" data-i18n-cn="{&quot;Observation date&quot;:&quot;观察日期&quot;}">Observation date</label>
+                  <div class="date-navigation">
+                    <button id="prevDay" aria-label="Previous day" title="Previous day" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;前一天&quot;,&quot;title&quot;:&quot;前一天&quot;}">‹</button><input id="date" type="date" value="2026-06-21" min="1900-01-01" max="2100-12-31" /><button id="nextDay" aria-label="Next day" title="Next day" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;后一天&quot;,&quot;title&quot;:&quot;后一天&quot;}">›</button>
+                  </div>
+                  <p class="micro" id="idealDateHint" hidden data-i18n-cn="{&quot;The idealized experiment does not use a date.&quot;:&quot;\n                    理想实验不使用日期。&quot;}">The idealized experiment does not use a date.<button id="dateObservationRestore" class="text-button" data-i18n-cn="{&quot;Restore ephemeris mode&quot;:&quot;\n                      恢复日期观测\n                    &quot;}">Restore ephemeris mode</button>
+                  </p>
+                  <div class="season-buttons" id="seasonButtons">
+                    <button data-date="2026-03-20" data-angle="0" data-month="3" data-i18n-cn="{&quot;March equinox&quot;:&quot;春分&quot;}">March equinox</button><button data-date="2026-06-21" data-angle="90" data-month="6" class="selected" data-i18n-cn="{&quot;June solstice&quot;:&quot;\n                      夏至&quot;}">June solstice</button><button data-date="2026-09-23" data-angle="180" data-month="9" data-i18n-cn="{&quot;September equinox&quot;:&quot;秋分&quot;}">September equinox</button><button data-date="2026-12-22" data-angle="270" data-month="12" data-i18n-cn="{&quot;December solstice&quot;:&quot;冬至&quot;}">December solstice</button>
+                  </div>
+                  <details class="menu-subsection" id="coordinatesMenu">
+                    <summary data-i18n-cn="{&quot;Set latitude and longitude&quot;:&quot;\n                      精确调整经纬度&quot;}">Set latitude and longitude<span class="menu-summary" id="coordinatesSummary"></span>
+                    </summary>
+                    <div class="menu-content">
+                      <div class="label-row">
+                        <label for="lat" data-i18n-cn="{&quot;Latitude&quot;:&quot;纬度&quot;}">Latitude</label>
+                        <div class="coordinate-editor">
+                          <input id="latInput" type="number" min="-90" max="90" step="0.1" value="39.9" aria-label="Latitude: north positive, south negative" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;纬度，北纬为正南纬为负&quot;}" /><output id="latText"></output>
+                        </div>
+                      </div>
+                      <input id="lat" type="range" min="-90" max="90" step="0.1" value="39.9" />
+                      <div class="range-labels"><span data-i18n-cn="{&quot;South Pole 90°S&quot;:&quot;南极 90°S&quot;}">South Pole 90°S</span><span data-i18n-cn="{&quot;North Pole 90°N&quot;:&quot;北极 90°N&quot;}">North Pole 90°N</span></div>
+                      <div class="label-row">
+                        <label for="lon" data-i18n-cn="{&quot;Longitude&quot;:&quot;经度&quot;}">Longitude</label>
+                        <div class="coordinate-editor">
+                          <input id="lonInput" type="number" min="-180" max="180" step="0.1" value="116.4" aria-label="Longitude: east positive, west negative" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;经度，东经为正西经为负&quot;}" /><output id="lonText"></output>
+                        </div>
+                      </div>
+                      <input id="lon" type="range" min="-180" max="180" step="0.1" value="116.4" />
+                    </div>
+                  </details>
+                  <details class="menu-subsection" id="seasonMenu">
+                    <summary data-i18n-cn="{&quot;Compare seasons&quot;:&quot;\n                      全年季节比较&quot;}">Compare seasons<span class="menu-summary" id="seasonSummary"></span>
+                    </summary>
+                    <div class="menu-content">
+                      <div class="solar-year-strip">
+                        <div class="year-strip-head">
+                          <label for="solarYearDay" data-i18n-cn="{&quot;Month of year · Compare seasons continuously&quot;:&quot;全年月份 · 连续比较季节&quot;}">Month of year · Compare seasons continuously</label>
+                          <div>
+                            <input id="solarYear" type="number" min="1900" max="2100" step="1" value="2026" aria-label="Observation year" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观察年份&quot;}" /><span id="solarYearDate"></span>
+                          </div>
+                        </div>
+                        <input id="solarYearDay" type="range" min="1" max="365" step="1" aria-label="Annual dates, changing continuously by day" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;全年日期，按天连续变化&quot;}" />
+                        <div class="month-ticks" id="solarMonthTicks"></div>
+                        <p class="micro" id="solarYearHint" data-i18n-cn="{&quot;Changing the date keeps the current observation time fixed.&quot;:&quot;拖动日期时保持当前观测时刻。&quot;}">Changing the date keeps the current observation time fixed.</p>
+                      </div>
+                    </div>
+                  </details>
+                  <p id="moonDateNote" class="micro" hidden data-i18n-cn="{&quot;The Moon&#x27;s position is calculated from the date, time, and observer location.&quot;:&quot;\n                    月球位置由日期、时间与观察地点共同计算。\n                  &quot;}">The Moon's position is calculated from the date, time, and observer location.</p>
+                </div>
+              </details>
+              <details class="menu-section" id="modelMenu">
+                <summary>
+                  <span class="menu-section-name" data-i18n-cn="{&quot;Experiment mode&quot;:&quot;演示方式&quot;}">Experiment mode</span><span class="menu-summary" id="modelSummary"></span>
+                </summary>
+                <div class="menu-content">
+                  <div id="solarSettings">
+                    <div class="model-switch" role="group" aria-label="Solar calculation mode" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;太阳计算方式&quot;}">
+                      <button data-model="date" class="active" aria-pressed="true" data-i18n-cn="{&quot;Ephemeris mode&quot;:&quot;日期观测&quot;}">Ephemeris mode</button><button data-model="ideal" aria-pressed="false" data-i18n-cn="{&quot;Idealized experiment&quot;:&quot;理想实验&quot;}">Idealized experiment</button>
+                    </div>
+                    <div class="label-row">
+                      <label for="dec" data-i18n-cn="{&quot;Solar declination / subsolar latitude&quot;:&quot;太阳赤纬 / 直射纬度&quot;}">Solar declination / subsolar latitude</label><output id="decText"></output>
+                    </div>
+                    <input id="dec" type="range" min="-23.44" max="23.44" step="0.01" />
+                    <p class="micro" id="dateMode" data-i18n-cn="{&quot;Calculated from date · Drag to enter the idealized experiment&quot;:&quot;随日期计算 · 可拖动进行理想化实验&quot;}">Calculated from date · Drag to enter the idealized experiment</p>
+                    <button id="restoreDate" class="text-button" hidden data-i18n-cn="{&quot;Restore date-based calculations&quot;:&quot;恢复日期计算&quot;}">Restore date-based calculations</button>
+                  </div>
+                  <div class="menu-divider"></div>
+                  <details class="menu-subsection" id="solarDateModeMenu">
+                    <summary data-i18n-cn="{&quot;Compare dates at a fixed time&quot;:&quot;固定时刻逐日比较&quot;}">Compare dates at a fixed time</summary>
+                    <div class="menu-content">
+                      <label class="toggle-row"><span data-i18n-cn="{&quot;Observe the Sun and gnomon shadow across dates&quot;:&quot;按日期观察太阳与杆影&quot;}">Observe the Sun and gnomon shadow across dates</span><input id="solarDateModeMenuToggle" type="checkbox" role="switch" /></label>
+                      <p class="micro" data-i18n-cn="{&quot;In ephemeris mode, keep local apparent solar time fixed and use the annual date slider. The Sun&#x27;s position and gnomon shadow change together.&quot;:&quot;\n                        日期观测下保持当地真太阳时，主界面显示全年日期滑动条；太阳位置与杆影同步变化。\n                      &quot;}">In ephemeris mode, keep local apparent solar time fixed and use the annual date slider. The Sun's position and gnomon shadow change together.</p>
+                      <button id="solarDateShow" type="button" data-i18n-cn="{&quot;Show date slider&quot;:&quot;查看日期滑动条&quot;}">Show date slider</button>
+                    </div>
+                  </details>
+                  <label class="toggle-row" id="compareControl"><span data-i18n-cn="{&quot;Ideal solstice / equinox comparison&quot;:&quot;理想两至 / 分日对比&quot;}">Ideal solstice / equinox comparison</span><input id="compare" type="checkbox" role="switch" /></label>
+                  <p class="micro" data-i18n-cn="{&quot;Ephemeris mode uses actual dates; the idealized experiment isolates latitude and solar declination.&quot;:&quot;日期观测对应实际日期；理想实验用于单独研究纬度和太阳赤纬。&quot;}">Ephemeris mode uses actual dates; the idealized experiment isolates latitude and solar declination.</p>
+                </div>
+              </details>
+              <details class="menu-section" id="displayMenu">
+                <summary>
+                  <span class="menu-section-name" data-i18n-cn="{&quot;Display aids&quot;:&quot;显示辅助&quot;}">Display aids</span><span class="menu-summary" id="displaySummary"></span>
+                </summary>
+                <div class="menu-content">
+                  <p id="displayContextNote" class="micro" hidden data-i18n-cn="{&quot;These settings affect the supporting sky view.&quot;:&quot;这些设置影响辅助天空视图。&quot;}">These settings affect the supporting sky view.</p>
+                  <label class="toggle-row"><span data-i18n-cn="{&quot;Celestial paths&quot;:&quot;天体轨迹&quot;}">Celestial paths</span><input id="track" type="checkbox" checked role="switch" /></label><label class="toggle-row"><span data-i18n-cn="{&quot;Angle guides&quot;:&quot;角度辅助线&quot;}">Angle guides</span><input id="angles" type="checkbox" checked role="switch" /></label>
+                  <details class="menu-subsection" id="shadowMenu">
+                    <summary data-i18n-cn="{&quot;Shadows and shadow-tip paths&quot;:&quot;日影与杆尖影迹&quot;}">Shadows and shadow-tip paths</summary>
+                    <div class="menu-content">
+                      <label class="toggle-row" id="shadowControl"><span data-i18n-cn="{&quot;Ground shadow&quot;:&quot;地面影子&quot;}">Ground shadow</span><input id="shadow" type="checkbox" checked role="switch" /></label>
+                      <div class="label-row" id="heightControl">
+                        <label for="height" data-i18n-cn="{&quot;Vertical gnomon height&quot;:&quot;竖直立杆高度&quot;}">Vertical gnomon height</label>
+                        <div>
+                          <input id="height" class="number" type="number" min="0.1" max="10" step="0.1" value="1" />
+                          m
+                        </div>
+                      </div>
+                      <label class="field-label shadow-scale-label" for="shadowZoom" data-i18n-cn="{&quot;Shadow ground scale&quot;:&quot;日影地面放大&quot;}">Shadow ground scale</label><select id="shadowZoom">
+                        <option value="1" data-i18n-cn="{&quot;1× · Show longer shadows&quot;:&quot;1× · 查看更长的影子&quot;}">1× · Show longer shadows</option>
+                        <option value="2">2×</option>
+                        <option value="4" selected data-i18n-cn="{&quot;4× · Emphasize short shadows&quot;:&quot;4× · 突出短影&quot;}">4× · Emphasize short shadows</option>
+                        <option value="8" data-i18n-cn="{&quot;8× · Examine midday shadows&quot;:&quot;8× · 观察近正午短影&quot;}">8× · Examine midday shadows</option>
+                        <option value="16" data-i18n-cn="{&quot;16× · Examine tiny shadows&quot;:&quot;16× · 观察微小影长&quot;}">16× · Examine tiny shadows</option></select><label class="toggle-row"><span data-i18n-cn="{&quot;Daily shadow-tip path&quot;:&quot;全天杆尖影迹&quot;}">Daily shadow-tip path</span><input id="shadowTrace" type="checkbox" role="switch" /></label>
+                      <p class="micro" data-i18n-cn="{&quot;Enabling the shadow path switches to Shadow plan view. The path traces the gnomon tip&#x27;s shadow moving across the ground over time. No direct-sunlight shadow is drawn when the Sun is below the horizon.&quot;:&quot;\n                        开启影迹会切到俯视日影。杆尖影迹指杆尖的影子在地面上随时间移动的轨迹；太阳在地平线下时不产生直射日影。\n                      &quot;}">Enabling the shadow path switches to Shadow plan view. The path traces the gnomon tip's shadow moving across the ground over time. No direct-sunlight shadow is drawn when the Sun is below the horizon.</p>
+                      <button id="shadowView" class="shadow-view-button" type="button" data-i18n-cn="{&quot;Show shadow plan view&quot;:&quot;\n                        查看俯视日影\n                      &quot;}">Show shadow plan view</button>
+                      <p class="micro" data-i18n-cn="{&quot;Zoom changes only the displayed ground scale; shadow lengths remain in real meters. At a fixed zoom, scale does not automatically change with time or gnomon height. The model assumes level ground and a vertical gnomon. Paths outside the circle are clipped, not connected along its edge.&quot;:&quot;\n                        放大只调整画面的地面比例，影长仍按真实米数显示；同一倍率下，比例不随时间或杆高自动变化。模型假设水平地面与竖直杆；圆外轨迹裁切，不沿边缘连线。\n                      &quot;}">Zoom changes only the displayed ground scale; shadow lengths remain in real meters. At a fixed zoom, scale does not automatically change with time or gnomon height. The model assumes level ground and a vertical gnomon. Paths outside the circle are clipped, not connected along its edge.</p>
+                    </div>
+                  </details>
+                </div>
+              </details>
+              <details class="menu-section" id="studyMenu">
+                <summary>
+                  <span class="menu-section-name" data-i18n-cn="{&quot;Related Diagrams&quot;:&quot;关联图解&quot;}">Related Diagrams</span><span class="menu-summary" data-i18n-cn="{&quot;Explore geometry and results&quot;:&quot;查看原理与结果&quot;}">Explore geometry and results</span>
+                </summary>
+                <nav class="study-navigation" aria-label="Teaching diagrams" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;教学图解&quot;}">
+                  <button data-study-target="riseSetPanel" id="eventsLink" data-i18n-cn="{&quot;Rise/set times and azimuths&quot;:&quot;升落时刻与方位&quot;}">Rise/set times and azimuths</button><button data-study-target="chartPanel" id="chartLink" data-i18n-cn="{&quot;Daily altitude curve&quot;:&quot;全天高度曲线&quot;}">Daily altitude curve</button><button data-study-target="contextPanel" id="contextLink" data-i18n-cn="{&quot;Subsolar point and day–night&quot;:&quot;\n                    太阳直射点与昼夜&quot;}">Subsolar point and day–night</button><button data-study-target="solarGeometryPanel" id="geometryLink" data-i18n-cn="{&quot;Earth&#x27;s axis and local horizon plane&quot;:&quot;\n                    地轴与当地地平面\n                  &quot;}">Earth's axis and local horizon plane</button>
+                  <div class="life-devices-entry" id="lifeDevicesMenu">
+                    <div class="menu-content">
+                      <button data-study-target="sundialPanel" id="sundialLink" aria-haspopup="dialog" aria-controls="sundialPanel" data-i18n-cn="{&quot;Sundial lab&quot;:&quot;\n                        日晷实验台\n                      &quot;}">Sundial lab</button>
+                    </div>
+                  </div>
+                  <button data-study-target="analemmaPanel" id="analemmaLink" data-i18n-cn="{&quot;Analemma · Fixed time throughout the year&quot;:&quot;\n                    日行迹 · 全年固定时刻\n                  &quot;}">Analemma · Fixed time throughout the year</button>
+                </nav>
+              </details>
+              <div class="menu-footer">
+                <button id="reset" class="text-button" data-i18n-cn="{&quot;Reset Sun experiment&quot;:&quot;重置当前太阳实验&quot;}">Reset Sun experiment</button>
+              </div>
+            </aside>
+          </div>
+          <div class="experiment">
+            <div class="experiment-toolbar">
+              <div class="body-switch" role="group" aria-label="Observed body" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观察天体&quot;}">
+                <button data-body="sun" aria-pressed="true" class="active" data-i18n-cn="{&quot;☀ Sun&quot;:&quot;☀ 太阳&quot;}">☀ Sun</button><button data-body="moon" aria-pressed="false" data-i18n-cn="{&quot;☾ Moon&quot;:&quot;☾ 月相&quot;}">☾ Moon</button>
+              </div>
+              <button id="settingsBtn" class="settings-button" aria-expanded="false" aria-controls="controls" data-i18n-cn="{&quot;Experiment menu&quot;:&quot;\n                实验菜单\n              &quot;}">Experiment menu</button>
+            </div>
+            <div class="view-head">
+              <div>
+                <h1 id="bodyTitle" data-i18n-cn="{&quot;Apparent solar motion&quot;:&quot;太阳视运动&quot;}">Apparent solar motion</h1>
+                <p id="sceneSubtitle" data-i18n-cn="{&quot;Beijing · June solstice&quot;:&quot;北京 · 夏至&quot;}">Beijing · June solstice</p>
+              </div>
+              <div class="view-tabs" role="group" aria-label="Viewing angle" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观察视角&quot;}">
+                <button data-view="orbit" aria-pressed="true" class="active" data-i18n-cn="{&quot;Spatial view&quot;:&quot;空间视图&quot;}">Spatial view</button><button data-view="top" aria-pressed="false" data-i18n-cn="{&quot;Shadow plan view&quot;:&quot;俯视日影&quot;}">Shadow plan view</button><button data-view="horizon" aria-pressed="false" data-i18n-cn="{&quot;Horizon view&quot;:&quot;地平视角&quot;}">Horizon view</button><button data-view="observer" aria-pressed="false" data-i18n-cn="{&quot;Look up&quot;:&quot;仰望天空&quot;}">Look up</button>
+              </div>
+            </div>
+            <div id="phasePrimaryHost"></div>
+            <div class="solar-overlay-bar" id="solarOverlayBar">
+              <label class="overlay-toggle" for="moonOverlay"><span data-i18n-cn="{&quot;Overlay Moon motion&quot;:&quot;叠加月球视运动&quot;}">Overlay Moon motion</span><input id="moonOverlay" type="checkbox" role="switch" /></label><span class="micro" id="moonOverlayReadout" data-i18n-cn="{&quot;Same location, date, and time&quot;:&quot;同一地点、日期和时刻&quot;}">Same location, date, and time</span>
+            </div>
+            <div class="stage" id="stage">
+              <canvas id="sky" aria-label="Interactive Sun path; drag to rotate and scroll to zoom" tabindex="0" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;太阳轨迹交互图，可拖动旋转、滚轮缩放&quot;}"></canvas>
+              <div class="stage-top">
+                <span class="scene-badge" id="dayBadge" data-i18n-cn="{&quot;Daylight&quot;:&quot;白昼&quot;}">Daylight</span><span id="viewHint" data-i18n-cn="{&quot;Drag to rotate · Scroll to zoom&quot;:&quot;拖动旋转 · 滚轮缩放&quot;}">Drag to rotate · Scroll to zoom</span>
+              </div>
+              <div class="stage-key">
+                <span><i class="dot sun-dot"></i><span id="primaryTrackText" data-i18n-cn="{&quot;Sun path&quot;:&quot;太阳轨迹&quot;}">Sun path</span></span><span id="moonOverlayKey" hidden data-i18n-cn="{&quot;Moon path&quot;:&quot;月球轨迹&quot;}"><i class="dot moon-dot"></i>Moon path</span><span id="solarAnnualKey" hidden data-i18n-cn="{&quot;Annual Sun path&quot;:&quot;全年太阳\n                  &quot;,&quot;Annual shadow-tip path&quot;:&quot;全年影尖&quot;}"><i class="dot solar-annual-dot"></i>Annual Sun path<i class="dot shadow-annual-dot"></i>Annual shadow-tip path</span><span id="shadowTraceKey" hidden data-i18n-cn="{&quot;Shadow-tip path&quot;:&quot;杆尖影迹&quot;}"><i class="dot shadow-tip-dot"></i>Shadow-tip path</span><span id="compareKey" hidden data-i18n-cn="{&quot;June-solstice model&quot;:&quot;夏至模型 &quot;,&quot;December-solstice model&quot;:&quot;冬至模型\n                  &quot;,&quot;Equinox model&quot;:&quot;分日模型&quot;}"><i class="dot summer-dot"></i>June-solstice model<i class="dot winter-dot"></i>December-solstice model<i class="dot equinox-dot"></i>Equinox model</span>
+              </div>
+              <button id="viewReset" class="view-reset" aria-label="Reset view" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;复位视角&quot;}" data-i18n-cn="{&quot;⟲ Reset view&quot;:&quot;⟲ 复位视角&quot;}">⟲ Reset view</button>
+            </div>
+            <div class="model-explanation">
+              <div id="observerControls" class="observer-controls" hidden>
+                <div class="observer-control-row">
+                  <div class="observer-bearing-panel">
+                    <div class="observer-directions" role="group" aria-label="Sky viewing direction" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;仰望天空的朝向&quot;}">
+                      <button data-look="0" data-i18n-cn="{&quot;N&quot;:&quot;北&quot;}">N</button><button data-look="90" data-i18n-cn="{&quot;E&quot;:&quot;东&quot;}">E</button><button data-look="180" data-i18n-cn="{&quot;S&quot;:&quot;南&quot;}">S</button><button data-look="270" data-i18n-cn="{&quot;W&quot;:&quot;西&quot;}">W</button>
+                    </div>
+                    <label data-i18n-cn="{&quot;Viewing azimuth &quot;:&quot;面向方位 &quot;}">Viewing azimuth <output id="observerBearing">180°</output><input id="observerAzimuth" type="range" min="0" max="360" step="1" value="180" /></label>
+                  </div>
+                  <div id="observerTimeHost" class="observer-time-host">
+                    <div id="observerClockPanel" class="observer-clock-panel">
+                      <label for="observerTime"><span id="observerTimeLabel" data-i18n-cn="{&quot;Local apparent solar time&quot;:&quot;当地真太阳时&quot;}">Local apparent solar time</span><output id="observerTimeValue">12:00</output></label><input id="observerTime" type="range" min="0" max="1440" step="1" value="720" aria-label="Sky observation time, local apparent solar time" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;仰望天空观测时刻，当地真太阳时&quot;}" />
+                      <div class="time-labels">
+                        <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="micro" id="observerStatus"></p>
+                <p class="micro" data-i18n-cn="{&quot;An orthographic projection of the forward sky hemisphere, not photographic perspective. Disks are enlarged for recognition and do not show real angular diameters. Planets are also marked in daylight; being geometrically above the horizon does not guarantee naked-eye visibility. Click a body&#x27;s name to face it.&quot;:&quot;\n                  面向前方半球的天空正投影：并非照片式透视，圆盘大小便于辨认，不代表真实角直径；白昼也标出行星位置，几何在天空中不代表肉眼可见。点击天体名称可转向它。\n                &quot;}">An orthographic projection of the forward sky hemisphere, not photographic perspective. Disks are enlarged for recognition and do not show real angular diameters. Planets are also marked in daylight; being geometrically above the horizon does not guarantee naked-eye visibility. Click a body's name to face it.</p>
+                <div id="observerBodies" class="observer-bodies"></div>
+              </div>
+              <p id="modelNote"></p>
+              <p id="plotNote"></p>
+              <p id="shadowScale"></p>
+              <p id="shadowTraceNote" hidden></p>
+            </div>
+            <div class="solar-date-mode-bar" id="solarDateModeBar">
+              <label class="overlay-toggle" for="solarDateMode"><span data-i18n-cn="{&quot;Fixed time · Daily observations&quot;:&quot;固定时刻 · 逐日观察&quot;}">Fixed time · Daily observations</span><input id="solarDateMode" type="checkbox" role="switch" aria-controls="solarDateTimeline" /></label>
+              <details class="compact-mode-help">
+                <summary aria-label="About daily observations at a fixed time" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;固定时刻逐日观察的说明&quot;}">ⓘ</summary>
+                <p class="micro" id="solarDateModeHint" data-i18n-cn="{&quot;Keep the observation time fixed and use the annual date slider to compare seasons.&quot;:&quot;\n                  开启后保持观测时刻，用全年日期滑动条比较季节变化。\n                &quot;}">Keep the observation time fixed and use the annual date slider to compare seasons.</p>
+              </details>
+            </div>
+            <div class="timeline" id="sunTimeline">
+              <div class="time-top">
+                <div>
+                  <span class="eyebrow" data-i18n-cn="{&quot;Local apparent solar time&quot;:&quot;当地真太阳时&quot;}">Local apparent solar time</span><strong id="timeText">12:00</strong>
+                </div>
+                <div class="play-controls">
+                  <select id="speed" aria-label="Playback speed" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;播放速度&quot;}">
+                    <option value="20" data-i18n-cn="{&quot;Slow&quot;:&quot;慢速&quot;}">Slow</option>
+                    <option value="60" selected data-i18n-cn="{&quot;Normal&quot;:&quot;常速&quot;}">Normal</option>
+                    <option value="180" data-i18n-cn="{&quot;Fast&quot;:&quot;快速&quot;}">Fast</option></select><label class="loop-control" data-i18n-cn="{&quot;Loop day&quot;:&quot;循环当天&quot;}"><input id="loop" type="checkbox" checked />Loop day</label><button id="play" class="play-button" data-i18n-cn="{&quot;▶ Play&quot;:&quot;▶ 播放&quot;}">▶ Play</button>
+                </div>
+              </div>
+              <input id="time" type="range" min="0" max="1440" step="1" value="720" aria-label="Local apparent solar time" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;当地真太阳时&quot;}" />
+              <div class="time-labels">
+                <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span>
+              </div>
+              <div class="time-shortcuts">
+                <button id="goRise">
+                  <span id="riseLabel" data-i18n-cn="{&quot;Sunrise&quot;:&quot;日出&quot;}">Sunrise</span> <span id="riseInline"></span></button><button id="goNoon">
+                  <span id="peakLabel" data-i18n-cn="{&quot;Solar noon&quot;:&quot;正午&quot;}">Solar noon</span> <span id="peakInline">12:00</span></button><button id="goSet">
+                  <span id="setLabel" data-i18n-cn="{&quot;Sunset&quot;:&quot;日落&quot;}">Sunset</span> <span id="setInline"></span>
+                </button>
+              </div>
+            </div>
+            <div class="timeline solar-date-timeline" id="solarDateTimeline" hidden>
+              <div class="time-top">
+                <div>
+                  <span class="eyebrow" data-i18n-cn="{&quot;Daily solar observations · Fixed local apparent solar time&quot;:&quot;太阳逐日观察 · 固定当地真太阳时&quot;}">Daily solar observations · Fixed local apparent solar time</span><strong id="solarDateText"></strong>
+                </div>
+                <div class="play-controls">
+                  <select id="solarDateSpeed" aria-label="Solar date playback speed" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;太阳日期播放速度&quot;}">
+                    <option value="1" data-i18n-cn="{&quot;1 day/s&quot;:&quot;1 天/秒&quot;}">1 day/s</option>
+                    <option value="3" selected data-i18n-cn="{&quot;3 days/s&quot;:&quot;3 天/秒&quot;}">3 days/s</option>
+                    <option value="10" data-i18n-cn="{&quot;10 days/s&quot;:&quot;10 天/秒&quot;}">10 days/s</option></select><label class="loop-control" data-i18n-cn="{&quot;Loop this year&quot;:&quot;循环本年&quot;}"><input id="solarDateLoop" type="checkbox" checked />Loop this year</label><button id="solarDatePlay" class="play-button" data-i18n-cn="{&quot;▶ Play dates&quot;:&quot;▶ 按日期播放&quot;}">▶ Play dates</button>
+                </div>
+              </div>
+              <div class="solar-date-year">
+                <label for="solarDateYear" data-i18n-cn="{&quot;Observation year&quot;:&quot;观察年份&quot;}">Observation year</label><input id="solarDateYear" type="number" min="1900" max="2100" step="1" value="2026" /><span id="solarFixedTimeLabel"></span>
+              </div>
+              <input id="solarDateDay" type="range" min="1" max="365" step="1" value="172" aria-label="Annual date at a fixed solar observation time" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;太阳固定时刻的全年日期&quot;}" />
+              <div id="solarDateMonths" class="month-ticks"></div>
+              <div class="lunar-day-buttons">
+                <button id="solarDatePrev" data-i18n-cn="{&quot;Previous day&quot;:&quot;前一天&quot;}">Previous day</button><button id="solarDateNext" data-i18n-cn="{&quot;Next day&quot;:&quot;后一天&quot;}">Next day</button>
+              </div>
+              <p class="micro motion-date-note" data-i18n-cn="{&quot;The Sun and shadow tip transition smoothly between dates. Values refer to the selected date. Advancing dates does not advance the time of day.&quot;:&quot;\n                相邻日期的太阳与影尖平滑过渡；数值对应选定日期。日期推进不推进一天内的时间。\n              &quot;}">The Sun and shadow tip transition smoothly between dates. Values refer to the selected date. Advancing dates does not advance the time of day.</p>
+              <div class="solar-date-options">
+                <label class="overlay-toggle" for="solarDateTrail"><input id="solarDateTrail" type="checkbox" checked role="switch" /><span data-i18n-cn="{&quot;Annual Sun / shadow-tip paths at the same time&quot;:&quot;全年同一时刻的太阳 / 影尖轨迹&quot;}">Annual Sun / shadow-tip paths at the same time</span></label><label class="overlay-toggle" for="solarDateLink"><input id="solarDateLink" type="checkbox" checked role="switch" /><span data-i18n-cn="{&quot;Link to annual analemma below&quot;:&quot;联动下方全年日行迹&quot;}">Link to annual analemma below</span></label>
+              </div>
+              <p id="solarDateResults" class="solar-date-results" aria-live="off"></p>
+              <details id="solarFixedObservation">
+                <summary data-i18n-cn="{&quot;Adjust the fixed observation time&quot;:&quot;调整固定观测时刻 &quot;}">Adjust the fixed observation time<span id="solarFixedTimeText"></span></summary>
+                <label class="micro" for="solarFixedTime" data-i18n-cn="{&quot;Local apparent solar time · Kept fixed when changing dates&quot;:&quot;当地真太阳时 · 日期变化时保持这个时刻&quot;}">Local apparent solar time · Kept fixed when changing dates</label><input id="solarFixedTime" type="range" min="0" max="1439" step="1" value="720" />
+                <div class="time-labels">
+                  <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:59</span>
+                </div>
+              </details>
+              <p class="micro" data-i18n-cn="{&quot;Annual curves connect positions at the same time each day: purple for the Sun and green for the gnomon&#x27;s shadow tip. Shadow paths are drawn only in direct sunlight and clipped outside the ground circle. Fixing apparent solar time makes the solar hour angle nearly constant, so this seasonal path usually differs from the figure eight obtained at a fixed clock time.&quot;:&quot;\n                全年轨迹连接每日同一时刻的位置：粉紫色为太阳、绿色为杆尖的影子。只在有直射阳光时绘制影迹，圆外部分裁切。固定真太阳时使太阳时角近似固定，季节轨迹通常不是固定钟表时形成的“8”字。\n              &quot;}">Annual curves connect positions at the same time each day: purple for the Sun and green for the gnomon's shadow tip. Shadow paths are drawn only in direct sunlight and clipped outside the ground circle. Fixing apparent solar time makes the solar hour angle nearly constant, so this seasonal path usually differs from the figure eight obtained at a fixed clock time.</p>
+            </div>
+            <div class="timeline lunar-timeline" id="moonTimeline" hidden>
+              <div class="time-top">
+                <div>
+                  <span class="eyebrow" data-i18n-cn="{&quot;Daily observations · Fixed observation time&quot;:&quot;逐日观察 · 固定观测时刻&quot;}">Daily observations · Fixed observation time</span><strong id="moonDateText"></strong>
+                </div>
+                <div class="play-controls">
+                  <select id="moonSpeed" aria-label="Date playback speed" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;日期播放速度&quot;}">
+                    <option value="0.5" data-i18n-cn="{&quot;0.5 days/s&quot;:&quot;0.5 天/秒&quot;}">0.5 days/s</option>
+                    <option value="1" selected data-i18n-cn="{&quot;1 day/s&quot;:&quot;1 天/秒&quot;}">1 day/s</option>
+                    <option value="3" data-i18n-cn="{&quot;3 days/s&quot;:&quot;3 天/秒&quot;}">3 days/s</option></select><label class="loop-control" data-i18n-cn="{&quot;Loop month&quot;:&quot;循环本月&quot;}"><input id="moonLoop" type="checkbox" checked />Loop month</label><button id="moonPlay" class="play-button" data-i18n-cn="{&quot;▶ Play dates&quot;:&quot;▶ 逐日播放&quot;}">▶ Play dates</button>
+                </div>
+              </div>
+              <p class="micro motion-date-note" data-i18n-cn="{&quot;The view transitions smoothly between dates; values refer to the selected date.&quot;:&quot;相邻日期的画面平滑过渡；数值以选定日期为准。&quot;}">The view transitions smoothly between dates; values refer to the selected date.</p>
+              <div class="month-navigation">
+                <button id="moonPrevMonth" aria-label="Previous month" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;上个月&quot;}">‹</button><input id="moonMonth" type="month" min="1900-01" max="2100-12" value="2026-06" aria-label="Observation month" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观察月份&quot;}" /><button id="moonNextMonth" aria-label="Next month" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;下个月&quot;}">›</button>
+              </div>
+              <input id="moonDay" type="range" min="1" max="30" step="1" value="21" aria-label="Select a date by day" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;按天选择日期&quot;}" />
+              <div class="time-labels" id="moonDayLabels"></div>
+              <div class="lunar-day-buttons">
+                <button id="moonPrevDay" data-i18n-cn="{&quot;Previous day&quot;:&quot;前一天&quot;}">Previous day</button><span id="moonFixedClock"></span><button id="moonNextDay" data-i18n-cn="{&quot;Next day&quot;:&quot;后一天&quot;}">Next day</button>
+              </div>
+              <details id="moonObservation">
+                <summary data-i18n-cn="{&quot;Adjust observation time within the day &quot;:&quot;调整一天内的观测时刻 &quot;}">Adjust observation time within the day <span id="moonClockText">20:00</span></summary>
+                <label class="micro" for="moonClock" data-i18n-cn="{&quot;Local apparent solar time · Kept fixed while dates advance&quot;:&quot;当地真太阳时 · 日期推进时保持这个时刻&quot;}">Local apparent solar time · Kept fixed while dates advance</label><input id="moonClock" type="range" min="0" max="1440" step="1" value="1200" />
+                <div class="time-labels">
+                  <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span>
+                </div>
+                <div class="time-shortcuts">
+                  <button id="moonRise" data-i18n-cn="{&quot;Moonrise&quot;:&quot;月出 &quot;}">Moonrise<span id="moonRiseTime"></span></button><button id="moonPeak" data-i18n-cn="{&quot;Daily maximum&quot;:&quot;日内最高 &quot;}">Daily maximum<span id="moonPeakTime"></span></button><button id="moonSet" data-i18n-cn="{&quot;Moonset&quot;:&quot;月落 &quot;}">Moonset<span id="moonSetTime"></span></button>
+                </div>
+              </details>
+            </div>
+            <section class="panel companion-module" id="companionModule" hidden aria-label="Moon–planet conjunction demonstration" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;行星伴月演示&quot;}">
+              <div class="panel-title">
+                <div>
+                  <span class="eyebrow" data-i18n-cn="{&quot;Explore further&quot;:&quot;拓展观察&quot;}">Explore further</span>
+                  <h2 data-i18n-cn="{&quot;Moon–planet conjunctions&quot;:&quot;行星伴月&quot;}">Moon–planet conjunctions</h2>
+                </div>
+                <label class="overlay-toggle" for="companionEnabled"><span data-i18n-cn="{&quot;Demonstration&quot;:&quot;演示&quot;}">Demonstration</span><input id="companionEnabled" type="checkbox" role="switch" aria-label="Show Moon–planet conjunctions" aria-controls="companionContent" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;开启行星伴月演示&quot;}" /></label>
+              </div>
+              <p class="micro" data-i18n-cn="{&quot;Compare the Moon and planet&#x27;s directions in the sky. Apparent closeness does not imply proximity in space.&quot;:&quot;\n                比较月球与行星在天空中的方向。看起来靠近，不代表真实空间距离接近。\n              &quot;}">Compare the Moon and planet's directions in the sky. Apparent closeness does not imply proximity in space.</p>
+              <div id="companionContent" hidden>
+                <div class="companion-toolbar">
+                  <label for="companionPlanet" data-i18n-cn="{&quot;Select a planet&quot;:&quot;选择行星&quot;}">Select a planet</label><select id="companionPlanet">
+                    <option value="Mercury" data-i18n-cn="{&quot;Mercury&quot;:&quot;水星&quot;}">Mercury</option>
+                    <option value="Venus" selected data-i18n-cn="{&quot;Venus&quot;:&quot;金星&quot;}">Venus</option>
+                    <option value="Mars" data-i18n-cn="{&quot;Mars&quot;:&quot;火星&quot;}">Mars</option>
+                    <option value="Jupiter" data-i18n-cn="{&quot;Jupiter&quot;:&quot;木星&quot;}">Jupiter</option>
+                    <option value="Saturn" data-i18n-cn="{&quot;Saturn&quot;:&quot;土星&quot;}">Saturn</option></select><button id="companionFind" data-i18n-cn="{&quot;Find closest date in next 30 days&quot;:&quot;找未来30天最靠近日&quot;}">Find closest date in next 30 days</button>
+                </div>
+                <p class="micro" id="companionObserver"></p>
+                <p class="companion-search-status" id="companionSearchStatus" role="status" aria-live="polite"></p>
+                <div class="companion-measures">
+                  <div>
+                    <span data-i18n-cn="{&quot;Moon–planet angular separation&quot;:&quot;月球与行星的角距&quot;}">Moon–planet angular separation</span><strong id="companionSeparation"></strong><small id="companionProximity"></small>
+                  </div>
+                  <div>
+                    <span data-i18n-cn="{&quot;Lunar altitude&quot;:&quot;月球高度&quot;}">Lunar altitude</span><strong id="companionMoonAltitude"></strong><small id="companionMoonDirection"></small>
+                  </div>
+                  <div>
+                    <span id="companionPlanetLabel" data-i18n-cn="{&quot;Venus altitude&quot;:&quot;金星高度&quot;}">Venus altitude</span><strong id="companionPlanetAltitude"></strong><small id="companionPlanetDirection"></small>
+                  </div>
+                </div>
+                <canvas id="companionSky" aria-label="Azimuth–altitude chart of the Moon and selected planet at the same location and time" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;月球与所选行星在同一地点和时刻的方位高度展开图&quot;}"></canvas>
+                <p class="companion-visibility" id="companionVisibility"></p>
+                <div class="companion-actions">
+                  <button id="companionClock" data-i18n-cn="{&quot;Adjust observation time&quot;:&quot;调整观测时刻&quot;}">Adjust observation time</button><span class="micro" data-i18n-cn="{&quot;Date playback uses the date slider above.&quot;:&quot;逐日播放沿用上方日期滑块。&quot;}">Date playback uses the date slider above.</span>
+                </div>
+                <p class="micro" data-i18n-cn="{&quot;This azimuth–altitude chart&#x27;s screen distances are not spherical angular separations. Dashed lines only link markers, and dots indicate directions without testing occultation or obstruction. Close approaches are enlarged. The phase icon does not show the Moon&#x27;s local orientation. The ≤5° threshold is a viewing reference, not a universal definition of conjunction. Searches compare a fixed time each day, not the exact conjunction instant.&quot;:&quot;\n                  方位—高度展开图，画面距离不等于球面角距；虚线只用于关联标记。圆点只表示方向位置，不判断遮挡或掩星。靠近时局部放大；月相朝向不代表本地月面朝向。近距参考取\n                  ≤5°，不是“伴月”的统一定义；搜索仅比较每日固定时刻，不是精确合相时刻。\n                &quot;}">This azimuth–altitude chart's screen distances are not spherical angular separations. Dashed lines only link markers, and dots indicate directions without testing occultation or obstruction. Close approaches are enlarged. The phase icon does not show the Moon's local orientation. The ≤5° threshold is a viewing reference, not a universal definition of conjunction. Searches compare a fixed time each day, not the exact conjunction instant.</p>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section class="metrics" aria-label="Live results" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;实时计算结果&quot;}">
+          <article>
+            <span id="altLabel" data-i18n-cn="{&quot;Solar altitude&quot;:&quot;太阳高度角&quot;}">Solar altitude</span><strong id="altMetric"></strong><small id="altNote"></small>
+          </article>
+          <article>
+            <span id="azLabel" data-i18n-cn="{&quot;Solar azimuth&quot;:&quot;太阳方位角&quot;}">Solar azimuth</span><strong id="azMetric"></strong><small data-i18n-cn="{&quot;North 0° · Measured clockwise&quot;:&quot;正北 0° · 顺时针计量&quot;}">North 0° · Measured clockwise</small>
+          </article>
+          <article>
+            <details class="metric-definition">
+              <summary>
+                <span id="durationLabel" data-i18n-cn="{&quot;Daylight duration&quot;:&quot;白昼时长&quot;}">Daylight duration</span><span class="metric-info-icon" aria-hidden="true">ⓘ</span><span class="sr-only" data-i18n-cn="{&quot;; expand calculation notes&quot;:&quot;，展开计算说明&quot;}">; expand calculation notes</span>
+              </summary>
+              <p id="durationDefinition"></p>
+            </details>
+            <strong id="dayMetric"></strong><small id="dayNote"></small>
+          </article>
+          <article>
+            <span id="fourthLabel" data-i18n-cn="{&quot;Ground shadow length&quot;:&quot;地面影长&quot;}">Ground shadow length</span><strong id="shadowMetric"></strong><small id="shadowNote"></small>
+          </article>
+        </section>
+
+        <section id="riseSetPanel" tabindex="-1" class="panel rise-set-panel" aria-label="Celestial rise/set times and azimuths" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;天体升落时刻和方位&quot;}">
+          <div class="panel-title">
+            <div>
+              <span class="eyebrow" data-i18n-cn="{&quot;Daily rise/set · Compare together&quot;:&quot;当日升落 · 同时比较&quot;}">Daily rise/set · Compare together</span>
+              <h2 id="eventTitle" data-i18n-cn="{&quot;Sunrise and sunset azimuths&quot;:&quot;日出与日落方位&quot;}">Sunrise and sunset azimuths</h2>
+            </div>
+            <span class="micro" data-i18n-cn="{&quot;North 0° · Clockwise&quot;:&quot;正北 0° · 顺时针&quot;}">North 0° · Clockwise</span>
+          </div>
+          <div class="event-layout">
+            <canvas id="eventCompass" aria-label="Rise and set azimuth diagram, north up" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;升落方向的北向上方位图&quot;}"></canvas>
+            <div class="event-values">
+              <button id="eventRise">
+                <span id="eventRiseLabel" data-i18n-cn="{&quot;Sunrise&quot;:&quot;日出&quot;}">Sunrise</span><strong id="eventRiseAz"></strong><small id="eventRiseClock"></small></button><button id="eventSet">
+                <span id="eventSetLabel" data-i18n-cn="{&quot;Sunset&quot;:&quot;日落&quot;}">Sunset</span><strong id="eventSetAz"></strong><small id="eventSetClock"></small>
+              </button>
+            </div>
+          </div>
+          <p class="micro" id="eventNote"></p>
+        </section>
+        <section class="detail-grid">
+          <article id="chartPanel" tabindex="-1" class="panel chart-panel">
+            <div class="panel-title">
+              <div>
+                <span class="eyebrow" id="chartEyebrow" data-i18n-cn="{&quot;Daily variation&quot;:&quot;全天变化&quot;}">Daily variation</span>
+                <h2 id="chartTitle" data-i18n-cn="{&quot;Solar altitude curve&quot;:&quot;太阳高度曲线&quot;}">Solar altitude curve</h2>
+              </div>
+              <span class="legend"><i class="dot sun-dot"></i><span id="chartLegend" data-i18n-cn="{&quot;Current date&quot;:&quot;当前日期&quot;}">Current date</span><span id="moonOverlayChartKey" hidden data-i18n-cn="{&quot;Moon&quot;:&quot;月球&quot;}"><i class="dot moon-dot"></i>Moon</span></span>
+            </div>
+            <canvas id="chart" aria-label="Daily solar altitude curve" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;全天太阳高度角曲线&quot;}"></canvas>
+            <p class="micro" id="chartHint" data-i18n-cn="{&quot;Click or drag the curve to change time. The dashed line marks the horizon.&quot;:&quot;点击或拖动曲线切换时间，虚线表示地平线。&quot;}">Click or drag the curve to change time. The dashed line marks the horizon.</p>
+          </article>
+          <article id="contextPanel" tabindex="-1" class="panel globe-panel">
+            <div class="panel-title">
+              <div>
+                <span class="eyebrow" id="contextEyebrow" data-i18n-cn="{&quot;From Earth&quot;:&quot;从地球看&quot;}">From Earth</span>
+                <h2 id="contextTitle" data-i18n-cn="{&quot;Subsolar point and day–night&quot;:&quot;太阳直射点与昼夜&quot;}">Subsolar point and day–night</h2>
+              </div>
+              <span id="utcLabel" class="micro"></span>
+            </div>
+            <div id="sunContextContent">
+              <div class="context-view-switch" role="group" aria-label="Earth display" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;地球展示方式&quot;}">
+                <button data-earth-view="globe" class="active" aria-pressed="true" data-i18n-cn="{&quot;Globe&quot;:&quot;球面视图&quot;}">Globe</button><button data-earth-view="map" aria-pressed="false" data-i18n-cn="{&quot;World map&quot;:&quot;全球平面图&quot;}">World map</button>
+              </div>
+              <div class="globe-content" id="earthGlobeView">
+                <canvas id="globe" aria-label="Earth&#x27;s latitude–longitude grid, subsolar point, and day–night regions" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;地球经纬网、太阳直射点和昼夜区域&quot;}"></canvas>
+                <div class="globe-notes">
+                  <span data-i18n-cn="{&quot;Subsolar point&quot;:&quot;太阳直射点&quot;}"><i class="dot sun-dot"></i>Subsolar point</span><strong id="subsolar"></strong><span data-i18n-cn="{&quot;Observer location&quot;:&quot;观察位置&quot;}"><i class="dot observer-dot"></i>Observer location</span><strong id="observerPos"></strong>
+                  <p data-i18n-cn="{&quot;The hemisphere facing the Sun is in daylight; the hemisphere facing away is in darkness.&quot;:&quot;太阳照亮的半球为白昼，背向太阳的一侧为黑夜。&quot;}">The hemisphere facing the Sun is in daylight; the hemisphere facing away is in darkness.</p>
+                </div>
+              </div>
+              <div id="earthMapView" hidden>
+                <canvas id="worldMap" tabindex="0" aria-label="World day–night map in latitude and longitude; click to select a location" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;全球经纬度平面昼夜图，点击选择观察地点&quot;}"></canvas>
+                <div class="map-key">
+                  <span data-i18n-cn="{&quot;Subsolar point&quot;:&quot;直射点&quot;}"><i class="dot sun-dot"></i>Subsolar point</span><span data-i18n-cn="{&quot;Observer location&quot;:&quot;观察位置&quot;}"><i class="dot observer-dot"></i>Observer location</span><span data-i18n-cn="{&quot;Dark area: night hemisphere&quot;:&quot;暗色为夜半球&quot;}">Dark area: night hemisphere</span>
+                </div>
+                <p class="micro" data-i18n-cn="{&quot;An equirectangular latitude–longitude map distorts areas and shapes. Click to select a location, or enter exact coordinates in the experiment settings.&quot;:&quot;\n                  经纬度等距展开，面积与形状会变形。点击地图选地点；经纬度也可在实验设置中精确调整。\n                &quot;}">An equirectangular latitude–longitude map distorts areas and shapes. Click to select a location, or enter exact coordinates in the experiment settings.</p>
+                <p class="micro" id="mapCoordinates"></p>
+              </div>
+            </div>
+            <div class="phase-content" id="phaseContent" hidden>
+              <canvas id="phaseOrbit" aria-label="Schematic Sun–Earth–Moon positions, viewed from above the north ecliptic pole" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;从北黄极上方俯视的太阳、地球和月球相对位置示意&quot;}"></canvas>
+              <div class="phase-view">
+                <canvas id="phaseDisk" aria-label="Moon phase as seen from Earth, shown in a fixed orientation" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;从地球看到的月相，固定朝向示意&quot;}"></canvas>
+                <div>
+                  <span data-i18n-cn="{&quot;Moon phase · Fixed orientation&quot;:&quot;月相 · 固定朝向示意&quot;}">Moon phase · Fixed orientation</span><strong id="phaseName"></strong><span id="phaseFraction"></span>
+                  <p data-i18n-cn="{&quot;The illuminated side has an illustrative orientation, not the orientation seen from your location.&quot;:&quot;亮面朝向为示意，不代表本地观测朝向。&quot;}">The illuminated side has an illustrative orientation, not the orientation seen from your location.</p>
+                </div>
+              </div>
+            </div>
+            <p class="micro" id="contextExplanation" data-i18n-cn="{&quot;Longitude determines location and UTC conversion; paths use local apparent solar time.&quot;:&quot;\n              经度用于定位与换算 UTC；轨迹使用当地真太阳时。\n            &quot;}">Longitude determines location and UTC conversion; paths use local apparent solar time.</p>
+          </article>
+        </section>
+        <details class="panel lunar-sky-details" id="lunarSkyDetails" hidden>
+          <summary>
+            <span data-i18n-cn="{&quot;Sky position and rise/set (supporting view)&quot;:&quot;天空位置与升落（辅助）&quot;}">Sky position and rise/set (supporting view)</span><span class="micro" data-i18n-cn="{&quot;Expand to observe the Moon&#x27;s daily motion&quot;:&quot;展开观察当天月球视运动&quot;}">Expand to observe the Moon's daily motion</span>
+          </summary>
+          <div class="moon-sky-head" id="moonSkyHead"><h2 data-i18n-cn="{&quot;Moon position in the sky&quot;:&quot;月球天空位置&quot;}">Moon position in the sky</h2></div>
+          <div id="moonSkyHost"></div>
+        </details>
+        <section class="panel geometry-panel" id="solarGeometryPanel" tabindex="-1">
+          <div class="panel-title">
+            <div>
+              <span class="eyebrow" data-i18n-cn="{&quot;Connect global and local views&quot;:&quot;连接全球与当地&quot;}">Connect global and local views</span>
+              <h2 data-i18n-cn="{&quot;Earth&#x27;s axis, observer, and local horizon plane&quot;:&quot;地轴、观察者与当地地平面&quot;}">Earth's axis, observer, and local horizon plane</h2>
+            </div>
+          </div>
+          <div class="geometry-layout">
+            <canvas id="earthGeometry" aria-label="Linked 3D projection of Earth&#x27;s axis, equator, observer, local horizon plane, and Sun direction" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;地轴、赤道、观察地点、当地地平面和太阳方向的联动三维投影示意&quot;}"></canvas>
+            <div class="geometry-notes">
+              <span data-i18n-cn="{&quot;Earth&#x27;s axis: joins the poles&quot;:&quot;地轴：连接南北极&quot;}"><i class="geometry-key axis-key"></i>Earth's axis: joins the poles</span><span data-i18n-cn="{&quot;Equatorial plane: perpendicular to Earth&#x27;s axis&quot;:&quot;赤道面：垂直于地轴&quot;}"><i class="geometry-key equator-key"></i>Equatorial plane: perpendicular to Earth's axis</span><span data-i18n-cn="{&quot;Local horizon plane: tangent to Earth&#x27;s surface&quot;:&quot;当地地平面：球面的切平面&quot;}"><i class="geometry-key horizon-key"></i>Local horizon plane: tangent to Earth's surface</span><span data-i18n-cn="{&quot;Local zenith: points from Earth&#x27;s center toward the observer&quot;:&quot;当地天顶：沿地心到观察者方向&quot;}"><i class="geometry-key zenith-key"></i>Local zenith: points from Earth's center toward the observer</span><span data-i18n-cn="{&quot;Sun direction: changes with date and time&quot;:&quot;太阳方向：随日期和时刻变化&quot;}"><i class="geometry-key sun-key"></i>Sun direction: changes with date and time</span><strong id="geometryObserver"></strong>
+              <p class="micro" id="geometryExplanation"></p>
+            </div>
+          </div>
+          <p class="micro" id="geometryNote"></p>
+        </section>
+        <section class="panel analemma-panel" id="analemmaPanel" tabindex="-1" aria-label="Annual analemma experiment" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;日行迹全年实验&quot;}">
+          <div class="panel-title">
+            <div>
+              <span class="eyebrow" data-i18n-cn="{&quot;Annual observations · Same time each day&quot;:&quot;全年观察 · 每天同一时刻&quot;}">Annual observations · Same time each day</span>
+              <h2 data-i18n-cn="{&quot;Analemma&quot;:&quot;日行迹（Analemma）&quot;}">Analemma</h2>
+            </div>
+            <label class="overlay-toggle" for="analemmaEnabled"><span data-i18n-cn="{&quot;Demonstration&quot;:&quot;演示&quot;}">Demonstration</span><input id="analemmaEnabled" type="checkbox" role="switch" aria-controls="analemmaContent" /></label>
+          </div>
+          <p class="micro" data-i18n-cn="{&quot;Overlay the Sun&#x27;s positions at the same time each day in the local sky. Compare observation times to see how the curve&#x27;s position and tilt change.&quot;:&quot;\n            把每天同一时刻的太阳位置叠加在当地天空中；比较不同观测时刻，观察轨迹的位置和倾斜。\n          &quot;}">Overlay the Sun's positions at the same time each day in the local sky. Compare observation times to see how the curve's position and tilt change.</p>
+          <p id="analemmaDateLinkNote" class="micro" hidden data-i18n-cn="{&quot;Linked to daily solar observations: uses the same local apparent solar time shown above.&quot;:&quot;\n            已与太阳逐日观察联动：使用上方同一当地真太阳时。&quot;}">Linked to daily solar observations: uses the same local apparent solar time shown above.<button id="solarDateUnlink" type="button" data-i18n-cn="{&quot;Unlink and set independently&quot;:&quot;\n              解除联动，独立设置\n            &quot;}">Unlink and set independently</button>
+          </p>
+          <div id="analemmaContent" hidden>
+            <p id="analemmaIdealNote" hidden data-i18n-cn="{&quot;The idealized experiment fixes declination and cannot reproduce the actual annual analemma.&quot;:&quot;\n              理想实验固定赤纬，无法表示真实的全年日行迹。&quot;}">The idealized experiment fixes declination and cannot reproduce the actual annual analemma.<button id="analemmaRestore" data-i18n-cn="{&quot;Restore ephemeris mode&quot;:&quot;\n                恢复日期观测\n              &quot;}">Restore ephemeris mode</button>
+            </p>
+            <div id="analemmaLab">
+              <div class="analemma-observation">
+                <div class="analemma-controls">
+                  <label data-i18n-cn="{&quot;Time reference&quot;:&quot;固定时刻的依据&quot;}">Time reference<select id="analemmaBasis">
+                      <option value="clock" data-i18n-cn="{&quot;Clock time (fixed UTC offset)&quot;:&quot;钟表时（固定 UTC 偏移）&quot;}">Clock time (fixed UTC offset)</option>
+                      <option value="apparent" data-i18n-cn="{&quot;Local apparent solar time (comparison)&quot;:&quot;当地真太阳时（对比）&quot;}">Local apparent solar time (comparison)</option>
+                    </select></label><label data-i18n-cn="{&quot;Daily observation time&quot;:&quot;每日观测时刻&quot;}">Daily observation time<input type="time" id="analemmaClock" value="12:00" required /></label><label id="analemmaZoneLabel" data-i18n-cn="{&quot;UTC offset (hours)&quot;:&quot;UTC 偏移（小时）&quot;}">UTC offset (hours)<input id="analemmaOffset" type="number" min="-12" max="14" step="0.25" value="8" /></label><label data-i18n-cn="{&quot;Diagram coordinates&quot;:&quot;图解坐标&quot;}">Diagram coordinates<select id="analemmaView">
+                      <option value="dome" data-i18n-cn="{&quot;Local sky · 3D schematic&quot;:&quot;当地天空 · 三维示意&quot;}">Local sky · 3D schematic</option>
+                      <option value="sky" data-i18n-cn="{&quot;Local sky · Azimuth chart&quot;:&quot;当地天空 · 方位展开&quot;}">Local sky · Azimuth chart</option>
+                      <option value="equatorial" data-i18n-cn="{&quot;Geometry · Hour angle–declination&quot;:&quot;原理图 · 时角—赤纬&quot;}">Geometry · Hour angle–declination</option>
+                    </select></label>
+                </div>
+                <div class="analemma-comparison">
+                  <label class="overlay-toggle" for="analemmaCompare"><input id="analemmaCompare" type="checkbox" role="switch" /><span data-i18n-cn="{&quot;Compare 09:00 / 12:00 / 15:00&quot;:&quot;叠加 09:00 / 12:00 / 15:00 比较&quot;}">Compare 09:00 / 12:00 / 15:00</span></label><button id="analemmaResetView" type="button" data-i18n-cn="{&quot;Reset sky view&quot;:&quot;重置天空视角&quot;}">Reset sky view</button>
+                </div>
+                <p class="micro" data-i18n-cn="{&quot;The daily observation time here is independent of the main view&#x27;s daily timeline. Comparison curves share the same time reference and UTC offset; 09:00 is not necessarily local morning.&quot;:&quot;\n                  这里的“每日观测时刻”独立于主画面的日内时间轴。比较轨迹使用相同的时间依据和 UTC\n                  偏移，09:00 不一定是当地早晨。\n                &quot;}">The daily observation time here is independent of the main view's daily timeline. Comparison curves share the same time reference and UTC offset; 09:00 is not necessarily local morning.</p>
+                <div id="analemmaLegend" class="analemma-legend" aria-label="Analemma legend" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;日行迹轨迹图例&quot;}"></div>
+                <p id="analemmaViewHint" class="micro"></p>
+                <p id="analemmaConditions" class="micro"></p>
+                <canvas id="analemmaCanvas" aria-label="Annual solar analemma at a fixed time; click the curve to select a date" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;全年固定时刻的太阳位置日行迹，可点击轨迹选择日期&quot;}"></canvas>
+              </div>
+              <div class="time-top analemma-date">
+                <strong id="analemmaDate"></strong><button id="analemmaPlay" class="play-button" data-i18n-cn="{&quot;▶ Play dates&quot;:&quot;▶ 逐日播放&quot;}">▶ Play dates</button>
+              </div>
+              <p class="micro motion-date-note" data-i18n-cn="{&quot;Markers move smoothly during playback. Values refer to the selected date; pausing aligns the markers immediately.&quot;:&quot;\n                播放时标记平滑移动；数值对应选定日期，暂停后立即对齐。\n              &quot;}">Markers move smoothly during playback. Values refer to the selected date; pausing aligns the markers immediately.</p>
+              <input id="analemmaDay" type="range" min="1" max="365" step="1" value="1" aria-label="Annual analemma date" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;日行迹全年日期&quot;}" />
+              <div class="time-labels">
+                <span data-i18n-cn="{&quot;Jan&quot;:&quot;1月&quot;}">Jan</span><span data-i18n-cn="{&quot;Apr&quot;:&quot;4月&quot;}">Apr</span><span data-i18n-cn="{&quot;Jul&quot;:&quot;7月&quot;}">Jul</span><span data-i18n-cn="{&quot;Oct&quot;:&quot;10月&quot;}">Oct</span><span data-i18n-cn="{&quot;Dec&quot;:&quot;12月&quot;}">Dec</span>
+              </div>
+              <p id="analemmaResults" class="analemma-results"></p>
+              <p id="analemmaExplanation" class="micro"></p>
+              <details class="analemma-advanced">
+                <summary data-i18n-cn="{&quot;Advanced experiment · What creates the figure eight?&quot;:&quot;高级实验 · “8”字的成因&quot;}">Advanced experiment · What creates the figure eight?</summary>
+                <p class="micro" data-i18n-cn="{&quot;This independent idealized orbit changes only the analemma, not the main lab&#x27;s actual-date ephemeris. Set tilt to 0° to isolate eccentricity, or eccentricity to 0 to isolate tilt.&quot;:&quot;\n                  独立的理想轨道模型：只改变这个日行迹图，不改变主实验台的真实日期星历。倾角为 0°\n                  可观察偏心率的影响，偏心率为 0 可观察倾角的影响。\n                &quot;}">This independent idealized orbit changes only the analemma, not the main lab's actual-date ephemeris. Set tilt to 0° to isolate eccentricity, or eccentricity to 0 to isolate tilt.</p>
+                <label class="overlay-toggle" for="analemmaIdeal"><input id="analemmaIdeal" type="checkbox" role="switch" /><span data-i18n-cn="{&quot;Enable idealized cause experiment&quot;:&quot;启用理想成因实验&quot;}">Enable idealized cause experiment</span></label>
+                <div id="analemmaIdealControls" hidden>
+                  <div class="analemma-ideal-controls">
+                    <label data-i18n-cn="{&quot;Axial tilt &quot;:&quot;地轴倾角 &quot;}">Axial tilt <output id="analemmaTiltValue">23.44°</output><input id="analemmaTilt" type="range" min="0" max="45" step="0.01" value="23.44" /></label><label data-i18n-cn="{&quot;Orbital eccentricity &quot;:&quot;轨道偏心率 &quot;}">Orbital eccentricity <output id="analemmaEccentricityValue">0.0167</output><input id="analemmaEccentricity" type="range" min="0" max="0.1" step="0.0001" value="0.0167" /></label>
+                  </div>
+                  <button id="analemmaIdealReset" type="button" data-i18n-cn="{&quot;Restore Earth&#x27;s reference parameters&quot;:&quot;恢复地球参考参数&quot;}">Restore Earth's reference parameters</button>
+                  <p class="micro" data-i18n-cn="{&quot;An approximate Keplerian orbit with fixed tilt and eccentricity. It omits precession, nutation, and topocentric parallax and is not for prediction. Disable this option to restore the actual ephemeris.&quot;:&quot;\n                    近似开普勒轨道，固定倾角和偏心率，不含岁差、章动或地平视差，不用于预报。关闭开关即恢复真实星历。\n                  &quot;}">An approximate Keplerian orbit with fixed tilt and eccentricity. It omits precession, nutation, and topocentric parallax and is not for prediction. Disable this option to restore the actual ephemeris.</p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </section>
+        <section class="insight" id="insight"></section>
+        <div id="sundialLauncher" class="sundial-launcher">
+          <button id="openSundials" type="button" aria-haspopup="dialog" aria-controls="sundialPanel" data-i18n-cn="{&quot;☀ Sundial Lab&quot;:&quot;\n            ☀ 日晷实验台 &quot;}">☀ Sundial Lab<span aria-hidden="true">↗</span>
+          </button>
+        </div>
+        <footer>
+          <span data-i18n-cn="{&quot;◎ Sky Motion Lab&quot;:&quot;◎ 天体视运动实验室&quot;}">◎ Sky Motion Lab</span><span data-i18n-cn="{&quot;Ephemeris / idealized model · Geometric horizon · No atmospheric refraction&quot;:&quot;天文星历 / 理想实验 · 几何地平线 · 未计大气折射&quot;}">Ephemeris / idealized model · Geometric horizon · No atmospheric refraction</span>
+        </footer>
+      </main>
+
+      <section id="timeWorkbench" class="time-workbench" aria-label="Time and date controls" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;时间与日期控制台&quot;}">
+        <div class="workbench-top">
+          <span id="workbenchContext"></span>
+          <div class="workbench-calendar">
+            <button id="workbenchPrevDate" type="button" aria-label="Previous day" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;前一天&quot;}">‹</button><input id="workbenchDate" type="date" min="1900-01-01" max="2100-12-31" aria-label="Observation date" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观察日期&quot;}" /><button id="workbenchNextDate" type="button" aria-label="Next day" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;后一天&quot;}">›</button>
+          </div>
+          <button id="workbenchPlay" type="button" class="play-button" data-i18n-cn="{&quot;▶ Play time&quot;:&quot;▶ 播放时刻&quot;}">▶ Play time</button>
+        </div>
+        <div id="workbenchMain" class="workbench-main">
+          <div id="workbenchBearingPanel" class="workbench-panel" hidden>
+            <div class="workbench-panel-head">
+              <label for="workbenchBearing" data-i18n-cn="{&quot;Viewing azimuth&quot;:&quot;面向方位&quot;}">Viewing azimuth</label><output id="workbenchBearingText" data-i18n-cn="{&quot;180° · S&quot;:&quot;180° · 南&quot;}">180° · S</output>
+            </div>
+            <input id="workbenchBearing" type="range" min="0" max="360" step="1" value="180" aria-label="Viewing azimuth" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;面向方位&quot;}" />
+            <div class="workbench-look-buttons">
+              <button data-workbench-look="0" data-i18n-cn="{&quot;N&quot;:&quot;北&quot;}">N</button><button data-workbench-look="90" data-i18n-cn="{&quot;E&quot;:&quot;东&quot;}">E</button><button data-workbench-look="180" data-i18n-cn="{&quot;S&quot;:&quot;南&quot;}">S</button><button data-workbench-look="270" data-i18n-cn="{&quot;W&quot;:&quot;西&quot;}">W</button>
+            </div>
+          </div>
+          <div id="workbenchClockPanel" class="workbench-panel">
+            <div class="workbench-panel-head">
+              <label id="workbenchClockLabel" for="workbenchTime" data-i18n-cn="{&quot;Observation time · Local apparent solar time&quot;:&quot;观测时刻 · 当地真太阳时&quot;}">Observation time · Local apparent solar time</label><output id="workbenchClockText">12:00</output>
+            </div>
+            <input id="workbenchTime" type="range" min="0" max="1440" step="1" value="720" aria-label="Observation time, local apparent solar time" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观测时刻，当地真太阳时&quot;}" />
+            <div class="workbench-clock-tools">
+              <button id="workbenchTimeBack" type="button" aria-label="Go back five minutes" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;提前五分钟&quot;}" data-i18n-cn="{&quot;−5 min&quot;:&quot;−5分&quot;}">−5 min</button><input id="workbenchClockInput" type="time" step="60" value="12:00" aria-label="Enter exact local apparent solar time" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;精确输入当地真太阳时&quot;}" /><button id="workbenchTimeForward" type="button" aria-label="Advance five minutes" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;推后五分钟&quot;}" data-i18n-cn="{&quot;+5 min&quot;:&quot;\n                +5分\n              &quot;}">+5 min</button>
+            </div>
+          </div>
+          <div id="workbenchDatePanel" class="workbench-panel">
+            <div class="workbench-panel-head">
+              <label id="workbenchDayLabel" for="workbenchDay" data-i18n-cn="{&quot;Date · This year&quot;:&quot;日期 · 本年&quot;}">Date · This year</label><output id="workbenchDayText" data-i18n-cn="{&quot;Jun 21&quot;:&quot;06月21日&quot;}">Jun 21</output>
+            </div>
+            <input id="workbenchDay" type="range" min="1" max="365" step="1" value="172" aria-label="Choose observation date" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;选择观察日期&quot;}" />
+            <div class="workbench-date-scale">
+              <span id="workbenchDayStart" data-i18n-cn="{&quot;Jan&quot;:&quot;1月&quot;}">Jan</span><span id="workbenchDayMiddle" data-i18n-cn="{&quot;Jul&quot;:&quot;7月&quot;}">Jul</span><span id="workbenchDayEnd" data-i18n-cn="{&quot;Dec&quot;:&quot;12月&quot;}">Dec</span>
+            </div>
+          </div>
+        </div>
+        <details id="workbenchMore" class="workbench-more">
+          <summary data-i18n-cn="{&quot;Playback settings and quick times&quot;:&quot;播放设置与快捷时刻&quot;}">Playback settings and quick times</summary>
+          <div class="workbench-extra">
+            <label data-i18n-cn="{&quot;Playback target&quot;:&quot;播放对象&quot;}">Playback target<select id="workbenchBasis">
+                <option value="day" data-i18n-cn="{&quot;Time of day&quot;:&quot;一天内的时刻&quot;}">Time of day</option>
+                <option value="date" data-i18n-cn="{&quot;Date (fixed time)&quot;:&quot;日期（固定时刻）&quot;}">Date (fixed time)</option>
+              </select></label><label data-i18n-cn="{&quot;Speed&quot;:&quot;速度&quot;}">Speed<select id="workbenchSpeed"></select></label><label class="workbench-loop"><input id="workbenchLoop" type="checkbox" checked /><span id="workbenchLoopLabel" data-i18n-cn="{&quot;Loop day&quot;:&quot;循环当天&quot;}">Loop day</span></label>
+            <div id="workbenchMonthTools" class="workbench-month-tools" hidden>
+              <button id="workbenchPrevMonth" type="button" aria-label="Previous month" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;上个月&quot;}">‹</button><input id="workbenchMonth" type="month" min="1900-01" max="2100-12" aria-label="Moon observation month" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;月球观察月份&quot;}" /><button id="workbenchNextMonth" type="button" aria-label="Next month" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;下个月&quot;}">›</button>
+            </div>
+            <div class="workbench-events">
+              <button id="workbenchRise" type="button" data-i18n-cn="{&quot;Sunrise&quot;:&quot;日出&quot;}">Sunrise</button><button id="workbenchPeak" type="button" data-i18n-cn="{&quot;Daily maximum&quot;:&quot;当日最高&quot;}">Daily maximum</button><button id="workbenchSet" type="button" data-i18n-cn="{&quot;Sunset&quot;:&quot;日落&quot;}">Sunset</button>
+            </div>
+          </div>
+          <div id="workbenchDateMoreHost"></div>
+          <p id="workbenchHint"></p>
+        </details>
+      </section>
+      <section class="sundial-panel sundial-page" id="sundialPanel" aria-labelledby="sundialDialogTitle">
+        <div class="sundial-dialog-head">
+          <div>
+            <span class="eyebrow" data-i18n-cn="{&quot;Everyday instruments · Horizontal and equatorial sundials&quot;:&quot;生活装置 · 水平日晷与赤道日晷&quot;}">Everyday instruments · Horizontal and equatorial sundials</span>
+            <h2 id="sundialDialogTitle" data-i18n-cn="{&quot;Sundial lab&quot;:&quot;日晷实验台&quot;}">Sundial lab</h2>
+          </div>
+          <button id="closeSundials" type="button" aria-label="Close sundial lab" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;关闭日晷实验台&quot;}">×</button>
+          <div class="sundial-sticky-clock">
+            <label for="sundialStickyTime" data-i18n-cn="{&quot;Local apparent solar time &quot;:&quot;当地真太阳时 &quot;}">Local apparent solar time <output id="sundialStickyClock">12:00</output></label><input id="sundialStickyTime" type="range" min="0" max="1440" step="1" value="720" aria-label="Sundial time, pinned to the top of the dialog" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;日晷时刻，固定在弹窗顶部&quot;}" />
+          </div>
+        </div>
+        <div class="sundial-content">
+          <p class="micro" data-i18n-cn="{&quot;Sundials turn the Sun&#x27;s direction into a time reading. Their gnomons are parallel to Earth&#x27;s axis, unlike the vertical gnomon used for shadow lengths. The equatorial gnomon passes through the dial so both faces can be used. Both instruments share the current location, date, and local apparent solar time.&quot;:&quot;\n            日晷把太阳方向变成时间。这里的晷针与地轴平行，和前面用于观察影长的竖直立杆不同；赤道日晷的晷针穿过盘面，供两面使用。两种装置共用当前地点、日期和当地真太阳时。\n          &quot;}">Sundials turn the Sun's direction into a time reading. Their gnomons are parallel to Earth's axis, unlike the vertical gnomon used for shadow lengths. The equatorial gnomon passes through the dial so both faces can be used. Both instruments share the current location, date, and local apparent solar time.</p>
+          <div class="sundial-toolbar">
+            <div role="group" aria-label="Sundial observation time" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;日晷观测时刻&quot;}">
+              <button data-dial-time="540" data-i18n-cn="{&quot;Morning 09:00&quot;:&quot;上午 09:00&quot;}">Morning 09:00</button><button data-dial-time="720" data-i18n-cn="{&quot;Local solar noon&quot;:&quot;当地正午&quot;}">Local solar noon</button><button data-dial-time="900" data-i18n-cn="{&quot;Afternoon 15:00&quot;:&quot;下午 15:00&quot;}">Afternoon 15:00</button>
+            </div>
+            <label for="sundialOffset" data-i18n-cn="{&quot;Comparison clock UTC offset&quot;:&quot;对照钟表时 UTC 偏移&quot;}">Comparison clock UTC offset<input id="sundialOffset" type="number" min="-12" max="14" step="0.25" value="8" /></label>
+          </div>
+          <div class="sundial-lab-controls">
+            <div class="sundial-view-controls" role="group" aria-label="Sundial display" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;日晷显示方式&quot;}">
+              <button data-dial-view="device" class="active" aria-pressed="true" data-i18n-cn="{&quot;3D instrument and shadow&quot;:&quot;\n                立体装置与影子&quot;}">3D instrument and shadow</button><button data-dial-view="plate" aria-pressed="false" data-i18n-cn="{&quot;Dial reading and installation&quot;:&quot;盘面读时与安装&quot;}">Dial reading and installation</button>
+            </div>
+            <div class="sundial-observation">
+              <label data-i18n-cn="{&quot;Observation date&quot;:&quot;观测日期&quot;}">Observation date<input id="sundialDate" type="date" min="1900-01-01" max="2100-12-31" /></label><button id="sundialPlay" class="play-button" data-i18n-cn="{&quot;▶ Play a day&quot;:&quot;▶ 演示一天&quot;}">▶ Play a day</button>
+            </div>
+            <label class="sundial-time-label" for="sundialTime" data-i18n-cn="{&quot;Drag the time slider to watch the gnomon&#x27;s shadow change &quot;:&quot;拖动时间，看晷针投影变化 &quot;}">Drag the time slider to watch the gnomon's shadow change <output id="sundialTimeValue">12:00</output></label><input id="sundialTime" type="range" min="0" max="1440" step="1" value="720" aria-label="Sundial local apparent solar time" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;日晷当地真太阳时&quot;}" />
+            <div class="time-labels">
+              <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span>
+            </div>
+            <label class="sundial-time-label" for="sundialNeedleLength" data-i18n-cn="{&quot;Gnomon length &quot;:&quot;改变晷针长度 &quot;}">Gnomon length <output id="sundialNeedleValue">18 cm</output></label><input id="sundialNeedleLength" type="range" min="6" max="30" step="1" value="18" aria-label="Horizontal gnomon length and each side of equatorial gnomon, in centimeters" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;水平晷针长度与赤道晷针单侧长度，厘米&quot;}" />
+            <p class="micro" data-i18n-cn="{&quot;Change the gnomon length to compare shadow lengths. Hour-line directions remain unchanged. On the equatorial sundial, this length applies to each side of the gnomon.&quot;:&quot;\n              改变针长可比较影长；时刻线方向不随针长改变。赤道晷针两侧各取此长度。\n            &quot;}">Change the gnomon length to compare shadow lengths. Hour-line directions remain unchanged. On the equatorial sundial, this length applies to each side of the gnomon.</p>
+            <p id="sundialInteractionHint" class="micro" data-i18n-cn="{&quot;Drag the shadow direction on the dial or click an hour mark. Both sundials and the main lab update together. There is no direct-sunlight shadow at night.&quot;:&quot;\n              在盘面拖动影子方向，或点击时刻刻度；两种日晷与主实验台同时更新。夜间无直射日影。\n            &quot;}">Drag the shadow direction on the dial or click an hour mark. Both sundials and the main lab update together. There is no direct-sunlight shadow at night.</p>
+          </div>
+          <div class="sundial-clock">
+            <div><span data-i18n-cn="{&quot;Local apparent solar time&quot;:&quot;当地真太阳时&quot;}">Local apparent solar time</span><strong id="sundialSolarClock"></strong></div>
+            <div>
+              <span id="sundialWatchLabel" data-i18n-cn="{&quot;Comparison clock · UTC+8&quot;:&quot;对照钟表时 · UTC+8&quot;}">Comparison clock · UTC+8</span><strong id="sundialWatchClock"></strong>
+            </div>
+            <p id="sundialClockNote" class="micro"></p>
+          </div>
+          <div class="sundial-grid">
+            <article class="sundial-card">
+              <div class="sundial-card-title">
+                <span class="sundial-type" data-i18n-cn="{&quot;01 · Courtyards and plazas&quot;:&quot;01 · 庭院与广场&quot;}">01 · Courtyards and plazas</span>
+                <h3 data-i18n-cn="{&quot;Horizontal sundial&quot;:&quot;水平日晷&quot;}">Horizontal sundial</h3>
+                <p data-i18n-cn="{&quot;The dial is horizontal; the gnomon points toward the celestial pole of the observer&#x27;s hemisphere.&quot;:&quot;晷面水平，晷针指向所在半球的天极。&quot;}">The dial is horizontal; the gnomon points toward the celestial pole of the observer's hemisphere.</p>
+              </div>
+              <canvas id="horizontalDial" tabindex="0" aria-label="Horizontal sundial: dial plan and installation side view. Click hour marks to set the time; arrow keys adjust one hour; Home returns to solar noon." data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;水平日晷：晷面俯视与安装侧视图；点击时刻刻度调时，方向键每次调整一小时，Home 回到正午&quot;}"></canvas>
+              <div class="sundial-reading">
+                <span data-i18n-cn="{&quot;Sundial reading&quot;:&quot;晷上读时&quot;}">Sundial reading</span><strong id="horizontalDialReading"></strong>
+              </div>
+              <p id="horizontalDialNote" class="micro"></p>
+              <p class="micro" data-i18n-cn="{&quot;Hour lines are generally unevenly spaced and depend on latitude. The gnomon&#x27;s elevation equals the absolute latitude. Recalibrate the instrument if you move it to another latitude.&quot;:&quot;\n                时刻线一般不等距，排列随纬度变化。晷针仰角等于当地纬度的绝对值；此装置搬到其他纬度需要重新校准。\n              &quot;}">Hour lines are generally unevenly spaced and depend on latitude. The gnomon's elevation equals the absolute latitude. Recalibrate the instrument if you move it to another latitude.</p>
+              <details class="sundial-make">
+                <summary data-i18n-cn="{&quot;How to build and install it&quot;:&quot;怎样制作和安装？&quot;}">How to build and install it</summary>
+                <p data-i18n-cn="{&quot;Use cardboard for a horizontal base and a straight rod as the gnomon. Align it with true north–south and set its elevation as shown above, pointing toward your hemisphere&#x27;s celestial pole. Draw hour lines for the current latitude; do not copy the equally spaced marks of an ordinary clock.&quot;:&quot;\n                  可用硬纸板做水平底板，用直杆做晷针。晷针沿真南北方向安装，按上面的仰角固定，指向所在半球的天极；时刻线参考当前纬度的盘面，不可直接照搬等分的普通钟面。\n                &quot;}">Use cardboard for a horizontal base and a straight rod as the gnomon. Align it with true north–south and set its elevation as shown above, pointing toward your hemisphere's celestial pole. Draw hour lines for the current latitude; do not copy the equally spaced marks of an ordinary clock.</p>
+              </details>
+            </article>
+            <article class="sundial-card">
+              <div class="sundial-card-title">
+                <span class="sundial-type" data-i18n-cn="{&quot;02 · Parks and astronomy classes&quot;:&quot;02 · 公园与天文教学&quot;}">02 · Parks and astronomy classes</span>
+                <h3 data-i18n-cn="{&quot;Equatorial sundial&quot;:&quot;赤道日晷&quot;}">Equatorial sundial</h3>
+                <p data-i18n-cn="{&quot;The dial is parallel to Earth&#x27;s equatorial plane; the gnomon is perpendicular to the dial.&quot;:&quot;晷面平行地球赤道面，晷针垂直晷面。&quot;}">The dial is parallel to Earth's equatorial plane; the gnomon is perpendicular to the dial.</p>
+              </div>
+              <canvas id="equatorialDial" tabindex="0" aria-label="Equatorial sundial: illuminated-face front view and installation side view. Click hour marks to set time; arrow keys adjust one hour; Home returns to solar noon." data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;赤道日晷：受光面的正视图与安装侧视图；点击时刻刻度调时，方向键每次调整一小时，Home 回到正午&quot;}"></canvas>
+              <div class="sundial-reading">
+                <span data-i18n-cn="{&quot;Sundial reading&quot;:&quot;晷上读时&quot;}">Sundial reading</span><strong id="equatorialDialReading"></strong>
+              </div>
+              <p id="equatorialDialNote" class="micro"></p>
+              <p class="micro" data-i18n-cn="{&quot;Adjacent hour lines differ by 15°. As solar declination changes, illumination switches between the two faces, whose hour marks are mirrored. Near the equinoxes, sunlight is nearly parallel to the dial, making it difficult to read.&quot;:&quot;\n                相邻整点线相差\n                15°。太阳赤纬改变时，受光面会换到另一面；两面的刻度左右相反。分日前后太阳光接近平行晷面，实际较难读时。\n              &quot;}">Adjacent hour lines differ by 15°. As solar declination changes, illumination switches between the two faces, whose hour marks are mirrored. Near the equinoxes, sunlight is nearly parallel to the dial, making it difficult to read.</p>
+              <details class="sundial-make">
+                <summary data-i18n-cn="{&quot;How to build and install it&quot;:&quot;怎样制作和安装？&quot;}">How to build and install it</summary>
+                <p data-i18n-cn="{&quot;Use a double-sided cardboard disk with a perpendicular rod through its center. Draw hour lines 15° apart on each face, reversing their left–right order. Install the disk at the tilt shown above so the rod is parallel to Earth&#x27;s axis; do not lay the disk horizontally.&quot;:&quot;\n                  可用双面硬纸圆盘，中心穿入一根与盘面垂直的杆；两面分别画每小时 15°\n                  的时刻线，注意镜像关系。按上面的晷面倾角安装，让杆轴与地轴平行；不要把盘面直接水平摆放。\n                &quot;}">Use a double-sided cardboard disk with a perpendicular rod through its center. Draw hour lines 15° apart on each face, reversing their left–right order. Install the disk at the tilt shown above so the rod is parallel to Earth's axis; do not lay the disk horizontally.</p>
+              </details>
+            </article>
+          </div>
+          <div class="sundial-key">
+            <span data-i18n-cn="{&quot;Gnomon / plan projection&quot;:&quot;晷针 / 俯视投影&quot;}"><i class="dial-gnomon"></i>Gnomon / plan projection</span><span data-i18n-cn="{&quot;Shadow line cast by direct sunlight&quot;:&quot;直射阳光形成的影线&quot;}"><i class="dial-shadow"></i>Shadow line cast by direct sunlight</span><span data-i18n-cn="{&quot;Pale hour marks: Sun below the horizon at that time on the selected date&quot;:&quot;浅色刻度：当前日期该时刻太阳在地平线下&quot;}">Pale hour marks: Sun below the horizon at that time on the selected date</span>
+          </div>
+          <p class="micro" data-i18n-cn="{&quot;Click an hour mark on the dial. With the canvas focused, ← / → adjust by one hour and Home returns to solar noon. The 3D instrument uses the same geometry; Dial reading and installation retains orthographic views. Gnomon length is adjustable (default horizontal length 0.18 m; equatorial length 0.18 m on each side), and dial radius is 0.32 m. Arrows show a shadow tip outside the dial. Align installations with true north–south; correct a magnetic compass for magnetic declination. Directions at the poles are not unique, so the selected meridian is used as a reference. Shadows are calculated from ray–dial intersections; line width and soft edges aid visibility without simulating actual penumbra, weather, or terrain obstruction.&quot;:&quot;\n            点击盘面时刻刻度；聚焦画布后可用键盘：← / → 调整一小时，Home\n            回到正午。立体装置按同一几何模型投影；“盘面读时与安装”保留正投影图。晷针长度可调（默认水平针长\n            0.18 m，赤道针两侧各 0.18 m），盘面半径 0.32\n            m；箭头表示杆尖的影子超出盘面。安装应按真南北定向，普通指南针的磁北需校正磁偏角；极点方位不唯一，图中按选定经线作参考。影子的位置按光线与晷面交点计算；线宽及柔边用于辨识，不模拟真实半影、天气或地形遮挡。\n          &quot;}">Click an hour mark on the dial. With the canvas focused, ← / → adjust by one hour and Home returns to solar noon. The 3D instrument uses the same geometry; Dial reading and installation retains orthographic views. Gnomon length is adjustable (default horizontal length 0.18 m; equatorial length 0.18 m on each side), and dial radius is 0.32 m. Arrows show a shadow tip outside the dial. Align installations with true north–south; correct a magnetic compass for magnetic declination. Directions at the poles are not unique, so the selected meridian is used as a reference. Shadows are calculated from ray–dial intersections; line width and soft edges aid visibility without simulating actual penumbra, weather, or terrain obstruction.</p>
+          <details class="sundial-question">
+            <summary data-i18n-cn="{&quot;Think about it: why might a sundial and your phone show different times?&quot;:&quot;想一想：为什么日晷与手机时间不一定相同？&quot;}">Think about it: why might a sundial and your phone show different times?</summary>
+            <p data-i18n-cn="{&quot;A sundial reads local apparent solar time. A phone usually shows its time zone&#x27;s clock time. Longitude relative to the zone&#x27;s central meridian and the changing equation of time both cause differences. This model uses a fixed UTC offset and does not automatically apply daylight saving time.&quot;:&quot;\n              日晷读出当地真太阳时。手机通常显示所在时区的钟表时；地点经度相对时区中央经线的差别，以及全年变化的均时差，都会使二者不同。这里使用固定\n              UTC 偏移，不自动处理夏令时。\n            &quot;}">A sundial reads local apparent solar time. A phone usually shows its time zone's clock time. Longitude relative to the zone's central meridian and the changing equation of time both cause differences. This model uses a fixed UTC offset and does not automatically apply daylight saving time.</p>
+            <p data-i18n-cn="{&quot;Try it: keep the date fixed and change longitude from 120°E to 105°E. Compare clock readings at the same local apparent solar time. Then keep the location fixed and change the date to explore the equation of time.&quot;:&quot;\n              动手比较：保持日期不变，把经度从 120°E 改到\n              105°E，观察同一当地真太阳时对应的钟表时；再固定地点改变日期，观察均时差的影响。\n            &quot;}">Try it: keep the date fixed and change longitude from 120°E to 105°E. Compare clock readings at the same local apparent solar time. Then keep the location fixed and change the date to explore the equation of time.</p>
+          </details>
+        </div>
+      </section>
+      <dialog id="settingsDialog" class="settings-dialog" aria-label="Experiment menu" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;实验菜单&quot;}">
+        <div id="mobileControlsHost"></div>
+      </dialog>
+      <dialog id="help">
+        <div class="dialog-head">
+          <h2 data-i18n-cn="{&quot;Make the sky your laboratory&quot;:&quot;把天空变成你的实验室&quot;}">Make the sky your laboratory</h2>
+          <button id="closeHelp" aria-label="Close learning guide" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;关闭学习指南&quot;}">×</button>
+        </div>
+        <p data-i18n-cn="{&quot;Choose the Sun or Moon first. The bottom time controls remain available: drag time or date, enter an exact time, or adjust in five-minute steps. Choose “Time of day” or “Date (fixed time)” in playback settings. The menu groups date and location, experiment mode, display aids, and linked diagrams; expand a group to adjust its parameters.&quot;:&quot;\n          主界面先选太阳或月球；底部时间控制台始终可用，拖动时刻或日期、输入精确时间，或按 5\n          分钟微调。播放设置中明确选择“一天内的时刻”或“日期（固定时刻）”。实验菜单按日期与地点、演示方式、显示辅助和关联图解分类；精确参数可展开调整。\n        &quot;}">Choose the Sun or Moon first. The bottom time controls remain available: drag time or date, enter an exact time, or adjust in five-minute steps. Choose “Time of day” or “Date (fixed time)” in playback settings. The menu groups date and location, experiment mode, display aids, and linked diagrams; expand a group to adjust its parameters.</p>
+        <p data-i18n-cn="{&quot;Switch between the Sun and Moon. The dot represents the observer on the ground. The curve shows the body&#x27;s daily path as seen by that observer.&quot;:&quot;可切换太阳和月球。圆点代表地面观察位置。轨迹是在该观察者眼中，天体当天经过的路径。&quot;}">Switch between the Sun and Moon. The dot represents the observer on the ground. The curve shows the body's daily path as seen by that observer.</p>
+        <ol>
+          <li data-i18n-cn="{&quot;In the Sun view, enable fixed-time date observations. Drag the annual date slider or play dates to compare the Sun and gnomon shadow. Overlay annual paths at the same time and link the analemma below. This keeps local apparent solar time fixed, not Beijing clock time.&quot;:&quot;在太阳界面开启“固定时刻 ·\n            按日期观察”，拖动全年日期或按日期播放，比较太阳与杆影的变化。可叠加全年同一时刻轨迹，并联动下方日行迹。此时固定当地真太阳时，不是固定北京时间。\n          &quot;}">
+            <strong data-i18n-cn="{&quot;Compare seasons at a fixed time:&quot;:&quot;固定时刻比较季节：&quot;}">Compare seasons at a fixed time:</strong>In the Sun view, enable fixed-time date observations. Drag the annual date slider or play dates to compare the Sun and gnomon shadow. Overlay annual paths at the same time and link the analemma below. This keeps local apparent solar time fixed, not Beijing clock time.</li>
+          <li data-i18n-cn="{&quot;Open the analemma from the Sun&#x27;s linked diagrams. Observe the annual figure eight at a fixed clock time, then compare a fixed apparent solar time. The analemma can use its own time; linked daily observations use the main lab&#x27;s apparent solar time. The UTC offset is fixed and excludes daylight saving time.&quot;:&quot;在太阳的关联图解中开启日行迹，固定钟表时观察全年“8”字，再切到固定真太阳时比较。日行迹可独立设置时刻；启用逐日联动时采用主实验台的真太阳时。UTC\n            偏移固定，不含夏令时。\n          &quot;}">
+            <strong data-i18n-cn="{&quot;Explore the analemma:&quot;:&quot;探索日行迹：&quot;}">Explore the analemma:</strong>Open the analemma from the Sun's linked diagrams. Observe the annual figure eight at a fixed clock time, then compare a fixed apparent solar time. The analemma can use its own time; linked daily observations use the main lab's apparent solar time. The UTC offset is fixed and excludes daylight saving time.</li>
+          <li data-i18n-cn="{&quot;Keep Beijing selected. Compare the June and December solstices, or drag the annual month slider to examine noon altitude and daylight duration. Seasons primarily result from Earth&#x27;s axial tilt changing solar altitude and daylight duration, not from changing Earth–Sun distance.&quot;:&quot;固定北京，依次选夏至、冬至，或拖动全年月份滑块，观察正午高度和昼长。季节主要由地轴倾斜造成太阳高度与昼长的变化，不能用日地距离远近来解释。\n          &quot;}">
+            <strong data-i18n-cn="{&quot;Compare seasons:&quot;:&quot;比较季节：&quot;}">Compare seasons:</strong>Keep Beijing selected. Compare the June and December solstices, or drag the annual month slider to examine noon altitude and daylight duration. Seasons primarily result from Earth's axial tilt changing solar altitude and daylight duration, not from changing Earth–Sun distance.</li>
+          <li data-i18n-cn="{&quot;Keep the date fixed and move the latitude from the equator toward the North Pole. Observe the path&#x27;s tilt, polar day, and polar night.&quot;:&quot;保持日期不变，把纬度从赤道拖到北极，观察轨迹倾斜和极昼、极夜。\n          &quot;}">
+            <strong data-i18n-cn="{&quot;Compare latitudes:&quot;:&quot;比较纬度：&quot;}">Compare latitudes:</strong>Keep the date fixed and move the latitude from the equator toward the North Pole. Observe the path's tilt, polar day, and polar night.</li>
+          <li data-i18n-cn="{&quot;Compare sunrise and sunset azimuths; click a result to jump to that time. Read the notes for polar day, polar night, and the poles.&quot;:&quot;同时查看日出与日落方位；点击结果跳到对应时刻。极昼、极夜和极点要结合提示判读。\n          &quot;}">
+            <strong data-i18n-cn="{&quot;Compare rise/set azimuths:&quot;:&quot;比较升落方位：&quot;}">Compare rise/set azimuths:</strong>Compare sunrise and sunset azimuths; click a result to jump to that time. Read the notes for polar day, polar night, and the poles.</li>
+          <li data-i18n-cn="{&quot;Choose Shadow plan view and drag the time slider. Under Display aids → Shadows and shadow-tip paths, enlarge the ground, show the daily tip path, and click it to change time. A vertical gnomon&#x27;s shadow on level ground points away from the Sun. Gnomon height affects shadow length, not the observer&#x27;s elevation.&quot;:&quot;切到俯视日影，拖动时间；在“显示辅助 →\n            日影与杆尖影迹”中可放大地面、显示全天杆尖影迹并点击轨迹切换时间。水平地面上的竖直立杆影子指向太阳的相反方向；杆高只用于影长，不改变观察地点的海拔。\n          &quot;}">
+            <strong data-i18n-cn="{&quot;Understand shadows:&quot;:&quot;理解日影：&quot;}">Understand shadows:</strong>Choose Shadow plan view and drag the time slider. Under Display aids → Shadows and shadow-tip paths, enlarge the ground, show the daily tip path, and click it to change time. A vertical gnomon's shadow on level ground points away from the Sun. Gnomon height affects shadow length, not the observer's elevation.</li>
+          <li data-i18n-cn="{&quot;Open the standalone Sundial lab from the Sun&#x27;s linked diagrams. Drag time or the shadow on the dial, or play a day, to compare both instruments. Change the gnomon length to examine shadows and time readings. Sundial gnomons are parallel to Earth&#x27;s axis and read local apparent solar time, which differs from a phone&#x27;s clock time.&quot;:&quot;在太阳的“关联图解 →\n            生活装置”中进入日晷独立实验页。拖动时间或盘面上的影子、播放一天，比较两种装置的日影；改变晷针长度，观察影长与读时。日晷的晷针与地轴平行，读的是当地真太阳时，不能直接当作手机钟表时。\n          &quot;}">
+            <strong data-i18n-cn="{&quot;Sundials in everyday life:&quot;:&quot;生活中的日晷：&quot;}">Sundials in everyday life:</strong>Open the standalone Sundial lab from the Sun's linked diagrams. Drag time or the shadow on the dial, or play a day, to compare both instruments. Change the gnomon length to examine shadows and time readings. Sundial gnomons are parallel to Earth's axis and read local apparent solar time, which differs from a phone's clock time.</li>
+          <li data-i18n-cn="{&quot;Choose Look up to see the Sun, Moon, and five planets from a ground observer&#x27;s perspective. Drag to turn or click a body&#x27;s name to face it. The sky is an orthographic projection of the forward hemisphere; bodies below the horizon or behind you are described in the list. Planet positions shown in daylight do not imply naked-eye visibility.&quot;:&quot;选择“仰望天空”，从地面观察者的角度查看太阳、月球及五颗行星。拖动转向，点击天体名称可面向它；天空为前方半球的正投影，地平线下和身后的天体用列表说明。白昼显示行星位置并不代表肉眼可见。\n          &quot;}">
+            <strong data-i18n-cn="{&quot;Look up:&quot;:&quot;仰望天空：&quot;}">Look up:</strong>Choose Look up to see the Sun, Moon, and five planets from a ground observer's perspective. Drag to turn or click a body's name to face it. The sky is an orthographic projection of the forward hemisphere; bodies below the horizon or behind you are described in the list. Planet positions shown in daylight do not imply naked-eye visibility.</li>
+          <li data-i18n-cn="{&quot;Switch between the globe and world map to examine the subsolar point and day–night regions. Click the map to choose a location. The linked diagram shows Earth&#x27;s axis, the observer, and the local horizon plane.&quot;:&quot;切换球面与全球平面图查看直射点和昼夜；平面图可点击选地点。联动示意显示地轴、观察地点及其当地地平面。\n          &quot;}">
+            <strong data-i18n-cn="{&quot;Connect with Earth:&quot;:&quot;联系地球：&quot;}">Connect with Earth:</strong>Switch between the globe and world map to examine the subsolar point and day–night regions. Click the map to choose a location. The linked diagram shows Earth's axis, the observer, and the local horizon plane.</li>
+          <li data-i18n-cn="{&quot;In Moon phases, enable the conjunction demonstration and select a planet. Compare spherical angular separation and altitude at the same location and time. Find the closest date in the next 30 days at that fixed time. A conjunction does not mean the planet and Moon are close in space, and small angular separation does not guarantee easy naked-eye viewing.&quot;:&quot;在月相界面开启演示，选择行星，比较同一地点和时刻的球面角距与高度。可寻找未来 30\n            天中固定时刻最靠近的一天；伴月并非行星与月球在空间里靠近，几何靠近也不等于适合肉眼观测。\n          &quot;}">
+            <strong data-i18n-cn="{&quot;Understand Moon–planet conjunctions:&quot;:&quot;理解行星伴月：&quot;}">Understand Moon–planet conjunctions:</strong>In Moon phases, enable the conjunction demonstration and select a planet. Compare spherical angular separation and altitude at the same location and time. Find the closest date in the next 30 days at that fixed time. A conjunction does not mean the planet and Moon are close in space, and small angular separation does not guarantee easy naked-eye viewing.</li>
+          <li data-i18n-cn="{&quot;Choose Moon phases to explore illumination and Sun–Earth–Moon geometry. Advance dates while keeping the observation time fixed to compare phases and sky positions. Choose Moon sky for its apparent motion, or overlay the Moon in the Sun view. The phase cycle is about 29.53 days, not one calendar month. The Moon can also appear in the daytime sky.&quot;:&quot;切到月相界面，先看月面亮暗与日地月关系，按天推进日期，在固定观测时刻比较月相与天空位置；如需查看月球视运动，可选择“月球天空”；太阳界面也可开启月球叠加。月相周期约\n            29.53 天，不等于一个公历月。月球也可能在白天出现在天空中。\n          &quot;}">
+            <strong data-i18n-cn="{&quot;Explore Moon phases:&quot;:&quot;探索月相：&quot;}">Explore Moon phases:</strong>Choose Moon phases to explore illumination and Sun–Earth–Moon geometry. Advance dates while keeping the observation time fixed to compare phases and sky positions. Choose Moon sky for its apparent motion, or overlay the Moon in the Sun view. The phase cycle is about 29.53 days, not one calendar month. The Moon can also appear in the daytime sky.</li>
+        </ol>
+        <p class="micro" data-i18n-cn="{&quot;Time is local apparent solar time: the Sun transits near 12:00 (exactly 12:00 in the idealized experiment), rather than your phone&#x27;s time-zone clock. Ephemeris mode uses astronomical calculations. Seasonal buttons select solstice and equinox local dates for the current year; their names and comparison-line labels follow Northern Hemisphere seasons, which are reversed in the Southern Hemisphere. The idealized experiment fixes solar declination to study latitude and seasons; selected date and UTC are not used. Comparison curves use ideal declinations of 0° and ±23.44°. Lunar calculations include topocentric parallax, placing the observer on the ground rather than at Earth&#x27;s center. Both bodies rise or set when their centers cross the geometric horizon; atmospheric refraction and terrain obstruction are omitted. Lunar illumination is the lit fraction of the disk seen from Earth, using a geocentric apparent-phase approximation. “Near” a principal phase does not identify its exact instant. Eclipse obstruction and brightness changes are not simulated. Elapsed durations in ephemeris mode use UTC intervals and differ slightly from apparent-solar-time reading intervals. Phase icons use a fixed orientation rather than the locally observed bright-limb orientation, which depends on hemisphere and observation time. A day&#x27;s maximum altitude can occur at the 00:00 or 24:00 boundary and need not coincide with lunar upper transit. A lunar direction and altitude do not guarantee naked-eye visibility; new moons and daytime conditions can make viewing difficult. Some azimuths are not uniquely defined at the poles or zenith.&quot;:&quot;\n          时间采用当地真太阳时，太阳上中天约在 12:00（理想实验恰为\n          12:00）；不是手机的时区时间。日期观测使用天文星历，四季按钮选择当前年份、当地日期的分至日，按钮和季节对比线的名称沿用北半球；南半球季节相反。理想实验固定太阳赤纬，用于分析纬度和季节规律，此时所选日期与\n          UTC 不参与计算。对比线采用赤纬 0°、±23.44°\n          的理想模型。月球使用天文星历计算，计入地平视差（观察者位于地面而非地心），两种天体均以中心穿越几何地平线为升落标准，未计大气折射和当地山地遮挡。可见月面照明比例指地球所见月圆盘的亮面比例，采用地心视月相近似；接近四种主要相位标注“附近”，不等同于精确发生时刻；此处未模拟日食、月食的遮挡与亮度变化。日期观测的实际经过时长按\n          UTC\n          时间间隔计算，与当地真太阳时的读数间隔略有区别。月相图标采用固定朝向，不表示本地观测时月面亮侧的朝向；北、南半球及观察时间会影响月面朝向。日内最高时刻可能位于当天的\n          00:00 或 24:00\n          边界，不一定等于月球上中天时刻。月球方位、高度不等于肉眼一定能看见；新月附近和白天可能难以辨认。极点及天体位于天顶时，部分方位定义不唯一。\n        &quot;}">Time is local apparent solar time: the Sun transits near 12:00 (exactly 12:00 in the idealized experiment), rather than your phone's time-zone clock. Ephemeris mode uses astronomical calculations. Seasonal buttons select solstice and equinox local dates for the current year; their names and comparison-line labels follow Northern Hemisphere seasons, which are reversed in the Southern Hemisphere. The idealized experiment fixes solar declination to study latitude and seasons; selected date and UTC are not used. Comparison curves use ideal declinations of 0° and ±23.44°. Lunar calculations include topocentric parallax, placing the observer on the ground rather than at Earth's center. Both bodies rise or set when their centers cross the geometric horizon; atmospheric refraction and terrain obstruction are omitted. Lunar illumination is the lit fraction of the disk seen from Earth, using a geocentric apparent-phase approximation. “Near” a principal phase does not identify its exact instant. Eclipse obstruction and brightness changes are not simulated. Elapsed durations in ephemeris mode use UTC intervals and differ slightly from apparent-solar-time reading intervals. Phase icons use a fixed orientation rather than the locally observed bright-limb orientation, which depends on hemisphere and observation time. A day's maximum altitude can occur at the 00:00 or 24:00 boundary and need not coincide with lunar upper transit. A lunar direction and altitude do not guarantee naked-eye visibility; new moons and daytime conditions can make viewing difficult. Some azimuths are not uniquely defined at the poles or zenith.</p>
+        <button id="startExplore" class="play-button" data-i18n-cn="{&quot;Start exploring&quot;:&quot;开始探索&quot;}">Start exploring</button>
+      </dialog>
+    </div>
+    <script src="astronomy.js"></script>
+    <script src="moon.js"></script>
+    <script src="coverage.js"></script>
+    <script src="menu.js"></script>
+    <script src="workspace.js"></script>
+    <script src="companion.js"></script>
+    <script src="analemma.js"></script>
+    <script src="shadow.js"></script>
+    <script src="sundial-device.js"></script>
+    <script src="sundial.js"></script>
+    <script src="observer.js"></script>
+    <script src="solar-date.js"></script>
+    <script src="time-workbench.js"></script>
+    <script src="motion.js"></script>
+    <script src="app.js"></script>
+    <script src="interface-motion.js"></script>
+    <script src="page-navigation.js"></script>
+    <script src="interaction-history.js"></script>
+    <script src="lab-history.js"></script>
+  </body>
+</html>

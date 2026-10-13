@@ -84,7 +84,8 @@
   function sync() {
     const reason = blockReason();
     button.disabled = Boolean(reason);
-    button.title = reason || '原关联图解与三维空间关系并排；共用下方时间控制。';
+    button.removeAttribute('title');
+    button.setAttribute('aria-label', reason || '三维对照：原关联图解与三维空间关系并排，共用下方时间控制');
     if (reason && enabled) setEnabled(false);
     if (!enabled || !frame?.contentWindow) return;
     const date = instantUTC(state.time, state.date, state.lon);

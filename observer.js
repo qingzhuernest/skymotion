@@ -2,28 +2,34 @@
  * 地面观察者视角的天空投影与天体朝向。
  */
 /* Ground observer: front half of the local unit sky, orthographic projection. */
-const observerNames = { Sun: '太阳', Moon: '月球', ...companionPlanets },
+const observerNames = { Sun: "太阳", Moon: "月球", ...companionPlanets },
   observerColors = {
-    Sun: '#ffd37a',
-    Moon: '#d6e6ff',
-    Mercury: '#b8c5d0',
-    Venus: '#fff0b8',
-    Mars: '#ffaf91',
-    Jupiter: '#efd2b1',
-    Saturn: '#e5d9a9',
+    Sun: "#ffd37a",
+    Moon: "#d6e6ff",
+    Mercury: "#b8c5d0",
+    Venus: "#fff0b8",
+    Mars: "#ffaf91",
+    Jupiter: "#efd2b1",
+    Saturn: "#e5d9a9",
   };
 const observerMinuteCache = new Map();
 let observerTimeHome = null;
 function observerPosition(body, time = state.time) {
-  if (body === 'Sun' && state.body === 'sun' && state.manual)
+  if (body === "Sun" && state.body === "sun" && state.manual)
     return solar(state.lat, state.dec, time);
   const minute = Math.floor(time),
-    key = [body, state.date, state.lat, state.lon, minute].join(':');
+    key = [body, state.date, state.lat, state.lon, minute].join(":");
   let pair = observerMinuteCache.get(key);
   if (!pair) {
     pair = [
       skyRaw(body, minute, state.date, state.lat, state.lon),
-      skyRaw(body, Math.min(minute + 1, 1440), state.date, state.lat, state.lon),
+      skyRaw(
+        body,
+        Math.min(minute + 1, 1440),
+        state.date,
+        state.lat,
+        state.lon,
+      ),
     ];
     if (observerMinuteCache.size >= 84)
       observerMinuteCache.delete(observerMinuteCache.keys().next().value);
@@ -52,7 +58,11 @@ function observerFrame(w, h, bearing = state.observerAz ?? 180) {
    Hemisphere and time enter through the local sky vectors, never a latitude flip. */
 function moonBrightLimbAngle(moon, sun, frame) {
   const dot = moon.x * sun.x + moon.y * sun.y + moon.z * sun.z;
-  const tangent = { x: sun.x - dot * moon.x, y: sun.y - dot * moon.y, z: sun.z - dot * moon.z };
+  const tangent = {
+    x: sun.x - dot * moon.x,
+    y: sun.y - dot * moon.y,
+    z: sun.z - dot * moon.z,
+  };
   const origin = frame.project({ x: 0, y: 0, z: 0 }),
     tip = frame.project(tangent),
     dx = tip.x - origin.x,
@@ -60,7 +70,8 @@ function moonBrightLimbAngle(moon, sun, frame) {
   return Math.hypot(dx, dy) > 1e-8 ? Math.atan2(dy, dx) : null;
 }
 function observerBodies() {
-  const bodies = state.body === 'sun' && state.manual ? ['Sun'] : Object.keys(observerNames);
+  const bodies =
+    state.body === "sun" && state.manual ? ["Sun"] : Object.keys(observerNames);
   return bodies.map((body) => ({
     body,
     name: observerNames[body],
@@ -69,7 +80,7 @@ function observerBodies() {
   }));
 }
 function observerDayPosition(body, time) {
-  if (state.body === 'sun' && state.manual && body === 'Sun')
+  if (state.body === "sun" && state.manual && body === "Sun")
     return solar(state.lat, state.dec, time);
   const day = ephemerisDay(body),
     t = clamp(time, 0, 1440) / 5,
@@ -89,7 +100,10 @@ function drawObserverCurve(c, positionAt, frame, color) {
     if (previous) {
       const a = previous.p,
         cuts = [0, 1];
-      for (const f of [a.y / (a.y - p.y), frame.front(a) / (frame.front(a) - frame.front(p))])
+      for (const f of [
+        a.y / (a.y - p.y),
+        frame.front(a) / (frame.front(a) - frame.front(p)),
+      ])
         if (f > 0 && f < 1) cuts.push(f);
       cuts.sort((a, b) => a - b);
       for (let i = 1; i < cuts.length; i++) {
@@ -118,56 +132,105 @@ function drawObserverTrack(c, body, frame, color) {
 }
 /* Ground compass is an illustrative horizontal reference, not a measured landscape. */
 function observerGroundFrame(w, h, base, bearing = state.observerAz ?? 180) {
-  const a = bearing * rad, depth = h - base;
-  const center = { x: w / 2, y: base + depth * .50 };
-  const Rx = Math.min(w * .29, depth * 2.8), Ry = Math.max(7, depth * .18);
-  return { center, Rx, Ry, project: (east, north) => ({
-    x: center.x + (east * Math.cos(a) - north * Math.sin(a)) * Rx,
-    y: center.y - (east * Math.sin(a) + north * Math.cos(a)) * Ry,
-  }) };
+  const a = bearing * rad,
+    depth = h - base;
+  const center = { x: w / 2, y: base + depth * 0.5 };
+  const Rx = Math.min(w * 0.29, depth * 2.8),
+    Ry = Math.max(7, depth * 0.18);
+  return {
+    center,
+    Rx,
+    Ry,
+    project: (east, north) => ({
+      x: center.x + (east * Math.cos(a) - north * Math.sin(a)) * Rx,
+      y: center.y - (east * Math.sin(a) + north * Math.cos(a)) * Ry,
+    }),
+  };
 }
 function drawObserverGround(c, w, h, frame) {
-  const ground = observerGroundFrame(w, h, frame.base), { center, Rx, Ry } = ground;
+  const ground = observerGroundFrame(w, h, frame.base),
+    { center, Rx, Ry } = ground;
   c.save();
-  c.beginPath(); c.ellipse(center.x, center.y, Rx, Ry, 0, 0, Math.PI * 2); c.clip();
-  for (const offset of [-.5, 0, .5]) {
-    poly(c, [ground.project(offset, -1), ground.project(offset, 1)], '#b5dfcf38', 1);
-    poly(c, [ground.project(-1, offset), ground.project(1, offset)], '#b5dfcf38', 1);
+  c.beginPath();
+  c.ellipse(center.x, center.y, Rx, Ry, 0, 0, Math.PI * 2);
+  c.clip();
+  for (const offset of [-0.5, 0, 0.5]) {
+    poly(
+      c,
+      [ground.project(offset, -1), ground.project(offset, 1)],
+      "#b5dfcf38",
+      1,
+    );
+    poly(
+      c,
+      [ground.project(-1, offset), ground.project(1, offset)],
+      "#b5dfcf38",
+      1,
+    );
   }
   c.restore();
-  for (const size of [.65, 1]) {
-    c.beginPath(); c.ellipse(center.x, center.y, Rx * size, Ry * size, 0, 0, Math.PI * 2);
-    c.strokeStyle = '#b5dfcf55'; c.lineWidth = 1; c.stroke();
+  for (const size of [0.65, 1]) {
+    c.beginPath();
+    c.ellipse(center.x, center.y, Rx * size, Ry * size, 0, 0, Math.PI * 2);
+    c.strokeStyle = "#b5dfcf55";
+    c.lineWidth = 1;
+    c.stroke();
   }
-  for (const [az, name] of [[0, '北'], [90, '东'], [180, '南'], [270, '西']]) {
-    const a = az * rad, q = ground.project(Math.sin(a) * 1.14, Math.cos(a) * 1.14);
-    text(c, (Math.abs(state.lat) > 89.99 ? '参考' : '') + name, q.x, q.y + 3,
-      name === '北' ? '#86d7f5' : '#d5e9dc', w < 500 ? 10 : 11);
+  for (const [az, name] of [
+    [0, "北"],
+    [90, "东"],
+    [180, "南"],
+    [270, "西"],
+  ]) {
+    const a = az * rad,
+      q = ground.project(Math.sin(a) * 1.14, Math.cos(a) * 1.14);
+    text(
+      c,
+      (Math.abs(state.lat) > 89.99 ? "参考" : "") + name,
+      q.x,
+      q.y + 3,
+      name === "北" ? "#86d7f5" : "#d5e9dc",
+      w < 500 ? 10 : 11,
+    );
   }
   // Forward stays at the top of the ground disk; world compass directions move with yaw.
-  const tip = { x: center.x, y: center.y - Ry * .82 };
-  poly(c, [center, tip], '#e7c783', 1.5);
-  poly(c, [{ x: tip.x - 3, y: tip.y + 4 }, tip, { x: tip.x + 3, y: tip.y + 4 }], '#e7c783', 1.5);
-  c.beginPath(); c.arc(center.x, center.y, 3, 0, Math.PI * 2);
-  c.fillStyle = '#91d8f4'; c.fill();
-  text(c, '地面方位参考 · 面向 ' + heading(state.observerAz ?? 180), w / 2, h - 9, '#c6ddd0', 10);
+  const tip = { x: center.x, y: center.y - Ry * 0.82 };
+  poly(c, [center, tip], "#e7c783", 1.5);
+  poly(
+    c,
+    [{ x: tip.x - 3, y: tip.y + 4 }, tip, { x: tip.x + 3, y: tip.y + 4 }],
+    "#e7c783",
+    1.5,
+  );
+  c.beginPath();
+  c.arc(center.x, center.y, 3, 0, Math.PI * 2);
+  c.fillStyle = "#91d8f4";
+  c.fill();
+  text(
+    c,
+    "地面方位参考 · 面向 " + heading(state.observerAz ?? 180),
+    w / 2,
+    h - 9,
+    "#c6ddd0",
+    10,
+  );
 }
 function drawObserverSky() {
-  if (!canPaint($('sky'))) return;
-  const { c, w, h } = resize($('sky')),
+  if (!canPaint($("sky"))) return;
+  const { c, w, h } = resize($("sky")),
     frame = observerFrame(w, h),
     bodies = observerBodies(),
-    sun = bodies.find((p) => p.body === 'Sun').position,
+    sun = bodies.find((p) => p.body === "Sun").position,
     day = sun.alt >= 0,
     twilight = sun.alt >= -18;
   const sky = c.createLinearGradient(0, 0, 0, frame.base);
-  sky.addColorStop(0, day ? '#427ca9' : twilight ? '#142844' : '#071425');
-  sky.addColorStop(1, day ? '#c2ddeb' : twilight ? '#a07464' : '#263c53');
+  sky.addColorStop(0, day ? "#427ca9" : twilight ? "#142844" : "#071425");
+  sky.addColorStop(1, day ? "#c2ddeb" : twilight ? "#a07464" : "#263c53");
   c.fillStyle = sky;
   c.fillRect(0, 0, w, frame.base);
   const ground = c.createLinearGradient(0, frame.base, 0, h);
-  ground.addColorStop(0, day ? '#52745c' : '#263d34');
-  ground.addColorStop(1, day ? '#203e35' : '#142920');
+  ground.addColorStop(0, day ? "#52745c" : "#263d34");
+  ground.addColorStop(1, day ? "#203e35" : "#142920");
   c.fillStyle = ground;
   c.fillRect(0, frame.base, w, h - frame.base);
   poly(
@@ -176,7 +239,7 @@ function drawObserverSky() {
       { x: 0, y: frame.base },
       { x: w, y: frame.base },
     ],
-    day ? '#cfdfc8' : '#90aba0',
+    day ? "#cfdfc8" : "#90aba0",
     1.5,
   );
   drawObserverGround(c, w, h, frame);
@@ -193,8 +256,15 @@ function drawObserverSky() {
           }),
         );
       }
-      poly(c, curve, '#d5e9ff22', 1, [3, 5]);
-      text(c, alt + '°', w - 25, frame.base - Math.sin(alt * rad) * frame.Ry, '#d0e5f2', 10);
+      poly(c, curve, "#d5e9ff22", 1, [3, 5]);
+      text(
+        c,
+        alt + "°",
+        w - 25,
+        frame.base - Math.sin(alt * rad) * frame.Ry,
+        day ? "#082331" : "#d0e5f2",
+        10,
+      );
     }
   }
   const bearing = state.observerAz ?? 180;
@@ -203,85 +273,146 @@ function drawObserverSky() {
       p = frame.project({ x: Math.sin(az * rad), y: 0, z: Math.cos(az * rad) });
     text(
       c,
-      (Math.abs(state.lat) > 89.99 ? '参考' : heading(az)) + ' ' + Math.round(az) + '°',
+      (Math.abs(state.lat) > 89.99 ? "参考" : heading(az)) +
+        " " +
+        Math.round(az) +
+        "°",
       clamp(p.x, 35, w - 35),
       frame.base + 15,
-      '#d6e3d4',
+      "#d6e3d4",
       11,
     );
   }
-  text(c, '天顶 90°', w / 2, Math.max(55, frame.base - frame.Ry - 12), '#dcebf5', 11);
-  if (state.body === 'sun' && state.solarDateMode && state.solarDateTrail)
-    drawObserverCurve(c, (t) => annualSolarPosition(t / 1440), frame, '#e8afff');
+  text(
+    c,
+    "天顶 90°",
+    w / 2,
+    Math.max(55, frame.base - frame.Ry - 12),
+    day ? "#082331" : "#dcebf5",
+    11,
+  );
+  if (state.body === "sun" && state.solarDateMode && state.solarDateTrail)
+    drawObserverCurve(
+      c,
+      (t) => annualSolarPosition(t / 1440),
+      frame,
+      "#e8afff",
+    );
+  const occupied = [];
   if (state.track) {
-    drawObserverTrack(c, 'Sun', frame, '#ffd37a77');
-    if (!state.manual || state.body === 'moon') {
-      drawObserverTrack(c, 'Moon', frame, '#c5ddff77');
+    drawObserverTrack(c, "Sun", frame, "#ffd37a77");
+    if (!state.manual || state.body === "moon") {
+      drawObserverTrack(c, "Moon", frame, "#c5ddff77");
       const project = (p) =>
-        p.y >= 0 && frame.front(p) >= 0 ? frame.project(p) : { x: -1e5, y: -1e5 };
-      drawMoonDayEndpoints(c, project, w, h, (t) =>
-        visualTrackPosition(t, observerDayPosition('Moon', t), 'Moon'),
+        p.y >= 0 && frame.front(p) >= 0
+          ? frame.project(p)
+          : { x: -1e5, y: -1e5 };
+      occupied.push(
+        ...drawMoonDayEndpoints(c, project, w, h, (t) =>
+          visualTrackPosition(t, observerDayPosition("Moon", t), "Moon"),
+        ),
       );
     }
   }
-  const occupied = [];
   for (const item of bodies) {
     const p = item.position;
     if (p.y <= 0 || frame.front(p) < -1e-10) continue;
     const q = frame.project(p);
-    if (item.body === 'Sun') glow(c, q.x, q.y, 9);
-    else if (item.body === 'Moon')
-      drawMoon(c, q.x, q.y, 10, visualPhase(), moonBrightLimbAngle(p, sun, frame));
+    if (item.body === "Sun") glow(c, q.x, q.y, 9);
+    else if (item.body === "Moon")
+      drawMoon(
+        c,
+        q.x,
+        q.y,
+        10,
+        visualPhase(),
+        moonBrightLimbAngle(p, sun, frame),
+      );
     else {
       c.fillStyle = observerColors[item.body];
       c.beginPath();
-      c.arc(q.x, q.y, item.body === 'Venus' ? 3.7 : 2.7, 0, Math.PI * 2);
+      c.arc(q.x, q.y, item.body === "Venus" ? 3.7 : 2.7, 0, Math.PI * 2);
       c.fill();
     }
-    let ly = q.y + 19;
-    while (occupied.some((r) => Math.abs(r.x - q.x) < 75 && Math.abs(r.y - ly) < 15)) ly += 16;
-    ly = clamp(ly, 62, frame.base - 12);
-    occupied.push({ x: q.x, y: ly });
-    text(c, item.name, clamp(q.x, 25, w - 25), ly, observerColors[item.body], 12);
+    // Labels move in screen space only; the body's computed position stays fixed.
+    const labelX = clamp(q.x, 25, w - 25),
+      baseY = clamp(q.y + 19, 62, frame.base - 12);
+    const candidates = [baseY];
+    for (let step = 1; step <= 8; step++)
+      candidates.push(baseY + step * 16, baseY - step * 16);
+    const ly =
+      candidates.find(
+        (y) =>
+          y >= 62 &&
+          y <= frame.base - 12 &&
+          !occupied.some(
+            (box) =>
+              Math.abs(box.x - labelX) < (box.width || 48) / 2 + 16 &&
+              Math.abs(box.y - y) < 16,
+          ),
+      ) ?? baseY;
+    occupied.push({ x: labelX, y: ly, width: 32 });
+    if (Math.abs(ly - (q.y + 19)) > 8)
+      poly(
+        c,
+        [q, { x: labelX, y: ly - 7 }],
+        observerColors[item.body] + "66",
+        0.7,
+      );
+    text(
+      c,
+      item.name,
+      labelX,
+      ly,
+      day ? "#082331" : observerColors[item.body],
+      12,
+    );
   }
 
-  $('sky').setAttribute(
-    'aria-label',
-    '地面观察者仰望天空，面向 ' + bearing.toFixed(0) + ' 度；只绘制地平线上方及前方的天体',
+  $("sky").setAttribute(
+    "aria-label",
+    "地面观察者仰望天空，面向 " +
+      bearing.toFixed(0) +
+      " 度；只绘制地平线上方及前方的天体",
   );
 }
 function arrangeObserverTime() {
-  const active = state.view === 'observer',
-    daily = active && state.body === 'sun' && !state.solarDateMode,
-    host = $('observerTimeHost'),
-    timeline = $('sunTimeline');
+  const active = state.view === "observer",
+    daily = active && state.body === "sun" && !state.solarDateMode,
+    host = $("observerTimeHost"),
+    timeline = $("sunTimeline");
   if (daily) {
     if (timeline.parentNode !== host) host.append(timeline);
   } else if (observerTimeHome && timeline.previousSibling !== observerTimeHome)
     observerTimeHome.after(timeline);
-  $('observerClockPanel').hidden = daily;
-  $('observerTime').value = state.time;
-  $('observerTimeValue').textContent = hhmm(state.time, true);
-  $('observerTimeLabel').textContent =
-    state.body === 'moon' || state.solarDateMode ? '固定当地真太阳时' : '当地真太阳时';
+  $("observerClockPanel").hidden = daily;
+  $("observerTime").value = state.time;
+  $("observerTimeValue").textContent = hhmm(state.time, true);
+  $("observerTimeLabel").textContent =
+    state.body === "moon" || state.solarDateMode
+      ? "固定当地真太阳时"
+      : "当地真太阳时";
 }
 function renderObserverControls() {
   arrangeObserverTime();
-  const active = state.view === 'observer';
-  $('observerControls').hidden = !active;
-  $('solarOverlayBar').hidden = state.body === 'moon' || active;
-  $('sky').style.touchAction = ['observer', 'orbit'].includes(state.view) ? 'none' : 'pan-y';
+  const active = state.view === "observer";
+  $("observerControls").hidden = !active;
+  $("solarOverlayBar").hidden = state.body === "moon" || active;
+  $("sky").style.touchAction = ["observer", "orbit"].includes(state.view)
+    ? "none"
+    : "pan-y";
   if (!active) return;
   const bearing = state.observerAz ?? 180;
-  $('observerAzimuth').value = bearing;
-  $('observerBearing').textContent = Math.round(bearing) + '° · ' + heading(bearing);
+  $("observerAzimuth").value = bearing;
+  $("observerBearing").textContent =
+    Math.round(bearing) + "° · " + heading(bearing);
   const frame = observerFrame(400, 400),
     items = observerBodies(),
-    box = $('observerBodies');
+    box = $("observerBodies");
   if (!box.children.length)
     for (const [body, name] of Object.entries(observerNames)) {
-      const b = document.createElement('button');
-      b.type = 'button';
+      const b = document.createElement("button");
+      b.type = "button";
       b.dataset.skyBody = body;
       b.onclick = () => {
         const p = observerPosition(body);
@@ -297,55 +428,57 @@ function renderObserverControls() {
     const p = item.exact;
     button.textContent =
       item.name +
-      ' ' +
+      " " +
       p.alt.toFixed(1) +
-      '° · ' +
-      (p.y <= 0 ? '地平线下' : frame.front(p) < 0 ? '身后' : '前方');
-    button.title = '转向' + item.name + ' · 方位 ' + p.az.toFixed(1) + '°';
+      "° · " +
+      (p.y <= 0 ? "地平线下" : frame.front(p) < 0 ? "身后" : "前方");
+    button.title = "转向" + item.name + " · 方位 " + p.az.toFixed(1) + "°";
   }
-  $('modelNote').textContent =
-    '仰望天空的月面亮边随当地天空几何方向转动；圆盘大小为示意，照明比例采用地心近似。月相原理图仍采用固定朝向。';
+  $("modelNote").textContent =
+    "仰望天空的月面亮边随当地天空几何方向转动；圆盘大小为示意，照明比例采用地心近似。月相原理图仍采用固定朝向。";
   const below = items.filter((p) => p.exact.y <= 0).map((p) => p.name);
-  $('observerStatus').textContent =
-    state.body === 'sun' && state.manual
-      ? '理想太阳实验仅显示太阳；恢复日期观测后可同时查看月球和行星。'
+  $("observerStatus").textContent =
+    state.body === "sun" && state.manual
+      ? "理想太阳实验仅显示太阳；恢复日期观测后可同时查看月球和行星。"
       : state.date +
-        ' · ' +
+        " · " +
         hhmm(state.time, true) +
-        ' 当地真太阳时' +
-        (below.length ? '；地平线下：' + below.join('、') : '；所列天体均在地平线上方');
-  $('viewHint').textContent = '拖动左右转身 · 下方选择天体';
-  const sunAltitude = items.find((p) => p.body === 'Sun').exact.alt;
-  $('dayBadge').textContent =
+        " 当地真太阳时" +
+        (below.length
+          ? "；地平线下：" + below.join("、")
+          : "；所列天体均在地平线上方");
+  $("viewHint").textContent = "拖动左右转身 · 下方选择天体";
+  const sunAltitude = items.find((p) => p.body === "Sun").exact.alt;
+  $("dayBadge").textContent =
     sunAltitude >= 0
-      ? '白昼 · 标注几何位置'
+      ? "白昼 · 标注几何位置"
       : sunAltitude >= -18
-        ? '暮光 · 地面观察'
-        : '夜空 · 地面观察';
-  $('sky').style.touchAction = 'none';
+        ? "暮光 · 地面观察"
+        : "夜空 · 地面观察";
+  $("sky").style.touchAction = "none";
 }
 function initObserver() {
-  const bearingPanel = document.querySelector('.observer-bearing-panel'),
-    bearingLabel = bearingPanel.querySelector('label'),
-    bearingInput = $('observerAzimuth');
-  bearingLabel.htmlFor = 'observerAzimuth';
+  const bearingPanel = document.querySelector(".observer-bearing-panel"),
+    bearingLabel = bearingPanel.querySelector("label"),
+    bearingInput = $("observerAzimuth");
+  bearingLabel.htmlFor = "observerAzimuth";
   bearingPanel.prepend(bearingLabel);
   bearingLabel.after(bearingInput);
-  observerTimeHome = document.createComment('home: observer Sun timeline');
-  $('sunTimeline').before(observerTimeHome);
-  $('observerTime').oninput = (e) => {
+  observerTimeHome = document.createComment("home: observer Sun timeline");
+  $("sunTimeline").before(observerTimeHome);
+  $("observerTime").oninput = (e) => {
     stop();
     state.time = Number(e.target.value);
     schedule();
   };
-  document.querySelectorAll('[data-look]').forEach(
+  document.querySelectorAll("[data-look]").forEach(
     (b) =>
       (b.onclick = () => {
         state.observerAz = Number(b.dataset.look);
         schedule();
       }),
   );
-  $('observerAzimuth').oninput = (e) => {
+  $("observerAzimuth").oninput = (e) => {
     state.observerAz = Number(e.target.value);
     schedule();
   };

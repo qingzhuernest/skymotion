@@ -2309,7 +2309,16 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   }
 }
 
-/* Welcome: entry on the left, five compact actions anchored at the lower right. */
+/* Welcome refinement: preserve the original star canvas and compact corner actions.
+ * One display/label family, a four-pixel spacing rhythm, and matching button geometry.
+ */
+@font-face {
+  font-family: 'SkyMotion Welcome Sans';
+  src: url('fonts/welcome-sans.woff') format('woff');
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
 html.welcome-page {
   height: 100%;
   overflow: hidden;
@@ -2322,6 +2331,10 @@ body[data-page='welcome'] {
   background: #080e17;
 }
 body[data-page='welcome'] .welcome-screen {
+  --welcome-action-width: 96px;
+  --welcome-radius: 14px;
+  --welcome-text: #edf3ff;
+  font-family: 'SkyMotion Welcome Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   position: relative;
   inset: auto;
   overflow: hidden;
@@ -2329,7 +2342,7 @@ body[data-page='welcome'] .welcome-screen {
   height: 100dvh;
   min-height: 0;
   background: radial-gradient(ellipse at 75% 20%, #18232e 0%, #0b131e 48%, #060b13 100%);
-  padding: max(24px, env(safe-area-inset-top)) clamp(20px, 5vw, 80px)
+  padding: max(24px, env(safe-area-inset-top)) clamp(24px, 5.6vw, 88px)
     max(20px, env(safe-area-inset-bottom));
 }
 body[data-page='welcome'] #welcomeSky {
@@ -2354,10 +2367,13 @@ body[data-page='welcome'] :is(a, button) {
 }
 body[data-page='welcome'] .welcome-brand {
   font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
   flex-shrink: 0;
 }
 body[data-page='welcome'] .welcome-brand > span {
-  font-size: 28px;
+  width: 28px;
+  height: 28px;
 }
 body[data-page='welcome'] .welcome-brand small {
   font-size: 9px;
@@ -2365,16 +2381,16 @@ body[data-page='welcome'] .welcome-brand small {
 }
 body[data-page='welcome'] .welcome-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 88px;
+  grid-template-columns: minmax(0, 1fr) var(--welcome-action-width);
   grid-template-rows: minmax(0, 1fr) auto;
-  column-gap: 24px;
+  column-gap: 32px;
   row-gap: 0;
   flex: 1;
   min-height: 0;
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: 16px 0;
+  padding: 24px 0;
   text-align: left;
 }
 body[data-page='welcome'] .welcome-corner-actions {
@@ -2382,9 +2398,9 @@ body[data-page='welcome'] .welcome-corner-actions {
   grid-row: 2;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   align-self: end;
-  width: 88px;
+  width: var(--welcome-action-width);
 }
 body[data-page='welcome'] :is(.welcome-intro, .welcome-toy) {
   padding: 0;
@@ -2403,26 +2419,26 @@ body[data-page='welcome'] .welcome-intro {
   max-width: 340px;
 }
 body[data-page='welcome'] .welcome-intro h1 {
-  font-size: clamp(22px, 2.2vw, 26px);
-  font-weight: 500;
-  line-height: 1.35;
+  font-size: clamp(25px, 3.2vw, 34px);
+  font-weight: 600;
+  line-height: 1.3;
   letter-spacing: 0;
-  margin: 0 0 8px;
+  margin: 0 0 16px;
 }
 body[data-page='welcome'] .welcome-intro > p {
-  color: #aab8ca;
-  font-size: 12px;
-  line-height: 1.6;
-  margin: 0 0 20px;
+  color: #b8c5d8;
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0 0 28px;
 }
 body[data-page='welcome'] .welcome-enter {
-  border-radius: 14px;
-  min-height: 46px;
-  width: 180px;
+  border-radius: var(--welcome-radius);
+  min-height: 48px;
+  width: 184px;
   padding: 10px 18px;
   gap: 20px;
   font-size: 14px;
-  background: #f0d6a5;
+  background: #f2d7a3;
   color: #253044;
   box-shadow: none;
 }
@@ -2430,7 +2446,7 @@ body[data-page='welcome'] .welcome-enter:hover {
   background: #fbe4bc;
 }
 body[data-page='welcome'] .welcome-toy {
-  width: 88px;
+  width: var(--welcome-action-width);
   align-self: flex-start;
   text-align: left;
 }
@@ -2438,37 +2454,37 @@ body[data-page='welcome'] .welcome-sky-actions {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 6px;
-  width: 88px;
+  gap: 8px;
+  width: var(--welcome-action-width);
   margin: 0;
 }
 body[data-page='welcome'] .welcome-footer {
   display: block;
   flex: none;
-  width: 88px;
+  width: var(--welcome-action-width);
   margin: 0;
   padding: 0;
 }
 body[data-page='welcome'] .welcome-corner-links {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  width: 88px;
+  width: var(--welcome-action-width);
   margin: 0;
-  gap: 6px;
+  gap: 8px;
 }
 body[data-page='welcome']
   :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited) {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 88px;
-  min-height: 30px;
-  padding: 4px 8px;
-  border-radius: 14px;
+  width: var(--welcome-action-width);
+  min-height: 40px;
+  padding: 8px;
+  border-radius: var(--welcome-radius);
   border: 1px solid #b8c5d329;
-  background: #14203199;
-  color: #c4cfde;
-  font-size: 11px !important;
+  background: #101b2bd9;
+  color: #d0dbea;
+  font-size: 12px !important;
   font-weight: 400;
   line-height: 1.5;
   text-decoration: none;
@@ -2499,7 +2515,7 @@ body[data-page='welcome'] #welcomeStarStatus {
 body[data-page='welcome'] .welcome-quote {
   flex-shrink: 0;
   font-family: 'Welcome Hand', 'Kaiti SC', KaiTi, cursive;
-  font-size: clamp(17px, 1.6vw, 21px);
+  font-size: clamp(15px, 1.35vw, 19px);
   font-weight: 400;
   line-height: 1.5;
   letter-spacing: 1px;
@@ -2518,7 +2534,7 @@ body[data-page='welcome'] .welcome-quote {
     padding: 12px 0;
   }
   body[data-page='welcome'] .welcome-intro > p {
-    margin-bottom: 14px;
+    margin-bottom: 20px;
   }
   body[data-page='welcome'] .welcome-enter {
     min-height: 42px;
@@ -2526,8 +2542,8 @@ body[data-page='welcome'] .welcome-quote {
   }
   body[data-page='welcome']
     :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited) {
-    min-height: 26px;
-    font-size: 10px !important;
+    min-height: 36px;
+    font-size: 11px !important;
     padding: 3px 8px;
   }
 }
@@ -2540,12 +2556,12 @@ body[data-page='welcome'] .welcome-quote {
 /* Give the desktop welcome greeting a clear visual hierarchy without enlarging mobile text. */
 @media (min-width: 1024px) and (min-height: 501px) {
   body[data-page='welcome'] .welcome-intro {
-    max-width: 680px;
+    max-width: 900px;
   }
   body[data-page='welcome'] .welcome-intro h1 {
-    font-size: clamp(36px, 3.8vw, 56px);
-    line-height: 1.25;
-    margin-bottom: 14px;
+    font-size: clamp(42px, 4.3vw, 64px);
+    line-height: 1.22;
+    margin-bottom: 20px;
   }
   body[data-page='welcome'] .welcome-intro > p {
     font-size: 15px;
@@ -2566,6 +2582,55 @@ body[data-page='welcome'] .welcome-quote {
   }
 }
 
+/* Deliberate states: quiet default, clear focus and tactile, reversible feedback. */
+body[data-page='welcome'] :is(a, button):focus-visible {
+  outline: 2px solid #f2d7a3;
+  outline-offset: 4px;
+}
+body[data-page='welcome'] .welcome-screen ::selection {
+  color: #182337;
+  background: #f2d7a3;
+}
+body[data-page='welcome'] .welcome-enter {
+  text-decoration: none;
+  font-family: inherit;
+  font-weight: 500;
+}
+body[data-page='welcome'] .welcome-enter svg {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+}
+body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links > a) {
+  font-family: inherit;
+}
+@media (max-width: 600px) and (min-height: 501px) {
+  body[data-page='welcome'] .welcome-intro h1 {
+    font-size: clamp(25px, 7.1vw, 34px);
+    white-space: normal;
+  }
+  body[data-page='welcome'] .welcome-layout {
+    padding: 16px 0;
+  }
+}
+@media (max-height: 500px) {
+  body[data-page='welcome'] .welcome-intro {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    max-width: 600px;
+  }
+  body[data-page='welcome'] .welcome-intro h1 {
+    font-size: clamp(25px, 3.8vw, 36px);
+    margin-bottom: 10px;
+  }
+  body[data-page='welcome'] .welcome-intro > p {
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  body[data-page='welcome'] .welcome-quote {
+    font-size: 13px;
+  }
+}
 /* Moon phase controls are a touch surface, independent of the observer camera. */
 .ui-plot #phaseOrbit {
   touch-action: none;
@@ -2671,18 +2736,56 @@ body[data-page='welcome'] .welcome-quote {
   line-height: 1.8;
   box-shadow: 0 16px 48px #122c4930;
 }
-.observer-explanation::backdrop { background: #10223c66; }
-.observer-explanation header { display: flex; align-items: start; gap: 12px; }
-.observer-explanation h2 { margin: 0; flex: 1; font-size: 19px; line-height: 1.5; }
-
-.observer-explanation ul { padding-left: 22px; }
-.observer-explanation li { margin: 10px 0; }
-.observer-explanation-example { padding: 12px; border-radius: 12px; background: #edf3ff; }
-@media (max-width: 600px) {
-  .observer-explanation { padding: 16px; font-size: 13px; }
-  .observer-explanation h2 { font-size: 17px; }
-  .ui-viewbar > .observer-explanation-button { font-size: 11px; padding: 6px 8px; }
+.observer-explanation::backdrop {
+  background: #10223c66;
 }
-.observer-explanation { transition: none; }
-.observer-explanation header { height: auto; max-width: none; margin: 0; padding: 0; border: 0; background: transparent; }
-.observer-explanation :is(p, li) { font-size: inherit; }
+.observer-explanation header {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+}
+.observer-explanation h2 {
+  margin: 0;
+  flex: 1;
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+.observer-explanation ul {
+  padding-left: 22px;
+}
+.observer-explanation li {
+  margin: 10px 0;
+}
+.observer-explanation-example {
+  padding: 12px;
+  border-radius: 12px;
+  background: #edf3ff;
+}
+@media (max-width: 600px) {
+  .observer-explanation {
+    padding: 16px;
+    font-size: 13px;
+  }
+  .observer-explanation h2 {
+    font-size: 17px;
+  }
+  .ui-viewbar > .observer-explanation-button {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+}
+.observer-explanation {
+  transition: none;
+}
+.observer-explanation header {
+  height: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.observer-explanation :is(p, li) {
+  font-size: inherit;
+}

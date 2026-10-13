@@ -178,7 +178,13 @@
         }),
       );
       // Only our own class mutation changes once; repeated renders do not restart motion.
-      new ResizeObserver(() => update(false)).observe(group);
+      const resize = new ResizeObserver(() => update(false));
+      resize.observe(group);
+      buttons.forEach((button) => resize.observe(button));
+      // Translation and font loading can move tabs without resizing their parent.
+      const remeasure = () => requestAnimationFrame(() => update(false));
+      document.addEventListener('skymotion:language', remeasure);
+      document.fonts?.addEventListener('loadingdone', remeasure);
       update(false);
     });
     document.querySelectorAll('.view-tabs').forEach((group) => {

@@ -86,7 +86,7 @@
       ctx.clearRect(0, 0, width, height);
       hits = [];
       const compact = height < 210 || width < 260;
-      ctx.font = `${compact || width < 380 ? 11 : 12}px system-ui, sans-serif`;
+      ctx.font = `${compact || width < 380 ? 11 : 12}px "SkyMotion Reading", serif`;
       ctx.textBaseline = 'middle';
       const earthmoon = view === 'earthmoon';
       text(

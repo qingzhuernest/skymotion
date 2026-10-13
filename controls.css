@@ -1,6 +1,17 @@
 /* Shared parameter geometry. Scoped away from welcome, diagrams and inline playback actions. */
-:is(.ui-parameters, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check) {
+:is(
+    .ui-parameters,
+    .ui-timeline-host,
+    body[data-page="space"] .side,
+    .scene-tools-panel
+  )
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  ) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 44px;
   align-items: center;
@@ -13,15 +24,26 @@
   border: 0;
   border-radius: 0;
   background: transparent;
-  color: #263b59;
+  color: var(--design-ink, #263b59);
   font-size: 13px;
   line-height: 1.6;
   white-space: normal;
   cursor: pointer;
 }
 
-:is(.ui-parameters, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check)
+:is(
+    .ui-parameters,
+    .ui-timeline-host,
+    body[data-page="space"] .side,
+    .scene-tools-panel
+  )
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  )
   > span {
   min-width: 0;
   grid-column: 1;
@@ -29,9 +51,20 @@
   overflow-wrap: anywhere;
 }
 
-:is(.ui-parameters, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check)
-  > input[type='checkbox'] {
+:is(
+    .ui-parameters,
+    .ui-timeline-host,
+    body[data-page="space"] .side,
+    .scene-tools-panel
+  )
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  )
+  > input[type="checkbox"] {
   appearance: none;
   box-sizing: border-box;
   position: relative;
@@ -55,10 +88,21 @@
     border-color 180ms ease;
 }
 
-:is(.ui-parameters, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check)
-  > input[type='checkbox']::after {
-  content: '';
+:is(
+    .ui-parameters,
+    .ui-timeline-host,
+    body[data-page="space"] .side,
+    .scene-tools-panel
+  )
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  )
+  > input[type="checkbox"]::after {
+  content: "";
   display: block;
   position: absolute;
   width: 18px;
@@ -73,31 +117,75 @@
     background-color 180ms ease;
 }
 
-:is(.ui-parameters, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check)
-  > input[type='checkbox']:checked {
-  border-color: #315da8;
-  background: #315da8;
+:is(
+    .ui-parameters,
+    .ui-timeline-host,
+    body[data-page="space"] .side,
+    .scene-tools-panel
+  )
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  )
+  > input[type="checkbox"]:checked {
+  border-color: var(--design-primary, #315da8);
+  background: var(--design-primary, #315da8);
 }
 
-:is(.ui-parameters, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check)
-  > input[type='checkbox']:checked::after {
+:is(
+    .ui-parameters,
+    .ui-timeline-host,
+    body[data-page="space"] .side,
+    .scene-tools-panel
+  )
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  )
+  > input[type="checkbox"]:checked::after {
   left: 3px;
   transform: translateX(18px);
   background: #fff;
 }
 
-:is(.ui-parameters, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check)
-  > input[type='checkbox']:focus-visible {
+:is(
+    .ui-parameters,
+    .ui-timeline-host,
+    body[data-page="space"] .side,
+    .scene-tools-panel
+  )
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  )
+  > input[type="checkbox"]:focus-visible {
   outline: 3px solid #759ad0;
   outline-offset: 3px;
 }
 
-:is(.ui-parameters, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check)
-  > input[type='checkbox']:disabled {
+:is(
+    .ui-parameters,
+    .ui-timeline-host,
+    body[data-page="space"] .side,
+    .scene-tools-panel
+  )
+  :is(
+    .toggle-row,
+    .overlay-toggle,
+    .toggles > label,
+    .tools-check,
+    .workbench-loop
+  )
+  > input[type="checkbox"]:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -110,7 +198,7 @@
 }
 
 .ui-parameters .solar-date-options,
-body[data-page='space'] .side .toggles {
+body[data-page="space"] .side .toggles {
   gap: 0;
 }
 
@@ -136,7 +224,9 @@ body[data-page='space'] .side .toggles {
   min-height: 44px;
 }
 
-.ui-parameters :is(.menu-content, .analemma-comparison, .solar-date-options) > button {
+.ui-parameters
+  :is(.menu-content, .analemma-comparison, .solar-date-options)
+  > button {
   width: 100%;
   box-sizing: border-box;
   min-height: 40px;
@@ -145,11 +235,11 @@ body[data-page='space'] .side .toggles {
   line-height: 1.5;
 }
 
-body[data-page='space'] .scene-tools-panel .tools-check {
+body[data-page="space"] .scene-tools-panel .tools-check {
   color: #eaf1fc;
 }
 
-body[data-page='space'] .scene-tools-panel .tools-field {
+body[data-page="space"] .scene-tools-panel .tools-field {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(100px, 48%);
   gap: 12px;
@@ -157,7 +247,7 @@ body[data-page='space'] .scene-tools-panel .tools-field {
   margin: 8px 0;
   line-height: 1.6;
 }
-body[data-page='space'] .scene-tools-panel .tools-field select {
+body[data-page="space"] .scene-tools-panel .tools-field select {
   width: 100%;
   min-width: 0;
   min-height: 40px;
@@ -165,12 +255,34 @@ body[data-page='space'] .scene-tools-panel .tools-field select {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :is(.ui-parameters, body[data-page='space'] .side, .scene-tools-panel)
-    :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check)
-    > input[type='checkbox'],
-  :is(.ui-parameters, body[data-page='space'] .side, .scene-tools-panel)
-    :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check)
-    > input[type='checkbox']::after {
+  :is(
+      .ui-parameters,
+      .ui-timeline-host,
+      body[data-page="space"] .side,
+      .scene-tools-panel
+    )
+    :is(
+      .toggle-row,
+      .overlay-toggle,
+      .toggles > label,
+      .tools-check,
+      .workbench-loop
+    )
+    > input[type="checkbox"],
+  :is(
+      .ui-parameters,
+      .ui-timeline-host,
+      body[data-page="space"] .side,
+      .scene-tools-panel
+    )
+    :is(
+      .toggle-row,
+      .overlay-toggle,
+      .toggles > label,
+      .tools-check,
+      .workbench-loop
+    )
+    > input[type="checkbox"]::after {
     transition: none;
   }
 }
