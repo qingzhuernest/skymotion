@@ -12,15 +12,22 @@
     const source = path.replace(/\.en\.html$/, '.html');
     if (!known.has(source)) return null;
     url.pathname = base.pathname + (next === 'en' ? source.replace(/\.html$/, '.en.html') : source);
-    if (url.searchParams.has('lang')) url.searchParams.set('lang', next);
+    let explicitPreference = false;
+    try { explicitPreference = Boolean(sessionStorage.getItem('skymotion-explicit-language')); } catch {}
+    if (url.searchParams.has('lang') || explicitPreference) url.searchParams.set('lang', next);
     return url;
   }
   window.skyLocaleUrl = localeUrl;
   const rendered = root.dataset.renderedLanguage || 'zh';
   let preferred = null;
   try { preferred = localStorage.getItem('skymotion-language'); } catch {}
-  let language = new URLSearchParams(location.search).get('lang') || preferred || rendered;
+  const explicit = new URLSearchParams(location.search).get('lang');
+  let language = explicit || preferred || rendered;
   language = language === 'en' ? 'en' : 'zh';
+  if (explicit === 'en' || explicit === 'zh') {
+    try { localStorage.setItem('skymotion-language', language); } catch {}
+    try { sessionStorage.setItem('skymotion-explicit-language', language); } catch {}
+  }
   root.dataset.languagePending = '';
   const guard = document.createElement('style');
   guard.textContent = 'html[data-language-pending] body,html[data-language-pending] body *{visibility:hidden!important}html[data-language-pending]{background:#f4f7f8}html[data-language-pending]::after{content:"";position:fixed;left:calc(50% - 12px);top:calc(50% - 12px);width:24px;height:24px;border:2px solid #cdd9de;border-top-color:#24576b;border-radius:50%;animation:sky-font-loading 1s linear infinite}@keyframes sky-font-loading{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){html[data-language-pending]::after{animation:none}}';
@@ -48,12 +55,15 @@
     if (!preparedFonts.has(locale)) {
       const family = locale === 'en' ? 'SkyMotion Charter' : 'SkyMotion Reading';
       const variants = locale === 'en' ? ['charter_regular.woff2','charter_bold.woff2'] : ['reading-regular.woff2','reading-bold.woff2'];
-      const promise = Promise.all(variants.map((file,index) => {
+      let expired = false, timer;
+      const loading = Promise.all(variants.map((file,index) => {
         const face = new FontFace(family, `url("${new URL('fonts/'+file,base)}")`, { weight: index ? '600 900' : '400 500', display: 'block' });
-        return face.load().then(loaded => { document.fonts.add(loaded); return loaded; });
+        return face.load().then(loaded => { if (!expired) document.fonts.add(loaded); return loaded; });
       }));
+      const deadline = new Promise((_,reject) => { timer=setTimeout(() => { expired=true; reject(new Error('Font loading timed out')); },8000); });
+      const promise = Promise.race([loading,deadline]).finally(() => clearTimeout(timer));
       preparedFonts.set(locale,promise);
-      promise.catch(() => preparedFonts.delete(locale));
+      promise.catch(() => { if (preparedFonts.get(locale)===promise) preparedFonts.delete(locale); });
     }
     return preparedFonts.get(locale);
   };
@@ -64,5 +74,30 @@
     document.dispatchEvent(new Event('skymotion:fonts-ready'));
     performance.mark('skymotion-fonts-visible');
   });
-  window.skyFirstFontsReady.catch(() => { root.dataset.fontLoadError = ''; });
+  function showFontFailure() {
+    root.dataset.fontLoadError = '';
+    delete root.dataset.languagePending;
+    const show = () => {
+      if (document.querySelector('.font-load-notice')) return;
+      const notice = document.createElement('aside');
+      notice.className = 'font-load-notice'; notice.dataset.i18nSkip = ''; notice.setAttribute('role','status');
+      const english = root.lang === 'en';
+      const message = document.createElement('span');
+      message.textContent = english ? 'Font loading failed. A fallback font is in use.' : '字体未能加载，暂用备用字体。';
+      const retry = document.createElement('button'); retry.type='button';
+      retry.textContent = english ? 'Retry fonts' : '重试字体';
+      retry.onclick = async () => {
+        retry.disabled=true;
+        try {
+          await window.skyPrepareFonts(document.documentElement.lang === 'en' ? 'en' : 'zh');
+          delete root.dataset.fontLoadError; root.dataset.fontsReady=''; notice.remove();
+          document.dispatchEvent(new Event('skymotion:fonts-ready'));
+          if(typeof schedule==='function')schedule();
+        } catch { retry.disabled=false; }
+      };
+      notice.append(message,retry);document.body.append(notice);
+    };
+    if(document.body)show();else document.addEventListener('DOMContentLoaded',show,{once:true});
+  }
+  window.skyFirstFontsReady.catch(showFontFailure);
 })();

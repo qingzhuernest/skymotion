@@ -227,7 +227,12 @@
     if (button) button.disabled = true;
     try {
       await prepareFonts(next);
-      if (generation === changeGeneration) apply(next, persist);
+      if (generation === changeGeneration) {
+        apply(next, persist);
+        delete document.documentElement.dataset.fontLoadError;
+        document.documentElement.dataset.fontsReady = '';
+        document.querySelector('.font-load-notice')?.remove();
+      }
     } finally {
       if (button && generation === changeGeneration) button.disabled = false;
     }
@@ -334,9 +339,6 @@
   async function failure(error) {
     console.error(error);
     cache.clear();
-    try {
-      await prepareFonts(language);
-    } catch {}
     apply(language, false);
     reveal();
     button.disabled = false;

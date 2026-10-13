@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
 
-<script src="page-boot.js?v=20261013-calendar8"></script>
+<script src="page-boot.js?v=20261013-review9"></script>
 
     <meta content="width=device-width,initial-scale=1" name="viewport" />
     <link href="favicon.svg" rel="icon" />
-    <link href="style.css?v=20261013-calendar8" rel="stylesheet" />
-    <link href="pages.css?v=20261013-calendar8" rel="stylesheet" />
+    <link href="style.css?v=20261013-review9" rel="stylesheet" />
+    <link href="pages.css?v=20261013-review9" rel="stylesheet" />
     <!-- search-metadata:start -->
     <title>开发说明：完整开发逻辑与维护 · 天体视运动实验室</title>
     <meta
@@ -35,13 +35,13 @@
     <meta content="website" property="og:type" />
     <meta content="zh_CN" property="og:locale" />
     <!-- search-metadata:end -->
-    <link href="documents.css?v=20261013-calendar8" rel="stylesheet" />
-    <link rel="stylesheet" href="design-system.css?v=20261013-calendar8" />
-    <link rel="stylesheet" href="language.css?v=20261013-calendar8" />
-    <script src="language-data.js?v=20261013-calendar8"></script>
-<script src="language.js?v=20261013-calendar8"></script>
-<script src="page-cache.js?v=20261013-calendar8" defer></script>
-  <script src="date-picker.js?v=20261013-calendar8" defer></script>
+    <link href="documents.css?v=20261013-review9" rel="stylesheet" />
+    <link rel="stylesheet" href="design-system.css?v=20261013-review9" />
+    <link rel="stylesheet" href="language.css?v=20261013-review9" />
+    <script src="language-data.js?v=20261013-review9"></script>
+<script src="language.js?v=20261013-review9"></script>
+<script src="page-cache.js?v=20261013-review9" defer></script>
+  <script src="date-picker.js?v=20261013-review9" defer></script>
 </head>
   <body data-page="development">
     <nav aria-label="页面导航" class="page-nav">
@@ -814,6 +814,7 @@ diagrams.html#chartPanel</code></pre>
           1.1。共享控件与动画样式消费同一套颜色变量，沉浸模式单独映射深色表面与文字。播放与选中项保留深青蓝强调色；日期方向、复位、天体跳转、菜单和三维辅助操作使用白底、青蓝文字与细边框，悬停仅加浅色底，深色画布上的工具保持中性深色；窄控制台按自身宽度将时间、日期与方位排为紧凑完整行，横屏保持原紧凑布局。仰望天空注释按明暗调整文字对比度并避让月球端点标记，不改变天体位置。理想实验提示、赤纬读数与恢复操作共享主题颜色；播放设置里的循环开关与其他参数开关同尺寸并靠右对齐，沉浸工具使用统一深色表面。该预览未改天文计算、星历数据、状态逻辑或正式网站部署。
         </p>
         <h3>中英文呈现与本地字体</h3>
+        <p>字体请求设有8秒超时。正常加载仍在指定字体就绪后显示页面；失败或超时会解除页面隐藏并提供“重试字体”，暂用备用字体，防止整页一直卡住。显式语言参数会保留到站内导航。日期选择器切换年月时同步更新草稿日期，并处理月底与闰年；重绘后保留键盘焦点，只有确认才更新实验与返回历史。</p>
         <p>
           language.js 负责共享语言状态，以 skymotion-language 为 localStorage
           偏好键；切换只更新呈现，不改科学状态、输入值或天文计算。翻译字典覆盖
@@ -1038,6 +1039,6 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory /tmp/skymotion-preview<
         </ol>
       </div>
     </main>
-    <script src="interface-motion.js?v=20261013-calendar8"></script>
+    <script src="interface-motion.js?v=20261013-review9"></script>
   </body>
 </html>

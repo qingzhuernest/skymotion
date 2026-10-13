@@ -273,13 +273,21 @@ def assert_unchanged(original: Node, generated: Node, source: str) -> None:
             raise ValueError(f'{source}: changed skipped <{old.tag}> content')
 
 
+def is_site_file(path: Path, root: Path) -> bool:
+    parts = path.relative_to(root).parts
+    return (not any(part.startswith('.') for part in parts)
+            and parts[0] not in {'dist', 'node_modules', 'tests', 'scripts', 'archive'}
+            and path.name not in {'README.md', 'DESIGN.md', 'PRODUCT.md'}
+            and not path.name.startswith('BUG-AUDIT-'))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--dist', type=Path, default=Path(__file__).resolve().parents[1])
     args = parser.parse_args()
     dist = args.dist.resolve()
     pages = sorted(path for path in dist.rglob('*.html')
-                   if not path.name.endswith('.en.html') and not re.fullmatch(r'google[^/]*\.html', path.name))
+                   if is_site_file(path, dist) and not path.name.endswith('.en.html') and not re.fullmatch(r'google[^/]*\.html', path.name))
     paths = {path.relative_to(dist).as_posix() for path in pages}
     dictionary = load_dictionary(dist)
     # External script: escape HTML-significant characters for safe reuse in other hosts too.
@@ -301,8 +309,8 @@ def main() -> None:
         print(f'{relative} -> {generated_paths[-1]} ({text_count} text nodes, {attr_count} attributes)')
     all_paths = sorted(paths | set(generated_paths))
     sizes = {path: (dist / path).stat().st_size for path in all_paths}
-    assets = sorted(p.relative_to(dist).as_posix() for p in dist.rglob('*') if p.is_file() and p.suffix in {'.js', '.css', '.json', '.jpg', '.jpeg', '.png', '.webp', '.svg', '.woff', '.woff2', '.md'} and p.name != 'page-cache-manifest.json')
-    manifest = {'version': 2, 'resourceVersion': '20261013-calendar8', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
+    assets = sorted(p.relative_to(dist).as_posix() for p in dist.rglob('*') if p.is_file() and is_site_file(p, dist) and p.suffix in {'.js', '.css', '.json', '.jpg', '.jpeg', '.png', '.webp', '.svg', '.woff', '.woff2', '.md'} and p.name != 'page-cache-manifest.json')
+    manifest = {'version': 2, 'resourceVersion': '20261013-review9', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
     (dist / 'page-cache-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(f'Validated structure, IDs, input/option values, scripts, and numerical attributes for {len(pages)} page pairs.')
     print(f'Cached HTML estimate: {manifest["totalBytes"]:,} bytes; dictionary: {len(dictionary):,} entries.')

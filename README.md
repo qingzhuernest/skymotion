@@ -28,3 +28,7 @@ Edit the Chinese HTML and `i18n-*.json` dictionaries, then regenerate the Englis
 - Application: [AGPLv3](LICENSE). Font, image and library licenses: [third-party notices](THIRD-PARTY-NOTICES.md).
 
 This branch does not include GPT Site hosting configuration, temporary credentials, review screenshots or local plugin installations.
+
+## Review regressions
+
+With a local server running and Playwright available, run `node tests/review-regressions.cjs`. Optional `SKY_MOTION_TEST_URL`, `SKY_MOTION_PLAYWRIGHT` and `SKY_MOTION_CHROMIUM` select the test server, module and browser executable. The suite covers stalled-font recovery and retry, explicit-language navigation, calendar month/year values, leap-day clamping, browser undo and keyboard focus at phone/tablet widths.

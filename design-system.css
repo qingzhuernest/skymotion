@@ -2001,3 +2001,36 @@ body :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#workbenchNex
 }
 body :is(#workbenchNextDate,#workbenchNextMonth,#moonNextMonth)::before { transform: rotate(180deg); }
 body .ui-shell :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#workbenchNextMonth,#moonPrevMonth,#moonNextMonth) { font-size: 0; }
+/* Failure recovery never keeps the whole application behind its font loader. */
+.font-load-notice {
+  position: fixed;
+  z-index: 100000;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  padding: 10px 14px;
+  box-sizing: border-box;
+  border: 1px solid #cdd9de;
+  border-radius: 12px;
+  background: #fff;
+  color: #20323e;
+  font: 14px/1.5 var(--design-font);
+}
+body .font-load-notice button {
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid #cdd9de;
+  border-radius: 8px;
+  background: #fff;
+  color: #24576b;
+  font: inherit;
+  cursor: pointer;
+}
+body .font-load-notice button:hover { background: #ecf2f4; }
+body .font-load-notice button:disabled { opacity: .6; cursor: wait; }

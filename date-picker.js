@@ -1,7 +1,7 @@
 /** Site-owned date/month controls; native fields retain ISO values and existing events. */
 (() => {
   const installed = new WeakSet();
-  let field = null, selected = '', year = 2026, month = 6, chooseMonth = false, chooseYear = false;
+  let field = null, selected = '', year = 2026, month = 6, yearPage = 2026, chooseMonth = false, chooseYear = false;
   const en = () => document.documentElement.lang === 'en';
   const label = (zh, english) => en() ? english : zh;
   const dialog = document.createElement('dialog');
@@ -11,21 +11,38 @@
   const icon = direction => `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="${direction < 0 ? 'M15 5 8 12l7 7' : 'm9 5 7 7-7 7'}"/></svg>`;
   function dateValue(y,m,d) { return `${String(y).padStart(4,'0')}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
   function allowed(value) { return (!field.min || value >= field.min) && (!field.max || value <= field.max); }
+  function updateDraft() {
+    if (field.dataset.calendarType === 'month') selected = dateValue(year,month,1).slice(0,7);
+    else {
+      const end = new Date(0); end.setUTCFullYear(year,month,0);
+      const day = Math.min(Number(selected.slice(8)) || 1,end.getUTCDate());
+      selected = dateValue(year,month,day);
+    }
+  }
+  function focusKey(node) {
+    if (!node || !dialog.contains(node)) return null;
+    if (node.id) return '#' + node.id;
+    for (const key of ['data-shift','data-date','data-month','data-year','data-cancel','data-confirm'])
+      if (node.hasAttribute(key)) return `[${key}="${node.getAttribute(key)}"]`;
+    return null;
+  }
+
   function close() { dialog.getAnimations().forEach(a=>a.cancel()); dialog.close();dialog.style.setProperty('display','none','important'); field?.focus({preventScroll:true}); }
   function render() {
+    const previousFocus = focusKey(document.activeElement);
     const months = en() ? ['January','February','March','April','May','June','July','August','September','October','November','December'] : Array.from({length:12},(_,i)=>`${i+1}月`);
     const monthOnly = field.dataset.calendarType === 'month';
-    const firstYear = Math.floor((year-1)/12)*12+1;
+    const firstYear = Math.floor((yearPage-1)/12)*12+1;
     dialog.innerHTML = `<div class="site-calendar-head"><button type="button" data-shift="-1" aria-label="${chooseYear?label('前十二年','Previous twelve years'):label('上一个月','Previous month')}">${icon(-1)}</button><button type="button" id="siteCalendarTitle" data-months>${chooseYear ? `${firstYear}–${Math.min(9999,firstYear+11)}` : en() ? `${months[month-1]} ${year}` : `${year}年${month}月`}</button><button type="button" data-shift="1" aria-label="${chooseYear?label('后十二年','Next twelve years'):label('下一个月','Next month')}">${icon(1)}</button></div><div class="site-calendar-year"><span>${label('年份','Year')}</span><button type="button" id="siteCalendarYear" aria-expanded="${chooseYear}">${year}</button></div><div class="site-calendar-grid ${monthOnly||chooseMonth||chooseYear?'site-calendar-months':''}"></div><div class="site-calendar-actions"><button type="button" data-cancel>${label('取消','Cancel')}</button><button type="button" data-confirm>${label('确定','Apply')}</button></div>`;
     const grid = dialog.querySelector('.site-calendar-grid');
     if (chooseYear) {
-      for(let y=firstYear;y<=Math.min(9999,firstYear+11);y++){const b=document.createElement('button');b.type='button';b.textContent=String(y);b.onclick=()=>{year=y;chooseYear=false;render()};grid.append(b)}
+      for(let y=firstYear;y<=Math.min(9999,firstYear+11);y++){const b=document.createElement('button');b.type='button';b.textContent=String(y);b.dataset.year=String(y);b.onclick=()=>{year=y;chooseYear=false;updateDraft();render()};grid.append(b)}
     } else if (monthOnly || chooseMonth) {
       months.forEach((name,i) => {
-        const b = document.createElement('button'); b.type='button'; b.textContent=name;
+        const b = document.createElement('button'); b.type='button'; b.textContent=name; b.dataset.month=String(i+1);
         const value=dateValue(year,i+1,1).slice(0,7);
         b.disabled=monthOnly&&!allowed(value); b.setAttribute('aria-pressed',String(selected.slice(0,7)===value));
-        b.onclick=()=>{month=i+1;if(monthOnly){selected=value;render()}else{chooseMonth=false;render()}};
+        b.onclick=()=>{month=i+1;chooseMonth=false;updateDraft();render()};
         grid.append(b);
       });
     } else {
@@ -41,19 +58,24 @@
         grid.append(b);
       }
     }
-    dialog.querySelectorAll('[data-shift]').forEach(b=>b.onclick=()=>{if(chooseYear){year=Math.max(1,Math.min(9999,year+Number(b.dataset.shift)*12));render();return}let m=month+Number(b.dataset.shift);if(m<1){year--;m=12}if(m>12){year++;m=1}if(year<1||year>9999)return;month=m;render()});
+    dialog.querySelectorAll('[data-shift]').forEach(b=>b.onclick=()=>{if(chooseYear){yearPage=Math.max(1,Math.min(9999,yearPage+Number(b.dataset.shift)*12));render();return}let m=month+Number(b.dataset.shift), y=year;if(m<1){y--;m=12}if(m>12){y++;m=1}if(y<1||y>9999)return;year=y;month=m;updateDraft();render()});
     dialog.querySelector('[data-months]').onclick=()=>{chooseYear=false;chooseMonth=!chooseMonth;render()};
-    dialog.querySelector('#siteCalendarYear').onclick=()=>{chooseYear=!chooseYear;render()};
+    dialog.querySelector('#siteCalendarYear').onclick=()=>{chooseYear=!chooseYear;if(chooseYear)yearPage=year;render()};
     dialog.querySelector('[data-cancel]').onclick=close;
     dialog.querySelector('[data-confirm]').disabled=!selected||!allowed(selected);
     dialog.querySelector('[data-confirm]').onclick=()=>{
       if(selected&&allowed(selected)&&selected!==field.value){window.SkyMotionHistory?.beginExternal();field.value=selected;field.dispatchEvent(new Event('input',{bubbles:true}));field.dispatchEvent(new Event('change',{bubbles:true}));window.SkyMotionHistory?.flush()}
       close();
     };
+    if (dialog.open && previousFocus) {
+      const candidate = dialog.querySelector(previousFocus);
+      const target = candidate && !candidate.disabled ? candidate : dialog.querySelector('[aria-pressed="true"]:not(:disabled)') || dialog.querySelector('[data-months]');
+      target?.focus({preventScroll:true});
+    }
   }
   function open(input) {
     if(input.disabled)return;
-    field=input;selected=input.value;const parts=(selected||'2026-06-21').split('-').map(Number);year=parts[0];month=parts[1]||1;chooseMonth=false;chooseYear=false;
+    field=input;selected=input.value;const parts=(selected||'2026-06-21').split('-').map(Number);year=parts[0];yearPage=year;month=parts[1]||1;chooseMonth=false;chooseYear=false;
     render();dialog.style.removeProperty('display');if(!dialog.isConnected)document.body.append(dialog);dialog.showModal();
     (dialog.querySelector('[aria-pressed="true"]')||dialog.querySelector('[data-months]')).focus();
     if(!matchMedia('(prefers-reduced-motion: reduce)').matches)dialog.animate([{opacity:.5,transform:'translateY(8px) scale(.98)'},{opacity:1,transform:'none'}],{duration:220,easing:'cubic-bezier(.22,1.15,.36,1)'});

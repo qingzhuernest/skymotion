@@ -393,6 +393,8 @@ CSS负责显示几何与配色；JavaScript负责科学状态、可用性和事�
 
 ### 中英文呈现与本地字体
 
+字体请求设有8秒超时。正常加载仍在指定字体就绪后显示页面；失败或超时会解除页面隐藏并提供“重试字体”，暂用备用字体，防止整页一直卡住。显式语言参数会保留到站内导航。日期选择器切换年月时同步更新草稿日期，并处理月底与闰年；重绘后保留键盘焦点，只有确认才更新实验与返回历史。
+
 language.js 负责共享语言状态，以 skymotion-language 为 localStorage 偏好键；切换只更新呈现，不改科学状态、输入值或天文计算。翻译字典覆盖 DOM 正文及 aria-label、title 等属性，Canvas 的 measureText、fillText 与 strokeText 使用同一翻译与英文字体，使测量和绘制保持一致；代码示例保留原文。英文文档由完整译文导出为 .en.md，下载入口随语言选择对应文件。
 
 中文沿用本地 SkyMotion Reading，英文使用本地 SkyMotion Charter 的常规、粗体、斜体和粗斜体四种样式。Charter 按 Bitstream 原始通知允许为任何目的使用、复制、修改、再许可、出售和再分发，须在副本中保留通知并按要求确认商标；完整通知随 fonts/LICENSE-Charter.txt 发布。中英文切换、字体和文档导出仅用于 GPT Site 预览，正式 Cloudflare 与 GitHub 网站保持原状。
