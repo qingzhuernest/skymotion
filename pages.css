@@ -1134,16 +1134,18 @@ body[data-page='analemma'] .workbench-events {
   font-size: 12px;
   line-height: 1.6;
 }
-.ui-diagram-details .event-values button:first-child:not(:disabled) {
-  background: #fff0ce;
-  color: #765414;
+/* Rise and set share one quiet readout treatment; labels distinguish the events. */
+.ui-diagram-details .event-values button:not(:disabled) {
+  background: var(--design-surface, #fff);
+  color: var(--design-primary, #24576b);
+  border: 1px solid var(--design-line, #cdd9de);
 }
-.ui-diagram-details .event-values button:first-child:not(:disabled) :is(span, small) {
-  color: #705b32;
+.ui-diagram-details .event-values button:not(:disabled) :is(span, small) {
+  color: var(--design-muted, #536975);
 }
-.ui-diagram-details .event-values button:last-child:not(:disabled) {
-  background: #e4ecfc;
-  color: #244d90;
+.ui-diagram-details .event-values button:not(:disabled):hover {
+  background: var(--design-paper, #f4f7f8);
+  border-color: #8caebc;
 }
 .ui-parameters > h2 {
   font-size: 14px;

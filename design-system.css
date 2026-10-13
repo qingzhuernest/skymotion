@@ -745,12 +745,18 @@ body .scene-tools-panel input[type="checkbox"]:checked {
   border-color: var(--design-line);
 }
 body :is(.page-action, .author-mail-button) {
-  background: var(--design-primary);
-  color: #fff;
+  background: var(--design-surface);
+  color: var(--design-primary);
+  border: 1px solid var(--design-line);
   border-radius: var(--design-radius-control);
 }
+body :is(.page-action, .author-mail-button):hover {
+  background: var(--design-paper);
+  color: var(--design-hover);
+  border-color: #8caebc;
+}
 .document-page .page-action {
-  color: #fff;
+  color: var(--design-primary);
 }
 body[data-page="contact"] .reading-page {
   max-width: 880px;

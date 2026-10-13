@@ -352,3 +352,7 @@ All date/month inputs are enhanced in place to readonly ISO text fields with the
 
 ### Review 9913064 fixes — 2026-10-13
 Critical font requests have an eight-second deadline. A failure releases the visibility guard and exposes a quiet, dismiss-free status with an explicit font retry; timed-out attempts cannot register fonts late, and initialization recovery does not wait for the failed font again. Successful loads retain the existing first-screen font policy. Explicit valid lang query choices are saved, and this tab's navigation carries the explicit locale, including when persistent preference storage is unavailable. Date/month drafts now follow year/month navigation, preserving and clamping the day for month ends and leap years; application values and history still change only on confirmation. Calendar rerenders restore the active control or an appropriate selected-date fallback. tests/review-regressions.cjs reproduces each reviewed failure and verifies recovery, retry, both viewport sizes, date undo and cancellation.
+
+## Quiet result cards and reading actions
+
+升落读数卡片使用相同白底、细边框、深青蓝数值和柔和辅助文字；不以黄蓝色块区分事件。文档入口链接沿用白底细边框操作，悬停为纸色底。实心强调仅保留播放和选中状态。
