@@ -31,11 +31,27 @@ try {
  await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.document-entrance'));
  await page.locator('.document-links a[href*="guide."]:not([href*="project-guide"]):not([href*="development-guide"])').click();await page.waitForLoadState();
  assert.equal(await page.locator('.document-entrance').count(),0);
+ const seenBeforeFrame=await page.evaluate(()=>sessionStorage.getItem('skymotion-reading-seen'));
+ await page.evaluate(url=>{const frame=document.createElement('iframe');frame.id='visit-frame';frame.src=url;document.body.append(frame)},base+'404.en.html');
+ await page.waitForFunction(()=>!!document.querySelector('#visit-frame')?.contentWindow.skyPageLanguage);
+ assert.equal(await page.evaluate(()=>sessionStorage.getItem('skymotion-reading-seen')),seenBeforeFrame);
+ await page.evaluate(()=>document.querySelector('#visit-frame').remove());
  assert.deepEqual(errors,[]);console.log('PASS night/paper navigation, six timed sentences, pause, skip, reload and per-document visit scope');
  // An independent clean opening resets even a cloned opener's seen state.
  const fresh=await context.newPage();await fresh.addInitScript(()=>sessionStorage.setItem('skymotion-reading-seen','["guide","project-guide"]'));
  await fresh.goto(base+'guide.en.html?lang=en');await ready(fresh);await leave(fresh);await fresh.close();
  console.log('PASS clean new-tab visit replays independently');
+ // Safari-style popup: inherited session flags, same-site referrer and history > 1.
+ const popup=await context.newPage();
+ await popup.addInitScript(()=>{Object.defineProperty(history,'length',{configurable:true,get:()=>4});sessionStorage.setItem('skymotion-reading-seen','["guide","project-guide"]');sessionStorage.setItem('skymotion-ad-astra','1');window.name=''});
+ await popup.goto(base+'guide.en.html?lang=en',{referer:base+'lab.en.html'});await ready(popup);assert.equal(await popup.evaluate(()=>document.documentElement.lang),'en');await leave(popup);await popup.reload();assert.equal(await popup.locator('.document-entrance').count(),0);await popup.close();
+ const clean=await context.newPage();
+ await clean.route('**/guide.en',route=>route.fulfill({path:require('node:path').resolve('guide.en.html'),contentType:'text/html'}));
+ await clean.goto(base+'guide.en',{referer:base+'lab.en.html'});await ready(clean);assert.match(await clean.locator('.entrance-dialogue').innerText(),/Why do we study geography/);await leave(clean);await clean.close();
+ const cover=await context.newPage();await cover.addInitScript(()=>{Object.defineProperty(history,'length',{configurable:true,get:()=>4});sessionStorage.setItem('skymotion-ad-astra','1');window.name=''});
+ await cover.goto(base+'index.en.html?lang=en',{referer:base+'lab.en.html'});assert.equal(await cover.evaluate(()=>document.documentElement.classList.contains('welcome-opening')),true);await cover.close();
+ console.log('PASS inherited popup storage, Safari-style history and clean English routes');
+
  const redirected=await context.newPage();await redirected.addInitScript(()=>localStorage.setItem('skymotion-language','en'));await redirected.goto(base+'guide.html');await ready(redirected);assert.equal(await redirected.evaluate(()=>document.documentElement.lang),'en');assert.match(await redirected.locator('.entrance-dialogue').innerText(),/Why do we study geography/);await leave(redirected);await redirected.close();
  console.log('PASS stored-language redirect prepares the correct first conversation');
  const blockedContext=await browser.newContext(),blocked=await blockedContext.newPage();

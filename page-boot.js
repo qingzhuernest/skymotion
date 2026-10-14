@@ -5,15 +5,25 @@
   const known = new Set(['index.html','lab.html','diagrams.html','analemma.html','sundial.html','guide.html','project-guide.html','development-guide.html','contact.html','geography-review.html','404.html','space/index.html']);
   const readingPages = new Set(['guide','project-guide','development-guide']);
   function readingKey(url) {
-    return url.pathname.split('/').filter(Boolean).pop()?.replace(/\.en\.html$|\.html$/, '') || '';
+    return url.pathname.split('/').filter(Boolean).pop()?.replace(/\.en(?:\.html)?$|\.html$/, '') || '';
   }
   const entryUrl = new URL(location.href), entryTheme = entryUrl.searchParams.get('sky-reading');
   const carriedSeen = (entryUrl.searchParams.get('sky-reading-seen') || '').split(',').filter(page => readingPages.has(page));
   let seenReadings = new Set(), readingStorageWorks = true;
   const readingNamePrefix = 'skymotion-reading:'+base.origin+base.pathname+'|';
+  let readingWindow = {};
+  const ownsWindowName = !window.name || window.name.startsWith(readingNamePrefix);
+  if (window.name.startsWith(readingNamePrefix)) {
+    try { const saved=JSON.parse(window.name.slice(readingNamePrefix.length)); readingWindow=Array.isArray(saved)?{seen:saved}:saved && typeof saved==='object'?saved:{}; } catch {}
+  }
+  const newReadingWindow = ownsWindowName && typeof readingWindow.windowId !== 'string';
+  if (newReadingWindow) readingWindow.windowId = typeof crypto.randomUUID==='function'?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);
+  function saveReadingWindow() {
+    if (ownsWindowName) { readingWindow.seen=[...seenReadings]; window.name=readingNamePrefix+JSON.stringify(readingWindow); }
+  }
   function mergeReadingFallback() {
     if (!readingStorageWorks && window.name.startsWith(readingNamePrefix)) {
-      try { const saved=JSON.parse(window.name.slice(readingNamePrefix.length)); if(Array.isArray(saved)) saved.filter(page=>readingPages.has(page)).forEach(page=>seenReadings.add(page)); } catch {}
+      try { const payload=JSON.parse(window.name.slice(readingNamePrefix.length)); const saved=Array.isArray(payload)?payload:payload?.seen; if(Array.isArray(saved)) saved.filter(page=>readingPages.has(page)).forEach(page=>seenReadings.add(page)); } catch {}
     }
   }
   let internalReferrer = false, welcomeReferrer = false;
@@ -22,8 +32,12 @@
     internalReferrer = referrer.origin === base.origin && referrer.pathname.startsWith(base.pathname);
     welcomeReferrer = internalReferrer && ['', 'index.html','index.en.html'].includes(referrer.pathname.slice(base.pathname.length));
   } catch {}
-  const navigationType = performance.getEntriesByType('navigation')[0]?.type;
-  const freshVisit = navigationType === 'navigate' && !carriedSeen.length && (!internalReferrer || history.length === 1);
+  let embeddedAppFrame = false;
+  try { embeddedAppFrame = window.parent !== window && window.parent.location.origin === base.origin && window.parent.location.pathname.startsWith(base.pathname); } catch {}
+  const navigationType = performance.getEntriesByType('navigation')[0]?.type || ({0:'navigate',1:'reload',2:'back_forward'}[performance.navigation?.type]) || 'navigate';
+  // A popup may clone sessionStorage and report more than one history entry.
+  // Its browsing-context name is independent, so it gets its own visit identity.
+  const freshVisit = !embeddedAppFrame && navigationType === 'navigate' && !carriedSeen.length && (newReadingWindow || !internalReferrer || (!ownsWindowName && history.length === 1));
   try {
     const saved = JSON.parse(sessionStorage.getItem('skymotion-reading-seen') || '[]');
     if (!freshVisit && Array.isArray(saved)) seenReadings = new Set(saved.filter(page => readingPages.has(page)));
@@ -32,16 +46,18 @@
       sessionStorage.removeItem('skymotion-ad-astra');
     }
   } catch { readingStorageWorks = false; }
-  if (freshVisit && window.name.startsWith(readingNamePrefix)) window.name = '';
+  if (freshVisit) readingWindow.seen = [];
+  if (ownsWindowName) window.name=readingNamePrefix+JSON.stringify(readingWindow);
   if (!freshVisit) mergeReadingFallback();
   if (!freshVisit && Array.isArray(history.state?.skyReadingSeen))
     history.state.skyReadingSeen.filter(page=>readingPages.has(page)).forEach(page=>seenReadings.add(page));
   carriedSeen.forEach(page=>seenReadings.add(page));
+  saveReadingWindow();
   window.skyMarkReadingSeen = page => {
     seenReadings.add(page);
     try { sessionStorage.setItem('skymotion-reading-seen',JSON.stringify([...seenReadings])); }
     catch { readingStorageWorks = false; }
-    if (!readingStorageWorks && (!window.name || window.name.startsWith(readingNamePrefix))) window.name=readingNamePrefix+JSON.stringify([...seenReadings]);
+    saveReadingWindow();
     history.replaceState({...history.state,skyReadingSeen:[...seenReadings]},'',location.href);
   };
   // Carry source theme and, when storage is denied, this visit's reading state.

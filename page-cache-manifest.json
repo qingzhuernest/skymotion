@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261014-readings22",
+  "resourceVersion": "20261014-readings23",
   "pages": [
     "404.en.html",
     "404.html",
@@ -142,5 +142,5 @@
     "sundial.html": 71490
   },
   "totalBytes": 1549847,
-  "assetBytes": 8429763
+  "assetBytes": 8431050
 }
