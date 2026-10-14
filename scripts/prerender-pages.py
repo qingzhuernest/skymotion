@@ -317,8 +317,16 @@ def main() -> None:
         print(f'{relative} -> {generated_paths[-1]} ({text_count} text nodes, {attr_count} attributes)')
     all_paths = sorted(paths | set(generated_paths))
     sizes = {path: (dist / path).stat().st_size for path in all_paths}
-    assets = sorted(p.relative_to(dist).as_posix() for p in dist.rglob('*') if p.is_file() and is_site_file(p, dist) and p.suffix in {'.js', '.css', '.json', '.jpg', '.jpeg', '.png', '.webp', '.svg', '.woff', '.woff2', '.md'} and p.name != 'page-cache-manifest.json')
-    manifest = {'version': 2, 'resourceVersion': '20261014-readings23', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
+    # Keep legacy files in the repository, but do not spend bandwidth warming them.
+    legacy_fonts = {'fonts/interface-regular.woff', 'fonts/interface-bold.woff',
+                    'fonts/reading-regular.woff', 'fonts/welcome-sans.woff'}
+    asset_suffixes = {'.js', '.css', '.json', '.jpg', '.jpeg', '.png', '.webp',
+                      '.svg', '.woff', '.woff2', '.ttf', '.md'}
+    assets = sorted(p.relative_to(dist).as_posix() for p in dist.rglob('*')
+                    if p.is_file() and is_site_file(p, dist) and p.suffix in asset_suffixes
+                    and p.name != 'page-cache-manifest.json'
+                    and p.relative_to(dist).as_posix() not in legacy_fonts)
+    manifest = {'version': 2, 'resourceVersion': '20261014-loading24', 'readingFontVersion': '20261014-font24', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
     output(dist / 'page-cache-manifest.json', json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
     if stale:
         raise SystemExit('Stale generated files; run scripts/prerender-pages.py: ' + ', '.join(stale))

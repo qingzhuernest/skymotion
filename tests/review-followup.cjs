@@ -27,6 +27,16 @@ try{
  blocked=false;await q.locator('.language-load-notice button').click();await q.waitForFunction(()=>document.documentElement.lang==='en');
  assert.equal(await q.locator('.language-load-notice').count(),0);assert.deepEqual(await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat})),initial);await q.close();console.log('PASS mobile language failure is visible and retries English without resetting the experiment');
 }finally{await browser.close()}
+ // Verify cache warming matches foreground font keys and prioritizes the chosen locale.
+ const vm=require('node:vm'),manifest=JSON.parse(fs.readFileSync('page-cache-manifest.json','utf8')),requests=[];
+ const sandbox={URL,Promise,setTimeout,CustomEvent:class{},addEventListener(){},document:{body:{dataset:{}},currentScript:{src:'https://example.test/page-cache.js'},readyState:'complete',documentElement:{lang:'zh-CN'},dispatchEvent(){}},fetch:async url=>{requests.push(String(url));return {ok:true,json:async()=>manifest,arrayBuffer:async()=>new ArrayBuffer(0)}}};
+ sandbox.window={requestIdleCallback:fn=>fn()};vm.runInNewContext(fs.readFileSync('page-cache.js','utf8'),sandbox);await sandbox.window.skyPageCacheReady;
+ assert.equal(sandbox.window.skyPageCache.state,'ready');assert.equal(requests.length,manifest.pages.length+manifest.assets.length+1);
+ assert(requests.slice(1,13).every(url=>!url.includes('.en.html')));
+ for(const weight of ['regular','bold'])assert(requests.includes(`https://example.test/fonts/reading-${weight}.woff2?v=${manifest.readingFontVersion}`));
+ assert(!manifest.assets.some(name=>/interface-.*\.woff$|reading-regular\.woff$|welcome-sans\.woff$/.test(name)));
+ assert(manifest.assets.includes('fonts/welcome-hand.ttf'));
+ console.log('PASS all-page warming, locale priority and matching font cache URLs');
  const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'skymotion-freshness-'));
  try{
   const manifest=JSON.parse(fs.readFileSync('page-cache-manifest.json','utf8'));

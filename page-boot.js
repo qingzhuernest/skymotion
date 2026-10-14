@@ -145,7 +145,7 @@
     const link = document.createElement('link');
     link.rel = 'preload'; link.as = 'font'; link.type = 'font/woff2'; link.crossOrigin = 'anonymous';
     link.fetchPriority = 'high';
-    link.href = new URL('fonts/'+file+(language==='zh'?'?v=20261014-readings22':''),base); document.head.append(link);
+    link.href = new URL('fonts/'+file+(language==='zh'?'?v=20261014-font24':''),base); document.head.append(link);
   }
   const preparedFonts = new Map();
   window.skyPrepareFonts = (locale) => {
@@ -155,7 +155,7 @@
       const variants = locale === 'en' ? ['charter_regular.woff2','charter_bold.woff2'] : ['reading-regular.woff2','reading-bold.woff2'];
       let expired = false, timer;
       const loading = Promise.all(variants.map((file,index) => {
-        const face = new FontFace(family, `url("${new URL('fonts/'+file+(locale==='zh'?'?v=20261014-readings22':''),base)}")`, { weight: index ? '600 900' : '400 500', display: 'block' });
+        const face = new FontFace(family, `url("${new URL('fonts/'+file+(locale==='zh'?'?v=20261014-font24':''),base)}")`, { weight: index ? '600 900' : '400 500', display: 'block' });
         return face.load().then(loaded => { if (!expired) document.fonts.add(loaded); return loaded; });
       }));
       const deadline = new Promise((_,reject) => { timer=setTimeout(() => { expired=true; reject(new Error('Font loading timed out')); },8000); });
