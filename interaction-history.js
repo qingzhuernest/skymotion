@@ -136,39 +136,44 @@
     timer = setTimeout(commit, delay);
   }
   async function restore(snapshot) {
-    if (!snapshot) return;
+    if (!adapter) return;
+    const fallback = read();
     const generation = ++restoreGeneration;
     restoring = true;
     clearTimeout(timer);
     timer = 0;
     gesture = false;
     route = null;
-    // Finish pending finite control animations before applying a new historical state.
-    await Promise.allSettled(
-      document
-        .getAnimations()
-        .filter((a) => Number.isFinite(a.effect?.getComputedTiming().endTime))
-        .map((a) => {
-          try {
-            a.finish();
-          } catch (_) {}
-          return a.finished;
-        }),
-    );
-    await Promise.resolve();
-    if (generation !== restoreGeneration) return;
-    for (const [id, value] of snapshot.fields || []) {
-      const node = document.getElementById(id);
-      if (!node) continue;
-      if (node.type === 'checkbox' || node.type === 'radio') node.checked = value;
-      else node.value = value;
+    try {
+      // Reject malformed envelopes before changing any form or scientific state.
+      if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot) ||
+          !snapshot.model || typeof snapshot.model !== 'object' || Array.isArray(snapshot.model) ||
+          !Array.isArray(snapshot.fields)) snapshot = fallback;
+      await Promise.allSettled(document.getAnimations()
+        .filter(a => Number.isFinite(a.effect?.getComputedTiming().endTime))
+        .map(a => { try { a.finish(); } catch {} return a.finished; }));
+      if (generation !== restoreGeneration) return;
+      for (const entry of snapshot.fields) {
+        if (!Array.isArray(entry) || entry.length !== 2 || typeof entry[0] !== 'string') continue;
+        const [id, value] = entry, node = document.getElementById(id);
+        if (!node || !node.matches('input,select')) continue;
+        if (node.type === 'checkbox' || node.type === 'radio') {
+          if (typeof value === 'boolean') node.checked = value;
+        } else if (typeof value === 'string' || (typeof value === 'number' && Number.isFinite(value))) node.value = value;
+      }
+      adapter.restore(clone(snapshot.model));
+      window.dispatchEvent(new Event('sky:history-restored'));
+    } catch (error) {
+      if (generation !== restoreGeneration) return;
+      // An incompatible historical entry must not trap subsequent undo operations.
+      try { adapter.restore(clone(fallback.model)); } catch (recoveryError) { console.warn('History recovery failed', recoveryError); }
+      console.warn('Discarded incompatible history entry', error);
+    } finally {
+      if (generation === restoreGeneration) {
+        restoring = false;
+        replace(read());
+      }
     }
-    adapter.restore(clone(snapshot.model));
-    window.dispatchEvent(new Event('sky:history-restored'));
-    // Model restores pause playback: a historical picture stays still and reviewable.
-    last = JSON.stringify(read());
-    await new Promise((resolve) => requestAnimationFrame(resolve));
-    if (generation === restoreGeneration) restoring = false;
   }
   window.SkyMotionHistory = {
     register(next) {

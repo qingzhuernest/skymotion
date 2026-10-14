@@ -40,25 +40,39 @@
       restore(snapshot) {
         stop();
         analemmaPlaying = false;
-        Object.assign(modeStates.sun, snapshot.sun, { playing: false });
-        Object.assign(modeStates.moon, snapshot.moon, { playing: false });
+        const clean = (source, defaults) => {
+          const value = SkyMotionSession.sanitizeMode(source, defaults);
+          // Historical date-link snapshots must retain the prior analemma settings.
+          // Session loading intentionally discards this temporary backup.
+          const backup = source?.solarDateLinkBackup;
+          if (backup && typeof backup === 'object' && !Array.isArray(backup)) {
+            const checked = SkyMotionSession.sanitizeMode(backup, defaults);
+            const fields = ['analemma', 'analemmaBasis', 'analemmaClock', 'analemmaIdeal'];
+            if (fields.every(key => backup[key] === checked[key]))
+              value.solarDateLinkBackup = Object.fromEntries(fields.map(key => [key, checked[key]]));
+          }
+          if (!value.manual) value.dec = dateDec(value.date);
+          return value;
+        };
+        Object.assign(modeStates.sun, clean(snapshot.sun, modeStates.sun));
+        Object.assign(modeStates.moon, clean(snapshot.moon, modeStates.moon));
         if (['analemma', 'sundial'].includes(document.body.dataset.page))
-          state = { ...state, ...snapshot.active, playing: false };
+          state = clean(snapshot.active, state);
         else {
           state = modeStates[snapshot.body === 'moon' ? 'moon' : 'sun'];
-          Object.assign(state, snapshot.active, { playing: false });
+          Object.assign(state, clean(snapshot.active, state));
         }
-        sundialLength = snapshot.sundialLength;
-        sundialView = snapshot.sundialView;
-        sundialDragMode = snapshot.sundialDragMode;
+        if (SkyMotionSession.inRange(snapshot.sundialLength, 0.06, 0.3)) sundialLength = snapshot.sundialLength;
+        if (['plate', 'device'].includes(snapshot.sundialView)) sundialView = snapshot.sundialView;
+        if (['orbit', 'time'].includes(snapshot.sundialDragMode)) sundialDragMode = snapshot.sundialDragMode;
         if (uiWorkspace) {
-          uiWorkspace.selected = snapshot.selected;
-          uiWorkspace.moonPhase = snapshot.moonPhase;
+          if (typeof snapshot.selected === 'string') uiWorkspace.selected = snapshot.selected;
+          if (typeof snapshot.moonPhase === 'boolean') uiWorkspace.moonPhase = snapshot.moonPhase;
         }
         syncControls();
         settleMotion();
         render();
-        window.SolarSpaceLabCompare?.restore?.(snapshot.linked, snapshot.linkedSelection);
+        window.SolarSpaceLabCompare?.restore?.(snapshot.linked === true, snapshot.linkedSelection);
       },
     });
   });

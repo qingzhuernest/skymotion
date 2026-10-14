@@ -14,3 +14,5 @@ for english in Path('.').resolve().rglob('*.en.html'):
 assert count==12,f'Expected 12 bilingual pairs, got {count}'
 print('PASS all 12 committed bilingual DOM, attribute, form-value and script pairs')
 `],{stdio:'inherit'});
+
+execFileSync('python3',['scripts/prerender-pages.py','--check'],{stdio:'inherit'});

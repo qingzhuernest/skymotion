@@ -473,6 +473,7 @@ Validation has three layers: numerical models and input boundaries, browser stat
 | tests/session-validation.cjs | Field ranges, legacy sessions, schema versions, dates and unavailable-storage fallback |
 | tests/storage-recovery.cjs | Working pages and time controls after corrupted or denied storage |
 | tests/bilingual-pages.cjs | Structure, attributes, form values and scripts across 12 committed bilingual page pairs |
+| tests/review-followup.cjs | Corrupt-history recovery, exception-safe unlocking, mobile language retry and generated-output freshness |
 
 ### How to run
 
@@ -554,13 +555,21 @@ Astronomy Engine and local Three.js retain their MIT licenses. The HYG subset is
 4. **Validate before refining visuals:**Start with model-boundary and state assertions, then check first interactions, rapid reversals, different widths, reduced motion, and real touch input. Control animation must not delay scientific readouts.
 5. **Synchronize documentation and publication by role:**Update task steps in the learning guide, purpose and capabilities in the project overview, and files, calculations, and validation in the developer notes. Synchronize Markdown and README, check documentation anchors, copyright, and the publication package, then inspect deployment and assets on both sites after committing to main.
 
+## Review follow-up: history recovery, generated-page freshness and language retry
+
+Browser-history snapshots use the same date, range and choice validation as session data. Failed or incompatible snapshots fall back to the current valid state. A generation-aware finally releases the restoration lock so one failure cannot block subsequent undo. Camera state retains the original history boundaries.
+
+Bilingual tests check both structure and generated-output freshness. python3 scripts/prerender-pages.py --check compares English HTML, language-data.js and the preload manifest without writing files. Forgetting to regenerate after source, dictionary or asset changes fails CI. Run the normal generator and synchronize document downloads before checking again.
+
+If the target font or language resources fail during a language switch, a visible white status notice offers a retry for the requested language. Successful retry preserves dates, location and experiment parameters and removes the notice. Failure does not silently change fonts or reset the experiment. The current deployment gate includes all 15 regression scripts.
+
 ## October 14, 2026: Session Recovery and Release Gates
 
 Invalid dates, out-of-range numbers, wrong field types and unknown choices in a cached session fall back to their respective defaults. Valid observation settings remain unchanged. Unversioned legacy sessions remain readable and subsequent saves use schemaVersion 1. If browser storage is blocked or its quota is exceeded, a memory snapshot supports the current page; it cannot guarantee persistence after closing the page or navigating elsewhere.
 
 Laboratory and 3D pages read experiment sessions through experiment-storage.js. Each laboratory field is validated, including coordinates, time, date, view, scale and idealized parameters. Restored experiments remain paused, and solar declination is recomputed from the date in ephemeris mode. Unknown session versions are not applied. This change does not alter astronomical formulas, scientific readings or colors.
 
-Both production deployment workflows depend on the shared validate.yml workflow. It installs a pinned Playwright version and Chromium and runs all 14 .cjs scripts at the tests root, covering models, history, controls, fonts, bilingual structure, corrupted-session recovery and packaging. Any failed test blocks that workflow’s deployment. Test tools are used only for maintenance and CI; they are not shipped with the website and do not change its buildless runtime.
+Both production deployment workflows depend on the shared validate.yml workflow. It installs a pinned Playwright version and Chromium and runs all 15 .cjs scripts at the tests root, covering models, history, controls, fonts, bilingual structure, corrupted-session recovery and packaging. Any failed test blocks that workflow’s deployment. Test tools are used only for maintenance and CI; they are not shipped with the website and do not change its buildless runtime.
 
 ## Production release notes — October 13, 2026
 

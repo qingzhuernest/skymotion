@@ -221,6 +221,28 @@
     }
     return fontPromises.get(locale);
   }
+  function showLanguageFailure(next) {
+    document.querySelector('.language-load-notice')?.remove();
+    const notice = document.createElement('aside');
+    notice.className = 'font-load-notice language-load-notice';
+    notice.dataset.i18nSkip = '';
+    notice.setAttribute('role', 'status');
+    const english = language === 'en', label = next === 'en' ? 'English' : '中文';
+    const message = document.createElement('span');
+    message.textContent = english ? `Could not switch to ${label}. Check your connection and retry.` : `未能切换到${label}，请检查网络后重试。`;
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.textContent = english ? 'Retry language' : '重试切换';
+    retry.onclick = async () => {
+      retry.disabled = true;
+      try {
+        if (!dictionaryReady) await init();
+        await change(next);
+      } catch { retry.disabled = false; }
+    };
+    notice.append(message, retry);
+    document.body.append(notice);
+  }
   let changeGeneration = 0;
   async function change(next, persist = true) {
     const generation = ++changeGeneration;
@@ -231,8 +253,12 @@
         apply(next, persist);
         delete document.documentElement.dataset.fontLoadError;
         document.documentElement.dataset.fontsReady = '';
-        document.querySelector('.font-load-notice')?.remove();
+        document.querySelectorAll('.font-load-notice').forEach(notice => notice.remove());
+        button?.removeAttribute('title');
       }
+    } catch (error) {
+      if (generation === changeGeneration) showLanguageFailure(next);
+      throw error;
     } finally {
       if (button && generation === changeGeneration) button.disabled = false;
     }
@@ -293,7 +319,7 @@
         else
           init()
             .then(() => change("en"))
-            .catch(failure);
+            .catch(error => failure(error, "en"));
       });
       const nav = document.querySelector(".page-nav");
       if (nav) {
@@ -336,13 +362,13 @@
     reveal();
     button.disabled = false;
   }
-  async function failure(error) {
+  async function failure(error, target = language) {
     console.error(error);
     cache.clear();
     apply(language, false);
     reveal();
     button.disabled = false;
-    button.title = "English could not load. Click to retry.";
+    if (!document.querySelector(".font-load-notice")) showLanguageFailure(target);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded",() => init().catch(failure),{once:true});
   else init().catch(failure);

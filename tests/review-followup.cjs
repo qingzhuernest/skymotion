@@ -1,0 +1,40 @@
+/** Corrupt history envelopes, restoration failure recovery, visible font retry and stale output. */
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{spawnSync}=require('node:child_process');
+const {chromium}=require(process.env.SKY_MOTION_PLAYWRIGHT||'playwright');
+const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/\/?$/,'/');
+(async()=>{const browser=await chromium.launch({executablePath:process.env.SKY_MOTION_CHROMIUM||'/usr/bin/chromium',args:['--no-sandbox','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+try{
+ const p=await browser.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto(base+'lab.html');await p.waitForFunction(()=>!!history.state?.skyMotionInteraction&&!SkyMotionHistory.restoring);
+ await p.evaluate(()=>{const saved=structuredClone(history.state);saved.skyMotionInteraction.snapshot.model.active.date='not-a-date';saved.skyMotionInteraction.snapshot.model.sun.lat=999;history.replaceState(saved,'',location.href)});
+ await p.reload();await p.waitForFunction(()=>!!window.SkyMotionHistory&&!SkyMotionHistory.restoring);
+ assert.equal(await p.evaluate(()=>state.date),'2026-06-21');assert.equal(await p.evaluate(()=>state.lat),39.9);assert.deepEqual(errors,[]);
+ // A malformed field list must be ignored instead of throwing midway through restoration.
+ await p.evaluate(()=>{const saved=structuredClone(history.state);saved.skyMotionInteraction.snapshot.fields=[null,42,['missing',{}]];history.replaceState(saved,'',location.href)});
+ await p.reload();await p.waitForFunction(()=>!!window.SkyMotionHistory&&!SkyMotionHistory.restoring);assert.deepEqual(errors,[]);
+ await p.evaluate(()=>{state.analemma=false;state.analemmaBasis='clock';state.analemmaClock=720;state.analemmaIdeal=false;state.solarDateMode=true;state.solarDateLink=true;prepareSolarDateMode();SkyMotionHistory.replaceExternal();window.dispatchEvent(new PopStateEvent('popstate',{state:history.state}));});
+ await p.waitForFunction(()=>!SkyMotionHistory.restoring);
+ assert.equal(await p.evaluate(()=>state.solarDateLinkBackup.analemma),false);
+ await p.evaluate(()=>{state.solarDateLink=false;prepareSolarDateMode()});
+ assert.equal(await p.evaluate(()=>state.analemma),false);assert.equal(await p.evaluate(()=>state.analemmaBasis),'clock');
+ // Exercise the generation-aware finally even when an adapter throws unexpectedly.
+ await p.evaluate(()=>{let fail=true;SkyMotionHistory.register({read:()=>({valid:true}),restore(){if(fail){fail=false;throw Error('test restoration failure')}}});});
+ await p.waitForFunction(()=>!SkyMotionHistory.restoring);await p.close();console.log('PASS corrupt historical fields and adapter failures release the restore lock');
+ const q=await browser.newPage({viewport:{width:390,height:844}});let blocked=true;
+ await q.route('**/fonts/charter_*.woff2',r=>blocked?r.abort():r.continue());await q.goto(base+'lab.html?lang=zh');await q.waitForSelector('.language-toggle:not(:disabled)');
+ const initial=await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat}));await q.locator('.language-toggle').click();
+ await q.waitForSelector('.language-load-notice');assert(await q.locator('.language-load-notice').isVisible());assert.match(await q.locator('.language-load-notice').innerText(),/English/);assert.equal(await q.evaluate(()=>document.documentElement.lang),'zh-CN');
+ blocked=false;await q.locator('.language-load-notice button').click();await q.waitForFunction(()=>document.documentElement.lang==='en');
+ assert.equal(await q.locator('.language-load-notice').count(),0);assert.deepEqual(await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat})),initial);await q.close();console.log('PASS mobile language failure is visible and retries English without resetting the experiment');
+}finally{await browser.close()}
+ const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'skymotion-freshness-'));
+ try{
+  const manifest=JSON.parse(fs.readFileSync('page-cache-manifest.json','utf8'));
+  for(const name of [...manifest.pages,...manifest.assets,'page-cache-manifest.json','scripts/prerender-pages.py']){const target=path.join(temporary,name);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(name,target)}
+  const check=()=>spawnSync('python3',['scripts/prerender-pages.py','--dist',temporary,'--check'],{encoding:'utf8'});
+  assert.equal(check().status,0,'Unmodified generated fixture must pass');
+  const dictionary=path.join(temporary,'i18n-docs.json'),map=JSON.parse(fs.readFileSync(dictionary,'utf8'));map['欢迎页']='Welcome — updated';fs.writeFileSync(dictionary,JSON.stringify(map));
+  const before=fs.readFileSync(path.join(temporary,'guide.en.html'),'utf8'),result=check();assert.notEqual(result.status,0);assert.match(result.stderr,/Stale generated files/);assert.equal(fs.readFileSync(path.join(temporary,'guide.en.html'),'utf8'),before);
+  console.log('PASS stale generated output fails the read-only freshness gate');
+ }finally{fs.rmSync(temporary,{recursive:true,force:true})}
+})().catch(e=>{console.error(e);process.exit(1)});
