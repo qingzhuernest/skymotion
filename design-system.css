@@ -2041,33 +2041,28 @@ body .font-load-notice button {
 body .font-load-notice button:hover { background: #ecf2f4; }
 body .font-load-notice button:disabled { opacity: .6; cursor: wait; }
 
-/* A quiet English reflection beside the welcome invitation, in both locales. */
-body[data-page="welcome"] .welcome-intro > .welcome-message {
-  max-width: 43ch;
-  margin: 28px 0 0;
-  color: #c7dde8;
+/* Corresponding reflections share the bottom position and warm night palette. */
+html:lang(en) .welcome-quote-zh,
+html:not(:lang(en)) .welcome-quote-en { display: none; }
+html:lang(en) body[data-page="welcome"] .welcome-quote {
+  width: min(100%, 72ch);
+  align-self: center;
+  color: #c8b99f;
   font-family: "SkyMotion Charter", Charter, "Bitstream Charter", Georgia, serif;
-  font-size: clamp(14px, 1.2vw, 18px);
-  font-weight: 400;
-  line-height: 1.6;
-  text-wrap: pretty;
-}
-@media (max-height: 700px) {
-  body[data-page="welcome"] .welcome-intro > .welcome-message { margin-top: 16px; font-size: 14px; line-height: 1.5; }
+  font-style: normal;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-wrap: balance;
 }
 @media (max-height: 400px) {
-  body[data-page="welcome"] .welcome-intro > .welcome-message { margin-top: 12px; font-size: 12px; max-width: 48ch; }
-}
-@media (min-width: 601px) and (max-height: 400px) {
-  body[data-page="welcome"] .welcome-intro { max-width: min(520px, 100%); }
-  body[data-page="welcome"] .welcome-intro > .welcome-message { max-width: 70ch; margin-top: 10px; }
+  html:lang(en) body[data-page="welcome"] .welcome-quote { width: 100%; font-size: 12px; line-height: 1.45; }
 }
 @media (min-width: 601px) and (max-height: 300px) {
   body[data-page="welcome"] .welcome-layout { padding: 4px 0; }
   body[data-page="welcome"] .welcome-intro h1 { font-size: 25px; margin-bottom: 8px; }
-  body[data-page="welcome"] .welcome-intro > p:not(.welcome-message) { margin-bottom: 12px; }
+  body[data-page="welcome"] .welcome-intro > p { margin-bottom: 12px; }
   body[data-page="welcome"] .welcome-enter { min-height: 36px; padding: 6px 16px; }
-  body[data-page="welcome"] .welcome-intro > .welcome-message { line-height: 1.4; }
   body[data-page="welcome"] :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited),
   html:lang(en) body[data-page="welcome"] :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited) { min-height: 32px; padding: 3px 8px; }
 }

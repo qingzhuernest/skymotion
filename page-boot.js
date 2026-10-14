@@ -67,8 +67,7 @@
     }
     return preparedFonts.get(locale);
   };
-  const quoteFonts = root.hasAttribute('data-english-quote') ? window.skyPrepareFonts('en') : Promise.resolve();
-  window.skyFirstFontsReady = Promise.all([window.skyPrepareFonts(language), quoteFonts]).then(() => {
+  window.skyFirstFontsReady = window.skyPrepareFonts(language).then(() => {
     // Static content already has the right language. It need not wait for experiments to initialize.
     delete root.dataset.languagePending;
     root.dataset.fontsReady = '';
@@ -90,7 +89,7 @@
       retry.onclick = async () => {
         retry.disabled=true;
         try {
-          await Promise.all([window.skyPrepareFonts(document.documentElement.lang === 'en' ? 'en' : 'zh'), root.hasAttribute('data-english-quote') ? window.skyPrepareFonts('en') : Promise.resolve()]);
+          await window.skyPrepareFonts(document.documentElement.lang === 'en' ? 'en' : 'zh');
           delete root.dataset.fontLoadError; root.dataset.fontsReady=''; notice.remove();
           document.dispatchEvent(new Event('skymotion:fonts-ready'));
           if(typeof schedule==='function')schedule();

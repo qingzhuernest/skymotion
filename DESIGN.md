@@ -361,6 +361,6 @@ Critical font requests have an eight-second deadline. A failure releases the vis
 
 正式站与镜像采用当前统一设计。语言、字体就绪／超时恢复、日期选择器和资源预热随正式版本发布；辅助文档入口和升落读数使用白底细边框。部署由 main 工作流执行，旧版通过生产回滚标签保留。
 
-## Welcome reflection — 2026-10-14
+## Welcome reflections — 2026-10-14
 
-The welcome invitation includes the user-supplied English reflection below its entry action. It remains English in both locales, uses Charter at a restrained reading size and shares the existing night text palette. The welcome font gate prepares Charter alongside the selected locale before showing the reflection; other pages retain their existing font preparation. The original greeting and handwritten footer remain in place.
+The Chinese handwritten sentence and the user-supplied English reflection occupy the same centered footer position, selected by locale. Both use the established warm night text (#c8b99f). English uses regular Charter, restrained sizing, balanced lines and no extra letter spacing; Chinese keeps the original handwriting. Locale-specific text is presentation copy, not a claim that the sentences translate one another. The entry action has no supplementary quote below it. Short landscape keeps clear space between controls and the footer.
