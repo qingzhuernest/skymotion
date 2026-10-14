@@ -2066,3 +2066,23 @@ html:lang(en) body[data-page="welcome"] .welcome-quote {
   body[data-page="welcome"] :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited),
   html:lang(en) body[data-page="welcome"] :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited) { min-height: 32px; padding: 3px 8px; }
 }
+
+/* Ad astra is drawn by the existing star canvas, never by a font or overlay. */
+html.welcome-opening body[data-page="welcome"] :is(.welcome-brand, .welcome-layout, .welcome-quote) {
+  opacity: var(--opening-reveal, 0);
+  pointer-events: none;
+}
+html.welcome-opening .welcome-brand .language-toggle { pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  html.welcome-opening body[data-page="welcome"] :is(.welcome-brand, .welcome-layout, .welcome-quote) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* The font-independent constellation can paint while locale fonts prepare. */
+html.welcome-opening[data-language-pending] { background: #0b131e; }
+html.welcome-opening[data-language-pending]::after { display: none; }
+html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeSky) {
+  visibility: visible !important;
+}

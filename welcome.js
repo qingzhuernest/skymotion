@@ -26,6 +26,68 @@
     gesture = null,
     seed = 431;
 
+  // One authored opening: letter-shaped constellations become the live star field.
+  // Coordinates are vector geometry; no font fetch or Canvas text is involved.
+  const letterPaths = [
+    [[0,100],[30,0],[60,100]], [[12,62],[48,62]], // A
+    [[123,0],[123,100],[105,100],[91,88],[86,69],[91,50],[105,40],[123,44]], // d
+    [[234,48],[220,40],[204,44],[195,59],[195,80],[204,96],[220,100],[234,91],[234,40],[234,100]], // a
+    [[294,45],[280,40],[263,43],[254,54],[263,65],[283,74],[294,85],[286,97],[268,100],[254,94]], // s
+    [[328,13],[328,87],[334,98],[347,97]], [[311,42],[347,42]], // t
+    [[369,100],[369,40],[369,58],[380,44],[393,40],[402,45]], // r
+    [[460,48],[446,40],[430,44],[421,59],[421,80],[430,96],[446,100],[460,91],[460,40],[460,100]], // a
+  ];
+  const openingNodes = [], openingLines = [];
+  // Share coincident endpoints so the constellation has real junctions.
+  const junctions = new Map();
+  function openingNode(x, y) {
+    const key = `${x.toFixed(2)},${y.toFixed(2)}`;
+    if (!junctions.has(key)) {
+      junctions.set(key, openingNodes.length);
+      openingNodes.push({ x, y });
+    }
+    return junctions.get(key);
+  }
+  for (const path of letterPaths) {
+    let previous = openingNode(...path[0]);
+    for (let i = 1; i < path.length; i++) {
+      const a = path[i-1], b = path[i];
+      const steps = Math.ceil(Math.hypot(b[0]-a[0], b[1]-a[1]) / 22);
+      for (let j = 1; j <= steps; j++) {
+        const next = openingNode(a[0]+(b[0]-a[0])*j/steps, a[1]+(b[1]-a[1])*j/steps);
+        openingLines.push([previous, next]);
+        previous = next;
+      }
+    }
+  }
+  let opening = document.documentElement.classList.contains('welcome-opening'),
+    openingReady = !document.documentElement.hasAttribute('data-language-pending'),
+    openingTime = 0, openingSpread = 0;
+  const openingContent = [...document.querySelectorAll('.welcome-brand,.welcome-layout,.welcome-quote')];
+  if (opening) {
+    openingContent.forEach(node => { node.inert = true; node.dataset.openingInert = ''; });
+    Promise.resolve(window.skyFirstFontsReady).catch(() => {}).then(() => {
+      openingReady = true;
+      last = 0;
+      request();
+    });
+  }
+  function finishOpening() {
+    if (!opening) return;
+    opening = false;
+    clearTimeout(window.skyOpeningSafety);
+    document.documentElement.classList.remove('welcome-opening');
+    document.documentElement.style.removeProperty('--opening-reveal');
+    openingContent.forEach(node => { node.inert = false; delete node.dataset.openingInert; });
+    try { sessionStorage.setItem('skymotion-ad-astra', '1'); } catch {}
+    nextMeteor = 0;
+    last = 0;
+    request();
+  }
+  // Keyboard/touch users may proceed immediately; no invisible controls receive focus.
+  document.addEventListener('keydown', () => { if (opening) finishOpening(); }, { capture: true });
+  window.addEventListener('pagehide', finishOpening);
+
   function random() {
     seed = (seed * 1664525 + 1013904223) >>> 0;
     return seed / 4294967296;
@@ -52,7 +114,14 @@
     alpha: 0.12 + random() * 0.26,
   }));
   function point(star) {
-    return { x: star.u * width, y: star.v * height };
+    const target = { x: star.u * width, y: star.v * height };
+    if (!opening || star.openingIndex === undefined) return target;
+    const node = openingNodes[star.openingIndex];
+    const scale = Math.min(width * 0.80 / 460, height * 0.26 / 100, 1.65);
+    const x = (width - 460 * scale) / 2 + node.x * scale;
+    const y = height * 0.46 - 50 * scale + node.y * scale;
+    return { x: x + (target.x-x) * openingSpread, y: y + (target.y-y) * openingSpread };
+
   }
   function request() {
     if (width > 0 && height > 0 && !document.hidden && !raf) raf = requestAnimationFrame(frame);
@@ -72,6 +141,7 @@
       const vx = (random() - 0.5) * 12,
         vy = (random() - 0.5) * 12;
       stars.push({
+        openingIndex: stars.length < openingNodes.length ? stars.length : undefined,
         u: random(),
         v: random(),
         r: 0.9 + random() * 1.7,
@@ -193,11 +263,20 @@
     }
     const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
     last = paintTime = now;
-    if (!reducedMotion.matches) {
-      clock += dt;
-      advance(dt, now);
+    if (opening && (reducedMotion.matches || !document.documentElement.classList.contains('welcome-opening'))) finishOpening();
+    if (opening && openingReady) {
+      openingTime += dt;
+      const travel = Math.max(0, Math.min(1, (openingTime - 1.35) / 2.7));
+      openingSpread = travel * travel * (3 - 2 * travel);
+      const reveal = Math.max(0, Math.min(1, (openingTime - 2.7) / 1.35));
+      document.documentElement.style.setProperty('--opening-reveal', reveal * reveal * (3-2*reveal));
+      if (openingTime >= 4.05) finishOpening();
     }
     if (!reducedMotion.matches) {
+      clock += dt;
+      if (!opening) advance(dt, now);
+    }
+    if (!reducedMotion.matches && !opening) {
       if (!nextMeteor) nextMeteor = now + 1500;
       if (now >= nextMeteor) {
         if (meteors.length < 6) spawnMeteors(now, 1 + Math.round(random()));
@@ -207,8 +286,19 @@
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = '#c6ddff';
     for (const mote of dust) {
-      ctx.globalAlpha = mote.alpha;
+      ctx.globalAlpha = mote.alpha * (opening ? openingSpread : 1);
       ctx.fillRect(mote.u * width, mote.v * height, 1, 1);
+    }
+    if (opening) {
+      ctx.globalAlpha = 0.55 * (1-openingSpread) ** 2;
+      ctx.strokeStyle = '#c8b99f';
+      ctx.lineWidth = 0.85;
+      ctx.beginPath();
+      for (const [a,b] of openingLines) {
+        const p = point(stars[a]), q = point(stars[b]);
+        ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y);
+      }
+      ctx.stroke();
     }
     const connected = new Set();
     ctx.globalAlpha = 1;
@@ -231,18 +321,20 @@
       const near = pointer
         ? Math.max(0, 1 - Math.hypot(p.x - pointer.x, p.y - pointer.y) / pointerRadius)
         : 0;
-      ctx.globalAlpha = lit ? 1 : 0.5 + 0.25 * Math.sin(clock * 0.7 + star.phase);
+      const letterStar = opening && star.openingIndex !== undefined;
+      ctx.globalAlpha = letterStar ? 0.88 + 0.12 * Math.sin(clock + star.phase) :
+        (lit ? 1 : 0.5 + 0.25 * Math.sin(clock * 0.7 + star.phase)) * (opening ? openingSpread : 1);
       if (star.r > 1.8 || lit || near > 0.4 || star.flash) {
         const size = 16 + near * 12 + star.flash * 14;
         ctx.drawImage(
-          lit ? goldGlow : glows[star.tint],
+          lit || letterStar ? goldGlow : glows[star.tint],
           p.x - size / 2,
           p.y - size / 2,
           size,
           size,
         );
       }
-      ctx.fillStyle = lit ? '#ecd3a2' : palette[star.tint];
+      ctx.fillStyle = letterStar ? '#eee9df' : lit ? '#ecd3a2' : palette[star.tint];
       ctx.beginPath();
       ctx.arc(p.x, p.y, star.r + near * 0.4, 0, Math.PI * 2);
       ctx.fill();
@@ -388,6 +480,7 @@
     return { x: event.clientX - rect.left, y: event.clientY - rect.top };
   }
   canvas.addEventListener('pointerdown', (event) => {
+    if (opening) { finishOpening(); return; }
     if (!width || !height || !event.isPrimary || event.button !== 0) return;
     pointer = pointerPoint(event);
     gesture = {

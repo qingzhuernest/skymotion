@@ -58,8 +58,10 @@ For systems without Chromium, install it with `tests/browser/node_modules/.bin/p
 
 ## Review follow-up — October 14, 2026
 
-Historical snapshots are validated before restoration; incompatible entries use a valid fallback, and a generation-aware finally releases the undo lock. Language-switch failures display a visible, localized notice with a retry for the target language. Bilingual CI now checks generated-output freshness as well as structure; run `python3 scripts/prerender-pages.py --check` for a read-only check of English HTML, the dictionary bundle and preload manifest. `tests/review-followup.cjs` covers corruption, adapter failure, mobile retry and stale generation; production gates run all 15 suites.
+Historical snapshots are validated before restoration; incompatible entries use a valid fallback, and a generation-aware finally releases the undo lock. Language-switch failures display a visible, localized notice with a retry for the target language. Bilingual CI now checks generated-output freshness as well as structure; run `python3 scripts/prerender-pages.py --check` for a read-only check of English HTML, the dictionary bundle and preload manifest. `tests/review-followup.cjs` covers corruption, adapter failure, mobile retry and stale generation; production gates run all 16 suites.
 
 ## Welcome reflections — October 14, 2026
 
 The Chinese welcome page keeps its original handwritten footer. English mode displays the supplied reflection, “Everyone here wants to understand something. What matters is whether you can stay curious when the answers don't come.”, at that same centered bottom position. Both use the existing warm night palette; English uses local Charter. These are locale-specific reflections rather than translations of each other. The sentence no longer appears below the entry action, and the welcome page requires only its selected locale's normal font preparation.
+
+欢迎页首次进入时以星点与连线组成 Ad astra，再散入互动星空并显露首页。每个标签页仅播放一次；点击或按键可跳过，减少动态效果时直接显示首页。
