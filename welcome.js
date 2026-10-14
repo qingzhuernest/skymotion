@@ -62,10 +62,16 @@
   }
   let opening = document.documentElement.classList.contains('welcome-opening'),
     openingReady = !document.documentElement.hasAttribute('data-language-pending'),
-    openingTime = 0, openingSpread = 0;
+    openingTime = 1.35, openingSpread = 0, openingActivated = false;
+  const originalSkyLabel = canvas.getAttribute('aria-label');
   const openingContent = [...document.querySelectorAll('.welcome-brand,.welcome-layout,.welcome-quote')];
   if (opening) {
     openingContent.forEach(node => { node.inert = true; node.dataset.openingInert = ''; });
+    canvas.dataset.i18nSkip = '';
+    canvas.setAttribute('role', 'button');
+    canvas.setAttribute('aria-label', document.documentElement.lang === 'en'
+      ? 'Ad Astra. Click or press Enter to open the sky.'
+      : 'Ad Astra，点击或按 Enter 展开星空。');
     Promise.resolve(window.skyFirstFontsReady).catch(() => {}).then(() => {
       openingReady = true;
       last = 0;
@@ -75,6 +81,9 @@
   function finishOpening() {
     if (!opening) return;
     opening = false;
+    canvas.removeAttribute('role');
+    delete canvas.dataset.i18nSkip;
+    canvas.setAttribute('aria-label', originalSkyLabel);
     clearTimeout(window.skyOpeningSafety);
     document.documentElement.classList.remove('welcome-opening');
     document.documentElement.style.removeProperty('--opening-reveal');
@@ -84,8 +93,20 @@
     last = 0;
     request();
   }
-  // Keyboard/touch users may proceed immediately; no invisible controls receive focus.
-  document.addEventListener('keydown', () => { if (opening) finishOpening(); }, { capture: true });
+  function activateOpening() {
+    if (!opening || openingActivated) return;
+    openingActivated = true;
+    last = 0;
+    request();
+  }
+  // The constellation stays intact until intentional pointer or keyboard activation.
+  document.addEventListener('keydown', event => {
+    if (opening && ['Enter', ' '].includes(event.key)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      activateOpening();
+    }
+  }, { capture: true });
   window.addEventListener('pagehide', finishOpening);
 
   function random() {
@@ -264,7 +285,7 @@
     const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
     last = paintTime = now;
     if (opening && (reducedMotion.matches || !document.documentElement.classList.contains('welcome-opening'))) finishOpening();
-    if (opening && openingReady) {
+    if (opening && openingReady && openingActivated) {
       openingTime += dt;
       const travel = Math.max(0, Math.min(1, (openingTime - 1.35) / 2.7));
       openingSpread = travel * travel * (3 - 2 * travel);
@@ -480,8 +501,8 @@
     return { x: event.clientX - rect.left, y: event.clientY - rect.top };
   }
   canvas.addEventListener('pointerdown', (event) => {
-    if (opening) { finishOpening(); return; }
     if (!width || !height || !event.isPrimary || event.button !== 0) return;
+    if (opening) { activateOpening(); return; }
     pointer = pointerPoint(event);
     gesture = {
       ...pointer,
@@ -626,5 +647,7 @@
   });
   new ResizeObserver(resize).observe(canvas);
   resize();
+  // Startup succeeded: this timer must not dismiss a deliberately waiting opening.
+  clearTimeout(window.skyOpeningSafety);
   request();
 })();

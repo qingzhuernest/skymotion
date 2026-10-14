@@ -1,4 +1,4 @@
-/** Constellation opening: coherent reveal, locale return, skip and reduced motion. */
+/** Constellation opening: coherent reveal, locale return, activation and reduced motion. */
 const assert=require('node:assert/strict');
 const {chromium}=require(process.env.SKY_MOTION_PLAYWRIGHT||'playwright');
 const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/\/?$/,'/');
@@ -12,6 +12,11 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
    await page.waitForFunction(()=>document.documentElement.classList.contains('welcome-opening'));
    assert.equal(await page.locator('.welcome-layout').evaluate(n=>getComputedStyle(n).opacity),'0');
    assert.equal(await page.locator('.welcome-layout').evaluate(n=>n.inert),true);
+   // Stay intact beyond both the old autoplay duration and startup recovery timer.
+   await page.waitForTimeout(width===1280?10500:4500);
+   assert.equal(await page.locator('.welcome-layout').evaluate(n=>getComputedStyle(n).opacity),'0');
+   assert.equal(await page.evaluate(()=>document.documentElement.classList.contains('welcome-opening')),true);
+   await page.locator('#welcomeSky').click({position:{x:width/2,y:height/2}});
    await page.waitForFunction(()=>!document.documentElement.classList.contains('welcome-opening'),{},{timeout:10000});
    assert.equal(await page.locator('.welcome-layout').evaluate(n=>n.inert),false);
    assert.equal(await page.locator('.welcome-layout').evaluate(n=>getComputedStyle(n).opacity),'1');
@@ -25,12 +30,12 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   for(const kind of ['reduced','keyboard','touch']) {
    const context=await browser.newContext({viewport:{width:320,height:568},reducedMotion:kind==='reduced'?'reduce':'no-preference',hasTouch:kind==='touch'}),page=await context.newPage();
    await page.goto(base+'index.html');
-   if(kind==='keyboard')await page.keyboard.press('Tab');
+   if(kind==='keyboard'){await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.documentElement.classList.contains('welcome-opening')),true);await page.keyboard.press('Enter');}
    if(kind==='touch')await page.locator('#welcomeSky').tap({position:{x:160,y:180}});
    await page.waitForFunction(()=>!document.documentElement.classList.contains('welcome-opening'));
    assert.equal(await page.locator('.welcome-layout').evaluate(n=>n.inert),false);
    await context.close();
   }
-  console.log('PASS welcome constellation reveal, both locales, return, keyboard/touch skip and reduced motion');
+  console.log('PASS welcome constellation reveal, both locales, return, keyboard/touch activation and reduced motion');
  } finally {await browser.close()}
 })().catch(e=>{console.error(e);process.exit(1)});

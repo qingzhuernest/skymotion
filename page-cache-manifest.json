@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261014-astra18",
+  "resourceVersion": "20261014-astra19",
   "pages": [
     "404.en.html",
     "404.html",
@@ -121,8 +121,8 @@
     "analemma.html": 71424,
     "contact.en.html": 8018,
     "contact.html": 4740,
-    "development-guide.en.html": 258208,
-    "development-guide.html": 82848,
+    "development-guide.en.html": 258234,
+    "development-guide.html": 82854,
     "diagrams.en.html": 119440,
     "diagrams.html": 71558,
     "geography-review.en.html": 1537,
@@ -140,6 +140,6 @@
     "sundial.en.html": 119277,
     "sundial.html": 71397
   },
-  "totalBytes": 1547308,
-  "assetBytes": 8397237
+  "totalBytes": 1547340,
+  "assetBytes": 8398182
 }

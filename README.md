@@ -64,4 +64,4 @@ Historical snapshots are validated before restoration; incompatible entries use 
 
 The Chinese welcome page keeps its original handwritten footer. English mode displays the supplied reflection, “Everyone here wants to understand something. What matters is whether you can stay curious when the answers don't come.”, at that same centered bottom position. Both use the existing warm night palette; English uses local Charter. These are locale-specific reflections rather than translations of each other. The sentence no longer appears below the entry action, and the welcome page requires only its selected locale's normal font preparation.
 
-欢迎页首次进入时以星点与连线组成 Ad Astra，再散入互动星空并显露首页。每个标签页仅播放一次；点击或按键可跳过，减少动态效果时直接显示首页。
+欢迎页首次进入时以星点与连线组成 Ad Astra，保持星座画面，用户点击后才散入互动星空并显露首页。每个标签页仅播放一次；Enter 或空格也可开始，减少动态效果时直接显示首页。

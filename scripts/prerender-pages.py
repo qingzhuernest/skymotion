@@ -318,7 +318,7 @@ def main() -> None:
     all_paths = sorted(paths | set(generated_paths))
     sizes = {path: (dist / path).stat().st_size for path in all_paths}
     assets = sorted(p.relative_to(dist).as_posix() for p in dist.rglob('*') if p.is_file() and is_site_file(p, dist) and p.suffix in {'.js', '.css', '.json', '.jpg', '.jpeg', '.png', '.webp', '.svg', '.woff', '.woff2', '.md'} and p.name != 'page-cache-manifest.json')
-    manifest = {'version': 2, 'resourceVersion': '20261014-astra18', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
+    manifest = {'version': 2, 'resourceVersion': '20261014-astra19', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
     output(dist / 'page-cache-manifest.json', json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
     if stale:
         raise SystemExit('Stale generated files; run scripts/prerender-pages.py: ' + ', '.join(stale))

@@ -473,7 +473,7 @@ interface-motion.js为受控details添加motion-disclosure。controls的几何�
 | tests/session-validation.cjs | 字段范围、旧缓存兼容、版本、日期与存储降级 |
 | tests/storage-recovery.cjs | 损坏缓存与禁用存储后的实际页面和时间控件 |
 | tests/bilingual-pages.cjs | 12组已提交中英文页面的结构、属性、表单与脚本 |
-| tests/welcome-opening.cjs | 欢迎页星座开场、双语显露、返回、跳过与减少动态效果 |
+| tests/welcome-opening.cjs | 欢迎页星座开场、双语显露、返回、点击开始与减少动态效果 |
 | tests/review-followup.cjs | 损坏历史恢复、异常解锁、手机语言重试与生成内容新鲜度 |
 
 ### 运行方式
