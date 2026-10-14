@@ -59,3 +59,7 @@ For systems without Chromium, install it with `tests/browser/node_modules/.bin/p
 ## Review follow-up — October 14, 2026
 
 Historical snapshots are validated before restoration; incompatible entries use a valid fallback, and a generation-aware finally releases the undo lock. Language-switch failures display a visible, localized notice with a retry for the target language. Bilingual CI now checks generated-output freshness as well as structure; run `python3 scripts/prerender-pages.py --check` for a read-only check of English HTML, the dictionary bundle and preload manifest. `tests/review-followup.cjs` covers corruption, adapter failure, mobile retry and stale generation; production gates run all 15 suites.
+
+## Welcome reflection — October 14, 2026
+
+The welcome page includes the supplied reflection, “Everyone here wants to understand something. What matters is whether you can stay curious when the answers don't come.” It remains English in both locales and uses local Charter; the original welcome copy and handwritten footer remain. Charter prepares with the welcome locale before first display, with the existing bounded font-failure recovery.

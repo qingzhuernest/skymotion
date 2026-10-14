@@ -360,3 +360,7 @@ Critical font requests have an eight-second deadline. A failure releases the vis
 ## Production release — 2026-10-13
 
 正式站与镜像采用当前统一设计。语言、字体就绪／超时恢复、日期选择器和资源预热随正式版本发布；辅助文档入口和升落读数使用白底细边框。部署由 main 工作流执行，旧版通过生产回滚标签保留。
+
+## Welcome reflection — 2026-10-14
+
+The welcome invitation includes the user-supplied English reflection below its entry action. It remains English in both locales, uses Charter at a restrained reading size and shares the existing night text palette. The welcome font gate prepares Charter alongside the selected locale before showing the reflection; other pages retain their existing font preparation. The original greeting and handwritten footer remain in place.
