@@ -1,0 +1,7 @@
+{
+  "name": "skymotion-browser-regressions",
+  "private": true,
+  "version": "1.0.0",
+  "description": "CI-only browser tools; the deployed application remains buildless.",
+  "devDependencies": { "playwright": "1.62.1" }
+}

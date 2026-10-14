@@ -93,26 +93,16 @@ function renderUIWorkspace() {
   for (const a of document.querySelectorAll('.page-nav a'))
     if (a.getAttribute('href') === page + '.html') a.setAttribute('aria-current', 'page');
   document.body.insertBefore(document.querySelector('.page-nav'), $('labShell'));
-  try {
-    const saved = JSON.parse(sessionStorage.getItem('skyLabSession') || 'null');
-    if (saved) {
-      for (const body of ['sun', 'moon'])
-        for (const key of Object.keys(modeStates[body])) {
-          const v = saved[body]?.[key];
-          if (
-            key !== 'playing' &&
-            key !== 'solarDateLinkBackup' &&
-            v !== undefined &&
-            typeof v === typeof modeStates[body][key]
-          )
-            modeStates[body][key] = v;
-        }
-      state = modeStates[saved.body === 'moon' ? 'moon' : 'sun'];
-      if (Number.isFinite(saved.sundialLength))
-        sundialLength = clamp(saved.sundialLength, 0.06, 0.3);
-      sundialView = saved.sundialView === 'plate' ? 'plate' : 'device';
+  const saved = SkyMotionSession.read();
+  if (saved) {
+    for (const body of ['sun', 'moon']) {
+      Object.assign(modeStates[body], SkyMotionSession.sanitizeMode(saved[body], modeStates[body]));
+      if (!modeStates[body].manual) modeStates[body].dec = dateDec(modeStates[body].date);
     }
-  } catch {}
+    state = modeStates[saved.body === 'moon' ? 'moon' : 'sun'];
+    if (SkyMotionSession.inRange(saved.sundialLength, 0.06, 0.3)) sundialLength = saved.sundialLength;
+    sundialView = saved.sundialView === 'plate' ? 'plate' : 'device';
+  }
   const returnBody = state.body;
   function save() {
     if (page === 'analemma' || page === 'sundial') {
@@ -128,18 +118,13 @@ function renderUIWorkspace() {
         modeStates.sun[k] = state[k];
       modeStates.sun.dec = dateDec(modeStates.sun.date);
     }
-    try {
-      sessionStorage.setItem(
-        'skyLabSession',
-        JSON.stringify({
-          body: ['analemma', 'sundial'].includes(page) ? returnBody : state.body,
-          sun: modeStates.sun,
-          moon: modeStates.moon,
-          sundialLength,
-          sundialView,
-        }),
-      );
-    } catch {}
+    SkyMotionSession.write({
+      body: ['analemma', 'sundial'].includes(page) ? returnBody : state.body,
+      sun: modeStates.sun,
+      moon: modeStates.moon,
+      sundialLength,
+      sundialView,
+    });
   }
   window.addEventListener('pagehide', save);
   window.addEventListener('pageshow', (e) => {

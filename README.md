@@ -40,3 +40,18 @@ Core astronomy libraries and model data are unchanged from production baseline `
 Regenerate English pages after editing Chinese HTML or dictionaries. Keep all three Chinese and English Markdown downloads synchronized with the reading pages. Font readiness has an eight-second timeout and explicit retry. Cache warming starts after the foreground page is ready, using two low-priority requests; this is not an offline application or a guarantee that all pages are cached immediately.
 
 The previous production commit is tagged `production-before-impeccable-20261013`. Restore it with a new commit if necessary; do not force-push main. Check both deployment workflows before calling the release successful. `tests/deployment-paths.cjs` validates root and GitHub project-path packaging.
+
+## Session hardening and automated deployment gates — October 14, 2026
+
+`experiment-storage.js` validates persisted dates, ranges, types and enumerated choices before restoring laboratory state. Valid legacy sessions remain readable; saves use `schemaVersion: 1`. Invalid fields use defaults, and unknown versions are ignored. Blocked or quota-limited storage falls back to a detached memory snapshot for the current page only. The 3D observer uses the same date and coordinate validation.
+
+Both production workflows require `.github/workflows/validate.yml` to pass before deployment. It installs the locked CI-only Playwright/Chromium tools under `tests/browser`, starts a disposable local server and runs all 14 root-level `.cjs` suites. No browser tools or test source are packaged into the static site.
+
+To run the same gate locally with Node 22+, Python 3 and installed Chromium:
+
+```sh
+npm ci --prefix tests/browser
+SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" SKY_MOTION_CHROMIUM=/usr/bin/chromium node .github/scripts/verify-site.cjs
+```
+
+For systems without Chromium, install it with `tests/browser/node_modules/.bin/playwright install --with-deps chromium` and set `SKY_MOTION_CHROMIUM` to the executable path returned by Playwright. Browser regressions primarily verify Chromium; they are not a complete real-device compatibility certification.

@@ -48,9 +48,9 @@
   // Read only the laboratory's saved date; this module never writes its scientific state.
   let initial = new Date();
   try {
-    const saved = JSON.parse(sessionStorage.getItem('skyLabSession') || 'null');
+    const saved = SkyMotionSession.read();
     const date = saved?.[saved.body || 'sun']?.date;
-    if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date))
+    if (SkyMotionSession.validDate(date))
       initial = new Date(date + 'T12:00:00Z');
   } catch {}
   if (
@@ -68,10 +68,10 @@
   let reference = 'plane';
   const observer = { lat: 39.9, lon: 116.4 };
   try {
-    const saved = JSON.parse(sessionStorage.getItem('skyLabSession') || 'null');
+    const saved = SkyMotionSession.read();
     const source = saved?.[saved.body === 'moon' ? 'moon' : 'sun'];
-    if (Number.isFinite(source?.lat)) observer.lat = Math.max(-90, Math.min(90, source.lat));
-    if (Number.isFinite(source?.lon)) observer.lon = Math.max(-180, Math.min(180, source.lon));
+    if (SkyMotionSession.inRange(source?.lat, -90, 90)) observer.lat = Math.max(-90, Math.min(90, source.lat));
+    if (SkyMotionSession.inRange(source?.lon, -180, 180)) observer.lon = Math.max(-180, Math.min(180, source.lon));
   } catch {}
   $('observerLat').value = observer.lat;
   $('observerLon').value = observer.lon;
