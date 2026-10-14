@@ -473,6 +473,8 @@ Validation has three layers: numerical models and input boundaries, browser stat
 | tests/session-validation.cjs | Field ranges, legacy sessions, schema versions, dates and unavailable-storage fallback |
 | tests/storage-recovery.cjs | Working pages and time controls after corrupted or denied storage |
 | tests/bilingual-pages.cjs | Structure, attributes, form values and scripts across 12 committed bilingual page pairs |
+| tests/welcome-opening.cjs | Welcome constellation reveal, activation, slow loading, cached-page restoration and reduced motion |
+| tests/document-entrance.cjs | Complete bilingual conversations, source themes, visit scope, skip and recovery |
 | tests/review-followup.cjs | Corrupt-history recovery, exception-safe unlocking, mobile language retry and generated-output freshness |
 
 ### How to run
@@ -561,7 +563,7 @@ Browser-history snapshots use the same date, range and choice validation as sess
 
 Bilingual tests check both structure and generated-output freshness. python3 scripts/prerender-pages.py --check compares English HTML, language-data.js and the preload manifest without writing files. Forgetting to regenerate after source, dictionary or asset changes fails CI. Run the normal generator and synchronize document downloads before checking again.
 
-If the target font or language resources fail during a language switch, a visible white status notice offers a retry for the requested language. Successful retry preserves dates, location and experiment parameters and removes the notice. Failure does not silently change fonts or reset the experiment. The current deployment gate includes all 15 regression scripts.
+If the target font or language resources fail during a language switch, a visible white status notice offers a retry for the requested language. Successful retry preserves dates, location and experiment parameters and removes the notice. Failure does not silently change fonts or reset the experiment. The current deployment gate includes all 17 regression scripts.
 
 ## October 14, 2026: Session Recovery and Release Gates
 
@@ -569,7 +571,7 @@ Invalid dates, out-of-range numbers, wrong field types and unknown choices in a 
 
 Laboratory and 3D pages read experiment sessions through experiment-storage.js. Each laboratory field is validated, including coordinates, time, date, view, scale and idealized parameters. Restored experiments remain paused, and solar declination is recomputed from the date in ephemeris mode. Unknown session versions are not applied. This change does not alter astronomical formulas, scientific readings or colors.
 
-Both production deployment workflows depend on the shared validate.yml workflow. It installs a pinned Playwright version and Chromium and runs all 15 .cjs scripts at the tests root, covering models, history, controls, fonts, bilingual structure, corrupted-session recovery and packaging. Any failed test blocks that workflow’s deployment. Test tools are used only for maintenance and CI; they are not shipped with the website and do not change its buildless runtime.
+Both production deployment workflows depend on the shared validate.yml workflow. It installs a pinned Playwright version and Chromium and runs all 17 .cjs scripts at the tests root, covering models, history, controls, fonts, bilingual structure, corrupted-session recovery and packaging. Any failed test blocks that workflow’s deployment. Test tools are used only for maintenance and CI; they are not shipped with the website and do not change its buildless runtime.
 
 ## Production release notes — October 13, 2026
 

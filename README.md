@@ -58,7 +58,7 @@ For systems without Chromium, install it with `tests/browser/node_modules/.bin/p
 
 ## Review follow-up — October 14, 2026
 
-Historical snapshots are validated before restoration; incompatible entries use a valid fallback, and a generation-aware finally releases the undo lock. Language-switch failures display a visible, localized notice with a retry for the target language. Bilingual CI now checks generated-output freshness as well as structure; run `python3 scripts/prerender-pages.py --check` for a read-only check of English HTML, the dictionary bundle and preload manifest. `tests/review-followup.cjs` covers corruption, adapter failure, mobile retry and stale generation; production gates run all 16 suites.
+Historical snapshots are validated before restoration; incompatible entries use a valid fallback, and a generation-aware finally releases the undo lock. Language-switch failures display a visible, localized notice with a retry for the target language. Bilingual CI now checks generated-output freshness as well as structure; run `python3 scripts/prerender-pages.py --check` for a read-only check of English HTML, the dictionary bundle and preload manifest. `tests/review-followup.cjs` covers corruption, adapter failure, mobile retry and stale generation; production gates run all 17 suites.
 
 ## Welcome reflections — October 14, 2026
 
@@ -67,3 +67,5 @@ The Chinese welcome page keeps its original handwritten footer. English mode dis
 欢迎页首次进入时以星点与连线组成 Ad Astra，保持星座画面，用户点击后才散入互动星空并显露首页。每个标签页仅播放一次；Enter 或空格也可开始，减少动态效果时直接显示首页。
 
 封面 Ad Astra 使用本地 Charter 斜体的曲线轮廓，由约400颗暖白星点及淡金细线组成。字形预先生成，首次显示不增加字体请求；仍由点击、Enter 或空格启动散开。
+
+三篇文档各有一段原创的完整中英文对话，分别讨论地理学习、模型与世界、模型失效后的再观察。语句逐句从两侧显现，可继续阅读或用键盘跳过。欢迎页入口由深色平缓转为浅色；浅色入口保持纸色。每篇文档在同次访问中只展示一次，内部跳转、返回和刷新不重播；新的独立／外部干净链接访问可再次播放。开场星点的色彩与亮度在散开过程中连续融合，不在结束时切换。

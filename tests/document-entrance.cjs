@@ -1,0 +1,64 @@
+/** Reading conversations: themes, complete dialogue, visit scope, failure and storage denial. */
+const assert=require('node:assert/strict');
+const {chromium}=require(process.env.SKY_MOTION_PLAYWRIGHT||'playwright');
+const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/\/?$/,'/');
+(async()=>{const browser=await chromium.launch({executablePath:process.env.SKY_MOTION_CHROMIUM||'/usr/bin/chromium',args:['--no-sandbox']});
+try {
+ const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage(),errors=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ const ready=async p=>{await p.waitForFunction(()=>!!document.querySelector('.document-entrance')&&document.documentElement.hasAttribute('data-fonts-ready'));};
+ const leave=async p=>{await p.locator('.entrance-continue').click();await p.waitForFunction(()=>!document.querySelector('.document-entrance'));};
+ await page.goto(base+'index.en.html?lang=en');await page.waitForFunction(()=>document.documentElement.hasAttribute('data-fonts-ready'));
+ await page.locator('#welcomeSky').click({position:{x:180,y:300}});await page.waitForFunction(()=>!document.documentElement.classList.contains('welcome-opening'));
+ await page.locator('.welcome-corner-links a[href*="guide."]:not([href*="project-guide"]):not([href*="development-guide"])').click();await ready(page);
+ assert.equal(await page.locator('.document-entrance').getAttribute('data-theme'),'night');
+ assert.equal(await page.locator('.entrance-sentence').count(),6);
+ assert.match(await page.locator('.entrance-dialogue').innerText(),/Why do we study geography/);
+ assert.equal(await page.locator('.document-page').evaluate(n=>n.inert),true);
+ await page.waitForTimeout(1700);
+ assert(Number(await page.locator('.entrance-sentence').first().evaluate(n=>getComputedStyle(n).opacity))>.9);
+ assert.equal(await page.locator('.entrance-sentence').last().evaluate(n=>getComputedStyle(n).opacity),'0');
+ // Backgrounding pauses the reading clock instead of consuming the conversation unseen.
+ const time=await page.evaluate(async()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));const clock=document.getAnimations().find(a=>a.effect.getComputedTiming().duration===13600);await clock.ready;return clock.currentTime});
+ await page.waitForTimeout(500);
+ assert.equal(await page.evaluate(()=>document.getAnimations().find(a=>a.effect.getComputedTiming().duration===13600)?.currentTime),time);
+ await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'))});
+ await leave(page);assert.equal(await page.locator('.document-page').evaluate(n=>n.inert),false);
+ await page.reload();assert.equal(await page.locator('.document-entrance').count(),0);
+ await page.locator('.document-links a[href*="project-guide"]').click();await ready(page);
+ assert.equal(await page.locator('.document-entrance').getAttribute('data-theme'),'paper');
+ assert.match(await page.locator('.entrance-dialogue').innerText(),/What is a model for/);
+ await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.document-entrance'));
+ await page.locator('.document-links a[href*="guide."]:not([href*="project-guide"]):not([href*="development-guide"])').click();await page.waitForLoadState();
+ assert.equal(await page.locator('.document-entrance').count(),0);
+ assert.deepEqual(errors,[]);console.log('PASS night/paper navigation, six timed sentences, pause, skip, reload and per-document visit scope');
+ // An independent clean opening resets even a cloned opener's seen state.
+ const fresh=await context.newPage();await fresh.addInitScript(()=>sessionStorage.setItem('skymotion-reading-seen','["guide","project-guide"]'));
+ await fresh.goto(base+'guide.en.html?lang=en');await ready(fresh);await leave(fresh);await fresh.close();
+ console.log('PASS clean new-tab visit replays independently');
+ const redirected=await context.newPage();await redirected.addInitScript(()=>localStorage.setItem('skymotion-language','en'));await redirected.goto(base+'guide.html');await ready(redirected);assert.equal(await redirected.evaluate(()=>document.documentElement.lang),'en');assert.match(await redirected.locator('.entrance-dialogue').innerText(),/Why do we study geography/);await leave(redirected);await redirected.close();
+ console.log('PASS stored-language redirect prepares the correct first conversation');
+ const blockedContext=await browser.newContext(),blocked=await blockedContext.newPage();
+ await blocked.addInitScript(()=>{for(const key of ['getItem','setItem','removeItem'])Storage.prototype[key]=function(){throw new DOMException('Denied','SecurityError')}});
+ await blocked.goto(base+'guide.en.html?lang=en');await ready(blocked);await leave(blocked);
+ await blocked.locator('.document-links a[href*="project-guide"]').click();await ready(blocked);await leave(blocked);
+ await blocked.locator('.document-links a[href*="guide."]:not([href*="project-guide"]):not([href*="development-guide"])').click();await blocked.waitForLoadState();assert.equal(await blocked.locator('.document-entrance').count(),0);
+ await blocked.goBack();await blocked.goBack();
+ await blocked.locator('.document-links a[href*="project-guide"]').click();await blocked.waitForLoadState();assert.equal(await blocked.locator('.document-entrance').count(),0);
+ await blocked.reload();assert.equal(await blocked.locator('.document-entrance').count(),0);
+ assert(!blocked.url().includes('sky-reading'));await blockedContext.close();console.log('PASS denied storage preserves visit scope and clean URLs');
+ const reducedContext=await browser.newContext({reducedMotion:'reduce'}),reduced=await reducedContext.newPage();
+ await reduced.goto(base+'development-guide.html?lang=zh');await ready(reduced);
+ assert.match(await reduced.locator('.entrance-dialogue').innerText(),/模型失效/);
+ for(const line of await reduced.locator('.entrance-sentence').all())assert.equal(await line.evaluate(n=>getComputedStyle(n).opacity),'1');
+ await leave(reduced);await reducedContext.close();console.log('PASS complete Chinese conversation without spatial motion');
+ const failedContext=await browser.newContext(),failed=await failedContext.newPage();await failed.route('**/document-entrance.js?*',route=>route.abort());
+ await failed.goto(base+'guide.html?lang=zh');await failed.waitForFunction(()=>document.documentElement.hasAttribute('data-fonts-ready'));
+ assert.equal(await failed.locator('.document-entrance').count(),0);assert(await failed.locator('.document-header h1').isVisible());await failedContext.close();
+ console.log('PASS failed entrance script exposes the readable document');
+ const autoContext=await browser.newContext(),auto=await autoContext.newPage();await auto.goto(base+'development-guide.en.html?lang=en');await ready(auto);
+ await auto.waitForFunction(()=>!document.querySelector('.document-entrance'),null,{timeout:22000});assert.equal(await auto.locator('.document-page').evaluate(n=>n.inert),false);await autoContext.close();
+ console.log('PASS automatic completion exposes the document');
+ await context.close();
+}finally{await browser.close()}
+})().catch(error=>{console.error(error);process.exit(1)});

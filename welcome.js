@@ -137,6 +137,7 @@
   }
   // A restrained deep-field palette: mostly ivory/white, with cool blue and warm amber/red.
   const palette = ['#eee9df', '#f2efea', '#d5e2ee', '#e9cc9b', '#bf8a72'];
+  const paletteRgb = palette.map(color => [1,3,5].map(i => parseInt(color.slice(i,i+2),16)));
   const glows = palette.map(makeGlow),
     goldGlow = makeGlow('#e9cc9b');
   const dust = Array.from({ length: 480 }, () => ({
@@ -353,19 +354,30 @@
         ? Math.max(0, 1 - Math.hypot(p.x - pointer.x, p.y - pointer.y) / pointerRadius)
         : 0;
       const letterStar = opening && star.openingIndex !== undefined;
-      ctx.globalAlpha = letterStar ? 0.88 + 0.12 * Math.sin(clock + star.phase) :
-        (lit ? 1 : 0.5 + 0.25 * Math.sin(clock * 0.7 + star.phase)) * (opening ? openingSpread : 1);
-      if ((letterStar && i % 5 === 0) || (!letterStar && star.r > 1.8) || lit || near > 0.4 || star.flash) {
-        const size = letterStar ? 10 + openingSpread * 6 : 16 + near * 12 + star.flash * 14;
+      const fieldAlpha = lit ? 1 : 0.5 + 0.25 * Math.sin(clock * 0.7 + star.phase);
+      const letterAlpha = 0.88 + 0.12 * Math.sin(clock + star.phase);
+      ctx.globalAlpha = letterStar ? letterAlpha + (fieldAlpha-letterAlpha)*openingSpread : fieldAlpha * (opening ? openingSpread : 1);
+      const fieldGlow = star.r > 1.8 || lit || near > 0.4 || star.flash;
+      if ((letterStar && i % 5 === 0) || fieldGlow) {
+        const fieldSize = 16 + near * 12 + star.flash * 14;
+        const size = letterStar ? 10 + (fieldSize-10)*openingSpread : fieldSize;
+        const alpha = ctx.globalAlpha;
+        if (letterStar) {
+          ctx.globalAlpha = alpha * (1-openingSpread) * (i % 5 === 0 ? 1 : 0);
+          ctx.drawImage(goldGlow, p.x-size/2, p.y-size/2, size, size);
+          ctx.globalAlpha = alpha * openingSpread * (fieldGlow ? 1 : 0);
+        }
         ctx.drawImage(
-          lit || letterStar ? goldGlow : glows[star.tint],
+          lit ? goldGlow : glows[star.tint],
           p.x - size / 2,
           p.y - size / 2,
           size,
           size,
         );
+        ctx.globalAlpha = alpha;
       }
-      ctx.fillStyle = letterStar ? '#eee9df' : lit ? '#ecd3a2' : palette[star.tint];
+      const color = letterStar ? 'rgb('+[238,233,223].map((value,k) => Math.round(value+(paletteRgb[star.tint][k]-value)*openingSpread)).join(',')+')' : palette[star.tint];
+      ctx.fillStyle = letterStar ? color : lit ? '#ecd3a2' : palette[star.tint];
       ctx.beginPath();
       const letterRadius = Math.max(0.5, Math.min(1.25, width / 460)) * (i % 5 === 0 ? 1.15 : 0.72);
       ctx.arc(p.x, p.y, (letterStar ? letterRadius + (star.r-letterRadius)*openingSpread : star.r) + near * 0.4, 0, Math.PI * 2);
