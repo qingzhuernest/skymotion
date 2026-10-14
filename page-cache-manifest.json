@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261014-astra20",
+  "resourceVersion": "20261014-astra21",
   "pages": [
     "404.en.html",
     "404.html",
@@ -141,5 +141,5 @@
     "sundial.html": 71397
   },
   "totalBytes": 1547472,
-  "assetBytes": 8398271
+  "assetBytes": 8401775
 }
