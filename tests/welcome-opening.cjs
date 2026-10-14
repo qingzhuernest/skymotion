@@ -16,6 +16,9 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
    await page.waitForTimeout(width===1280?10500:4500);
    assert.equal(await page.locator('.welcome-layout').evaluate(n=>getComputedStyle(n).opacity),'0');
    assert.equal(await page.evaluate(()=>document.documentElement.classList.contains('welcome-opening')),true);
+   await page.evaluate(()=>{window.dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}))});
+   assert.equal(await page.evaluate(()=>document.documentElement.classList.contains('welcome-opening')),true);
+   assert.equal(await page.evaluate(()=>sessionStorage.getItem('skymotion-ad-astra')),null);
    await page.locator('#welcomeSky').click({position:{x:width/2,y:height/2}});
    await page.waitForFunction(()=>!document.documentElement.classList.contains('welcome-opening'),{},{timeout:10000});
    assert.equal(await page.locator('.welcome-layout').evaluate(n=>n.inert),false);
@@ -27,6 +30,15 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
    assert.equal(await page.evaluate(()=>document.documentElement.lang),locale==='en'?'en':'zh-CN');
    await context.close();
   }
+  // A slow script request must not make the head advance to the home page.
+  const slowContext=await browser.newContext(),slow=await slowContext.newPage();
+  await slow.route('**/welcome.js?*', async route=>{await new Promise(resolve=>setTimeout(resolve,11000));await route.continue()});
+  await slow.goto(base+'index.html');
+  assert.equal(await slow.evaluate(()=>document.documentElement.classList.contains('welcome-opening')),true);
+  assert.equal(await slow.locator('.welcome-layout').evaluate(n=>getComputedStyle(n).opacity),'0');
+  await slow.keyboard.press('Enter');
+  await slow.waitForFunction(()=>!document.documentElement.classList.contains('welcome-opening'));
+  await slowContext.close();
   for(const kind of ['reduced','keyboard','touch']) {
    const context=await browser.newContext({viewport:{width:320,height:568},reducedMotion:kind==='reduced'?'reduce':'no-preference',hasTouch:kind==='touch'}),page=await context.newPage();
    await page.goto(base+'index.html');
@@ -36,6 +48,6 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
    assert.equal(await page.locator('.welcome-layout').evaluate(n=>n.inert),false);
    await context.close();
   }
-  console.log('PASS welcome constellation reveal, both locales, return, keyboard/touch activation and reduced motion');
+  console.log('PASS welcome constellation reveal, both locales, return, keyboard/touch activation, delayed scripts, cached-page restoration and reduced motion');
  } finally {await browser.close()}
 })().catch(e=>{console.error(e);process.exit(1)});

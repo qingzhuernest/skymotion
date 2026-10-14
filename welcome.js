@@ -84,7 +84,6 @@
     canvas.removeAttribute('role');
     delete canvas.dataset.i18nSkip;
     canvas.setAttribute('aria-label', originalSkyLabel);
-    clearTimeout(window.skyOpeningSafety);
     document.documentElement.classList.remove('welcome-opening');
     document.documentElement.style.removeProperty('--opening-reveal');
     openingContent.forEach(node => { node.inert = false; delete node.dataset.openingInert; });
@@ -107,7 +106,13 @@
       activateOpening();
     }
   }, { capture: true });
-  window.addEventListener('pagehide', finishOpening);
+  // Safari may cache a page without the visitor activating it. Pause, do not complete.
+  window.addEventListener('pagehide', () => {
+    if (raf) cancelAnimationFrame(raf);
+    raf = 0;
+    last = 0;
+  });
+  window.addEventListener('pageshow', () => { last = 0; request(); });
 
   function random() {
     seed = (seed * 1664525 + 1013904223) >>> 0;
@@ -647,7 +652,6 @@
   });
   new ResizeObserver(resize).observe(canvas);
   resize();
-  // Startup succeeded: this timer must not dismiss a deliberately waiting opening.
-  clearTimeout(window.skyOpeningSafety);
+  window.skyWelcomeReady = true;
   request();
 })();

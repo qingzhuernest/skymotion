@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261014-astra19",
+  "resourceVersion": "20261014-astra20",
   "pages": [
     "404.en.html",
     "404.html",
@@ -129,8 +129,8 @@
     "geography-review.html": 1029,
     "guide.en.html": 186294,
     "guide.html": 63622,
-    "index.en.html": 7773,
-    "index.html": 6455,
+    "index.en.html": 7839,
+    "index.html": 6521,
     "lab.en.html": 119364,
     "lab.html": 71480,
     "project-guide.en.html": 80252,
@@ -140,6 +140,6 @@
     "sundial.en.html": 119277,
     "sundial.html": 71397
   },
-  "totalBytes": 1547340,
-  "assetBytes": 8398182
+  "totalBytes": 1547472,
+  "assetBytes": 8398271
 }
