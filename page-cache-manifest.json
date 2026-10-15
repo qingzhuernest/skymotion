@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261015-companion32",
+  "resourceVersion": "20261015-companion33",
   "readingFontVersion": "20261015-font29",
   "pages": [
     "404.en.html",
@@ -142,5 +142,5 @@
     "sundial.html": 71653
   },
   "totalBytes": 1557306,
-  "assetBytes": 6940078
+  "assetBytes": 6940288
 }
