@@ -32,7 +32,7 @@ function renderUIWorkspace() {
   }
   if (page === 'diagrams') {
     const allowed = moon
-      ? ['contextPanel', 'chartPanel', 'riseSetPanel', 'companionModule']
+      ? ['contextPanel', 'chartPanel', 'riseSetPanel', 'companionModule', 'lunarOrbit']
       : ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel', 'solarCompare'];
     if (!allowed.includes(u.selected)) {
       u.selected = 'contextPanel';
@@ -47,11 +47,17 @@ function renderUIWorkspace() {
         riseSetPanel: moon ? '月出月落' : '日出日落',
         solarGeometryPanel: '地轴与地平面',
         companionModule: '行星伴月',
+        lunarOrbit: '地升地落',
         solarCompare: '四图对照',
       }[b.dataset.diagram]);
       uiViewHidden(b, !allowed.includes(b.dataset.diagram));
       uiViewAttribute(b, 'aria-selected', String(b.dataset.diagram === u.selected));
     });
+    if (u.lastRevealedTab !== u.selected) {
+      const activeTab = u.tabs.querySelector('[aria-selected="true"]');
+      if (activeTab) u.tabs.scrollLeft = activeTab.offsetLeft - (u.tabs.clientWidth - activeTab.offsetWidth) / 2;
+      u.lastRevealedTab = u.selected;
+    }
     if (window.skyWorkspacePresentation) window.skyWorkspacePresentation.sync();
     const visibleNodes = new Set();
     const chosen = {
@@ -60,7 +66,20 @@ function renderUIWorkspace() {
       riseSetPanel: $('eventCompass'),
       solarGeometryPanel: $('earthGeometry'),
       companionModule: $('companionSky'),
+      lunarOrbit: $('lunarOrbitPanel'),
     }[u.selected];
+    const lunar = moon && u.selected === 'lunarOrbit';
+    u.plot.closest('.ui-shell').classList.toggle('ui-lunar-orbit', lunar);
+    if (u.lunarFrame) {
+      if (lunar && !u.lunarFrame.getAttribute('src')) {
+        const lang = document.documentElement.lang === 'en' ? 'index.en.html' : 'index.html';
+        u.lunarFrame.src = 'lunar/' + lang + '?embedded=1';
+      }
+      if (u.lunarActive !== lunar) {
+        u.lunarActive = lunar;
+        u.lunarFrame.contentWindow?.postMessage({type:'skymotion:lunar-active',active:lunar},location.origin);
+      }
+    }
     const comparing = !moon && u.selected === 'solarCompare';
     for (const [id, card] of Object.entries(u.cards)) {
       const visible =
@@ -143,6 +162,7 @@ function renderUIWorkspace() {
   document.addEventListener('click', (e) => {
     if (e.target.closest('a[href]')) save();
   });
+  if (page === 'diagrams' && location.hash === '#lunarOrbit') state = modeStates.moon;
   state.playing = false;
   $('labShell').hidden = false;
   $('labShell').inert = false;
@@ -423,6 +443,7 @@ function renderUIWorkspace() {
         ['riseSetPanel', '升落方位'],
         ['solarGeometryPanel', '地轴与地平面'],
         ['companionModule', '行星伴月'],
+        ['lunarOrbit', '地升地落'],
         ['solarCompare', '四图对照'],
       ]) {
         const b = document.createElement('button');
@@ -433,6 +454,7 @@ function renderUIWorkspace() {
         b.onclick = () => {
           uiWorkspace.selected = id;
           if (id === 'companionModule') state.companion = true;
+          if (id === 'lunarOrbit') stop();
           if (location.hash !== '#' + id) {
             if (window.SkyMotionHistory) SkyMotionHistory.setRoute('#' + id);
             else history.pushState(null, '', '#' + id);
@@ -452,6 +474,15 @@ function renderUIWorkspace() {
         plot.append($(id));
         uiWorkspace.nodes.push($(id));
       }
+      const lunarPanel = document.createElement('section');
+      lunarPanel.id = 'lunarOrbitPanel';
+      lunarPanel.hidden = true;
+      const lunarFrame = document.createElement('iframe');
+      lunarFrame.title = '地升地落互动演示';
+      lunarFrame.setAttribute('allow', 'fullscreen');
+      lunarFrame.addEventListener('load', () => lunarFrame.contentWindow?.postMessage({type:'skymotion:lunar-active',active:uiWorkspace.lunarActive===true},location.origin));
+      lunarPanel.append(lunarFrame);plot.append(lunarPanel);
+      uiWorkspace.nodes.push(lunarPanel);uiWorkspace.lunarFrame=lunarFrame;
       // Reuse the same canvases in single and comparison views; no duplicate pipelines.
       for (const [id, nodeId, name] of [
         ['contextPanel', 'sunContextContent', '直射点与昼夜'],

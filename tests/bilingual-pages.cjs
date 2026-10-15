@@ -27,8 +27,8 @@ for english in Path('.').resolve().rglob('*.en.html'):
         for child in node.children: check_english_text(child,skip)
     check_english_text(m.parse(english.read_text()))
     count+=1
-assert count==12,f'Expected 12 bilingual pairs, got {count}'
-print('PASS all 12 bilingual DOM, attribute, form-value and script pairs, with complete English text')
+assert count==13,f'Expected 13 bilingual pairs, got {count}'
+print('PASS all 13 bilingual DOM, attribute, form-value and script pairs, with complete English text')
 `],{stdio:'inherit'});
 
 execFileSync('python3',['scripts/prerender-pages.py','--check'],{stdio:'inherit'});

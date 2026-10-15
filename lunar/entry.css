@@ -1,0 +1,39 @@
+.ui-lunar-orbit .ui-grid {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: minmax(0, 1fr) !important;
+  grid-template-areas: 'visual' !important;
+  column-gap: 0 !important;
+}
+.ui-lunar-orbit
+  :is(
+    .ui-parameters,
+    .ui-timeline-host,
+    .motion-menu-edge,
+    .motion-menu-grip,
+    #uiParametersButton,
+    .ui-linked-toggle
+  ) {
+  display: none !important;
+}
+.ui-lunar-orbit .ui-plot {
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  padding: 0 !important;
+}
+#lunarOrbitPanel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--design-paper);
+}
+#lunarOrbitPanel[hidden] {
+  display: none !important;
+}
+#lunarOrbitPanel iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+}

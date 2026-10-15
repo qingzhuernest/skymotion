@@ -41,6 +41,7 @@
   const initialRequest = new URLSearchParams(location.search).get('compare') === '1';
 
   function blockReason() {
+    if (uiWorkspace.selected === 'lunarOrbit') return '地升地落演示使用独立的绕月控制。';
     if (state.body === 'sun' && state.manual) return '先切回日期观测，再与真实星历三维模型对照。';
     if (uiWorkspace.selected === 'solarCompare') return '请选择单张关联图解，再开启三维对照。';
     return '';
