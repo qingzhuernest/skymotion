@@ -172,3 +172,5 @@ Cloudflare Pages is the production site, with the same content mirrored on GitHu
 My workspace in the Sun’s Linked Diagrams supports one to four views, side-by-side or stacked arrangements, and a three-view layout with one main diagram. Choosing a diagram already on screen swaps positions. Drag a grip to reorder or a divider to resize after release. Focus a diagram for a closer look and press Esc to return. Undo and redo layout changes, and save up to five named combinations. Phones use tabs; reorder them in Layout & saved views. Saved combinations contain only the layout, preserving dates, location and scientific parameters. Standard view restores the original arrangement.
 
 In Layout & saved views, choose a diagram to add, make a diagram the main view, or equalize proportions. All these changes can be undone.
+
+Saved layouts support renaming, updating from the current workspace, and undoing changes. A Current layout marker identifies matching arrangements. On desktop, enter column or row proportions from 30% to 70%; the canvas updates only after committing the value.

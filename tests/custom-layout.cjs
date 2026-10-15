@@ -333,6 +333,50 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
       1,
       'Saved combinations survive navigation',
     );
+    const collectionBefore = await r.evaluate(() =>
+      JSON.parse(localStorage.getItem('skymotion-saved-layouts-v1')),
+    );
+    await r.locator('[data-word="rename"]').click();
+    await r.locator('.workspace-profile-editor input').fill('Classroom');
+    await r.locator('[data-word="saveName"]').click();
+    assert.match(await r.locator('.workspace-profile-apply').innerText(), /Classroom/);
+    await r.locator('[data-word="rename"]').click();
+    await r.locator('.workspace-profile-editor input').fill('Discard this');
+    await r.keyboard.press('Escape');
+    assert.equal(await r.locator('.workspace-profile-editor').count(), 0);
+    assert.equal(await r.locator('[data-word="options"]').getAttribute('aria-expanded'), 'true');
+    assert.match(await r.locator('.workspace-profile-apply').innerText(), /Classroom/);
+    await r.locator('[data-word="undoSaved"]').click();
+    assert.deepEqual(
+      await r.evaluate(() => JSON.parse(localStorage.getItem('skymotion-saved-layouts-v1'))),
+      collectionBefore,
+    );
+    await r.locator('[data-word="overview"]').click();
+    await r.locator('[data-word="update"]').click();
+    assert.equal(await r.locator('[data-word="update"]').isDisabled(), true);
+    assert.equal(
+      (await r.evaluate(() => JSON.parse(localStorage.getItem('skymotion-saved-layouts-v1'))))
+        .items[0].layout.views.length,
+      4,
+    );
+    await r.locator('[data-word="undoSaved"]').click();
+    assert.equal(
+      (await richSaved()).views.length,
+      4,
+      'Collection undo leaves the workspace unchanged',
+    );
+    await r.locator('.workspace-profile-apply').click();
+    assert.equal((await richSaved()).views.length, 3);
+    const ratioBeforeTyping = (await richSaved()).ratio;
+    await r.locator('[data-proportion="ratio"]').fill('43');
+    assert.equal((await richSaved()).ratio, ratioBeforeTyping, 'Typing does not resize the canvas');
+    await r.locator('[data-proportion="ratio"]').press('Tab');
+    assert.equal((await richSaved()).ratio, 43);
+    await r.locator('[data-proportion="rowRatio"]').fill('99');
+    await r.locator('[data-proportion="rowRatio"]').press('Tab');
+    assert.equal((await richSaved()).rowRatio, 70, 'Exact input clamps to supported proportions');
+    await r.locator('[data-word="equalize"]').click();
+    assert.deepEqual(await inputState(), scienceBefore);
     for (let i = 2; i <= 5; i++) {
       await r.locator('.workspace-save-form input').fill('Layout ' + i);
       await r.locator('[data-word="save"]').click();
@@ -343,6 +387,22 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     assert.match(await r.locator('.workspace-settings-status').innerText(), /five/);
     await r.locator('.workspace-profile-row [data-word="delete"]').last().click();
     assert.equal(await r.locator('.workspace-profile-row').count(), 4);
+    await r.locator('[data-word="undoSaved"]').click();
+    assert.equal(
+      await r.locator('.workspace-profile-row').count(),
+      5,
+      'Deleted collections can be restored',
+    );
+    await r.locator('.workspace-profile-row [data-word="rename"]').last().click();
+    await r.locator('.workspace-profile-editor input').fill('Observation');
+    await r.locator('[data-word="saveName"]').click();
+    assert.equal(
+      await r.locator('.workspace-profile-editor input').getAttribute('aria-invalid'),
+      'true',
+    );
+    await r.locator('[data-word="cancelEdit"]').click();
+    await r.locator('.workspace-profile-row [data-word="delete"]').last().click();
+
     await r.keyboard.press('Escape');
     assert.deepEqual(
       await inputState(),

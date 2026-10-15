@@ -62,6 +62,23 @@
     after: ['向后移', 'Move later'],
     saved: ['我的收藏', 'Saved layouts'],
     name: ['组合名称', 'Layout name'],
+    rename: ['重命名收藏', 'Rename saved layout'],
+    saveName: ['保存名称', 'Save name'],
+    update: ['用当前布局更新收藏', 'Update with current layout'],
+    cancelEdit: ['取消重命名', 'Cancel renaming'],
+    undoSaved: ['撤销收藏修改', 'Undo saved-layout change'],
+    nameConflict: ['请输入不同的组合名称。', 'Enter a different layout name.'],
+    renamed: ['收藏已重命名。', 'Saved layout renamed.'],
+    updated: ['收藏已更新。', 'Saved layout updated.'],
+    restored: ['已撤销收藏修改。', 'Saved-layout change undone.'],
+    current: ['当前布局', 'Current layout'],
+    exact: ['精确调整比例', 'Exact proportions'],
+    columnShare: ['左栏比例（%）', 'Left column (%)'],
+    rowShare: ['上栏比例（%）', 'Top row (%)'],
+    proportionHint: [
+      '输入 30–70，确认后更新画布。',
+      'Enter 30–70; the view updates when you commit.',
+    ],
     save: ['保存组合', 'Save layout'],
     empty: [
       '还没有收藏。保存当前组合，下次可直接使用。',
@@ -177,6 +194,9 @@
   }
   let data = load(),
     profiles = loadProfiles(),
+    profileUndo = [],
+    editingProfile = null,
+    editDraft = '',
     undo = [],
     redo = [],
     focused = null,
@@ -363,6 +383,38 @@
       data.rowRatio = 50;
     }),
   );
+  const proportions = document.createElement('fieldset');
+  proportions.className = 'workspace-proportions';
+  const proportionTitle = document.createElement('legend');
+  proportionTitle.dataset.wordHeading = 'exact';
+  proportions.append(proportionTitle);
+  const proportionFields = ['ratio', 'rowRatio'].map((key, i) => {
+    const label = document.createElement('label'),
+      text = document.createElement('span'),
+      input = document.createElement('input');
+    text.dataset.wordHeading = i ? 'rowShare' : 'columnShare';
+    input.type = 'number';
+    input.min = '30';
+    input.max = '70';
+    input.step = '1';
+    input.dataset.proportion = key;
+    input.onchange = () => {
+      const n = input.valueAsNumber;
+      if (Number.isFinite(n))
+        change(() => {
+          data[key] = Math.max(30, Math.min(70, Math.round(n)));
+        });
+      input.value = data[key];
+    };
+    label.append(text, input);
+    proportions.append(label);
+    return input;
+  });
+  const proportionHint = document.createElement('p');
+  proportionHint.className = 'workspace-settings-hint';
+  proportionHint.dataset.wordHeading = 'proportionHint';
+  proportions.append(proportionHint);
+  arrange.append(proportions);
   const available = section('choose'),
     availableChoices = document.createElement('div');
   availableChoices.className = 'workspace-choice-group workspace-add-choices';
@@ -398,6 +450,15 @@
     profileList = document.createElement('div');
   profileList.className = 'workspace-profile-list';
   savedSection.append(profileList);
+  const undoSavedButton = button(
+    savedSection,
+    'undoSaved',
+    undoProfiles,
+    'M9 5 4 10l5 5M4 10h10a6 6 0 0 1 0 12',
+    true,
+  );
+  undoSavedButton.className = 'workspace-undo-saved';
+  undoSavedButton.hidden = true;
   const saveForm = document.createElement('form');
   saveForm.className = 'workspace-save-form';
   const nameInput = document.createElement('input');
@@ -413,6 +474,7 @@
   savedSection.append(saveHint);
   const panelStatus = document.createElement('p');
   panelStatus.className = 'workspace-settings-status';
+  panelStatus.id = 'workspaceSavedStatus';
   panelStatus.setAttribute('role', 'status');
   savedSection.append(panelStatus);
   const panelFoot = document.createElement('div');
@@ -436,19 +498,53 @@
       announce('limit');
       return;
     }
-    const item = { name, layout: copy(data) };
-    if (existing >= 0) profiles[existing] = item;
-    else profiles.push(item);
+    mutateProfiles(() => {
+      const item = { name, layout: copy(data) };
+      if (existing >= 0) profiles[existing] = item;
+      else profiles.push(item);
+    }, 'savedStatus');
+    nameInput.value = '';
+  };
+  function persistProfiles(word) {
+    const active = document.activeElement,
+      action = active?.dataset.word,
+      name = active?.dataset.profileName;
     let stored = true;
     try {
       localStorage.setItem(profileKey, JSON.stringify({ version: 1, items: profiles }));
     } catch {
       stored = false;
     }
-    nameInput.value = '';
     renderProfiles();
-    announce(stored ? 'savedStatus' : 'memoryStatus');
-  };
+    if (name) {
+      const row = [...profileList.querySelectorAll('[data-saved-name]')].find(
+        (row) => row.dataset.savedName === name,
+      );
+      const target =
+        row?.querySelector(`[data-word="${action}"]:not(:disabled)`) ||
+        row?.querySelector('.workspace-profile-apply');
+      target?.focus();
+    }
+    announce(stored ? word : 'memoryStatus');
+  }
+  function mutateProfiles(fn, word) {
+    const before = copy(profiles);
+    fn();
+    if (JSON.stringify(before) !== JSON.stringify(profiles)) {
+      profileUndo.push(before);
+      if (profileUndo.length > 10) profileUndo.shift();
+    }
+    persistProfiles(word);
+  }
+  function undoProfiles() {
+    if (!profileUndo.length) return;
+    profiles = profileUndo.pop();
+    editingProfile = null;
+    persistProfiles('restored');
+    (profileUndo.length ? undoSavedButton : nameInput).focus();
+  }
+  const presentation = (layout) => JSON.stringify({ ...layout, enabled: false, active: 0 });
+
   const controls = new Map();
   for (const id of ids) {
     const head = cards[id].querySelector('.ui-diagram-card-head'),
@@ -709,8 +805,31 @@
       else orderList.querySelector('button:not(:disabled)')?.focus();
     }
   }
+  function focusProfile(name) {
+    [...profileList.querySelectorAll('[data-word="rename"]')]
+      .find((b) => b.dataset.profileName === name)
+      ?.focus();
+  }
+  function finishEditing(name) {
+    editingProfile = null;
+    renderProfiles();
+    focusProfile(name);
+  }
   function renderProfiles() {
-    const signature = document.documentElement.lang + JSON.stringify(profiles);
+    undoSavedButton.hidden = !profileUndo.length;
+    const signature = document.documentElement.lang + JSON.stringify(profiles) + editingProfile;
+    for (const row of profileList.querySelectorAll('[data-saved-name]')) {
+      const profile = profiles.find((p) => p.name === row.dataset.savedName);
+      const same = profile && presentation(profile.layout) === presentation(data);
+      row.dataset.current = String(Boolean(same));
+      const marker = row.querySelector('.workspace-current-marker');
+      if (marker) {
+        marker.hidden = !same;
+        marker.textContent = t('current');
+      }
+      const update = row.querySelector('[data-word="update"]');
+      if (update) update.disabled = Boolean(same);
+    }
     if (profileList.dataset.signature === signature) return;
     profileList.dataset.signature = signature;
     profileList.replaceChildren();
@@ -723,26 +842,92 @@
     for (const profile of profiles) {
       const row = document.createElement('div');
       row.className = 'workspace-profile-row';
+      row.dataset.savedName = profile.name;
+      row.dataset.current = String(presentation(profile.layout) === presentation(data));
+      if (editingProfile === profile.name) {
+        const form = document.createElement('form'),
+          input = document.createElement('input');
+        form.className = 'workspace-profile-editor';
+        form.noValidate = true;
+        input.type = 'text';
+        input.value = editDraft;
+        input.maxLength = 40;
+        input.setAttribute('aria-label', t('name'));
+        input.oninput = () => {
+          editDraft = input.value;
+          input.removeAttribute('aria-invalid');
+        };
+        form.append(input);
+        button(form, 'saveName', () => {}).type = 'submit';
+        button(form, 'cancelEdit', () => finishEditing(profile.name), 'm7 7 10 10M17 7 7 17');
+        form.onsubmit = (e) => {
+          e.preventDefault();
+          const name = input.value.trim();
+          if (!name || profiles.some((p) => p !== profile && p.name === name)) {
+            input.setAttribute('aria-invalid', 'true');
+            input.setAttribute('aria-errormessage', panelStatus.id);
+            announce('nameConflict');
+            input.focus();
+            return;
+          }
+          editingProfile = null;
+          mutateProfiles(() => {
+            profile.name = name;
+          }, 'renamed');
+          focusProfile(name);
+        };
+        row.append(form);
+        profileList.append(row);
+        continue;
+      }
       const apply = document.createElement('button');
       apply.type = 'button';
       apply.className = 'workspace-profile-apply';
-      apply.textContent = profile.name;
+      const title = document.createElement('span'),
+        marker = document.createElement('small');
+      title.textContent = profile.name;
+      marker.className = 'workspace-current-marker';
+      marker.textContent = t('current');
+      marker.hidden = presentation(profile.layout) !== presentation(data);
+      apply.append(title, marker);
       apply.onclick = () =>
         change(() => {
           data = { ...copy(profile.layout), enabled: true };
         }, 'applied');
       row.append(apply);
+      const update = button(
+        row,
+        'update',
+        () =>
+          mutateProfiles(() => {
+            profile.layout = copy(data);
+          }, 'updated'),
+        'M4 4h14l2 2v14H4zM8 4v6h8V4M8 20v-6h8v6',
+      );
+      update.dataset.profileName = profile.name;
+      update.disabled = presentation(profile.layout) === presentation(data);
+      const rename = button(
+        row,
+        'rename',
+        () => {
+          editingProfile = profile.name;
+          editDraft = profile.name;
+          renderProfiles();
+          const input = profileList.querySelector('.workspace-profile-editor input');
+          input.focus();
+          input.select();
+        },
+        'm4 16 11-11 4 4-11 11H4zM13 7l4 4',
+      );
+      rename.dataset.profileName = profile.name;
       const remove = button(
         row,
         'delete',
         () => {
-          profiles = profiles.filter((p) => p !== profile);
-          try {
-            localStorage.setItem(profileKey, JSON.stringify({ version: 1, items: profiles }));
-          } catch {}
-          renderProfiles();
-          announce('deleted');
-          nameInput.focus();
+          mutateProfiles(() => {
+            profiles = profiles.filter((p) => p !== profile);
+          }, 'deleted');
+          undoSavedButton.focus();
         },
         'M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13M10 10v7M14 10v7',
       );
@@ -774,6 +959,11 @@
       b.hidden = data.views.includes(ids[i]);
     });
     featuredGroup.hidden = data.views.length !== 3;
+    proportionFields.forEach((input, i) => {
+      const axis = i ? 'rows' : 'columns';
+      input.value = data[i ? 'rowRatio' : 'ratio'];
+      input.disabled = data.views.length === 2 && data.axis !== axis;
+    });
     axisButtons.forEach((b, i) => {
       b.setAttribute('aria-pressed', String(data.axis === ['columns', 'rows'][i]));
       b.disabled = data.views.length === 1;
@@ -842,6 +1032,7 @@
   function closeOptions(restore = false) {
     if (!optionOpen) return;
     optionOpen = false;
+    editingProfile = null;
     statusKey = '';
     optionsButton.setAttribute('aria-expanded', 'false');
     if (nativePopover && panel.matches(':popover-open')) panel.hidePopover();
@@ -868,6 +1059,7 @@
   if (nativePopover)
     panel.addEventListener('toggle', (e) => {
       if (e.newState === 'closed' && optionOpen) {
+        editingProfile = null;
         optionOpen = false;
         statusKey = '';
         panel.hidden = true;
@@ -1018,6 +1210,10 @@
           e.preventDefault();
           e.stopImmediatePropagation();
           cancel();
+        } else if (optionOpen && editingProfile) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          finishEditing(editingProfile);
         } else if (optionOpen) {
           e.preventDefault();
           e.stopImmediatePropagation();
@@ -1053,6 +1249,8 @@
   window.addEventListener('storage', (event) => {
     if (event.key === profileKey || event.key === null) {
       profiles = loadProfiles();
+      profileUndo = [];
+      editingProfile = null;
       if (optionOpen) renderProfiles();
     }
   });
