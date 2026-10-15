@@ -45,7 +45,7 @@ The previous production commit is tagged `production-before-impeccable-20261013`
 
 `experiment-storage.js` validates persisted dates, ranges, types and enumerated choices before restoring laboratory state. Valid legacy sessions remain readable; saves use `schemaVersion: 1`. Invalid fields use defaults, and unknown versions are ignored. Blocked or quota-limited storage falls back to a detached memory snapshot for the current page only. The 3D observer uses the same date and coordinate validation.
 
-Both production workflows require `.github/workflows/validate.yml` to pass before deployment. It installs the locked CI-only Playwright/Chromium tools under `tests/browser`, starts a disposable local server and runs all 15 root-level `.cjs` suites. No browser tools or test source are packaged into the static site.
+Both production workflows require `.github/workflows/validate.yml` to pass before deployment. It installs the locked CI-only Playwright/Chromium tools under `tests/browser`, starts a disposable local server and runs all 18 root-level `.cjs` suites. No browser tools or test source are packaged into the static site.
 
 To run the same gate locally with Node 22+, Python 3 and installed Chromium:
 
@@ -58,7 +58,7 @@ For systems without Chromium, install it with `tests/browser/node_modules/.bin/p
 
 ## Review follow-up — October 14, 2026
 
-Historical snapshots are validated before restoration; incompatible entries use a valid fallback, and a generation-aware finally releases the undo lock. Language-switch failures display a visible, localized notice with a retry for the target language. Bilingual CI now checks generated-output freshness as well as structure; run `python3 scripts/prerender-pages.py --check` for a read-only check of English HTML, the dictionary bundle and preload manifest. `tests/review-followup.cjs` covers corruption, adapter failure, mobile retry and stale generation; production gates run all 17 suites.
+Historical snapshots are validated before restoration; incompatible entries use a valid fallback, and a generation-aware finally releases the undo lock. Language-switch failures display a visible, localized notice with a retry for the target language. Bilingual CI now checks generated-output freshness as well as structure; run `python3 scripts/prerender-pages.py --check` for a read-only check of English HTML, the dictionary bundle and preload manifest. `tests/review-followup.cjs` covers corruption, adapter failure, mobile retry and stale generation; production gates run all 18 suites.
 
 ## Welcome reflections — October 14, 2026
 
@@ -75,3 +75,5 @@ Loading performance: Reading WOFF2 subsets total 711,888 bytes (26% smaller), wi
 Ordered loading: only `page-boot.js` blocks parsing, to choose the correct locale before content. Other external scripts use `defer` and retain dependency order. The Welcome canvas and document conversations start before the shared translation dictionary finishes; their local copy remains bilingual. Deferred language initialization still waits for DOMContentLoaded so experiment globals exist. Cover failure recovery also waits for deferred startup, rather than skipping a healthy opening.
 
 Controlled parser-order comparison (Chromium, 100 ms latency, 500 KB/s): English star-cover script readiness improved from 2.90 s to 1.31 s with identical shared assets. This measures cover startup, not whole-application interactivity or real-device Safari performance.
+
+Custom-layout pilot (GPT Site preview): Linked solar diagrams can opt into a 12-column workspace with drag handles, pointer/keyboard resizing, move buttons, undo/reset and standard-layout recovery. Desktop and mobile layouts use independent versioned, validated localStorage records. Six existing panels retain their nodes; DOM/tab order follows the arrangement. Mobile parameters rejoin the page while customizing and return to the drawer afterward. Layout changes do not save or modify scientific state. This release is preview-only; do not push it to main without a new release instruction.

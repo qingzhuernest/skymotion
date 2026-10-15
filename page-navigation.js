@@ -644,7 +644,7 @@ function renderUIWorkspace() {
   }
   drawerMedia.addEventListener('change', updateParameterPresentation);
   updateParameterPresentation();
-  SkyMotionUI.installRail({
+  shell.skyRailSync = SkyMotionUI.installRail({
     shell,
     rail,
     button: parameterButton,

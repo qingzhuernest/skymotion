@@ -1,0 +1,57 @@
+/* Opt-in layout editing: paper controls around unchanged scientific canvases. */
+.layout-launch {flex-shrink:0;white-space:nowrap;font:inherit;font-size:13px;padding:7px 12px;border:1px solid var(--design-line);border-radius:10px;background:var(--design-surface);color:var(--design-primary);min-height:36px;cursor:pointer}
+.layout-toolbar {display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 16px;background:var(--design-surface);border:1px solid var(--design-line);border-radius:16px;color:var(--design-ink)}
+.layout-toolbar p {margin:0;font-size:13px;line-height:1.6}.layout-toolbar>div{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto}.layout-toolbar .layout-status{flex-basis:100%;color:var(--design-muted);font-size:12px;min-height:0}
+.layout-toolbar button,.layout-panel-tools button,.layout-panel-tools select {font:inherit;font-size:12px;color:var(--design-primary);background:var(--design-surface);border:1px solid var(--design-line);border-radius:8px;min-height:32px;padding:4px 9px;cursor:pointer}
+.layout-toolbar button:hover,.layout-panel-tools button:hover,.layout-launch:hover{background:var(--design-inset)}
+.layout-toolbar button:disabled,.layout-panel-tools button:disabled{opacity:.45;cursor:default}
+.layout-panel-tools svg,.layout-resize svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;display:block}
+.layout-panel-tools{display:flex;align-items:center;gap:6px;padding:8px 10px;flex-shrink:0;min-width:0;border-bottom:1px solid var(--design-line);background:var(--design-surface);color:var(--design-ink)}
+.layout-panel-name {font-size:13px;line-height:1.4;flex:1;min-width:0}.layout-width{display:flex;align-items:center;gap:4px;color:var(--design-muted);font-size:12px}
+.layout-handle{touch-action:none;cursor:grab!important}.layout-handle:active{cursor:grabbing!important}
+.layout-panel-tools button{padding:4px}.layout-resize{position:absolute;right:4px;bottom:4px;width:32px;height:32px;padding:6px;background:var(--design-surface);color:var(--design-primary);border:1px solid var(--design-line);border-radius:8px;z-index:5;touch-action:none;cursor:nwse-resize}
+body.custom-workspace{height:auto!important;overflow:auto!important;min-height:100dvh}
+body.custom-workspace #labShell{height:auto!important;min-height:calc(100dvh - var(--ui-nav-height))}
+body.custom-workspace .ui-shell{height:auto;min-height:calc(100dvh - var(--ui-nav-height))}
+body.custom-workspace .ui-shell .ui-grid{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;grid-template-rows:none!important;grid-template-areas:none!important;gap:16px;align-items:start;flex:none}
+body.custom-workspace .ui-visual,body.custom-workspace .ui-plot{display:contents!important}
+body.custom-workspace .ui-viewbar{grid-column:1/-1;order:-1;border:1px solid var(--design-line);border-radius:16px;background:var(--design-surface);min-width:0}
+body.custom-workspace [data-layout-panel]{grid-area:auto!important;grid-column:span var(--layout-span)!important;order:var(--layout-order)!important;min-width:0;position:relative;border:1px solid var(--design-line);border-radius:16px;background:var(--design-surface);overflow:hidden;flex:none}
+body.custom-workspace .ui-diagram-card{height:var(--layout-height);min-height:280px;display:flex;flex-direction:column}
+body.custom-workspace .ui-diagram-card-head{display:flex;background:var(--design-surface);color:var(--design-muted);min-height:38px;padding:8px 12px}
+body.custom-workspace .ui-diagram-card-head h2{display:block;color:var(--design-ink);font-size:13px}
+body.custom-workspace .ui-diagram-card-head button{color:var(--design-primary);border-color:var(--design-line)}
+body.custom-workspace .layout-editing .ui-diagram-card-head h2{display:none}
+body.custom-workspace .ui-diagram-card:not(.ui-geometry-card):has(.layout-panel-tools:not([hidden])) .ui-diagram-card-head{display:none}
+body.custom-workspace .ui-diagram-surface{background:#132438}
+body.custom-workspace .ui-parameters{height:var(--layout-height);max-height:none;overflow:auto;contain:layout paint}
+body.custom-workspace .ui-parameters>.layout-panel-tools{position:sticky;top:-14px;z-index:6;margin:-14px -14px 14px}
+body.custom-workspace .ui-timeline-host .time-workbench{border:0;border-radius:0;min-width:0}
+body.custom-workspace .motion-menu-edge,body.custom-workspace .motion-menu-grip,body.custom-workspace #uiParametersButton{display:none!important}
+.layout-active:not(.layout-editing) .layout-panel-tools,.layout-active:not(.layout-editing) .layout-resize{display:none}
+.layout-moving{opacity:.48;outline:1px dashed var(--design-primary);outline-offset:2px}
+.layout-drop-target{outline:2px solid var(--design-primary);outline-offset:3px}
+.layout-ghost{position:fixed;z-index:300;pointer-events:none;border:1px dashed var(--design-primary);border-radius:12px;background:var(--design-surface);color:var(--design-ink);padding:12px 18px;box-sizing:border-box;max-width:calc(100vw - 24px);font-family:var(--design-font);font-size:14px;box-shadow:0 8px 24px #20323e1a}
+body.layout-dragging{user-select:none;cursor:grabbing}
+:is(.layout-launch,.layout-toolbar button,.layout-panel-tools button,.layout-panel-tools select,.layout-resize):focus-visible{outline:2px solid var(--design-primary);outline-offset:3px}
+@media(min-width:761px) and (max-width:1000px){body.custom-workspace [data-layout-panel]{grid-column:span max(6,var(--layout-span))!important}.layout-width>span{display:none}}
+@media(max-width:760px){
+ .ui-heading .layout-launch{grid-column:1/-1;justify-self:end;font-size:12px}
+ body.custom-workspace .ui-shell .ui-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px}
+ body.custom-workspace [data-layout-panel]{grid-column:1!important}
+ .layout-width,.layout-resize{display:none!important}.layout-panel-tools button{min-height:40px;min-width:40px}.layout-panel-tools{gap:6px;padding:6px 10px}.layout-panel-name{font-size:12px}
+ body.custom-workspace .ui-diagram-card{height:360px;min-height:280px}
+ body.custom-workspace .ui-parameters{height:400px}.layout-toolbar{padding:10px 12px;gap:8px}.layout-toolbar>div{margin-left:0}
+ body.custom-workspace .ui-viewbar{overflow:auto}.layout-toolbar .layout-status{font-size:12px}
+}
+
+/* Release the standard viewport lock only inside the scrollable custom workspace. */
+html.custom-layout-root{height:auto!important;overflow:auto!important;scroll-padding-bottom:24px}
+body.custom-workspace{position:static!important;inset:auto!important;max-height:none!important;width:auto!important}
+body.custom-workspace #sunContextContent{display:flex;flex:1;flex-direction:column;min-height:0;padding:0;background:#132438}
+body.custom-workspace :is(#earthGlobeView,#earthMapView){display:flex;flex:1;min-height:0;align-items:stretch;margin:0}
+body.custom-workspace :is(#globe,#worldMap){width:100%!important;height:100%!important;min-width:0;min-height:0;flex:1;border-radius:0}
+.layout-launch:disabled{opacity:.55;cursor:default}
+body.custom-workspace #earthMapView{flex-direction:column}
+body.custom-workspace #earthMapView .micro{display:none}
+body.custom-workspace .map-key{font-size:11px;flex-shrink:0;padding:4px;color:#b7ceda}

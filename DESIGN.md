@@ -384,3 +384,6 @@ The Ad Astra letter stars now blend their RGB color, brightness, radius and glow
 ### Independent Safari windows
 
 A browsing-context identity is stored in the existing app-scoped window-name record, independently of cloned sessionStorage. An empty/new window context starts a new visit even when its same-site referrer and history length resemble internal navigation; the existing context still preserves seen flags through internal navigation and reload. Unrelated named windows are left unchanged. Navigation timing has a legacy fallback, and clean English routes such as /guide.en use the same canonical document key as /guide.en.html. Both document conversations and the welcome constellation share the corrected fresh-visit detection.
+
+### Linked-diagram custom layout (GPT preview, 2026-10-15)
+Operate mode; opt-in editing around the original scientific canvases. Paper panel headers, existing Reading/Charter typography, thin muted teal handles, 16px gutters and 16px corners. Twelve desktop columns snap to thirds, halves or a full row; phones use one column. Editing tools disappear on Done. Drag/resize previews leave the real canvas untouched until drop. Keyboard move and resize, actual DOM order, separate layout undo and Standard layout recovery are required.
