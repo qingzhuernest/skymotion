@@ -2326,7 +2326,7 @@ body[data-body='moon'] .chart-panel {
   flex-wrap: wrap;
   margin-top: 18px;
   font-size: 14px;
-  color: #405675;
+  color: var(--design-muted, #536975);
 }
 .companion-toolbar select {
   padding: 8px 12px;
@@ -2334,15 +2334,15 @@ body[data-body='moon'] .chart-panel {
 }
 .companion-toolbar button {
   margin-left: auto;
-  color: #315da8;
-  background: #e1eafb;
-  border: 0;
+  color: var(--design-primary, #24576b);
+  background: var(--design-surface, #fff);
+  border: 1px solid var(--design-line, #cdd9de);
   padding: 10px 15px;
-  border-radius: 22px;
+  border-radius: var(--design-radius-control, 12px);
 }
 .companion-search-status {
   font-size: 13px;
-  color: #315da8;
+  color: var(--design-primary, #24576b);
   line-height: 1.7;
   margin: 8px 0;
 }
@@ -2357,15 +2357,16 @@ body[data-body='moon'] .chart-panel {
 }
 .companion-measures > div {
   padding: 12px 16px;
-  background: #eaf0fb;
+  border: 1px solid var(--design-line, #cdd9de);
+  background: var(--design-surface, #fff);
   border-radius: 16px;
-  color: #315da8;
+  color: var(--design-primary, #24576b);
 }
 .companion-measures span,
 .companion-measures small {
   display: block;
   font-size: 12px;
-  color: #526681;
+  color: var(--design-muted, #536975);
 }
 .companion-measures strong {
   display: block;
@@ -2383,7 +2384,7 @@ body[data-body='moon'] .chart-panel {
 }
 .companion-visibility {
   font-size: 14px;
-  color: #405675;
+  color: var(--design-muted, #536975);
   line-height: 1.7;
   margin: 12px 0;
 }
@@ -2395,13 +2396,19 @@ body[data-body='moon'] .chart-panel {
   margin-bottom: 10px;
 }
 .companion-actions button {
-  color: #315da8;
-  border: 0;
-  border-radius: 22px;
-  background: #e1eafb;
+  color: var(--design-primary, #24576b);
+  border: 1px solid var(--design-line, #cdd9de);
+  border-radius: var(--design-radius-control, 12px);
+  background: var(--design-surface, #fff);
 }
 .companion-actions .micro {
   margin: 0;
+}
+/* These controls also live outside .ui-parameters after diagram reparenting. */
+.companion-module :is(.companion-toolbar, .companion-actions) button:hover:not(:disabled) {
+  background: var(--design-inset, #ecf2f4);
+  color: var(--design-hover, #174558);
+  border-color: var(--design-line, #cdd9de);
 }
 @media (max-width: 760px) {
   .companion-toolbar {
