@@ -64,10 +64,6 @@ function workbenchPlay() {
 function workbenchIsPlaying() {
   return document.body.dataset.page === 'analemma' ? analemmaPlaying : state.playing;
 }
-function focusTimeWorkbench() {
-  schedule();
-  requestAnimationFrame(() => $('workbenchTime').focus({ preventScroll: true }));
-}
 function renderTimeWorkbench() {
   const root = $('timeWorkbench');
   if (!root) return;

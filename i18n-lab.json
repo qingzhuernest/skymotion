@@ -859,5 +859,6 @@
   "当前方向相距较远": "Currently farther apart in the sky",
   "两者位于地平线上方，但太阳也在地平线上方；几何靠近不代表适合肉眼观测。": "Both bodies are above the horizon, but so is the Sun. Angular proximity does not imply suitable conditions for viewing with the naked eye.",
   "两者位于地平线上方，太阳在地平线下；实际可见性还取决于暮光、月相、天气和地形。": "Both bodies are above the horizon and the Sun is below it. Actual visibility also depends on twilight, lunar phase, weather and terrain.",
-  "位于地平线下方或地平线上，当前不能按无遮挡的地平线上方天体观测。": " is at or below the horizon and cannot currently be observed as an unobstructed body above it."
+  "位于地平线下方或地平线上，当前不能按无遮挡的地平线上方天体观测。": " is at or below the horizon and cannot currently be observed as an unobstructed body above it.",
+  "日期与观测时刻在底部时间栏调整。": "Adjust the date and observation time in the timeline below."
 }
