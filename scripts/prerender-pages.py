@@ -326,7 +326,7 @@ def main() -> None:
                     if p.is_file() and is_site_file(p, dist) and p.suffix in asset_suffixes
                     and p.name != 'page-cache-manifest.json'
                     and p.relative_to(dist).as_posix() not in legacy_fonts)
-    manifest = {'version': 2, 'resourceVersion': '20261015-layout26', 'readingFontVersion': '20261015-font26', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
+    manifest = {'version': 2, 'resourceVersion': '20261015-workspace27', 'readingFontVersion': '20261015-font26', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
     output(dist / 'page-cache-manifest.json', json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
     if stale:
         raise SystemExit('Stale generated files; run scripts/prerender-pages.py: ' + ', '.join(stale))

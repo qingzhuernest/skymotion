@@ -169,4 +169,4 @@ Cloudflare Pages is the production site, with the same content mirrored on GitHu
 
 ## Custom layout
 
-The four linked solar diagrams support a custom layout. Choose “Customize layout” to reorder panels by their handles or resize them from the bottom corner. Phones use a single column. Choose “Done” to keep the arrangement, or “Standard layout” to return to the original page. Layouts are stored only in the current browser; time, location and scientific parameters stay unchanged.
+My workspace in Linked Diagrams offers one, two or four views. Choose each diagram independently, drag its header handle to swap positions, or drag the divider to adjust proportions; canvases resize after release. On phones, switch diagrams with tabs. Settings and the shared timeline stay in place. Undo, reset and standard-view recovery are available. Layouts are stored only in this browser; time, location and scientific parameters stay unchanged.

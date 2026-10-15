@@ -1,57 +1,305 @@
-/* Opt-in layout editing: paper controls around unchanged scientific canvases. */
-.layout-launch {flex-shrink:0;white-space:nowrap;font:inherit;font-size:13px;padding:7px 12px;border:1px solid var(--design-line);border-radius:10px;background:var(--design-surface);color:var(--design-primary);min-height:36px;cursor:pointer}
-.layout-toolbar {display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 16px;background:var(--design-surface);border:1px solid var(--design-line);border-radius:16px;color:var(--design-ink)}
-.layout-toolbar p {margin:0;font-size:13px;line-height:1.6}.layout-toolbar>div{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto}.layout-toolbar .layout-status{flex-basis:100%;color:var(--design-muted);font-size:12px;min-height:0}
-.layout-toolbar button,.layout-panel-tools button,.layout-panel-tools select {font:inherit;font-size:12px;color:var(--design-primary);background:var(--design-surface);border:1px solid var(--design-line);border-radius:8px;min-height:32px;padding:4px 9px;cursor:pointer}
-.layout-toolbar button:hover,.layout-panel-tools button:hover,.layout-launch:hover{background:var(--design-inset)}
-.layout-toolbar button:disabled,.layout-panel-tools button:disabled{opacity:.45;cursor:default}
-.layout-panel-tools svg,.layout-resize svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;display:block}
-.layout-panel-tools{display:flex;align-items:center;gap:6px;padding:8px 10px;flex-shrink:0;min-width:0;border-bottom:1px solid var(--design-line);background:var(--design-surface);color:var(--design-ink)}
-.layout-panel-name {font-size:13px;line-height:1.4;flex:1;min-width:0}.layout-width{display:flex;align-items:center;gap:4px;color:var(--design-muted);font-size:12px}
-.layout-handle{touch-action:none;cursor:grab!important}.layout-handle:active{cursor:grabbing!important}
-.layout-panel-tools button{padding:4px}.layout-resize{position:absolute;right:4px;bottom:4px;width:32px;height:32px;padding:6px;background:var(--design-surface);color:var(--design-primary);border:1px solid var(--design-line);border-radius:8px;z-index:5;touch-action:none;cursor:nwse-resize}
-body.custom-workspace{height:auto!important;overflow:auto!important;min-height:100dvh}
-body.custom-workspace #labShell{height:auto!important;min-height:calc(100dvh - var(--ui-nav-height))}
-body.custom-workspace .ui-shell{height:auto;min-height:calc(100dvh - var(--ui-nav-height))}
-body.custom-workspace .ui-shell .ui-grid{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;grid-template-rows:none!important;grid-template-areas:none!important;gap:16px;align-items:start;flex:none}
-body.custom-workspace .ui-visual,body.custom-workspace .ui-plot{display:contents!important}
-body.custom-workspace .ui-viewbar{grid-column:1/-1;order:-1;border:1px solid var(--design-line);border-radius:16px;background:var(--design-surface);min-width:0}
-body.custom-workspace [data-layout-panel]{grid-area:auto!important;grid-column:span var(--layout-span)!important;order:var(--layout-order)!important;min-width:0;position:relative;border:1px solid var(--design-line);border-radius:16px;background:var(--design-surface);overflow:hidden;flex:none}
-body.custom-workspace .ui-diagram-card{height:var(--layout-height);min-height:280px;display:flex;flex-direction:column}
-body.custom-workspace .ui-diagram-card-head{display:flex;background:var(--design-surface);color:var(--design-muted);min-height:38px;padding:8px 12px}
-body.custom-workspace .ui-diagram-card-head h2{display:block;color:var(--design-ink);font-size:13px}
-body.custom-workspace .ui-diagram-card-head button{color:var(--design-primary);border-color:var(--design-line)}
-body.custom-workspace .layout-editing .ui-diagram-card-head h2{display:none}
-body.custom-workspace .ui-diagram-card:not(.ui-geometry-card):has(.layout-panel-tools:not([hidden])) .ui-diagram-card-head{display:none}
-body.custom-workspace .ui-diagram-surface{background:#132438}
-body.custom-workspace .ui-parameters{height:var(--layout-height);max-height:none;overflow:auto;contain:layout paint}
-body.custom-workspace .ui-parameters>.layout-panel-tools{position:sticky;top:-14px;z-index:6;margin:-14px -14px 14px}
-body.custom-workspace .ui-timeline-host .time-workbench{border:0;border-radius:0;min-width:0}
-body.custom-workspace .motion-menu-edge,body.custom-workspace .motion-menu-grip,body.custom-workspace #uiParametersButton{display:none!important}
-.layout-active:not(.layout-editing) .layout-panel-tools,.layout-active:not(.layout-editing) .layout-resize{display:none}
-.layout-moving{opacity:.48;outline:1px dashed var(--design-primary);outline-offset:2px}
-.layout-drop-target{outline:2px solid var(--design-primary);outline-offset:3px}
-.layout-ghost{position:fixed;z-index:300;pointer-events:none;border:1px dashed var(--design-primary);border-radius:12px;background:var(--design-surface);color:var(--design-ink);padding:12px 18px;box-sizing:border-box;max-width:calc(100vw - 24px);font-family:var(--design-font);font-size:14px;box-shadow:0 8px 24px #20323e1a}
-body.layout-dragging{user-select:none;cursor:grabbing}
-:is(.layout-launch,.layout-toolbar button,.layout-panel-tools button,.layout-panel-tools select,.layout-resize):focus-visible{outline:2px solid var(--design-primary);outline-offset:3px}
-@media(min-width:761px) and (max-width:1000px){body.custom-workspace [data-layout-panel]{grid-column:span max(6,var(--layout-span))!important}.layout-width>span{display:none}}
-@media(max-width:760px){
- .ui-heading .layout-launch{grid-column:1/-1;justify-self:end;font-size:12px}
- body.custom-workspace .ui-shell .ui-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px}
- body.custom-workspace [data-layout-panel]{grid-column:1!important}
- .layout-width,.layout-resize{display:none!important}.layout-panel-tools button{min-height:40px;min-width:40px}.layout-panel-tools{gap:6px;padding:6px 10px}.layout-panel-name{font-size:12px}
- body.custom-workspace .ui-diagram-card{height:360px;min-height:280px}
- body.custom-workspace .ui-parameters{height:400px}.layout-toolbar{padding:10px 12px;gap:8px}.layout-toolbar>div{margin-left:0}
- body.custom-workspace .ui-viewbar{overflow:auto}.layout-toolbar .layout-status{font-size:12px}
+/* A finite observation workspace: original rail and shared timeline keep their places. */
+.layout-launch,
+.workspace-toolbar button,
+.workspace-pane-tools button,
+.workspace-pane-tools select {
+  font: inherit;
+  color: var(--design-primary);
+  background: var(--design-surface);
+  border: 1px solid var(--design-line);
+  border-radius: 9px;
+  cursor: pointer;
+}
+.layout-launch {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: 12px;
+  padding: 7px 12px;
+  min-height: 36px;
+}
+.layout-launch:disabled {
+  opacity: 0.5;
+}
+.workspace-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--design-line);
+  background: var(--design-surface);
+  flex-shrink: 0;
+}
+.workspace-presets,
+.workspace-actions {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.workspace-actions {
+  margin-left: auto;
+}
+.workspace-toolbar button {
+  min-height: 32px;
+  padding: 5px 9px;
+  font-size: 12px;
+}
+.workspace-toolbar button[aria-pressed='true'] {
+  background: var(--design-inset);
+  border-color: var(--design-primary);
+}
+.workspace-toolbar svg,
+.workspace-pane-tools svg {
+  display: block;
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.workspace-toolbar button:disabled,
+.workspace-pane-tools button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.workspace-toolbar[hidden],
+.workspace-pane-tools,
+.workspace-divider,
+.workspace-tabs {
+  display: none;
+}
+.workspace-active .ui-viewbar {
+  display: none !important;
+}
+.workspace-active .ui-plot {
+  display: grid !important;
+  position: relative;
+  grid-template-columns: minmax(0, var(--workspace-ratio)) minmax(0, 1fr) !important;
+  grid-template-rows: minmax(0, 1fr) !important;
+  gap: 8px !important;
+  padding: 8px !important;
+  background: var(--design-inset);
+  min-height: 0;
+}
+.workspace-active .ui-plot[data-workspace-count='1'] {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+.workspace-active .ui-plot:is([data-workspace-count='3'], [data-workspace-count='4']) {
+  grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+}
+.workspace-active .ui-plot[data-workspace-count='3'] .ui-diagram-card:nth-last-of-type(1) {
+  grid-column: 1/-1;
+}
+.workspace-active .ui-diagram-card {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  border: 1px solid var(--design-line);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex !important;
+  flex-direction: column;
+}
+.workspace-active .ui-diagram-card[hidden] {
+  display: none !important;
+}
+.workspace-active .ui-diagram-card-head {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 4px 7px !important;
+  background: var(--design-surface) !important;
+  color: var(--design-ink) !important;
+  flex-shrink: 0;
+}
+.workspace-active .ui-diagram-card-head > h2,
+.workspace-active .ui-diagram-card-head > span {
+  display: none !important;
+}
+.workspace-active .workspace-pane-tools {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  min-width: 0;
+  flex: 1;
+}
+.workspace-pane-tools button {
+  padding: 3px;
+  border-color: transparent;
+  min-height: 30px;
+}
+.workspace-pane-tools select {
+  font-size: 12px;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  border-color: transparent;
+  padding: 4px 20px 4px 5px;
+  text-overflow: ellipsis;
+}
+.workspace-grip {
+  touch-action: none;
+  cursor: grab !important;
+}
+.workspace-grip:active {
+  cursor: grabbing !important;
+}
+.workspace-active .ui-diagram-surface {
+  flex: 1;
+  min-height: 0;
+}
+.workspace-active .ui-diagram-card-head > button {
+  font-size: 11px !important;
+  white-space: nowrap;
+  background: var(--design-surface) !important;
+  color: var(--design-primary) !important;
+  border: 1px solid var(--design-line) !important;
+}
+.workspace-active .workspace-divider:not([hidden]) {
+  display: block;
+  position: absolute;
+  left: var(--workspace-ratio);
+  top: 10px;
+  bottom: 10px;
+  width: 12px;
+  margin-left: -2px;
+  z-index: 4;
+  cursor: col-resize;
+  touch-action: none;
+  border-radius: 6px;
+}
+.workspace-divider:after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 40%;
+  height: 20%;
+  width: 2px;
+  background: var(--design-line);
+  border-radius: 3px;
+}
+.workspace-divider:hover:after,
+.workspace-divider:focus-visible:after {
+  background: var(--design-primary);
+}
+.workspace-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  pointer-events: none;
+  background: var(--design-surface);
+  color: var(--design-ink);
+  border: 1px solid var(--design-line);
+  border-radius: 10px;
+  box-shadow: 0 6px 22px #20323e18;
+  padding: 10px 16px;
+  font: 14px var(--design-font);
+}
+.workspace-guide {
+  position: fixed;
+  left: 0;
+  width: 2px;
+  z-index: 300;
+  pointer-events: none;
+  background: var(--design-primary);
+}
+.workspace-drop {
+  outline: 2px solid var(--design-primary);
+  outline-offset: -2px;
+}
+:is(
+  .layout-launch,
+  .workspace-toolbar button,
+  .workspace-pane-tools button,
+  .workspace-pane-tools select
+):hover {
+  background: var(--design-inset);
+}
+:is(
+  .layout-launch,
+  .workspace-toolbar button,
+  .workspace-pane-tools button,
+  .workspace-pane-tools select,
+  .workspace-divider
+):focus-visible {
+  outline: 2px solid var(--design-primary);
+  outline-offset: 2px;
+}
+@media (max-width: 760px) {
+  .ui-heading .layout-launch {
+    font-size: 11px;
+    min-height: 30px;
+    padding: 5px 9px;
+  }
+  .workspace-toolbar {
+    padding: 6px 8px;
+    gap: 5px;
+  }
+  .workspace-toolbar button {
+    min-height: 34px;
+    font-size: 11px;
+    padding: 4px 7px;
+  }
+  .workspace-active .ui-plot {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+    gap: 0 !important;
+    padding: 5px !important;
+  }
+  .workspace-tabs {
+    display: flex;
+    overflow-x: auto;
+    width: 100%;
+    gap: 5px;
+    scrollbar-width: none;
+  }
+  .workspace-tabs button {
+    white-space: nowrap;
+    font-size: 11px;
+  }
+  .workspace-tabs button[aria-selected='true'] {
+    background: var(--design-inset);
+    border-color: var(--design-primary);
+  }
+  .workspace-active .workspace-grip {
+    display: none;
+  }
+  .workspace-active .ui-diagram-card {
+    grid-column: auto !important;
+  }
+  .workspace-active .ui-diagram-card-head {
+    min-height: 34px;
+  }
+  .workspace-active .workspace-divider {
+    display: none !important;
+  }
 }
 
-/* Release the standard viewport lock only inside the scrollable custom workspace. */
-html.custom-layout-root{height:auto!important;overflow:auto!important;scroll-padding-bottom:24px}
-body.custom-workspace{position:static!important;inset:auto!important;max-height:none!important;width:auto!important}
-body.custom-workspace #sunContextContent{display:flex;flex:1;flex-direction:column;min-height:0;padding:0;background:#132438}
-body.custom-workspace :is(#earthGlobeView,#earthMapView){display:flex;flex:1;min-height:0;align-items:stretch;margin:0}
-body.custom-workspace :is(#globe,#worldMap){width:100%!important;height:100%!important;min-width:0;min-height:0;flex:1;border-radius:0}
-.layout-launch:disabled{opacity:.55;cursor:default}
-body.custom-workspace #earthMapView{flex-direction:column}
-body.custom-workspace #earthMapView .micro{display:none}
-body.custom-workspace .map-key{font-size:11px;flex-shrink:0;padding:4px;color:#b7ceda}
+/* Keep native form text fully inside the new compact headers. */
+.workspace-pane-tools select {
+  height: 32px;
+  min-height: 32px;
+  line-height: 1.4;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.workspace-note {
+  display: none;
+}
+.workspace-active .workspace-note {
+  display: block;
+}
+.workspace-active .ui-diagram-details[data-for='solarCompare'] > :is(h2, p) {
+  display: none;
+}
+.workspace-active .ui-diagram-card-head {
+  border-bottom: 1px solid var(--design-line);
+}
+@media (max-width: 760px) {
+  .workspace-active .ui-plot[data-workspace-count] {
+    grid-template-rows: minmax(0, 1fr) !important;
+  }
+}

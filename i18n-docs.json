@@ -832,7 +832,7 @@
   "损坏历史恢复、异常解锁、手机语言重试与生成内容新鲜度": "Corrupt-history recovery, exception-safe unlocking, mobile language retry and generated-output freshness",
   "欢迎页星座开场、双语显露、返回、点击开始与减少动态效果": "Welcome constellation opening, bilingual reveal, return, click to start and reduced motion",
   "三篇文档的完整双语对话、入口配色、单次访问、跳过与恢复": "Complete bilingual document conversations, source themes, visit scope, skipping and recovery",
-  "关联图解中的太阳四图对照支持自定义布局。点击“自定义布局”后，可拖动面板把手调整顺序，拖动右下角调整大小。手机使用单列排序。点击“完成”后保留布局；“标准布局”可返回原来的页面。布局只保存在当前浏览器，时间、地点和科学参数不变。": "The four linked solar diagrams support a custom layout. Choose “Customize layout” to reorder panels by their handles or resize them from the bottom corner. Phones use a single column. Choose “Done” to keep the arrangement, or “Standard layout” to return to the original page. Layouts are stored only in the current browser; time, location and scientific parameters stay unchanged.",
   "自定义布局": "Custom layout",
-  "布局拖动、大小调整、撤销、恢复、保存、手机与科学参数": "Layout drag and resize, undo, reset, persistence, mobile controls and scientific-state isolation"
+  "布局拖动、大小调整、撤销、恢复、保存、手机与科学参数": "Layout drag and resize, undo, reset, persistence, mobile controls and scientific-state isolation",
+  "关联图解中的“我的工作区”提供单图、双图和四图布局。每张图可独立选择内容；拖动标题把手可交换位置，拖动分隔线可调整比例，松手后再更新画布。手机通过标签切换图解。参数菜单与统一时间栏保持原位，布局支持撤销、恢复和返回标准视图。布局只保存在当前浏览器，时间、地点和科学参数不变。": "My workspace in Linked Diagrams offers one, two or four views. Choose each diagram independently, drag its header handle to swap positions, or drag the divider to adjust proportions; canvases resize after release. On phones, switch diagrams with tabs. Settings and the shared timeline stay in place. Undo, reset and standard-view recovery are available. Layouts are stored only in this browser; time, location and scientific parameters stay unchanged."
 }
