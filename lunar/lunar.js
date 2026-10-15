@@ -574,6 +574,11 @@
       playing: s.playing,
     }),
     pause,
+    paint: () => {
+      resize();
+      const q = refresh();
+      if (renderer && bounds) draw(q);
+    },
   };
   $('revealEarth').onclick = () => $('seekRise').click();
   if (embedded && parent !== window) {
@@ -600,4 +605,12 @@
   refresh();
   setup();
   invalidate();
+  if (embedded && parent !== window) {
+    const earthImage = new Image();
+    earthImage.src = '../earth.jpg';
+    Promise.allSettled([window.skyFirstFontsReady, earthImage.decode()]).then(() => {
+      window.LunarOrbitLesson.paint();
+      parent.postMessage({ type: 'skymotion:lunar-ready' }, location.origin);
+    });
+  }
 })();

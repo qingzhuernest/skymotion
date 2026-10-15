@@ -94,3 +94,10 @@ body.lunar-orbit-active .ui-parameters > :not(.lunar-controls-host):not(.motion-
 .lunar-timeline-host .lunar-sliders small {
   display: none;
 }
+
+/* Prepare the first frame without covering the currently selected diagram. */
+#lunarOrbitPanel[data-preparing][hidden] {
+  display: block !important;
+  visibility: hidden;
+  pointer-events: none;
+}
