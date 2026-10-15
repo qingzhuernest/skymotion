@@ -63,14 +63,15 @@ function renderCompanion() {
   const m = companionSnapshot(),
     name = companionPlanets[state.planet],
     atPole = Math.abs(state.lat) > 89.99999999;
-  $('companionObserver').textContent =
-    state.date +
-    ' · ' +
-    hhmm(state.time, true) +
-    ' 当地真太阳时 · ' +
-    coord(state.lat, 'lat') +
-    ' / ' +
-    coord(state.lon, 'lon');
+  const observerDate = $('companionObserverDate'),
+    observerTime = $('companionObserverTime'),
+    observerLocation = $('companionObserverLocation'),
+    clock = hhmm(state.time, true),
+    location = coord(state.lat, 'lat') + ' / ' + coord(state.lon, 'lon');
+  if (observerDate.textContent !== state.date) observerDate.textContent = state.date;
+  if (observerDate.dateTime !== state.date) observerDate.dateTime = state.date;
+  if (observerTime.textContent !== clock) observerTime.textContent = clock;
+  if (observerLocation.textContent !== location) observerLocation.textContent = location;
   $('companionSeparation').textContent = m.separation.toFixed(2) + '°';
   $('companionProximity').textContent =
     m.separation <= 5 ? '在 5° 近距参考范围内' : '当前方向相距较远';
