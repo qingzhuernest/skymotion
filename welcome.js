@@ -6,6 +6,32 @@
   const canvas = $('welcomeSky'),
     ctx = canvas.getContext('2d'),
     status = $('welcomeStarStatus');
+  // The cover starts before the shared dictionary; its tiny local copy stays bilingual.
+  const earlyCopy = {
+    "这颗星亮了，再点另一颗连线": "Star selected. Choose another to connect.",
+    "已取消选星，可以从另一颗开始": "Selection cleared. Choose another star.",
+    "连线已拆开 · 还剩 ${edges.size} 条": "Connection removed · ${edges.size} connections remain",
+    "已连成 ${edges.size} 条线 · 再连同一对可拆开": "${edges.size} connections · Select the same pair to disconnect",
+    "点亮附近的星星，开始一幅新星图": "Select nearby stars to start a new constellation.",
+    "已选中一颗星，按空格操作": "Star selected. Press Space to act.",
+    "连线已清空，星空还在，重新开始吧": "Connections cleared. The stars are still here—start again.",
+    "清空连线": "Clear connections",
+    "星空连线": "Connect stars",
+    "一颗亮星出现在星空中": "A bright star appeared.",
+    "几颗流星正划过星空": "Meteors are crossing the sky."
+  };
+  let statusKey = '';
+  const welcomeText = key => (document.documentElement.lang === 'en' ? earlyCopy[key] || key : key).replaceAll('${edges.size}', String(edges.size));
+  status.dataset.i18nSkip = '';
+  function setStatus(key) {
+    statusKey = key;
+    status.textContent = welcomeText(key);
+  }
+  document.addEventListener('skymotion:language', () => {
+    setStatus(statusKey);
+    syncConnectButton();
+  });
+
   const stars = [],
     edges = new Map(),
     sparks = [],
@@ -454,18 +480,18 @@
     const p = point(stars[i]);
     if (selected < 0) {
       selected = i;
-      status.textContent = '这颗星亮了，再点另一颗连线';
+      setStatus('这颗星亮了，再点另一颗连线');
     } else if (selected === i) {
       selected = -1;
-      status.textContent = '已取消选星，可以从另一颗开始';
+      setStatus('已取消选星，可以从另一颗开始');
     } else {
       const key = edgeKey(selected, i);
       if (edges.has(key)) {
         edges.delete(key);
-        status.textContent = `连线已拆开 · 还剩 ${edges.size} 条`;
+        setStatus('连线已拆开 · 还剩 ${edges.size} 条');
       } else {
         edges.set(key, [selected, i]);
-        status.textContent = `已连成 ${edges.size} 条线 · 再连同一对可拆开`;
+        setStatus('已连成 ${edges.size} 条线 · 再连同一对可拆开');
       }
       selected = i;
     }
@@ -510,10 +536,10 @@
     }
     if (hit.edge && edges.has(hit.edge)) {
       edges.delete(hit.edge);
-      status.textContent = `连线已拆开 · 还剩 ${edges.size} 条`;
+      setStatus('连线已拆开 · 还剩 ${edges.size} 条');
     } else {
       selected = -1;
-      status.textContent = '点亮附近的星星，开始一幅新星图';
+      setStatus('点亮附近的星星，开始一幅新星图');
     }
     syncConnectButton();
     pulse(p.x, p.y);
@@ -597,7 +623,7 @@
       }
     });
     keyboardStar = next;
-    status.textContent = '已选中一颗星，按空格操作';
+    setStatus('已选中一颗星，按空格操作');
     request();
   });
   let keyboardStar = -1;
@@ -610,24 +636,26 @@
     edges.clear();
     sparks.length = 0;
     selected = keyboardStar = -1;
-    status.textContent = '连线已清空，星空还在，重新开始吧';
+    setStatus('连线已清空，星空还在，重新开始吧');
     syncConnectButton();
     request();
   }
   // One control introduces connecting, then becomes clear once the graph has edges.
   function syncConnectButton() {
     const button = $('welcomeConnect');
-    button.textContent = edges.size ? '清空连线' : '星空连线';
+    button.textContent = welcomeText(edges.size ? '清空连线' : '星空连线');
     button.setAttribute(
       'aria-label',
-      edges.size ? `清空全部 ${edges.size} 条连线` : '连线：点两颗星连接',
+      document.documentElement.lang === 'en'
+        ? (edges.size ? `Clear all ${edges.size} connections` : 'Connect stars: select two stars')
+        : (edges.size ? `清空全部 ${edges.size} 条连线` : '连线：点两颗星连接'),
     );
   }
   $('welcomeConnect').onclick = () => {
     if (edges.size) clear();
     else {
       selected = -1;
-      status.textContent = '';
+      setStatus('');
       request();
     }
   };
@@ -650,7 +678,7 @@
   }
   $('welcomeMeteor').onclick = () => {
     spawnMeteors(performance.now(), reducedMotion.matches ? 1 : 4);
-    status.textContent = reducedMotion.matches ? '一颗亮星出现在星空中' : '几颗流星正划过星空';
+    setStatus(reducedMotion.matches ? '一颗亮星出现在星空中' : '几颗流星正划过星空');
     request();
   };
   document.addEventListener('visibilitychange', () => {

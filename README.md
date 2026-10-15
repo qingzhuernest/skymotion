@@ -71,3 +71,7 @@ The Chinese welcome page keeps its original handwritten footer. English mode dis
 三篇文档各有一段原创的完整中英文对话，分别讨论地理学习、模型与世界、模型失效后的再观察。语句逐句从两侧显现，可继续阅读或用键盘跳过。欢迎页入口由深色平缓转为浅色；浅色入口保持纸色。每篇文档在同次访问中只展示一次，内部跳转、返回和刷新不重播；新的独立／外部干净链接访问可再次播放。开场星点的色彩与亮度在散开过程中连续融合，不在结束时切换。
 
 Loading performance: Reading WOFF2 subsets total 711,888 bytes (26% smaller), with verified identical character coverage, outlines and advance widths. `scripts/optimize-reading-fonts.py` reproduces the optimization. Background warming prioritizes the current language, keeps all 24 pages, excludes obsolete font variants, and uses the same versioned Reading URLs as the foreground. In one controlled Chromium cold-load comparison (80 ms latency, 500 KB/s), Chinese font readiness improved from 3.60 s to 3.10 s; actual device/network timings vary.
+
+Ordered loading: only `page-boot.js` blocks parsing, to choose the correct locale before content. Other external scripts use `defer` and retain dependency order. The Welcome canvas and document conversations start before the shared translation dictionary finishes; their local copy remains bilingual. Deferred language initialization still waits for DOMContentLoaded so experiment globals exist. Cover failure recovery also waits for deferred startup, rather than skipping a healthy opening.
+
+Controlled parser-order comparison (Chromium, 100 ms latency, 500 KB/s): English star-cover script readiness improved from 2.90 s to 1.31 s with identical shared assets. This measures cover startup, not whole-application interactivity or real-device Safari performance.

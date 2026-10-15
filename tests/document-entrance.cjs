@@ -75,6 +75,14 @@ try {
  const autoContext=await browser.newContext(),auto=await autoContext.newPage();await auto.goto(base+'development-guide.en.html?lang=en');await ready(auto);
  await auto.waitForFunction(()=>!document.querySelector('.document-entrance'),null,{timeout:22000});assert.equal(await auto.locator('.document-page').evaluate(n=>n.inert),false);await autoContext.close();
  console.log('PASS automatic completion exposes the document');
+ const earlyContext=await browser.newContext(),early=await earlyContext.newPage();let releaseDictionary;
+ await early.route('**/language-data.js?*',async route=>{await new Promise(resolve=>releaseDictionary=resolve);await route.continue()});
+ await early.goto(base+'guide.en.html?lang=en',{waitUntil:'commit'});await ready(early);
+ await early.waitForFunction(()=>Number(getComputedStyle(document.querySelector('.entrance-sentence')).opacity)>.9);
+ assert.equal(await early.evaluate(()=>window.skyEnglishDictionary),undefined);
+ assert.match(await early.locator('.entrance-sentence').first().innerText(),/Why do we study geography/);
+ releaseDictionary();await early.waitForLoadState('domcontentloaded');await earlyContext.close();
+ console.log('PASS English conversation starts independently of the shared dictionary');
  await context.close();
 }finally{await browser.close()}
 })().catch(error=>{console.error(error);process.exit(1)});

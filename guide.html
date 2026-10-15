@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
 
-<script src="page-boot.js?v=20261014-loading24"></script>
+<script src="page-boot.js?v=20261015-defer25"></script>
 
     <meta content="width=device-width,initial-scale=1" name="viewport" />
     <link href="favicon.svg" rel="icon" />
-    <link href="style.css?v=20261014-loading24" rel="stylesheet" />
-    <link href="pages.css?v=20261014-loading24" rel="stylesheet" />
+    <link href="style.css?v=20261015-defer25" rel="stylesheet" />
+    <link href="pages.css?v=20261015-defer25" rel="stylesheet" />
     <!-- search-metadata:start -->
     <title>学习指南：操作与观察任务 · 天体视运动实验室</title>
     <meta
@@ -29,15 +29,16 @@
     <meta content="website" property="og:type" />
     <meta content="zh_CN" property="og:locale" />
     <!-- search-metadata:end -->
-    <link href="documents.css?v=20261014-loading24" rel="stylesheet" />
-    <link href="interface-motion.css?v=20261014-loading24" rel="stylesheet" />
-    <link rel="stylesheet" href="design-system.css?v=20261014-loading24" />
-    <link rel="stylesheet" href="language.css?v=20261014-loading24" />
-    <script src="language-data.js?v=20261014-loading24"></script>
-<script src="language.js?v=20261014-loading24"></script>
-<script src="page-cache.js?v=20261014-loading24" defer></script>
-  <script src="date-picker.js?v=20261014-loading24" defer></script>
-<script src="document-entrance.js?v=20261014-loading24" defer></script>
+    <link href="documents.css?v=20261015-defer25" rel="stylesheet" />
+    <link href="interface-motion.css?v=20261015-defer25" rel="stylesheet" />
+    <link rel="stylesheet" href="design-system.css?v=20261015-defer25" />
+    <link rel="stylesheet" href="language.css?v=20261015-defer25" />
+    <script src="document-entrance.js?v=20261015-defer25" defer></script>
+<script src="language-data.js?v=20261015-defer25" defer></script>
+<script src="language.js?v=20261015-defer25" defer></script>
+<script src="page-cache.js?v=20261015-defer25" defer></script>
+  <script src="date-picker.js?v=20261015-defer25" defer></script>
+
 </head>
   <body data-page="guide">
     <nav aria-label="页面导航" class="page-nav">
@@ -928,6 +929,6 @@
 <section class="maintenance-notes"><h2>2026年10月14日：状态恢复与发布门禁</h2><p>缓存中的无效日期、越界数值、错误类型或未知选项会回退到对应默认值；有效观察设置保持不变。旧版未标记版本的会话仍可读取，之后保存为 schemaVersion 1。浏览器禁止存储或写入空间不足时，同一页面内使用内存备份；这种备份不能在页面关闭后或跨页面保证保留。</p><p>普通实验页与三维页通过 experiment-storage.js 读取实验会话。实验模式逐字段校验，经纬度、时刻、日期、视图、倍率和理想参数都有边界；恢复后保持暂停，按真实日期重新求太阳赤纬。未识别的缓存版本不会应用。此处不改天文公式、科学读数或图形颜色。</p><p>两个正式部署工作流都依赖共享 validate.yml：锁定 Playwright 版本、安装 Chromium，运行 tests 根目录全部15个 .cjs 脚本，包括模型、历史、控件、字体、双语结构、损坏缓存恢复和打包检查。任一测试失败会阻止该工作流部署。测试工具只用于维护和 CI，不随网站发布，也不改变零构建运行方式。</p></section>
 <section class="release-notes"><h2>2026年10月13日正式发布说明</h2><p>本版统一浅色操作区、衬线字体和辅助按钮样式，提供24份中英文静态页面；切换语言保留实验状态。菜单弹性展开尊重减少动态效果设置。日期选择器支持年月、闰年、确认与取消；原天文计算、星历、模型数据和科学限制不变。</p><p>发布核对包含六组模型回归、36组控件布局、44个首次展开场景、参数历史、字体超时恢复、语言导航、日期与键盘操作，以及根路径和 GitHub 项目路径打包。检查以 Chromium 自动化为主，不代表完整 Safari、Firefox 或所有 GPU 实机认证。</p><p>正式站为 Cloudflare Pages，GitHub Pages 提供同内容镜像。main 推送触发两个独立工作流；维护者应分别核对部署结论。更新前版本保留为 production-before-impeccable-20261013 标签；需要回滚时从该标签创建恢复提交，不改写主分支历史。</p></section>
         </main>
-    <script src="interface-motion.js?v=20261014-loading24"></script>
+    <script src="interface-motion.js?v=20261015-defer25" defer></script>
   </body>
 </html>

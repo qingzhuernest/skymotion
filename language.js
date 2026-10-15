@@ -370,6 +370,8 @@
     button.disabled = false;
     if (!document.querySelector(".font-load-notice")) showLanguageFailure(target);
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded",() => init().catch(failure),{once:true});
+  // Deferred scripts run with readyState=interactive, before later experiment scripts.
+  // Keep initialization after all ordered scripts have installed their globals.
+  if (document.readyState === "loading" || document.currentScript?.defer) document.addEventListener("DOMContentLoaded",() => init().catch(failure),{once:true});
   else init().catch(failure);
 })();

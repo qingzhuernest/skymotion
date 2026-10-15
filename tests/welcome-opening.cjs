@@ -30,6 +30,26 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
    assert.equal(await page.evaluate(()=>document.documentElement.lang),locale==='en'?'en':'zh-CN');
    await context.close();
   }
+  // The opening does not depend on the large dictionary download.
+  const earlyContext=await browser.newContext(),early=await earlyContext.newPage();
+  let releaseDictionary;
+  await early.route('**/language-data.js?*',async route=>{await new Promise(resolve=>releaseDictionary=resolve);await route.continue()});
+  await early.goto(base+'index.en.html',{waitUntil:'commit'});
+  await early.waitForFunction(()=>window.skyWelcomeReady && document.documentElement.hasAttribute('data-fonts-ready'));
+  assert.equal(await early.evaluate(()=>window.skyEnglishDictionary),undefined);
+  assert.equal(await early.locator('#welcomeSky').isVisible(),true);
+  assert.equal(await early.locator('#welcomeSky').getAttribute('role'),'button');
+  assert.equal(await early.evaluate(()=>document.documentElement.classList.contains('welcome-opening')),true);
+  await early.keyboard.press('Enter');
+  await early.waitForFunction(()=>!document.documentElement.classList.contains('welcome-opening'));
+  await early.locator('#welcomeMeteor').click();
+  assert.match(await early.locator('#welcomeStarStatus').innerText(),/Meteors are crossing the sky/);
+  releaseDictionary();await early.waitForLoadState('domcontentloaded');
+  await early.locator('.language-toggle:not(:disabled)').click();
+  await early.waitForFunction(()=>document.documentElement.lang==='zh-CN');
+  assert.match(await early.locator('#welcomeStarStatus').innerText(),/几颗流星/);
+  await earlyContext.close();
+  console.log('PASS English star cover starts while the dictionary is still downloading');
   // A slow script request must not make the head advance to the home page.
   const slowContext=await browser.newContext(),slow=await slowContext.newPage();
   await slow.route('**/welcome.js?*', async route=>{await new Promise(resolve=>setTimeout(resolve,11000));await route.continue()});
