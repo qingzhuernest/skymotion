@@ -2160,3 +2160,40 @@ html:not(:lang(en)) .entrance-sentence { line-height: 1.75; letter-spacing: .025
   .entrance-sentence:first-child { font-size: 26px; margin-bottom: 18px; }
   .entrance-sentence:last-child { font-size: 19px; margin-top: 16px; }
 }
+
+/* Secondary explanations share the paper palette, including expanded menus. */
+body :is(.ui-parameters, .ui-parameter-drawer) :is(
+  #workbenchHint, #durationDefinition, #globeDragExplanation,
+  .workbench-more p, .year-strip-head > label, .sundial-time-label, .sundial-clock p, .sundial-question p
+),
+body[data-page="diagrams"] .ui-linked-menu-note {
+  color: var(--design-muted);
+}
+body[data-page="not-found"] .reading-page a:not(.page-action) {
+  color: var(--design-primary);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+body[data-page="not-found"] .reading-page a:hover {
+  color: var(--design-hover);
+}
+body[data-page="not-found"] .language-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 20;
+}
+@media (max-width: 760px) {
+  body[data-page="diagrams"] .ui-viewbar.ui-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  body[data-page="diagrams"] .ui-viewbar.ui-tabs > button {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+/* Override the legacy important caption and the relocated needle readout. */
+body #globeDragExplanation { color: var(--design-muted) !important; }
+body #sundialNeedleValue { color: var(--design-primary); }

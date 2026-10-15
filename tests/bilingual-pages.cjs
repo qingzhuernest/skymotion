@@ -19,9 +19,16 @@ for english in Path('.').resolve().rglob('*.en.html'):
                 assert 'defer' in keys and 'async' not in keys,f'Parser-blocking or unordered script in {chinese}: {node.attr("src")}'
         for child in node.children: check_scripts(child)
     check_scripts(m.parse(chinese.read_text()))
+    def check_english_text(node, skip=False):
+        # Explicit bilingual quotes and code samples retain their source language.
+        skip=skip or node.tag in ('script','style','pre','code') or (node.attr('lang') or '').startswith('zh') or any(k=='data-i18n-skip' for k,v in node.attrs)
+        if not skip and node.kind=='text':
+            assert not m.CHINESE.search(node.data),f'Untranslated English text in {english}: {node.data[:140]}'
+        for child in node.children: check_english_text(child,skip)
+    check_english_text(m.parse(english.read_text()))
     count+=1
 assert count==12,f'Expected 12 bilingual pairs, got {count}'
-print('PASS all 12 committed bilingual DOM, attribute, form-value and script pairs')
+print('PASS all 12 bilingual DOM, attribute, form-value and script pairs, with complete English text')
 `],{stdio:'inherit'});
 
 execFileSync('python3',['scripts/prerender-pages.py','--check'],{stdio:'inherit'});

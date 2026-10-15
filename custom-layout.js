@@ -77,6 +77,7 @@
   const launch = document.createElement('button');
   launch.type = 'button';
   launch.className = 'layout-launch';
+  launch.setAttribute('aria-controls', 'layoutTools');
   launch.dataset.i18nSkip = '';
   launch.disabled = true;
   shell.querySelector('.ui-heading').append(launch);
@@ -233,7 +234,10 @@
     sync() {
       const active =
         data.enabled && state.body === 'sun' && uiWorkspace.selected === 'solarCompare';
+      const leaving = api.active && !active;
       api.active = active;
+      if (leaving) for (const id of ids) plot.insertBefore(cards[id], divider);
+      uiViewAttribute(launch, 'aria-expanded', String(active));
       api.visibleIds = new Set(mobile.matches ? [data.views[data.active]] : data.views);
       shell.classList.toggle('workspace-active', active);
       uiViewHidden(bar, !active);
@@ -291,7 +295,7 @@
     presetButtons.forEach((b, i) =>
       b.setAttribute('aria-pressed', String(data.views.length === [1, 2, 4][i])),
     );
-    if (api.active) for (const id of data.views) plot.insertBefore(cards[id], divider);
+    for (const id of api.active ? data.views : ids) plot.insertBefore(cards[id], divider);
     if (tabs.dataset.order !== data.views.join(',')) {
       tabs.dataset.order = data.views.join(',');
       tabs.replaceChildren();

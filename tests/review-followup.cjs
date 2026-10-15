@@ -25,7 +25,19 @@ try{
  const initial=await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat}));await q.locator('.language-toggle').click();
  await q.waitForSelector('.language-load-notice');assert(await q.locator('.language-load-notice').isVisible());assert.match(await q.locator('.language-load-notice').innerText(),/English/);assert.equal(await q.evaluate(()=>document.documentElement.lang),'zh-CN');
  blocked=false;await q.locator('.language-load-notice button').click();await q.waitForFunction(()=>document.documentElement.lang==='en');
- assert.equal(await q.locator('.language-load-notice').count(),0);assert.deepEqual(await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat})),initial);await q.close();console.log('PASS mobile language failure is visible and retries English without resetting the experiment');
+ assert.equal(await q.locator('.language-load-notice').count(),0);assert.deepEqual(await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat})),initial);console.log('PASS mobile language failure is visible and retries English without resetting the experiment');
+ await q.locator('button[data-body="moon"]').click();
+ await q.waitForFunction(()=>document.getElementById('altLabel').textContent==='Lunar altitude');
+ assert.equal(await q.locator('#azLabel').textContent(),'Lunar azimuth');
+ await q.goto(base+'diagrams.en.html');await q.waitForSelector('.language-toggle:not(:disabled)');
+ await q.locator('button[data-body="moon"]').click();
+ await q.locator('[data-diagram="companionModule"]').click();
+ for(const time of [0,360,720,1080,1200]){
+  await q.evaluate(t=>{state.time=t;render()},time);
+  await q.waitForFunction(()=>['companionProximity','companionVisibility'].every(id=>!/[\u3400-\u9fff]/.test(document.getElementById(id).textContent)));
+  assert(!/(Moonand|andJupiter|Jupiteris)/.test(await q.locator('#companionVisibility').textContent()),'Translated names keep word boundaries');
+ }
+ await q.close();console.log('PASS complete English lunar readings and companion visibility across day/night states');
 }finally{await browser.close()}
  // Verify cache warming matches foreground font keys and prioritizes the chosen locale.
  const vm=require('node:vm'),manifest=JSON.parse(fs.readFileSync('page-cache-manifest.json','utf8')),requests=[];

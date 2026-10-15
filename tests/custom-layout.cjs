@@ -97,6 +97,13 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     assert.equal(writes, 0);
     await p.locator('[data-word="standard"]').click();
     assert.equal(await p.locator('.workspace-active').count(), 0);
+    assert.deepEqual(
+      await p
+        .locator('.ui-plot > [data-diagram-card]')
+        .evaluateAll((ns) => ns.map((n) => n.dataset.diagramCard)),
+      ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel'],
+      'Standard view restores the original DOM and visual order',
+    );
     await p.locator('[data-diagram="chartPanel"]').click();
     assert(await p.locator('#chart').isVisible());
     await p.setViewportSize({ width: 390, height: 844 });
@@ -111,8 +118,16 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     assert.equal(await p.locator('.workspace-tabs button').count(), 4);
     await p.locator('.workspace-tabs [aria-selected="true"]').focus();
     await p.keyboard.press('End');
-    assert.equal(await p.locator('.workspace-tabs button').last().getAttribute('aria-selected'), 'true');
-    assert(await p.locator('.workspace-tabs button').last().evaluate(n => n === document.activeElement));
+    assert.equal(
+      await p.locator('.workspace-tabs button').last().getAttribute('aria-selected'),
+      'true',
+    );
+    assert(
+      await p
+        .locator('.workspace-tabs button')
+        .last()
+        .evaluate((n) => n === document.activeElement),
+    );
     assert((await p.locator('.ui-diagram-card:visible').boundingBox()).height > 200);
     assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
     assert.equal(
@@ -123,9 +138,18 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await p.waitForFunction(() => document.documentElement.lang === 'zh-CN');
     assert.match(await p.locator('.layout-launch').innerText(), /我的工作区/);
     await p.locator('button[data-body="moon"]').click();
-    await p.waitForFunction(() => state.body === 'moon' && !document.querySelector('.workspace-active'));
+    await p.waitForFunction(
+      () => state.body === 'moon' && !document.querySelector('.workspace-active'),
+    );
     assert.equal(await p.locator('.workspace-active').count(), 0);
     assert(await p.locator('#phaseContent').isVisible());
+    assert.equal(await p.locator('.layout-launch').getAttribute('aria-expanded'), 'false');
+    assert.deepEqual(
+      await p
+        .locator('.ui-plot > [data-diagram-card]')
+        .evaluateAll((ns) => ns.map((n) => n.dataset.diagramCard)),
+      ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel'],
+    );
     assert.deepEqual(errors, []);
     await c.close();
     const blocked = await b.newContext(),

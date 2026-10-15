@@ -91,7 +91,10 @@ function renderCompanion() {
     if (m.moon.alt <= 0) below.push('月球');
     if (m.planet.alt <= 0) below.push(name);
     $('companionVisibility').textContent =
-      below.join('和') + '位于地平线下方或地平线上，当前不能按无遮挡的地平线上方天体观测。';
+      document.documentElement.lang === 'en'
+        ? below.map(name => window.skyTranslate(name)).join(' and ') +
+          window.skyTranslate('位于地平线下方或地平线上，当前不能按无遮挡的地平线上方天体观测。')
+        : below.join('和') + '位于地平线下方或地平线上，当前不能按无遮挡的地平线上方天体观测。';
   } else if (m.sun.alt >= 0)
     $('companionVisibility').textContent =
       '两者位于地平线上方，但太阳也在地平线上方；几何靠近不代表适合肉眼观测。';
