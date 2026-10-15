@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261015-companion28",
+  "resourceVersion": "20261015-companion29",
   "readingFontVersion": "20261014-font24",
   "pages": [
     "404.en.html",
@@ -116,29 +116,29 @@
   "sizes": {
     "404.en.html": 3032,
     "404.html": 1840,
-    "analemma.en.html": 119388,
-    "analemma.html": 71536,
+    "analemma.en.html": 119762,
+    "analemma.html": 71817,
     "contact.en.html": 8080,
     "contact.html": 4802,
     "development-guide.en.html": 258733,
     "development-guide.html": 83126,
-    "diagrams.en.html": 119532,
-    "diagrams.html": 71684,
+    "diagrams.en.html": 119906,
+    "diagrams.html": 71965,
     "geography-review.en.html": 1591,
     "geography-review.html": 1083,
     "guide.en.html": 186435,
     "guide.html": 63763,
     "index.en.html": 8005,
     "index.html": 6687,
-    "lab.en.html": 119452,
-    "lab.html": 71602,
+    "lab.en.html": 119826,
+    "lab.html": 71883,
     "project-guide.en.html": 80393,
     "project-guide.html": 27323,
     "space/index.en.html": 31465,
     "space/index.html": 20419,
-    "sundial.en.html": 119355,
-    "sundial.html": 71509
+    "sundial.en.html": 119729,
+    "sundial.html": 71790
   },
-  "totalBytes": 1550835,
-  "assetBytes": 6847936
+  "totalBytes": 1553455,
+  "assetBytes": 6848878
 }

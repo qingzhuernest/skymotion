@@ -37,8 +37,21 @@ try{
   await q.locator('#workbenchClockInput').press('Tab');
   assert.equal(await q.evaluate(()=>state.time),660,'Shared timeline still changes observation time');
   assert.equal(await q.evaluate(()=>state.date),dateBefore);
+  await q.waitForFunction(()=>document.getElementById('companionObserverTime').textContent==='11:00');
+  assert.equal(await q.locator('#companionObserverDate').textContent(),dateBefore);
   for(const width of [1280,960,390]){
    await q.setViewportSize({width,height:900});
+   await q.waitForFunction(width=>Boolean(document.querySelector('.ui-parameters').closest('#uiParameterDrawer'))===(width<=760),width);
+   if(width<=760){if(!await q.locator('#uiParameterDrawer').evaluate(d=>d.open))await q.locator('#uiParametersButton').click();}
+   else if(await q.locator('.motion-menu-edge').isVisible())await q.locator('.motion-menu-edge').click();
+   await q.locator('#companionPlanet').waitFor({state:'visible'});
+   const alignment=await q.evaluate(()=>{
+    const rect=s=>document.querySelector(s).getBoundingClientRect().toJSON();
+    return {label:rect('.companion-toolbar label'),select:rect('#companionPlanet'),button:rect('#companionFind'),moment:rect('.companion-observer-moment'),location:rect('#companionObserverLocation')};
+   });
+   for(const item of [alignment.label,alignment.button,alignment.moment,alignment.location])assert(Math.abs(item.x-alignment.select.x)<1,'Controls and observation metadata share a left edge');
+   assert(Math.abs(alignment.button.width-alignment.select.width)<1,'Select and search button have equal widths');
+   assert(alignment.button.y>=alignment.select.bottom+6,'Search sits below the select with a deliberate gap');
    const theme=await q.evaluate(()=>{
     const css=el=>{const s=getComputedStyle(el);return {bg:s.backgroundColor,color:s.color,border:s.borderTopColor,width:s.borderTopWidth}};
     const token=name=>{const el=document.createElement('i');el.style.color=`var(${name})`;document.body.append(el);const value=getComputedStyle(el).color;el.remove();return value};
@@ -51,6 +64,7 @@ try{
    for(const label of theme.labels)assert.equal(label.color,theme.muted);
    for(const button of theme.buttons){assert.equal(button.bg,theme.surface);assert.equal(button.color,theme.primary);assert.equal(button.border,theme.line)}
    assert.equal(theme.status.color,theme.primary);
+   await q.evaluate(()=>{const d=document.getElementById('uiParameterDrawer');if(d?.open)d.close()});
   }
   await q.locator('[data-diagram="chartPanel"]').click();
   for(const width of [1280,960,390]){
@@ -65,7 +79,7 @@ try{
   }
 
  }
- console.log('PASS companion card, label, search/status and clock-action colors after routing in both languages at 1280/960/390px');
+ console.log('PASS companion theme, aligned controls, structured observation metadata and lunar markers in both languages at 1280/960/390px');
 
  await q.close();console.log('PASS mobile language failure is visible and retries English without resetting the experiment');
 }finally{await browser.close()}
