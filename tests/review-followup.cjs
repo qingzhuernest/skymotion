@@ -25,7 +25,49 @@ try{
  const initial=await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat}));await q.locator('.language-toggle').click();
  await q.waitForSelector('.language-load-notice');assert(await q.locator('.language-load-notice').isVisible());assert.match(await q.locator('.language-load-notice').innerText(),/English/);assert.equal(await q.evaluate(()=>document.documentElement.lang),'zh-CN');
  blocked=false;await q.locator('.language-load-notice button').click();await q.waitForFunction(()=>document.documentElement.lang==='en');
- assert.equal(await q.locator('.language-load-notice').count(),0);assert.deepEqual(await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat})),initial);await q.close();console.log('PASS mobile language failure is visible and retries English without resetting the experiment');
+ assert.equal(await q.locator('.language-load-notice').count(),0);assert.deepEqual(await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat})),initial); // Diagram routing moves companion controls outside .ui-parameters. Theme the component itself.
+ for(const route of ['diagrams.html','diagrams.en.html']){
+  await q.goto(base+route);await q.waitForSelector('.language-toggle:not(:disabled)');
+  await q.locator('button[data-body="moon"]').click();
+  await q.locator('[data-diagram="companionModule"]').click();
+  assert.equal(await q.locator('#companionClock').count(),0,'Redundant time shortcut is removed');
+  await q.setViewportSize({width:1280,height:900});
+  const dateBefore=await q.evaluate(()=>state.date);
+  await q.locator('#workbenchClockInput').fill('11:00');
+  await q.locator('#workbenchClockInput').press('Tab');
+  assert.equal(await q.evaluate(()=>state.time),660,'Shared timeline still changes observation time');
+  assert.equal(await q.evaluate(()=>state.date),dateBefore);
+  for(const width of [1280,960,390]){
+   await q.setViewportSize({width,height:900});
+   const theme=await q.evaluate(()=>{
+    const css=el=>{const s=getComputedStyle(el);return {bg:s.backgroundColor,color:s.color,border:s.borderTopColor,width:s.borderTopWidth}};
+    const token=name=>{const el=document.createElement('i');el.style.color=`var(${name})`;document.body.append(el);const value=getComputedStyle(el).color;el.remove();return value};
+    return {surface:token('--design-surface'),primary:token('--design-primary'),muted:token('--design-muted'),line:token('--design-line'),
+     cards:[...document.querySelectorAll('.companion-measures > div')].map(css),
+     labels:[...document.querySelectorAll('.companion-measures span,.companion-measures small')].map(css),
+     buttons:[...document.querySelectorAll('.companion-toolbar button')].map(css),status:css(document.getElementById('companionSearchStatus'))};
+   });
+   for(const card of theme.cards){assert.equal(card.bg,theme.surface,`${route} ${width}: companion card is paper, not legacy blue`);assert.equal(card.color,theme.primary);assert.equal(card.border,theme.line);assert.equal(card.width,'1px')}
+   for(const label of theme.labels)assert.equal(label.color,theme.muted);
+   for(const button of theme.buttons){assert.equal(button.bg,theme.surface);assert.equal(button.color,theme.primary);assert.equal(button.border,theme.line)}
+   assert.equal(theme.status.color,theme.primary);
+  }
+  await q.locator('[data-diagram="chartPanel"]').click();
+  for(const width of [1280,960,390]){
+   await q.setViewportSize({width,height:900});
+   const marker=await q.evaluate(()=>{
+    const dot=document.querySelector('#chartPanel .panel-title .legend > .dot.sun-dot');
+    const probe=document.createElement('i');probe.style.color='var(--design-primary)';document.body.append(probe);
+    const expected=getComputedStyle(probe).color;probe.remove();
+    return {actual:getComputedStyle(dot).backgroundColor,expected};
+   });
+   assert.equal(marker.actual,marker.expected,`${route} ${width}: fixed-time legend uses the interface accent`);
+  }
+
+ }
+ console.log('PASS companion card, label, search/status and clock-action colors after routing in both languages at 1280/960/390px');
+
+ await q.close();console.log('PASS mobile language failure is visible and retries English without resetting the experiment');
 }finally{await browser.close()}
  // Verify cache warming matches foreground font keys and prioritizes the chosen locale.
  const vm=require('node:vm'),manifest=JSON.parse(fs.readFileSync('page-cache-manifest.json','utf8')),requests=[];
