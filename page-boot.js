@@ -155,7 +155,9 @@
       const variants = locale === 'en' ? ['charter_regular.woff2','charter_bold.woff2'] : ['reading-regular.woff2','reading-bold.woff2'];
       let expired = false, timer;
       const loading = Promise.all(variants.map((file,index) => {
-        const face = new FontFace(family, `url("${new URL('fonts/'+file+(locale==='zh'?'?v=20261015-font26':''),base)}")`, { weight: index ? '600 900' : '400 500', display: 'block' });
+        // Charter's legacy descent is positive; normalize line metrics for native text controls.
+        const metrics = locale === 'en' ? { ascentOverride: '98%', descentOverride: '24%', lineGapOverride: '0%' } : {};
+        const face = new FontFace(family, `url("${new URL('fonts/'+file+(locale==='zh'?'?v=20261015-font26':''),base)}")`, { weight: index ? '600 900' : '400 500', display: 'block', ...metrics });
         return face.load().then(loaded => { if (!expired) document.fonts.add(loaded); return loaded; });
       }));
       const deadline = new Promise((_,reject) => { timer=setTimeout(() => { expired=true; reject(new Error('Font loading timed out')); },8000); });
