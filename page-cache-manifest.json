@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261015-workspace29",
+  "resourceVersion": "20261015-workspace30",
   "readingFontVersion": "20261015-font29",
   "pages": [
     "404.en.html",
@@ -134,13 +134,13 @@
     "index.html": 6687,
     "lab.en.html": 119651,
     "lab.html": 71746,
-    "project-guide.en.html": 82579,
-    "project-guide.html": 27925,
+    "project-guide.en.html": 82986,
+    "project-guide.html": 28048,
     "space/index.en.html": 31360,
     "space/index.html": 20314,
     "sundial.en.html": 119554,
     "sundial.html": 71653
   },
-  "totalBytes": 1555832,
-  "assetBytes": 6920760
+  "totalBytes": 1556362,
+  "assetBytes": 6925830
 }

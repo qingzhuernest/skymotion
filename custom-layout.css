@@ -613,3 +613,14 @@
     line-height: 1.3;
   }
 }
+.workspace-add-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.workspace-add-choices button {
+  min-width: 0;
+  white-space: normal;
+}
+.workspace-options [data-word='equalize'] {
+  margin-top: 8px;
+}

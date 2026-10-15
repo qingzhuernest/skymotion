@@ -284,6 +284,33 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
       'Choosing an occupied diagram swaps without duplicates',
     );
     await options();
+    const originalOrder = (await richSaved()).views;
+    const missing = ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel'].find(
+      (id) => !originalOrder.includes(id),
+    );
+    await r.locator(`[data-add-view="${missing}"]`).click();
+    assert.equal((await richSaved()).views.at(-1), missing, 'Add the requested diagram directly');
+    await r.keyboard.press('Escape');
+    await r.locator('[data-word="undo"]').click();
+    await options();
+    await r.locator(`[data-main-view="${originalOrder.at(-1)}"]`).click();
+    assert.equal(
+      (await richSaved()).views[0],
+      originalOrder.at(-1),
+      'Any diagram can become the main view',
+    );
+    await r.keyboard.press('Escape');
+    await r.locator('[data-word="undo"]').click();
+    await options();
+    await r.locator('[data-word="equalize"]').click();
+    assert.equal((await richSaved()).ratio, 50);
+    assert.equal((await richSaved()).rowRatio, 50);
+    assert(await r.locator('[data-word="equalize"]').isDisabled());
+    assert.deepEqual(
+      await inputState(),
+      scienceBefore,
+      'New customization controls leave science untouched',
+    );
     await r.locator('.workspace-save-form input').fill('Observation');
     await r.locator('[data-word="save"]').click();
     assert.equal(await r.locator('.workspace-profile-row').count(), 1);

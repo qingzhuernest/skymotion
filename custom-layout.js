@@ -22,6 +22,9 @@
     four: ['四图', 'Four views'],
     add: ['添加图解', 'Add a view'],
     options: ['布局与收藏', 'Layout & saved views'],
+    choose: ['选择要添加的图解', 'Choose a diagram to add'],
+    main: ['设为主图', 'Make main view'],
+    equalize: ['恢复均等比例', 'Equalize proportions'],
     closeOptions: ['关闭布局设置', 'Close layout settings'],
     move: ['拖动交换位置；方向键调整顺序', 'Drag to swap; arrow keys to reorder'],
     close: ['移除此图', 'Remove view'],
@@ -354,6 +357,26 @@
       true,
     ),
   );
+  const equalizeButton = button(arrange, 'equalize', () =>
+    change(() => {
+      data.ratio = 50;
+      data.rowRatio = 50;
+    }),
+  );
+  const available = section('choose'),
+    availableChoices = document.createElement('div');
+  availableChoices.className = 'workspace-choice-group workspace-add-choices';
+  available.append(availableChoices);
+  const availableButtons = ids.map((id) => {
+    const b = button(availableChoices, id, () =>
+      change(() => {
+        data.views.push(id);
+        data.active = data.views.length - 1;
+      }, 'added'),
+    );
+    b.dataset.addView = id;
+    return b;
+  });
   const quick = section('templates');
   quick.className = 'workspace-quick';
   const templates = [
@@ -474,8 +497,14 @@
       'close',
       () =>
         change(() => {
+          const selected = data.views[data.active];
           data.views = data.views.filter((x) => x !== id);
-          data.active = Math.min(data.active, data.views.length - 1);
+          data.active = Math.max(
+            0,
+            data.views.includes(selected)
+              ? data.views.indexOf(selected)
+              : Math.min(data.active, data.views.length - 1),
+          );
         }, 'removed'),
       'm7 7 10 10M17 7 7 17',
     );
@@ -571,7 +600,10 @@
     cancel();
     const before = copy(data);
     fn();
-    if (JSON.stringify(before) === JSON.stringify(data)) return;
+    if (JSON.stringify(before) === JSON.stringify(data)) {
+      if (status) announce(status);
+      return;
+    }
     undo.push(before);
     if (undo.length > 20) undo.shift();
     redo = [];
@@ -642,6 +674,21 @@
       const name = document.createElement('span');
       name.textContent = t(id);
       row.append(name);
+      const main = button(
+        row,
+        'main',
+        () =>
+          change(() => {
+            const selected = data.views[data.active];
+            data.views.splice(i, 1);
+            data.views.unshift(id);
+            data.active = data.views.indexOf(selected);
+            data.featured = true;
+          }),
+        'M4 5h16v14H4zM14 5v14M14 12h6',
+      );
+      main.dataset.mainView = id;
+      main.disabled = i === 0;
       for (const [delta, word, path] of [
         [-1, 'before', 'm7 14 5-5 5 5'],
         [1, 'after', 'm7 10 5 5 5-5'],
@@ -719,7 +766,13 @@
     addButton.disabled = data.views.length === 4;
     presets.hidden = Boolean(focused);
     backButton.hidden = !focused;
-    arrange.hidden = mobile.matches || data.views.length === 1 || data.views.length === 4;
+    arrange.hidden = mobile.matches || data.views.length === 1;
+    axisGroup.hidden = data.views.length === 4;
+    equalizeButton.disabled = data.ratio === 50 && data.rowRatio === 50;
+    available.hidden = data.views.length === ids.length;
+    availableButtons.forEach((b, i) => {
+      b.hidden = data.views.includes(ids[i]);
+    });
     featuredGroup.hidden = data.views.length !== 3;
     axisButtons.forEach((b, i) => {
       b.setAttribute('aria-pressed', String(data.axis === ['columns', 'rows'][i]));
