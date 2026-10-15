@@ -109,6 +109,10 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await p.locator('[data-word="four"]').click();
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 1);
     assert.equal(await p.locator('.workspace-tabs button').count(), 4);
+    await p.locator('.workspace-tabs [aria-selected="true"]').focus();
+    await p.keyboard.press('End');
+    assert.equal(await p.locator('.workspace-tabs button').last().getAttribute('aria-selected'), 'true');
+    assert(await p.locator('.workspace-tabs button').last().evaluate(n => n === document.activeElement));
     assert((await p.locator('.ui-diagram-card:visible').boundingBox()).height > 200);
     assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
     assert.equal(
@@ -119,6 +123,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await p.waitForFunction(() => document.documentElement.lang === 'zh-CN');
     assert.match(await p.locator('.layout-launch').innerText(), /我的工作区/);
     await p.locator('button[data-body="moon"]').click();
+    await p.waitForFunction(() => state.body === 'moon' && !document.querySelector('.workspace-active'));
     assert.equal(await p.locator('.workspace-active').count(), 0);
     assert(await p.locator('#phaseContent').isVisible());
     assert.deepEqual(errors, []);
