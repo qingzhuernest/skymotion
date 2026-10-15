@@ -130,8 +130,8 @@
     "contact.html": 4758,
     "development-guide.en.html": 259048,
     "development-guide.html": 83206,
-    "diagrams.en.html": 120001,
-    "diagrams.html": 72039,
+    "diagrams.en.html": 120073,
+    "diagrams.html": 72111,
     "geography-review.en.html": 1555,
     "geography-review.html": 1047,
     "guide.en.html": 186643,
@@ -140,8 +140,8 @@
     "index.html": 6639,
     "lab.en.html": 119719,
     "lab.html": 71755,
-    "lunar/index.en.html": 14071,
-    "lunar/index.html": 7801,
+    "lunar/index.en.html": 14208,
+    "lunar/index.html": 7865,
     "project-guide.en.html": 83667,
     "project-guide.html": 28207,
     "space/index.en.html": 31360,
@@ -149,6 +149,6 @@
     "sundial.en.html": 119626,
     "sundial.html": 71666
   },
-  "totalBytes": 1578962,
-  "assetBytes": 6983780
+  "totalBytes": 1579307,
+  "assetBytes": 6988694
 }

@@ -512,3 +512,55 @@ body[data-page='lunar'] {
   border-radius: 8px;
   background: #102230;
 }
+.lunar-view-status {
+  pointer-events: auto;
+  max-width: calc(100% - 36px);
+  box-sizing: border-box;
+}
+.lunar-shell #revealEarth {
+  align-self: flex-start;
+  min-height: 30px;
+  padding: 4px 10px;
+  color: #e4ebed;
+  background: #172b3a;
+  border-color: #59707e;
+}
+.lunar-mounted,
+.lunar-mounted .lunar-shell {
+  height: 100vh;
+  box-sizing: border-box;
+}
+.lunar-mounted .lunar-shell {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+.lunar-mounted .lunar-stage {
+  flex: 1;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+}
+.lunar-mounted .lunar-pane {
+  display: flex;
+  flex-direction: column;
+}
+.lunar-mounted .lunar-view {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+}
+.lunar-mounted .lunar-mobile-tabs {
+  padding: 8px;
+  margin: 0;
+}
+.lunar-mounted .lunar-heading[hidden] {
+  display: none;
+}
+
+.lunar-pane header {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  flex-shrink: 0;
+}

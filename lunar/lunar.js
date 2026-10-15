@@ -1,6 +1,8 @@
 /** One WebGL context, two views, and a clock independent of the ephemeris workbench. */
 (() => {
-  const $ = (id) => document.getElementById(id),
+  const elements = new Map([...document.querySelectorAll('[id]')].map((node) => [node.id, node]));
+  const modeButtons = [...document.querySelectorAll('[data-mode]')];
+  const $ = (id) => elements.get(id),
     M = LunarOrbitModel;
   const embedded = new URLSearchParams(location.search).get('embedded') === '1';
   if (embedded) document.body.classList.add('lunar-embedded');
@@ -25,6 +27,15 @@
       'In this synchronous-rotation model, the fixed near-side site keeps facing Earth. Changing the Sun–Earth–Moon geometry changes Earth’s illuminated fraction, without causing a daily rise or set. Lunar libration is not modeled.',
     ],
     minutes: ['分钟', 'min'],
+    outside: [
+      '地球在画面之外，请点击“朝向地球”。',
+      'Earth is outside the view. Choose Look toward Earth.',
+    ],
+    blockedHint: [
+      '点击“看地升”，观察地球从月面边缘出现。',
+      'Choose Watch Earthrise to see Earth emerge from the lunar limb.',
+    ],
+    lookHint: ['拖动画面可自由转头。', 'Drag the view to look around.'],
   };
   const t = (k) => words[k][document.documentElement.lang === 'en' ? 1 : 0];
   const s = {
@@ -45,7 +56,8 @@
     renderer = null,
     disposed = false,
     scenes = null,
-    bounds = null;
+    bounds = null,
+    riseTarget = null;
   document.querySelectorAll('[data-lunar-view]').forEach(
     (b) =>
       (b.onclick = () => {
@@ -77,10 +89,8 @@
     text('positionValue', (surface ? 0 : s.angle).toFixed(1) + '°');
     text('phaseValue', s.phase.toFixed(0) + '°');
     $('playOrbit').querySelector('span').textContent = t(s.playing ? 'pause' : 'play');
-    document
-      .querySelectorAll('[data-mode]')
-      .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === s.mode)));
-    $('followEarth').setAttribute('aria-pressed', String(s.follow));
+    modeButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === s.mode)));
+    $('followEarth').setAttribute('aria-pressed', String(s.follow && !s.yaw && !s.pitch));
     text('visibilityText', t(surface ? 'surface' : q.visibility));
     text('earthAltitude', q.altitude.toFixed(1) + '°');
     text('horizonAltitude', q.horizon.toFixed(1) + '°');
@@ -100,7 +110,16 @@
       return;
     }
     if (s.playing) {
-      if (last) s.angle = (s.angle + (Math.min((now - last) / 1000, 0.08) * 360) / s.seconds) % 360;
+      if (last)
+        s.angle =
+          (s.angle +
+            Math.min((now - last) / 1000, 0.08) * (riseTarget === null ? 360 / s.seconds : 1.2)) %
+          360;
+      if (riseTarget !== null && s.angle >= riseTarget) {
+        s.angle = riseTarget;
+        s.playing = false;
+        riseTarget = null;
+      }
       last = now;
     } else last = 0;
     const q = refresh();
@@ -109,11 +128,13 @@
   }
   function pause() {
     s.playing = false;
+    riseTarget = null;
     last = 0;
     invalidate();
   }
   $('playOrbit').onclick = () => {
     if (s.mode !== 'orbit') return;
+    riseTarget = null;
     s.playing = !s.playing;
     last = 0;
     invalidate();
@@ -121,6 +142,7 @@
   $('seekRise').onclick = () => {
     if (s.mode !== 'orbit') return;
     s.angle = M.riseAngle(s.altitude) - 1;
+    riseTarget = s.angle + 5;
     s.playing = true;
     s.follow = true;
     s.yaw = s.pitch = 0;
@@ -142,7 +164,7 @@
     });
     invalidate();
   };
-  document.querySelectorAll('[data-mode]').forEach(
+  modeButtons.forEach(
     (b) =>
       (b.onclick = () => {
         s.mode = b.dataset.mode;
@@ -154,10 +176,14 @@
   );
   $('orbitAngle').oninput = (e) => {
     s.angle = +e.target.value;
+    s.follow = true;
+    s.yaw = s.pitch = 0;
     pause();
   };
   $('phaseAngle').oninput = (e) => {
     s.phase = +e.target.value;
+    s.follow = true;
+    s.yaw = s.pitch = 0;
     invalidate();
   };
   $('altitude').onchange = (e) => {
@@ -173,7 +199,7 @@
     invalidate();
   };
   $('followEarth').onclick = () => {
-    s.follow = !s.follow;
+    s.follow = true;
     s.yaw = s.pitch = 0;
     invalidate();
   };
@@ -410,7 +436,13 @@
     projectLabel('mapMoon', moonPos.clone().add(v(0, -0.35, 0)), g.mapCamera, bounds.orbit);
     projectLabel('mapObserver', marker, g.mapCamera, bounds.orbit, -24);
     projectLabel('skyEarth', g.earthSky.position, g.eye, bounds.sky, 22);
-    $('skyEarth').hidden = q.visibility === 'hidden' || $('skyEarth').hidden;
+    const offscreen = $('skyEarth').hidden;
+    $('skyEarth').hidden = q.visibility === 'hidden' || offscreen;
+    text(
+      'cameraHint',
+      t(q.visibility === 'hidden' ? 'blockedHint' : offscreen ? 'outside' : 'lookHint'),
+    );
+    $('revealEarth').hidden = q.visibility !== 'hidden';
   }
   let drag = null;
   $('orbitView').addEventListener('pointerdown', (e) => {
@@ -418,7 +450,9 @@
     const hit = mapPoint(e);
     if (!hit) return;
     const moon = scenes.moonMap.position;
-    drag = { kind: hit.distanceTo(moon) < 1.2 ? 'observer' : 'phase', id: e.pointerId };
+    const observerHit = hit.distanceTo(scenes.marker.position) < 0.32;
+    if (!observerHit && hit.distanceTo(moon) > 0.35) return;
+    drag = { kind: observerHit ? 'observer' : 'phase', id: e.pointerId };
     $('orbitView').setPointerCapture(e.pointerId);
     pause();
     moveMap(e);
@@ -541,6 +575,28 @@
     }),
     pause,
   };
+  $('revealEarth').onclick = () => $('seekRise').click();
+  if (embedded && parent !== window) {
+    const rail = parent.document.querySelector('.ui-parameters');
+    const timeline = parent.document.querySelector('.ui-timeline-host');
+    if (rail && timeline) {
+      const side = parent.document.createElement('div');
+      side.className = 'lunar-shell lunar-controls-host';
+      const clock = parent.document.createElement('div');
+      clock.className = 'lunar-shell lunar-timeline-host';
+      side.append(
+        document.querySelector('.lunar-explanation'),
+        document.querySelector('.lunar-mode'),
+        document.querySelector('.lunar-options'),
+        document.querySelector('.lunar-readouts'),
+      );
+      clock.append(document.querySelector('.lunar-workbench'));
+      rail.append(side);
+      timeline.append(clock);
+      document.querySelector('.lunar-heading').hidden = true;
+      document.body.classList.add('lunar-mounted');
+    }
+  }
   refresh();
   setup();
   invalidate();

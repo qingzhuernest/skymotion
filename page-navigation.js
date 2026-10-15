@@ -70,6 +70,7 @@ function renderUIWorkspace() {
     }[u.selected];
     const lunar = moon && u.selected === 'lunarOrbit';
     u.plot.closest('.ui-shell').classList.toggle('ui-lunar-orbit', lunar);
+    document.body.classList.toggle('lunar-orbit-active', lunar);
     if (u.lunarFrame) {
       if (lunar && !u.lunarFrame.getAttribute('src')) {
         const lang = document.documentElement.lang === 'en' ? 'index.en.html' : 'index.html';

@@ -908,5 +908,7 @@
   "地升地落": "Earthrise and Earthset",
   "地升地落互动演示": "Interactive Earthrise and Earthset",
   "地升地落演示使用独立的绕月控制。": "The Earthrise lesson has its own lunar-orbit controls.",
-  "重置": "Reset"
+  "重置": "Reset",
+  "地球在画面之外，请点击“朝向地球”。": "Earth is outside the view. Choose Look toward Earth.",
+  "点击“看地升”，观察地球从月面边缘出现。": "Choose Watch Earthrise to see Earth emerge from the lunar limb."
 }

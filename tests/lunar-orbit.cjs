@@ -55,14 +55,27 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
       await p.locator('[data-diagram="lunarOrbit"]').getAttribute('aria-selected'),
       'true',
     );
-    assert.equal(await p.locator('.ui-timeline-host').isVisible(), false);
+    assert(await p.locator('.ui-timeline-host').isVisible());
+    const railBox = await p.locator('.ui-parameters').boundingBox(),
+      plotBox = await p.locator('#lunarOrbitPanel').boundingBox();
+    assert(railBox.x + railBox.width <= plotBox.x, 'Original left rail and right image layout');
+    assert(await p.locator('.lunar-controls-host #lessonText').isVisible());
+    await p.locator('.motion-menu-grip').click();
+    await p.waitForFunction(() =>
+      document.querySelector('.ui-shell').classList.contains('motion-rail-collapsed'),
+    );
+    await p.locator('.motion-menu-edge').click();
+    await p.waitForFunction(
+      () => !document.querySelector('.ui-shell').classList.contains('motion-rail-collapsed'),
+    );
+    assert(await p.locator('.lunar-controls-host #lessonText').isVisible());
     assert.equal(await frame.locator('canvas').count(), 1);
     assert.equal(await frame.locator('#lunarFailure').isVisible(), false);
     const science = () =>
         p.evaluate(() => ({ date: state.date, time: state.time, lat: state.lat, lon: state.lon })),
       initial = await science();
     const input = async (id, value) =>
-      frame.locator('#' + id).evaluate((el, value) => {
+      p.locator('#' + id).evaluate((el, value) => {
         el.value = value;
         el.dispatchEvent(new Event('input', { bubbles: true }));
       }, value);
@@ -72,17 +85,17 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     assert.equal((await frame.evaluate(() => LunarOrbitLesson.read())).visibility, 'visible');
     await input('phaseAngle', 180);
     await frame.waitForFunction(
-      () => document.getElementById('earthIllumination').textContent === '0.0%',
+      () => parent.document.getElementById('earthIllumination').textContent === '0.0%',
     );
-    await frame.locator('[data-mode="surface"]').click();
-    await frame.waitForFunction(() => document.getElementById('orbitAngle').disabled);
-    assert(await frame.locator('#orbitAngle').isDisabled());
-    assert(await frame.locator('#playOrbit').isDisabled());
+    await p.locator('[data-mode="surface"]').click();
+    await frame.waitForFunction(() => parent.document.getElementById('orbitAngle').disabled);
+    assert(await p.locator('#orbitAngle').isDisabled());
+    assert(await p.locator('#playOrbit').isDisabled());
     assert.equal((await frame.evaluate(() => LunarOrbitLesson.read())).altitude, 90);
     await input('phaseAngle', 0);
     assert.equal((await frame.evaluate(() => LunarOrbitLesson.read())).altitude, 90);
-    await frame.locator('[data-mode="orbit"]').click();
-    await frame.locator('#seekRise').click();
+    await p.locator('[data-mode="orbit"]').click();
+    await p.locator('#seekRise').click();
     await frame.waitForTimeout(180);
     assert((await frame.evaluate(() => LunarOrbitLesson.read())).playing);
     await p.locator('[data-diagram="chartPanel"]').click();
@@ -93,10 +106,37 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     assert.equal(await p.locator('#lunarOrbitPanel iframe').count(), 1);
     await p.locator('.language-toggle').click();
     await frame.waitForFunction(() => document.documentElement.lang === 'en');
-    await frame.waitForTimeout(80);
+    await frame.waitForFunction(() => !/[\u3400-\u9fff]/.test(document.body.innerText));
+    await p.waitForFunction(() => !/[\u3400-\u9fff]/.test(document.querySelector('.lunar-controls-host').innerText));
     assert(
       !/[\u3400-\u9fff]/.test(await frame.locator('body').innerText()),
       'English scene and control labels are complete',
+    );
+    assert(
+      !/[\u3400-\u9fff]/.test(await p.locator('.lunar-controls-host').innerText()),
+      'English sidebar is complete',
+    );
+    await input('orbitAngle', 0);
+    await frame.waitForFunction(() => !document.getElementById('skyEarth').hidden);
+    const skyBox = await frame.locator('#astronautView').boundingBox();
+    await p.mouse.move(skyBox.x + 30, skyBox.y + skyBox.height / 2);
+    await p.mouse.down();
+    await p.mouse.move(skyBox.x + 200, skyBox.y + skyBox.height / 2, { steps: 5 });
+    await p.mouse.up();
+    await frame.waitForFunction(() =>
+      document.getElementById('cameraHint').textContent.includes('outside'),
+    );
+    await frame.locator('#followEarth').click();
+    await frame.waitForFunction(() => !document.getElementById('skyEarth').hidden);
+    await input('orbitAngle', 180);
+    await frame.waitForFunction(() => !document.getElementById('revealEarth').hidden);
+    await frame.locator('#revealEarth').click();
+    assert((await frame.evaluate(() => LunarOrbitLesson.read())).playing);
+    await frame.waitForFunction(() => !LunarOrbitLesson.read().playing, null, { timeout: 15000 });
+    assert.equal(
+      (await frame.evaluate(() => LunarOrbitLesson.read())).visibility,
+      'visible',
+      'Earthrise demonstration stops with the full Earth visible',
     );
     await p.setViewportSize({ width: 390, height: 844 });
     await frame.locator('[data-lunar-view="orbit"]').click();

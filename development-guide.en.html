@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
 
-<script src="page-boot.js?v=20261015-lunar36"></script>
+<script src="page-boot.js?v=20261015-lunar37"></script>
 
     <meta content="width=device-width,initial-scale=1" name="viewport" />
     <link href="favicon.svg" rel="icon" />
-    <link href="style.css?v=20261015-lunar36" rel="stylesheet" />
-    <link href="pages.css?v=20261015-lunar36" rel="stylesheet" />
+    <link href="style.css?v=20261015-lunar37" rel="stylesheet" />
+    <link href="pages.css?v=20261015-lunar37" rel="stylesheet" />
     <!-- search-metadata:start -->
     <title data-i18n-cn="{&quot;Development Guide: Complete Implementation Logic and Maintenance · Sky Motion Lab&quot;:&quot;开发说明：完整开发逻辑与维护 · 天体视运动实验室&quot;}">Development Guide: Complete Implementation Logic and Maintenance · Sky Motion Lab</title>
     <meta content="供开发和维护者使用：源码职责、状态和时间约定、天文模型、渲染与控件动画、回归测试、AGPLv3及双站点发布。" name="description" />
@@ -20,14 +20,14 @@
     <meta content="website" property="og:type" />
     <meta content="zh_CN" property="og:locale" />
     <!-- search-metadata:end -->
-    <link href="documents.css?v=20261015-lunar36" rel="stylesheet" />
-    <link rel="stylesheet" href="design-system.css?v=20261015-lunar36" />
-    <link rel="stylesheet" href="language.css?v=20261015-lunar36" />
-    <script src="document-entrance.js?v=20261015-lunar36" defer></script>
-<script src="language-data.js?v=20261015-lunar36" defer></script>
-<script src="language.js?v=20261015-lunar36" defer></script>
-<script src="page-cache.js?v=20261015-lunar36" defer></script>
-  <script src="date-picker.js?v=20261015-lunar36" defer></script>
+    <link href="documents.css?v=20261015-lunar37" rel="stylesheet" />
+    <link rel="stylesheet" href="design-system.css?v=20261015-lunar37" />
+    <link rel="stylesheet" href="language.css?v=20261015-lunar37" />
+    <script src="document-entrance.js?v=20261015-lunar37" defer></script>
+<script src="language-data.js?v=20261015-lunar37" defer></script>
+<script src="language.js?v=20261015-lunar37" defer></script>
+<script src="page-cache.js?v=20261015-lunar37" defer></script>
+  <script src="date-picker.js?v=20261015-lunar37" defer></script>
 
 </head>
   <body data-page="development">
@@ -609,6 +609,6 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory /tmp/skymotion-preview<
 <section class="maintenance-notes"><h2 data-i18n-cn="{&quot;October 14, 2026: Session Recovery and Release Gates&quot;:&quot;2026年10月14日：状态恢复与发布门禁&quot;}">October 14, 2026: Session Recovery and Release Gates</h2><p data-i18n-cn="{&quot;Invalid dates, out-of-range numbers, wrong field types and unknown choices in a cached session fall back to their respective defaults. Valid observation settings remain unchanged. Unversioned legacy sessions remain readable and subsequent saves use schemaVersion 1. If browser storage is blocked or its quota is exceeded, a memory snapshot supports the current page; it cannot guarantee persistence after closing the page or navigating elsewhere.&quot;:&quot;缓存中的无效日期、越界数值、错误类型或未知选项会回退到对应默认值；有效观察设置保持不变。旧版未标记版本的会话仍可读取，之后保存为 schemaVersion 1。浏览器禁止存储或写入空间不足时，同一页面内使用内存备份；这种备份不能在页面关闭后或跨页面保证保留。&quot;}">Invalid dates, out-of-range numbers, wrong field types and unknown choices in a cached session fall back to their respective defaults. Valid observation settings remain unchanged. Unversioned legacy sessions remain readable and subsequent saves use schemaVersion 1. If browser storage is blocked or its quota is exceeded, a memory snapshot supports the current page; it cannot guarantee persistence after closing the page or navigating elsewhere.</p><p data-i18n-cn="{&quot;Laboratory and 3D pages read experiment sessions through experiment-storage.js. Each laboratory field is validated, including coordinates, time, date, view, scale and idealized parameters. Restored experiments remain paused, and solar declination is recomputed from the date in ephemeris mode. Unknown session versions are not applied. This change does not alter astronomical formulas, scientific readings or colors.&quot;:&quot;普通实验页与三维页通过 experiment-storage.js 读取实验会话。实验模式逐字段校验，经纬度、时刻、日期、视图、倍率和理想参数都有边界；恢复后保持暂停，按真实日期重新求太阳赤纬。未识别的缓存版本不会应用。此处不改天文公式、科学读数或图形颜色。&quot;}">Laboratory and 3D pages read experiment sessions through experiment-storage.js. Each laboratory field is validated, including coordinates, time, date, view, scale and idealized parameters. Restored experiments remain paused, and solar declination is recomputed from the date in ephemeris mode. Unknown session versions are not applied. This change does not alter astronomical formulas, scientific readings or colors.</p><p data-i18n-cn="{&quot;Both production deployment workflows depend on the shared validate.yml workflow. It installs a pinned Playwright version and Chromium and runs all 18 .cjs scripts at the tests root, covering models, history, controls, fonts, bilingual structure, corrupted-session recovery and packaging. Any failed test blocks that workflow’s deployment. Test tools are used only for maintenance and CI; they are not shipped with the website and do not change its buildless runtime.&quot;:&quot;两个正式部署工作流都依赖共享 validate.yml：锁定 Playwright 版本、安装 Chromium，运行 tests 根目录全部18个 .cjs 脚本，包括模型、历史、控件、字体、双语结构、损坏缓存恢复和打包检查。任一测试失败会阻止该工作流部署。测试工具只用于维护和 CI，不随网站发布，也不改变零构建运行方式。&quot;}">Both production deployment workflows depend on the shared validate.yml workflow. It installs a pinned Playwright version and Chromium and runs all 18 .cjs scripts at the tests root, covering models, history, controls, fonts, bilingual structure, corrupted-session recovery and packaging. Any failed test blocks that workflow’s deployment. Test tools are used only for maintenance and CI; they are not shipped with the website and do not change its buildless runtime.</p></section>
 <section class="release-notes"><h2 data-i18n-cn="{&quot;Production release notes — October 13, 2026&quot;:&quot;2026年10月13日正式发布说明&quot;}">Production release notes — October 13, 2026</h2><p data-i18n-cn="{&quot;This release unifies light control surfaces, serif typography and supporting actions, and provides 24 static Chinese and English pages. Language switching preserves experiment state. Spring menu transitions respect reduced-motion preferences. The calendar supports month/year selection, leap years, confirm and cancel. Original astronomy calculations, ephemerides, model data and scientific limitations remain unchanged.&quot;:&quot;本版统一浅色操作区、衬线字体和辅助按钮样式，提供24份中英文静态页面；切换语言保留实验状态。菜单弹性展开尊重减少动态效果设置。日期选择器支持年月、闰年、确认与取消；原天文计算、星历、模型数据和科学限制不变。&quot;}">This release unifies light control surfaces, serif typography and supporting actions, and provides 24 static Chinese and English pages. Language switching preserves experiment state. Spring menu transitions respect reduced-motion preferences. The calendar supports month/year selection, leap years, confirm and cancel. Original astronomy calculations, ephemerides, model data and scientific limitations remain unchanged.</p><p data-i18n-cn="{&quot;Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.&quot;:&quot;发布核对包含六组模型回归、36组控件布局、44个首次展开场景、参数历史、字体超时恢复、语言导航、日期与键盘操作，以及根路径和 GitHub 项目路径打包。检查以 Chromium 自动化为主，不代表完整 Safari、Firefox 或所有 GPU 实机认证。&quot;}">Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.</p><p data-i18n-cn="{&quot;Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.&quot;:&quot;正式站为 Cloudflare Pages，GitHub Pages 提供同内容镜像。main 推送触发两个独立工作流；维护者应分别核对部署结论。更新前版本保留为 production-before-impeccable-20261013 标签；需要回滚时从该标签创建恢复提交，不改写主分支历史。&quot;}">Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.</p></section>
         </main>
-    <script src="interface-motion.js?v=20261015-lunar36" defer></script>
+    <script src="interface-motion.js?v=20261015-lunar37" defer></script>
   </body>
 </html>

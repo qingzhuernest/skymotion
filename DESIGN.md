@@ -397,3 +397,5 @@ Saved-layout refinement (2026-10-15): inline name editing supports Enter, Escape
 
 ### Earthrise lesson (preview)
 Access from the Moon tabs in Linked Diagrams. Lazy-load one same-origin frame; hide the parent parameter rail, dated timeline and optional 3D comparison for this independent idealized model, restoring them when leaving. The parent pauses the frame on tab exit. Use two adjacent dark scientific views on paper; mobile switches between the two views rather than compressing both. Physical geometry and field of view belong to the astronaut view; the overview labels its separate size/distance scaling. Controls remain outlined, muted teal, native inputs and existing Reading/Charter fonts. No homepage changes.
+
+The Earthrise lesson preserves the incumbent diagram rail, image cell, timeline, collapse affordance and mobile drawer. Its existing DOM controls are mounted in those hosts while retaining one independent renderer and clock. Physical occultation remains explicit; offscreen viewing offers a return direction, and limb-contact playback slows and stops after the full disk emerges.
