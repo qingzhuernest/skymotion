@@ -68,6 +68,15 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     await p.waitForFunction(
       () => !document.querySelector('.ui-shell').classList.contains('motion-rail-collapsed'),
     );
+    await p.evaluate(() =>
+      Promise.all(
+        document
+          .querySelector('.ui-shell')
+          .getAnimations({ subtree: true })
+          .map((animation) => animation.finished.catch(() => {})),
+      ),
+    );
+    await frame.evaluate(() => LunarOrbitLesson.paint());
     assert(await p.locator('.lunar-controls-host #lessonText').isVisible());
     assert.equal(await frame.locator('canvas').count(), 1);
     assert.equal(await frame.locator('#lunarFailure').isVisible(), false);
@@ -79,6 +88,88 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
         el.value = value;
         el.dispatchEvent(new Event('input', { bubbles: true }));
       }, value);
+    const settleScene = () =>
+      frame.evaluate(
+        () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+      );
+    const mapPosition = async (name) => {
+      const local = await frame.evaluate((name) => LunarOrbitLesson.inspect()[name], name);
+      const box = await p.locator('#lunarOrbitPanel iframe').boundingBox();
+      return { x: box.x + local.x, y: box.y + local.y };
+    };
+    const beforeClick = await frame.evaluate(() => LunarOrbitLesson.read());
+    const moonPoint = await mapPosition('moon');
+    await p.mouse.click(moonPoint.x + 4, moonPoint.y + 2);
+    assert.equal(
+      (await frame.evaluate(() => LunarOrbitLesson.read())).phase,
+      beforeClick.phase,
+      'Grabbing the Moon must not jump its position',
+    );
+    const observerPoint = await mapPosition('observer');
+    await p.mouse.move(observerPoint.x, observerPoint.y);
+    await p.mouse.down();
+    await p.mouse.move(observerPoint.x + 18, observerPoint.y - 12, { steps: 5 });
+    await p.mouse.up();
+    assert.equal(
+      (await frame.evaluate(() => LunarOrbitLesson.read())).phase,
+      beforeClick.phase,
+      'Observer drag must not move the Moon',
+    );
+    assert.notEqual((await frame.evaluate(() => LunarOrbitLesson.read())).angle, beforeClick.angle);
+    const angleBeforeMoon = (await frame.evaluate(() => LunarOrbitLesson.read())).angle;
+    const moonDrag = await mapPosition('moon');
+    await p.mouse.move(moonDrag.x, moonDrag.y);
+    await p.mouse.down();
+    await p.mouse.move(moonDrag.x + 15, moonDrag.y - 15, { steps: 5 });
+    await p.mouse.up();
+    assert.equal(
+      (await frame.evaluate(() => LunarOrbitLesson.read())).angle,
+      angleBeforeMoon,
+      'Moon drag must preserve orbital position',
+    );
+    assert.notEqual((await frame.evaluate(() => LunarOrbitLesson.read())).phase, beforeClick.phase);
+    await input('orbitAngle', 359.9);
+    await settleScene();
+    const upBefore = (await frame.evaluate(() => LunarOrbitLesson.inspect())).cameraUp;
+    await input('orbitAngle', 0.1);
+    await settleScene();
+    const upAfter = (await frame.evaluate(() => LunarOrbitLesson.inspect())).cameraUp;
+    assert(
+      upBefore.reduce((sum, x, i) => sum + x * upAfter[i], 0) > 0.99,
+      'Camera roll stays continuous through zenith',
+    );
+    const orbitBefore = (await frame.evaluate(() => LunarOrbitLesson.inspect())).orbitRadius;
+    await p.locator('#seekRise').click();
+    await p.locator('#playOrbit').click();
+    assert.equal((await frame.evaluate(() => LunarOrbitLesson.read())).playing, false);
+    assert(
+      (await frame.evaluate(() => LunarOrbitLesson.read())).guided,
+      'Pause keeps the guided rise',
+    );
+    await p.locator('#playOrbit').click();
+    assert(
+      (await frame.evaluate(() => LunarOrbitLesson.read())).guided,
+      'Resume continues the same guided rise',
+    );
+    await p.locator('#altitude').selectOption('1000');
+    await settleScene();
+    assert.equal(
+      (await frame.evaluate(() => LunarOrbitLesson.read())).playing,
+      false,
+      'Height change cancels a guided rise with old contacts',
+    );
+    assert.equal((await frame.evaluate(() => LunarOrbitLesson.read())).orbitalHeight, 1000);
+    assert((await frame.evaluate(() => LunarOrbitLesson.inspect())).orbitRadius > orbitBefore);
+    await p.locator('#playOrbit').click();
+    await p.locator('[data-mode="orbit"]').click();
+    assert(
+      (await frame.evaluate(() => LunarOrbitLesson.read())).playing,
+      'Clicking the active mode does not interrupt playback',
+    );
+    await p.locator('#altitude').selectOption('100');
+    console.log(
+      'PASS Moon/observer gestures, no grab jump, stable zenith camera, height-aware orbit and playback transitions',
+    );
     await input('orbitAngle', 180);
     await frame.waitForFunction(() => LunarOrbitLesson.read().visibility === 'hidden');
     await input('orbitAngle', 0);
@@ -90,6 +181,11 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     await p.locator('[data-mode="surface"]').click();
     await frame.waitForFunction(() => parent.document.getElementById('orbitAngle').disabled);
     assert(await p.locator('#orbitAngle').isDisabled());
+    assert.equal(
+      await p.locator('#orbitAngle').inputValue(),
+      '0',
+      'Fixed-site slider agrees with its zero-degree readout',
+    );
     assert(await p.locator('#playOrbit').isDisabled());
     assert.equal((await frame.evaluate(() => LunarOrbitLesson.read())).altitude, 90);
     await input('phaseAngle', 0);

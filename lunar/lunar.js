@@ -9,6 +9,10 @@
   const words = {
     play: ['播放绕月飞行', 'Play lunar orbit'],
     pause: ['暂停飞行', 'Pause flight'],
+    pauseRise: ['暂停地升', 'Pause Earthrise'],
+    resumeRise: ['继续地升', 'Resume Earthrise'],
+    rising: ['地球正在升起', 'Earth is rising'],
+    setting: ['地球正在落下', 'Earth is setting'],
     visible: ['地球在月面边缘上方', 'Earth is above the lunar limb'],
     partial: ['地球正在升起或落下', 'Earth is crossing the lunar limb'],
     hidden: ['地球被月球遮住', 'Earth is behind the Moon'],
@@ -80,7 +84,7 @@
     $('speed').disabled = surface;
     $('playOrbit').disabled = surface;
     $('seekRise').disabled = surface;
-    $('orbitAngle').value = s.angle;
+    $('orbitAngle').value = surface ? 0 : s.angle;
     $('phaseAngle').value = s.phase;
     $('altitude').value = s.altitude;
     $('speed').value = s.seconds;
@@ -88,10 +92,29 @@
     $('playOrbit').setAttribute('aria-pressed', String(s.playing));
     text('positionValue', (surface ? 0 : s.angle).toFixed(1) + '°');
     text('phaseValue', s.phase.toFixed(0) + '°');
-    $('playOrbit').querySelector('span').textContent = t(s.playing ? 'pause' : 'play');
+    $('playOrbit').querySelector('span').textContent = t(
+      s.playing
+        ? riseTarget === null
+          ? 'pause'
+          : 'pauseRise'
+        : riseTarget === null
+          ? 'play'
+          : 'resumeRise',
+    );
     modeButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === s.mode)));
     $('followEarth').setAttribute('aria-pressed', String(s.follow && !s.yaw && !s.pitch));
-    text('visibilityText', t(surface ? 'surface' : q.visibility));
+    text(
+      'visibilityText',
+      t(
+        surface
+          ? 'surface'
+          : q.visibility === 'partial'
+            ? s.angle > 180
+              ? 'rising'
+              : 'setting'
+            : q.visibility,
+      ),
+    );
     text('earthAltitude', q.altitude.toFixed(1) + '°');
     text('horizonAltitude', q.horizon.toFixed(1) + '°');
     text('earthIllumination', (q.earthFraction * 100).toFixed(1) + '%');
@@ -113,7 +136,7 @@
       if (last)
         s.angle =
           (s.angle +
-            Math.min((now - last) / 1000, 0.08) * (riseTarget === null ? 360 / s.seconds : 1.2)) %
+            Math.min((now - last) / 1000, 0.25) * (riseTarget === null ? 360 / s.seconds : 1.2)) %
           360;
       if (riseTarget !== null && s.angle >= riseTarget) {
         s.angle = riseTarget;
@@ -134,7 +157,6 @@
   }
   $('playOrbit').onclick = () => {
     if (s.mode !== 'orbit') return;
-    riseTarget = null;
     s.playing = !s.playing;
     last = 0;
     invalidate();
@@ -150,6 +172,8 @@
     invalidate();
   };
   $('resetOrbit').onclick = () => {
+    riseTarget = null;
+    last = 0;
     Object.assign(s, {
       mode: 'orbit',
       angle: 258,
@@ -167,6 +191,7 @@
   modeButtons.forEach(
     (b) =>
       (b.onclick = () => {
+        if (s.mode === b.dataset.mode) return;
         s.mode = b.dataset.mode;
         pause();
         s.follow = true;
@@ -181,18 +206,22 @@
     pause();
   };
   $('phaseAngle').oninput = (e) => {
+    pause();
     s.phase = +e.target.value;
     s.follow = true;
     s.yaw = s.pitch = 0;
     invalidate();
   };
   $('altitude').onchange = (e) => {
+    pause();
     s.altitude = +e.target.value;
     invalidate();
   };
   $('speed').onchange = (e) => {
     s.seconds = +e.target.value;
+    riseTarget = null;
     last = 0;
+    invalidate();
   };
   $('lens').onchange = (e) => {
     s.fov = +e.target.value;
@@ -296,8 +325,9 @@
       overview.add(satellitePath);
       const marker = new THREE.Mesh(
         new THREE.SphereGeometry(0.055, 16, 12),
-        new THREE.MeshBasicMaterial({ color: 0xf2d7a3 }),
+        new THREE.MeshBasicMaterial({ color: 0xf2d7a3, depthTest: false, depthWrite: false }),
       );
+      marker.renderOrder = 10;
       overview.add(marker);
       const dotLine = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints([v(), v(1, 0, 0)]),
@@ -373,10 +403,13 @@
     g.moonMap.rotation.y = -p;
     g.satellitePath.position.copy(moonPos);
     g.satellitePath.visible = s.mode === 'orbit';
+    // Exaggerate altitude in the overview, but let the selected height change its orbit.
+    const orbitRadius = s.mode === 'surface' ? 0.26 : 0.55 + s.altitude * 0.00035;
+    g.satellitePath.scale.setScalar(orbitRadius / 0.65);
     const marker = moonPos
       .clone()
-      .addScaledVector(u, -Math.cos(a) * (s.mode === 'surface' ? 0.26 : 0.65))
-      .addScaledVector(w, Math.sin(a) * 0.65);
+      .addScaledVector(u, -Math.cos(a) * orbitRadius)
+      .addScaledVector(w, Math.sin(a) * orbitRadius);
     g.marker.position.copy(marker);
     const attr = g.dotLine.geometry.attributes.position;
     attr.setXYZ(0, moonPos.x, 0, moonPos.z);
@@ -396,7 +429,9 @@
           .multiplyScalar(Math.cos(M.rad(q.horizon + 8)))
           .addScaledVector(normal, Math.sin(M.rad(q.horizon + 8)))
           .normalize();
-    const up = normal.clone().addScaledVector(forward, -normal.dot(forward));
+    // A fixed inertial roll reference avoids the 180-degree flip at local zenith.
+    const up = v(0, 0, -1);
+    up.addScaledVector(forward, -up.dot(forward));
     if (up.lengthSq() < 1e-8) up.set(0, 1, 0);
     up.normalize();
     const right = forward.clone().cross(up).normalize();
@@ -446,16 +481,32 @@
   }
   let drag = null;
   $('orbitView').addEventListener('pointerdown', (e) => {
-    if (!renderer || s.mode === 'surface') return;
+    if (!renderer) return;
     const hit = mapPoint(e);
     if (!hit) return;
-    const moon = scenes.moonMap.position;
-    const observerHit = hit.distanceTo(scenes.marker.position) < 0.32;
-    if (!observerHit && hit.distanceTo(moon) > 0.35) return;
-    drag = { kind: observerHit ? 'observer' : 'phase', id: e.pointerId };
+    const pixelDistance = (position) => {
+      const point = position.clone().project(scenes.mapCamera);
+      return Math.hypot(
+        e.clientX - (bounds.orbit.left + ((point.x + 1) * bounds.orbit.width) / 2),
+        e.clientY - (bounds.orbit.top + ((1 - point.y) * bounds.orbit.height) / 2),
+      );
+    };
+    const observerDistance = pixelDistance(scenes.marker.position);
+    const moonDistance = pixelDistance(scenes.moonMap.position);
+    if (Math.min(observerDistance, moonDistance) > 24) return;
+    if (s.mode === 'surface' && moonDistance > 24) return;
+    const kind = s.mode !== 'surface' && observerDistance < moonDistance ? 'observer' : 'phase';
+    drag = {
+      kind,
+      id: e.pointerId,
+      x: e.clientX,
+      y: e.clientY,
+      moved: false,
+      angle: kind === 'phase' ? s.phase : s.angle,
+      start: mapAngle(hit, kind),
+    };
     $('orbitView').setPointerCapture(e.pointerId);
     pause();
-    moveMap(e);
   });
   function mapPoint(e) {
     const r = bounds?.orbit;
@@ -470,25 +521,28 @@
     );
     return ray.ray.intersectPlane(new THREE.Plane(v(0, 1, 0), 0), v());
   }
+  function mapAngle(hit, kind) {
+    if (kind === 'phase') return M.deg(Math.atan2(hit.z, hit.x));
+    const d = hit.clone().sub(scenes.moonMap.position),
+      p = M.rad(s.phase);
+    return M.deg(
+      Math.atan2(d.dot(v(-Math.sin(p), 0, Math.cos(p))), -d.dot(v(Math.cos(p), 0, Math.sin(p)))),
+    );
+  }
   function moveMap(e) {
     if (!drag || !renderer) return;
+    if (!drag.moved && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 4) return;
     const hit = mapPoint(e);
     if (!hit) return;
-    if (drag.kind === 'phase') {
-      s.phase = (M.deg(Math.atan2(hit.z, hit.x)) + 360) % 360;
-    } else {
-      const d = hit.sub(scenes.moonMap.position),
-        p = M.rad(s.phase);
-      s.angle =
-        (M.deg(
-          Math.atan2(
-            d.dot(v(-Math.sin(p), 0, Math.cos(p))),
-            -d.dot(v(Math.cos(p), 0, Math.sin(p))),
-          ),
-        ) +
-          360) %
-        360;
-    }
+    const center = drag.kind === 'phase' ? v() : scenes.moonMap.position;
+    if (hit.distanceTo(center) < 0.08) return;
+    drag.moved = true;
+    const delta = ((mapAngle(hit, drag.kind) - drag.start + 540) % 360) - 180;
+    const value = (drag.angle + delta + 360) % 360;
+    if (drag.kind === 'phase') s.phase = value;
+    else s.angle = value;
+    s.follow = true;
+    s.yaw = s.pitch = 0;
     invalidate();
   }
   $('orbitView').addEventListener('pointermove', (e) => {
@@ -570,10 +624,28 @@
   window.LunarOrbitLesson = {
     read: () => ({
       ...s,
+      orbitalHeight: s.altitude,
+      guided: riseTarget !== null,
       ...M.sample(s.angle, s.altitude, s.phase, s.mode === 'surface'),
       playing: s.playing,
     }),
     pause,
+    inspect: () => {
+      if (!scenes || !bounds) return null;
+      const project = (position) => {
+        const p = position.clone().project(scenes.mapCamera);
+        return {
+          x: bounds.orbit.left + ((p.x + 1) * bounds.orbit.width) / 2,
+          y: bounds.orbit.top + ((1 - p.y) * bounds.orbit.height) / 2,
+        };
+      };
+      return {
+        moon: project(scenes.moonMap.position),
+        observer: project(scenes.marker.position),
+        orbitRadius: scenes.satellitePath.scale.x * 0.65,
+        cameraUp: scenes.eye.up.toArray(),
+      };
+    },
     paint: () => {
       resize();
       const q = refresh();
