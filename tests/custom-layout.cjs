@@ -25,13 +25,13 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
       }));
     const initial = await science(),
       stored = () =>
-        p.evaluate(() => JSON.parse(localStorage.getItem('skymotion-workspace-v2-wide')));
+        p.evaluate(() => JSON.parse(localStorage.getItem('skymotion-workspace-v3-wide')));
     await p.locator('.layout-launch').click();
     await p.waitForTimeout(250);
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 2);
     assert(await p.locator('.ui-timeline-host').isVisible());
     assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
-    const divider = p.locator('.workspace-divider'),
+    const divider = p.locator('.workspace-divider-x'),
       before = await p.locator('[data-diagram-card="contextPanel"]').boundingBox();
     let rect = await divider.boundingBox();
     await p.mouse.move(rect.x + 6, rect.y + 30);
@@ -73,7 +73,9 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await p.locator('[data-word="two"]').click();
     await p.locator('.ui-diagram-card:visible [data-word="close"]').first().click();
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 1);
+    await p.locator('[data-word="options"]').click();
     await p.locator('[data-word="reset"]').click();
+    await p.keyboard.press('Escape');
     assert.deepEqual((await stored()).views, ['contextPanel', 'chartPanel']);
     assert.deepEqual(await science(), initial);
     await p.reload();
@@ -166,7 +168,207 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await q.locator('.layout-launch').click();
     await q.locator('[data-word="four"]').click();
     assert.equal(await q.locator('.ui-diagram-card:visible').count(), 4);
+    await q.locator('[data-word="options"]').click();
+    await q.locator('.workspace-save-form input').fill('Temporary');
+    await q.locator('[data-word="save"]').click();
+    assert.match(await q.locator('.workspace-settings-status').innerText(), /unavailable/);
     await blocked.close();
+    const rich = await b.newContext({ viewport: { width: 1280, height: 900 } }),
+      r = await rich.newPage(),
+      richErrors = [];
+    r.on('pageerror', (e) => richErrors.push(e.message));
+    await r.addInitScript(() => {
+      if (!localStorage.getItem('migration-test')) {
+        localStorage.setItem('migration-test', '1');
+        localStorage.setItem(
+          'skymotion-workspace-v2-wide',
+          JSON.stringify({
+            version: 2,
+            enabled: true,
+            views: ['chartPanel', 'contextPanel'],
+            ratio: 57,
+            active: 0,
+          }),
+        );
+      }
+    });
+    await r.goto(base + 'diagrams.en.html');
+    await r.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
+    const richSaved = () =>
+      r.evaluate(() => JSON.parse(localStorage.getItem('skymotion-workspace-v3-wide')));
+    const inputState = () =>
+      r.evaluate(() => ({
+        date: state.date,
+        time: state.time,
+        lat: state.lat,
+        lon: state.lon,
+        playing: state.playing,
+      }));
+    const scienceBefore = await inputState();
+    const options = async () => {
+      if ((await r.locator('[data-word="options"]').getAttribute('aria-expanded')) !== 'true')
+        await r.locator('[data-word="options"]').click();
+    };
+    assert.equal(await r.locator('.ui-diagram-card:visible').count(), 2, 'Old v2 layouts migrate');
+    assert.equal(
+      await r.locator('.ui-diagram-card:visible').first().getAttribute('data-diagram-card'),
+      'chartPanel',
+    );
+    await options();
+    await r.locator('[data-word="rows"]').click();
+    await r.keyboard.press('Control+z');
+    assert.equal((await richSaved()).axis, 'columns');
+    await r.keyboard.press('Control+Shift+z');
+    assert.equal((await richSaved()).axis, 'rows');
+    await r.keyboard.press('Escape');
+    let first = await r.locator('[data-diagram-card="chartPanel"]').boundingBox(),
+      second = await r.locator('[data-diagram-card="contextPanel"]').boundingBox();
+    assert(
+      second.y > first.y + first.height - 1 && Math.abs(first.x - second.x) < 2,
+      'Stacked view occupies separate rows',
+    );
+    const splitY = r.locator('.workspace-divider-y');
+    let handle = await splitY.boundingBox();
+    await r.mouse.move(handle.x + 30, handle.y + 6);
+    await r.mouse.down();
+    await r.mouse.move(handle.x + 30, handle.y + 65, { steps: 6 });
+    await r.waitForTimeout(80);
+    assert.equal(
+      (await r.locator('[data-diagram-card="chartPanel"]').boundingBox()).height,
+      first.height,
+      'Vertical resizing is deferred',
+    );
+    await r.mouse.up();
+    assert((await richSaved()).rowRatio > 50);
+    const heightRatio = (await richSaved()).rowRatio;
+    await r.locator('[data-word="undo"]').click();
+    assert.equal((await richSaved()).rowRatio, 50);
+    await r.locator('[data-word="redo"]').click();
+    assert.equal((await richSaved()).rowRatio, heightRatio);
+    await options();
+    await r.keyboard.press('Escape');
+    await r.locator('.ui-diagram-card:visible [data-word="focus"]').first().click();
+    assert.equal(await r.locator('.ui-diagram-card:visible').count(), 1);
+    assert(await r.locator('[data-word="back"]').isVisible());
+    const focusChoice = (await richSaved()).views[1];
+    await r.locator('.ui-diagram-card:visible select').selectOption(focusChoice);
+    assert.equal(await r.locator('.ui-diagram-card:visible').count(), 1);
+    assert.equal(
+      await r.locator('.ui-diagram-card:visible').getAttribute('data-diagram-card'),
+      focusChoice,
+    );
+    await r.keyboard.press('Escape');
+    assert.equal(await r.locator('.ui-diagram-card:visible').count(), 2);
+    await r.locator('[data-word="add"]').click();
+    assert.equal((await richSaved()).views.length, 3);
+    await options();
+    await r.locator('[data-word="columns"]').click();
+    await r.locator('[data-word="featured"]').click();
+    await r.keyboard.press('Escape');
+    const main = r.locator('.ui-diagram-card[data-workspace-position="0"]'),
+      support = r.locator('.ui-diagram-card[data-workspace-position="1"]');
+    const mainBox = await main.boundingBox(),
+      supportBox = await support.boundingBox(),
+      lowerBox = await r.locator('.ui-diagram-card[data-workspace-position="2"]').boundingBox();
+    assert(
+      Math.abs(mainBox.y - supportBox.y) < 2 &&
+        Math.abs(mainBox.y + mainBox.height - lowerBox.y - lowerBox.height) < 2 &&
+        lowerBox.y > supportBox.y + supportBox.height,
+      'Featured view spans both supporting rows',
+    );
+    await r.waitForTimeout(150);
+    await main.locator('select').selectOption((await richSaved()).views[1]);
+    assert.equal(
+      new Set((await richSaved()).views).size,
+      3,
+      'Choosing an occupied diagram swaps without duplicates',
+    );
+    await options();
+    await r.locator('.workspace-save-form input').fill('Observation');
+    await r.locator('[data-word="save"]').click();
+    assert.equal(await r.locator('.workspace-profile-row').count(), 1);
+    await r.locator('.workspace-save-form input').fill('Observation');
+    await r.locator('[data-word="save"]').click();
+    assert.equal(
+      await r.locator('.workspace-profile-row').count(),
+      1,
+      'Same name updates rather than duplicates',
+    );
+    await r.locator('[data-word="overview"]').click();
+    await r.locator('.workspace-profile-apply').click();
+    assert.equal((await richSaved()).views.length, 3);
+    await r.reload();
+    await r.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
+    assert.equal(await r.locator('.ui-diagram-card:visible').count(), 3);
+    await options();
+    assert.equal(
+      await r.locator('.workspace-profile-row').count(),
+      1,
+      'Saved combinations survive navigation',
+    );
+    for (let i = 2; i <= 5; i++) {
+      await r.locator('.workspace-save-form input').fill('Layout ' + i);
+      await r.locator('[data-word="save"]').click();
+    }
+    await r.locator('.workspace-save-form input').fill('Sixth');
+    await r.locator('[data-word="save"]').click();
+    assert.equal(await r.locator('.workspace-profile-row').count(), 5);
+    assert.match(await r.locator('.workspace-settings-status').innerText(), /five/);
+    await r.locator('.workspace-profile-row [data-word="delete"]').last().click();
+    assert.equal(await r.locator('.workspace-profile-row').count(), 4);
+    await r.keyboard.press('Escape');
+    assert.deepEqual(
+      await inputState(),
+      scienceBefore,
+      'Layout operations never restore scientific state',
+    );
+    await r.setViewportSize({ width: 390, height: 844 });
+    await r.waitForTimeout(100);
+    await r.locator('.layout-launch').click();
+    await options();
+    assert.equal(
+      await r.locator('.workspace-profile-row').count(),
+      4,
+      'Saved layouts are available on phones',
+    );
+    await r.locator('.workspace-profile-apply').first().click();
+    assert.equal(await r.locator('.ui-diagram-card:visible').count(), 1);
+    assert.equal(await r.locator('.workspace-tabs button').count(), 3);
+    await r.keyboard.press('Escape');
+    await r.locator('.workspace-tabs button').first().click();
+    await options();
+    const oldOrder = await r.evaluate(
+      () => JSON.parse(localStorage.getItem('skymotion-workspace-v3-narrow')).views,
+    );
+    await r.locator('.workspace-order-row [data-word="after"]').first().click();
+    const newOrder = await r.evaluate(
+      () => JSON.parse(localStorage.getItem('skymotion-workspace-v3-narrow')).views,
+    );
+    assert.equal(newOrder[1], oldOrder[0]);
+    assert.equal(
+      await r.locator('.workspace-tabs [aria-selected="true"]').getAttribute('data-word'),
+      oldOrder[0],
+      'Reordering keeps the selected diagram',
+    );
+    await r.keyboard.press('Escape');
+    await r.setViewportSize({ width: 320, height: 760 });
+    await r.waitForTimeout(100);
+    assert.equal(await r.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+    const moonChoice = await r.locator('.ui-heading button[data-body="moon"]').boundingBox(),
+      compareEntry = await r.locator('.ui-linked-toggle').boundingBox();
+    assert(
+      moonChoice.x + moonChoice.width <= compareEntry.x,
+      'Narrow header choices do not overlap',
+    );
+    await options();
+    const bounds = await r.locator('#workspaceOptions').boundingBox();
+    assert(bounds.x >= 0 && bounds.x + bounds.width <= 320, 'Settings stay inside narrow screens');
+    await r.keyboard.press('Escape');
+    assert.deepEqual(richErrors, []);
+    await rich.close();
+    console.log(
+      'PASS v2 migration, stacked/main layouts, deferred row resize, focus, redo, swapping, saved profiles, bounds, mobile ordering and unchanged science',
+    );
     console.log(
       'PASS workspace presets, content, resize preview, cancel, keyboard swap, undo, persistence, mobile tabs, locale, denied storage and scientific isolation',
     );

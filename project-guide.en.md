@@ -169,4 +169,4 @@ Cloudflare Pages is the production site, with the same content mirrored on GitHu
 
 ## Custom layout
 
-My workspace in Linked Diagrams offers one, two or four views. Choose each diagram independently, drag its header handle to swap positions, or drag the divider to adjust proportions; canvases resize after release. On phones, switch diagrams with tabs. Settings and the shared timeline stay in place. Undo, reset and standard-view recovery are available. Layouts are stored only in this browser; time, location and scientific parameters stay unchanged.
+My workspace in the Sun’s Linked Diagrams supports one to four views, side-by-side or stacked arrangements, and a three-view layout with one main diagram. Choosing a diagram already on screen swaps positions. Drag a grip to reorder or a divider to resize after release. Focus a diagram for a closer look and press Esc to return. Undo and redo layout changes, and save up to five named combinations. Phones use tabs; reorder them in Layout & saved views. Saved combinations contain only the layout, preserving dates, location and scientific parameters. Standard view restores the original arrangement.
