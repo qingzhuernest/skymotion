@@ -45,6 +45,18 @@ try{
    for(const button of theme.buttons){assert.equal(button.bg,theme.surface);assert.equal(button.color,theme.primary);assert.equal(button.border,theme.line)}
    assert.equal(theme.status.color,theme.primary);
   }
+  await q.locator('[data-diagram="chartPanel"]').click();
+  for(const width of [1280,960,390]){
+   await q.setViewportSize({width,height:900});
+   const marker=await q.evaluate(()=>{
+    const dot=document.querySelector('#chartPanel .panel-title .legend > .dot.sun-dot');
+    const probe=document.createElement('i');probe.style.color='var(--design-primary)';document.body.append(probe);
+    const expected=getComputedStyle(probe).color;probe.remove();
+    return {actual:getComputedStyle(dot).backgroundColor,expected};
+   });
+   assert.equal(marker.actual,marker.expected,`${route} ${width}: fixed-time legend uses the interface accent`);
+  }
+
  }
  console.log('PASS companion card, label, search/status and clock-action colors after routing in both languages at 1280/960/390px');
 

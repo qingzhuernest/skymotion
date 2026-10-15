@@ -1265,6 +1265,10 @@ body[data-body='moon'] .stage .dot.sun-dot,
 body[data-body='moon'] .chart-panel .dot.sun-dot {
   background: #b4cff5;
 }
+/* The paper illumination card is interface chrome, separate from the dark plot key. */
+body[data-body='moon'] .chart-panel .panel-title .legend > .dot.sun-dot {
+  background: var(--design-primary, #24576b);
+}
 body[data-body='moon'] .stage-key {
   color: #afc6df;
 }
