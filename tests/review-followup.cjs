@@ -37,6 +37,29 @@ try{
   await q.waitForFunction(()=>['companionProximity','companionVisibility'].every(id=>!/[\u3400-\u9fff]/.test(document.getElementById(id).textContent)));
   assert(!/(Moonand|andJupiter|Jupiteris)/.test(await q.locator('#companionVisibility').textContent()),'Translated names keep word boundaries');
  }
+
+ // Diagram routing moves companion controls outside .ui-parameters. Theme the component itself.
+ for(const route of ['diagrams.html','diagrams.en.html']){
+  await q.goto(base+route);await q.waitForSelector('.language-toggle:not(:disabled)');
+  await q.locator('button[data-body="moon"]').click();
+  await q.locator('[data-diagram="companionModule"]').click();
+  for(const width of [1280,960,390]){
+   await q.setViewportSize({width,height:900});
+   const theme=await q.evaluate(()=>{
+    const css=el=>{const s=getComputedStyle(el);return {bg:s.backgroundColor,color:s.color,border:s.borderTopColor,width:s.borderTopWidth}};
+    const token=name=>{const el=document.createElement('i');el.style.color=`var(${name})`;document.body.append(el);const value=getComputedStyle(el).color;el.remove();return value};
+    return {surface:token('--design-surface'),primary:token('--design-primary'),muted:token('--design-muted'),line:token('--design-line'),
+     cards:[...document.querySelectorAll('.companion-measures > div')].map(css),
+     labels:[...document.querySelectorAll('.companion-measures span,.companion-measures small')].map(css),
+     buttons:[...document.querySelectorAll('.companion-toolbar button,.companion-actions button')].map(css),status:css(document.getElementById('companionSearchStatus'))};
+   });
+   for(const card of theme.cards){assert.equal(card.bg,theme.surface,`${route} ${width}: companion card is paper, not legacy blue`);assert.equal(card.color,theme.primary);assert.equal(card.border,theme.line);assert.equal(card.width,'1px')}
+   for(const label of theme.labels)assert.equal(label.color,theme.muted);
+   for(const button of theme.buttons){assert.equal(button.bg,theme.surface);assert.equal(button.color,theme.primary);assert.equal(button.border,theme.line)}
+   assert.equal(theme.status.color,theme.primary);
+  }
+ }
+ console.log('PASS companion card, label, search/status and clock-action colors after routing in both languages at 1280/960/390px');
  await q.close();console.log('PASS complete English lunar readings and companion visibility across day/night states');
 }finally{await browser.close()}
  // Verify cache warming matches foreground font keys and prioritizes the chosen locale.
