@@ -249,5 +249,4 @@ function initCompanion() {
     state.companionSearchResult = result;
     schedule();
   };
-  $('companionClock').onclick = focusTimeWorkbench;
 }

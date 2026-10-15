@@ -2392,24 +2392,8 @@ body[data-body='moon'] .chart-panel {
   line-height: 1.7;
   margin: 12px 0;
 }
-.companion-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-.companion-actions button {
-  color: var(--design-primary, #24576b);
-  border: 1px solid var(--design-line, #cdd9de);
-  border-radius: var(--design-radius-control, 12px);
-  background: var(--design-surface, #fff);
-}
-.companion-actions .micro {
-  margin: 0;
-}
 /* These controls also live outside .ui-parameters after diagram reparenting. */
-.companion-module :is(.companion-toolbar, .companion-actions) button:hover:not(:disabled) {
+.companion-module .companion-toolbar button:hover:not(:disabled) {
   background: var(--design-inset, #ecf2f4);
   color: var(--design-hover, #174558);
   border-color: var(--design-line, #cdd9de);
@@ -2434,10 +2418,6 @@ body[data-body='moon'] .chart-panel {
   }
   .companion-measures strong {
     font-size: 24px;
-  }
-  .companion-actions {
-    align-items: flex-start;
-    flex-direction: column;
   }
   #companionSky {
     height: 255px;
