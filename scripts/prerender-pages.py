@@ -277,7 +277,7 @@ def is_site_file(path: Path, root: Path) -> bool:
     parts = path.relative_to(root).parts
     return (not any(part.startswith('.') for part in parts)
             and parts[0] not in {'dist', 'node_modules', 'tests', 'scripts', 'archive'}
-            and path.name not in {'README.md', 'DESIGN.md', 'PRODUCT.md'}
+            and path.name not in {'README.md', 'README.en.md', 'DESIGN.md', 'PRODUCT.md'}
             and not path.name.startswith('BUG-AUDIT-'))
 
 
@@ -326,7 +326,7 @@ def main() -> None:
                     if p.is_file() and is_site_file(p, dist) and p.suffix in asset_suffixes
                     and p.name != 'page-cache-manifest.json'
                     and p.relative_to(dist).as_posix() not in legacy_fonts)
-    manifest = {'version': 2, 'resourceVersion': '20261015-companion29', 'readingFontVersion': '20261014-font24', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
+    manifest = {'version': 2, 'resourceVersion': '20261016-earthrise41', 'readingFontVersion': '20261016-font41', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
     output(dist / 'page-cache-manifest.json', json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
     if stale:
         raise SystemExit('Stale generated files; run scripts/prerender-pages.py: ' + ', '.join(stale))

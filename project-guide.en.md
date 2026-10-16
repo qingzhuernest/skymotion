@@ -166,3 +166,13 @@ This release unifies light control surfaces, serif typography and supporting act
 Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.
 
 Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.
+
+## October 16, 2026: Earthrise and Interface Fixes
+
+The production release adds Linked Diagrams → Moon → Earthrise and Earthset. The left explanation and parameter rail, right image area and bottom playback controls remain in place. No welcome-page entry is added. Custom layouts are not included in this release.
+
+This independent teaching model links an orbit diagram with an astronaut view using one geometry model. It distinguishes Earthrise caused by changing observer position from observations at a fixed site on a synchronously rotating Moon. Orbital height, Sun–Earth–Moon geometry and field of view are independent of the dated workbench and do not overwrite its date, time, location or observation record.
+
+The model assumes a circular orbit, fixed Earth–Moon distance and synchronous rotation. Sun–Earth–Moon geometry stays fixed during each demonstrated circuit. The fixed site is at the center of the near side. Terrain, libration, inclination, eclipses and refraction are omitted. The overview scales sizes and distances separately; the astronaut view follows the model geometry and selected field of view. Surface textures are illustrative. This is not a date-prediction or mission-planning tool.
+
+Document buttons now use the shared light surfaces, thin borders and theme colors in normal, hover and keyboard-focus states, replacing legacy blue styles. Production now has 13 bilingual page pairs and 18 regression scripts. Both deployment workflows still require validation before publishing.

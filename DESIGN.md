@@ -384,3 +384,7 @@ The Ad Astra letter stars now blend their RGB color, brightness, radius and glow
 ### Independent Safari windows
 
 A browsing-context identity is stored in the existing app-scoped window-name record, independently of cloned sessionStorage. An empty/new window context starts a new visit even when its same-site referrer and history length resemble internal navigation; the existing context still preserves seen flags through internal navigation and reload. Unrelated named windows are left unchanged. Navigation timing has a legacy fallback, and clean English routes such as /guide.en use the same canonical document key as /guide.en.html. Both document conversations and the welcome constellation share the corrected fresh-visit detection.
+
+## 2026-10-16 Earthrise production release
+
+Publish the independent lunar-orbit lesson and legacy document-button color fix. Preserve the original left rail, right image and bottom workbench. Custom layout code, assets, controls and documentation are excluded from this production release. All three user documents and both README languages describe the new lesson and its limits. The release gate discovers all 18 model, browser, bilingual and packaging regression scripts.

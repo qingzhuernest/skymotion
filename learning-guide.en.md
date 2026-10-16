@@ -389,3 +389,13 @@ This release unifies light control surfaces, serif typography and supporting act
 Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.
 
 Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.
+
+## October 16, 2026: Earthrise and Interface Fixes
+
+The production release adds Linked Diagrams → Moon → Earthrise and Earthset. The left explanation and parameter rail, right image area and bottom playback controls remain in place. No welcome-page entry is added. Custom layouts are not included in this release.
+
+Open Earthrise and Earthset in Moon mode and choose Watch Earthrise to see Earth emerge from the lunar limb. The demonstration pauses once the full disk is visible, and can be paused and resumed. Drag the Moon to change the Sun–Earth–Moon geometry, or the observer to change orbital position; grabbing a target alone does not move it.
+
+Changing orbital height pauses the current demonstration and updates its orbit and period readings. Fixed lunar site compares a fixed near-side observer: Earth stays in nearly the same direction while its illuminated fraction changes with geometry. Choose Look toward Earth after turning away, or Watch Earthrise when the Moon blocks Earth. On phones, switch between the orbit diagram and astronaut view; parameters remain in the existing drawer.
+
+Document buttons now use the shared light surfaces, thin borders and theme colors in normal, hover and keyboard-focus states, replacing legacy blue styles. Production now has 13 bilingual page pairs and 18 regression scripts. Both deployment workflows still require validation before publishing.
