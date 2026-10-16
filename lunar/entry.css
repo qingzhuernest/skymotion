@@ -101,3 +101,15 @@ body.lunar-orbit-active .ui-parameters > :not(.lunar-controls-host):not(.motion-
   visibility: hidden;
   pointer-events: none;
 }
+/* Keep diagram navigation compact when the extra Moon lesson is available. */
+@media (max-width: 760px) {
+  body[data-page='diagrams'] .ui-viewbar.ui-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  body[data-page='diagrams'] .ui-viewbar.ui-tabs > button {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
