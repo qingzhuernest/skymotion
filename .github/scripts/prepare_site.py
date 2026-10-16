@@ -22,7 +22,7 @@ for name in tracked:
     if (
         any(part.startswith('.') for part in source.parts)
         or source.parts[0] in ('tests', 'scripts', 'archive')
-        or name in ('README.md', 'DESIGN.md', 'PRODUCT.md')
+        or name in ('README.md', 'README.en.md', 'DESIGN.md', 'PRODUCT.md')
         or name.startswith('BUG-AUDIT-')
     ):
         continue
