@@ -758,6 +758,31 @@ body :is(.page-action, .author-mail-button):hover {
 .document-page .page-action {
   color: var(--design-primary);
 }
+.document-page .article-actions :is(.page-action, .page-link) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  min-height: 38px;
+  box-sizing: border-box;
+  background: var(--design-surface);
+  color: var(--design-primary);
+  border: 1px solid var(--design-line);
+  border-radius: var(--design-radius-control);
+  font-size: 13px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+.document-page .article-actions :is(.page-action, .page-link):hover {
+  background: var(--design-paper);
+  border-color: #8caebc;
+  color: var(--design-hover);
+}
+.document-page .article-actions :is(.page-action, .page-link):focus-visible {
+  outline: 2px solid var(--design-primary);
+  outline-offset: 3px;
+}
+
 body[data-page="contact"] .reading-page {
   max-width: 880px;
   padding: 36px;

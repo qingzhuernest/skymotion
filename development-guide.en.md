@@ -580,3 +580,15 @@ This release unifies light control surfaces, serif typography and supporting act
 Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.
 
 Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.
+
+## October 16, 2026: Earthrise and Interface Fixes
+
+The production release adds Linked Diagrams → Moon → Earthrise and Earthset. The left explanation and parameter rail, right image area and bottom playback controls remain in place. No welcome-page entry is added. Custom layouts are not included in this release.
+
+lunar/model.js contains independent circular-orbit geometry; lunar/lunar.js renders both views in one WebGL context. page-navigation.js mounts the existing lesson controls into the left rail and bottom workbench. The new model does not read or write the original experiment state or alter its astronomy calculations.
+
+The first frame, texture, fonts and explanation are prepared in a hidden region before switching the image and rail together. Cold loading preserves the current diagram; late completion must not override a newer tab selection. Leaving the tab or hiding the page pauses playback; return never starts playback automatically. Rendering pixel ratio is capped at 1.5 and static views redraw only after parameter or view changes.
+
+tests/lunar-orbit.cjs covers limb contacts, occlusion, illumination, periods, drag targets and grab offsets, zenith camera continuity, height changes, guided pause/resume, delayed loading, languages, phones and no-WebGL fallback. Regenerate with scripts/prerender-pages.py after editing Chinese HTML or dictionaries, then run the complete release gate.
+
+Document buttons now use the shared light surfaces, thin borders and theme colors in normal, hover and keyboard-focus states, replacing legacy blue styles. Production now has 13 bilingual page pairs and 18 regression scripts. Both deployment workflows still require validation before publishing.

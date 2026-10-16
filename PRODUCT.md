@@ -32,3 +32,7 @@ web
 - 同一种控件在不同页面具有相同形状和反馈。
 - 画布、时间条、参数区保留独立空间。
 - 减少动态效果、键盘操作与禁用状态不得退化。
+
+## 2026-10-16 Earthrise production release
+
+Publish the independent lunar-orbit lesson and legacy document-button color fix. Preserve the original left rail, right image and bottom workbench. Custom layout code, assets, controls and documentation are excluded from this production release. All three user documents and both README languages describe the new lesson and its limits. The release gate discovers all 18 model, browser, bilingual and packaging regression scripts.
