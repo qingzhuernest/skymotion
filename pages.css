@@ -26,16 +26,16 @@
   min-height: 36px;
   padding: 6px 12px;
   font-size: 13px;
-  color: #315da8;
+  color: var(--design-primary, #24576b);
   text-decoration: none;
-  border-radius: 18px;
+  border-radius: var(--design-radius-control, 12px);
 }
 .page-nav a:hover,
 .page-link:hover {
-  background: #e1eafb;
+  background: var(--design-inset, #ecf2f4);
 }
 a:focus-visible {
-  outline: 2px solid #527bd1;
+  outline: 2px solid var(--design-primary, #24576b);
   outline-offset: 2px;
 }
 .reading-page {
@@ -2791,3 +2791,8 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
 .observer-explanation :is(p, li) {
   font-size: inherit;
 }
+
+.observer-link-settings{display:grid;gap:10px;margin:0 0 16px;padding:0 0 14px;border-bottom:1px solid var(--design-line)}
+.observer-link-settings label{display:grid;gap:6px;color:var(--design-ink);font-size:13px}
+.observer-link-settings select{width:100%;min-width:0;font:inherit;color:var(--design-ink);background:var(--design-surface);border:1px solid var(--design-line);border-radius:var(--design-radius-control);padding:9px}
+.observer-link-settings p{margin:0;color:var(--design-muted);font-size:12px;line-height:1.65;overflow-wrap:anywhere}

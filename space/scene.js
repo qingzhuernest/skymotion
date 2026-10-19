@@ -1064,6 +1064,10 @@
           names: $('names').checked,
         });
     }
+    if (window.SkyDiagramTools && !comparing) {
+      const project=p=>{const q=new THREE.Vector3(...p).project(camera);return {x:(q.x+1)*stage.clientWidth/2,y:(1-q.y)*stage.clientHeight/2,hidden:q.z>1||q.z< -1};};
+      window.SkyDiagramTools.overlay('solar-system',{type:'space',pause,canvas:renderer.domElement,body:'space',date:utcDate().toISOString().slice(0,10),time:720,lat:0,lon:0,project,planet:id=>{const q=physical.planets.find(p=>p.id===id);if(!q)return null;const position=planets[Model.bodies.findIndex(p=>p.id===id)].mesh.getWorldPosition(new THREE.Vector3());return {physical:[q.physical.x,q.physical.y,q.physical.z],display:[position.x,position.y,position.z]};},captureCamera:()=>({azimuth,elevation,distance:targetDistance,selected,view,inspectingMoon}),restoreCamera:q=>{if(!q)return;window.SolarSpaceView.restoreSelection({...q,cameraPreset:'custom',fields:[]});},redraw:invalidate});
+    }
     frames++;
     labelBounds = [];
     leaders.replaceChildren();

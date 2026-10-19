@@ -31,6 +31,7 @@
         moon: scientificState(modeStates.moon),
         selected: uiWorkspace?.selected,
         moonPhase: uiWorkspace?.moonPhase,
+        lunar: uiWorkspace?.lunarLesson?.snapshot() || uiWorkspace?.lunarSnapshot || null,
         sundialLength,
         sundialView,
         sundialDragMode,
@@ -68,6 +69,10 @@
         if (uiWorkspace) {
           if (typeof snapshot.selected === 'string') uiWorkspace.selected = snapshot.selected;
           if (typeof snapshot.moonPhase === 'boolean') uiWorkspace.moonPhase = snapshot.moonPhase;
+          uiWorkspace.pendingLunar = false;
+          uiWorkspace.lunarSnapshot = snapshot.lunar || null;
+          const lesson = uiWorkspace.lunarLesson;
+          if (snapshot.lunar && lesson) lesson.restore(snapshot.lunar);
         }
         syncControls();
         settleMotion();

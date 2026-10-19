@@ -1,0 +1,54 @@
+const {addTool}=require('./diagram-test-helpers.cjs');
+const assert = require('node:assert/strict');
+const {chromium} = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
+const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8973/').replace(/\/?$/, '/');
+(async()=>{
+ const browser=await chromium.launch({executablePath:process.env.SKY_MOTION_CHROMIUM||'/usr/bin/chromium',args:['--no-sandbox','--disable-gpu','--use-angle=swiftshader']});
+ const errors=[];
+ try{
+  const p=await browser.newPage({viewport:{width:1280,height:1000}});p.on('pageerror',e=>errors.push(e.message));
+  const read=()=>p.evaluate(()=>SkyDiagramTools.read('earth')[0]);
+  const drag=async(dx,dy,cancel=false)=>{const o=await read(),r=await p.locator('#globe').boundingBox(),x=r.x+r.width*o.x/100,y=r.y+r.height*o.y/100;await p.mouse.move(x,y);await p.mouse.down();await p.mouse.move(x+dx,y+dy,{steps:5});if(cancel===true)await p.keyboard.press('Escape');else if(cancel==='pointer')await p.locator('#globe').dispatchEvent('pointercancel',{pointerId:1});await p.mouse.up();};
+  await p.goto(base+'diagrams.html');await require('./diagram-test-helpers.cjs').enterCustomization(p);await p.locator('.diagram-tool-launch:visible').click();
+  await addTool(p,'note');await p.keyboard.press('Enter');
+  const location=await p.evaluate(()=>[state.lat,state.lon]);
+  await p.locator('.dt-fields [data-field="x"]').fill('45');await p.locator('.dt-fields [data-field="x"]').press('Tab');
+  assert.equal(await p.evaluate(()=>document.activeElement.dataset.field),'y');
+  await p.keyboard.type('35');await p.keyboard.press('Tab');
+  assert.equal((await read()).y,35);
+  await p.locator('.dt-collapse').click();assert.equal(await p.locator('.dt-collapse').getAttribute('aria-expanded'),'false');assert.equal(await p.locator('.dt-fields').isVisible(),false);
+  const original=await read();await drag(65,25);const moved=await read();assert(moved.x>original.x&&moved.y>original.y);assert.deepEqual(await p.evaluate(()=>[state.lat,state.lon]),location);
+  await p.keyboard.press('Control+z');assert.deepEqual(await read(),original);
+  await p.keyboard.press('Control+Shift+z');assert.deepEqual(await read(),moved);
+  await drag(50,-20,true);assert.deepEqual(await read(),moved);await drag(30,40,'pointer');assert.deepEqual(await read(),moved);
+  await p.locator('.dt-head button').last().click();await p.locator('.diagram-tool-launch:visible').click();assert.equal(await p.locator('.dt-collapse').getAttribute('aria-expanded'),'false');assert.match(await p.locator('.dt-status').innerText(),/未保存/);
+  await p.locator('.dt-collapse').click();assert.equal(await p.locator('.dt-fields [data-field="x"]').inputValue(),String(moved.x));
+  await require('./diagram-test-helpers.cjs').objectAction(p,'保存');await p.locator('.dt-head button').last().click();await p.locator('.diagram-tool-launch:visible').click();assert.match(await p.locator('.dt-status').innerText(),/已保存/);
+  await addTool(p,'observer');await p.keyboard.press('Enter');
+  const gr=await p.locator('#globe').boundingBox(),beforeObserver=await p.evaluate(()=>SkyDiagramTools.read('earth')[1]);
+  await p.mouse.move(gr.x+gr.width/2,gr.y+gr.height/2);await p.mouse.down();await p.mouse.move(gr.x+gr.width/2-55,gr.y+gr.height/2-20,{steps:5});await p.mouse.up();
+  assert.notDeepEqual(await p.evaluate(()=>SkyDiagramTools.read('earth')[1]),beforeObserver);assert.deepEqual(await p.evaluate(()=>[state.lat,state.lon]),location);
+  await p.locator('.dt-head button').last().click();
+  await p.locator('#globe').click({position:{x:gr.width/2+150,y:gr.height/2+15}});
+  assert.notDeepEqual(await p.evaluate(()=>[state.lat,state.lon]),location);
+  await p.locator('[data-diagram="chartPanel"]').click();await p.waitForFunction(()=>document.querySelector('.ui-plot').dataset.kind==='chartPanel');await p.locator('.diagram-tool-launch:visible').click();
+  await addTool(p,'time');await p.keyboard.press('Enter');
+  const r=await p.locator('#chart').boundingBox();const point=await p.evaluate(()=>{const c=document.getElementById('chart'),r=c.getBoundingClientRect(),time=SkyDiagramTools.read('chart')[0].time;const left=35,right=r.width-12,top=r.height<100?10:14,bottom=r.height-(r.height<100?22:27),alt=skyRaw('Sun',time,state.date,state.lat,state.lon).alt;return{x:left+(right-left)*time/1440,y:bottom-(alt+90)/180*(bottom-top)};});
+  // Use the native canvas drawing coordinates (read from its accessibility-neutral time handle).
+  const before=await p.evaluate(()=>SkyDiagramTools.read('chart')[0].time);
+  await p.mouse.move(r.x+point.x,r.y+point.y);await p.mouse.down();await p.mouse.move(r.x+point.x+75,r.y+point.y,{steps:5});await p.mouse.up();
+  const after=await p.evaluate(()=>SkyDiagramTools.read('chart')[0].time);assert(after>before);
+  await p.screenshot({path:'/workspace/audits/edit53-desktop.png'});await p.close();
+  console.log('PASS tab order, compact properties, mouse dragging, one-step undo/redo, Esc rollback, selected/draft restoration, no observer changes and time-marker movement');
+  const m=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});m.on('pageerror',e=>errors.push(e.message));await m.goto(base+'diagrams.en.html#chartPanel');await require('./diagram-test-helpers.cjs').enterCustomization(m);await m.locator('.diagram-tool-launch:visible').click();await addTool(m,'note');await m.keyboard.press('Enter');await m.locator('.dt-collapse').click();
+  const c=await m.locator('#chart').boundingBox(),x=c.x+c.width/2,y=c.y+c.height/2,cdp=await m.context().newCDPSession(m);
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y,id:1}]});for(let i=1;i<=5;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+i*8,y:y-i*4,id:1}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  assert((await m.evaluate(()=>SkyDiagramTools.read('chart')[0].x))>50);
+  const touchSaved=await m.evaluate(()=>SkyDiagramTools.read('chart')[0]);
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:x+40,y:y-20,id:2}]});
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+70,y:y-35,id:2}]});
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});
+  assert.deepEqual(await m.evaluate(()=>SkyDiagramTools.read('chart')[0]),touchSaved);assert.equal(await m.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);assert.equal(await m.locator('.dt-panel').evaluate(n=>/[\u3400-\u9fff]/.test(n.innerText)),false);await m.screenshot({path:'/workspace/audits/edit53-mobile.png'});await m.close();
+  assert.deepEqual(errors,[]);console.log('PASS real touch dragging, collapsed mobile panel, localized controls, no overflow or page errors');
+ }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1});

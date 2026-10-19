@@ -232,6 +232,8 @@ function drawCompanionSky(m) {
       m.separation.toFixed(2) +
       ' 度',
   );
+  window.SkyDiagramTools?.paint('companion',{type:'companion',canvas:$('companionSky'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,clip:[left,top,right-left,bottom-top],project:q=>({x:xx(q.az),y:yy(q.alt),wrap:((q.az-view.center+540)%360)-180}),sample:(date,time)=>companionSnapshot(date,time,state.planet,state.lat,state.lon),trail:o=>SkyDiagramSampling.memo(JSON.stringify(['companion-trail',o.date,o.time,o.hours,o.step,state.planet,state.lat,state.lon]),()=>{const values=[];for(let h=-o.hours;h<=o.hours+.0001;h+=o.step)values.push(companionSnapshot(o.date,o.time+h*60,state.planet,state.lat,state.lon));return values;})});
+
 }
 function initCompanion() {
   $('companionEnabled').onchange = (e) => {

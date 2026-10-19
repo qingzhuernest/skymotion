@@ -1,0 +1,147 @@
+/* Use the existing parameter rail, visual cell and bottom workbench. */
+.lunar-controls-host,
+.lunar-timeline-host {
+  display: none;
+}
+body.lunar-orbit-active .lunar-controls-host,
+.ui-lunar-orbit .lunar-timeline-host {
+  display: block;
+}
+body.lunar-orbit-active .ui-parameters > :not(.lunar-controls-host):not(.motion-menu-grip),
+.ui-lunar-orbit .ui-timeline-host > :not(.lunar-timeline-host),
+.ui-lunar-orbit .ui-linked-toggle {
+  display: none !important;
+}
+.ui-lunar-orbit .ui-plot {
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  padding: 0 !important;
+}
+#lunarOrbitPanel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--design-paper);
+}
+#lunarOrbitPanel[hidden] {
+  display: none !important;
+}
+#lunarOrbitPanel iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+}
+.lunar-shell.lunar-controls-host,
+.lunar-shell.lunar-timeline-host {
+  padding: 0;
+  margin: 0;
+  max-width: none;
+}
+.lunar-controls-host .lunar-explanation {
+  margin: 0 0 22px;
+  padding: 0;
+  border: 0;
+}
+.lunar-controls-host .lunar-explanation h2 {
+  margin: 4px 0 12px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.lunar-controls-host .lunar-explanation p {
+  font-size: 13px;
+  line-height: 1.9;
+}
+.lunar-controls-host .lunar-mode {
+  display: flex;
+  gap: 6px;
+  margin: 18px 0;
+}
+.lunar-controls-host .lunar-mode button {
+  flex: 1;
+  padding: 7px;
+  min-width: 0;
+}
+.lunar-controls-host .lunar-options {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+.lunar-controls-host .lunar-options label {
+  margin: 0;
+}
+.lunar-controls-host .lunar-readouts {
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin: 24px 0 0;
+}
+.lunar-controls-host .lunar-readouts dd {
+  font-size: 24px;
+}
+.lunar-timeline-host .lunar-workbench {
+  margin: 0;
+  padding: 12px 16px;
+}
+.lunar-timeline-host .lunar-sliders {
+  margin-top: 10px;
+  gap: 20px;
+}
+.lunar-timeline-host .lunar-sliders label {
+  gap: 3px;
+}
+.lunar-timeline-host .lunar-sliders small {
+  display: none;
+}
+
+/* Prepare the first frame without covering the currently selected diagram. */
+#lunarOrbitPanel[data-preparing][hidden] {
+  display: block !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+/* Keep diagram navigation compact when the extra Moon lesson is available. */
+@media (max-width: 760px) {
+  body[data-page='diagrams'] .ui-viewbar.ui-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  body[data-page='diagrams'] .ui-viewbar.ui-tabs > button {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+
+/* Failure feedback belongs to the light control surface, never replaces the plot. */
+body[data-page='diagrams'] .ui-plot { position: relative; }
+.lunar-load-notice {
+  position: absolute;
+  z-index: 5;
+  inset: auto 16px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--design-line, #cdd9de);
+  border-radius: 12px;
+  background: var(--design-surface, #fff);
+  color: var(--design-ink, #20323e);
+  font-size: 14px;
+  line-height: 1.6;
+  box-shadow: 0 4px 14px rgb(32 50 62 / 12%);
+}
+.lunar-load-notice[hidden] { display: none; }
+.lunar-load-notice button {
+  flex-shrink: 0;
+  background: var(--design-surface);
+  color: var(--design-ink);
+  border-color: var(--design-line);
+}
+.lunar-load-notice button:hover { background: var(--design-inset); }
+.lunar-load-notice button:focus-visible {
+  outline: 2px solid var(--design-primary);
+  outline-offset: 3px;
+}

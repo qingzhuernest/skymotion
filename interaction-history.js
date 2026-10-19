@@ -11,7 +11,7 @@
       }
     };
     const actionable = (target) =>
-      target instanceof Element && target.closest('button,input,select,canvas');
+      target?.nodeType === 1 && target.closest('button,input,select,canvas');
     let pointerStart = null,
       skipClick = false;
     document.addEventListener(
@@ -87,7 +87,7 @@
   function read() {
     return {
       model: adapter?.read() || null,
-      fields: [...document.querySelectorAll('input[id],select[id]')].map((node) => [
+      fields: [...document.querySelectorAll('input[id]:not([data-builder-field]),select[id]:not([data-builder-field])')].map((node) => [
         node.id,
         node.type === 'checkbox' || node.type === 'radio' ? node.checked : node.value,
       ]),
@@ -195,9 +195,9 @@
     },
   };
   const actionable = (target) =>
-    target instanceof Element &&
+    target?.nodeType === 1 &&
     !target.closest(
-      '.motion-menu-grip,.motion-menu-edge,#uiParametersButton,#spaceParameters,#uiDrawerClose,#spaceDrawerClose',
+      '.diagram-tools,.scene-builder,.motion-menu-grip,.motion-menu-edge,#uiParametersButton,#spaceParameters,#uiDrawerClose,#spaceDrawerClose',
     ) &&
     target.closest('button,input,select,a,canvas');
   document.addEventListener(
@@ -250,7 +250,7 @@
     (event) => {
       if (!actionable(event.target)) return;
       pendingInput =
-        event.target instanceof HTMLInputElement &&
+        event.target.matches('input') &&
         !['checkbox', 'radio'].includes(event.target.type)
           ? event.target.id
           : null;

@@ -2,7 +2,7 @@
 (() => {
   const root = document.documentElement;
   const base = new URL('.', document.currentScript.src);
-  const known = new Set(['index.html','lab.html','diagrams.html','analemma.html','sundial.html','guide.html','project-guide.html','development-guide.html','contact.html','geography-review.html','404.html','space/index.html']);
+  const known = new Set(['index.html','lab.html','diagrams.html','analemma.html','sundial.html','guide.html','project-guide.html','development-guide.html','contact.html','geography-review.html','404.html','space/index.html','lunar/index.html']);
   const readingPages = new Set(['guide','project-guide','development-guide']);
   function readingKey(url) {
     return url.pathname.split('/').filter(Boolean).pop()?.replace(/\.en(?:\.html)?$|\.html$/, '') || '';
@@ -145,7 +145,7 @@
     const link = document.createElement('link');
     link.rel = 'preload'; link.as = 'font'; link.type = 'font/woff2'; link.crossOrigin = 'anonymous';
     link.fetchPriority = 'high';
-    link.href = new URL('fonts/'+file+(language==='zh'?'?v=20261015-font29':''),base); document.head.append(link);
+    link.href = new URL('fonts/'+file+(language==='zh'?'?v=20261015-font36':''),base); document.head.append(link);
   }
   const preparedFonts = new Map();
   window.skyPrepareFonts = (locale) => {
@@ -157,7 +157,7 @@
       const loading = Promise.all(variants.map((file,index) => {
         // Charter's legacy descent is positive; normalize line metrics for native text controls.
         const metrics = locale === 'en' ? { ascentOverride: '98%', descentOverride: '24%', lineGapOverride: '0%' } : {};
-        const face = new FontFace(family, `url("${new URL('fonts/'+file+(locale==='zh'?'?v=20261015-font29':''),base)}")`, { weight: index ? '600 900' : '400 500', display: 'block', ...metrics });
+        const face = new FontFace(family, `url("${new URL('fonts/'+file+(locale==='zh'?'?v=20261015-font36':''),base)}")`, { weight: index ? '600 900' : '400 500', display: 'block', ...metrics });
         return face.load().then(loaded => { if (!expired) document.fonts.add(loaded); return loaded; });
       }));
       const deadline = new Promise((_,reject) => { timer=setTimeout(() => { expired=true; reject(new Error('Font loading timed out')); },8000); });

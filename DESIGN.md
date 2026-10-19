@@ -365,32 +365,162 @@ Critical font requests have an eight-second deadline. A failure releases the vis
 
 The Chinese handwritten sentence and the user-supplied English reflection occupy the same centered footer position, selected by locale. Both use the established warm night text (#c8b99f). English uses regular Charter, restrained sizing, balanced lines and no extra letter spacing; Chinese keeps the original handwriting. Locale-specific text is presentation copy, not a claim that the sentences translate one another. The entry action has no supplementary quote below it. Short landscape keeps clear space between controls and the footer.
 
-## Ad Astra opening — 2026-10-14
+### Linked-diagram construction preview — 2026-10-16
 
-The first welcome visit per tab begins with warm ivory stars and fine warm-gold lines spelling Ad Astra. No other visible text appears during the initial hold. The constellation waits for a click, tap, Enter or Space; then over roughly 2.7 seconds the letter stars disperse into the existing interactive star field while the original welcome composition emerges. The geometry is authored independently of fonts, reuses the existing Canvas frame scheduler and remains centered on mobile and desktop. Returning home or changing language skips the opening. Reduced motion shows the original page immediately; keyboard or touch starts the same dispersal. Content is inert until the opening finishes. Recovery runs only after an actual script initialization failure; no elapsed-time callback advances the opening. Page hide/show pauses and resumes rendering without finishing the opening or writing the seen flag, including cached-page restoration in Safari. No experiment state or scientific model changes.
+Preserve the left parameter rail, right scientific canvas and bottom clock. A Build experiment tab contains an orthographic local-ground model: upright rods in meters, reference circles and markers. Observe rotates the scene; Build selects or moves objects. Controls use white/paper surfaces, fine borders, ink text and a quiet sage selection. Existing scientific colors and fonts remain. Labels avoid overlap; small-screen placement closes the parameter drawer and selected objects expose a return-to-properties action. Object changes have separate undo/redo and explicit device-local saving. No production deployment is part of this preview.
 
-### Constellation lettering refinement
+## Plot customization — 2026-10-17
 
-Ad Astra now follows the actual outlines of local Charter italic: balanced capitals, serifs and curved lowercase forms, rather than angular single-stroke lettering. Approximately 400 warm ivory star points and delicate warm-gold connections trace the contours, with smaller secondary points and restrained major-star glow. The outlines are baked into welcome.js by scripts/generate-welcome-lettering.py (maintenance-only fontTools/Brotli); visitors do not load a lettering font. Curve simplification bounds geometry size while preserving optical proportions. The same stars disperse into the existing sky after explicit activation; slow loading and page restoration never advance it automatically.
+图内参考使用原科学画布的投影及观测条件，入口固定在图角；仅放置状态接管一次指针，平时保留旋转、缩放和点选。属性编辑器采用白底细线、深墨色文字，显式保存与未保存提示。不同图解和天体的参考分开存储，切换不修改实验地点与日期。实验搭建区的排列、测量和冻结对照收在可展开工具组里，选中对象后显示属性；移动端保留图面，通过参数抽屉及 A/B 切换操作。
 
-## Document conversations — 2026-10-14
+Plot references share native scientific projections. Pointer capture is armed only for placement; ordinary camera gestures remain available. White property panels, ink text and restrained sage selections follow the existing design. References are isolated per diagram/body, and frozen comparisons retain their own objects and scientific conditions.
 
-Each of the three documents opens with an original six-sentence bilingual dialogue: the learning guide asks why geography matters, the project guide distinguishes a model from the world, and the development guide returns to observation when a model fails. Questions and responses enter from opposite sides with a restrained 14px translation and a soft horizontal reveal; existing lines stay visible, and the final response has time to settle. English uses regular Charter and Chinese the same Reading family, whose subset now covers the new words. No quotation is attributed to a real professor or presented as a historical quotation.
+## Customization hardening — 2026-10-17
 
-The initial background follows the source surface. A welcome-page entry begins in deep night; its text fades before a gradual exposure to cool paper, then the document is revealed. Light entries remain paper throughout. Continue reading and Escape/Enter/Space can shorten the interlude; reduced motion shows the complete dialogue immediately. Background tabs pause the reading clock. Failed scripts/fonts recover the readable document. Each document plays once per visit, tracked per tab; reloads, back/forward and internal navigation do not replay. A fresh external or independent clean-link opening starts a new visit, including tabs with copied opener storage. Denied storage carries only the visited-document set through temporary internal links, history and an app-scoped window-name fallback (without overwriting an existing unrelated window name); the transient parameters are removed before reading. Experiment state is separate.
+原图工具的放置状态同时支持指针与键盘：进入放置后聚焦画布，Enter 在图中放置，Esc 取消，并保留明确的放置按钮。属性列表重选维持焦点并刷新读数；默认名称与用户文本分开处理。触屏按钮使用至少 44px 的有效区域，可见性复选框由可点击标签扩大热区，视觉尺寸保持克制。异常冻结对照显示恢复说明，保留有效实验物体。
 
-The Ad Astra letter stars now blend their RGB color, brightness, radius and glow into the field over the dispersal itself, so the end of the sequence has no palette or light jump.
+Placement exposes equivalent pointer, keyboard and button paths. Selection retains focus and refreshes numerical results. Default names remain locale-aware; personal text is preserved. Touch targets expand without enlarging the checkbox artwork. Invalid frozen conditions degrade to the usable scene with a localized explanation.
 
-### Independent Safari windows
+## Direct reference editing — 2026-10-17
 
-A browsing-context identity is stored in the existing app-scoped window-name record, independently of cloned sessionStorage. An empty/new window context starts a new visit even when its same-site referrer and history length resemble internal navigation; the existing context still preserves seen flags through internal navigation and reload. Unrelated named windows are left unchanged. Navigation timing has a legacy fallback, and clean English routes such as /guide.en use the same canonical document key as /guide.en.html. Both document conversations and the welcome constellation share the corrected fresh-visit detection.
+支持直接拖动的参考对象显示小圆手柄。编辑面板打开时，只有命中参考对象的指针操作被接管；其他手势沿用原图行为。拖动采用单次事务，取消可回到原位置。属性面板可收起为标题、展开入口、当前结果与保存提示，手机上为图面留出更多空间。数值位数适合操作尺度，画布焦点使用鼠尾草色边线；面板、输入和科学画布沿用既有字体、布局和配色。
 
-### Observation workspace (GPT preview, 2026-10-15)
-Preserve the finite viewport, parameter rail/drawer, existing canvases and shared time controls. One to four views support columns, rows, balanced or featured three-view arrangements. Two independent divider overlays commit once on release; cached pane rectangles keep drag previews free of canvas reflow. The header selector swaps occupied views. Focus mode is temporary, returns with Esc and paints only one diagram. Layout undo/redo stays separate from scientific history. A compact Layout & saved views popover contains templates, accessible reordering and five named presentation-only layouts, shared across device classes. Mobile keeps one visible canvas and tabs. Version 3 validates all fields and migrates version 2 preferences. No floating windows, duplicate rendering pipelines or persistent animation.
+A small circular handle identifies directly movable references. A gesture is intercepted only when it hits a supported reference while the editor is open. Gestures form atomic undo transactions. Compact properties keep the active result and draft status visible; native form focus survives edits. Existing layout, fonts and scientific colors remain intact.
 
-### Detail review (GPT preview, 2026-10-15)
-The standard diagram view restores canonical DOM order after custom layouts, including body changes. The workspace entry exposes the actual expanded state and controlled toolbar. Narrow diagram tabs scroll in one row so long English labels do not consume the drawing area. Secondary captions and 404 links use shared paper tokens; the 404 locale switch stays at the upper right. Complete English lunar/companion strings and exact maintenance translations replace fragment fallbacks. Reading regular and bold now cover all 1,028 Chinese characters in visible source pages; all previously shipped outlines and advances were verified unchanged. Review used local Chromium across 48 route/locale/viewport combinations and solar/lunar subviews, followed by one representative confirmation batch; it does not certify physical Safari or GPU performance.
+## Reference interaction feedback — 2026-10-17
 
-Workspace interaction refinement: the settings expose explicit missing-diagram choices, per-view promotion to the main position, and a proportions-only reset. Removing a view preserves the selected diagram when it remains present. Applying an already-current combination still announces success. These actions remain presentation-only and reuse existing canvases.
+显隐切换保留原控件，适合连续键盘操作。输入错误以暖色细边框和明确文案表示；保存、导出和复制不能把无效输入伪装成成功。空列表、无选择和满额状态说明下一步操作。副本名称和位置帮助识别新对象；多指中断回滚当前编辑，不把残余事件交给科学相机。面板收起仍保留当前放置的操作入口。既有布局、字体及科学颜色保持。
 
-Saved-layout refinement (2026-10-15): inline name editing supports Enter, Escape, duplicate-name recovery and cancel without applying scientific or presentation state. Explicit update replaces only the saved presentation. A separate bounded collection undo recovers saves, updates, renames and deletions, cleared on cross-window changes. Matching presentations receive a quiet text marker, ignoring active tab. Exact proportion fields commit on change, never during typing; input is clamped to the same 30–70% splitter limits. Existing palette and font assets remain unchanged.
+Visibility changes keep focus. Invalid inputs retain valid model data and expose a localized correction path. Empty, selection and limit states explain available actions. Copies remain distinguishable by name and nearby position. Interrupted reference gestures roll back atomically; compact placement remains actionable.
+
+## Explicit reference modes — 2026-10-17
+
+编辑器以同一纸色、细线与鼠尾草选中态提供“编辑参考 / 观察图解”。模式切换在紧凑面板中保留，观察模式隐藏移动手柄并恢复原图手势；编辑模式显示手柄。位置锁定使用有文字标签的复选框，禁用对应位置字段；锁定手柄采用方形标记。键盘操作只在聚焦图面时移动参考，输入焦点与原生文本操作保留。
+
+The existing palette carries an explicit Edit/Explore control. Compact mode retains it. Explore restores native gestures and hides editing handles; locked positions have a labeled control and disabled coordinate fields. Keyboard nudging is scoped to the focused canvas; native text editing remains intact.
+
+## Reference workbench redesign — 2026-10-17 / preview 56
+
+用户授权重新设计自定义界面。本节替代此前图内参考编辑器的长浮层布局：桌面在原参数栏位置停靠，留出原科学画布；窄屏采用底部工作台。标题栏收起/关闭、编辑/观察、撤销/重做、添加/对象/文件导航及保存状态各有固定职责。滚动仅发生在内容区，新建对象后直接定位到属性。收起时保留模式与保存状态；放置时仍显示说明和确认入口。
+
+工具库按当前图解提供有效参考，常用组合按一次事务添加；同类默认名称自动编号。对象使用可滚动列表、显隐控件、属性和叠放顺序。文件页区分设备保存、JSON 导出及导入，导入只接受匹配图解/天体、最多 40 个对象的文件；读取后由用户选择合并/替换，不自动覆盖。清空需要再次点击确认且可撤销。导入异步任务随关闭/切换失效，旧任务不污染新视图。
+
+The workbench replaces the long floating reference form. Desktop docking reuses the parameter rail and leaves the plot clear; mobile uses a bottom sheet with independently scrolling content. Add / Objects / Files organize the task. Creation reveals properties immediately. Persistent modes, history and device-save feedback remain available; compact placement is still actionable. White and warm paper surfaces, ink text and quiet sage selections use existing serif fonts without introducing blue accents.
+
+Useful reference sets are atomic undo steps. Numbered default names distinguish repeated types, while personal labels stay intact. Layer ordering changes reference drawing order only. JSON imports are staged for explicit merge/replace, isolated by diagram and body, size-limited and sanitized; stale asynchronous reads are discarded. Clear requires confirmation and remains undoable. Scientific models, observer/time inputs and the separate physical-object builder retain their existing behavior. This is a GPT Site preview only.
+
+## Continuous reference editing — 2026-10-18 / preview 57
+
+校验错误在字段旁显示，并只滚动工作台内容以露出错误字段，不移动周围网页或科学画布。修正后移除对应错误与 ARIA 关联。单行输入支持 Enter 应用，保留输入焦点；输入法组合期间不接管 Enter/Escape。
+
+撤销记录同时保留对象和选中状态，删除后选择邻近对象，撤销删除回到原对象属性。内容区及对象列表在重建时保留滚动位置；添加/对象/文件分别记住位置，重新打开及太阳/月球上下文切换恢复相应编辑位置和选择。保持第 56 版工作台的布局、字体、纸色与鼠尾草配色。
+
+Validation errors appear beside their field and reveal it by scrolling only the workbench content. Corrections remove stale error associations. Enter applies a single-line value without rebuilding or blurring the input; IME composition retains native Enter/Escape behavior. History snapshots restore both objects and selection; deletion selects an adjacent object, and undo restores the original inspector. Tabs, reopening and Sun/Moon contexts retain their respective scroll/selection state. Existing scientific conditions, layout and palette remain unchanged.
+
+## Desktop object navigation — 2026-10-18 / preview 58
+
+较宽且高度足够的桌面窗口将对象列表和属性改为独立滚动，选择和新建后露出对应列表项，原科学画布仍不被遮挡。短窗口与手机保留连续滚动。保存、复制和删除收在固定底栏；叠放顺序留在属性区。完整操作说明按需展开，减少常驻文字占用。
+
+列表支持 ↑↓、Home/End 选择，Enter 进入属性；属性里的 Esc 放弃尚未应用的输入并返回列表，再按 Esc 回到图面。输入法组合保持原生行为。Ctrl/Cmd+D 复制，列表中的 Delete/Backspace 删除；复制、删除及撤销重建列表后恢复有效焦点，支持连续操作。快捷键只在当前工作台/画布且不编辑文字时接管。独立属性与列表的滚动位置随重新打开和太阳/月球上下文恢复。
+
+Wide desktop windows keep the object navigator visible above an independently scrolling inspector. New and selected rows are revealed without moving the scientific plot. Shorter windows and phones retain the continuous flow. Save / Duplicate / Delete stay in the footer; stacking controls remain in properties. Full instructions expand on request.
+
+List arrows and Home/End select; Enter opens editing. Escape in a property restores an unapplied draft and returns to the list; another Escape returns to the plot. Scoped Ctrl/Cmd+D duplicates, and list Delete/Backspace deletes with undo. Rebuilt rows retain a valid keyboard destination for repeated actions. Text fields and IME keep native key behavior. No new palette, font or scientific model changes.
+
+## Release-candidate edge handling — 2026-10-18 / preview 59
+
+本轮冻结工作台的布局与功能范围，集中修复贴边说明文字的移动坐标：指针拖动和首次键盘微调从实际绘制位置开始，避免文字边界收纳后出现移动死区。取消及撤销仍恢复原始数据，不改变实验地点、日期或时间。新建对象显式初始化显隐、锁定和默认名称状态，与存档恢复一致。列表里的显式删除在观察模式仍可使用，与可见删除按钮一致；画布 Delete 仍只用于编辑模式。
+
+The review candidate retains the established layout and feature scope. Edge-clamped annotation movement starts at its actual rendered anchor, eliminating a dead zone for pointer and keyboard movement. Cancellation/undo restores original data and leaves scientific observation conditions untouched. New references initialize the same boolean defaults used by storage restoration. Explicit list deletion remains consistent with the visible action in Explore; canvas deletion still requires Edit mode.
+
+工作台打开时隐藏当前图角上重复的“图内自定义”入口，避免遮住贴边标注或重复打开面板；关闭后立即恢复入口及键盘焦点。入口的 aria-expanded / aria-controls 与面板状态同步。
+
+The current plot's redundant launch button hides while its workbench is open, keeping edge annotations unobstructed. Closing restores the button and keyboard focus, with expanded/control relationships synchronized.
+
+## Scientific reference boundaries — preview 60
+
+时间标记和两点高度差在实际参考时刻调用原天文计算，不再对十分钟样本作数值插值；曲线的绘制样本仍缓存。升落参考通过局部极值细分识别短可见/遮挡窗口，零高度相切不当成穿越；角度容差为 1e-9°，根定位采用有界二分。时间先对总分钟取整再格式化，避免出现“19:60”。行星伴月参考轨迹在方位展开图的接缝处分段，避免跨图伪连线；地球昼夜的反正弦输入作浮点截断。
+
+日行迹参考缓存只包含影响年度轨迹的科学参数，不因播放状态、当前日或当前时刻变化重新求整年样本。以上不替换星历或改变主模型公式；原布局、颜色与字体不变。
+
+Time-marker and altitude-difference references now evaluate native astronomy at the requested instant rather than interpolating ten-minute samples. Bounded extrema refinement finds short visibility windows; zero-height tangencies are excluded, with a 1e-9° numerical tolerance. Minute carry is applied before clock formatting. Companion trails split at the azimuth projection seam, and inverse-sine inputs clamp floating-point noise. Annual-reference cache keys contain only the scientific inputs that affect the track. Ephemerides and primary model formulas are retained.
+
+科学参考标签按实际绘图区边界收纳，靠近天顶或图边时不再被绘图裁切；个人说明仍可放在整个画布范围，不改变其拖动坐标。
+
+Scientific-reference labels stay within the plot's clipping bounds; personal notes retain canvas-wide positioning and their existing movement coordinates.
+
+## 月份参考的语义 / Month reference semantics — preview 61
+
+逐日照明图中的日期标记仅在所属月份显示。跨月测量仍给出两日数值与差值，属性区说明未显示标记的原因；切换到对应月份后自动显示。月份对照曲线在图内标注年月，避免把另一月份的同日号误读为当前日期。原星历与观测状态不受参考对象编辑影响。仅更新 GPT Site 预览，正式发布仍待用户批准。
+
+Dated illumination markers appear only in their own month. Cross-month measurements retain both dated values and their difference; the inspector explains absent markers and updates when the displayed month changes. Comparison curves identify their year and month. Editing references leaves native ephemerides and observation conditions independent. GPT Site preview only; official publication awaits user approval.
+
+## 参考点与联动观测 / References and observation locations — preview 62
+
+工作台以白底、墨色与中性灰区分层级，统一原界面的边框与字号，移除独立的绿色配色。自动生成及编辑后的经纬度显示最多四位小数，存储与计算仍保留输入精度。地球/地图与地轴图的观察点属性明确说明当前计算地点；“按此地点更新各图”把参考点设为当前天体的观测地点，统一更新该天体的关联图解，不改变日期或当地真太阳时。浏览器后退恢复观测地点；工作台撤销仍只撤销参考对象编辑。继续移动参考点不会暗中更改观测地点，需再次应用。
+
+The workbench uses the existing white, ink and neutral-gray interface palette. Coordinate fields display up to four decimal places without rounding stored or calculated values. Observer references explicitly identify the current observation location. “Update all diagrams from here” applies the reference to the active body's observation conditions, keeping the date and local apparent solar clock. Native browser Back restores observation conditions; workbench Undo remains scoped to reference edits. Further reference movement remains independent until applied again. The new observer-link suite checks four-plot consistency, native history, validation, precision, bilingual context and phone operation. GPT Site preview only; official hosting remains unchanged.
+
+## 侧栏内编辑 / Editing within the parameter rail — preview 63
+
+桌面与宽屏平板的图内自定义直接挂载到原参数侧栏，以原侧栏边框和背景承载；不再使用覆盖在其上方的独立浮窗。关闭恢复原参数和侧栏滚动位置。跨窗口尺寸保留编辑焦点，手机继续采用紧凑面板，去除浮层阴影。自定义控件复用原界面的颜色、圆角及字体变量，不新增独立配色。
+
+On desktop and wide tablets, customization is mounted inside the original parameter rail rather than overlaid on it. Closing restores the original controls and rail scroll position. Responsive remounting retains editor focus; phones retain a compact panel with no floating shadow. Controls reuse existing theme, radius and typography variables. Only the GPT Site preview is updated.
+
+## 统一自定义开关 / One customization switch — preview 64
+
+关联图解默认以正常模式打开，顶部“进入自定义”是编辑模式的统一入口。进入后显示布局工具、图内参考编辑及实验搭建入口；图解标签保留，可在单图与自定义组合之间切换。顶部“完成自定义”统一退出，关闭编辑与布局设置、恢复进入前的正常图解。参考对象、布局和编辑草稿保留在本次访问中；本机保存仍需明确点击保存。正常模式不绘制自定义参考、不应用参考显隐设置，也不显示编辑手柄和入口。日期、地点、观测时刻仍使用原共享科学状态；这不是另一套物理计算。刷新不会自动进入编辑模式。无效输入会阻止退出并定位到字段，避免丢失未修正的编辑。
+
+Related Diagrams opens in normal mode. The header Customize / Finish customizing switch controls layout editing, plot-reference tools and the experiment-builder entry. Native diagram tabs remain usable within editing mode. Finishing closes editing surfaces and restores the prior normal diagram while retaining session drafts and layout choices. Device persistence still requires Save. Normal mode hides custom annotations and editing affordances and ignores reference visibility overrides. Dates, location and observation time remain the original shared scientific state, not a second simulation. Refresh starts in normal mode. Invalid reference fields block exit and receive focus. GPT Site preview only; official hosting is unchanged.
+
+## 地点联动与日行迹对照 / Location linkage and analemma comparisons — preview 65
+
+主观察点可直接拖动，球面其他位置保留旋转视角；四图共用原观测状态。移动地点可固定当地真太阳时，或保持同一 UTC 瞬间并换算当地日期和时刻，含跨日、日期变更线和闰年边界。自由移动、沿纬线及沿经线约束用于图上移动；明确选择城市、输入坐标或应用参考点时不套用拖动约束。Escape、失焦或调整窗口可取消主观察点拖动。理想模型仅使用固定当地真太阳时。
+
+日行迹对照继承主图的时间规则，每条轨迹可独立指定钟表时/真太阳时和时区。赤纬—时角视图禁用无效的纬度编辑并说明原因；高度参考仅用于天空/天穹视图。坐标范围包含所有可见对照轨迹，不裁掉异地时刻曲线。轨迹使用不同的浅色、选中线宽和列表色标；完全相同条件提示重合，图上不再堆叠长标签。读数使用简明经纬度、时刻、时间规则和时区。
+
+Drag the primary observer dot to update the shared solar diagrams; dragging elsewhere retains camera rotation. Location changes can preserve local apparent solar time or the same UTC instant, including local-date rollover. Parallel/meridian constraints apply to plot movement; explicit cities, coordinate entry and reference application bypass these movement constraints. Escape, blur or resize cancels a point drag. Ideal models use apparent-solar-time comparison only.
+
+Analemma references inherit the primary time basis and expose independent time-basis/UTC-offset fields. Declination–hour-angle views explain latitude invariance; altitude references require sky/dome coordinates. Bounds include visible comparison tracks. Distinct light curve colors, selected line width and list swatches identify references, matching conditions report overlap, and long canvas labels are removed. Numeric readouts are compact. GPT Site preview only; official hosting unchanged.
+
+## 地点与时间对照 / Place & time comparisons — preview 66
+
+关联图解在自定义模式内新增“地点与时间”，保留左侧说明与控制、右侧图解及下方共享时间栏。“同一地点 · 不同时刻”比较当前真太阳时前后的太阳位置，间隔可选 1、3、6 小时；跨午夜使用相邻日期。“同一瞬间 · 不同地点”以同一 UTC 时间戳计算三个观察点，提供纬度/经度对照示例及两个独立经纬度输入，显示各地真太阳日期、时刻、高度和方位。对照条件不改变主观测地点。天空半球包含方向、天顶、日轨迹及地平线下方虚线；读数表可辅助阅读。理想赤纬模型不提供 UTC 异地对照，边界日期和非法坐标有明确处理。轨迹使用有界缓存，时间更新不重复生成整日采样。
+
+Related Diagrams adds a customization-mode Place & time lesson, keeping explanations and controls in the original left rail and diagrams on the right. One-place comparisons use apparent solar times one, three or six hours either side of the shared timeline, with adjacent dates at midnight. One-instant comparisons compute three locations at exactly the same UTC timestamp, with latitude/longitude examples and two editable sites. Readings show each local apparent solar date/time, altitude and azimuth without modifying the primary observation location. Sky hemispheres show cardinal directions, zenith and day paths; below-horizon portions are dashed. Ideal declination models explicitly exclude UTC comparisons. Invalid coordinates and date limits have explicit states; bounded day-path caching avoids resampling on each clock update. GPT Site preview only; official hosting unchanged.
+
+自定义总开关现位于语言切换旁边；新增功能仅在开启后出现，原观测参数始终可用。交互约定：[中文](docs/customization-interaction.zh.md) · [English](docs/customization-interaction.en.md)。
+
+The customization switch sits beside language. New tools require explicit entry; original observation controls remain available. See the bilingual interaction specifications linked above.
+
+## 预览 67：图内编辑与城市对照 / Preview 67: reference editing and city comparisons
+
+进入自定义保留当前图解；布局工具仅在四图对照中出现。原工具名称保留，按钮统一完整边框与尺寸；模式名称改为“移动图中标记／按原图操作”。桌面左栏通过“观测条件／图中对象”原位切换，保留科学条件和草稿。保存、复制、删除收进每行对象名称及显示勾选后面的“···”，底部仅显示状态。新增可见城市自动参与高度曲线、升落方位及地平面图对照，使用同一组颜色；全局时间规则区分同一 UTC 与同一当地真太阳时。原地点保留为基准，明确应用城市时才更换基准。城市的隐藏、删除及位置变化会刷新对照。仅 GPT Site 预览；正式网站未改动。
+
+Customization retains the selected diagram; layout controls appear only in four-view comparison. Existing tool labels remain, outlined controls have consistent dimensions, and modes explicitly say Move plot markers / Use original controls. The desktop rail switches in place between observation controls and plot objects without losing drafts. Save, Duplicate and Delete live in the ellipsis beside each object's name and visibility checkbox; the footer shows status only. Visible city references automatically contribute corresponding altitude curves, event bearings and horizon planes, using shared colors and an explicit UTC/apparent-solar-time rule. The original observation location remains the baseline unless a reference is explicitly applied. GPT Site preview only.
+
+
+## 预览 68：实验台共用自定义 / Preview 68: Lab customization
+
+实验台在语言旁提供统一自定义开关，保留四个原视角、地点参数与共享时间栏。城市自动参与天空和关联图解对照；天空／高度图的时间标记跨原图显示，同地不同时间不必另开页面。内部导航一次延续编辑状态，会话草稿跨页保留，刷新默认正常模式。实验台添加工具可进入摆放实验物体，点击原视角返回。对象行“···”提供保存、复制、删除。仅发布 GPT Site 预览，正式网站未更新。
+
+Lab shares the customization switch beside language while retaining native viewpoints, observation controls and timeline. Cities appear in sky and related comparisons; pinned times compare within the original diagrams. Internal navigation transfers edit intent once and retains session drafts; refresh starts normally. Lab can open construction from its Add tools and return through a native viewpoint. Row ellipsis contains Save, Duplicate and Delete. GPT Site preview only; official hosting is unchanged.
+
+当前交互约定 / Current interaction rules: [中文](docs/customization-interaction.zh.md) · [English](docs/customization-interaction.en.md).
+
+
+预览 69 / Preview 69：修复 GPT Site 将 `.html` 跳转为简洁地址时，跨页自定义状态无法延续的问题；中英文两套路由均有重定向回归检查。 Clean-URL redirects now retain one-use customization intent in both languages; refresh still starts normally.
+
+
+## 实验台就地对照 / Inline Lab comparisons — preview 70
+
+常用城市和时刻对照移入实验台原“日期与地点”菜单，保留原参数、视角与时间栏。可直接编辑本页及关联图解创建的城市／时刻，复用原时间规则、图中参考数据和历史；不再需要跨页设置。手机沿用原设置抽屉。仅更新 GPT Site 预览。
+
+Common city and time comparisons now live in the Lab’s original Date and location menu. Edit references from either page in place, using existing time semantics, reference stores and history. Native controls and the phone drawer remain. GPT Site preview only.
+
+
+## 固定菜单层级 / Stable navigation — preview 71
+
+主导航不随太阳／月球改变入口。桌面自定义的观测条件／图中对象常驻，关闭编辑器只替换下层内容。添加／对象／文件保留用户选择，不按有无对象自动跳转；图名只作为当前上下文。手机保留栏目选择。仅 GPT Site 预览更新。
+
+Primary destinations remain stable across Sun/Moon changes. Desktop customization retains its sidebar navigation after closing editors; plot context updates only the content. Add / Objects / Files follows user selection rather than object count. Phones retain the chosen section. GPT Site preview only.

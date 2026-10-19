@@ -706,3 +706,9 @@
     top: -14px;
   }
 }
+
+/* One explicit gate separates presentation editing from normal observation. */
+body[data-page=diagrams]:not(.customization-active) [data-diagram=sceneBuilder]{display:none!important}
+.layout-launch[aria-pressed=true]{background:var(--design-inset);border-color:var(--design-primary)}
+/* The normal diagram tabs remain available inside the custom workspace. */
+body.customization-active .workspace-active .ui-viewbar{display:flex!important}
