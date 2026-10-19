@@ -231,3 +231,6 @@ Common city and time comparisons now live in the Lab’s original Date and locat
 主导航不随太阳／月球改变入口。桌面自定义的观测条件／图中对象常驻，关闭编辑器只替换下层内容。添加／对象／文件保留用户选择，不按有无对象自动跳转；图名只作为当前上下文。手机保留栏目选择。仅 GPT Site 预览更新。
 
 Primary destinations remain stable across Sun/Moon changes. Desktop customization retains its sidebar navigation after closing editors; plot context updates only the content. Add / Objects / Files follows user selection rather than object count. Phones retain the chosen section. GPT Site preview only.
+
+
+Preview 72 (2026-10-19): persistent 3D Customize entry beside language, including immersive mode; Lab comparisons moved to the original menu top with direct builder access; new construction scenes start empty and examples require a choice. Existing saved scenes are preserved. See bilingual interaction documentation in docs/.

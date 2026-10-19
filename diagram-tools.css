@@ -194,7 +194,7 @@ body .dt-panel>.dt-footer{justify-content:flex-start;}
 /* In customization, sidebar navigation belongs to the page, not the selected plot. */
 body .ui-parameters.dt-navigation-ready{padding-top:0}
 .dt-rail-navigation[hidden],.dt-context-empty[hidden]{display:none!important}
-.ui-parameters.dt-navigation-ready[data-editor-view=references]>:not(.dt-rail-navigation):not(.dt-panel):not(.dt-context-empty){display:none!important}
+.ui-parameters.dt-navigation-ready[data-editor-view=references]>:not(.dt-rail-navigation):not(.dt-panel):not(.dt-context-empty):not(.sb-controls){display:none!important}
 .ui-parameters.dt-navigation-ready[data-editor-view=conditions]>.dt-panel,.ui-parameters.dt-navigation-ready[data-editor-view=conditions]>.dt-context-empty{display:none!important}
 body .dt-context-empty{padding:18px 14px;color:var(--design-ink);font:inherit;font-size:13px;line-height:1.7}
 body .dt-context-empty p{margin:0 0 16px}
@@ -205,3 +205,10 @@ body .dt-context-empty button:focus-visible{outline:2px solid var(--design-prima
 /* The builder supplies the object content without replacing the sidebar tabs. */
 body.scene-builder-active .ui-parameters.dt-navigation-ready[data-editor-view=references]>.sb-controls{display:block!important}
 body.scene-builder-active .ui-parameters.dt-navigation-ready>.dt-context-empty{display:none!important}
+
+.ui-parameters.dt-navigation-ready[data-editor-view=conditions]>.sb-controls{display:none!important}
+/* New space actions retain the existing paper control palette. */
+body[data-page=space] .head-actions .language-actions :is(.layout-launch,.language-toggle),body[data-page=space] .diagram-tool-launch{background:var(--design-surface);color:var(--design-primary);border:1px solid var(--design-line);box-shadow:none}
+body[data-page=space] .head-actions .language-actions .layout-launch[aria-pressed=true]{background:var(--design-primary);color:var(--design-surface);border-color:var(--design-primary)}
+body[data-page=space] .head-actions .language-actions{margin:0;gap:6px}
+@media(max-width:600px){body[data-page=space].space-immersive .head{flex-wrap:wrap;gap:6px}body[data-page=space].space-immersive .head .head-actions{flex-wrap:wrap;margin-left:auto}}

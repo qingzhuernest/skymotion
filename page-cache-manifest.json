@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261019-tools71",
+  "resourceVersion": "20261019-tools72",
   "pages": [
     "404.en.html",
     "404.html",
@@ -110,6 +110,7 @@
     "space/assets/stars.json",
     "space/compare.css",
     "space/compare.js",
+    "space/customization.js",
     "space/earth-frame.js",
     "space/embed.css",
     "space/embed.js",
@@ -160,11 +161,11 @@
     "lunar/index.html": 8215,
     "project-guide.en.html": 83667,
     "project-guide.html": 28207,
-    "space/index.en.html": 31539,
-    "space/index.html": 20493,
+    "space/index.en.html": 31605,
+    "space/index.html": 20559,
     "sundial.en.html": 119626,
     "sundial.html": 71666
   },
-  "totalBytes": 1583455,
-  "assetBytes": 8589114
+  "totalBytes": 1583587,
+  "assetBytes": 8597644
 }

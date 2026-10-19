@@ -5,19 +5,23 @@
   const tr=value=>value.split('|')[en()?1:0];
   const api=()=>window.SkyDiagramTools.comparisons;
   const node=(tag,cls,parent)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(parent)parent.append(n);return n;};
-  const panel=node('details','menu-subsection lab-comparisons');panel.id='labComparisons';panel.hidden=true;panel.open=true;panel.dataset.i18nSkip='';
-  document.getElementById('seasonButtons').after(panel);
+  const panel=node('details','menu-section lab-comparisons');panel.id='labComparisons';panel.hidden=true;panel.open=true;panel.dataset.i18nSkip='';
+  document.querySelector('#controls .section-head').after(panel);
   const summary=node('summary','',panel),content=node('div','menu-content',panel);
   const intro=node('p','micro',content);
+  const originNote=node('p','micro');
+  const cityHelp=node('p','micro');
+  const build=node('button','lc-add',content);build.type='button';build.dataset.comparisonAction='build';build.onclick=()=>{if(validate())window.SkySceneBuilder?.open();};
   const timeTitle=node('h3','',content),timeList=node('div','lc-list',content),timeEmpty=node('p','micro',content);
   const addTime=node('button','lc-add',content);addTime.type='button';addTime.dataset.comparisonAction='time';
   const cityTitle=node('h3','',content),basisSlot=node('div','lc-basis',content);
-  basisSlot.append(document.querySelector('.observer-link-settings'));
+  basisSlot.append(document.querySelector('.observer-link-settings'));basisSlot.append(cityHelp);
   const cityList=node('div','lc-list',content),cityEmpty=node('p','micro',content);
   const cityAdder=node('div','lc-city-add',content),cityChoice=node('select','',cityAdder),addCity=node('button','',cityAdder);
   addCity.type='button';addCity.dataset.comparisonAction='observer';
   for(const option of document.querySelectorAll('#place option')){if(option.value==='custom')continue;const o=option.cloneNode(true);cityChoice.append(o);}
   cityChoice.value='51.5,-0.1';
+  intro.after(build);content.append(originNote);
   const history=node('div','lc-history',content),undo=node('button','',history),redo=node('button','',history);undo.type=redo.type='button';undo.dataset.comparisonHistory='undo';redo.dataset.comparisonHistory='redo';
   const status=node('p','micro lc-status',content);status.setAttribute('role','status');
   const rows=new Map();let menuRow=null,serial=0;
@@ -59,15 +63,20 @@
   menu.addEventListener('toggle',e=>{if(e.newState==='closed')menuRow?.more.setAttribute('aria-expanded','false');});
   menu.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();menu.hidePopover();menuRow?.more.focus();}else if(['ArrowDown','ArrowUp','Home','End'].includes(e.key)){e.preventDefault();const choices=[...menu.querySelectorAll('button')],i=choices.indexOf(document.activeElement);choices[e.key==='Home'?0:e.key==='End'?choices.length-1:(i+(e.key==='ArrowDown'?1:-1)+choices.length)%choices.length].focus();}});
   function sync(){
-    const visible=window.SkyCustomization?.active===true&&state.body==='sun';panel.hidden=!visible;if(!visible){if(menu.matches(':popover-open'))menu.hidePopover();return;}
-    summary.textContent=tr('对照地点与时刻|Compare places and times');intro.textContent=tr('基准地点和日期沿用上方设置；时刻使用下方时间栏。|The controls above set the baseline place and date; the timeline sets the current time.');
-    timeTitle.textContent=tr('同一地点 · 不同时刻|One place · different times');cityTitle.textContent=tr('不同地点的对照|Compare different places');
+    const visible=window.SkyCustomization?.active===true,sun=state.body==='sun';panel.hidden=!visible;if(!visible){if(menu.matches(':popover-open'))menu.hidePopover();return;}
+    for(const n of [timeTitle,timeList,timeEmpty,addTime,cityTitle,basisSlot,cityList,cityEmpty,cityAdder,history,status])n.hidden=!sun;
+    summary.textContent=tr(sun?'地点与时间对照|Compare places and times':'实验物体与参考|Experiment objects');intro.textContent=tr(sun?'基准地点和日期在“日期与地点”中调整；当前时刻使用下方时间栏。添加的对照会显示在原图中。|Set the baseline in Date and location and the current time on the timeline. Comparisons appear in the original plot.':'在当前地点的地面上摆放物体，以月球方向作几何投影。地点和时刻仍用原来的控制调整。|Place objects on the ground at the current observation site, with geometric projections along the Moon direction. Keep using the original location and time controls.');
+    originNote.textContent=tr('小圈表示原有观察者；自定义不会自动添加物体，已保存的对象会恢复。|The center ring marks the original observer. No objects are added automatically; saved objects reappear.');
+    build.textContent=tr('摆放杆、球与参考圈|Place rods, spheres and circles');
+    cityHelp.textContent=tr(state.observerTimeBasis==='utc'&&!state.manual?'固定同一 UTC 瞬间；添加城市后，各地太阳位置同步变化。|One shared UTC instant: added cities show their local solar positions together.':'当前按各地相同真太阳时比较；要比较同一瞬间，请在上方选择“固定同一瞬间（UTC）”。|Currently comparing equal local apparent solar times. To compare one instant, choose the shared UTC option above.');
+    timeTitle.textContent=tr('同一地点 · 不同时间|One place · different times');cityTitle.textContent=tr('同一时间 · 不同地点|One time · different places');
     timeEmpty.textContent=tr('记录几个时刻，在原天空图中比较。|Pin times to compare them in the original sky.');cityEmpty.textContent=tr('添加地点；展开城市名称即可改经纬度。|Add a place; expand its name to edit coordinates.');
     addTime.textContent=tr('记录当前时刻|Pin current time');addCity.textContent=tr('添加地点|Add place');cityChoice.setAttribute('aria-label',tr('选择对照地点|Choose comparison place'));
     const originalOptions=[...document.querySelectorAll('#place option')];for(const option of cityChoice.options){const original=originalOptions.find(x=>x.value===option.value);if(original)option.textContent=original.textContent;}
     const basis=document.querySelector('[data-link-label=basis]');if(basis?.closest('.lc-basis'))basis.textContent=tr('对照时间规则|Comparison time basis');
-    undo.textContent=tr('撤销|Undo');redo.textContent=tr('重做|Redo');const history=api().history();undo.disabled=!history.undo;redo.disabled=!history.redo;
+    undo.textContent=tr('撤销|Undo');redo.textContent=tr('重做|Redo');const historyState=api().history();undo.disabled=!historyState.undo;redo.disabled=!historyState.redo;
     for(const [key,label]of Object.entries({save:'保存|Save',duplicate:'复制|Duplicate',remove:'删除|Delete'}))actions[key].textContent=tr(label);
+    if(!sun)return;
     const refs=api().list(),keys=new Set(refs.map(o=>o.source+':'+o.id));
     for(const [key,row]of rows)if(!keys.has(key)){if(menuRow===row&&menu.matches(':popover-open'))menu.hidePopover();row.element.remove();rows.delete(key);}
     for(const ref of refs){const key=ref.source+':'+ref.id;let row=rows.get(key);if(!row){row=createRow(ref);rows.set(key,row);(ref.type==='observer'?cityList:timeList).append(row.element);}row.ref=ref;row.element.dataset.comparisonId=ref.id;row.element.dataset.comparisonSource=ref.source;row.name.textContent=ref.customLabel?ref.label:tr(ref.label);row.visibility.checked=ref.visible;row.visibility.setAttribute('aria-label',tr('显示|Show')+' '+row.name.textContent);row.more.setAttribute('aria-label',tr('更多操作|More actions')+' · '+row.name.textContent);

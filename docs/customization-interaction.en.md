@@ -57,3 +57,15 @@ After entering customization, open Compare places and times inside the original 
 ## Stable navigation hierarchy (preview 71)
 
 Primary navigation keeps the same destinations and order across Sun/Moon changes, including Analemma. Current-page highlighting supports both languages. During desktop customization, Observation controls / Plot objects belongs to the page and stays present when the plot editor closes. Closing replaces only the content with a continuation action. Changing plots updates the editing target and tools, while retaining the chosen Add / Objects / Files section regardless of object count. Empty plots show empty content. Explicit object creation still reveals its properties for editing. Phones retain their native bottom workbench and selected section. Finishing customization restores normal mode.
+
+
+## Preview 72: visible entry and an empty starting point
+
+- Standalone 3D Solar system has the same Customize switch beside the language action. Immersive mode moves that same action group into its top controls. Embedded views keep the parent's mode without a duplicate switch.
+- In Lab customization, Compare places and times is at the top of the original observation menu. One place / different times and one time / different places are explicit; the latter explains shared UTC versus equal local apparent solar time using the existing time-basis control. Comparisons use the shared references without changing baseline conditions.
+- Place rods, spheres and circles opens the builder directly. New scenes start empty; two-rod and circular examples require an explicit choice. Previously saved scenes are preserved.
+- The center ring in the original sky marks the original observer. It is not a circle automatically added by customization. Restored user references remain editable and removable in Plot objects.
+
+Solar and lunar construction both start without an automatic circle. The canvas takes its background from the original `.ui-plot`; ground, grid and labels follow the existing plot palette rather than a separate green gradient. Restoring an existing saved scene is explained beside the introduction, with Empty ground and object deletion available.
+
+The lunar Lab keeps Experiment objects in the same menu position, with direct construction access; solar-only city and time comparisons stay hidden.

@@ -1,5 +1,5 @@
 .lab-comparisons[hidden]{display:none!important}
-#controls .lab-comparisons>.menu-content{padding:12px 0 4px}
+#controls .lab-comparisons>.menu-content{padding:12px 14px 14px}
 .lab-comparisons h3{font:inherit;font-weight:600;font-size:13px;line-height:1.5;margin:22px 0 8px;color:var(--design-ink)}
 .lab-comparisons .micro{font-size:12px;line-height:1.7;color:var(--design-muted);margin:4px 0 10px;overflow-wrap:anywhere}
 .lab-comparisons .lc-list{display:grid;gap:0;margin-bottom:8px}
@@ -40,3 +40,5 @@ body #controls .lab-comparisons .lc-menu button{display:block;width:100%;text-al
 
 /* Keep the original camera reset available beside the customization entry. */
 body.customization-active[data-page=lab] #stage .diagram-tool-launch{bottom:62px}
+/* Solar comparisons stay out of the lunar object panel, including flex/grid rows. */
+.lab-comparisons [hidden]{display:none!important}

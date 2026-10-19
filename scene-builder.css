@@ -1,4 +1,4 @@
-/* Preview construction tools: light paper controls, one dark scientific canvas. */
+/* Preview construction tools: existing paper controls and the original scientific plot palette. */
 .sb-controls { display: none; }
 body.scene-builder-active .sb-controls { display: block; }
 /* Original observation controls remain available below the builder tools. */
@@ -16,8 +16,8 @@ body .scene-builder button:focus-visible { outline: 2px solid var(--design-prima
 body .scene-builder button:disabled { color: var(--design-muted); background: var(--design-inset); opacity: .6; cursor: default; }
 body .sb-toolbar button { border-color: transparent; }
 body .sb-toolbar button[aria-pressed='true'] { border-color: var(--design-line); }
-.sb-hud { position: absolute; inset: 82px 22px auto; display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; color: #c4d4cc; font-size: 12px; pointer-events: none; }
-.sb-footer { position: absolute; inset: auto 20px 18px; display: flex; gap: 8px 24px; flex-wrap: wrap; justify-content: space-between; color: #c4d4cc; font-size: 12px; line-height: 1.7; pointer-events: none; }
+.sb-hud { position: absolute; inset: 82px 22px auto; display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; color: #a3b5c9; font-size: 12px; pointer-events: none; }
+.sb-footer { position: absolute; inset: auto 20px 18px; display: flex; gap: 8px 24px; flex-wrap: wrap; justify-content: space-between; color: #a3b5c9; font-size: 12px; line-height: 1.7; pointer-events: none; }
 .sb-shadow { color: #eedcb7; }
 .sb-controls { padding: 8px 0 20px; }
 .sb-controls h2 { margin: 0 0 10px; font-size: 21px; font-weight: 400; }
@@ -75,7 +75,7 @@ body .sb-tool-grid button { padding-inline:6px; font-size:12px; }
 .sb-records { margin-top:12px; font-size:12px; line-height:1.7; color:var(--design-muted); }
 .sb-reference-canvas { position:absolute; inset:0 auto 0 0; width:50%; height:100%; pointer-events:none; border-right:1px solid #78908955; }
 .sb-surface[data-comparing='true'] .sb-canvas { position:absolute; inset:0 0 0 auto; width:50%; }
-.sb-compare-label { position:absolute; top:112px; left:14px; right:14px; text-align:center; color:#c4d4cc; font-size:12px; pointer-events:none; }
+.sb-compare-label { position:absolute; top:112px; left:14px; right:14px; text-align:center; color:#a3b5c9; font-size:12px; pointer-events:none; }
 .sb-mobile-compare { display:none; pointer-events:auto; }
 @media(max-width:760px){
  .sb-surface[data-comparing='true'] .sb-canvas { width:100%; }

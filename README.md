@@ -1,12 +1,12 @@
 ## Customization preview · 自定义预览（2026-10-19）
 
-This branch now matches GPT Site preview 71. It is a review branch, not the production release. See [interaction design (English)](docs/customization-interaction.en.md) and [preview source notes](docs/preview-source.en.md). Main navigation stays fixed; desktop customization keeps Observation controls / Plot objects in place; editor categories persist across closing, reopening and switching plots. Original observation controls remain usable.
+This branch now matches GPT Site preview 72. It is a review branch, not the production release. See [interaction design (English)](docs/customization-interaction.en.md) and [preview source notes](docs/preview-source.en.md). Main navigation stays fixed; desktop customization keeps Observation controls / Plot objects in place; editor categories persist across closing, reopening and switching plots. Original observation controls remain usable.
 
-此分支已同步 GPT Site 第 71 版预览，用于审查，尚未合并正式版。详见[中文交互说明](docs/customization-interaction.zh.md)。主菜单固定；桌面自定义的“观测条件／图中对象”保持原位；关闭、重开及换图保留编辑栏目，原有观测控制仍可同时使用。
+此分支已同步 GPT Site 第 72 版预览，用于审查，尚未合并正式版。详见[中文交互说明](docs/customization-interaction.zh.md)。主菜单固定；桌面自定义的“观测条件／图中对象”保持原位；关闭、重开及换图保留编辑栏目，原有观测控制仍可同时使用。
 
 Preview / 预览：https://skymotion-impeccable-preview.ernest-chua.chatgpt.site/lab
 
-Source snapshot / 源码快照：`5ee0ed952bd5fdfe6deb96b7a1a255ab240c4c85` (GPT Site source).
+Source snapshot / 源码快照：`d041b0e59a159df937596de48368922c09d8ffab` (GPT Site source).
 
 Run from repository root / 在仓库根目录运行：
 
@@ -19,6 +19,10 @@ SKY_MOTION_PLAYWRIGHT=/path/to/playwright node tests/stable-navigation.cjs
 The stable-navigation test uses `/usr/bin/chromium`. Other interaction tests accept `SKY_MOTION_TEST_URL` to select a server. Rebuild bilingual pages with `python3 scripts/prerender-pages.py --dist .`.
 
 同步时保留原有 `.github` 正式部署配置；此分支推送不会发布正式网站。自动化交互验证使用 Chromium，不代表 Safari 实机认证。
+
+Preview 72 additionally keeps Customize visible on the standalone 3D page and in immersive mode, puts comparisons and object placement at the top of Lab’s native menu, starts both Sun/Moon construction empty, and matches construction colors to the original plots. Saved scenes are preserved and explained.
+
+第 72 版补齐三维与沉浸模式的顶部入口，把对照与物体摆放放到实验台原菜单顶部；太阳、月球新搭建均从空白开始，配色沿用原图，已有保存方案恢复时会明确提示。
 
 ---
 
