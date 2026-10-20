@@ -155,7 +155,7 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
     throw Error('embedded camera selection redo');
   await frame.locator('#sceneTools summary').click();
   const beforeDrag = await p.evaluate(() => history.length);
-  const canvas = await frame.locator('#stage canvas').boundingBox();
+  const canvas = await frame.locator('#stage canvas:not(.dt-overlay)').boundingBox();
   await p.mouse.move(canvas.x + canvas.width * 0.5, canvas.y + canvas.height * 0.4);
   await p.mouse.down();
   await p.mouse.move(canvas.x + canvas.width * 0.65, canvas.y + canvas.height * 0.45, { steps: 6 });

@@ -78,7 +78,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     );
     await frame.evaluate(() => LunarOrbitLesson.paint());
     assert(await p.locator('.lunar-controls-host #lessonText').isVisible());
-    assert.equal(await frame.locator('canvas').count(), 1);
+    assert.equal(await frame.locator('canvas:not(.dt-overlay)').count(), 1);
     assert.equal(await frame.locator('#lunarFailure').isVisible(), false);
     const science = () =>
         p.evaluate(() => ({ date: state.date, time: state.time, lat: state.lat, lon: state.lon })),
