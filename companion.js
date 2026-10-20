@@ -92,7 +92,10 @@ function renderCompanion() {
     if (m.moon.alt <= 0) below.push('月球');
     if (m.planet.alt <= 0) below.push(name);
     $('companionVisibility').textContent =
-      below.join('和') + '位于地平线下方或地平线上，当前不能按无遮挡的地平线上方天体观测。';
+      document.documentElement.lang === 'en'
+        ? below.map(name => window.skyTranslate(name)).join(' and ') +
+          window.skyTranslate('位于地平线下方或地平线上，当前不能按无遮挡的地平线上方天体观测。')
+        : below.join('和') + '位于地平线下方或地平线上，当前不能按无遮挡的地平线上方天体观测。';
   } else if (m.sun.alt >= 0)
     $('companionVisibility').textContent =
       '两者位于地平线上方，但太阳也在地平线上方；几何靠近不代表适合肉眼观测。';
@@ -229,6 +232,8 @@ function drawCompanionSky(m) {
       m.separation.toFixed(2) +
       ' 度',
   );
+  window.SkyDiagramTools?.paint('companion',{type:'companion',canvas:$('companionSky'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,clip:[left,top,right-left,bottom-top],project:q=>({x:xx(q.az),y:yy(q.alt),wrap:((q.az-view.center+540)%360)-180}),sample:(date,time)=>companionSnapshot(date,time,state.planet,state.lat,state.lon),trail:o=>SkyDiagramSampling.memo(JSON.stringify(['companion-trail',o.date,o.time,o.hours,o.step,state.planet,state.lat,state.lon]),()=>{const values=[];for(let h=-o.hours;h<=o.hours+.0001;h+=o.step)values.push(companionSnapshot(o.date,o.time+h*60,state.planet,state.lat,state.lon));return values;})});
+
 }
 function initCompanion() {
   $('companionEnabled').onchange = (e) => {

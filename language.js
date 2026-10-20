@@ -58,6 +58,7 @@
   // Canvas annotations share the same translations and English font as DOM controls.
   for (const method of ["fillText", "strokeText", "measureText"]) {
     const native = CanvasRenderingContext2D.prototype[method];
+    if(method==='fillText')window.skyFillText=(context,value,...args)=>native.call(context,value,...args);
     CanvasRenderingContext2D.prototype[method] = function (value, ...args) {
       const font = this.font;
       if (language === "en")
@@ -269,6 +270,12 @@
     document.dispatchEvent(new CustomEvent("skymotion:ready"));
   }
   window.skySetLanguage = change;
+  // Storage is optional; an embedded lesson must also work when it is blocked.
+  addEventListener('message', event => {
+    if (parent === window || event.source !== parent || event.origin !== location.origin ||
+        event.data?.type !== 'skymotion:language-sync') return;
+    change(event.data.language, false).catch(console.error);
+  });
   document.documentElement.lang = language === "en" ? "en" : "zh-CN";
   let presentationObserved = false;
   function observePresentation() {
@@ -326,7 +333,15 @@
         const bar = document.createElement("div");
         bar.className = "language-nav";
         nav.before(bar);
-        bar.append(nav, button);
+        bar.append(nav);
+        const customize = document.querySelector('.layout-launch');
+        if (customize) {
+          const actions = document.createElement('div');
+          actions.className = 'language-actions';
+          actions.dataset.i18nSkip = '';
+          actions.append(customize, button);
+          bar.append(actions);
+        } else bar.append(button);
       } else {
         (document.querySelector(".welcome-brand") || document.body).append(
           button,

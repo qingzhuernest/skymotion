@@ -39,7 +39,9 @@
       '点击“看地升”，观察地球从月面边缘出现。',
       'Choose Watch Earthrise to see Earth emerge from the lunar limb.',
     ],
-    lookHint: ['拖动画面可自由转头。', 'Drag the view to look around.'],
+    lookHint: ['拖动或使用方向键转头，Home 朝向地球。', 'Drag or use arrow keys to look around; Home faces Earth.'],
+    orbitKeys: ['轨道示意：左右键改变绕月位置，上下键改变日地月构型，Home 朝向地球。', 'Orbit diagram: Left/Right changes orbital position; Up/Down changes the Sun–Earth–Moon configuration; Home faces Earth.'],
+    skyKeys: ['宇航员视角：使用方向键转头，Home 朝向地球。', 'Astronaut view: use arrow keys to look around; Home faces Earth.'],
   };
   const t = (k) => words[k][document.documentElement.lang === 'en' ? 1 : 0];
   const s = {
@@ -77,17 +79,19 @@
     if ($(id).textContent !== value) $(id).textContent = value;
   }
   function refresh() {
+    $('orbitView').setAttribute('aria-label', t('orbitKeys'));
+    $('astronautView').setAttribute('aria-label', t('skyKeys'));
     const surface = s.mode === 'surface',
       q = M.sample(s.angle, s.altitude, s.phase, surface);
     $('orbitAngle').disabled = surface;
     $('altitude').disabled = surface;
-    $('speed').disabled = surface;
+    $('lunarSpeed').disabled = surface;
     $('playOrbit').disabled = surface;
     $('seekRise').disabled = surface;
     $('orbitAngle').value = surface ? 0 : s.angle;
     $('phaseAngle').value = s.phase;
     $('altitude').value = s.altitude;
-    $('speed').value = s.seconds;
+    $('lunarSpeed').value = s.seconds;
     $('lens').value = s.fov;
     $('playOrbit').setAttribute('aria-pressed', String(s.playing));
     text('positionValue', (surface ? 0 : s.angle).toFixed(1) + '°');
@@ -217,7 +221,7 @@
     s.altitude = +e.target.value;
     invalidate();
   };
-  $('speed').onchange = (e) => {
+  $('lunarSpeed').onchange = (e) => {
     s.seconds = +e.target.value;
     riseTarget = null;
     last = 0;
@@ -471,6 +475,12 @@
     projectLabel('mapMoon', moonPos.clone().add(v(0, -0.35, 0)), g.mapCamera, bounds.orbit);
     projectLabel('mapObserver', marker, g.mapCamera, bounds.orbit, -24);
     projectLabel('skyEarth', g.earthSky.position, g.eye, bounds.sky, 22);
+    if (window.SkyDiagramTools) {
+      const world=q=>{const a=q.angle*M.rad(1),radius=q.type==='station'?.255:.55+(q.height||100)*.00035;return moonPos.clone().addScaledVector(u,-Math.cos(a)*radius).addScaledVector(w,Math.sin(a)*radius);};
+      const screen=position=>{const p=position.clone().project(g.mapCamera);return {x:(p.x+1)*bounds.orbit.width/2,y:(1-p.y)*bounds.orbit.height/2,hidden:p.z>1||p.z< -1};};
+      const source=$('orbitView');
+      window.SkyDiagramTools.overlay('lunar',{type:'lunar',pause,canvas:source,body:'lunar',date:new Date().toISOString().slice(0,10),time:720,lat:0,lon:0,earth:screen(v()),reference:o=>screen(world(o)),readReference:o=>{const height=o.type==='station'?0:o.height||100,radius=M.R+height,theta=M.rad(o.angle),distance=Math.sqrt(M.D*M.D+radius*radius-2*M.D*radius*Math.cos(theta)),altitude=M.deg(Math.asin((M.D*Math.cos(theta)-radius)/distance)),clearance=altitude+M.deg(Math.acos(M.R/radius)),disk=M.deg(Math.asin(M.E/distance));return (clearance>disk?t('visible'):clearance< -disk?t('hidden'):t('partial'))+' · '+altitude.toFixed(2)+'°';},redraw:()=>window.LunarOrbitLesson.paint()});
+    }
     const offscreen = $('skyEarth').hidden;
     $('skyEarth').hidden = q.visibility === 'hidden' || offscreen;
     text(
@@ -496,6 +506,8 @@
     if (Math.min(observerDistance, moonDistance) > 24) return;
     if (s.mode === 'surface' && moonDistance > 24) return;
     const kind = s.mode !== 'surface' && observerDistance < moonDistance ? 'observer' : 'phase';
+    if (drag || e.button !== 0) return;
+    lessonHistory()?.beginExternal();
     drag = {
       kind,
       id: e.pointerId,
@@ -549,12 +561,46 @@
     if (drag?.id === e.pointerId) moveMap(e);
   });
   for (const type of ['pointerup', 'pointercancel', 'lostpointercapture'])
-    $('orbitView').addEventListener(type, () => {
+    $('orbitView').addEventListener(type, e => {
+      if (drag?.id !== e.pointerId) return;
       drag = null;
+      lessonHistory()?.endExternal();
     });
+  const lessonHistory = () => embedded ? parent.SkyMotionHistory : null;
+  // Frame-local controls do not bubble to the parent's history listeners.
+  for (const type of ['pointerdown', 'keydown']) document.addEventListener(type, e => {
+    if (e.target.closest?.('button,input,select') && (type === 'pointerdown' ? e.button === 0 :
+        e.key !== 'Tab' && !e.altKey && !e.ctrlKey && !e.metaKey))
+      lessonHistory()?.beginExternal();
+  }, true);
+  for (const type of ['click', 'input', 'change']) document.addEventListener(type, e => {
+    if (e.target.closest?.('button,input,select')) lessonHistory()?.endExternal();
+  }, true);
+  for (const id of ['orbitView', 'astronautView']) {
+    $(id).addEventListener('keydown', e => {
+      if (e.target !== $(id) || e.altKey || e.ctrlKey || e.metaKey ||
+          !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home'].includes(e.key)) return;
+      e.preventDefault();
+      lessonHistory()?.beginExternal();
+      pause();
+      if (e.key === 'Home') { s.follow = true; s.yaw = s.pitch = 0; }
+      else if (id === 'orbitView') {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+          if (s.mode === 'orbit') s.angle = (s.angle + (e.key === 'ArrowRight' ? 2 : -2) + 360) % 360;
+        } else s.phase = (s.phase + (e.key === 'ArrowUp' ? 2 : -2) + 360) % 360;
+        s.follow = true; s.yaw = s.pitch = 0;
+      } else {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') s.yaw += e.key === 'ArrowRight' ? -0.04 : 0.04;
+        else s.pitch = Math.max(-1.1, Math.min(1.1, s.pitch + (e.key === 'ArrowDown' ? 0.04 : -0.04)));
+      }
+      invalidate();
+      lessonHistory()?.endExternal();
+    });
+  }
   let look = null;
   $('astronautView').addEventListener('pointerdown', (e) => {
-    if (e.target.closest('button,select,label')) return;
+    if (look || e.button !== 0 || e.target.closest('button,select,label')) return;
+    lessonHistory()?.beginExternal();
     look = { x: e.clientX, y: e.clientY, yaw: s.yaw, pitch: s.pitch, id: e.pointerId };
     $('astronautView').setPointerCapture(e.pointerId);
   });
@@ -565,9 +611,14 @@
     invalidate();
   });
   for (const type of ['pointerup', 'pointercancel', 'lostpointercapture'])
-    $('astronautView').addEventListener(type, () => {
+    $('astronautView').addEventListener(type, e => {
+      if (look?.id !== e.pointerId) return;
       look = null;
+      lessonHistory()?.endExternal();
     });
+  window.addEventListener('blur', () => {
+    if (look || drag) { look = drag = null; lessonHistory()?.endExternal(); }
+  });
   window.addEventListener('message', (event) => {
     if (
       event.origin !== location.origin ||
@@ -622,6 +673,24 @@
     resize();
   });
   window.LunarOrbitLesson = {
+    snapshot: () => ({ ...s, playing: false, riseTarget }),
+    restore(value) {
+      if (!value || typeof value !== 'object' || Array.isArray(value)) return;
+      pause();
+      if (['orbit', 'surface'].includes(value.mode)) s.mode = value.mode;
+      for (const [key, min, max] of [
+        ['angle', 0, 360], ['phase', 0, 360], ['yaw', -10000, 10000],
+        ['pitch', -1.1, 1.1],
+      ]) if (Number.isFinite(value[key])) s[key] = Math.max(min, Math.min(max, value[key]));
+      if ([24, 45, 70].includes(value.fov)) s.fov = value.fov;
+      if ([100, 300, 1000].includes(value.altitude)) s.altitude = value.altitude;
+      if ([20, 40, 80].includes(value.seconds)) s.seconds = value.seconds;
+      if (typeof value.follow === 'boolean') s.follow = value.follow;
+      riseTarget = Number.isFinite(value.riseTarget) ? value.riseTarget : null;
+      last = 0;
+      invalidate();
+      refresh();
+    },
     read: () => ({
       ...s,
       orbitalHeight: s.altitude,
@@ -680,9 +749,11 @@
   if (embedded && parent !== window) {
     const earthImage = new Image();
     earthImage.src = '../earth.jpg';
-    Promise.allSettled([window.skyFirstFontsReady, earthImage.decode()]).then(() => {
+    Promise.allSettled([window.skyFirstFontsReady, earthImage.decode()]).then(async () => {
+      // The parent's in-memory locale is authoritative, even without localStorage.
+      await window.skySetLanguage?.(parent.document.documentElement.lang === 'en' ? 'en' : 'zh', false);
       window.LunarOrbitLesson.paint();
-      parent.postMessage({ type: 'skymotion:lunar-ready' }, location.origin);
+      parent.postMessage({ type: 'skymotion:lunar-ready', attempt: new URLSearchParams(location.search).get('attempt') }, location.origin);
     });
   }
 })();

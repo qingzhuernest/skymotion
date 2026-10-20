@@ -21,8 +21,8 @@ function elementVisible(node) {
   );
 }
 function canPaint(canvas) {
-  if (!elementVisible(canvas)) return false;
   const known = visibleCanvases.get(canvas);
+  if (known === false || !elementVisible(canvas)) return false;
   if (known !== undefined) return known;
   const r = canvas.getBoundingClientRect();
   return r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < innerHeight;
@@ -249,6 +249,13 @@ function motionFrame(now) {
         framePending = true;
       }
     }
+  }
+  // Layout previews move only an overlay; repaint the scientific views once on release.
+  if (window.skyWorkspaceInteracting) {
+    framePending = true;
+    if (state.playing || analemmaPlaying) requestMotionFrame();
+    else motionLast = 0;
+    return;
   }
   let cameraMoving = false;
   const target = { yaw: state.yaw, pitch: state.pitch, zoom: state.zoom };

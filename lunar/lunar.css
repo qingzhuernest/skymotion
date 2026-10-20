@@ -564,3 +564,8 @@ body[data-page='lunar'] {
   margin: 0;
   flex-shrink: 0;
 }
+
+.lunar-view:focus-visible {
+  outline: 2px solid var(--design-night-ink, #e4eef3);
+  outline-offset: -4px;
+}

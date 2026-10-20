@@ -375,6 +375,7 @@ function drawObserverSky() {
       bearing.toFixed(0) +
       " 度；只绘制地平线上方及前方的天体",
   );
+  paintLabReferences(c,w,h,p=>({...frame.project(p),hidden:p.y<0||frame.front(p)<0}),state.body);
 }
 function arrangeObserverTime() {
   const active = state.view === "observer",

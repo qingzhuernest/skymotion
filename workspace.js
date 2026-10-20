@@ -50,7 +50,6 @@ function initWorkspace() {
 function updateWorkspaceLayout() {
   if (typeof uiWorkspace !== 'undefined' && uiWorkspace) {
     workspaceBody = state.body;
-    renderUIWorkspace();
     return;
   }
   if (workspaceBody === state.body) return;

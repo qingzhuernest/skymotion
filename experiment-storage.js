@@ -19,7 +19,7 @@
   };
   const choices = {
     view: ['orbit', 'top', 'horizon', 'observer'], earthView: ['globe', 'map'],
-    globeDragMode: ['view', 'location'], analemmaBasis: ['clock', 'apparent'],
+    globeDragMode: ['view', 'location'], observerTimeBasis: ['solar','utc'], observerConstraint: ['free','latitude','longitude'], analemmaBasis: ['clock', 'apparent'],
     analemmaView: ['dome', 'sky', 'equatorial'], planet: ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn'],
     shadowZoom: [1, 2, 4, 8, 16], speed: [20, 60, 180], daysRate: [0.5, 1, 3], solarDateRate: [1, 3, 10],
   };

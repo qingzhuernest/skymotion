@@ -153,6 +153,7 @@ function analemmaSegments(points, panorama) {
   analemmaPathCache.set(points, paths);
   return segments;
 }
+function analemmaReferenceOptions(ref){return {...state,lat:ref.lat,lon:ref.lon,analemmaClock:ref.clock,analemmaBasis:ref.basis||'clock',analemmaOffset:ref.offset??state.analemmaOffset};}
 function drawAnalemma() {
   if (state.body !== 'sun' || !state.analemma || state.manual || !canPaint($('analemmaCanvas')))
     return;
@@ -220,7 +221,8 @@ function drawAnalemma() {
     } else {
       const center = points[Math.floor(points.length / 2)].hour;
       xy = (p) => ({ x: center + (((p.hour - center + 540) % 360) - 180), y: p.dec });
-      const all = tracks.flatMap((t) => t.points.map(xy)),
+      const references=(window.SkyDiagramTools?.read('analemma')||[]).filter(o=>o.visible&&o.type==='track').flatMap(o=>SkyDiagramSampling.year(analemmaReferenceOptions(o)));
+      const all = [...tracks.flatMap((t) => t.points.map(xy)),...references.map(xy)],
         xs = all.map((p) => p.x),
         ys = all.map((p) => p.y);
       lowX = Math.min(...xs);
@@ -410,6 +412,8 @@ function drawAnalemma() {
     analemmaMarker.last = p;
   } else analemmaMarker = null;
   glow(c, p.x, p.y, 4.5);
+  window.SkyDiagramTools?.paint('analemma',{type:'analemma',view:state.analemmaView,basis:state.analemmaBasis,clock:state.analemmaClock,offset:state.analemmaOffset,canvas:$('analemmaCanvas'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,clip:dome?[0,18,w,h-45]:[left,top,right-left,bottom-top],project:point=>dome?project(point):({...project(xy(point)),...(sky?{wrap:point.az}:{})}),sample:date=>analemmaSample(date),track:ref=>SkyDiagramSampling.year(analemmaReferenceOptions(ref))});
+
 }
 function renderAnalemma() {
   const sun = state.body === 'sun';
@@ -461,6 +465,7 @@ function renderAnalemma() {
       span.append(i, document.createTextNode(hhmm(t.clock) + (t.primary ? ' · 当前' : '')));
       return span;
     }),
+    ...(window.SkyDiagramTools?.read('analemma')||[]).filter(o=>o.type==='track').map((ref,index)=>({ref,index})).filter(({ref})=>ref.visible).map(({ref,index})=>{const span=document.createElement('span'),mark=document.createElement('i');mark.style.setProperty('--track-color',SkyDiagramTools.referenceColor(index));span.append(mark,document.createTextNode((ref.customLabel?ref.label:ref.label.split('|')[document.documentElement.lang==='en'?1:0])+' · '+hhmm(ref.clock)));return span;}),
   );
   $('analemmaViewHint').textContent =
     state.analemmaView === 'dome'

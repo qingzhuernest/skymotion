@@ -47,7 +47,7 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
   await settle();
   if ((await p.evaluate(() => state.time)) !== 840) throw Error('range redo');
   const count = await p.evaluate(() => history.length);
-  await p.locator('.ui-parameters details > summary').first().click();
+  await p.locator('.ui-parameters details > summary:visible').first().click();
   await settle();
   await p.locator('.motion-menu-grip').click();
   await settle();

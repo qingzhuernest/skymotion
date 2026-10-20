@@ -1,0 +1,6 @@
+/* Use the same tab navigation a person uses in the reference workbench. */
+exports.addTool=async(page,type)=>{const fold=page.locator('.dt-collapse');if(await fold.getAttribute('aria-expanded')==='false')await fold.click();await page.locator('[data-dt-view=library]').click();await page.locator(`[data-tool-type="${type}"]`).click();};
+
+exports.enterCustomization=async(page)=>{if(!await page.locator('.layout-launch').count())return;await page.waitForFunction(()=>!!window.SkyCustomization);if(await page.evaluate(()=>SkyCustomization.active))return;const selected=await page.evaluate(()=>typeof uiWorkspace==='undefined'?null:location.hash==='#sceneBuilder'?'sceneBuilder':uiWorkspace.selected);await page.locator('.layout-launch').click();if(!selected)return;const tab=page.locator(`[data-diagram="${selected}"]`);if(await tab.count()){await tab.click();await page.waitForFunction(selected=>uiWorkspace.selected===selected&&(selected==='solarCompare'?skyWorkspacePresentation.active:!skyWorkspacePresentation.active),selected);}};
+
+exports.objectAction=async(page,name)=>{if(!await page.locator('#dt-object-menu').isVisible()){const tab=page.locator('[data-dt-view=objects]');if(await tab.getAttribute('aria-current')!=='page')await tab.click();await page.locator('.dt-more').click();}await page.getByRole('menuitem',{name,exact:true}).click();};

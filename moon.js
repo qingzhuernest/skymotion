@@ -428,6 +428,8 @@ function drawPhasePanel() {
   text(c, '拖动月球 · 连续调整日期与时刻', w / 2, h - 12, '#a9c4e0', w < 260 ? 9 : 11);
   const disk = resize($('phaseDisk'));
   drawMoon(disk.c, disk.w / 2, disk.h / 2, Math.min(disk.w, disk.h) * 0.43, phase);
+  window.SkyDiagramTools?.paint('phase',{type:'phase',canvas:$('phaseOrbit'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,center,radius:r,sunX,project:angle=>({x:center.x+r*Math.cos(angle*rad),y:center.y-r*Math.sin(angle*rad)}),phaseAt:(date,time)=>Astronomy.MoonPhase(instantUTC(time,date,state.lon)),fractionAt:(date,time)=>Astronomy.Illumination('Moon',instantUTC(time,date,state.lon)).phase_fraction,pick:(x,y)=>({angle:((Math.atan2(center.y-y,x-center.x)*deg)+360)%360})});
+
 }
 
 /** Dragging changes the real observation instant; no invented phase-angle formula is used. */

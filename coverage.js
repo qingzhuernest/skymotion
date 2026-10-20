@@ -215,6 +215,8 @@ function drawWorldMap() {
     coord(state.lat, 'lat') +
     ' / ' +
     coord(state.lon, 'lon');
+  window.SkyDiagramTools?.paint('world-map',{type:'globe',observeLocation:useReferenceObserver,canvas:$('worldMap'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,sun:context,rayAt:(lat,lon)=>{const a=solar(lat,context.dec,720+(lon-context.lon)*4).az*rad;return {x:xx(lon)+40*Math.sin(a),y:yy(lat)-40*Math.cos(a)};},project:(lat,lon)=>({x:xx(lon),y:yy(lat)}),pick:(x,y)=>x<g.left||x>g.right||y<g.top||y>g.bottom?null:{lat:90-(y-g.top)/mh*180,lon:(x-g.left)/mw*360-180}});
+
 }
 function updateEarthView(paint = true) {
   renderGlobeOptions();
@@ -344,6 +346,8 @@ function drawEventCompass(m) {
   c.beginPath();
   c.arc(cx, cy, 3, 0, Math.PI * 2);
   c.fill();
+  window.SkyDiagramTools?.paint('bearings',{type:'azimuth',canvas:$('eventCompass'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,radius:r,project:(az,scale)=>({x:cx+r*scale*Math.sin(az*rad),y:cy-r*scale*Math.cos(az*rad)}),events:(date,threshold)=>SkyDiagramSampling.events(date,threshold,state.body==='moon'?'Moon':'Sun',state.lat,state.lon,state.body==='sun'&&state.manual?state.dec:null)});
+
 }
 function geometryModel() {
   const p = state.lat * rad,
@@ -492,13 +496,15 @@ function drawEarthGeometry() {
     }
     poly(c, ps, color, width, front ? [] : [3, 4]);
   }
-  ring([0, 0, 0], [1, 0, 0], [0, 0, 1], 1, '#abaef4', 1.5);
+  if(window.SkyDiagramTools?.visible('geometry','equator')!==false)ring([0, 0, 0], [1, 0, 0], [0, 0, 1], 1, '#abaef4', 1.5);
   ring([0, 0, 0], [1, 0, 0], [0, 1, 0], 1, '#7394b760');
   const axisTop = project([0, 1.3, 0]),
     axisBottom = project([0, -1.3, 0]);
+  if(window.SkyDiagramTools?.visible('geometry','axis')!==false){
   poly(c, [axisBottom, axisTop], '#fa9c89', 2);
   label(compact ? '北极' : '北极 / 地轴', axisTop.x, axisTop.y - 12, '#fac0b0', 12);
   label('南极', axisBottom.x, axisBottom.y + 13, '#fac0b0', 12);
+  }
   if (m.eclipticNormal) {
     const tip = project(scale(m.eclipticNormal, 1.22));
     poly(c, [project(scale(m.eclipticNormal, -1.22)), tip], '#b9a8db88', 1, [4, 4]);
@@ -515,19 +521,25 @@ function drawEarthGeometry() {
         ),
       ),
     );
+  if(window.SkyDiagramTools?.visible('geometry','horizon')!==false){
   c.beginPath();
   plane.forEach((p, i) => (i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)));
   c.closePath();
   c.fillStyle = '#76d4bd30';
   c.fill();
   poly(c, plane, '#76d4bd', 1.5);
+  }
   const observer = project(m.q),
     zenith = project(scale(m.q, 1.55));
+  if(window.SkyDiagramTools?.visible('geometry','zenith')!==false){
   poly(c, [project([0, 0, 0]), zenith], '#82c7ff', 1.5, [4, 4]);
   if (!compact) label('当地天顶', zenith.x, zenith.y - 13, '#a4d7ff', 12);
+  }
   const rayEnd = project(add(m.q, scale(m.sun, 0.83)));
+  if(window.SkyDiagramTools?.visible('geometry','sun')!==false){
   poly(c, [rayEnd, observer], '#ffc35a', 2, bodyPosition().alt < 0 ? [4, 4] : []);
   glow(c, rayEnd.x, rayEnd.y, 5);
+  }
   c.fillStyle = '#82c7ff';
   c.strokeStyle = '#fff';
   c.beginPath();
@@ -535,7 +547,7 @@ function drawEarthGeometry() {
   c.fill();
   c.stroke();
   if (h >= 100) label('观察者', observer.x, observer.y + 17, '#c5e6ff', 12);
-  label('太阳', rayEnd.x + 12, rayEnd.y + 7, '#ffda8b', 12, 'left');
+  if(window.SkyDiagramTools?.visible('geometry','sun')!==false)label('太阳', rayEnd.x + 12, rayEnd.y + 7, '#ffda8b', 12, 'left');
   $('geometryObserver').textContent =
     '观察纬度 ' + coord(state.lat, 'lat') + ' · 太阳高度 ' + bodyPosition().alt.toFixed(1) + '°';
   $('geometryExplanation').textContent =
@@ -545,6 +557,8 @@ function drawEarthGeometry() {
     (m.obliquity === null
       ? '理想实验不对应实际公转位置，隐藏黄道法线。'
       : '地轴与黄道法线实际夹角约 ' + m.obliquity.toFixed(2) + '°，图上的投影夹角不等于实际夹角。');
+  window.SkyDiagramTools?.paint('geometry',{type:'geometry',observeLocation:useReferenceObserver,canvas:$('earthGeometry'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,...m,lon:state.lon,project});
+
 }
 function renderSolarCoverage() {
   updateYearSlider();
@@ -556,14 +570,29 @@ function renderLunarCoverage() {
   if ($('lunarSkyDetails').open) updateEvents(false);
   $('solarGeometryPanel').hidden = true;
 }
-function chooseMapObserver(location) {
-  if (!location) return;
-  stop();
-  state.lat = location.lat;
-  state.lon = location.lon;
-  state.place = 'custom';
-  $('place').value = 'custom';
-  schedule();
+// Applying an independent reference is an explicit, reversible observation change.
+function useReferenceObserver(location) {
+  if(!location||!Number.isFinite(location.lat)||!Number.isFinite(location.lon)||Math.abs(location.lat)>90||Math.abs(location.lon)>180)return;
+  window.SkyMotionHistory?.beginExternal();
+  const moved=chooseMapObserver(location,{constraint:false});
+  requestAnimationFrame(()=>window.SkyMotionHistory?.flush());
+  return moved;
+}
+// Invert the apparent-solar clock at a fixed UTC instant, including local date rollover.
+function observerClockAt(instant,lon){
+  const t=new Date(instant),time=720+4*sunHourAngle(t,lon),estimate=new Date(instant+lon*240000).toISOString().slice(0,10);let best=null;
+  for(const offset of [0,-1,1]){const d=new Date(estimate+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+offset);const date=d.toISOString().slice(0,10);if(!SkyMotionSession.validDate(date))continue;const error=Math.abs(instantUTC(time,date,lon).getTime()-instant);if(!best||error<best.error)best={date,time,error};if(error<2)return best;}
+  return best&&best.error<1000?best:null;
+}
+function chooseMapObserver(location,options={}) {
+  if(!location||!Number.isFinite(location.lat)||!Number.isFinite(location.lon))return false;
+  stop();const origin=options.origin||state,sun=state.body==='sun',constraint=sun&&options.constraint!==false?state.observerConstraint:'free';
+  const lat=constraint==='latitude'?origin.lat:clamp(location.lat,-90,90),lon=constraint==='longitude'?origin.lon:clamp(location.lon,-180,180);
+  const instant=sun&&state.observerTimeBasis==='utc'&&!state.manual?(options.instant??instantUTC().getTime()):null,clock=instant===null?null:observerClockAt(instant,lon);
+  if(instant!==null&&!clock){$('place').value=state.place;const note=$('observerLinkReadout');if(note)note.textContent=document.documentElement.lang==='en'?'This move would leave the supported date range (1900–2100).':'此移动将超出支持日期范围（1900—2100 年）。';return false;}
+  state.lat=lat;state.lon=lon;state.place='custom';
+  if(clock){state.date=clock.date;state.time=clock.time;state.dec=dateDec(state.date);}
+  $('place').value='custom';schedule();return true;
 }
 function initCoverage() {
   initGeometryCamera();
