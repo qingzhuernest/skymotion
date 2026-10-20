@@ -212,3 +212,10 @@ body[data-page=space] .head-actions .language-actions :is(.layout-launch,.langua
 body[data-page=space] .head-actions .language-actions .layout-launch[aria-pressed=true]{background:var(--design-primary);color:var(--design-surface);border-color:var(--design-primary)}
 body[data-page=space] .head-actions .language-actions{margin:0;gap:6px}
 @media(max-width:600px){body[data-page=space].space-immersive .head{flex-wrap:wrap;gap:6px}body[data-page=space].space-immersive .head .head-actions{flex-wrap:wrap;margin-left:auto}}
+
+/* Keep the next add action visible while inspecting an existing reference. */
+.dt-object-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;flex:none}
+body .dt-object-heading h3{margin:0;min-width:0}
+body .dt-object-heading .dt-add-another{min-height:44px;flex:none;color:var(--design-primary);border-radius:var(--design-radius-control)}
+.dt-city-picker{display:grid;gap:6px;margin:0 0 14px;font-size:12px;color:var(--design-muted)}
+.dt-panel[data-placing=true] .dt-hint{display:block;max-height:none;overflow:visible}

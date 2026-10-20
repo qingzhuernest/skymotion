@@ -69,3 +69,7 @@ Primary navigation keeps the same destinations and order across Sun/Moon changes
 Solar and lunar construction both start without an automatic circle. The canvas takes its background from the original `.ui-plot`; ground, grid and labels follow the existing plot palette rather than a separate green gradient. Restoring an existing saved scene is explained beside the introduction, with Empty ground and object deletion available.
 
 The lunar Lab keeps Experiment objects in the same menu position, with direct construction access; solar-only city and time comparisons stay hidden.
+
+### Adding objects and touch placement
+
+Use Add object beside the object list to add another reference without closing properties. In the solar sky, choose a city before adding an observer. The baseline stays unchanged; identical locations have overlapping curves. Position-based tools display placement instructions: tap the plot, or choose Place at the center. Creation opens the new object’s properties. Save, duplicate and delete remain in the row’s More menu.
