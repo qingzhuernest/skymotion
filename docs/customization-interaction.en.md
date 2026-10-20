@@ -73,3 +73,5 @@ The lunar Lab keeps Experiment objects in the same menu position, with direct co
 ### Adding objects and touch placement
 
 Use Add object beside the object list to add another reference without closing properties. In the solar sky, choose a city before adding an observer. The baseline stays unchanged; identical locations have overlapping curves. Position-based tools display placement instructions: tap the plot, or choose Place at the center. Creation opens the new object’s properties. Save, duplicate and delete remain in the row’s More menu.
+
+Customize plot and Reset view use the same dark auxiliary-button styling inside plots: matching background, text, border, radius and touch size. Light sidebars and timeline playback retain their existing styling.
