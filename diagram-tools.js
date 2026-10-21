@@ -1,547 +1,3184 @@
 /** Scientific reference objects for the existing plots. Does not mutate their experiment. */
 (() => {
-  const models=new Map(), states=new Map(), portals=new Map();
-  const R=Math.PI/180, copy=x=>JSON.parse(JSON.stringify(x));
-  const validDate=value=>window.SkyMotionSession.validDate(value);
-  const en=()=>document.documentElement.lang==='en';
-  const tr=x=>typeof x==='string'?(x.split('|')[en()?1:0]||x.split('|')[0]):String(x);
-  const E=(tag,cls,parent)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(parent)parent.append(e);return e;};
-  const field=(name,title,value,min,max,step=1)=>({name,title,value,min,max,step});
-  const choice=(name,title,value,options)=>({name,title,value,options});
-  const date=()=>field('date','日期 YYYY-MM-DD|Date YYYY-MM-DD','date');
-  const time=()=>field('time','当地真太阳时 HH:MM|Local apparent solar time HH:MM','time',0,1440,1);
-  const lat=()=>field('lat','纬度 / °|Latitude / °','lat',-90,90,.1);
-  const lon=()=>field('lon','经度 / °|Longitude / °','lon',-180,180,.1);
-  const type=(id,title,fields)=>({id,title,fields});
-  const common=[type('note','文字说明|Text note',[field('x','水平位置 / %|Horizontal / %',50,0,100),field('y','竖直位置 / %|Vertical / %',30,0,100)]),type('emphasis','重点圈|Highlight circle',[field('x','水平位置 / %|Horizontal / %',50,0,100),field('y','竖直位置 / %|Vertical / %',50,0,100),field('radius','半径 / %|Radius / %',10,1,40)])];
-  const definitions={
-    sky:[type('observer','观察点 / 城市|Observer / city',[lat(),lon()]),type('curve','日期对照曲线|Date comparison curve',[date()]),type('time','时间标记|Time marker',[time()]),type('build','摆放实验物体|Place experiment objects',[])],
-    globe:[type('observer','观察点 / 城市|Observer / city',[lat(),lon()]),type('latitude','纬度参考线|Latitude line',[lat()]),type('longitude','经度参考线|Longitude line',[lon()]),type('ray','观察点太阳方向|Sun direction at observer',[lat(),lon()])],
-    altitude:[type('curve','日期对照曲线|Date comparison curve',[date()]),type('level','参考高度线|Altitude reference',[field('alt','高度 / °|Altitude / °',30,-90,90)]),type('time','时间标记|Time marker',[time()]),type('measure','两点时间 / 高度差|Measure time / altitude difference',[field('a','第一个时刻 / 分钟|First time / minutes',600,0,1440),field('b','第二个时刻 / 分钟|Second time / minutes',840,0,1440)])],
-    illumination:[type('curve','月份对照曲线|Compare another month',[date()]),type('level','照明比例参考线|Illumination reference',[field('value','照明比例 / %|Illumination / %',50,0,100)]),type('date','日期标记|Date marker',[date()]),type('measure','两日照明差|Illumination difference',[field('a','日期 A|Date A','date'),field('b','日期 B|Date B','date')])],
-    azimuth:[type('direction','方向线|Direction',[field('az','方位角 / °|Azimuth / °',90,0,360)]),type('ring','方位参考圈|Bearing circle',[field('radius','相对半径 / %|Relative radius / %',70,10,120)]),type('events','日期 / 遮挡角对照|Date / obstruction comparison',[date(),field('obstruction','地平遮挡角 / °|Horizon obstruction / °',0,0,30,.5)])],
-    geometry:[type('observer','观察者与当地竖杆|Observer and local vertical',[lat(),lon(),field('height','示意杆长 / 地球半径|Illustrative length / Earth radius',.4,.1,1,.05)]),type('ring','空间参考圈|Spatial reference circle',[choice('plane','所在平面|Plane','horizon',['horizon:当地地平面|Local horizon','equator:赤道面|Equator','meridian:子午面|Meridian']),field('radius','示意半径|Illustrative radius',.6,.2,1.5,.1)]),type('visibility','原图显示开关|Original diagram visibility',[...['axis','equator','horizon','zenith','sun'].map(name=>choice(name,({axis:'地轴|Earth axis',equator:'赤道面|Equatorial plane',horizon:'地平面|Horizon plane',zenith:'天顶|Zenith',sun:'太阳方向|Sun direction'})[name],'yes',['yes:显示|Show','no:隐藏|Hide']))]),type('angle','空间夹角|Spatial angle',[choice('a','方向 A|Direction A','axis',['axis:地轴|Earth axis','sun:太阳方向|Sun direction','zenith:天顶|Zenith','north:当地北方|Local north']),choice('b','方向 B|Direction B','zenith',['axis:地轴|Earth axis','sun:太阳方向|Sun direction','zenith:天顶|Zenith','north:当地北方|Local north'])]),type('direction','方向箭头|Direction vector',[choice('direction','方向|Direction','sun',['sun:太阳方向|Sun direction','axis:地轴|Earth axis','zenith:天顶|Zenith','north:当地北方|Local north'])])],
-    phase:[type('snapshot','记录指定日期月相|Dated phase snapshot',[date(),time(),choice('sight','显示视线|Show sightline','yes',['yes:显示|Show','no:隐藏|Hide'])]),type('phase','指定相位标记|Phase position marker',[field('angle','相位角 / °|Phase angle / °',90,0,360)]),type('rays','平行光参考线|Parallel light references',[field('count','条数|Line count',5,1,15),field('spread','相对间距|Relative spacing',.2,.05,.5,.05)]),type('observer','地球上的观察方向|Observer direction',[field('angle','方向角 / °|Direction / °',0,0,360)])],
-    companion:[type('snapshot','日期位置与角距离|Dated positions and separation',[date(),time()]),type('trail','连续位置轨迹|Position trail',[date(),time(),field('hours','前后时间 / 小时|Hours before and after',6,1,24),field('step','采样间隔 / 小时|Sample interval / hours',1,.5,6,.5)])],
-    analemma:[type('track','地点 / 时刻对照轨迹|Location / time comparison track',[lat(),lon(),field('clock','每日固定时刻 / 分钟|Fixed daily time / minutes',720,0,1439),choice('basis','时间规则|Time basis','clock',['clock:钟表时|Clock time','apparent:当地真太阳时|Local apparent solar time']),field('offset','钟表时区 / UTC 偏移|Clock zone / UTC offset',8,-12,14,.5)]),type('date','指定日期标记|Dated marker',[date()]),type('level','高度参考圈 / 线|Altitude reference circle / line',[field('alt','高度 / °|Altitude / °',30,0,90)])],
-    lunar:[type('station','固定月面站|Fixed lunar station',[field('angle','相对近地侧角度 / °|Angle from near side / °',0,0,360)]),type('orbiter','绕月参考位置|Reference orbiter',[field('angle','绕月位置 / °|Orbital position / °',258,0,360),field('height','轨道高度 / km|Orbital height / km',100,50,2000,10)]),type('sight','视线与月缘可见性|Sightline and lunar-limb visibility',[field('angle','绕月位置 / °|Orbital position / °',270,0,360),field('height','轨道高度 / km|Orbital height / km',100,50,2000,10)])],
-    space:[type('plane','参考平面|Reference plane',[choice('plane','平面|Plane','xz',['xz:黄道参考面|Ecliptic reference','xy:竖直 XY 面|Vertical XY','yz:竖直 YZ 面|Vertical YZ']),field('radius','显示半径 / 场景单位|Display radius / scene units',20,2,100)]),type('distance','行星间距离|Distance between planets',[choice('a','天体 A|Body A','Earth',['Mercury:水星|Mercury','Venus:金星|Venus','Earth:地球|Earth','Mars:火星|Mars','Jupiter:木星|Jupiter','Saturn:土星|Saturn']),choice('b','天体 B|Body B','Mars',['Mercury:水星|Mercury','Venus:金星|Venus','Earth:地球|Earth','Mars:火星|Mars','Jupiter:木星|Jupiter','Saturn:土星|Saturn'])]),type('angle','日心夹角|Heliocentric angle',[choice('a','天体 A|Body A','Earth',['Mercury:水星|Mercury','Venus:金星|Venus','Earth:地球|Earth','Mars:火星|Mars','Jupiter:木星|Jupiter']),choice('b','天体 B|Body B','Mars',['Mercury:水星|Mercury','Venus:金星|Venus','Earth:地球|Earth','Mars:火星|Mars','Jupiter:木星|Jupiter'])]),type('camera','保存当前观察相机|Save current camera',[])]
+  const models = new Map(),
+    states = new Map(),
+    portals = new Map();
+  const R = Math.PI / 180,
+    copy = (x) => JSON.parse(JSON.stringify(x));
+  const validDate = (value) => window.SkyMotionSession.validDate(value);
+  const en = () => document.documentElement.lang === 'en';
+  const tr = (x) =>
+    typeof x === 'string' ? x.split('|')[en() ? 1 : 0] || x.split('|')[0] : String(x);
+  const E = (tag, cls, parent) => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (parent) parent.append(e);
+    return e;
   };
-  const titles={globe:'地球与昼夜|Earth and daylight',altitude:'高度曲线|Altitude curve',illumination:'逐日照明比例|Daily illumination',azimuth:'升落方位|Rise and set bearings',geometry:'地轴与地平面|Axis and horizon',phase:'月相关系|Moon phase relationships',companion:'行星伴月|Moon–planet comparison',analemma:'日行迹|Analemma',lunar:'地升地落|Earthrise',space:'三维太阳系|3D Solar system',sky:'天空与时间对照|Sky and time comparisons'};
-  let current=null,selected=null,armed=null,serial=0,drag=null,editing=true,nudging=null,visibilityTimer=0;
-  const panel=E('section','diagram-tools dt-panel',document.body);panel.hidden=true;panel.id='diagram-tool-panel';panel.dataset.i18nSkip='';panel.setAttribute('role','region');
-  const head=E('div','dt-head',panel),title=E('h2','',head),close=E('button','',head);close.type='button';close.textContent='×';close.onclick=()=>hide();title.id='diagram-tool-heading';panel.setAttribute('aria-labelledby',title.id);
-  const fold=E('button','dt-collapse',panel);fold.type='button';fold.setAttribute('aria-expanded','true');fold.onclick=()=>{panel.dataset.collapsed=String(panel.dataset.collapsed!=='true');updateFold();};
-  head.insertBefore(fold,close);
-  function updateFold(){const collapsed=panel.dataset.collapsed==='true';fold.textContent=tr(collapsed?'展开工作台|Expand workbench':'收起工作台|Collapse workbench');fold.setAttribute('aria-label',fold.textContent);fold.setAttribute('aria-expanded',String(!collapsed));}
-  const modeBar=E('div','dt-modes',panel);modeBar.hidden=true;modeBar.setAttribute('role','group');
-  const editMode=E('button','',modeBar),exploreMode=E('button','',modeBar);editMode.type=exploreMode.type='button';editMode.dataset.mode='edit';exploreMode.dataset.mode='explore';
-  editMode.onclick=()=>setMode(true);exploreMode.onclick=()=>setMode(false);
-  function updateMode(){modeBar.hidden=true;modeBar.setAttribute('aria-label',tr('图面操作方式|Plot interaction mode'));editMode.textContent=tr('移动图中标记|Move plot markers');exploreMode.textContent=tr('按原图操作|Use original controls');editMode.setAttribute('aria-pressed',String(editing));exploreMode.setAttribute('aria-pressed',String(!editing));if(current)(current.host||current.canvas).classList.toggle('dt-editing',!panel.hidden&&customizationOn());}
-  function setMode(value){commitActive();if(!validInputs())return;finishNudge();cancelDrag();editing=value;armed=null;updateMode();placementUI();repaint();}
-  const tabs=E('nav','dt-tabs',panel),scroll=E('div','dt-scroll',panel),library=E('section','dt-library',scroll),objects=E('section','dt-objects',scroll),files=E('section','dt-files',scroll);
-  let selectedSource=null;
-  function selectedOwner(){return current&&selectedSource&&selectedSource!==current.id?comparisonModel(selectedSource):current;}
-  function selectedKey(){return selectedSource&&selectedSource!==current?.id?selectedSource+':'+selected:selected;}
-  function entries(){if(!current)return[];const local=stateFor(current).objects.map(o=>({o,source:current.id}));if(current.body==='sun'&&['lab','diagrams'].includes(document.body.dataset.page)){for(const o of comparisonList())if(o.source!==current.id)local.push({o,source:o.source});}return local;}
-  function restoredSection(){try{const value=sessionStorage.getItem('sky-reference-section-v1');return ['library','objects','files'].includes(value)?value:'library';}catch{return 'library';}}
-  let activeView='objects',pendingImport=null,clearPending=false,importRequest=0,blockedRail=null,railWasInert=false,mountedRail=null,railScroll=0,railNavigation=null,railView='references',referenceMode=true;
-  let persistedSection=activeView;
-  const views={library,objects,files},tabLabels={library:'添加对象|Add object',objects:'返回对象|Back to objects',files:'方案|Plans'};
-  for(const key of Object.keys(views)){const b=E('button','',tabs);b.type='button';b.dataset.dtView=key;b.onclick=()=>switchView(activeView===key&&key!=='objects'?'objects':key);}
-  function switchView(key,force=false){
-    if(!force){commitActive();if(!validInputs())return;if(armed){armed=null;placementUI();repaint();}clearPending=false;updateFiles();}
-    const positions=current?(stateFor(selectedOwner()).viewScroll??={}):{};
-    positions[activeView]=scroll.scrollTop;
-    if(key==='files'&&current&&selectedSource!==current.id){selectedSource=current.id;selected=stateFor(current).lastSelected||null;}activeView=key;if(persistedSection!==key){try{sessionStorage.setItem('sky-reference-section-v1',key);persistedSection=key;}catch{}}scroll.dataset.view=key;
-    for(const [name,section]of Object.entries(views))section.hidden=name!==key;
-    for(const b of tabs.querySelectorAll('[data-dt-view]')){
-      b.textContent=tr(tabLabels[b.dataset.dtView]);b.title=b.textContent;b.hidden=b.dataset.dtView==='objects'&&key==='objects';b.setAttribute('aria-expanded',String(b.dataset.dtView===key));
-      if(b.dataset.dtView===key)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
-    }
-    scroll.scrollTop=positions[key]||0;
+  const { definitions, common, titles } = window.SkyDiagramDefinitions;
+  let current = null,
+    selected = null,
+    armed = null,
+    serial = 0,
+    drag = null,
+    editing = true,
+    nudging = null,
+    visibilityTimer = 0;
+  const panel = E('section', 'diagram-tools dt-panel', document.body);
+  panel.hidden = true;
+  panel.id = 'diagram-tool-panel';
+  panel.dataset.i18nSkip = '';
+  panel.setAttribute('role', 'region');
+  const head = E('div', 'dt-head', panel),
+    title = E('h2', '', head),
+    close = E('button', '', head);
+  close.type = 'button';
+  close.textContent = '×';
+  close.onclick = () => hide();
+  title.id = 'diagram-tool-heading';
+  panel.setAttribute('aria-labelledby', title.id);
+  const fold = E('button', 'dt-collapse', panel);
+  fold.type = 'button';
+  fold.setAttribute('aria-expanded', 'true');
+  fold.onclick = () => {
+    panel.dataset.collapsed = String(panel.dataset.collapsed !== 'true');
+    updateFold();
+  };
+  head.insertBefore(fold, close);
+  function updateFold() {
+    const collapsed = panel.dataset.collapsed === 'true';
+    fold.textContent = tr(
+      collapsed ? '展开工作台|Expand workbench' : '收起工作台|Collapse workbench',
+    );
+    fold.setAttribute('aria-label', fold.textContent);
+    fold.setAttribute('aria-expanded', String(!collapsed));
   }
-  // Only scroll the workbench's own content, never the surrounding page/canvas.
-  function revealField(input){
-    const container=desktopSplit()&&inspector.contains(input)?inspector:scroll;revealWithin(input,container);
+  function updateMode() {
+    if (current)
+      (current.host || current.canvas).classList.toggle(
+        'dt-editing',
+        !panel.hidden && customizationOn(),
+      );
   }
-  const desktopSplit=()=>matchMedia('(min-width:1000px) and (min-height:650px)').matches;
-  function revealWithin(element,container){
-    const r=element.getBoundingClientRect(),bounds=container.getBoundingClientRect();
-    if(r.bottom>bounds.bottom-8)container.scrollTop+=r.bottom-bounds.bottom+8;
-    else if(r.top<bounds.top+8)container.scrollTop+=r.top-bounds.top-8;
-  }
-  const libraryTitle=E('h3','',library),libraryIntro=E('p','dt-caption',library),cityPicker=E('label','dt-city-picker',library),cityCaption=E('span','',cityPicker),citySelect=E('select','',cityPicker),add=E('div','dt-add',library),recipe=E('button','dt-recipe',library);
-  recipe.type='button';recipe.onclick=addRecipe;recipe.hidden=true;
-  citySelect.id='dt-add-city';cityCaption.textContent=tr('新增观察点的地点|Location for the new observer');
-  for(const option of document.querySelectorAll('#place option')){const copy=option.cloneNode(true);if(copy.value==='custom')continue;citySelect.append(copy);}citySelect.value=document.querySelector('#place')?.value||'';
-  const objectHeading=E('div','dt-object-heading',objects),objectTitle=E('h3','',objectHeading),addAnother=E('button','dt-add-another',objectHeading);addAnother.type='button';addAnother.hidden=true;addAnother.onclick=()=>{switchView('library');if(activeView==='library'){scroll.scrollTop=0;add.querySelector('button:not(:disabled)')?.focus({preventScroll:true});}};
-  const list=E('div','dt-list',objects),inspector=E('section','dt-inspector',objects),inspectorTitle=E('h3','',inspector),form=E('div','dt-fields',inspector),result=E('p','dt-result',inspector),actions=E('div','dt-actions dt-footer',panel),status=E('p','dt-status',panel);
-  const mobileBack=E('button','dt-back-list',objects);mobileBack.type='button';mobileBack.onclick=()=>{panel.dataset.detail='false';scroll.scrollTop=0;selectedRow()?.focus({preventScroll:true});};objects.insertBefore(mobileBack,inspector);
-  const referenceHelp=E('p','dt-reference-help',inspector);inspector.insertBefore(referenceHelp,form);
-  const locationPanel=E('div','dt-location',inspector),locationInfo=E('p','',locationPanel),locationApply=E('button','',locationPanel);inspector.insertBefore(locationPanel,form);locationApply.type='button';locationApply.dataset.observeLocation='';
-  const objectActions=E('div','dt-object-actions dt-actions',inspector),historyActions=E('div','dt-history dt-actions',panel);
-  tabs.append(historyActions);
-  const help=E('button','dt-help-toggle',historyActions);help.type='button';help.setAttribute('aria-expanded','false');help.setAttribute('aria-controls','dt-help-text');help.onclick=()=>{panel.dataset.help=String(panel.dataset.help!=='true');help.setAttribute('aria-expanded',panel.dataset.help);};
-  const hint=E('p','dt-hint',panel),placement=E('button','dt-place',panel),cancelPlacement=E('button','dt-cancel-place',panel);cancelPlacement.type='button';cancelPlacement.hidden=true;cancelPlacement.onclick=()=>{armed=null;placementUI();switchView('objects',true);repaint();};panel.insertBefore(cancelPlacement,tabs);panel.insertBefore(hint,tabs);panel.insertBefore(placement,tabs);
-  hint.id='dt-help-text';
-  status.setAttribute('role','status');status.id='diagram-tool-status';result.setAttribute('aria-live','polite');placement.type='button';placement.hidden=true;placement.onclick=()=>placeAt(current.w/2,current.h/2);
-  const fileTitle=E('h3','',files),fileIntro=E('p','dt-caption',files),fileActions=E('div','dt-file-actions dt-actions',files),importReview=E('div','dt-import-review',files),fileInput=E('input','',files);fileInput.type='file';fileInput.accept='.json,application/json';fileInput.hidden=true;fileInput.onchange=()=>readImport(fileInput.files[0]);
-  function placementUI(){updateMode();help.textContent=tr('操作提示|Help');help.title=help.textContent;panel.dataset.placing=String(!!armed);placement.hidden=cancelPlacement.hidden=!armed;panel.dataset.placing=String(!!armed);cancelPlacement.textContent=tr('取消放置|Cancel placement');placement.textContent=tr('直接放在图中央|Place at the center');hint.textContent=armed?tr('已选：|Selected: ')+tr(armed.title)+tr('。点一下画布放置，或点击下方按钮直接添加。点“取消放置”或按 Esc 可取消。|. Tap the plot to place it, or use the button below. Choose Cancel placement or press Esc to cancel.'):tr('点选对象查看属性，拖动手柄调整；空白处沿用原图操作。方向键微调，Ctrl/Cmd+Z 撤销，Esc 取消当前操作。|Select an object to view properties and drag its handle to adjust it. Empty space uses the original plot controls. Arrow keys nudge, Ctrl/Cmd+Z undoes, and Esc cancels the current action.');}
-  function arm(def){finishNudge();editing=true;armed=def;panel.dataset.detail='false';placementUI();if(current.canvas.tabIndex<0)current.canvas.tabIndex=0;current.canvas.focus({preventScroll:true});}
-  function placeAt(x,y){if(!armed||!current)return;const def=armed,point=['note','emphasis'].includes(def.id)?{x:x/current.w*100,y:y/current.h*100}:current.pick?.(x,y);if(point===null){status.textContent=tr('请在有效区域内选择|Choose a valid point');return;}armed=null;create(def,point);}
-  const action=(zh,en,fn)=>{const b=E('button','',actions);b.type='button';b.dataset.dtLabel=zh+'|'+en;b.onclick=fn;return b;};
-  const undo=action('撤销','Undo',()=>travel('undo','redo')),redo=action('重做','Redo',()=>travel('redo','undo'));undo.classList.add('dt-undo');redo.classList.add('dt-redo');historyActions.append(undo,redo);head.insertBefore(help,fold);
-  const duplicate=action('复制','Duplicate',()=>{if(!validInputs())return;mutate(s=>{const o=s.objects.find(x=>x.id===selected);if(!o||s.objects.length>=40)return;const q=copy(o);q.locked=false;q.id='d'+Date.now()+ ++serial;
-    if(o.customLabel){let n=2;while(s.objects.some(x=>x.label===o.label+' '+n))n++;q.label=o.label+' '+n;}
-    else{q.copyNumber=Math.max(1,...s.objects.filter(x=>x.type===o.type&&!x.customLabel).map(x=>x.copyNumber||1))+1;const title=defs(selectedOwner()).find(d=>d.id===o.type).title;q.label=title.split('|').map(x=>x+' '+q.copyNumber).join('|');}
-    if(['note','emphasis'].includes(q.type)){let placed=false;for(let ring=1;ring<=10&&!placed;ring++)for(const [dx,dy]of [[1,1],[1,-1],[-1,1],[-1,-1],[1,0],[-1,0],[0,1],[0,-1]]){const x=o.x+dx*ring*3,y=o.y+dy*ring*3;if(x<0||x>100||y<0||y>100)continue;const box=q.type==='note'?textLayout(current,q.customLabel?q.label:tr(q.label),{x:current.w*x/100,y:current.h*y/100}):null;const occupied=s.objects.some(v=>{if(!['note','emphasis'].includes(v.type))return false;if(Math.hypot(v.x-x,v.y-y)<2.5)return true;if(!box||v.type!=='note')return false;const other=textLayout(current,v.customLabel?v.label:tr(v.label),{x:current.w*v.x/100,y:current.h*v.y/100});return box.x<other.x+other.width+6&&box.x+box.width+6>other.x&&box.y<other.y+20&&box.y+20>other.y;});if(occupied)continue;q.x=x;q.y=y;placed=true;break;}}
-    if(o.autoLabel&&!o.customLabel){q.autoLabel=o.autoLabel.split('|').map(x=>x.replace(/ \d+$/,'')+' '+q.copyNumber).join('|');q.label=q.autoLabel;}s.objects.push(q);selected=q.id;});});
-  const remove=action('删除','Delete',()=>{commitActive();if(validInputs())mutate(s=>{const index=s.objects.findIndex(o=>o.id===selected);s.objects=s.objects.filter(o=>o.id!==selected);selected=s.objects[Math.max(0,Math.min(index,s.objects.length-1))]?.id||null;});});
-  objectActions.append(duplicate,remove);
-  const backward=action('向后叠放','Send backward',()=>reorder(-1)),forward=action('向前叠放','Bring forward',()=>reorder(1));objectActions.append(backward,forward);
-  const saveAction=action('保存本图对象','Save plot objects',save);saveAction.title='Ctrl/Cmd+S';saveAction.setAttribute('aria-keyshortcuts','Control+s Meta+s');const exportAction=action('导出','Export',()=>{commitActive();if(!current||!validInputs())return;const blob=new Blob([JSON.stringify({version:1,plot:current.type,body:current.body||'shared',objects:stateFor(selectedOwner()).objects},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`skymotion-${current.type}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
-  duplicate.title='Ctrl/Cmd+D';duplicate.setAttribute('aria-keyshortcuts','Control+d Meta+d');saveAction.dataset.save='';const objectMenu=E('div','dt-object-menu',actions);objectMenu.id='dt-object-menu';objectMenu.setAttribute('popover','auto');objectMenu.setAttribute('role','menu');objectMenu.setAttribute('aria-label',tr('对象操作|Object actions'));
-  objectMenu.append(saveAction,duplicate,remove);
-  const more=E('button','dt-more');more.type='button';more.setAttribute('aria-haspopup','menu');more.setAttribute('aria-controls',objectMenu.id);more.setAttribute('aria-expanded','false');more.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>';
-  for(const b of objectMenu.children){b.setAttribute('role','menuitem');b.tabIndex=-1;b.addEventListener('click',()=>{closeObjectMenu();});}
-  function menuOpen(){return objectMenu.matches(':popover-open');}
-  function closeObjectMenu(){if(menuOpen())objectMenu.hidePopover();more.setAttribute('aria-expanded','false');}
-  more.onclick=()=>{if(menuOpen()){closeObjectMenu();return;}commitActive();objectMenu.showPopover();more.setAttribute('aria-expanded','true');const r=more.getBoundingClientRect();objectMenu.style.left=Math.max(8,Math.min(innerWidth-objectMenu.offsetWidth-8,r.right-objectMenu.offsetWidth))+'px';objectMenu.style.top=Math.max(8,r.top-objectMenu.offsetHeight-6)+'px';objectMenu.querySelector('button:not(:disabled)')?.focus();};
-  objectMenu.addEventListener('toggle',e=>{more.setAttribute('aria-expanded',String(e.newState==='open'));});
-  objectMenu.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closeObjectMenu();more.focus();return;}if(!['ArrowDown','ArrowUp','Home','End'].includes(e.key))return;e.preventDefault();e.stopPropagation();const choices=[...objectMenu.querySelectorAll('button:not(:disabled)')],i=choices.indexOf(document.activeElement);choices[e.key==='Home'?0:e.key==='End'?choices.length-1:(i+(e.key==='ArrowDown'?1:-1)+choices.length)%choices.length]?.focus();});
-  actions.prepend(status);
-  const importAction=action('导入 JSON','Import JSON',()=>{commitActive();if(validInputs())fileInput.click();}),clearAction=action('清空本图参考','Clear plot references',()=>{commitActive();if(!validInputs())return;if(!clearPending){clearPending=true;clearAction.textContent=tr('确认清空（可撤销）|Confirm clear (undoable)');return;}mutate(s=>{s.objects=[];selected=null;});clearPending=false;updateFiles();});
-  const planSave=E('button','',fileActions);planSave.type='button';planSave.onclick=save;planSave.dataset.dtLabel='保存本图对象|Save plot objects';fileActions.append(exportAction,importAction,clearAction);
-  function reorder(delta){if(!validInputs())return;mutate(s=>{const i=s.objects.findIndex(o=>o.id===selected),j=i+delta;if(i>=0&&j>=0&&j<s.objects.length)[s.objects[i],s.objects[j]]=[s.objects[j],s.objects[i]];});}
-  function updateFiles(){fileTitle.textContent=tr('本图方案|Plot plans');fileIntro.textContent=tr('保存仅保留在此设备。导出 JSON 可以备份或转移到另一台设备；导入前可选择合并或替换。|Save keeps references on this device. Export JSON for backup or another device; review an import before merging or replacing.');clearAction.textContent=tr(clearPending?'确认清空（可撤销）|Confirm clear (undoable)':'清空本图参考|Clear plot references');clearAction.disabled=!current||!stateFor(selectedOwner()).objects.length;}
-  async function readImport(file) {
-    fileInput.value='';
-    if(!file||!current)return;
-    const model=current,key=model.id+':'+(model.body||'shared'),request=++importRequest;
-    const stillCurrent=()=>request===importRequest&&!panel.hidden&&current&&key===current.id+':'+(current.body||'shared');
-    try {
-      if(file.size>200000)throw Error('size');
-      const text=await file.text();
-      if(!stillCurrent())return;
-      const data=JSON.parse(text);
-      if(data.version!==1||data.plot!==model.type||(data.body&&data.body!==(model.body||'shared'))||!Array.isArray(data.objects)||data.objects.length>40)throw Error('schema');
-      const accepted=clean(data.objects,model);
-      if(!accepted.length&&data.objects.length)throw Error('empty');
-      pendingImport=accepted.map(o=>({...o,id:'d'+Date.now()+ ++serial}));
-      importReview.replaceChildren();
-      const message=E('p','dt-caption',importReview);
-      message.textContent=tr('可导入参考对象：|References ready to import: ')+accepted.length+(accepted.length!==data.objects.length?tr('（不支持的对象已略过）| (unsupported objects skipped)'):'');
-      for(const [mode,label]of [['merge','合并到本图|Merge into plot'],['replace','替换本图|Replace plot'],['cancel','取消|Cancel']]) {
-        const b=E('button','',importReview);b.type='button';b.textContent=tr(label);
-        b.onclick=()=>{
-          if(mode==='cancel'){pendingImport=null;importReview.replaceChildren();return;}
-          if(!validInputs())return;
-          const imported=pendingImport;
-          if(!imported)return;
-          if(mode==='merge'&&stateFor(selectedOwner()).objects.length+imported.length>40){status.textContent=tr('合并后超过 40 个对象；请改用替换或减少现有对象。|Merging exceeds 40 references; replace or remove some existing references.');return;}
-          mutate(s=>{s.objects=mode==='replace'?copy(imported):[...s.objects,...copy(imported)];selected=imported.at(-1)?.id||null;});
-          pendingImport=null;importReview.replaceChildren();switchView('objects',true);
-        };
-      }
-      status.textContent=tr('文件已读取，选择合并或替换。|File ready; choose merge or replace.');
-    } catch {
-      if(!stillCurrent())return;
-      pendingImport=null;importReview.replaceChildren();
-      status.textContent=tr('无法导入：请选择同一天体、同类图解的有效 JSON 文件（不超过 200 KB）。|Import failed. Choose valid JSON for this plot and body, up to 200 KB.');
-    }
-  }
-  function cityLabel(){const text=citySelect.selectedOptions[0]?.textContent||tr('观察点 / 城市|Observer / city'),dict=window.skyEnglishDictionary||{},zh=en()?Object.keys(dict).find(k=>dict[k]===text)||text:text;return zh+'|'+(dict[zh]||text);}
-  function makeObject(def,point){const o={id:'d'+Date.now()+ ++serial,type:def.id,label:def.title,visible:true,locked:false,customLabel:false};for(const f of def.fields){const v=typeof f.value==='string'&&['date','time','lat','lon'].includes(f.value)?current[f.value]:f.value;o[f.name]=v??f.value;}const siblings=stateFor(selectedOwner()).objects.filter(v=>v.type===def.id&&!v.customLabel);if(siblings.length){o.copyNumber=Math.max(...siblings.map(v=>v.copyNumber||1))+1;o.label=def.title.split('|').map(v=>v+' '+o.copyNumber).join('|');}if(current.type==='analemma'&&def.id==='track'){o.clock=current.clock??720;o.basis=current.basis||'clock';o.offset=current.offset??8;}if(def.id==='camera')o.camera=current.captureCamera?.();if(point)Object.assign(o,point);if(o.autoLabel){const base=o.autoLabel;let n=1,candidate=base;while(stateFor(current).objects.some(q=>(q.autoLabel||q.label)===candidate)){n++;candidate=base.split('|').map(x=>x+' '+n).join('|');}o.label=o.autoLabel=candidate;}return o;}
-  function addRecipe(){selectedSource=current.id;commitActive();if(!validInputs())return;const recipes={globe:[['observer',{lat:current.lat,lon:current.lon}],['observer',{lat:current.lat,lon:((current.lon+360)%360)-180}],['ray',{lat:0,lon:current.lon}]],altitude:[['time',{time:600}],['time',{time:840}],['measure',{}]],illumination:[['date',{}],['level',{value:50}]],sky:[['time',{time:600}],['time',{time:840}]],azimuth:[['direction',{az:90}],['direction',{az:270}],['ring',{}]],geometry:[['ring',{}],['angle',{}]],phase:[['phase',{angle:90}],['phase',{angle:270}],['rays',{}]],companion:[['snapshot',{}],['trail',{}]],analemma:[['track',{clock:600}],['track',{clock:840}]],lunar:[['station',{angle:0}],['station',{angle:180}],['sight',{}]],space:[['distance',{}],['angle',{}],['plane',{}]]};const available=defs(current),items=(recipes[current.type]||[]).filter(([id])=>available.some(d=>d.id===id));if(stateFor(selectedOwner()).objects.length+items.length>40){status.textContent=tr('空间不足；请先删除一些对象。|Not enough room; remove some references first.');return;}editing=true;mutate(s=>{for(const [id,values]of items){const o=makeObject(available.find(d=>d.id===id),values);s.objects.push(o);selected=o.id;}});switchView('objects',true);}
-  const draftKey=m=>'sky-diagram-draft-v2:'+m.id+':'+(m.body||'shared');
-  function persist(m,s){try{sessionStorage.setItem(draftKey(m),JSON.stringify({version:1,objects:s.objects}));}catch{}}
-  function stateFor(m){const key=m.id+':'+(m.body||'shared');if(!states.has(key)){let objects=[],stored=false;try{const v=JSON.parse(localStorage.getItem('sky-diagram-tools-v1:'+key));if(v?.version===1&&Array.isArray(v.objects)){objects=clean(v.objects,m);stored=true;}}catch{}const saved=JSON.stringify(objects);try{const v=JSON.parse(sessionStorage.getItem(draftKey(m)));if(v?.version===1&&Array.isArray(v.objects))objects=clean(v.objects,m);}catch{}states.set(key,{objects,undo:[],redo:[],stored,saved});}return states.get(key);}
-  function clean(objects,m){if(objects.length>40)return[];const out=[];for(const raw of objects){if(!raw||typeof raw!=='object')continue;const def=defs(m).find(d=>d.id===raw.type);if(!def||typeof raw.id!=='string')continue;const o={id:raw.id.slice(0,80),type:def.id,label:typeof raw.label==='string'?raw.label.slice(0,60):def.title,customLabel:raw.customLabel===true,visible:raw.visible!==false,locked:raw.locked===true};if(!o.customLabel){const n=Number.isInteger(raw.copyNumber)?raw.copyNumber:Number(o.label.match(/ (\d+)$/)?.[1]);if(n>=2&&n<=999)o.copyNumber=n;o.label=def.title.split('|').map(x=>x+(o.copyNumber?' '+o.copyNumber:'')).join('|');}if(!o.customLabel&&typeof raw.autoLabel==='string'&&raw.autoLabel.length<=160){o.autoLabel=raw.autoLabel;o.label=raw.autoLabel;}for(const f of def.fields){const v=raw[f.name];if(f.options)o[f.name]=f.options.some(x=>x.split(':')[0]===v)?v:f.value;else if(f.min!==undefined)o[f.name]=Number.isFinite(v)?Math.max(f.min,Math.min(f.max,v)):Number.isFinite(f.value)?f.value:0;else if(f.value==='date')o[f.name]=validDate(v)?v:validDate(m.date)?m.date:'1900-01-01';else o[f.name]=typeof v==='string'?v.slice(0,100):f.value;}if(def.id==='camera'&&raw.camera&&['azimuth','elevation','distance'].every(k=>Number.isFinite(raw.camera[k])))o.camera={azimuth:raw.camera.azimuth,elevation:Math.max(-1.5,Math.min(1.5,raw.camera.elevation)),distance:Math.max(.5,Math.min(10000,raw.camera.distance)),selected:Number.isInteger(raw.camera.selected)&&raw.camera.selected>=0&&raw.camera.selected<8?raw.camera.selected:2,view:['overview','earthmoon','focus'].includes(raw.camera.view)?raw.camera.view:'overview',inspectingMoon:raw.camera.inspectingMoon===true};out.push(o);}return out;}
-  function defs(m){let d=definitions[m.type]||[];if(m.type==='sky'&&m.body==='moon')d=d.filter(x=>['curve','time','build'].includes(x.id));if(m.type==='altitude'&&m.body==='moon')d=d.filter(x=>['curve','time'].includes(x.id));return [...d,...common];}
-  function repaint(){if(!current)return;if(current.redraw)current.redraw();else if(typeof schedule==='function')schedule();}
-  function draftStatus(){if(!current)return;const s=stateFor(selectedOwner());status.textContent=JSON.stringify(s.objects)===s.saved?tr(s.stored?'已保存到此设备|Saved to this device':'没有未保存的修改|No unsaved changes'):tr('有未保存的修改|Unsaved changes');}
-  function record(s,before,beforeSelected=selected,model=selectedOwner()){if(JSON.stringify(before)===JSON.stringify(s.objects))return;s.undo.push({objects:before,selected:beforeSelected});if(s.undo.length>30)s.undo.shift();s.redo=[];persist(model,s);draftStatus();document.dispatchEvent(new Event('skymotion:references'));}
-  const displayValue=(key,value)=>key==='time'&&Number.isFinite(value)?String(Math.floor(value/60)).padStart(2,'0')+':'+String(Math.round(value)%60).padStart(2,'0'):['lat','lon','clock'].includes(key)&&Number.isFinite(value)?String(Number(value.toFixed(['lat','lon'].includes(key)?4:2))):value;
-  const coordinates=(lat,lon)=>`${Math.abs(lat).toFixed(2)}°${lat<0?'S':'N'} · ${Math.abs(lon).toFixed(2)}°${lon<0?'W':'E'}`;
-let basisHome=null,basisNode=null;
-  function restoreBasis(){if(basisNode&&basisHome?.parentNode)basisHome.after(basisNode);}
-  function updateLocation(m=selectedOwner()){
-    if(!m)return;const o=stateFor(m).objects.find(o=>o.id===selected),available=o?.type==='observer'&&typeof m.observeLocation==='function';locationPanel.hidden=!available;if(!available){restoreBasis();return;}
-    const linked=m.body==='sun'&&['lab','diagrams'].includes(document.body.dataset.page);
-    if(linked){basisNode=document.querySelector('.observer-link-settings');if(basisNode){if(!basisHome){basisHome=document.createComment('observer comparison settings');basisNode.before(basisHome);}locationPanel.append(basisNode);}}
-    const same=Math.abs(o.lat-m.lat)<1e-7&&Math.abs(o.lon-m.lon)<1e-7;
-    const text=tr(same?'所有图解正在使用此观测地点。|All diagrams use this observation location.':(linked?'对照城市，已同步到高度曲线、升落方位和地平面图。|Comparison city: synchronized with altitude, bearings and horizon diagrams.':'独立参考点。|Independent reference.'))+(same?'':'\n'+tr('当前观测：|Current: ')+coordinates(m.lat,m.lon));
-    if(locationInfo.textContent!==text)locationInfo.textContent=text;
-    locationApply.disabled=same;locationApply.textContent=tr(same?'当前基准地点|Current baseline location':'设为基准地点|Use as baseline location');
-  }
-  locationApply.onclick=()=>{commitActive();if(!validInputs()||!current)return;finishNudge();cancelDrag();const o=stateFor(selectedOwner()).objects.find(o=>o.id===selected);if(o?.type!=='observer'||!current.observeLocation)return;if(current.observeLocation({lat:o.lat,lon:o.lon})===false){status.textContent=tr('此地点将超出支持日期范围；请调整日期或时间规则。|This location leaves the supported date range; adjust the date or time basis.');return;}status.textContent=tr('已更新观测地点；可用浏览器后退恢复。|Observation location updated; browser Back restores it.');};
-  function actionState(){if(!current)return;const s=stateFor(selectedOwner()),o=s.objects.find(o=>o.id===selected),index=s.objects.findIndex(o=>o.id===selected);backward.disabled=index<=0;forward.disabled=index<0||index>=s.objects.length-1;undo.disabled=!s.undo.length;redo.disabled=!s.redo.length;duplicate.disabled=!o||s.objects.length>=40;remove.disabled=!o;for(const b of add.querySelectorAll('[data-tool-type]'))b.disabled=(stateFor(current).objects.length>=40&&b.dataset.toolType!=='build')||(current.type==='analemma'&&current.view==='equatorial'&&b.dataset.toolType==='level');}
-  function validInputs(){const bad=form.querySelector('[aria-invalid="true"]');if(!bad)return true;panel.dataset.collapsed='false';panel.dataset.detail='true';updateFold();switchView('objects',true);status.textContent=bad.dataset.error||tr('请先修正标记的输入。|Correct the marked input first.');bad.focus({preventScroll:true});revealField(bad);return false;}
-  function fieldError(input,message){
-    input.setAttribute('aria-invalid','true');input.dataset.error=message;status.textContent=message;
-    let error=input.parentElement.querySelector('.dt-field-error');
-    if(!error){error=E('small','dt-field-error',input.parentElement);error.id='dt-error-'+input.dataset.field;}
-    error.textContent=message;input.setAttribute('aria-errormessage',error.id);
-  }
-  function clearFieldError(input){
-    input.removeAttribute('aria-invalid');input.removeAttribute('aria-errormessage');delete input.dataset.error;
-    input.parentElement.querySelector('.dt-field-error')?.remove();
-  }
-  function updateSmall(){if(!current)return;const s=stateFor(selectedOwner());for(const b of list.querySelectorAll('[data-reference-id]')){const o=s.objects.find(o=>o.id===b.dataset.referenceId.split(':').at(-1));if(o){const label=o.customLabel?o.label:tr(o.label);b.textContent=label;b.parentElement.querySelector('input')?.setAttribute('aria-label',tr('显示|Show')+' '+label);}}if(!s.objects.find(o=>o.id===selected)?.visible)result.textContent='';updateLocation();actionState();}
-  function mutate(fn,keepFields=false){finishNudge();if(!current)return;const s=stateFor(selectedOwner()),before=copy(s.objects),beforeSelected=selected;if(typeof state!=='undefined'&&typeof stop==='function')stop();else current.pause?.();fn(s);record(s,before,beforeSelected);if(keepFields)draftStatus();keepFields?updateSmall():update();repaint();}
-  function travel(from,to){
-    finishNudge();cancelDrag();if(!current)return;
-    const s=stateFor(selectedOwner());if(!s[from].length)return;
-    s[to].push({objects:copy(s.objects),selected});
-    const snapshot=s[from].pop();
-    s.objects=snapshot.objects;persist(selectedOwner(),s);
-    selected=s.objects.some(o=>o.id===snapshot.selected)?snapshot.selected:null;
-    draftStatus();update();repaint();document.dispatchEvent(new Event('skymotion:references'));
-  }
-  function commitActive(){const field=document.activeElement;if(form.contains(field)&&field.matches('input:not([type=checkbox]),select')&&field.dataset.committedValue!==field.value)field.dispatchEvent(new Event('change',{bubbles:true}));}
-  function save(){finishNudge();commitActive();if(!current||!validInputs())return;cancelDrag();try{const owner=selectedOwner(),s=stateFor(owner);localStorage.setItem('sky-diagram-tools-v1:'+owner.id+':'+(owner.body||'shared'),JSON.stringify({version:1,objects:s.objects}));s.saved=JSON.stringify(s.objects);s.stored=true;status.textContent=tr('已保存到此设备|Saved to this device');}catch{status.textContent=tr('浏览器无法保存；仅本次访问有效|Storage unavailable; available for this visit');}}
-  function create(def,point){selectedSource=current.id;editing=true;updateMode();if(stateFor(selectedOwner()).objects.length>=40){status.textContent=tr('最多添加 40 个参考对象，请先删除一个。|Up to 40 references; remove one before adding another.');return;}mutate(s=>{const o=makeObject(def,point);s.objects.push(o);selected=o.id;});switchView('objects',true);showInspector();const o=stateFor(current).objects.find(o=>o.id===selected);status.textContent=tr('已添加：|Added: ')+(o.customLabel?o.label:tr(o.label))+tr('。已打开对象属性。|. Its properties are now open.');if(o.type==='observer'&&(Math.abs(o.lat-current.lat)<1e-7&&Math.abs(o.lon-current.lon)<1e-7||entries().some(q=>q.o.id!==o.id&&q.o.type==='observer'&&Math.abs(q.o.lat-o.lat)<1e-7&&Math.abs(q.o.lon-o.lon)<1e-7)))status.textContent=tr('已添加。地点相同，轨迹重合；可修改经纬度。|Added. These locations overlap; change the comparison coordinates.');else if(o.type==='curve'&&o.date===current.date)status.textContent=tr('已添加。对照日期相同，请在属性中更改日期。|Added. The dates match; change the comparison date in Properties.');else if(o.type==='time'&&Math.abs(o.time-current.time)<.01)status.textContent=tr('已记录当前时刻。可改为其他时刻进行对照。|Current time pinned. Change its time to compare another moment.');}
-
-  function showInspector(){panel.dataset.detail='true';mobileBack.textContent=tr('返回对象列表|Back to object list');if(desktopSplit()){inspector.scrollTop=0;const row=selectedRow();if(row)revealWithin(row,list);return;}scroll.scrollTop=Math.max(0,inspector.offsetTop-scroll.offsetTop-8);}
-  function rememberContext(){
-    if(!current||panel.hidden)return;
-    const s=stateFor(selectedOwner());s.lastSelected=selected;
-    (s.viewScroll??={})[activeView]=scroll.scrollTop;s.inspectorScroll=inspector.scrollTop;s.listScroll=list.scrollTop;
-  }
-  function hide(){for(const input of form.querySelectorAll('[aria-invalid=true]')){input.value=input.dataset.committedValue;clearFieldError(input);}closeObjectMenu();restoreBasis();clearTimeout(visibilityTimer);visibilityTimer=0;rememberContext();++importRequest;unmountPanel();if(blockedRail){blockedRail.inert=railWasInert;blockedRail=null;}document.body.classList.remove('diagram-workbench-active');finishNudge();const wasOpen=!panel.hidden;if(current)(current.host||current.canvas).classList.remove('dt-editing');cancelDrag();if(current)stateFor(selectedOwner()).lastSelected=selected;panel.hidden=true;armed=null;placement.hidden=true;syncLaunchers();if(current)portals.get(current.id)?.focus({preventScroll:true});syncRailShell();if(wasOpen)repaint();}
-  function open(m,preserveRail=false){if(!customizationOn())return false;if(!panel.hidden){commitActive();if(!validInputs())return false;}if(!preserveRail)railView='references';rememberContext();if(current?.id!==m.id)activeView='objects';++importRequest;finishNudge();cancelDrag();if(current)(current.host||current.canvas).classList.remove('dt-editing');current=m;selectedSource=m.id;editing=true;const s=stateFor(m);selected=s.objects.some(o=>o.id===s.lastSelected)?s.lastSelected:null;armed=null;panel.hidden=false;pendingImport=null;clearPending=false;importReview.replaceChildren();const remembered=s.viewScroll?.[activeView]||0,inspectorPosition=s.inspectorScroll||0,listPosition=s.listScroll||0;scroll.scrollTop=0;draftStatus();update();scroll.scrollTop=remembered;(s.viewScroll??={})[activeView]=remembered;inspector.scrollTop=inspectorPosition;list.scrollTop=listPosition;placePanel();syncLaunchers();panel.dataset.restoring='true';const epoch=importRequest;requestAnimationFrame(()=>requestAnimationFrame(()=>{if(panel.hidden||current?.id!==m.id||epoch!==importRequest)return;scroll.scrollTop=Math.min(remembered,Math.max(0,scroll.scrollHeight-scroll.clientHeight));inspector.scrollTop=inspectorPosition;list.scrollTop=listPosition;panel.dataset.restoring='false';}));repaint();}
-  const railPositions={conditions:0,references:0};
-  let emptyContext=null;
-  function parameterRail(){return document.querySelector('.ui-parameters')||document.querySelector('body[data-page=space]:not(.space-immersive) #spaceSidebarHost .side');}
-  function persistentRailMode(){return !!parameterRail()&&window.SkyCustomization?.active===true&&!matchMedia('(max-width:760px)').matches;}
-  function visibleModels(){return [...models.values()].filter(m=>(typeof state==='undefined'||m.body===state.body)&&m.canvas.getBoundingClientRect().width>0&&m.canvas.getBoundingClientRect().height>0);}
-  function chooseRail(kind){
-    commitActive();if(!validInputs()||window.SkyLabComparison?.validate()===false)return false;
-    closeObjectMenu();const rail=parameterRail();if(!rail)return false;
-    railPositions[railView]=rail.scrollTop;
-    if(kind==='conditions'){referenceMode=editing;setMode(false);}else{
-      const target=current&&visibleModels().some(m=>m.id===current.id)?models.get(current.id):visibleModels()[0];
-      if(panel.hidden&&target&&!document.body.classList.contains('scene-builder-active'))open(target,true);
-      setMode(referenceMode);
-    }
-    railView=kind;syncRailShell();rail.scrollTop=railPositions[kind]||0;return true;
-  }
-  function ensureRailNavigation(rail){
-    if(railNavigation?.parentElement===rail)return;
-    railNavigation=E('nav','dt-rail-navigation',rail);railNavigation.dataset.i18nSkip='';railNavigation.setAttribute('role','tablist');railNavigation.setAttribute('aria-label',tr('侧栏内容|Sidebar section'));rail.prepend(railNavigation);
-    for(const kind of ['conditions','references']){
-      const b=E('button','',railNavigation);b.type='button';b.id='dt-rail-'+kind;b.dataset.railSection=kind;b.setAttribute('role','tab');b.setAttribute('aria-controls',kind==='conditions'?(document.body.dataset.page==='space'?'spaceSidebarHost':'controls'):panel.id);b.onclick=()=>chooseRail(kind);
-    }
-    railNavigation.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const index=e.key==='Home'?0:e.key==='End'?1:e.target.dataset.railSection==='conditions'?1:0,button=railNavigation.children[index];if(chooseRail(button.dataset.railSection))button.focus({preventScroll:true});});
-    emptyContext=E('section','dt-context-empty',rail);emptyContext.dataset.i18nSkip='';emptyContext.id='dt-reference-empty';emptyContext.setAttribute('role','region');emptyContext.setAttribute('aria-labelledby','dt-rail-references');emptyContext.hidden=true;
-    const text=E('p','',emptyContext),resume=E('button','',emptyContext);resume.type='button';resume.onclick=()=>{const available=visibleModels(),target=available.find(m=>m.id===current?.id)||available[0];if(target)open(target,true);};
-  }
-  function syncRailNavigation(){if(!railNavigation)return;railNavigation.setAttribute('aria-label',tr('侧栏内容|Sidebar section'));for(const b of railNavigation.children){const chosen=b.dataset.railSection===railView;b.textContent=tr(b.dataset.railSection==='conditions'?'观测条件|Observation controls':'图中对象|Plot objects');b.setAttribute('aria-selected',String(chosen));b.tabIndex=chosen?0:-1;}}
-  function syncRailShell(){
-    const rail=parameterRail();if(!rail)return;
-    const persistent=persistentRailMode();if(persistent)ensureRailNavigation(rail);
-    rail.classList.toggle('dt-navigation-ready',persistent);
-    if(railNavigation){railNavigation.hidden=!persistent&&!mountedRail;if(persistent||mountedRail)rail.dataset.editorView=railView;else delete rail.dataset.editorView;}
-    if(emptyContext){emptyContext.hidden=!persistent||railView!=='references'||!panel.hidden;emptyContext.firstElementChild.textContent=tr(visibleModels().length?'图中编辑已收起。选择“继续编辑当前图”恢复，或切换到观测条件。|Plot editing is closed. Continue editing this plot, or choose Observation controls.':'当前视图没有图内参考工具；可切换到观测条件，或选择其他图解。|This view has no plot-reference tools. Choose Observation controls or another diagram.');const b=emptyContext.lastElementChild;b.textContent=tr('继续编辑当前图|Continue editing this plot');b.disabled=!visibleModels().length;}
-    syncRailNavigation();
-  }
-  function unmountPanel(){
-    if(!mountedRail)return;const previous=mountedRail;mountedRail=null;
-    document.body.append(panel);previous.classList.remove('dt-rail-active');
-    if(!persistentRailMode()){railNavigation?.remove();railNavigation=null;emptyContext?.remove();emptyContext=null;delete previous.dataset.editorView;}
-    previous.scrollTop=railScroll;
-  }
-  function placePanel(){
-    const rail=parameterRail(),controls=document.getElementById('controls');
-    const r=rail?.getBoundingClientRect(),mobile=matchMedia('(max-width:760px)').matches;
-    const docked=!mobile&&!!r&&r.width>180&&r.width<450&&r.left>=0&&r.height>180;
-    const focused=panel.contains(document.activeElement)?document.activeElement:null;
-    if(mountedRail&&(!docked||mountedRail!==rail))unmountPanel();
-    panel.classList.toggle('dt-docked',docked);
-    if(docked&&!mountedRail){mountedRail=rail;railScroll=rail.scrollTop;rail.classList.add('dt-rail-active');rail.append(panel);ensureRailNavigation(rail);rail.dataset.editorView=railView;rail.scrollTop=railPositions[railView]||0;}
-    panel.style.top=mobile?'auto':'110px';panel.style.bottom=mobile?'12px':'16px';panel.style.left='';panel.style.width='';
-    if(blockedRail&&(!docked||blockedRail!==controls)){blockedRail.inert=railWasInert;blockedRail=null;}
-    document.body.classList.toggle('diagram-workbench-active',docked);
-    syncRailShell();
-    if(focused&&document.activeElement!==focused)focused.focus({preventScroll:true});
-  }
-  function update(){if(!current||panel.hidden)return;const scrollBefore=scroll.scrollTop,listBefore=list.scrollTop,inspectorBefore=inspector.scrollTop,s=stateFor(selectedOwner());panel.dataset.canvas=current.canvas.id;const allEntries=entries();panel.dataset.empty=String(!allEntries.length);updateFold();tabs.setAttribute('aria-label',tr('图中对象操作|Plot object actions'));title.textContent=tr(titles[current.type]||current.type);more.setAttribute('aria-label',tr('更多操作|More actions'));more.title=tr('保存本图对象、复制或删除|Save plot objects, duplicate or delete');mobileBack.textContent=tr('返回对象列表|Back to object list');panel.dataset.detail=panel.dataset.detail||'false';libraryTitle.textContent=tr('添加图中对象|Add a plot object');libraryIntro.textContent=tr('选择要添加的对象。地点和时刻直接用于原图对照；杆、球等会进入实验地面摆放。|Choose an object. Places and times compare within the original plot; rods and spheres open the experiment ground.');objectTitle.textContent=tr('图中对象|Plot objects')+' · '+allEntries.length;addAnother.textContent=tr('添加对象|Add object');cityPicker.hidden=!(current.type==='sky'&&current.body!=='moon'&&citySelect.options.length);cityCaption.textContent=tr('新增观察点的地点|Location for the new observer');inspectorTitle.textContent=tr('调整所选对象|Selected reference');recipe.textContent=tr('添加一组常用参考|Add a useful reference set');updateFiles();switchView(activeView,true);close.setAttribute('aria-label',tr('收起图中编辑|Close plot editor'));placementUI();panel.dataset.limit=String(stateFor(current).objects.length>=40);if(stateFor(current).objects.length>=40)hint.textContent=tr('已达到 40 个参考对象上限；删除一个后可继续添加。|40-reference limit reached; remove one to add another.');add.replaceChildren();const groups=new Map();for(const def of defs(current)){const group=['observer','time','track'].includes(def.id)?'地点与时刻|Places and times':'图上参考|Plot references';let target=groups.get(group);if(!target){const heading=E('h4','dt-add-group',add);heading.textContent=tr(group);target=E('div','dt-add-group-tools',add);groups.set(group,target);}if(def.id==='build')continue;const b=E('button','',target);b.type='button';b.dataset.toolType=def.id;b.textContent=tr(def.title);b.onclick=()=>{commitActive();if(!validInputs())return;if(def.id==='build'){window.SkySceneBuilder?.open();return;}if(['note','emphasis'].includes(def.id)||(current.pick&&['observer','time','phase'].includes(def.id)&&!(current.type==='sky'&&def.id==='observer'))){arm(def);}else {const coords=def.id==='observer'&&!cityPicker.hidden?citySelect.value.split(',').map(Number):null;create(def,coords?.length===2&&coords.every(Number.isFinite)?{lat:coords[0],lon:coords[1],label:cityLabel(),autoLabel:cityLabel(),customLabel:false}:undefined);}};}
-    if(window.SkySceneBuilder&&['lab','diagrams'].includes(document.body.dataset.page)){const heading=E('h4','dt-add-group',add);heading.textContent=tr('实验物体 · 在实验地面中摆放|Experiment objects · place on the experiment ground');const target=E('div','dt-add-group-tools',add);for(const [kind,label]of [['rod','杆|Rod'],['sphere','球|Sphere'],['circle','参考圈|Reference circle'],['planeObject','参考平面|Reference plane'],['dial','刻度盘|Dial'],['observer','观察站|Station'],['marker','标记点|Marker'],['note','地面文字|Ground note']]){const b=E('button','',target);b.type='button';b.dataset.buildKind=kind;b.textContent=tr(label);b.onclick=()=>{commitActive();if(validInputs())window.SkySceneBuilder.open({kind});};}}
-    list.replaceChildren();if(!allEntries.length){const empty=E('p','dt-empty',list);empty.textContent=tr('还没有添加对象。点击上方“添加对象”，选择地点、时刻或图上参考。|No objects yet. Use Add object above to choose a place, time or plot reference.');}for(const {o,source} of allEntries){const token=source===current.id?o.id:source+':'+o.id;const row=E('div','dt-row',list),b=E('button','',row);b.type='button';b.textContent=(o.customLabel?o.label:tr(o.label));b.setAttribute('aria-pressed',String(o.id===selected&&source===selectedOwner().id));b.dataset.referenceId=token;b.dataset.referenceSource=source;if(current.type==='analemma'&&o.type==='track'){b.classList.add('dt-track-label');b.style.setProperty('--reference-color',trackColors[s.objects.filter(q=>q.type==='track').indexOf(o)%trackColors.length]);}b.onclick=()=>selectReference(token);const toggle=E('label','dt-toggle',row),visible=E('input','',toggle);visible.type='checkbox';visible.checked=o.visible;visible.setAttribute('aria-label',tr('显示|Show')+' '+(o.customLabel?o.label:tr(o.label)));visible.onchange=()=>{commitActive();if(!validInputs()){visible.checked=!visible.checked;return;}if(source!==current.id){comparisons.patch(source,o.id,{visible:visible.checked});update();}else{const owner=selectedSource;selectedSource=source;mutate(()=>{o.visible=visible.checked;},true);selectedSource=owner;}};
-      if(o.id===selected&&source===selectedOwner().id)row.append(more);else{const rowMore=E('button','dt-row-more',row);rowMore.type='button';rowMore.innerHTML=more.innerHTML;rowMore.setAttribute('aria-label',tr('更多操作|More actions')+' · '+b.textContent);rowMore.setAttribute('aria-haspopup','menu');rowMore.onclick=()=>{selectReference(token);more.click();};}
-    }
-    if(window.SkySceneBuilder&&['lab','diagrams'].includes(document.body.dataset.page)){const physical=SkySceneBuilder.listObjects();objectTitle.textContent=tr('图中对象|Plot objects')+' · '+(allEntries.length+physical.length);panel.dataset.empty=String(!allEntries.length&&!physical.length);if(physical.length){list.querySelector('.dt-empty')?.remove();for(const o of physical){const row=E('div','dt-row dt-ground-row',list),b=E('button','',row);b.type='button';b.textContent=o.label+tr(' · 实验地面| · Experiment ground');b.dataset.groundObject=o.id;b.onclick=()=>SkySceneBuilder.open({objectId:o.id});}}}
-    referenceHelp.hidden=current.type!=='analemma';referenceHelp.textContent=current.type==='analemma'?tr(current.view==='equatorial'?'赤纬—时角图不随纬度改变。比较纬度请切换天空或天穹视图；每条轨迹可选择时间规则，钟表时使用指定时区。|Latitude does not change declination or hour angle. Compare latitudes in the sky or dome view. Each track has its own time basis; clock time uses the selected UTC offset.':'对照轨迹沿用本图年份和模型。纬度、经度、每日时刻及时间规则独立设置；钟表时使用指定时区。|Tracks share this plot’s year and model. Set each location, daily time and time basis independently; clock time uses its selected UTC offset.'):' ';
-    form.replaceChildren();const o=s.objects.find(o=>o.id===selected);inspector.hidden=!o;if(!o)panel.dataset.detail='false';objectActions.hidden=!o||s.objects.length<2;if(o?.type==='observer'&&['lab','diagrams'].includes(document.body.dataset.page)&&current.body==='sun'){referenceHelp.hidden=false;referenceHelp.textContent=tr('这是额外的地点对照，不会移动原观察者。修改下方经纬度即可更新对照；若与原地点相同，曲线会重合。继续添加请点上方“添加对象”。|This is an extra location comparison; your original observer stays unchanged. Change the coordinates below to update it. Identical locations overlap. Use Add object above to add another.');}inspectorTitle.textContent=tr(o?'调整所选对象|Selected reference':'选择一个对象以调整|Select a reference to adjust');const resultKey=(selectedOwner()?.id||'')+':'+(current.body||'')+':'+selected;if(result.dataset.reference!==resultKey){result.textContent='';result.dataset.reference=resultKey;}if(o){const def=defs(selectedOwner()).find(d=>d.id===o.type);const label=E('label','',form);label.append(document.createTextNode(tr('名称 / 说明|Name / note')));const input=E('input','',label);input.value=(o.customLabel?o.label:tr(o.label));input.maxLength=60;input.dataset.field='label';input.dataset.committedValue=input.value;input.onchange=()=>{const value=input.value.trim();mutate(()=>{o.label=value||def.title;o.customLabel=!!value;if(!value)delete o.copyNumber;},true);input.value=value||tr(def.title);input.dataset.committedValue=input.value;};
-      for(const f of def.fields){const l=E('label','',form);l.append(document.createTextNode(tr(f.title)));const n=E(f.options?'select':'input','',l);if(f.options){for(const opt of f.options){const [value,...label]=opt.split(':');const e=E('option','',n);e.value=value;e.textContent=tr(label.join(':'));}}else{n.type=f.min!==undefined?'number':'text';if(f.min!==undefined){n.min=f.min;n.max=f.max;n.step=f.step;}if(f.value==='date'){n.placeholder='YYYY-MM-DD';n.maxLength=10;}n.setAttribute('aria-describedby',status.id);}if(f.name==='time'){n.type='text';n.inputMode='numeric';n.placeholder='HH:MM';n.maxLength=5;}n.dataset.field=f.name;n.value=displayValue(f.name,o[f.name]);n.dataset.committedValue=n.value;if(current.type==='analemma'&&((current.view==='equatorial'&&f.name==='lat')||(f.name==='offset'&&o.basis==='apparent')))n.disabled=true;if(o.locked&&['x','y','lat','lon','time'].includes(f.name))n.disabled=true;n.onchange=()=>{let v=n.value;if(f.min!==undefined){if(f.name==='time'&&String(v).includes(':')){const parts=/^(\d{1,2}):(\d{2})$/.exec(v);v=parts&&+parts[2]<60&&(+parts[1]<24||+parts[1]===24&&+parts[2]===0)?+parts[1]*60+ +parts[2]:NaN;}v=Number(v);if(n.value.trim()===''||!Number.isFinite(v)){fieldError(n,tr(f.name==='time'?'请输入 00:00—24:00 的时刻。|Enter a time from 00:00 to 24:00.':'请输入有效数值。|Enter a valid number.'));return;}v=Math.max(f.min,Math.min(f.max,v));}if(f.value==='date'&&!validDate(v)){fieldError(n,tr('请输入 1900-01-01 至 2100-12-31 之间的有效日期。|Enter a valid date between 1900-01-01 and 2100-12-31.'));return;}n.value=displayValue(f.name,v);clearFieldError(n);n.dataset.committedValue=n.value;mutate(()=>o[f.name]=v,true);if(current.type==='analemma'&&f.name==='basis'){const offset=form.querySelector('[data-field=offset]');if(offset)offset.disabled=v==='apparent';}if(current.type==='illumination'&&f.value==='date')requestAnimationFrame(()=>{if(!panel.hidden&&selected===o.id)revealField(result);});};}
-      if(anchor(selectedOwner(),o)){const row=E('label','dt-lock',form),lock=E('input','',row),text=E('span','',row);lock.type='checkbox';lock.checked=!!o.locked;text.textContent=tr('锁定位置|Lock position');lock.onchange=()=>{if(!validInputs()){lock.checked=!!o.locked;return;}mutate(()=>o.locked=lock.checked,true);for(const field of form.querySelectorAll('[data-field]'))field.disabled=!!o.locked&&['x','y','lat','lon','time'].includes(field.dataset.field);};}
-      if(o.type==='camera'){const b=E('button','',form);b.type='button';b.textContent=tr('回到此相机|Restore this camera');b.onclick=()=>current.restoreCamera?.(o.camera);}
-    }
-    for(const b of panel.querySelectorAll('[data-dt-label]')){b.textContent=tr(b.dataset.dtLabel);b.title=b.textContent;}title.title=title.textContent;updateFiles();updateLocation();actionState();scroll.scrollTop=scrollBefore;list.scrollTop=listBefore;inspector.scrollTop=inspectorBefore;if(desktopSplit()&&activeView==='objects'&&panel.dataset.collapsed!=='true'){const row=selectedRow();if(row)revealWithin(row,list);}
-  }
-  function selectedRow(){return [...list.querySelectorAll('[data-reference-id]')].find(b=>b.dataset.referenceId===selectedKey());}
-  function focusSelectedRow(){const row=selectedRow();(row||undo).focus({preventScroll:true});if(row)revealWithin(row,list);}
-  function selectReference(id,edit=false){
-    commitActive();if(!validInputs())return;
-    finishNudge();switchView('objects',true);const parts=id.split(':');selectedSource=parts.length>1?parts[0]:current.id;selected=parts.length>1?parts.slice(1).join(':'):id;update();showInspector();
-    const row=selectedRow();row?.focus({preventScroll:true});
-    if(desktopSplit()&&row)revealWithin(row,list);
-    if(edit){const input=form.querySelector('input:not(:disabled),select:not(:disabled),button');input?.focus({preventScroll:true});if(input)revealField(input);}
+  function setEditing(value) {
+    finishNudge();
+    cancelDrag();
+    editing = value;
+    armed = null;
+    placementUI();
     repaint();
   }
-  list.addEventListener('keydown',e=>{
-    if(!desktopSplit()||!e.target.matches('[data-reference-id]')||e.altKey||e.ctrlKey||e.metaKey)return;
-    const rows=[...list.querySelectorAll('[data-reference-id]')],index=rows.indexOf(e.target);
-    if(['ArrowUp','ArrowDown','Home','End'].includes(e.key)){
-      e.preventDefault();e.stopImmediatePropagation();
-      const next=e.key==='Home'?0:e.key==='End'?rows.length-1:Math.max(0,Math.min(rows.length-1,index+(e.key==='ArrowDown'?1:-1)));
-      selectReference(rows[next].dataset.referenceId);
-    }else if(e.key==='Enter'){e.preventDefault();e.stopImmediatePropagation();selectReference(e.target.dataset.referenceId,true);}
-  });
-  function textLayout(m,value,p,bounds=null){
-    const c=m.c;c.save();c.font=`12px "${en()?'SkyMotion Charter':'SkyMotion Reading'}",serif`;
-    let label=String(value),width=c.measureText(label).width;const [left,top,w,h]=bounds||[0,0,m.w,m.h],available=Math.max(12,w-12);
-    if(width>available){while(label.length&&c.measureText(label+'…').width>available)label=label.slice(0,-1);label+='…';width=c.measureText(label).width;}
-    c.restore();return {text:label,width,x:Math.max(left+6,Math.min(left+w-6-width,p.x)),y:Math.max(top+14,Math.min(top+h-8,p.y))};
+  const tabs = E('nav', 'dt-tabs', panel),
+    scroll = E('div', 'dt-scroll', panel),
+    library = E('section', 'dt-library', scroll),
+    objects = E('section', 'dt-objects', scroll),
+    files = E('section', 'dt-files', scroll);
+  let selectedSource = null;
+  function selectedOwner() {
+    return current && selectedSource && selectedSource !== current.id
+      ? comparisonModel(selectedSource)
+      : current;
   }
-  const trackColors=['#c4d9bf','#e5b9a5','#dfd2a4','#d2c1d8','#b9d4ce'];
-  function helper(m){const {c,w,h}=m,col='#f2d7a3';return{c,w,h,
-    line(a,b,dashed=false){if(!a||!b)return;c.beginPath();c.setLineDash(dashed?[4,4]:[]);c.strokeStyle=this.color||col;c.lineWidth=this.width||1.5;c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();c.setLineDash([]);},
-    path(points,dashed=false){let previous=null;for(const p of points){if(!p||p.hidden){previous=null;continue;}if(previous&&(!Number.isFinite(p.wrap)||!Number.isFinite(previous.wrap)||Math.abs(p.wrap-previous.wrap)<=180))this.line(previous,p,dashed);previous=p;}},
-    dot(p,label){if(!p||p.hidden)return;c.fillStyle=this.color||col;c.beginPath();c.arc(p.x,p.y,4,0,7);c.fill();if(label)this.text(label,{x:p.x+8,y:p.y-8});},
-    text(label,p){if(!p)return;const layout=textLayout(m,label,p,this.clipLabels?m.clip:null);c.font=`12px "${en()?'SkyMotion Charter':'SkyMotion Reading'}",serif`;c.fillStyle=this.color||col;c.textAlign='left';if(window.skyFillText)window.skyFillText(c,layout.text,layout.x,layout.y);else c.fillText(layout.text,layout.x,layout.y);},
-    circle(p,r){if(!p)return;c.strokeStyle=this.color||col;c.lineWidth=this.width||1.5;c.beginPath();c.arc(p.x,p.y,r,0,7);c.stroke();}
-  };}
-  function drawObject(o,m,H){
-    const {type}=m,at=m.project, label=(o.customLabel?o.label:tr(o.label));let metric='';
-    if(o.type==='note'){H.text(label,{x:m.w*o.x/100,y:m.h*o.y/100});return label;}
-    if(o.type==='emphasis'){H.circle({x:m.w*o.x/100,y:m.h*o.y/100},Math.min(m.w,m.h)*o.radius/100);return label;}
-    if(type==='sky'){
-      const body=m.body==='moon'?'Moon':'Sun',position=(time,date=m.date,lat=m.lat,lon=m.lon)=>body==='Sun'&&state.manual?solar(lat,state.dec,time):skyRaw(body,time,date,lat,lon);
-      if(o.type==='time'){const p=position(o.time);H.dot(m.projectSky(p),label+' · '+SkyDiagramSampling.clock(o.time));metric=SkyDiagramSampling.clock(o.time)+' · '+p.alt.toFixed(1)+'°';}
-      if(o.type==='observer'){const p=window.SkyObserverComparison?.sites().find(q=>q.id===o.id)?.position||position(m.time,m.date,o.lat,o.lon);H.dot(m.projectSky(p),label);metric=p.alt.toFixed(1)+'° · '+p.az.toFixed(1)+'°';}
-      if(o.type==='curve'){const points=SkyDiagramSampling.memo(JSON.stringify(['sky-date',body,o.date,m.lat,m.lon,state.manual,state.manual?state.dec:0]),()=>Array.from({length:97},(_,i)=>position(i*15,o.date)));H.path(points.map(m.projectSky));metric=o.date;}
+  function selectedKey() {
+    return selectedSource && selectedSource !== current?.id
+      ? selectedSource + ':' + selected
+      : selected;
+  }
+  function entries() {
+    if (!current) return [];
+    const local = stateFor(current).objects.map((o) => ({ o, source: current.id }));
+    if (current.body === 'sun' && ['lab', 'diagrams'].includes(document.body.dataset.page)) {
+      for (const o of comparisonList())
+        if (o.source !== current.id) local.push({ o, source: o.source });
     }
-    if(type==='globe'){
-      if(['observer','ray'].includes(o.type)){const p=at(o.lat,o.lon);H.dot(p,label);if(m.sun){const a=o.lat*R,l=(o.lon-m.sun.lon)*R,d=m.sun.dec*R,alt=Math.asin(Math.max(-1,Math.min(1,Math.sin(a)*Math.sin(d)+Math.cos(a)*Math.cos(d)*Math.cos(l))))/R;metric=`${label} · ${alt.toFixed(1)}° · ${tr(alt>=0?'白昼|Daylight':'夜晚|Night')}`;if(o.type==='ray'&&p&&!p.hidden)H.line(p,m.rayAt?.(o.lat,o.lon),alt<0);}}
-      if(o.type==='observer'){const linked=window.SkyObserverComparison?.sites().find(p=>p.id===o.id);if(linked){const minute=Math.round(linked.time)%1440;metric=`${label} · ${linked.position.alt.toFixed(1)}° · `+(linked.clockValid?`${linked.date} ${String(Math.floor(minute/60)).padStart(2,'0')}:${String(minute%60).padStart(2,'0')}`:tr('日期超出范围|Date outside range'));}}
-      if(o.type==='latitude')H.path(Array.from({length:181},(_,i)=>at(o.lat,-180+i*2)));
-      if(o.type==='longitude')H.path(Array.from({length:91},(_,i)=>at(-90+i*2,o.lon)));
+    return local;
+  }
+  let activeView = 'objects',
+    pendingImport = null,
+    clearPending = false,
+    importRequest = 0,
+    mountedRail = null,
+    railScroll = 0,
+    railNavigation = null,
+    railView = 'references',
+    referenceMode = true;
+  const views = { library, objects, files },
+    tabLabels = {
+      library: '添加对象|Add object',
+      objects: '返回对象|Back to objects',
+      files: '方案|Plans',
+    };
+  for (const key of Object.keys(views)) {
+    const b = E('button', '', tabs);
+    b.type = 'button';
+    b.dataset.dtView = key;
+    b.onclick = () => switchView(activeView === key && key !== 'objects' ? 'objects' : key);
+  }
+  function switchView(key, force = false) {
+    if (!force) {
+      commitActive();
+      if (!validInputs()) return;
+      if (armed) {
+        armed = null;
+        placementUI();
+        repaint();
+      }
+      clearPending = false;
+      updateFiles();
     }
-    if(type==='altitude'){
-      if(o.type==='curve'){const points=Array.from({length:145},(_,i)=>m.project(i*10,m.value(i*10,o.date)));H.path(points,true);H.text(label,points[72]);metric=o.date;}
-      if(o.type==='level')H.line(at(0,o.alt),at(1440,o.alt),true);
-      if(o.type==='time'){const v=m.value(o.time,m.date);H.line(at(o.time,m.low),at(o.time,m.high),true);H.dot(at(o.time,v),label);metric=`${v.toFixed(2)} ${m.unit}`;}
-      if(o.type==='measure'){const a=m.value(o.a,m.date),b=m.value(o.b,m.date);H.dot(at(o.a,a),'A');H.dot(at(o.b,b),'B');H.line(at(o.a,a),at(o.b,b));metric=`Δt ${Math.abs(o.b-o.a)} min · Δh ${(b-a).toFixed(2)}°`;}
+    const positions = current ? (stateFor(selectedOwner()).viewScroll ??= {}) : {};
+    positions[activeView] = scroll.scrollTop;
+    if (key === 'files' && current && selectedSource !== current.id) {
+      selectedSource = current.id;
+      selected = stateFor(current).lastSelected || null;
     }
-    if(type==='illumination'){
-      const value=date=>m.value(date),inMonth=date=>date.slice(0,7)===m.date.slice(0,7),outside=tr('日期不在当前月份；切换到对应月份查看标记。|Date outside this month; switch to its month to see the marker.');
-      const dateDot=(date,v,text)=>{if(inMonth(date))H.dot(m.project(Number(date.slice(8)),v),text);};
-      if(o.type==='curve'){const base=o.date.slice(0,8),count=new Date(Number(o.date.slice(0,4)),Number(o.date.slice(5,7)),0).getDate();const points=Array.from({length:Math.min(count,m.days)},(_,i)=>m.project(i+1,value(base+String(i+1).padStart(2,'0'))));H.path(points,true);H.text(o.date.slice(0,7)+' · '+label,points[Math.floor(points.length/2)]);metric=o.date.slice(0,7);}
-      if(o.type==='level')H.line(m.project(1,o.value),m.project(m.days,o.value),true);
-      if(o.type==='date'){const v=value(o.date);dateDot(o.date,v,label+' · '+o.date);metric=o.date+' · '+v.toFixed(2)+'%'+(inMonth(o.date)?'':' · '+outside);}
-      if(o.type==='measure'){const a=value(o.a),b=value(o.b);dateDot(o.a,a,'A · '+o.a);dateDot(o.b,b,'B · '+o.b);metric=`A ${o.a} · ${a.toFixed(2)}% / B ${o.b} · ${b.toFixed(2)}% · Δ ${(b-a).toFixed(2)} ${tr('个百分点|pp')}`+(!inMonth(o.a)||!inMonth(o.b)?' · '+outside:'');}
+    activeView = key;
+    scroll.dataset.view = key;
+    for (const [name, section] of Object.entries(views)) section.hidden = name !== key;
+    for (const b of tabs.querySelectorAll('[data-dt-view]')) {
+      b.textContent = tr(tabLabels[b.dataset.dtView]);
+      b.title = b.textContent;
+      b.hidden = b.dataset.dtView === 'objects' && key === 'objects';
+      b.setAttribute('aria-expanded', String(b.dataset.dtView === key));
+      if (b.dataset.dtView === key) b.setAttribute('aria-current', 'page');
+      else b.removeAttribute('aria-current');
     }
-    if(type==='azimuth'){
-      if(o.type==='direction'){const p=at(o.az,1);H.line(at(0,0),p);H.dot(p,label);metric=o.az+'°';}
-      if(o.type==='ring')H.circle(at(0,0),m.radius*o.radius/100);
-      if(o.type==='events'){const events=m.events(o.date,o.obstruction);for(const [i,p]of events.entries()){const q=at(p.az,i? .88:1.1);H.line(at(0,0),q,true);H.dot(q,`${label} ${SkyDiagramSampling.clock(p.time)}`);}metric=events.length?events.map(x=>x.az.toFixed(1)+'°').join(' / '):tr('此日未穿越指定遮挡角|No crossing of this obstruction angle');}
+    scroll.scrollTop = positions[key] || 0;
+  }
+  // Only scroll the workbench's own content, never the surrounding page/canvas.
+  function revealField(input) {
+    const container = desktopSplit() && inspector.contains(input) ? inspector : scroll;
+    revealWithin(input, container);
+  }
+  const desktopSplit = () => matchMedia('(min-width:1000px) and (min-height:650px)').matches;
+  function revealWithin(element, container) {
+    const r = element.getBoundingClientRect(),
+      bounds = container.getBoundingClientRect();
+    if (r.bottom > bounds.bottom - 8) container.scrollTop += r.bottom - bounds.bottom + 8;
+    else if (r.top < bounds.top + 8) container.scrollTop += r.top - bounds.top - 8;
+  }
+  const libraryTitle = E('h3', '', library),
+    libraryIntro = E('p', 'dt-caption', library),
+    cityPicker = E('label', 'dt-city-picker', library),
+    cityCaption = E('span', '', cityPicker),
+    citySelect = E('select', '', cityPicker),
+    add = E('div', 'dt-add', library),
+    recipe = E('button', 'dt-recipe', library);
+  recipe.type = 'button';
+  recipe.onclick = addRecipe;
+  recipe.hidden = true;
+  citySelect.id = 'dt-add-city';
+  cityCaption.textContent = tr('新增观察点的地点|Location for the new observer');
+  for (const option of document.querySelectorAll('#place option')) {
+    const copy = option.cloneNode(true);
+    if (copy.value === 'custom') continue;
+    citySelect.append(copy);
+  }
+  citySelect.value = document.querySelector('#place')?.value || '';
+  const objectHeading = E('div', 'dt-object-heading', objects),
+    objectTitle = E('h3', '', objectHeading),
+    addAnother = E('button', 'dt-add-another', objectHeading);
+  addAnother.type = 'button';
+  addAnother.hidden = true;
+  addAnother.onclick = () => {
+    switchView('library');
+    if (activeView === 'library') {
+      scroll.scrollTop = 0;
+      add.querySelector('button:not(:disabled)')?.focus({ preventScroll: true });
     }
-    if(type==='geometry'){
-      const scale=(a,k)=>a.map(x=>x*k),add=(a,b)=>a.map((x,i)=>x+b[i]);
-      if(o.type==='observer'){const a=o.lat*R,l=(o.lon-m.lon)*R,q=[Math.cos(a)*Math.cos(l),Math.sin(a),Math.cos(a)*Math.sin(l)];H.dot(at(q),label);H.line(at(q),at(scale(q,1+o.height)));metric=`${o.lat.toFixed(1)}°, ${o.lon.toFixed(1)}°`;}
-      if(o.type==='ring'){const center=o.plane==='horizon'?m.q:[0,0,0],u=o.plane==='horizon'?m.north:[1,0,0],v=o.plane==='horizon'?m.east:o.plane==='equator'?[0,0,1]:[0,1,0];H.path(Array.from({length:121},(_,i)=>{const a=i*Math.PI/60;return at(add(center,add(scale(u,o.radius*Math.cos(a)),scale(v,o.radius*Math.sin(a)))));}));}
-      if(o.type==='angle'){const dir=key=>key==='axis'?[0,1,0]:key==='sun'?m.sun:key==='north'?m.north:m.q,a=dir(o.a),b=dir(o.b),angle=Math.acos(Math.max(-1,Math.min(1,a.reduce((n,x,i)=>n+x*b[i],0)/(Math.hypot(...a)*Math.hypot(...b)))))/R;H.line(at([0,0,0]),at(scale(a,1.4)));H.line(at([0,0,0]),at(scale(b,1.4)));metric=angle.toFixed(3)+'°';H.text(metric,at(scale(a,1.2)));}
-      if(o.type==='direction'){const q=o.direction==='sun'?m.sun:o.direction==='axis'?[0,1,0]:o.direction==='north'?m.north:m.q;H.line(at([0,0,0]),at(scale(q,1.5)));H.dot(at(scale(q,1.5)),label);}
+  };
+  const list = E('div', 'dt-list', objects),
+    inspector = E('section', 'dt-inspector', objects),
+    inspectorTitle = E('h3', '', inspector),
+    form = E('div', 'dt-fields', inspector),
+    result = E('p', 'dt-result', inspector),
+    actions = E('div', 'dt-actions dt-footer', panel),
+    status = E('p', 'dt-status', panel);
+  const mobileBack = E('button', 'dt-back-list', objects);
+  mobileBack.type = 'button';
+  mobileBack.onclick = () => {
+    panel.dataset.detail = 'false';
+    scroll.scrollTop = 0;
+    selectedRow()?.focus({ preventScroll: true });
+  };
+  objects.insertBefore(mobileBack, inspector);
+  const referenceHelp = E('p', 'dt-reference-help', inspector);
+  inspector.insertBefore(referenceHelp, form);
+  const locationPanel = E('div', 'dt-location', inspector),
+    locationInfo = E('p', '', locationPanel),
+    locationApply = E('button', '', locationPanel);
+  inspector.insertBefore(locationPanel, form);
+  locationApply.type = 'button';
+  locationApply.dataset.observeLocation = '';
+  const objectActions = E('div', 'dt-object-actions dt-actions', inspector),
+    historyActions = E('div', 'dt-history dt-actions', panel);
+  tabs.append(historyActions);
+  const help = E('button', 'dt-help-toggle', historyActions);
+  help.type = 'button';
+  help.setAttribute('aria-expanded', 'false');
+  help.setAttribute('aria-controls', 'dt-help-text');
+  help.onclick = () => {
+    panel.dataset.help = String(panel.dataset.help !== 'true');
+    help.setAttribute('aria-expanded', panel.dataset.help);
+  };
+  const hint = E('p', 'dt-hint', panel),
+    placement = E('button', 'dt-place', panel),
+    cancelPlacement = E('button', 'dt-cancel-place', panel);
+  cancelPlacement.type = 'button';
+  cancelPlacement.hidden = true;
+  cancelPlacement.onclick = () => {
+    armed = null;
+    placementUI();
+    switchView('objects', true);
+    repaint();
+  };
+  panel.insertBefore(cancelPlacement, tabs);
+  panel.insertBefore(hint, tabs);
+  panel.insertBefore(placement, tabs);
+  hint.id = 'dt-help-text';
+  status.setAttribute('role', 'status');
+  status.id = 'diagram-tool-status';
+  result.setAttribute('aria-live', 'polite');
+  placement.type = 'button';
+  placement.hidden = true;
+  placement.onclick = () => placeAt(current.w / 2, current.h / 2);
+  const fileTitle = E('h3', '', files),
+    fileIntro = E('p', 'dt-caption', files),
+    fileActions = E('div', 'dt-file-actions dt-actions', files),
+    importReview = E('div', 'dt-import-review', files),
+    fileInput = E('input', '', files);
+  fileInput.type = 'file';
+  fileInput.accept = '.json,application/json';
+  fileInput.hidden = true;
+  fileInput.onchange = () => readImport(fileInput.files[0]);
+  function placementUI() {
+    updateMode();
+    help.textContent = tr('操作提示|Help');
+    help.title = help.textContent;
+    panel.dataset.placing = String(!!armed);
+    placement.hidden = cancelPlacement.hidden = !armed;
+    cancelPlacement.textContent = tr('取消放置|Cancel placement');
+    placement.textContent = tr('直接放在图中央|Place at the center');
+    hint.textContent = armed
+      ? tr('已选：|Selected: ') +
+        tr(armed.title) +
+        tr(
+          '。点一下画布放置，或点击下方按钮直接添加。点“取消放置”或按 Esc 可取消。|. Tap the plot to place it, or use the button below. Choose Cancel placement or press Esc to cancel.',
+        )
+      : tr(
+          '点选对象查看属性，拖动手柄调整；空白处沿用原图操作。方向键微调，Ctrl/Cmd+Z 撤销，Esc 取消当前操作。|Select an object to view properties and drag its handle to adjust it. Empty space uses the original plot controls. Arrow keys nudge, Ctrl/Cmd+Z undoes, and Esc cancels the current action.',
+        );
+  }
+  function arm(def) {
+    finishNudge();
+    editing = true;
+    armed = def;
+    panel.dataset.detail = 'false';
+    placementUI();
+    if (current.canvas.tabIndex < 0) current.canvas.tabIndex = 0;
+    current.canvas.focus({ preventScroll: true });
+  }
+  function placeAt(x, y) {
+    if (!armed || !current) return;
+    const def = armed,
+      point = ['note', 'emphasis'].includes(def.id)
+        ? { x: (x / current.w) * 100, y: (y / current.h) * 100 }
+        : current.pick?.(x, y);
+    if (point === null) {
+      status.textContent = tr('请在有效区域内选择|Choose a valid point');
+      return;
     }
-    if(type==='phase'){
-      if(o.type==='rays'){for(let i=0;i<o.count;i++){const y=m.center.y+(i-(o.count-1)/2)*m.radius*o.spread;H.line({x:m.sunX-15,y},{x:Math.max(8,m.center.x-m.radius),y},true);}return o.count+' '+tr('条平行光线|parallel rays');}
-      const angle=o.type==='snapshot'?m.phaseAt(o.date,o.time):o.angle,p=at(angle);H.dot(p,label);if(o.type==='snapshot'&&o.sight!=='no')H.line(m.center,p,true);if(o.type==='observer')H.line(m.center,p);
-      metric=`${angle.toFixed(1)}° · ${tr('照明|Illuminated')} ${(o.type==='snapshot'?m.fractionAt(o.date,o.time)*100:(1-Math.cos(angle*R))*50).toFixed(1)}%`;
+    armed = null;
+    create(def, point);
+  }
+  const action = (zh, en, fn) => {
+    const b = E('button', '', actions);
+    b.type = 'button';
+    b.dataset.dtLabel = zh + '|' + en;
+    b.onclick = fn;
+    return b;
+  };
+  const undo = action('撤销', 'Undo', () => travel('undo', 'redo')),
+    redo = action('重做', 'Redo', () => travel('redo', 'undo'));
+  undo.classList.add('dt-undo');
+  redo.classList.add('dt-redo');
+  historyActions.append(undo, redo);
+  head.insertBefore(help, fold);
+  const duplicate = action('复制', 'Duplicate', () => {
+    if (!validInputs()) return;
+    mutate((s) => {
+      const o = s.objects.find((x) => x.id === selected);
+      if (!o || s.objects.length >= 40) return;
+      const q = copy(o);
+      q.locked = false;
+      q.id = 'd' + Date.now() + ++serial;
+      if (o.customLabel) {
+        let n = 2;
+        while (s.objects.some((x) => x.label === o.label + ' ' + n)) n++;
+        q.label = o.label + ' ' + n;
+      } else {
+        q.copyNumber =
+          Math.max(
+            1,
+            ...s.objects
+              .filter((x) => x.type === o.type && !x.customLabel)
+              .map((x) => x.copyNumber || 1),
+          ) + 1;
+        const title = defs(selectedOwner()).find((d) => d.id === o.type).title;
+        q.label = title
+          .split('|')
+          .map((x) => x + ' ' + q.copyNumber)
+          .join('|');
+      }
+      if (['note', 'emphasis'].includes(q.type)) {
+        let placed = false;
+        for (let ring = 1; ring <= 10 && !placed; ring++)
+          for (const [dx, dy] of [
+            [1, 1],
+            [1, -1],
+            [-1, 1],
+            [-1, -1],
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+          ]) {
+            const x = o.x + dx * ring * 3,
+              y = o.y + dy * ring * 3;
+            if (x < 0 || x > 100 || y < 0 || y > 100) continue;
+            const box =
+              q.type === 'note'
+                ? textLayout(current, q.customLabel ? q.label : tr(q.label), {
+                    x: (current.w * x) / 100,
+                    y: (current.h * y) / 100,
+                  })
+                : null;
+            const occupied = s.objects.some((v) => {
+              if (!['note', 'emphasis'].includes(v.type)) return false;
+              if (Math.hypot(v.x - x, v.y - y) < 2.5) return true;
+              if (!box || v.type !== 'note') return false;
+              const other = textLayout(current, v.customLabel ? v.label : tr(v.label), {
+                x: (current.w * v.x) / 100,
+                y: (current.h * v.y) / 100,
+              });
+              return (
+                box.x < other.x + other.width + 6 &&
+                box.x + box.width + 6 > other.x &&
+                box.y < other.y + 20 &&
+                box.y + 20 > other.y
+              );
+            });
+            if (occupied) continue;
+            q.x = x;
+            q.y = y;
+            placed = true;
+            break;
+          }
+      }
+      if (o.autoLabel && !o.customLabel) {
+        q.autoLabel = o.autoLabel
+          .split('|')
+          .map((x) => x.replace(/ \d+$/, '') + ' ' + q.copyNumber)
+          .join('|');
+        q.label = q.autoLabel;
+      }
+      s.objects.push(q);
+      selected = q.id;
+    });
+  });
+  const remove = action('删除', 'Delete', () => {
+    commitActive();
+    if (validInputs())
+      mutate((s) => {
+        const index = s.objects.findIndex((o) => o.id === selected);
+        s.objects = s.objects.filter((o) => o.id !== selected);
+        selected = s.objects[Math.max(0, Math.min(index, s.objects.length - 1))]?.id || null;
+      });
+  });
+  objectActions.append(duplicate, remove);
+  const backward = action('向后叠放', 'Send backward', () => reorder(-1)),
+    forward = action('向前叠放', 'Bring forward', () => reorder(1));
+  objectActions.append(backward, forward);
+  const saveAction = action('保存本图对象', 'Save plot objects', save);
+  saveAction.title = 'Ctrl/Cmd+S';
+  saveAction.setAttribute('aria-keyshortcuts', 'Control+s Meta+s');
+  const exportAction = action('导出', 'Export', () => {
+    commitActive();
+    if (!current || !validInputs()) return;
+    const blob = new Blob(
+        [
+          JSON.stringify(
+            {
+              version: 1,
+              plot: current.type,
+              body: current.body || 'shared',
+              objects: stateFor(selectedOwner()).objects,
+            },
+            null,
+            2,
+          ),
+        ],
+        { type: 'application/json' },
+      ),
+      url = URL.createObjectURL(blob),
+      a = document.createElement('a');
+    a.href = url;
+    a.download = `skymotion-${current.type}.json`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+  duplicate.title = 'Ctrl/Cmd+D';
+  duplicate.setAttribute('aria-keyshortcuts', 'Control+d Meta+d');
+  saveAction.dataset.save = '';
+  const objectMenu = E('div', 'dt-object-menu', actions);
+  objectMenu.id = 'dt-object-menu';
+  objectMenu.setAttribute('popover', 'auto');
+  objectMenu.setAttribute('role', 'menu');
+  objectMenu.setAttribute('aria-label', tr('对象操作|Object actions'));
+  objectMenu.append(saveAction, duplicate, remove);
+  const more = E('button', 'dt-more');
+  more.type = 'button';
+  more.setAttribute('aria-haspopup', 'menu');
+  more.setAttribute('aria-controls', objectMenu.id);
+  more.setAttribute('aria-expanded', 'false');
+  more.innerHTML =
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>';
+  for (const b of objectMenu.children) {
+    b.setAttribute('role', 'menuitem');
+    b.tabIndex = -1;
+    b.addEventListener('click', () => {
+      closeObjectMenu();
+    });
+  }
+  function menuOpen() {
+    return objectMenu.matches(':popover-open');
+  }
+  function closeObjectMenu() {
+    if (menuOpen()) objectMenu.hidePopover();
+    more.setAttribute('aria-expanded', 'false');
+  }
+  more.onclick = () => {
+    if (menuOpen()) {
+      closeObjectMenu();
+      return;
     }
-    if(type==='companion'){
-      if(o.type==='snapshot'){const s=m.sample(o.date,o.time);const a=at(s.moon),b=at(s.planet);H.line(a,b,true);H.dot(a,label+' A');H.dot(b,label+' B');metric=`${o.date} · ${s.separation.toFixed(3)}°`;}
-      if(o.type==='trail'){const moon=[],planet=[];for(const s of m.trail(o)){moon.push(at(s.moon));planet.push(at(s.planet));}H.path(moon);H.path(planet,true);metric=tr('前后|Before/after')+' '+o.hours+' h';}
+    commitActive();
+    objectMenu.showPopover();
+    more.setAttribute('aria-expanded', 'true');
+    const r = more.getBoundingClientRect();
+    objectMenu.style.left =
+      Math.max(
+        8,
+        Math.min(innerWidth - objectMenu.offsetWidth - 8, r.right - objectMenu.offsetWidth),
+      ) + 'px';
+    objectMenu.style.top = Math.max(8, r.top - objectMenu.offsetHeight - 6) + 'px';
+    objectMenu.querySelector('button:not(:disabled)')?.focus();
+  };
+  objectMenu.addEventListener('toggle', (e) => {
+    more.setAttribute('aria-expanded', String(e.newState === 'open'));
+  });
+  objectMenu.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      closeObjectMenu();
+      more.focus();
+      return;
     }
-    if(type==='analemma'){
-      if(o.type==='track'){const samples=m.track(o);H.path(samples.map(at),true);if(samples[0])H.dot(at(samples[0]));const signature=q=>JSON.stringify([q.lat,q.lon,q.clock,q.basis||'clock',(q.basis||'clock')==='clock'?(q.offset??m.offset):0]),primary={lat:m.lat,lon:m.lon,clock:m.clock,basis:m.basis,offset:m.offset},duplicate=stateFor(m).objects.some(q=>q.id!==o.id&&q.type==='track'&&q.visible&&signature(q)===signature(o));metric=`${Math.abs(o.lat).toFixed(2)}°${o.lat<0?'S':'N'} · ${Math.abs(o.lon).toFixed(2)}°${o.lon<0?'W':'E'} · ${SkyDiagramSampling.clock(o.clock)} · ${tr(o.basis==='apparent'?'真太阳时|Apparent solar time':'钟表时|Clock time')}`;if(o.basis!=='apparent')metric+=' · UTC'+(o.offset>=0?'+':'')+o.offset;if(signature(primary)===signature(o)||duplicate)metric+=' · '+tr('条件相同，轨迹重合；请改变时刻、经度或切换天空视图比较纬度。|Matching conditions overlap. Change time or longitude, or use a sky view to compare latitudes.');}
-      if(o.type==='date'){const p=m.sample(o.date);H.dot(at(p),label+' '+o.date);metric=`${p.alt.toFixed(2)}°`;}
-      if(o.type==='level'){if(m.view==='equatorial')return tr('此图不是高度坐标，请切换天空或天穹视图查看高度参考。|Switch to sky or dome view to see an altitude reference.');H.path(Array.from({length:181},(_,i)=>at({az:i*2,alt:o.alt})),true);}
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const choices = [...objectMenu.querySelectorAll('button:not(:disabled)')],
+      i = choices.indexOf(document.activeElement);
+    choices[
+      e.key === 'Home'
+        ? 0
+        : e.key === 'End'
+          ? choices.length - 1
+          : (i + (e.key === 'ArrowDown' ? 1 : -1) + choices.length) % choices.length
+    ]?.focus();
+  });
+  actions.prepend(status);
+  const importAction = action('导入 JSON', 'Import JSON', () => {
+      commitActive();
+      if (validInputs()) fileInput.click();
+    }),
+    clearAction = action('清空本图参考', 'Clear plot references', () => {
+      commitActive();
+      if (!validInputs()) return;
+      if (!clearPending) {
+        clearPending = true;
+        clearAction.textContent = tr('确认清空（可撤销）|Confirm clear (undoable)');
+        return;
+      }
+      mutate((s) => {
+        s.objects = [];
+        selected = null;
+      });
+      clearPending = false;
+      updateFiles();
+    });
+  const planSave = E('button', '', fileActions);
+  planSave.type = 'button';
+  planSave.onclick = save;
+  planSave.dataset.dtLabel = '保存本图对象|Save plot objects';
+  fileActions.append(exportAction, importAction, clearAction);
+  function reorder(delta) {
+    if (!validInputs()) return;
+    mutate((s) => {
+      const i = s.objects.findIndex((o) => o.id === selected),
+        j = i + delta;
+      if (i >= 0 && j >= 0 && j < s.objects.length)
+        [s.objects[i], s.objects[j]] = [s.objects[j], s.objects[i]];
+    });
+  }
+  function updateFiles() {
+    fileTitle.textContent = tr('本图方案|Plot plans');
+    fileIntro.textContent = tr(
+      '保存仅保留在此设备。导出 JSON 可以备份或转移到另一台设备；导入前可选择合并或替换。|Save keeps references on this device. Export JSON for backup or another device; review an import before merging or replacing.',
+    );
+    clearAction.textContent = tr(
+      clearPending
+        ? '确认清空（可撤销）|Confirm clear (undoable)'
+        : '清空本图参考|Clear plot references',
+    );
+    clearAction.disabled = !current || !stateFor(selectedOwner()).objects.length;
+  }
+  async function readImport(file) {
+    fileInput.value = '';
+    if (!file || !current) return;
+    const model = current,
+      key = model.id + ':' + (model.body || 'shared'),
+      request = ++importRequest;
+    const stillCurrent = () =>
+      request === importRequest &&
+      !panel.hidden &&
+      current &&
+      key === current.id + ':' + (current.body || 'shared');
+    try {
+      if (file.size > 200000) throw Error('size');
+      const text = await file.text();
+      if (!stillCurrent()) return;
+      const data = JSON.parse(text);
+      if (
+        data.version !== 1 ||
+        data.plot !== model.type ||
+        (data.body && data.body !== (model.body || 'shared')) ||
+        !Array.isArray(data.objects) ||
+        data.objects.length > 40
+      )
+        throw Error('schema');
+      const accepted = clean(data.objects, model);
+      if (!accepted.length && data.objects.length) throw Error('empty');
+      pendingImport = accepted.map((o) => ({ ...o, id: 'd' + Date.now() + ++serial }));
+      importReview.replaceChildren();
+      const message = E('p', 'dt-caption', importReview);
+      message.textContent =
+        tr('可导入参考对象：|References ready to import: ') +
+        accepted.length +
+        (accepted.length !== data.objects.length
+          ? tr('（不支持的对象已略过）| (unsupported objects skipped)')
+          : '');
+      for (const [mode, label] of [
+        ['merge', '合并到本图|Merge into plot'],
+        ['replace', '替换本图|Replace plot'],
+        ['cancel', '取消|Cancel'],
+      ]) {
+        const b = E('button', '', importReview);
+        b.type = 'button';
+        b.textContent = tr(label);
+        b.onclick = () => {
+          if (mode === 'cancel') {
+            pendingImport = null;
+            importReview.replaceChildren();
+            return;
+          }
+          if (!validInputs()) return;
+          const imported = pendingImport;
+          if (!imported) return;
+          if (mode === 'merge' && stateFor(selectedOwner()).objects.length + imported.length > 40) {
+            status.textContent = tr(
+              '合并后超过 40 个对象；请改用替换或减少现有对象。|Merging exceeds 40 references; replace or remove some existing references.',
+            );
+            return;
+          }
+          mutate((s) => {
+            s.objects = mode === 'replace' ? copy(imported) : [...s.objects, ...copy(imported)];
+            selected = imported.at(-1)?.id || null;
+          });
+          pendingImport = null;
+          importReview.replaceChildren();
+          switchView('objects', true);
+        };
+      }
+      status.textContent = tr('文件已读取，选择合并或替换。|File ready; choose merge or replace.');
+    } catch {
+      if (!stillCurrent()) return;
+      pendingImport = null;
+      importReview.replaceChildren();
+      status.textContent = tr(
+        '无法导入：请选择同一天体、同类图解的有效 JSON 文件（不超过 200 KB）。|Import failed. Choose valid JSON for this plot and body, up to 200 KB.',
+      );
     }
-    if(type==='lunar'){const p=m.reference(o);H.dot(p,label);if(o.type==='sight')H.line(p,m.earth,true);metric=m.readReference(o);}
-    if(type==='space'){
-      if(o.type==='plane'){const points=Array.from({length:101},(_,i)=>{const a=i*Math.PI/50,x=o.radius*Math.cos(a),y=o.radius*Math.sin(a);return at(o.plane==='xz'?[x,0,y]:o.plane==='xy'?[x,y,0]:[0,x,y]);});H.path(points,true);}
-      if(['distance','angle'].includes(o.type)){const a=m.planet(o.a),b=m.planet(o.b);if(a&&b){H.dot(at(a.display),o.a);H.dot(at(b.display),o.b);if(o.type==='distance'){H.line(at(a.display),at(b.display));metric=Math.hypot(...a.physical.map((v,i)=>v-b.physical[i])).toFixed(5)+' AU';}else{H.line(at(a.display),at([0,0,0]));H.line(at([0,0,0]),at(b.display));const angle=Math.acos(Math.max(-1,Math.min(1,a.physical.reduce((n,v,i)=>n+v*b.physical[i],0)/(Math.hypot(...a.physical)*Math.hypot(...b.physical)))))/R;metric=angle.toFixed(3)+'°';}H.text(metric,at(a.display));}}
-      if(o.type==='camera')metric=tr('已保存此视角，可在属性中返回|Saved viewpoint; restore from its properties');
+  }
+  function cityLabel() {
+    const text = citySelect.selectedOptions[0]?.textContent || tr('观察点 / 城市|Observer / city'),
+      dict = window.skyEnglishDictionary || {},
+      zh = en() ? Object.keys(dict).find((k) => dict[k] === text) || text : text;
+    return zh + '|' + (dict[zh] || text);
+  }
+  function makeObject(def, point) {
+    const o = {
+      id: 'd' + Date.now() + ++serial,
+      type: def.id,
+      label: def.title,
+      visible: true,
+      locked: false,
+      customLabel: false,
+    };
+    for (const f of def.fields) {
+      const v =
+        typeof f.value === 'string' && ['date', 'time', 'lat', 'lon'].includes(f.value)
+          ? current[f.value]
+          : f.value;
+      o[f.name] = v ?? f.value;
+    }
+    const siblings = stateFor(selectedOwner()).objects.filter(
+      (v) => v.type === def.id && !v.customLabel,
+    );
+    if (siblings.length) {
+      o.copyNumber = Math.max(...siblings.map((v) => v.copyNumber || 1)) + 1;
+      o.label = def.title
+        .split('|')
+        .map((v) => v + ' ' + o.copyNumber)
+        .join('|');
+    }
+    if (current.type === 'analemma' && def.id === 'track') {
+      o.clock = current.clock ?? 720;
+      o.basis = current.basis || 'clock';
+      o.offset = current.offset ?? 8;
+    }
+    if (def.id === 'camera') o.camera = current.captureCamera?.();
+    if (point) Object.assign(o, point);
+    if (o.autoLabel) {
+      const base = o.autoLabel;
+      let n = 1,
+        candidate = base;
+      while (stateFor(current).objects.some((q) => (q.autoLabel || q.label) === candidate)) {
+        n++;
+        candidate = base
+          .split('|')
+          .map((x) => x + ' ' + n)
+          .join('|');
+      }
+      o.label = o.autoLabel = candidate;
+    }
+    return o;
+  }
+  function addRecipe() {
+    selectedSource = current.id;
+    commitActive();
+    if (!validInputs()) return;
+    const recipes = {
+      globe: [
+        ['observer', { lat: current.lat, lon: current.lon }],
+        ['observer', { lat: current.lat, lon: ((current.lon + 360) % 360) - 180 }],
+        ['ray', { lat: 0, lon: current.lon }],
+      ],
+      altitude: [
+        ['time', { time: 600 }],
+        ['time', { time: 840 }],
+        ['measure', {}],
+      ],
+      illumination: [
+        ['date', {}],
+        ['level', { value: 50 }],
+      ],
+      sky: [
+        ['time', { time: 600 }],
+        ['time', { time: 840 }],
+      ],
+      azimuth: [
+        ['direction', { az: 90 }],
+        ['direction', { az: 270 }],
+        ['ring', {}],
+      ],
+      geometry: [
+        ['ring', {}],
+        ['angle', {}],
+      ],
+      phase: [
+        ['phase', { angle: 90 }],
+        ['phase', { angle: 270 }],
+        ['rays', {}],
+      ],
+      companion: [
+        ['snapshot', {}],
+        ['trail', {}],
+      ],
+      analemma: [
+        ['track', { clock: 600 }],
+        ['track', { clock: 840 }],
+      ],
+      lunar: [
+        ['station', { angle: 0 }],
+        ['station', { angle: 180 }],
+        ['sight', {}],
+      ],
+      space: [
+        ['distance', {}],
+        ['angle', {}],
+        ['plane', {}],
+      ],
+    };
+    const available = defs(current),
+      items = (recipes[current.type] || []).filter(([id]) => available.some((d) => d.id === id));
+    if (stateFor(selectedOwner()).objects.length + items.length > 40) {
+      status.textContent = tr(
+        '空间不足；请先删除一些对象。|Not enough room; remove some references first.',
+      );
+      return;
+    }
+    editing = true;
+    mutate((s) => {
+      for (const [id, values] of items) {
+        const o = makeObject(
+          available.find((d) => d.id === id),
+          values,
+        );
+        s.objects.push(o);
+        selected = o.id;
+      }
+    });
+    switchView('objects', true);
+  }
+  const draftKey = (m) => 'sky-diagram-draft-v2:' + m.id + ':' + (m.body || 'shared');
+  function persist(m, s) {
+    try {
+      sessionStorage.setItem(draftKey(m), JSON.stringify({ version: 1, objects: s.objects }));
+    } catch {}
+  }
+  function stateFor(m) {
+    const key = m.id + ':' + (m.body || 'shared');
+    if (!states.has(key)) {
+      let objects = [],
+        stored = false;
+      try {
+        const v = JSON.parse(localStorage.getItem('sky-diagram-tools-v1:' + key));
+        if (v?.version === 1 && Array.isArray(v.objects)) {
+          objects = clean(v.objects, m);
+          stored = true;
+        }
+      } catch {}
+      const saved = JSON.stringify(objects);
+      try {
+        const v = JSON.parse(sessionStorage.getItem(draftKey(m)));
+        if (v?.version === 1 && Array.isArray(v.objects)) objects = clean(v.objects, m);
+      } catch {}
+      states.set(key, { objects, undo: [], redo: [], stored, saved });
+    }
+    return states.get(key);
+  }
+  function clean(objects, m) {
+    if (objects.length > 40) return [];
+    const out = [];
+    for (const raw of objects) {
+      if (!raw || typeof raw !== 'object') continue;
+      const def = defs(m).find((d) => d.id === raw.type);
+      if (!def || typeof raw.id !== 'string') continue;
+      const o = {
+        id: raw.id.slice(0, 80),
+        type: def.id,
+        label: typeof raw.label === 'string' ? raw.label.slice(0, 60) : def.title,
+        customLabel: raw.customLabel === true,
+        visible: raw.visible !== false,
+        locked: raw.locked === true,
+      };
+      if (!o.customLabel) {
+        const n = Number.isInteger(raw.copyNumber)
+          ? raw.copyNumber
+          : Number(o.label.match(/ (\d+)$/)?.[1]);
+        if (n >= 2 && n <= 999) o.copyNumber = n;
+        o.label = def.title
+          .split('|')
+          .map((x) => x + (o.copyNumber ? ' ' + o.copyNumber : ''))
+          .join('|');
+      }
+      if (!o.customLabel && typeof raw.autoLabel === 'string' && raw.autoLabel.length <= 160) {
+        o.autoLabel = raw.autoLabel;
+        o.label = raw.autoLabel;
+      }
+      for (const f of def.fields) {
+        const v = raw[f.name];
+        if (f.options) o[f.name] = f.options.some((x) => x.split(':')[0] === v) ? v : f.value;
+        else if (f.min !== undefined)
+          o[f.name] = Number.isFinite(v)
+            ? Math.max(f.min, Math.min(f.max, v))
+            : Number.isFinite(f.value)
+              ? f.value
+              : 0;
+        else if (f.value === 'date')
+          o[f.name] = validDate(v) ? v : validDate(m.date) ? m.date : '1900-01-01';
+        else o[f.name] = typeof v === 'string' ? v.slice(0, 100) : f.value;
+      }
+      if (
+        def.id === 'camera' &&
+        raw.camera &&
+        ['azimuth', 'elevation', 'distance'].every((k) => Number.isFinite(raw.camera[k]))
+      )
+        o.camera = {
+          azimuth: raw.camera.azimuth,
+          elevation: Math.max(-1.5, Math.min(1.5, raw.camera.elevation)),
+          distance: Math.max(0.5, Math.min(10000, raw.camera.distance)),
+          selected:
+            Number.isInteger(raw.camera.selected) &&
+            raw.camera.selected >= 0 &&
+            raw.camera.selected < 8
+              ? raw.camera.selected
+              : 2,
+          view: ['overview', 'earthmoon', 'focus'].includes(raw.camera.view)
+            ? raw.camera.view
+            : 'overview',
+          inspectingMoon: raw.camera.inspectingMoon === true,
+        };
+      out.push(o);
+    }
+    return out;
+  }
+  function defs(m) {
+    let d = definitions[m.type] || [];
+    if (m.type === 'sky' && m.body === 'moon')
+      d = d.filter((x) => ['curve', 'time', 'build'].includes(x.id));
+    if (m.type === 'altitude' && m.body === 'moon')
+      d = d.filter((x) => ['curve', 'time'].includes(x.id));
+    return [...d, ...common];
+  }
+  function repaint() {
+    if (!current) return;
+    if (current.redraw) current.redraw();
+    else if (typeof schedule === 'function') schedule();
+  }
+  function draftStatus() {
+    if (!current) return;
+    const s = stateFor(selectedOwner());
+    status.textContent =
+      JSON.stringify(s.objects) === s.saved
+        ? tr(
+            s.stored
+              ? '已保存到此设备|Saved to this device'
+              : '没有未保存的修改|No unsaved changes',
+          )
+        : tr('有未保存的修改|Unsaved changes');
+  }
+  function record(s, before, beforeSelected = selected, model = selectedOwner()) {
+    if (JSON.stringify(before) === JSON.stringify(s.objects)) return;
+    s.undo.push({ objects: before, selected: beforeSelected });
+    if (s.undo.length > 30) s.undo.shift();
+    s.redo = [];
+    persist(model, s);
+    draftStatus();
+    document.dispatchEvent(new Event('skymotion:references'));
+  }
+  const displayValue = (key, value) =>
+    key === 'time' && Number.isFinite(value)
+      ? String(Math.floor(value / 60)).padStart(2, '0') +
+        ':' +
+        String(Math.round(value) % 60).padStart(2, '0')
+      : ['lat', 'lon', 'clock'].includes(key) && Number.isFinite(value)
+        ? String(Number(value.toFixed(['lat', 'lon'].includes(key) ? 4 : 2)))
+        : value;
+  const coordinates = (lat, lon) =>
+    `${Math.abs(lat).toFixed(2)}°${lat < 0 ? 'S' : 'N'} · ${Math.abs(lon).toFixed(2)}°${lon < 0 ? 'W' : 'E'}`;
+  let basisHome = null,
+    basisNode = null;
+  function restoreBasis() {
+    if (basisNode && basisHome?.parentNode) basisHome.after(basisNode);
+  }
+  function updateLocation(m = selectedOwner()) {
+    if (!m) return;
+    const o = stateFor(m).objects.find((o) => o.id === selected),
+      available = o?.type === 'observer' && typeof m.observeLocation === 'function';
+    locationPanel.hidden = !available;
+    if (!available) {
+      restoreBasis();
+      return;
+    }
+    const linked = m.body === 'sun' && ['lab', 'diagrams'].includes(document.body.dataset.page);
+    if (linked) {
+      basisNode = document.querySelector('.observer-link-settings');
+      if (basisNode) {
+        if (!basisHome) {
+          basisHome = document.createComment('observer comparison settings');
+          basisNode.before(basisHome);
+        }
+        locationPanel.append(basisNode);
+      }
+    }
+    const same = Math.abs(o.lat - m.lat) < 1e-7 && Math.abs(o.lon - m.lon) < 1e-7;
+    const text =
+      tr(
+        same
+          ? '所有图解正在使用此观测地点。|All diagrams use this observation location.'
+          : linked
+            ? '对照城市，已同步到高度曲线、升落方位和地平面图。|Comparison city: synchronized with altitude, bearings and horizon diagrams.'
+            : '独立参考点。|Independent reference.',
+      ) + (same ? '' : '\n' + tr('当前观测：|Current: ') + coordinates(m.lat, m.lon));
+    if (locationInfo.textContent !== text) locationInfo.textContent = text;
+    locationApply.disabled = same;
+    locationApply.textContent = tr(
+      same ? '当前基准地点|Current baseline location' : '设为基准地点|Use as baseline location',
+    );
+  }
+  locationApply.onclick = () => {
+    commitActive();
+    if (!validInputs() || !current) return;
+    finishNudge();
+    cancelDrag();
+    const o = stateFor(selectedOwner()).objects.find((o) => o.id === selected);
+    if (o?.type !== 'observer' || !current.observeLocation) return;
+    if (current.observeLocation({ lat: o.lat, lon: o.lon }) === false) {
+      status.textContent = tr(
+        '此地点将超出支持日期范围；请调整日期或时间规则。|This location leaves the supported date range; adjust the date or time basis.',
+      );
+      return;
+    }
+    status.textContent = tr(
+      '已更新观测地点；可用浏览器后退恢复。|Observation location updated; browser Back restores it.',
+    );
+  };
+  function actionState() {
+    if (!current) return;
+    const s = stateFor(selectedOwner()),
+      o = s.objects.find((o) => o.id === selected),
+      index = s.objects.findIndex((o) => o.id === selected);
+    backward.disabled = index <= 0;
+    forward.disabled = index < 0 || index >= s.objects.length - 1;
+    undo.disabled = !s.undo.length;
+    redo.disabled = !s.redo.length;
+    duplicate.disabled = !o || s.objects.length >= 40;
+    remove.disabled = !o;
+    for (const b of add.querySelectorAll('[data-tool-type]'))
+      b.disabled =
+        (stateFor(current).objects.length >= 40 && b.dataset.toolType !== 'build') ||
+        (current.type === 'analemma' &&
+          current.view === 'equatorial' &&
+          b.dataset.toolType === 'level');
+  }
+  function validInputs() {
+    const bad = form.querySelector('[aria-invalid="true"]');
+    if (!bad) return true;
+    panel.dataset.collapsed = 'false';
+    panel.dataset.detail = 'true';
+    updateFold();
+    switchView('objects', true);
+    status.textContent =
+      bad.dataset.error || tr('请先修正标记的输入。|Correct the marked input first.');
+    bad.focus({ preventScroll: true });
+    revealField(bad);
+    return false;
+  }
+  function fieldError(input, message) {
+    input.setAttribute('aria-invalid', 'true');
+    input.dataset.error = message;
+    status.textContent = message;
+    let error = input.parentElement.querySelector('.dt-field-error');
+    if (!error) {
+      error = E('small', 'dt-field-error', input.parentElement);
+      error.id = 'dt-error-' + input.dataset.field;
+    }
+    error.textContent = message;
+    input.setAttribute('aria-errormessage', error.id);
+  }
+  function clearFieldError(input) {
+    input.removeAttribute('aria-invalid');
+    input.removeAttribute('aria-errormessage');
+    delete input.dataset.error;
+    input.parentElement.querySelector('.dt-field-error')?.remove();
+  }
+  function updateSmall() {
+    if (!current) return;
+    const s = stateFor(selectedOwner());
+    for (const b of list.querySelectorAll('[data-reference-id]')) {
+      const o = s.objects.find((o) => o.id === b.dataset.referenceId.split(':').at(-1));
+      if (o) {
+        const label = o.customLabel ? o.label : tr(o.label);
+        b.textContent = label;
+        b.parentElement
+          .querySelector('input')
+          ?.setAttribute('aria-label', tr('显示|Show') + ' ' + label);
+      }
+    }
+    if (!s.objects.find((o) => o.id === selected)?.visible) result.textContent = '';
+    updateLocation();
+    actionState();
+  }
+  function mutate(fn, keepFields = false) {
+    finishNudge();
+    if (!current) return;
+    const s = stateFor(selectedOwner()),
+      before = copy(s.objects),
+      beforeSelected = selected;
+    if (typeof state !== 'undefined' && typeof stop === 'function') stop();
+    else current.pause?.();
+    fn(s);
+    record(s, before, beforeSelected);
+    if (keepFields) draftStatus();
+    keepFields ? updateSmall() : update();
+    repaint();
+  }
+  function travel(from, to) {
+    finishNudge();
+    cancelDrag();
+    if (!current) return;
+    const s = stateFor(selectedOwner());
+    if (!s[from].length) return;
+    s[to].push({ objects: copy(s.objects), selected });
+    const snapshot = s[from].pop();
+    s.objects = snapshot.objects;
+    persist(selectedOwner(), s);
+    selected = s.objects.some((o) => o.id === snapshot.selected) ? snapshot.selected : null;
+    draftStatus();
+    update();
+    repaint();
+    document.dispatchEvent(new Event('skymotion:references'));
+  }
+  function commitActive() {
+    const field = document.activeElement;
+    if (
+      form.contains(field) &&
+      field.matches('input:not([type=checkbox]),select') &&
+      field.dataset.committedValue !== field.value
+    )
+      field.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+  function save() {
+    finishNudge();
+    commitActive();
+    if (!current || !validInputs()) return;
+    cancelDrag();
+    try {
+      const owner = selectedOwner(),
+        s = stateFor(owner);
+      localStorage.setItem(
+        'sky-diagram-tools-v1:' + owner.id + ':' + (owner.body || 'shared'),
+        JSON.stringify({ version: 1, objects: s.objects }),
+      );
+      s.saved = JSON.stringify(s.objects);
+      s.stored = true;
+      status.textContent = tr('已保存到此设备|Saved to this device');
+    } catch {
+      status.textContent = tr(
+        '浏览器无法保存；仅本次访问有效|Storage unavailable; available for this visit',
+      );
+    }
+  }
+  function create(def, point) {
+    selectedSource = current.id;
+    editing = true;
+    updateMode();
+    if (stateFor(selectedOwner()).objects.length >= 40) {
+      status.textContent = tr(
+        '最多添加 40 个参考对象，请先删除一个。|Up to 40 references; remove one before adding another.',
+      );
+      return;
+    }
+    mutate((s) => {
+      const o = makeObject(def, point);
+      s.objects.push(o);
+      selected = o.id;
+    });
+    switchView('objects', true);
+    showInspector();
+    const o = stateFor(current).objects.find((o) => o.id === selected);
+    status.textContent =
+      tr('已添加：|Added: ') +
+      (o.customLabel ? o.label : tr(o.label)) +
+      tr('。已打开对象属性。|. Its properties are now open.');
+    if (
+      o.type === 'observer' &&
+      ((Math.abs(o.lat - current.lat) < 1e-7 && Math.abs(o.lon - current.lon) < 1e-7) ||
+        entries().some(
+          (q) =>
+            q.o.id !== o.id &&
+            q.o.type === 'observer' &&
+            Math.abs(q.o.lat - o.lat) < 1e-7 &&
+            Math.abs(q.o.lon - o.lon) < 1e-7,
+        ))
+    )
+      status.textContent = tr(
+        '已添加。地点相同，轨迹重合；可修改经纬度。|Added. These locations overlap; change the comparison coordinates.',
+      );
+    else if (o.type === 'curve' && o.date === current.date)
+      status.textContent = tr(
+        '已添加。对照日期相同，请在属性中更改日期。|Added. The dates match; change the comparison date in Properties.',
+      );
+    else if (o.type === 'time' && Math.abs(o.time - current.time) < 0.01)
+      status.textContent = tr(
+        '已记录当前时刻。可改为其他时刻进行对照。|Current time pinned. Change its time to compare another moment.',
+      );
+  }
+
+  function showInspector() {
+    panel.dataset.detail = 'true';
+    mobileBack.textContent = tr('返回对象列表|Back to object list');
+    if (desktopSplit()) {
+      inspector.scrollTop = 0;
+      const row = selectedRow();
+      if (row) revealWithin(row, list);
+      return;
+    }
+    scroll.scrollTop = Math.max(0, inspector.offsetTop - scroll.offsetTop - 8);
+  }
+  function rememberContext() {
+    if (!current || panel.hidden) return;
+    const s = stateFor(selectedOwner());
+    s.lastSelected = selected;
+    (s.viewScroll ??= {})[activeView] = scroll.scrollTop;
+    s.inspectorScroll = inspector.scrollTop;
+    s.listScroll = list.scrollTop;
+  }
+  function hide() {
+    for (const input of form.querySelectorAll('[aria-invalid=true]')) {
+      input.value = input.dataset.committedValue;
+      clearFieldError(input);
+    }
+    closeObjectMenu();
+    restoreBasis();
+    clearTimeout(visibilityTimer);
+    visibilityTimer = 0;
+    rememberContext();
+    ++importRequest;
+    unmountPanel();
+    document.body.classList.remove('diagram-workbench-active');
+    finishNudge();
+    const wasOpen = !panel.hidden;
+    if (current) (current.host || current.canvas).classList.remove('dt-editing');
+    cancelDrag();
+    if (current) stateFor(selectedOwner()).lastSelected = selected;
+    panel.hidden = true;
+    armed = null;
+    placement.hidden = true;
+    syncLaunchers();
+    if (current) portals.get(current.id)?.focus({ preventScroll: true });
+    syncRailShell();
+    if (wasOpen) repaint();
+  }
+  function open(m, preserveRail = false) {
+    if (!customizationOn()) return false;
+    if (!panel.hidden) {
+      commitActive();
+      if (!validInputs()) return false;
+    }
+    if (!preserveRail) railView = 'references';
+    rememberContext();
+    if (current?.id !== m.id) activeView = 'objects';
+    ++importRequest;
+    finishNudge();
+    cancelDrag();
+    if (current) (current.host || current.canvas).classList.remove('dt-editing');
+    current = m;
+    selectedSource = m.id;
+    editing = true;
+    const s = stateFor(m);
+    selected = s.objects.some((o) => o.id === s.lastSelected) ? s.lastSelected : null;
+    armed = null;
+    panel.hidden = false;
+    pendingImport = null;
+    clearPending = false;
+    importReview.replaceChildren();
+    const remembered = s.viewScroll?.[activeView] || 0,
+      inspectorPosition = s.inspectorScroll || 0,
+      listPosition = s.listScroll || 0;
+    scroll.scrollTop = 0;
+    draftStatus();
+    update();
+    scroll.scrollTop = remembered;
+    (s.viewScroll ??= {})[activeView] = remembered;
+    inspector.scrollTop = inspectorPosition;
+    list.scrollTop = listPosition;
+    placePanel();
+    syncLaunchers();
+    panel.dataset.restoring = 'true';
+    const epoch = importRequest;
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        if (panel.hidden || current?.id !== m.id || epoch !== importRequest) return;
+        scroll.scrollTop = Math.min(
+          remembered,
+          Math.max(0, scroll.scrollHeight - scroll.clientHeight),
+        );
+        inspector.scrollTop = inspectorPosition;
+        list.scrollTop = listPosition;
+        panel.dataset.restoring = 'false';
+      }),
+    );
+    repaint();
+  }
+  const railPositions = { conditions: 0, references: 0 };
+  let emptyContext = null;
+  function parameterRail() {
+    return (
+      document.querySelector('.ui-parameters') ||
+      document.querySelector('body[data-page=space]:not(.space-immersive) #spaceSidebarHost .side')
+    );
+  }
+  function persistentRailMode() {
+    return (
+      !!parameterRail() &&
+      window.SkyCustomization?.active === true &&
+      !matchMedia('(max-width:760px)').matches
+    );
+  }
+  function visibleModels() {
+    return [...models.values()].filter(
+      (m) =>
+        (typeof state === 'undefined' || m.body === state.body) &&
+        m.canvas.getBoundingClientRect().width > 0 &&
+        m.canvas.getBoundingClientRect().height > 0,
+    );
+  }
+  function chooseRail(kind) {
+    commitActive();
+    if (!validInputs() || window.SkyLabComparison?.validate() === false) return false;
+    closeObjectMenu();
+    const rail = parameterRail();
+    if (!rail) return false;
+    railPositions[railView] = rail.scrollTop;
+    if (kind === 'conditions') {
+      referenceMode = editing;
+      setEditing(false);
+    } else {
+      const target =
+        current && visibleModels().some((m) => m.id === current.id)
+          ? models.get(current.id)
+          : visibleModels()[0];
+      if (panel.hidden && target && !document.body.classList.contains('scene-builder-active'))
+        open(target, true);
+      setEditing(referenceMode);
+    }
+    railView = kind;
+    syncRailShell();
+    rail.scrollTop = railPositions[kind] || 0;
+    return true;
+  }
+  function ensureRailNavigation(rail) {
+    if (railNavigation?.parentElement === rail) return;
+    rail.id ||= 'diagram-parameter-rail';
+    railNavigation = E('nav', 'dt-rail-navigation', rail);
+    railNavigation.dataset.i18nSkip = '';
+    railNavigation.setAttribute('role', 'tablist');
+    railNavigation.setAttribute('aria-label', tr('侧栏内容|Sidebar section'));
+    rail.prepend(railNavigation);
+    for (const kind of ['conditions', 'references']) {
+      const b = E('button', '', railNavigation);
+      b.type = 'button';
+      b.id = 'dt-rail-' + kind;
+      b.dataset.railSection = kind;
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-controls', kind === 'conditions' ? rail.id : panel.id);
+      b.onclick = () => chooseRail(kind);
+    }
+    railNavigation.addEventListener('keydown', (e) => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+      e.preventDefault();
+      const index =
+          e.key === 'Home'
+            ? 0
+            : e.key === 'End'
+              ? 1
+              : e.target.dataset.railSection === 'conditions'
+                ? 1
+                : 0,
+        button = railNavigation.children[index];
+      if (chooseRail(button.dataset.railSection)) button.focus({ preventScroll: true });
+    });
+    emptyContext = E('section', 'dt-context-empty', rail);
+    emptyContext.dataset.i18nSkip = '';
+    emptyContext.id = 'dt-reference-empty';
+    emptyContext.setAttribute('role', 'region');
+    emptyContext.setAttribute('aria-labelledby', 'dt-rail-references');
+    emptyContext.hidden = true;
+    const text = E('p', '', emptyContext),
+      resume = E('button', '', emptyContext);
+    resume.type = 'button';
+    resume.onclick = () => {
+      const available = visibleModels(),
+        target = available.find((m) => m.id === current?.id) || available[0];
+      if (target) open(target, true);
+    };
+  }
+  function syncRailNavigation() {
+    if (!railNavigation) return;
+    railNavigation.setAttribute('aria-label', tr('侧栏内容|Sidebar section'));
+    for (const b of railNavigation.children) {
+      const chosen = b.dataset.railSection === railView;
+      b.textContent = tr(
+        b.dataset.railSection === 'conditions'
+          ? '观测条件|Observation controls'
+          : '图中对象|Plot objects',
+      );
+      b.setAttribute('aria-selected', String(chosen));
+      b.tabIndex = chosen ? 0 : -1;
+    }
+  }
+  function syncRailShell() {
+    const rail = parameterRail() || railNavigation?.parentElement;
+    if (!rail) return;
+    const persistent = persistentRailMode();
+    if (persistent) ensureRailNavigation(rail);
+    rail.classList.toggle('dt-navigation-ready', persistent);
+    if (railNavigation) {
+      railNavigation.hidden = !persistent && !mountedRail;
+      if (persistent || mountedRail) rail.dataset.editorView = railView;
+      else delete rail.dataset.editorView;
+    }
+    if (emptyContext) {
+      emptyContext.hidden = !persistent || railView !== 'references' || !panel.hidden;
+      emptyContext.firstElementChild.textContent = tr(
+        visibleModels().length
+          ? '图中编辑已收起。选择“继续编辑当前图”恢复，或切换到观测条件。|Plot editing is closed. Continue editing this plot, or choose Observation controls.'
+          : '当前视图没有图内参考工具；可切换到观测条件，或选择其他图解。|This view has no plot-reference tools. Choose Observation controls or another diagram.',
+      );
+      const b = emptyContext.lastElementChild;
+      b.textContent = tr('继续编辑当前图|Continue editing this plot');
+      b.disabled = !visibleModels().length;
+    }
+    syncRailNavigation();
+  }
+  function unmountPanel() {
+    if (!mountedRail) return;
+    const previous = mountedRail;
+    mountedRail = null;
+    document.body.append(panel);
+    previous.classList.remove('dt-rail-active');
+    if (!persistentRailMode()) {
+      previous.classList.remove('dt-navigation-ready');
+      railNavigation?.remove();
+      railNavigation = null;
+      emptyContext?.remove();
+      emptyContext = null;
+      delete previous.dataset.editorView;
+    }
+    previous.scrollTop = railScroll;
+  }
+  function placePanel() {
+    const rail = parameterRail();
+    const r = rail?.getBoundingClientRect(),
+      mobile = matchMedia('(max-width:760px)').matches;
+    const docked =
+      !mobile && !!r && r.width > 180 && r.width < 450 && r.left >= 0 && r.height > 180;
+    const focused = panel.contains(document.activeElement) ? document.activeElement : null;
+    if (mountedRail && (!docked || mountedRail !== rail)) unmountPanel();
+    panel.classList.toggle('dt-docked', docked);
+    if (docked && !mountedRail) {
+      mountedRail = rail;
+      railScroll = rail.scrollTop;
+      rail.classList.add('dt-rail-active');
+      rail.append(panel);
+      ensureRailNavigation(rail);
+      rail.dataset.editorView = railView;
+      rail.scrollTop = railPositions[railView] || 0;
+    }
+    panel.style.top = mobile ? 'auto' : '110px';
+    panel.style.bottom = mobile ? '12px' : '16px';
+    panel.style.left = '';
+    panel.style.width = '';
+    document.body.classList.toggle('diagram-workbench-active', docked);
+    syncRailShell();
+    if (focused && document.activeElement !== focused) focused.focus({ preventScroll: true });
+  }
+  // Tool creation, object navigation and properties render independently.
+  function renderToolLibrary() {
+    add.replaceChildren();
+    const groups = new Map();
+    for (const def of defs(current)) {
+      const group = ['observer', 'time', 'track'].includes(def.id)
+        ? '地点与时刻|Places and times'
+        : '图上参考|Plot references';
+      let target = groups.get(group);
+      if (!target) {
+        const heading = E('h4', 'dt-add-group', add);
+        heading.textContent = tr(group);
+        target = E('div', 'dt-add-group-tools', add);
+        groups.set(group, target);
+      }
+      if (def.id === 'build') continue;
+      const b = E('button', '', target);
+      b.type = 'button';
+      b.dataset.toolType = def.id;
+      b.textContent = tr(def.title);
+      b.onclick = () => {
+        commitActive();
+        if (!validInputs()) return;
+        if (
+          ['note', 'emphasis'].includes(def.id) ||
+          (current.pick &&
+            ['observer', 'time', 'phase'].includes(def.id) &&
+            !(current.type === 'sky' && def.id === 'observer'))
+        ) {
+          arm(def);
+        } else {
+          const coords =
+            def.id === 'observer' && !cityPicker.hidden
+              ? citySelect.value.split(',').map(Number)
+              : null;
+          create(
+            def,
+            coords?.length === 2 && coords.every(Number.isFinite)
+              ? {
+                  lat: coords[0],
+                  lon: coords[1],
+                  label: cityLabel(),
+                  autoLabel: cityLabel(),
+                  customLabel: false,
+                }
+              : undefined,
+          );
+        }
+      };
+    }
+    if (window.SkySceneBuilder && ['lab', 'diagrams'].includes(document.body.dataset.page)) {
+      const heading = E('h4', 'dt-add-group', add);
+      heading.textContent = tr(
+        '实验物体 · 在实验地面中摆放|Experiment objects · place on the experiment ground',
+      );
+      const target = E('div', 'dt-add-group-tools', add);
+      for (const [kind, label] of [
+        ['rod', '杆|Rod'],
+        ['sphere', '球|Sphere'],
+        ['circle', '参考圈|Reference circle'],
+        ['planeObject', '参考平面|Reference plane'],
+        ['dial', '刻度盘|Dial'],
+        ['observer', '观察站|Station'],
+        ['marker', '标记点|Marker'],
+        ['note', '地面文字|Ground note'],
+      ]) {
+        const b = E('button', '', target);
+        b.type = 'button';
+        b.dataset.buildKind = kind;
+        b.textContent = tr(label);
+        b.onclick = () => {
+          commitActive();
+          if (validInputs()) window.SkySceneBuilder.open({ kind });
+        };
+      }
+    }
+  }
+
+  function renderObjectList(allEntries, s) {
+    list.replaceChildren();
+    if (!allEntries.length) {
+      const empty = E('p', 'dt-empty', list);
+      empty.textContent = tr(
+        '还没有添加对象。点击上方“添加对象”，选择地点、时刻或图上参考。|No objects yet. Use Add object above to choose a place, time or plot reference.',
+      );
+    }
+    for (const { o, source } of allEntries) {
+      const token = source === current.id ? o.id : source + ':' + o.id;
+      const row = E('div', 'dt-row', list),
+        b = E('button', '', row);
+      b.type = 'button';
+      b.textContent = o.customLabel ? o.label : tr(o.label);
+      b.setAttribute('aria-pressed', String(o.id === selected && source === selectedOwner().id));
+      b.dataset.referenceId = token;
+      b.dataset.referenceSource = source;
+      if (current.type === 'analemma' && o.type === 'track') {
+        b.classList.add('dt-track-label');
+        b.style.setProperty(
+          '--reference-color',
+          trackColors[s.objects.filter((q) => q.type === 'track').indexOf(o) % trackColors.length],
+        );
+      }
+      b.onclick = () => selectReference(token);
+      const toggle = E('label', 'dt-toggle', row),
+        visible = E('input', '', toggle);
+      visible.type = 'checkbox';
+      visible.checked = o.visible;
+      visible.setAttribute(
+        'aria-label',
+        tr('显示|Show') + ' ' + (o.customLabel ? o.label : tr(o.label)),
+      );
+      visible.onchange = () => {
+        commitActive();
+        if (!validInputs()) {
+          visible.checked = !visible.checked;
+          return;
+        }
+        if (source !== current.id) {
+          comparisons.patch(source, o.id, { visible: visible.checked });
+          update();
+        } else {
+          const owner = selectedSource;
+          selectedSource = source;
+          mutate(() => {
+            o.visible = visible.checked;
+          }, true);
+          selectedSource = owner;
+        }
+      };
+      if (o.id === selected && source === selectedOwner().id) row.append(more);
+      else {
+        const rowMore = E('button', 'dt-row-more', row);
+        rowMore.type = 'button';
+        rowMore.innerHTML = more.innerHTML;
+        rowMore.setAttribute('aria-label', tr('更多操作|More actions') + ' · ' + b.textContent);
+        rowMore.setAttribute('aria-haspopup', 'menu');
+        rowMore.onclick = () => {
+          selectReference(token);
+          more.click();
+        };
+      }
+    }
+    if (window.SkySceneBuilder && ['lab', 'diagrams'].includes(document.body.dataset.page)) {
+      const physical = SkySceneBuilder.listObjects();
+      objectTitle.textContent =
+        tr('图中对象|Plot objects') + ' · ' + (allEntries.length + physical.length);
+      panel.dataset.empty = String(!allEntries.length && !physical.length);
+      if (physical.length) {
+        list.querySelector('.dt-empty')?.remove();
+        for (const o of physical) {
+          const row = E('div', 'dt-row dt-ground-row', list),
+            b = E('button', '', row);
+          b.type = 'button';
+          b.textContent = o.label + tr(' · 实验地面| · Experiment ground');
+          b.dataset.groundObject = o.id;
+          b.onclick = () => SkySceneBuilder.open({ objectId: o.id });
+        }
+      }
+    }
+  }
+
+  // One validation/commit path for every reference property, regardless of page.
+  function commitReferenceField(n, f, o) {
+    let v = n.value;
+    if (f.min !== undefined) {
+      if (f.name === 'time' && String(v).includes(':')) {
+        const parts = /^(\d{1,2}):(\d{2})$/.exec(v);
+        v =
+          parts && +parts[2] < 60 && (+parts[1] < 24 || (+parts[1] === 24 && +parts[2] === 0))
+            ? +parts[1] * 60 + +parts[2]
+            : NaN;
+      }
+      v = Number(v);
+      if (n.value.trim() === '' || !Number.isFinite(v)) {
+        fieldError(
+          n,
+          tr(
+            f.name === 'time'
+              ? '请输入 00:00—24:00 的时刻。|Enter a time from 00:00 to 24:00.'
+              : '请输入有效数值。|Enter a valid number.',
+          ),
+        );
+        return;
+      }
+      v = Math.max(f.min, Math.min(f.max, v));
+    }
+    if (f.value === 'date' && !validDate(v)) {
+      fieldError(
+        n,
+        tr(
+          '请输入 1900-01-01 至 2100-12-31 之间的有效日期。|Enter a valid date between 1900-01-01 and 2100-12-31.',
+        ),
+      );
+      return;
+    }
+    n.value = displayValue(f.name, v);
+    clearFieldError(n);
+    n.dataset.committedValue = n.value;
+    mutate(() => (o[f.name] = v), true);
+    if (current.type === 'analemma' && f.name === 'basis') {
+      const offset = form.querySelector('[data-field=offset]');
+      if (offset) offset.disabled = v === 'apparent';
+    }
+    if (current.type === 'illumination' && f.value === 'date')
+      requestAnimationFrame(() => {
+        if (!panel.hidden && selected === o.id) revealField(result);
+      });
+  }
+
+  function renderInspector(s) {
+    referenceHelp.hidden = current.type !== 'analemma';
+    referenceHelp.textContent =
+      current.type === 'analemma'
+        ? tr(
+            current.view === 'equatorial'
+              ? '赤纬—时角图不随纬度改变。比较纬度请切换天空或天穹视图；每条轨迹可选择时间规则，钟表时使用指定时区。|Latitude does not change declination or hour angle. Compare latitudes in the sky or dome view. Each track has its own time basis; clock time uses the selected UTC offset.'
+              : '对照轨迹沿用本图年份和模型。纬度、经度、每日时刻及时间规则独立设置；钟表时使用指定时区。|Tracks share this plot’s year and model. Set each location, daily time and time basis independently; clock time uses its selected UTC offset.',
+          )
+        : ' ';
+    form.replaceChildren();
+    const o = s.objects.find((o) => o.id === selected);
+    inspector.hidden = !o;
+    if (!o) panel.dataset.detail = 'false';
+    objectActions.hidden = !o || s.objects.length < 2;
+    if (
+      o?.type === 'observer' &&
+      ['lab', 'diagrams'].includes(document.body.dataset.page) &&
+      current.body === 'sun'
+    ) {
+      referenceHelp.hidden = false;
+      referenceHelp.textContent = tr(
+        '这是额外的地点对照，不会移动原观察者。修改下方经纬度即可更新对照；若与原地点相同，曲线会重合。继续添加请点上方“添加对象”。|This is an extra location comparison; your original observer stays unchanged. Change the coordinates below to update it. Identical locations overlap. Use Add object above to add another.',
+      );
+    }
+    inspectorTitle.textContent = tr(
+      o ? '调整所选对象|Selected reference' : '选择一个对象以调整|Select a reference to adjust',
+    );
+    const resultKey = (selectedOwner()?.id || '') + ':' + (current.body || '') + ':' + selected;
+    if (result.dataset.reference !== resultKey) {
+      result.textContent = '';
+      result.dataset.reference = resultKey;
+    }
+    if (o) {
+      const def = defs(selectedOwner()).find((d) => d.id === o.type);
+      const label = E('label', '', form);
+      label.append(document.createTextNode(tr('名称 / 说明|Name / note')));
+      const input = E('input', '', label);
+      input.value = o.customLabel ? o.label : tr(o.label);
+      input.maxLength = 60;
+      input.dataset.field = 'label';
+      input.dataset.committedValue = input.value;
+      input.onchange = () => {
+        const value = input.value.trim();
+        mutate(() => {
+          o.label = value || def.title;
+          o.customLabel = !!value;
+          if (!value) delete o.copyNumber;
+        }, true);
+        input.value = value || tr(def.title);
+        input.dataset.committedValue = input.value;
+      };
+      for (const f of def.fields) {
+        const l = E('label', '', form);
+        l.append(document.createTextNode(tr(f.title)));
+        const n = E(f.options ? 'select' : 'input', '', l);
+        if (f.options) {
+          for (const opt of f.options) {
+            const [value, ...label] = opt.split(':');
+            const e = E('option', '', n);
+            e.value = value;
+            e.textContent = tr(label.join(':'));
+          }
+        } else {
+          n.type = f.min !== undefined ? 'number' : 'text';
+          if (f.min !== undefined) {
+            n.min = f.min;
+            n.max = f.max;
+            n.step = f.step;
+          }
+          if (f.value === 'date') {
+            n.placeholder = 'YYYY-MM-DD';
+            n.maxLength = 10;
+          }
+          n.setAttribute('aria-describedby', status.id);
+        }
+        if (f.name === 'time') {
+          n.type = 'text';
+          n.inputMode = 'numeric';
+          n.placeholder = 'HH:MM';
+          n.maxLength = 5;
+        }
+        n.dataset.field = f.name;
+        n.value = displayValue(f.name, o[f.name]);
+        n.dataset.committedValue = n.value;
+        if (
+          current.type === 'analemma' &&
+          ((current.view === 'equatorial' && f.name === 'lat') ||
+            (f.name === 'offset' && o.basis === 'apparent'))
+        )
+          n.disabled = true;
+        if (o.locked && ['x', 'y', 'lat', 'lon', 'time'].includes(f.name)) n.disabled = true;
+        n.onchange = () => commitReferenceField(n, f, o);
+      }
+      if (anchor(selectedOwner(), o)) {
+        const row = E('label', 'dt-lock', form),
+          lock = E('input', '', row),
+          text = E('span', '', row);
+        lock.type = 'checkbox';
+        lock.checked = !!o.locked;
+        text.textContent = tr('锁定位置|Lock position');
+        lock.onchange = () => {
+          if (!validInputs()) {
+            lock.checked = !!o.locked;
+            return;
+          }
+          mutate(() => (o.locked = lock.checked), true);
+          for (const field of form.querySelectorAll('[data-field]'))
+            field.disabled =
+              !!o.locked && ['x', 'y', 'lat', 'lon', 'time'].includes(field.dataset.field);
+        };
+      }
+      if (o.type === 'camera') {
+        const b = E('button', '', form);
+        b.type = 'button';
+        b.textContent = tr('回到此相机|Restore this camera');
+        b.onclick = () => current.restoreCamera?.(o.camera);
+      }
+    }
+  }
+
+  function update() {
+    if (!current || panel.hidden) return;
+    const scrollBefore = scroll.scrollTop,
+      listBefore = list.scrollTop,
+      inspectorBefore = inspector.scrollTop,
+      s = stateFor(selectedOwner());
+    panel.dataset.canvas = current.canvas.id;
+    const allEntries = entries();
+    panel.dataset.empty = String(!allEntries.length);
+    updateFold();
+    tabs.setAttribute('aria-label', tr('图中对象操作|Plot object actions'));
+    title.textContent = tr(titles[current.type] || current.type);
+    more.setAttribute('aria-label', tr('更多操作|More actions'));
+    more.title = tr('保存本图对象、复制或删除|Save plot objects, duplicate or delete');
+    mobileBack.textContent = tr('返回对象列表|Back to object list');
+    panel.dataset.detail = panel.dataset.detail || 'false';
+    libraryTitle.textContent = tr('添加图中对象|Add a plot object');
+    libraryIntro.textContent = tr(
+      '选择要添加的对象。地点和时刻直接用于原图对照；杆、球等会进入实验地面摆放。|Choose an object. Places and times compare within the original plot; rods and spheres open the experiment ground.',
+    );
+    objectTitle.textContent = tr('图中对象|Plot objects') + ' · ' + allEntries.length;
+    addAnother.textContent = tr('添加对象|Add object');
+    cityPicker.hidden = !(
+      current.type === 'sky' &&
+      current.body !== 'moon' &&
+      citySelect.options.length
+    );
+    cityCaption.textContent = tr('新增观察点的地点|Location for the new observer');
+    recipe.textContent = tr('添加一组常用参考|Add a useful reference set');
+    switchView(activeView, true);
+    close.setAttribute('aria-label', tr('收起图中编辑|Close plot editor'));
+    placementUI();
+    panel.dataset.limit = String(stateFor(current).objects.length >= 40);
+    if (stateFor(current).objects.length >= 40)
+      hint.textContent = tr(
+        '已达到 40 个参考对象上限；删除一个后可继续添加。|40-reference limit reached; remove one to add another.',
+      );
+    renderToolLibrary();
+    renderObjectList(allEntries, s);
+    renderInspector(s);
+    for (const b of panel.querySelectorAll('[data-dt-label]')) {
+      b.textContent = tr(b.dataset.dtLabel);
+      b.title = b.textContent;
+    }
+    title.title = title.textContent;
+    updateFiles();
+    updateLocation();
+    actionState();
+    scroll.scrollTop = scrollBefore;
+    list.scrollTop = listBefore;
+    inspector.scrollTop = inspectorBefore;
+    if (desktopSplit() && activeView === 'objects' && panel.dataset.collapsed !== 'true') {
+      const row = selectedRow();
+      if (row) revealWithin(row, list);
+    }
+  }
+  function selectedRow() {
+    return [...list.querySelectorAll('[data-reference-id]')].find(
+      (b) => b.dataset.referenceId === selectedKey(),
+    );
+  }
+  function focusSelectedRow() {
+    const row = selectedRow();
+    (row || undo).focus({ preventScroll: true });
+    if (row) revealWithin(row, list);
+  }
+  function selectReference(id, edit = false) {
+    commitActive();
+    if (!validInputs()) return;
+    finishNudge();
+    switchView('objects', true);
+    const parts = id.split(':');
+    selectedSource = parts.length > 1 ? parts[0] : current.id;
+    selected = parts.length > 1 ? parts.slice(1).join(':') : id;
+    update();
+    showInspector();
+    const row = selectedRow();
+    row?.focus({ preventScroll: true });
+    if (desktopSplit() && row) revealWithin(row, list);
+    if (edit) {
+      const input = form.querySelector('input:not(:disabled),select:not(:disabled),button');
+      input?.focus({ preventScroll: true });
+      if (input) revealField(input);
+    }
+    repaint();
+  }
+  list.addEventListener('keydown', (e) => {
+    if (
+      !desktopSplit() ||
+      !e.target.matches('[data-reference-id]') ||
+      e.altKey ||
+      e.ctrlKey ||
+      e.metaKey
+    )
+      return;
+    const rows = [...list.querySelectorAll('[data-reference-id]')],
+      index = rows.indexOf(e.target);
+    if (['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const next =
+        e.key === 'Home'
+          ? 0
+          : e.key === 'End'
+            ? rows.length - 1
+            : Math.max(0, Math.min(rows.length - 1, index + (e.key === 'ArrowDown' ? 1 : -1)));
+      selectReference(rows[next].dataset.referenceId);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      selectReference(e.target.dataset.referenceId, true);
+    }
+  });
+  function textLayout(m, value, p, bounds = null) {
+    const c = m.c;
+    c.save();
+    c.font = `12px "${en() ? 'SkyMotion Charter' : 'SkyMotion Reading'}",serif`;
+    let label = String(value),
+      width = c.measureText(label).width;
+    const [left, top, w, h] = bounds || [0, 0, m.w, m.h],
+      available = Math.max(12, w - 12);
+    if (width > available) {
+      while (label.length && c.measureText(label + '…').width > available)
+        label = label.slice(0, -1);
+      label += '…';
+      width = c.measureText(label).width;
+    }
+    c.restore();
+    return {
+      text: label,
+      width,
+      x: Math.max(left + 6, Math.min(left + w - 6 - width, p.x)),
+      y: Math.max(top + 14, Math.min(top + h - 8, p.y)),
+    };
+  }
+  const trackColors = ['#c4d9bf', '#e5b9a5', '#dfd2a4', '#d2c1d8', '#b9d4ce'];
+  function helper(m) {
+    const { c, w, h } = m,
+      col = '#f2d7a3';
+    return {
+      c,
+      w,
+      h,
+      line(a, b, dashed = false) {
+        if (!a || !b) return;
+        c.beginPath();
+        c.setLineDash(dashed ? [4, 4] : []);
+        c.strokeStyle = this.color || col;
+        c.lineWidth = this.width || 1.5;
+        c.moveTo(a.x, a.y);
+        c.lineTo(b.x, b.y);
+        c.stroke();
+        c.setLineDash([]);
+      },
+      path(points, dashed = false) {
+        let previous = null;
+        for (const p of points) {
+          if (!p || p.hidden) {
+            previous = null;
+            continue;
+          }
+          if (
+            previous &&
+            (!Number.isFinite(p.wrap) ||
+              !Number.isFinite(previous.wrap) ||
+              Math.abs(p.wrap - previous.wrap) <= 180)
+          )
+            this.line(previous, p, dashed);
+          previous = p;
+        }
+      },
+      dot(p, label) {
+        if (!p || p.hidden) return;
+        c.fillStyle = this.color || col;
+        c.beginPath();
+        c.arc(p.x, p.y, 4, 0, 7);
+        c.fill();
+        if (label) this.text(label, { x: p.x + 8, y: p.y - 8 });
+      },
+      text(label, p) {
+        if (!p) return;
+        const layout = textLayout(m, label, p, this.clipLabels ? m.clip : null);
+        c.font = `12px "${en() ? 'SkyMotion Charter' : 'SkyMotion Reading'}",serif`;
+        c.fillStyle = this.color || col;
+        c.textAlign = 'left';
+        if (window.skyFillText) window.skyFillText(c, layout.text, layout.x, layout.y);
+        else c.fillText(layout.text, layout.x, layout.y);
+      },
+      circle(p, r) {
+        if (!p) return;
+        c.strokeStyle = this.color || col;
+        c.lineWidth = this.width || 1.5;
+        c.beginPath();
+        c.arc(p.x, p.y, r, 0, 7);
+        c.stroke();
+      },
+    };
+  }
+  function drawObject(o, m, H) {
+    const { type } = m,
+      at = m.project,
+      label = o.customLabel ? o.label : tr(o.label);
+    let metric = '';
+    if (o.type === 'note') {
+      H.text(label, { x: (m.w * o.x) / 100, y: (m.h * o.y) / 100 });
+      return label;
+    }
+    if (o.type === 'emphasis') {
+      H.circle(
+        { x: (m.w * o.x) / 100, y: (m.h * o.y) / 100 },
+        (Math.min(m.w, m.h) * o.radius) / 100,
+      );
+      return label;
+    }
+    if (type === 'sky') {
+      const body = m.body === 'moon' ? 'Moon' : 'Sun',
+        position = (time, date = m.date, lat = m.lat, lon = m.lon) =>
+          body === 'Sun' && state.manual
+            ? solar(lat, state.dec, time)
+            : skyRaw(body, time, date, lat, lon);
+      if (o.type === 'time') {
+        const p = position(o.time);
+        H.dot(m.projectSky(p), label + ' · ' + SkyDiagramSampling.clock(o.time));
+        metric = SkyDiagramSampling.clock(o.time) + ' · ' + p.alt.toFixed(1) + '°';
+      }
+      if (o.type === 'observer') {
+        const p =
+          window.SkyObserverComparison?.sites().find((q) => q.id === o.id)?.position ||
+          position(m.time, m.date, o.lat, o.lon);
+        H.dot(m.projectSky(p), label);
+        metric = p.alt.toFixed(1) + '° · ' + p.az.toFixed(1) + '°';
+      }
+      if (o.type === 'curve') {
+        const points = SkyDiagramSampling.memo(
+          JSON.stringify([
+            'sky-date',
+            body,
+            o.date,
+            m.lat,
+            m.lon,
+            state.manual,
+            state.manual ? state.dec : 0,
+          ]),
+          () => Array.from({ length: 97 }, (_, i) => position(i * 15, o.date)),
+        );
+        H.path(points.map(m.projectSky));
+        metric = o.date;
+      }
+    }
+    if (type === 'globe') {
+      if (['observer', 'ray'].includes(o.type)) {
+        const p = at(o.lat, o.lon);
+        H.dot(p, label);
+        if (m.sun) {
+          const a = o.lat * R,
+            l = (o.lon - m.sun.lon) * R,
+            d = m.sun.dec * R,
+            alt =
+              Math.asin(
+                Math.max(
+                  -1,
+                  Math.min(1, Math.sin(a) * Math.sin(d) + Math.cos(a) * Math.cos(d) * Math.cos(l)),
+                ),
+              ) / R;
+          metric = `${label} · ${alt.toFixed(1)}° · ${tr(alt >= 0 ? '白昼|Daylight' : '夜晚|Night')}`;
+          if (o.type === 'ray' && p && !p.hidden) H.line(p, m.rayAt?.(o.lat, o.lon), alt < 0);
+        }
+      }
+      if (o.type === 'observer') {
+        const linked = window.SkyObserverComparison?.sites().find((p) => p.id === o.id);
+        if (linked) {
+          const minute = Math.round(linked.time) % 1440;
+          metric =
+            `${label} · ${linked.position.alt.toFixed(1)}° · ` +
+            (linked.clockValid
+              ? `${linked.date} ${String(Math.floor(minute / 60)).padStart(2, '0')}:${String(minute % 60).padStart(2, '0')}`
+              : tr('日期超出范围|Date outside range'));
+        }
+      }
+      if (o.type === 'latitude')
+        H.path(Array.from({ length: 181 }, (_, i) => at(o.lat, -180 + i * 2)));
+      if (o.type === 'longitude')
+        H.path(Array.from({ length: 91 }, (_, i) => at(-90 + i * 2, o.lon)));
+    }
+    if (type === 'altitude') {
+      if (o.type === 'curve') {
+        const points = Array.from({ length: 145 }, (_, i) =>
+          m.project(i * 10, m.value(i * 10, o.date)),
+        );
+        H.path(points, true);
+        H.text(label, points[72]);
+        metric = o.date;
+      }
+      if (o.type === 'level') H.line(at(0, o.alt), at(1440, o.alt), true);
+      if (o.type === 'time') {
+        const v = m.value(o.time, m.date);
+        H.line(at(o.time, m.low), at(o.time, m.high), true);
+        H.dot(at(o.time, v), label);
+        metric = `${v.toFixed(2)} ${m.unit}`;
+      }
+      if (o.type === 'measure') {
+        const a = m.value(o.a, m.date),
+          b = m.value(o.b, m.date);
+        H.dot(at(o.a, a), 'A');
+        H.dot(at(o.b, b), 'B');
+        H.line(at(o.a, a), at(o.b, b));
+        metric = `Δt ${Math.abs(o.b - o.a)} min · Δh ${(b - a).toFixed(2)}°`;
+      }
+    }
+    if (type === 'illumination') {
+      const value = (date) => m.value(date),
+        inMonth = (date) => date.slice(0, 7) === m.date.slice(0, 7),
+        outside = tr(
+          '日期不在当前月份；切换到对应月份查看标记。|Date outside this month; switch to its month to see the marker.',
+        );
+      const dateDot = (date, v, text) => {
+        if (inMonth(date)) H.dot(m.project(Number(date.slice(8)), v), text);
+      };
+      if (o.type === 'curve') {
+        const base = o.date.slice(0, 8),
+          count = new Date(Number(o.date.slice(0, 4)), Number(o.date.slice(5, 7)), 0).getDate();
+        const points = Array.from({ length: Math.min(count, m.days) }, (_, i) =>
+          m.project(i + 1, value(base + String(i + 1).padStart(2, '0'))),
+        );
+        H.path(points, true);
+        H.text(o.date.slice(0, 7) + ' · ' + label, points[Math.floor(points.length / 2)]);
+        metric = o.date.slice(0, 7);
+      }
+      if (o.type === 'level') H.line(m.project(1, o.value), m.project(m.days, o.value), true);
+      if (o.type === 'date') {
+        const v = value(o.date);
+        dateDot(o.date, v, label + ' · ' + o.date);
+        metric = o.date + ' · ' + v.toFixed(2) + '%' + (inMonth(o.date) ? '' : ' · ' + outside);
+      }
+      if (o.type === 'measure') {
+        const a = value(o.a),
+          b = value(o.b);
+        dateDot(o.a, a, 'A · ' + o.a);
+        dateDot(o.b, b, 'B · ' + o.b);
+        metric =
+          `A ${o.a} · ${a.toFixed(2)}% / B ${o.b} · ${b.toFixed(2)}% · Δ ${(b - a).toFixed(2)} ${tr('个百分点|pp')}` +
+          (!inMonth(o.a) || !inMonth(o.b) ? ' · ' + outside : '');
+      }
+    }
+    if (type === 'azimuth') {
+      if (o.type === 'direction') {
+        const p = at(o.az, 1);
+        H.line(at(0, 0), p);
+        H.dot(p, label);
+        metric = o.az + '°';
+      }
+      if (o.type === 'ring') H.circle(at(0, 0), (m.radius * o.radius) / 100);
+      if (o.type === 'events') {
+        const events = m.events(o.date, o.obstruction);
+        for (const [i, p] of events.entries()) {
+          const q = at(p.az, i ? 0.88 : 1.1);
+          H.line(at(0, 0), q, true);
+          H.dot(q, `${label} ${SkyDiagramSampling.clock(p.time)}`);
+        }
+        metric = events.length
+          ? events.map((x) => x.az.toFixed(1) + '°').join(' / ')
+          : tr('此日未穿越指定遮挡角|No crossing of this obstruction angle');
+      }
+    }
+    if (type === 'geometry') {
+      const scale = (a, k) => a.map((x) => x * k),
+        add = (a, b) => a.map((x, i) => x + b[i]);
+      if (o.type === 'observer') {
+        const a = o.lat * R,
+          l = (o.lon - m.lon) * R,
+          q = [Math.cos(a) * Math.cos(l), Math.sin(a), Math.cos(a) * Math.sin(l)];
+        H.dot(at(q), label);
+        H.line(at(q), at(scale(q, 1 + o.height)));
+        metric = `${o.lat.toFixed(1)}°, ${o.lon.toFixed(1)}°`;
+      }
+      if (o.type === 'ring') {
+        const center = o.plane === 'horizon' ? m.q : [0, 0, 0],
+          u = o.plane === 'horizon' ? m.north : [1, 0, 0],
+          v = o.plane === 'horizon' ? m.east : o.plane === 'equator' ? [0, 0, 1] : [0, 1, 0];
+        H.path(
+          Array.from({ length: 121 }, (_, i) => {
+            const a = (i * Math.PI) / 60;
+            return at(
+              add(center, add(scale(u, o.radius * Math.cos(a)), scale(v, o.radius * Math.sin(a)))),
+            );
+          }),
+        );
+      }
+      if (o.type === 'angle') {
+        const dir = (key) =>
+            key === 'axis' ? [0, 1, 0] : key === 'sun' ? m.sun : key === 'north' ? m.north : m.q,
+          a = dir(o.a),
+          b = dir(o.b),
+          angle =
+            Math.acos(
+              Math.max(
+                -1,
+                Math.min(
+                  1,
+                  a.reduce((n, x, i) => n + x * b[i], 0) / (Math.hypot(...a) * Math.hypot(...b)),
+                ),
+              ),
+            ) / R;
+        H.line(at([0, 0, 0]), at(scale(a, 1.4)));
+        H.line(at([0, 0, 0]), at(scale(b, 1.4)));
+        metric = angle.toFixed(3) + '°';
+        H.text(metric, at(scale(a, 1.2)));
+      }
+      if (o.type === 'direction') {
+        const q =
+          o.direction === 'sun'
+            ? m.sun
+            : o.direction === 'axis'
+              ? [0, 1, 0]
+              : o.direction === 'north'
+                ? m.north
+                : m.q;
+        H.line(at([0, 0, 0]), at(scale(q, 1.5)));
+        H.dot(at(scale(q, 1.5)), label);
+      }
+    }
+    if (type === 'phase') {
+      if (o.type === 'rays') {
+        for (let i = 0; i < o.count; i++) {
+          const y = m.center.y + (i - (o.count - 1) / 2) * m.radius * o.spread;
+          H.line({ x: m.sunX - 15, y }, { x: Math.max(8, m.center.x - m.radius), y }, true);
+        }
+        return o.count + ' ' + tr('条平行光线|parallel rays');
+      }
+      const angle = o.type === 'snapshot' ? m.phaseAt(o.date, o.time) : o.angle,
+        p = at(angle);
+      H.dot(p, label);
+      if (o.type === 'snapshot' && o.sight !== 'no') H.line(m.center, p, true);
+      if (o.type === 'observer') H.line(m.center, p);
+      metric = `${angle.toFixed(1)}° · ${tr('照明|Illuminated')} ${(o.type === 'snapshot' ? m.fractionAt(o.date, o.time) * 100 : (1 - Math.cos(angle * R)) * 50).toFixed(1)}%`;
+    }
+    if (type === 'companion') {
+      if (o.type === 'snapshot') {
+        const s = m.sample(o.date, o.time);
+        const a = at(s.moon),
+          b = at(s.planet);
+        H.line(a, b, true);
+        H.dot(a, label + ' A');
+        H.dot(b, label + ' B');
+        metric = `${o.date} · ${s.separation.toFixed(3)}°`;
+      }
+      if (o.type === 'trail') {
+        const moon = [],
+          planet = [];
+        for (const s of m.trail(o)) {
+          moon.push(at(s.moon));
+          planet.push(at(s.planet));
+        }
+        H.path(moon);
+        H.path(planet, true);
+        metric = tr('前后|Before/after') + ' ' + o.hours + ' h';
+      }
+    }
+    if (type === 'analemma') {
+      if (o.type === 'track') {
+        const samples = m.track(o);
+        H.path(samples.map(at), true);
+        if (samples[0]) H.dot(at(samples[0]));
+        const signature = (q) =>
+            JSON.stringify([
+              q.lat,
+              q.lon,
+              q.clock,
+              q.basis || 'clock',
+              (q.basis || 'clock') === 'clock' ? (q.offset ?? m.offset) : 0,
+            ]),
+          primary = { lat: m.lat, lon: m.lon, clock: m.clock, basis: m.basis, offset: m.offset },
+          duplicate = stateFor(m).objects.some(
+            (q) =>
+              q.id !== o.id && q.type === 'track' && q.visible && signature(q) === signature(o),
+          );
+        metric = `${Math.abs(o.lat).toFixed(2)}°${o.lat < 0 ? 'S' : 'N'} · ${Math.abs(o.lon).toFixed(2)}°${o.lon < 0 ? 'W' : 'E'} · ${SkyDiagramSampling.clock(o.clock)} · ${tr(o.basis === 'apparent' ? '真太阳时|Apparent solar time' : '钟表时|Clock time')}`;
+        if (o.basis !== 'apparent') metric += ' · UTC' + (o.offset >= 0 ? '+' : '') + o.offset;
+        if (signature(primary) === signature(o) || duplicate)
+          metric +=
+            ' · ' +
+            tr(
+              '条件相同，轨迹重合；请改变时刻、经度或切换天空视图比较纬度。|Matching conditions overlap. Change time or longitude, or use a sky view to compare latitudes.',
+            );
+      }
+      if (o.type === 'date') {
+        const p = m.sample(o.date);
+        H.dot(at(p), label + ' ' + o.date);
+        metric = `${p.alt.toFixed(2)}°`;
+      }
+      if (o.type === 'level') {
+        if (m.view === 'equatorial')
+          return tr(
+            '此图不是高度坐标，请切换天空或天穹视图查看高度参考。|Switch to sky or dome view to see an altitude reference.',
+          );
+        H.path(
+          Array.from({ length: 181 }, (_, i) => at({ az: i * 2, alt: o.alt })),
+          true,
+        );
+      }
+    }
+    if (type === 'lunar') {
+      const p = m.reference(o);
+      H.dot(p, label);
+      if (o.type === 'sight') H.line(p, m.earth, true);
+      metric = m.readReference(o);
+    }
+    if (type === 'space') {
+      if (o.type === 'plane') {
+        const points = Array.from({ length: 101 }, (_, i) => {
+          const a = (i * Math.PI) / 50,
+            x = o.radius * Math.cos(a),
+            y = o.radius * Math.sin(a);
+          return at(o.plane === 'xz' ? [x, 0, y] : o.plane === 'xy' ? [x, y, 0] : [0, x, y]);
+        });
+        H.path(points, true);
+      }
+      if (['distance', 'angle'].includes(o.type)) {
+        const a = m.planet(o.a),
+          b = m.planet(o.b);
+        if (a && b) {
+          H.dot(at(a.display), o.a);
+          H.dot(at(b.display), o.b);
+          if (o.type === 'distance') {
+            H.line(at(a.display), at(b.display));
+            metric = Math.hypot(...a.physical.map((v, i) => v - b.physical[i])).toFixed(5) + ' AU';
+          } else {
+            H.line(at(a.display), at([0, 0, 0]));
+            H.line(at([0, 0, 0]), at(b.display));
+            const angle =
+              Math.acos(
+                Math.max(
+                  -1,
+                  Math.min(
+                    1,
+                    a.physical.reduce((n, v, i) => n + v * b.physical[i], 0) /
+                      (Math.hypot(...a.physical) * Math.hypot(...b.physical)),
+                  ),
+                ),
+              ) / R;
+            metric = angle.toFixed(3) + '°';
+          }
+          H.text(metric, at(a.display));
+        }
+      }
+      if (o.type === 'camera')
+        metric = tr('已保存此视角，可在属性中返回|Saved viewpoint; restore from its properties');
     }
     return metric;
   }
   // Direct manipulation uses the plot's existing projection and inverse pick.
-  function anchor(m,o){
-    if(o.type==='note')return textLayout(m,o.customLabel?o.label:tr(o.label),{x:m.w*o.x/100,y:m.h*o.y/100});
-    if(o.type==='emphasis')return {x:m.w*o.x/100,y:m.h*o.y/100};
-    if(m.type==='sky'&&o.type==='time')return m.projectSky(m.position(o.time));
-    if(m.type==='globe'&&['observer','ray'].includes(o.type)&&m.pick)return m.project(o.lat,o.lon);
-    if(m.type==='altitude'&&o.type==='time'&&m.pick)return m.project(o.time,m.value(o.time,m.date));
+  function anchor(m, o) {
+    if (o.type === 'note')
+      return textLayout(m, o.customLabel ? o.label : tr(o.label), {
+        x: (m.w * o.x) / 100,
+        y: (m.h * o.y) / 100,
+      });
+    if (o.type === 'emphasis') return { x: (m.w * o.x) / 100, y: (m.h * o.y) / 100 };
+    if (m.type === 'sky' && o.type === 'time') return m.projectSky(m.position(o.time));
+    if (m.type === 'globe' && ['observer', 'ray'].includes(o.type) && m.pick)
+      return m.project(o.lat, o.lon);
+    if (m.type === 'altitude' && o.type === 'time' && m.pick)
+      return m.project(o.time, m.value(o.time, m.date));
     return null;
   }
   // Text may be visually clamped at an edge; movement starts where it is drawn.
-  function movementOrigin(m,o){
-    const origin=copy(o);
-    if(o.type==='note'){const p=anchor(m,o);origin.x=p.x/m.w*100;origin.y=p.y/m.h*100;}
+  function movementOrigin(m, o) {
+    const origin = copy(o);
+    if (o.type === 'note') {
+      const p = anchor(m, o);
+      origin.x = (p.x / m.w) * 100;
+      origin.y = (p.y / m.h) * 100;
+    }
     return origin;
   }
-  function hitAnchor(m,o){const a=anchor(m,o);if(a)return a;if(m.type==='sky'&&o.type==='observer'){const p=window.SkyObserverComparison?.sites().find(q=>q.id===o.id)?.position||(state.manual?solar(o.lat,state.dec,m.time):skyRaw('Sun',m.time,m.date,o.lat,o.lon));return m.projectSky(p);}return null;}
-  function pointAt(m,e){const r=m.canvas.getBoundingClientRect();return {x:(e.clientX-r.left)/r.width*m.w,y:(e.clientY-r.top)/r.height*m.h};}
-  function beginDrag(id,e){
-    if(!customizationOn()||armed)return false;
-    commitActive();if(!validInputs())return true;finishNudge();
-    if(drag){cancelDrag();return true;}
-    const m=models.get(id),p=pointAt(m,e),s=stateFor(m);
-    const o=[...s.objects].reverse().find(o=>{if(!o.visible)return false;const a=hitAnchor(m,o);if(!a||a.hidden)return false;if(Math.hypot(p.x-a.x,p.y-a.y)<=20)return true;if(o.type==='note'){const label=o.customLabel?o.label:tr(o.label);return p.y>=a.y-16&&p.y<=a.y+6&&p.x>=a.x&&p.x<=a.x+a.width;}return false;});
-    if(!o)return false;if(panel.hidden||current?.id!==id||railView!=='references')open(m);editing=true;
-    if(typeof state!=='undefined'&&typeof stop==='function')stop();else m.pause?.();
-    const changed=selected!==o.id||selectedSource!==current.id;selectedSource=current.id;selected=o.id;switchView('objects',true);if(o.locked||!anchor(m,o)){m.canvas.setPointerCapture(e.pointerId);if(m.canvas.tabIndex<0)m.canvas.tabIndex=0;m.canvas.focus({preventScroll:true});update();if(changed)showInspector();status.textContent=tr(o.locked?'位置已锁定，可在属性中解锁。|Position locked; unlock it in properties.':'已选中对象，可在属性中调整。|Object selected; adjust its properties.');repaint();return true;}drag={id:e.pointerId,m,s,object:o.id,before:copy(s.objects),start:p,origin:movementOrigin(m,o),moved:false};
-    m.canvas.setPointerCapture(e.pointerId);if(m.canvas.tabIndex<0)m.canvas.tabIndex=0;m.canvas.focus({preventScroll:true});update();if(changed)showInspector();repaint();return true;
-  }
-  function moveDrag(e){
-    if(!drag||e.pointerId!==drag.id)return false;
-    const g=drag,p=pointAt(g.m,e),o=g.s.objects.find(o=>o.id===g.object);
-    if(!o)return false;if(o.locked)return true;
-    const dx=p.x-g.start.x,dy=p.y-g.start.y;if(!g.moved&&Math.hypot(dx,dy)<3)return true;g.moved=true;
-    if(['note','emphasis'].includes(o.type)){o.x=Number(Math.max(0,Math.min(100,g.origin.x+dx/g.m.w*100)).toFixed(2));o.y=Number(Math.max(0,Math.min(100,g.origin.y+dy/g.m.h*100)).toFixed(2));}
-    else {const picked=g.m.pick?.(p.x,p.y);if(picked)for(const [key,value]of Object.entries(picked))o[key]=key==='time'?Math.round(value):Number.isFinite(value)?Number(value.toFixed(2)):value;}
-    syncInputs(o);
-    repaint();return true;
-  }
-  function finishDrag(cancel=false){
-    if(!drag)return;const g=drag;drag=null;
-    if(cancel)g.s.objects=g.before;else record(g.s,g.before);
-    if(g.m.canvas.hasPointerCapture(g.id))g.m.canvas.releasePointerCapture(g.id);
-    draftStatus();update();repaint();
-  }
-  function cancelDrag(){finishDrag(true);}
-  function wireCanvas(id,canvas,surface=canvas){
-    let suppressClick=false;
-    const owned=new Set(),consume=e=>{e.preventDefault();e.stopImmediatePropagation();};
-    surface.addEventListener('click',e=>{if(suppressClick){suppressClick=false;consume(e);}},true);
-    surface.addEventListener('pointerdown',e=>{
-      // A second finger during reference editing cancels the edit; it must not
-      // leak a partial pinch gesture to the underlying scientific camera.
-      if(owned.size&&!owned.has(e.pointerId)){owned.add(e.pointerId);canvas.setPointerCapture(e.pointerId);suppressClick=true;consume(e);cancelDrag();return;}
-      const control=e.target.closest?.('button,input,select,a');if(control&&!control.matches('.label'))return;
-      suppressClick=false;if(e.button!==0||!e.isPrimary)return;
-      if(armed&&current?.id===id){owned.add(e.pointerId);canvas.setPointerCapture(e.pointerId);suppressClick=true;consume(e);const p=pointAt(models.get(id),e);placeAt(p.x,p.y);}
-      else if(beginDrag(id,e)){owned.add(e.pointerId);suppressClick=true;consume(e);}
-    },true);
-    surface.addEventListener('pointermove',e=>{if(owned.has(e.pointerId)){moveDrag(e);consume(e);}},true);
-    surface.addEventListener('pointerup',e=>{if(owned.delete(e.pointerId)){consume(e);if(drag?.id===e.pointerId)finishDrag();}},true);
-    for(const event of ['pointercancel','lostpointercapture'])surface.addEventListener(event,e=>{if(owned.delete(e.pointerId)){consume(e);if(drag?.id===e.pointerId)cancelDrag();}},true);
-    window.addEventListener('blur',()=>{for(const pointer of owned)if(canvas.hasPointerCapture(pointer))canvas.releasePointerCapture(pointer);owned.clear();});
-  }
-  function paint(id,m){if(!m.canvas||!m.w||!m.h)return;m={...m,id};models.set(id,m);syncRailShell();if(!portals.has(id)){const b=E('button','diagram-tool-launch diagram-tools',(m.host||m.canvas.parentElement));b.type='button';b.dataset.i18nSkip='';b.onclick=()=>open(models.get(id));portals.set(id,b);(m.host||m.canvas.parentElement).classList.add('dt-host');wireCanvas(id,m.canvas,m.host||m.canvas);}
-    const b=portals.get(id);b.textContent=tr('图内自定义|Customize plot');b.setAttribute('aria-label',tr(titles[m.type]||m.type)+' · '+b.textContent);
-    syncLaunchers();
-    if(current&&current.id!==id)checkCurrentVisibility();
-    if(current?.id===id&&(current.body!==m.body||current.type!==m.type||(m.type==='analemma'&&current.view!==m.view))){
-      rememberContext();finishNudge();cancelDrag();current=m;selectedSource=m.id;
-      const target=stateFor(m);selected=target.objects.some(o=>o.id===target.lastSelected)?target.lastSelected:null;
-      armed=null;pendingImport=null;clearPending=false;importReview.replaceChildren();
-
-      const remembered=target.viewScroll?.[activeView]||0,inspectorPosition=target.inspectorScroll||0,listPosition=target.listScroll||0;scroll.scrollTop=0;
-      update();scroll.scrollTop=remembered;(target.viewScroll??={})[activeView]=remembered;inspector.scrollTop=inspectorPosition;list.scrollTop=listPosition;
+  function hitAnchor(m, o) {
+    const a = anchor(m, o);
+    if (a) return a;
+    if (m.type === 'sky' && o.type === 'observer') {
+      const p =
+        window.SkyObserverComparison?.sites().find((q) => q.id === o.id)?.position ||
+        (state.manual
+          ? solar(o.lat, state.dec, m.time)
+          : skyRaw('Sun', m.time, m.date, o.lat, o.lon));
+      return m.projectSky(p);
     }
-    if(!customizationOn())return;
-    window.SkyObserverComparison?.paint(m);
-    const s=stateFor(m),H=helper(m);m.c.save();try{
-      for(const o of s.objects.filter(o=>o.visible)){m.c.save();try{H.color=['globe','sky'].includes(m.type)&&o.type==='observer'?window.SkyObserverComparison?.color(o.id):m.type==='analemma'&&o.type==='track'?trackColors[s.objects.filter(q=>q.type==='track').indexOf(o)%trackColors.length]:null;H.width=m.type==='analemma'&&o.type==='track'&&o.id===selected?2.5:1.5;
-        if(m.clip&&!['note','emphasis'].includes(o.type)){m.c.beginPath();m.c.rect(...m.clip);m.c.clip();}
-        H.clipLabels=!!m.clip&&!['note','emphasis'].includes(o.type);const metric=drawObject(o,m,H);if(current?.id===id&&o.id===selected){if(result.textContent!==(metric||''))result.textContent=metric||'';if(!panel.hidden&&editing){const a=anchor(m,o);if(a&&!a.hidden){if(o.locked){m.c.strokeStyle='#f2d7a3';m.c.strokeRect(a.x-5,a.y-5,10,10);}else H.circle(a,7);}}}
-      }finally{m.c.restore();}}
-    }catch(error){console.warn('Diagram reference rejected',error);}finally{m.c.restore();}
-    if(current?.id===id){current=m;if(!panel.hidden)updateLocation(m);}
+    return null;
   }
-  function customizationOn(){try{return (window.SkyCustomization||parent.SkyCustomization)?.active!==false;}catch{return true;}}
-  function syncLaunchers(){
-    for(const [key,button]of portals){
-      const source=models.get(key)?.canvas,active=!panel.hidden&&current?.id===key;
-      button.hidden=!customizationOn()||active||!source||source.getBoundingClientRect().width<1||source.getBoundingClientRect().height<1;
-      button.setAttribute('aria-expanded',String(active));button.setAttribute('aria-controls',panel.id);
+  function pointAt(m, e) {
+    const r = m.canvas.getBoundingClientRect();
+    return { x: ((e.clientX - r.left) / r.width) * m.w, y: ((e.clientY - r.top) / r.height) * m.h };
+  }
+  function beginDrag(id, e) {
+    if (!customizationOn() || armed) return false;
+    commitActive();
+    if (!validInputs()) return true;
+    finishNudge();
+    if (drag) {
+      cancelDrag();
+      return true;
+    }
+    const m = models.get(id),
+      p = pointAt(m, e),
+      s = stateFor(m);
+    const o = [...s.objects].reverse().find((o) => {
+      if (!o.visible) return false;
+      const a = hitAnchor(m, o);
+      if (!a || a.hidden) return false;
+      if (Math.hypot(p.x - a.x, p.y - a.y) <= 20) return true;
+      if (o.type === 'note') {
+        const label = o.customLabel ? o.label : tr(o.label);
+        return p.y >= a.y - 16 && p.y <= a.y + 6 && p.x >= a.x && p.x <= a.x + a.width;
+      }
+      return false;
+    });
+    if (!o) return false;
+    if (panel.hidden || current?.id !== id || railView !== 'references') open(m);
+    editing = true;
+    if (typeof state !== 'undefined' && typeof stop === 'function') stop();
+    else m.pause?.();
+    const changed = selected !== o.id || selectedSource !== current.id;
+    selectedSource = current.id;
+    selected = o.id;
+    switchView('objects', true);
+    if (o.locked || !anchor(m, o)) {
+      m.canvas.setPointerCapture(e.pointerId);
+      if (m.canvas.tabIndex < 0) m.canvas.tabIndex = 0;
+      m.canvas.focus({ preventScroll: true });
+      update();
+      if (changed) showInspector();
+      status.textContent = tr(
+        o.locked
+          ? '位置已锁定，可在属性中解锁。|Position locked; unlock it in properties.'
+          : '已选中对象，可在属性中调整。|Object selected; adjust its properties.',
+      );
+      repaint();
+      return true;
+    }
+    drag = {
+      id: e.pointerId,
+      m,
+      s,
+      object: o.id,
+      before: copy(s.objects),
+      start: p,
+      origin: movementOrigin(m, o),
+      moved: false,
+    };
+    m.canvas.setPointerCapture(e.pointerId);
+    if (m.canvas.tabIndex < 0) m.canvas.tabIndex = 0;
+    m.canvas.focus({ preventScroll: true });
+    update();
+    if (changed) showInspector();
+    repaint();
+    return true;
+  }
+  function moveDrag(e) {
+    if (!drag || e.pointerId !== drag.id) return false;
+    const g = drag,
+      p = pointAt(g.m, e),
+      o = g.s.objects.find((o) => o.id === g.object);
+    if (!o) return false;
+    if (o.locked) return true;
+    const dx = p.x - g.start.x,
+      dy = p.y - g.start.y;
+    if (!g.moved && Math.hypot(dx, dy) < 3) return true;
+    g.moved = true;
+    if (['note', 'emphasis'].includes(o.type)) {
+      o.x = Number(Math.max(0, Math.min(100, g.origin.x + (dx / g.m.w) * 100)).toFixed(2));
+      o.y = Number(Math.max(0, Math.min(100, g.origin.y + (dy / g.m.h) * 100)).toFixed(2));
+    } else {
+      const picked = g.m.pick?.(p.x, p.y);
+      if (picked)
+        for (const [key, value] of Object.entries(picked))
+          o[key] =
+            key === 'time'
+              ? Math.round(value)
+              : Number.isFinite(value)
+                ? Number(value.toFixed(2))
+                : value;
+    }
+    syncInputs(o);
+    repaint();
+    return true;
+  }
+  function finishDrag(cancel = false) {
+    if (!drag) return;
+    const g = drag;
+    drag = null;
+    if (cancel) g.s.objects = g.before;
+    else record(g.s, g.before);
+    if (g.m.canvas.hasPointerCapture(g.id)) g.m.canvas.releasePointerCapture(g.id);
+    draftStatus();
+    update();
+    repaint();
+  }
+  function cancelDrag() {
+    finishDrag(true);
+  }
+  function wireCanvas(id, canvas, surface = canvas) {
+    let suppressClick = false;
+    const owned = new Set(),
+      consume = (e) => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      };
+    surface.addEventListener(
+      'click',
+      (e) => {
+        if (suppressClick) {
+          suppressClick = false;
+          consume(e);
+        }
+      },
+      true,
+    );
+    surface.addEventListener(
+      'pointerdown',
+      (e) => {
+        // A second finger during reference editing cancels the edit; it must not
+        // leak a partial pinch gesture to the underlying scientific camera.
+        if (owned.size && !owned.has(e.pointerId)) {
+          owned.add(e.pointerId);
+          canvas.setPointerCapture(e.pointerId);
+          suppressClick = true;
+          consume(e);
+          cancelDrag();
+          return;
+        }
+        const control = e.target.closest?.('button,input,select,a');
+        if (control && !control.matches('.label')) return;
+        suppressClick = false;
+        if (e.button !== 0 || !e.isPrimary) return;
+        if (armed && current?.id === id) {
+          owned.add(e.pointerId);
+          canvas.setPointerCapture(e.pointerId);
+          suppressClick = true;
+          consume(e);
+          const p = pointAt(models.get(id), e);
+          placeAt(p.x, p.y);
+        } else if (beginDrag(id, e)) {
+          owned.add(e.pointerId);
+          suppressClick = true;
+          consume(e);
+        }
+      },
+      true,
+    );
+    surface.addEventListener(
+      'pointermove',
+      (e) => {
+        if (owned.has(e.pointerId)) {
+          moveDrag(e);
+          consume(e);
+        }
+      },
+      true,
+    );
+    surface.addEventListener(
+      'pointerup',
+      (e) => {
+        if (owned.delete(e.pointerId)) {
+          consume(e);
+          if (drag?.id === e.pointerId) finishDrag();
+        }
+      },
+      true,
+    );
+    for (const event of ['pointercancel', 'lostpointercapture'])
+      surface.addEventListener(
+        event,
+        (e) => {
+          if (owned.delete(e.pointerId)) {
+            consume(e);
+            if (drag?.id === e.pointerId) cancelDrag();
+          }
+        },
+        true,
+      );
+    window.addEventListener('blur', () => {
+      for (const pointer of owned)
+        if (canvas.hasPointerCapture(pointer)) canvas.releasePointerCapture(pointer);
+      owned.clear();
+    });
+  }
+  function paint(id, m) {
+    if (!m.canvas || !m.w || !m.h) return;
+    m = { ...m, id };
+    models.set(id, m);
+    syncRailShell();
+    if (!portals.has(id)) {
+      const b = E('button', 'diagram-tool-launch diagram-tools', m.host || m.canvas.parentElement);
+      b.type = 'button';
+      b.dataset.i18nSkip = '';
+      b.onclick = () => open(models.get(id));
+      portals.set(id, b);
+      (m.host || m.canvas.parentElement).classList.add('dt-host');
+      wireCanvas(id, m.canvas, m.host || m.canvas);
+    }
+    const b = portals.get(id);
+    b.textContent = tr('图内自定义|Customize plot');
+    b.setAttribute('aria-label', tr(titles[m.type] || m.type) + ' · ' + b.textContent);
+    syncLaunchers();
+    if (current && current.id !== id) checkCurrentVisibility();
+    if (
+      current?.id === id &&
+      (current.body !== m.body ||
+        current.type !== m.type ||
+        (m.type === 'analemma' && current.view !== m.view))
+    ) {
+      rememberContext();
+      finishNudge();
+      cancelDrag();
+      current = m;
+      selectedSource = m.id;
+      const target = stateFor(m);
+      selected = target.objects.some((o) => o.id === target.lastSelected)
+        ? target.lastSelected
+        : null;
+      armed = null;
+      pendingImport = null;
+      clearPending = false;
+      importReview.replaceChildren();
+
+      const remembered = target.viewScroll?.[activeView] || 0,
+        inspectorPosition = target.inspectorScroll || 0,
+        listPosition = target.listScroll || 0;
+      scroll.scrollTop = 0;
+      update();
+      scroll.scrollTop = remembered;
+      (target.viewScroll ??= {})[activeView] = remembered;
+      inspector.scrollTop = inspectorPosition;
+      list.scrollTop = listPosition;
+    }
+    if (!customizationOn()) return;
+    window.SkyObserverComparison?.paint(m);
+    const s = stateFor(m),
+      H = helper(m);
+    m.c.save();
+    try {
+      for (const o of s.objects.filter((o) => o.visible)) {
+        m.c.save();
+        try {
+          H.color =
+            ['globe', 'sky'].includes(m.type) && o.type === 'observer'
+              ? window.SkyObserverComparison?.color(o.id)
+              : m.type === 'analemma' && o.type === 'track'
+                ? trackColors[
+                    s.objects.filter((q) => q.type === 'track').indexOf(o) % trackColors.length
+                  ]
+                : null;
+          H.width = m.type === 'analemma' && o.type === 'track' && o.id === selected ? 2.5 : 1.5;
+          if (m.clip && !['note', 'emphasis'].includes(o.type)) {
+            m.c.beginPath();
+            m.c.rect(...m.clip);
+            m.c.clip();
+          }
+          H.clipLabels = !!m.clip && !['note', 'emphasis'].includes(o.type);
+          const metric = drawObject(o, m, H);
+          if (current?.id === id && o.id === selected) {
+            if (result.textContent !== (metric || '')) result.textContent = metric || '';
+            if (!panel.hidden && editing) {
+              const a = anchor(m, o);
+              if (a && !a.hidden) {
+                if (o.locked) {
+                  m.c.strokeStyle = '#f2d7a3';
+                  m.c.strokeRect(a.x - 5, a.y - 5, 10, 10);
+                } else H.circle(a, 7);
+              }
+            }
+          }
+        } finally {
+          m.c.restore();
+        }
+      }
+    } catch (error) {
+      console.warn('Diagram reference rejected', error);
+    } finally {
+      m.c.restore();
+    }
+    if (current?.id === id) {
+      current = m;
+      if (!panel.hidden) updateLocation(m);
+    }
+  }
+  function customizationOn() {
+    try {
+      return (window.SkyCustomization || parent.SkyCustomization)?.active !== false;
+    } catch {
+      return true;
+    }
+  }
+  function syncLaunchers() {
+    for (const [key, button] of portals) {
+      const source = models.get(key)?.canvas,
+        active = !panel.hidden && current?.id === key;
+      button.hidden =
+        !customizationOn() ||
+        active ||
+        !source ||
+        source.getBoundingClientRect().width < 1 ||
+        source.getBoundingClientRect().height < 1;
+      button.setAttribute('aria-expanded', String(active));
+      button.setAttribute('aria-controls', panel.id);
     }
   }
   // Responsive reparenting can briefly report a zero-sized canvas. Close only
   // when it remains hidden, rather than discarding the editor during that frame.
-  function checkCurrentVisibility(){if(!current||panel.hidden)return;if(current.canvas.getBoundingClientRect().width){clearTimeout(visibilityTimer);visibilityTimer=0;return;}if(visibilityTimer)return;const canvas=current.canvas;visibilityTimer=setTimeout(()=>{visibilityTimer=0;if(current?.canvas===canvas&&!panel.hidden&&!canvas.getBoundingClientRect().width){const next=visibleModels()[0];if(next)open(next,true);else hide();}},120);}
-  function syncVisibility(){syncLaunchers();checkCurrentVisibility();syncRailShell();}
+  function checkCurrentVisibility() {
+    if (!current || panel.hidden) return;
+    if (current.canvas.getBoundingClientRect().width) {
+      clearTimeout(visibilityTimer);
+      visibilityTimer = 0;
+      return;
+    }
+    if (visibilityTimer) return;
+    const canvas = current.canvas;
+    visibilityTimer = setTimeout(() => {
+      visibilityTimer = 0;
+      if (current?.canvas === canvas && !panel.hidden && !canvas.getBoundingClientRect().width) {
+        const next = visibleModels()[0];
+        if (next) open(next, true);
+        else hide();
+      }
+    }, 120);
+  }
+  function syncVisibility() {
+    syncLaunchers();
+    checkCurrentVisibility();
+    syncRailShell();
+  }
   // The Lab's native parameter menu edits the same reference stores as the plots.
-  const comparisonSources={'lab-sky':'sky',earth:'globe','world-map':'globe',chart:'altitude'};
-  let comparisonSource='lab-sky';
-  function comparisonModel(source){if(!comparisonSources[source])return null;return {...models.get(source),id:source,type:comparisonSources[source],body:'sun',date:state.date,time:state.time,lat:state.lat,lon:state.lon};}
-  function comparisonList(){return Object.keys(comparisonSources).flatMap(source=>{const m=comparisonModel(source);return stateFor(m).objects.filter(o=>o.type==='observer'||o.type==='time').map(o=>({...copy(o),source}));});}
-  function comparisonChange(source,fn){
-    if(!customizationOn()||state.body!=='sun')return false;
-    commitActive();if(!validInputs())return false;finishNudge();cancelDrag();
-    const m=comparisonModel(source);if(!m)return false;
-    const s=stateFor(m),before=copy(s.objects),last=s.lastSelected;
-    if(fn(s,m)===false)return false;
-    stop();comparisonSource=source;record(s,before,last,m);
-    if(current?.id===source&&current.body==='sun'){selected=s.objects.some(o=>o.id===s.lastSelected)?s.lastSelected:null;update();}
-    schedule();return true;
-  }
-  function comparisonValid(o){return ['observer','time'].includes(o.type)&&typeof o.label==='string'&&o.label.trim().length>0&&o.label.length<=60&&(o.type==='time'?Number.isFinite(o.time)&&o.time>=0&&o.time<=1440:Number.isFinite(o.lat)&&Math.abs(o.lat)<=90&&Number.isFinite(o.lon)&&Math.abs(o.lon)<=180);}
-  const comparisons={
-    list:comparisonList,
-    add(kind,values={}){let id=null;const ok=comparisonChange('lab-sky',(s,m)=>{if(s.objects.length>=40||!['observer','time'].includes(kind))return false;const def=defs(m).find(d=>d.id===kind),n=s.objects.filter(o=>o.type===kind).length+1,o={id:'d'+Date.now()+ ++serial,type:kind,label:def.title,visible:true,locked:false,customLabel:false,...(kind==='observer'?{lat:state.lat,lon:state.lon}:{time:state.time}),...values};if(values.label!==undefined)o.customLabel=values.customLabel!==false;else if(n>1){o.copyNumber=n;o.label=def.title.split('|').map(x=>x+' '+n).join('|');}if(!comparisonValid(o))return false;s.objects.push(o);s.lastSelected=o.id;id=o.id;});return ok?id:null;},
-    patch(source,id,patch){return comparisonChange(source,s=>{const o=s.objects.find(o=>o.id===id);if(!o||o.locked&&['lat','lon','time'].some(k=>k in patch))return false;const allowed=['label','visible',...(o.type==='observer'?['lat','lon']:['time'])],next={...o};for(const key of allowed)if(key in patch)next[key]=patch[key];if('label'in patch)next.customLabel=true;if(!comparisonValid(next)||typeof next.visible!=='boolean')return false;Object.assign(o,next);s.lastSelected=id;});},
-    remove(source,id){return comparisonChange(source,s=>{if(!s.objects.some(o=>o.id===id))return false;s.objects=s.objects.filter(o=>o.id!==id);if(s.lastSelected===id)s.lastSelected=null;});},
-    duplicate(source,id){return comparisonChange(source,s=>{const o=s.objects.find(o=>o.id===id);if(!o||s.objects.length>=40)return false;const q=copy(o);q.id='d'+Date.now()+ ++serial;q.locked=false;if(q.customLabel){let n=2;while(s.objects.some(x=>x.label===o.label+' '+n))n++;q.label=o.label+' '+n;}else{q.copyNumber=Math.max(1,...s.objects.filter(x=>x.type===o.type).map(x=>x.copyNumber||1))+1;const title=definitions[comparisonSources[source]].find(d=>d.id===o.type).title;q.label=title.split('|').map(x=>x+' '+q.copyNumber).join('|');}s.objects.push(q);s.lastSelected=q.id;});},
-    save(source){const m=comparisonModel(source);if(!m)return false;try{const s=stateFor(m);localStorage.setItem('sky-diagram-tools-v1:'+source+':sun',JSON.stringify({version:1,objects:s.objects}));s.saved=JSON.stringify(s.objects);s.stored=true;draftStatus();return true;}catch{return false;}},
-    history(){const m=comparisonModel(comparisonSource),s=stateFor(m);return {undo:!!s.undo.length,redo:!!s.redo.length};},
-    travel(from){const to=from==='undo'?'redo':'undo';commitActive();if(!validInputs())return false;finishNudge();cancelDrag();const m=comparisonModel(comparisonSource),s=stateFor(m);if(!s[from].length)return false;s[to].push({objects:copy(s.objects),selected:s.lastSelected});const snapshot=s[from].pop();s.objects=snapshot.objects;s.lastSelected=snapshot.selected;persist(m,s);draftStatus();if(current?.id===m.id){selected=s.lastSelected;update();}stop();schedule();document.dispatchEvent(new Event('skymotion:references'));return true;}
+  const comparisonSources = {
+    'lab-sky': 'sky',
+    earth: 'globe',
+    'world-map': 'globe',
+    chart: 'altitude',
   };
-  window.SkyDiagramTools={openObjects(options={}){if(!customizationOn())return false;const available=visibleModels(),target=available.find(m=>m.id===options.source)||available.find(m=>m.id===current?.id)||available[0];if(!target)return false;if(open(target)===false)return false;panel.dataset.detail='false';switchView(options.add?'library':'objects',true);if(options.id){if(typeof options.id!=='string')return false;const source=options.source||target.id;if(source!==target.id&&(!comparisonSources[source]||target.body!=='sun'))return false;selectReference(source===target.id?options.id:source+':'+options.id,true);}return true;},comparisons,observers(){if(!customizationOn()||typeof state==='undefined'||state.body!=='sun')return[];return ['earth','world-map','lab-sky'].flatMap(id=>stateFor({id,type:id==='lab-sky'?'sky':'globe',body:'sun',date:state.date,lat:state.lat,lon:state.lon}).objects.filter(o=>o.type==='observer'&&o.visible).map(o=>({...copy(o),source:id})));},times(){if(!customizationOn()||typeof state==='undefined'||state.body!=='sun')return[];return ['chart','lab-sky'].flatMap(id=>stateFor({id,type:id==='chart'?'altitude':'sky',body:'sun',date:state.date,time:state.time,lat:state.lat,lon:state.lon}).objects.filter(o=>o.type==='time'&&o.visible).map(o=>({...copy(o),source:id})));},paint,syncVisibility,referenceColor:index=>trackColors[index%trackColors.length],leave(){commitActive();if(!validInputs())return false;hide();return true;},visible:(id,key)=>{if(!customizationOn())return true;const m=models.get(id);if(!m)return true;const refs=stateFor(m).objects.filter(o=>o.type==='visibility'&&o.visible);return !refs.length||refs.at(-1)[key]!=='no';},read:id=>{const m=models.get(id);return m?copy(stateFor(m).objects):null;},overlay(id,base){const host=base.canvas.tagName==='CANVAS'?base.canvas.parentElement:base.canvas;let layer=host.querySelector('.dt-overlay');if(!layer){layer=E('canvas','dt-overlay',host);layer.setAttribute('aria-hidden','true');}const w=base.canvas.clientWidth,h=base.canvas.clientHeight,dpr=Math.min(devicePixelRatio||1,2);if(layer.width!==Math.round(w*dpr)||layer.height!==Math.round(h*dpr)){layer.width=Math.round(w*dpr);layer.height=Math.round(h*dpr);}layer.style.width=w+'px';layer.style.height=h+'px';const c=layer.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);paint(id,{...base,host,w,h,c});}};
-  document.addEventListener('skymotion:builder-open',()=>{railView='references';syncRailShell();});
-  document.addEventListener('skymotion:customization',()=>{if(!customizationOn())hide();else{railView='references';editing=true;requestAnimationFrame(()=>{const target=visibleModels()[0];if(target&&!document.body.classList.contains('scene-builder-active')){open(target,true);switchView('objects',true);}});}syncRailShell();syncLaunchers();repaint();});
-  function syncInputs(o){for(const input of form.querySelectorAll('[data-field]'))if(input!==document.activeElement&&input.dataset.field!=='label'){input.value=displayValue(input.dataset.field,o[input.dataset.field]);input.dataset.committedValue=input.value;}}
-  function finishNudge(cancel=false){if(!nudging)return;const g=nudging;nudging=null;if(cancel)g.s.objects=g.before;else record(g.s,g.before);draftStatus();update();repaint();}
-  function nudge(e){
-    if(!editing||armed||drag||e.target!==current.canvas||e.altKey||e.metaKey||e.ctrlKey||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return false;
-    const s=stateFor(selectedOwner()),o=s.objects.find(o=>o.id===selected);if(!o?.visible||!anchor(current,o))return false;
-    if(o.locked){status.textContent=tr(o.locked?'位置已锁定，可在属性中解锁。|Position locked; unlock it in properties.':'已选中对象，可在属性中调整。|Object selected; adjust its properties.');return true;}
-    if(!nudging){if(typeof state!=='undefined'&&typeof stop==='function')stop();else current.pause?.();nudging={s,before:copy(s.objects)};if(o.type==='note'){const origin=movementOrigin(current,o);o.x=origin.x;o.y=origin.y;}}
-    const fast=e.shiftKey?5:1,sign=['ArrowLeft','ArrowDown'].includes(e.key)?-1:1;
-    if(['note','emphasis'].includes(o.type)){const step=.2*fast;if(e.key==='ArrowLeft')o.x=Math.max(0,o.x-step);if(e.key==='ArrowRight')o.x=Math.min(100,o.x+step);if(e.key==='ArrowUp')o.y=Math.max(0,o.y-step);if(e.key==='ArrowDown')o.y=Math.min(100,o.y+step);o.x=Number(o.x.toFixed(2));o.y=Number(o.y.toFixed(2));}
-    else if(current.type==='globe'){if(['ArrowLeft','ArrowRight'].includes(e.key)){o.lon=Number((((o.lon+sign*.1*fast+540)%360)-180).toFixed(2));}else o.lat=Number(Math.max(-90,Math.min(90,o.lat+sign*.1*fast)).toFixed(2));}
-    else if(o.type==='time')o.time=Math.max(0,Math.min(1440,o.time+sign*fast));
-    syncInputs(o);repaint();return true;
+  let comparisonSource = 'lab-sky';
+  function comparisonModel(source) {
+    if (!comparisonSources[source]) return null;
+    return {
+      ...models.get(source),
+      id: source,
+      type: comparisonSources[source],
+      body: 'sun',
+      date: state.date,
+      time: state.time,
+      lat: state.lat,
+      lon: state.lon,
+    };
   }
-  document.addEventListener('keydown',e=>{
-    if(panel.hidden||e.isComposing||e.keyCode===229||objectMenu.contains(e.target))return;const local=panel.contains(e.target)||e.target===current.canvas;
-    if(form.contains(e.target)&&e.target.matches('input:not([type=checkbox])')&&e.key==='Enter'&&!e.isComposing){e.preventDefault();e.stopImmediatePropagation();commitActive();validInputs();return;}
-    if(desktopSplit()&&e.key==='Escape'&&form.contains(e.target)){
-      e.preventDefault();e.stopImmediatePropagation();
-      if(e.target.matches('input:not([type=checkbox])')){e.target.value=e.target.dataset.committedValue;clearFieldError(e.target);}
-      draftStatus();const row=selectedRow();row?.focus({preventScroll:true});if(row)revealWithin(row,list);return;
+  function comparisonList() {
+    return Object.keys(comparisonSources).flatMap((source) => {
+      const m = comparisonModel(source);
+      return stateFor(m)
+        .objects.filter((o) => o.type === 'observer' || o.type === 'time')
+        .map((o) => ({ ...copy(o), source }));
+    });
+  }
+  function comparisonChange(source, fn) {
+    if (!customizationOn() || state.body !== 'sun') return false;
+    commitActive();
+    if (!validInputs()) return false;
+    finishNudge();
+    cancelDrag();
+    const m = comparisonModel(source);
+    if (!m) return false;
+    const s = stateFor(m),
+      before = copy(s.objects),
+      last = s.lastSelected;
+    if (fn(s, m) === false) return false;
+    stop();
+    comparisonSource = source;
+    record(s, before, last, m);
+    if (current?.id === source && current.body === 'sun') {
+      selected = s.objects.some((o) => o.id === s.lastSelected) ? s.lastSelected : null;
+      update();
     }
-    if(desktopSplit()&&e.key==='Escape'&&list.contains(e.target)){e.preventDefault();e.stopImmediatePropagation();if(current.canvas.tabIndex<0)current.canvas.tabIndex=0;current.canvas.focus({preventScroll:true});return;}
-    if(local&&(e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='d'&&!e.target.matches('input,textarea,select')){e.preventDefault();e.stopImmediatePropagation();const fromList=list.contains(e.target);duplicate.click();if(fromList)focusSelectedRow();return;}
-    if(local&&(e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='s'){e.preventDefault();e.stopImmediatePropagation();save();return;}
-    if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='z'&&!e.target.matches('input,textarea,select')&&local){e.preventDefault();e.stopImmediatePropagation();const fromList=list.contains(e.target);travel(e.shiftKey?'redo':'undo',e.shiftKey?'undo':'redo');if(fromList)focusSelectedRow();return;}
-    if(drag&&e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();cancelDrag();return;}
-    if(nudging&&e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();finishNudge(true);return;}
-    if(nudge(e)){e.preventDefault();e.stopImmediatePropagation();return;}
-    if(!armed&&((editing&&e.target===current.canvas)||(desktopSplit()&&list.contains(e.target)&&e.target.matches('[data-reference-id]')))&&['Delete','Backspace'].includes(e.key)&&stateFor(selectedOwner()).objects.some(o=>o.id===selected)){
-      e.preventDefault();e.stopImmediatePropagation();const fromList=list.contains(e.target);remove.click();
-      if(fromList)focusSelectedRow();return;
+    schedule();
+    return true;
+  }
+  function comparisonValid(o) {
+    return (
+      ['observer', 'time'].includes(o.type) &&
+      typeof o.label === 'string' &&
+      o.label.trim().length > 0 &&
+      o.label.length <= 60 &&
+      (o.type === 'time'
+        ? Number.isFinite(o.time) && o.time >= 0 && o.time <= 1440
+        : Number.isFinite(o.lat) &&
+          Math.abs(o.lat) <= 90 &&
+          Number.isFinite(o.lon) &&
+          Math.abs(o.lon) <= 180)
+    );
+  }
+  const comparisons = {
+    list: comparisonList,
+    add(kind, values = {}) {
+      let id = null;
+      const ok = comparisonChange('lab-sky', (s, m) => {
+        if (s.objects.length >= 40 || !['observer', 'time'].includes(kind)) return false;
+        const def = defs(m).find((d) => d.id === kind),
+          n = s.objects.filter((o) => o.type === kind).length + 1,
+          o = {
+            id: 'd' + Date.now() + ++serial,
+            type: kind,
+            label: def.title,
+            visible: true,
+            locked: false,
+            customLabel: false,
+            ...(kind === 'observer' ? { lat: state.lat, lon: state.lon } : { time: state.time }),
+            ...values,
+          };
+        if (values.label !== undefined) o.customLabel = values.customLabel !== false;
+        else if (n > 1) {
+          o.copyNumber = n;
+          o.label = def.title
+            .split('|')
+            .map((x) => x + ' ' + n)
+            .join('|');
+        }
+        if (!comparisonValid(o)) return false;
+        s.objects.push(o);
+        s.lastSelected = o.id;
+        id = o.id;
+      });
+      return ok ? id : null;
+    },
+    patch(source, id, patch) {
+      return comparisonChange(source, (s) => {
+        const o = s.objects.find((o) => o.id === id);
+        if (!o || (o.locked && ['lat', 'lon', 'time'].some((k) => k in patch))) return false;
+        const allowed = [
+            'label',
+            'visible',
+            ...(o.type === 'observer' ? ['lat', 'lon'] : ['time']),
+          ],
+          next = { ...o };
+        for (const key of allowed) if (key in patch) next[key] = patch[key];
+        if ('label' in patch) next.customLabel = true;
+        if (!comparisonValid(next) || typeof next.visible !== 'boolean') return false;
+        Object.assign(o, next);
+        s.lastSelected = id;
+      });
+    },
+    remove(source, id) {
+      return comparisonChange(source, (s) => {
+        if (!s.objects.some((o) => o.id === id)) return false;
+        s.objects = s.objects.filter((o) => o.id !== id);
+        if (s.lastSelected === id) s.lastSelected = null;
+      });
+    },
+    duplicate(source, id) {
+      return comparisonChange(source, (s) => {
+        const o = s.objects.find((o) => o.id === id);
+        if (!o || s.objects.length >= 40) return false;
+        const q = copy(o);
+        q.id = 'd' + Date.now() + ++serial;
+        q.locked = false;
+        if (q.customLabel) {
+          let n = 2;
+          while (s.objects.some((x) => x.label === o.label + ' ' + n)) n++;
+          q.label = o.label + ' ' + n;
+        } else {
+          q.copyNumber =
+            Math.max(
+              1,
+              ...s.objects.filter((x) => x.type === o.type).map((x) => x.copyNumber || 1),
+            ) + 1;
+          const title = definitions[comparisonSources[source]].find((d) => d.id === o.type).title;
+          q.label = title
+            .split('|')
+            .map((x) => x + ' ' + q.copyNumber)
+            .join('|');
+        }
+        s.objects.push(q);
+        s.lastSelected = q.id;
+      });
+    },
+    save(source) {
+      const m = comparisonModel(source);
+      if (!m) return false;
+      try {
+        const s = stateFor(m);
+        localStorage.setItem(
+          'sky-diagram-tools-v1:' + source + ':sun',
+          JSON.stringify({ version: 1, objects: s.objects }),
+        );
+        s.saved = JSON.stringify(s.objects);
+        s.stored = true;
+        draftStatus();
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    history() {
+      const m = comparisonModel(comparisonSource),
+        s = stateFor(m);
+      return { undo: !!s.undo.length, redo: !!s.redo.length };
+    },
+    travel(from) {
+      const to = from === 'undo' ? 'redo' : 'undo';
+      commitActive();
+      if (!validInputs()) return false;
+      finishNudge();
+      cancelDrag();
+      const m = comparisonModel(comparisonSource),
+        s = stateFor(m);
+      if (!s[from].length) return false;
+      s[to].push({ objects: copy(s.objects), selected: s.lastSelected });
+      const snapshot = s[from].pop();
+      s.objects = snapshot.objects;
+      s.lastSelected = snapshot.selected;
+      persist(m, s);
+      draftStatus();
+      if (current?.id === m.id) {
+        selected = s.lastSelected;
+        update();
+      }
+      stop();
+      schedule();
+      document.dispatchEvent(new Event('skymotion:references'));
+      return true;
+    },
+  };
+  window.SkyDiagramTools = {
+    openObjects(options = {}) {
+      if (!customizationOn()) return false;
+      const available = visibleModels(),
+        target =
+          available.find((m) => m.id === options.source) ||
+          available.find((m) => m.id === current?.id) ||
+          available[0];
+      if (!target) return false;
+      if (open(target) === false) return false;
+      panel.dataset.detail = 'false';
+      switchView(options.add ? 'library' : 'objects', true);
+      if (options.id) {
+        if (typeof options.id !== 'string') return false;
+        const source = options.source || target.id;
+        if (source !== target.id && (!comparisonSources[source] || target.body !== 'sun'))
+          return false;
+        selectReference(source === target.id ? options.id : source + ':' + options.id, true);
+      }
+      return true;
+    },
+    comparisons,
+    observers() {
+      if (!customizationOn() || typeof state === 'undefined' || state.body !== 'sun') return [];
+      return ['earth', 'world-map', 'lab-sky'].flatMap((id) =>
+        stateFor({
+          id,
+          type: id === 'lab-sky' ? 'sky' : 'globe',
+          body: 'sun',
+          date: state.date,
+          lat: state.lat,
+          lon: state.lon,
+        })
+          .objects.filter((o) => o.type === 'observer' && o.visible)
+          .map((o) => ({ ...copy(o), source: id })),
+      );
+    },
+    times() {
+      if (!customizationOn() || typeof state === 'undefined' || state.body !== 'sun') return [];
+      return ['chart', 'lab-sky'].flatMap((id) =>
+        stateFor({
+          id,
+          type: id === 'chart' ? 'altitude' : 'sky',
+          body: 'sun',
+          date: state.date,
+          time: state.time,
+          lat: state.lat,
+          lon: state.lon,
+        })
+          .objects.filter((o) => o.type === 'time' && o.visible)
+          .map((o) => ({ ...copy(o), source: id })),
+      );
+    },
+    paint,
+    syncVisibility,
+    referenceColor: (index) => trackColors[index % trackColors.length],
+    leave() {
+      commitActive();
+      if (!validInputs()) return false;
+      hide();
+      return true;
+    },
+    visible: (id, key) => {
+      if (!customizationOn()) return true;
+      const m = models.get(id);
+      if (!m) return true;
+      const refs = stateFor(m).objects.filter((o) => o.type === 'visibility' && o.visible);
+      return !refs.length || refs.at(-1)[key] !== 'no';
+    },
+    read: (id) => {
+      const m = models.get(id);
+      return m ? copy(stateFor(m).objects) : null;
+    },
+    overlay(id, base) {
+      const host = base.canvas.tagName === 'CANVAS' ? base.canvas.parentElement : base.canvas;
+      let layer = host.querySelector('.dt-overlay');
+      if (!layer) {
+        layer = E('canvas', 'dt-overlay', host);
+        layer.setAttribute('aria-hidden', 'true');
+      }
+      const w = base.canvas.clientWidth,
+        h = base.canvas.clientHeight,
+        dpr = Math.min(devicePixelRatio || 1, 2);
+      if (layer.width !== Math.round(w * dpr) || layer.height !== Math.round(h * dpr)) {
+        layer.width = Math.round(w * dpr);
+        layer.height = Math.round(h * dpr);
+      }
+      layer.style.width = w + 'px';
+      layer.style.height = h + 'px';
+      const c = layer.getContext('2d');
+      c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      c.clearRect(0, 0, w, h);
+      paint(id, { ...base, host, w, h, c });
+    },
+  };
+  document.addEventListener('skymotion:builder-open', () => {
+    railView = 'references';
+    syncRailShell();
+  });
+  document.addEventListener('skymotion:customization', () => {
+    if (!customizationOn()) hide();
+    else {
+      railView = 'references';
+      editing = true;
+      requestAnimationFrame(() => {
+        const target = visibleModels()[0];
+        if (target && !document.body.classList.contains('scene-builder-active')) {
+          open(target, true);
+          switchView('objects', true);
+        }
+      });
     }
-    if(armed&&e.key==='Enter'&&(e.target===current.canvas||e.target===placement)){e.preventDefault();e.stopImmediatePropagation();placeAt(current.w/2,current.h/2);}
-    else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();armed?(armed=null,update()):hide();}
-  },true);
-  document.addEventListener('keyup',e=>{if(nudging&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();finishNudge();}},true);
-  document.addEventListener('skymotion:language',()=>{syncRailShell();for(const b of portals.values())b.textContent=tr('图内自定义|Customize plot');draftStatus();update();repaint();});
-  window.addEventListener('blur',()=>{finishNudge();cancelDrag();});
-  window.addEventListener('space:layout',()=>{if(!panel.hidden){placePanel();syncLaunchers();}});
-  window.addEventListener('resize',()=>{finishNudge();cancelDrag();if(!panel.hidden){placePanel();if(form.contains(document.activeElement))revealField(document.activeElement);}});
-  if(typeof schedule==='function')schedule();else window.dispatchEvent(new Event('space:layout'));
+    syncRailShell();
+    syncLaunchers();
+    repaint();
+  });
+  function syncInputs(o) {
+    for (const input of form.querySelectorAll('[data-field]'))
+      if (input !== document.activeElement && input.dataset.field !== 'label') {
+        input.value = displayValue(input.dataset.field, o[input.dataset.field]);
+        input.dataset.committedValue = input.value;
+      }
+  }
+  function finishNudge(cancel = false) {
+    if (!nudging) return;
+    const g = nudging;
+    nudging = null;
+    if (cancel) g.s.objects = g.before;
+    else record(g.s, g.before);
+    draftStatus();
+    update();
+    repaint();
+  }
+  function nudge(e) {
+    if (
+      !editing ||
+      armed ||
+      drag ||
+      e.target !== current.canvas ||
+      e.altKey ||
+      e.metaKey ||
+      e.ctrlKey ||
+      !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)
+    )
+      return false;
+    const s = stateFor(selectedOwner()),
+      o = s.objects.find((o) => o.id === selected);
+    if (!o?.visible || !anchor(current, o)) return false;
+    if (o.locked) {
+      status.textContent = tr(
+        o.locked
+          ? '位置已锁定，可在属性中解锁。|Position locked; unlock it in properties.'
+          : '已选中对象，可在属性中调整。|Object selected; adjust its properties.',
+      );
+      return true;
+    }
+    if (!nudging) {
+      if (typeof state !== 'undefined' && typeof stop === 'function') stop();
+      else current.pause?.();
+      nudging = { s, before: copy(s.objects) };
+      if (o.type === 'note') {
+        const origin = movementOrigin(current, o);
+        o.x = origin.x;
+        o.y = origin.y;
+      }
+    }
+    const fast = e.shiftKey ? 5 : 1,
+      sign = ['ArrowLeft', 'ArrowDown'].includes(e.key) ? -1 : 1;
+    if (['note', 'emphasis'].includes(o.type)) {
+      const step = 0.2 * fast;
+      if (e.key === 'ArrowLeft') o.x = Math.max(0, o.x - step);
+      if (e.key === 'ArrowRight') o.x = Math.min(100, o.x + step);
+      if (e.key === 'ArrowUp') o.y = Math.max(0, o.y - step);
+      if (e.key === 'ArrowDown') o.y = Math.min(100, o.y + step);
+      o.x = Number(o.x.toFixed(2));
+      o.y = Number(o.y.toFixed(2));
+    } else if (current.type === 'globe') {
+      if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        o.lon = Number((((o.lon + sign * 0.1 * fast + 540) % 360) - 180).toFixed(2));
+      } else o.lat = Number(Math.max(-90, Math.min(90, o.lat + sign * 0.1 * fast)).toFixed(2));
+    } else if (o.type === 'time') o.time = Math.max(0, Math.min(1440, o.time + sign * fast));
+    syncInputs(o);
+    repaint();
+    return true;
+  }
+  document.addEventListener(
+    'keydown',
+    (e) => {
+      if (panel.hidden || e.isComposing || e.keyCode === 229 || objectMenu.contains(e.target))
+        return;
+      const modal = e.target.closest?.('dialog[open],:popover-open');
+      if (modal && !panel.contains(modal)) return;
+      const local = panel.contains(e.target) || e.target === current.canvas;
+      if (
+        form.contains(e.target) &&
+        e.target.matches('input:not([type=checkbox])') &&
+        e.key === 'Enter' &&
+        !e.isComposing
+      ) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        commitActive();
+        validInputs();
+        return;
+      }
+      if (desktopSplit() && e.key === 'Escape' && form.contains(e.target)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        if (e.target.matches('input:not([type=checkbox])')) {
+          e.target.value = e.target.dataset.committedValue;
+          clearFieldError(e.target);
+        }
+        draftStatus();
+        const row = selectedRow();
+        row?.focus({ preventScroll: true });
+        if (row) revealWithin(row, list);
+        return;
+      }
+      if (desktopSplit() && e.key === 'Escape' && list.contains(e.target)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        if (current.canvas.tabIndex < 0) current.canvas.tabIndex = 0;
+        current.canvas.focus({ preventScroll: true });
+        return;
+      }
+      if (
+        local &&
+        (e.metaKey || e.ctrlKey) &&
+        e.key.toLowerCase() === 'd' &&
+        !e.target.matches('input,textarea,select')
+      ) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const fromList = list.contains(e.target);
+        duplicate.click();
+        if (fromList) focusSelectedRow();
+        return;
+      }
+      if (local && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        save();
+        return;
+      }
+      if (
+        (e.metaKey || e.ctrlKey) &&
+        e.key.toLowerCase() === 'z' &&
+        !e.target.matches('input,textarea,select') &&
+        local
+      ) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const fromList = list.contains(e.target);
+        travel(e.shiftKey ? 'redo' : 'undo', e.shiftKey ? 'undo' : 'redo');
+        if (fromList) focusSelectedRow();
+        return;
+      }
+      if (drag && e.key === 'Escape') {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        cancelDrag();
+        return;
+      }
+      if (nudging && e.key === 'Escape') {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        finishNudge(true);
+        return;
+      }
+      if (nudge(e)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return;
+      }
+      if (
+        !armed &&
+        ((editing && e.target === current.canvas) ||
+          (desktopSplit() && list.contains(e.target) && e.target.matches('[data-reference-id]'))) &&
+        ['Delete', 'Backspace'].includes(e.key) &&
+        stateFor(selectedOwner()).objects.some((o) => o.id === selected)
+      ) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const fromList = list.contains(e.target);
+        remove.click();
+        if (fromList) focusSelectedRow();
+        return;
+      }
+      if (armed && e.key === 'Enter' && (e.target === current.canvas || e.target === placement)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        placeAt(current.w / 2, current.h / 2);
+      } else if (e.key === 'Escape' && (local || armed)) {
+        e.preventDefault();
+        e.stopPropagation();
+        armed ? ((armed = null), update()) : hide();
+      }
+    },
+    true,
+  );
+  document.addEventListener(
+    'keyup',
+    (e) => {
+      if (nudging && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        finishNudge();
+      }
+    },
+    true,
+  );
+  document.addEventListener('skymotion:language', () => {
+    syncRailShell();
+    for (const b of portals.values()) b.textContent = tr('图内自定义|Customize plot');
+    draftStatus();
+    update();
+    repaint();
+  });
+  window.addEventListener('blur', () => {
+    finishNudge();
+    cancelDrag();
+  });
+  window.addEventListener('space:layout', () => {
+    if (!panel.hidden) placePanel();
+    else syncRailShell();
+    syncLaunchers();
+  });
+  window.addEventListener('resize', () => {
+    finishNudge();
+    cancelDrag();
+    if (!panel.hidden) {
+      placePanel();
+      if (form.contains(document.activeElement)) revealField(document.activeElement);
+    } else syncRailShell();
+  });
+  if (typeof schedule === 'function') schedule();
+  else window.dispatchEvent(new Event('space:layout'));
 })();

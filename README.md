@@ -38,6 +38,8 @@ python3 scripts/prerender-pages.py --check
 
 界面颜色统一在 `ui-palette.css` 定义，控件通过 `--design-*` 变量调用；不要在页面模块里另写色号。对象菜单将撤销、重做并入操作行，帮助按需展开，给列表和属性保留空间。
 
+[界面集中审查记录](docs/ui-code-review.zh.md)列出已复现的问题、公共开关的职责与验证范围。
+
 ## 自动检查
 
 使用 Node 22 或更新版本、Python 3 和 Chromium：

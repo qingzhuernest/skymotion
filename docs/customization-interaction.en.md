@@ -41,3 +41,5 @@ Customization preserves the baseline location, date, time and view. Cities and t
 New controls retain the site typography, colors and radii. Light sidebars and dark plot actions stay consistent with their regions. Adding, selecting, editing, saving and returning to the original plot are checked on desktop, tablet and phone sizes; Chromium checks do not replace Safari device testing.
 
 Other tools: altitude plots support date comparisons, reference levels and two-point time/altitude differences. Phase diagrams can capture dated snapshots; planet–Moon diagrams support angular separations and trails. The ground also supports spheres, circles, planes, dials, stations, points and text. Select several objects for Arrange selected objects or Measure and record. Reference A freezes its creation conditions; B follows the current parameters.
+
+After closing the editor, native observation controls remain available across phone-width and immersive transitions. Escape belongs to the current dialog; inside the editor it cancels placement or returns, while outside the editor it does not close the object menu.

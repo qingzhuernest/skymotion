@@ -1,13 +1,8 @@
-:root {
-  color-scheme: light;
-}
 * {
   box-sizing: border-box;
 }
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
   font:
     16px/1.6 'Noto Sans SC',
     system-ui,
@@ -23,19 +18,9 @@ select,
 input[type='date'],
 input[type='number'] {
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--design-surface);
-  color: var(--text);
 }
 button {
   cursor: pointer;
-  transition:
-    background 0.16s,
-    border-color 0.16s;
-}
-button:hover {
-  background: var(--design-inset);
-  border-color: var(--design-open-border);
 }
 button:focus-visible,
 select:focus-visible,
@@ -60,7 +45,6 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--line);
 }
 .brand {
   text-decoration: none;
@@ -74,12 +58,9 @@ header {
 .brand-mark {
   font-size: 36px;
   line-height: 1;
-  color: var(--gold);
 }
 .brand small {
   display: block;
-  font-size: 10px;
-  letter-spacing: 2.4px;
   color: var(--muted);
   font-weight: 500;
 }
@@ -93,9 +74,6 @@ header {
   color: var(--muted);
   margin-right: 12px;
 }
-.quiet {
-  background: transparent;
-}
 main {
   max-width: 1600px;
   margin: auto;
@@ -105,12 +83,6 @@ main {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
   gap: 24px;
-}
-.controls {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 22px;
 }
 .section-head,
 .label-row {
@@ -125,7 +97,6 @@ main {
 .eyebrow {
   font-size: 12px;
   letter-spacing: 1.6px;
-  color: var(--muted);
 }
 .text-button {
   padding: 0;
@@ -135,7 +106,6 @@ main {
 }
 .field-label {
   display: block;
-  font-size: 14px;
   font-weight: 500;
   margin-bottom: 9px;
 }
@@ -146,13 +116,11 @@ main {
   font-size: 14px;
 }
 .label-row {
-  font-size: 14px;
   margin-top: 18px;
   margin-bottom: 6px;
 }
 .label-row output {
   font-variant-numeric: tabular-nums;
-  color: var(--gold);
   font-size: 14px;
 }
 input[type='range'] {
@@ -160,30 +128,22 @@ input[type='range'] {
   height: 5px;
   border-radius: 5px;
   appearance: none;
-  background: var(--design-range-track);
   cursor: pointer;
-  accent-color: var(--gold);
   margin: 12px 0;
 }
 input[type='range']::-webkit-slider-thumb {
   appearance: none;
-  background: var(--gold);
   border: 3px solid var(--design-night-surface);
   border-radius: 50%;
-  height: 19px;
-  width: 19px;
-  box-shadow: 0 0 0 1px var(--gold);
 }
 .range-labels,
 .time-labels {
   display: flex;
   justify-content: space-between;
-  color: var(--muted);
   font-size: 12px;
 }
 .divider {
   height: 1px;
-  background: var(--line);
   margin: 23px 0;
 }
 .season-buttons {
@@ -196,11 +156,6 @@ input[type='range']::-webkit-slider-thumb {
   padding: 6px 2px;
   font-size: 13px;
 }
-.selected {
-  color: var(--gold);
-  border-color: var(--design-action) !important;
-  background: var(--design-selected) !important;
-}
 .micro {
   font-size: 12px;
   color: var(--muted);
@@ -211,36 +166,19 @@ input[type='range']::-webkit-slider-thumb {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
   margin: 12px 0;
 }
 .toggle-row input {
   appearance: none;
-  width: 32px;
-  height: 18px;
   border-radius: 20px;
-  background: var(--design-switch-idle);
   cursor: pointer;
   position: relative;
 }
 .toggle-row input:after {
   content: '';
   display: block;
-  width: 12px;
-  height: 12px;
   border-radius: 50%;
-  background: var(--design-inset);
   position: absolute;
-  top: 3px;
-  left: 3px;
-  transition: left 0.15s;
-}
-.toggle-row input:checked {
-  background: var(--design-action);
-}
-.toggle-row input:checked:after {
-  left: 17px;
-  background: var(--gold);
 }
 .number {
   width: 56px;
@@ -259,7 +197,6 @@ input[type='range']::-webkit-slider-thumb {
   font-size: 34px;
 }
 .observer-card p {
-  font-size: 13px;
   margin: 0;
 }
 .observer-card small {
@@ -298,35 +235,19 @@ h2 {
 }
 .view-tabs {
   display: flex;
-  background: var(--design-surface);
-  padding: 4px;
-  border: 1px solid var(--line);
-  border-radius: 9px;
 }
 .view-tabs button {
   background: transparent;
   border: none;
-  color: var(--muted);
   padding: 7px 13px;
-  white-space: nowrap;
-}
-.view-tabs .active {
-  background: var(--design-inset);
-  color: var(--design-on-action);
 }
 .stage {
   position: relative;
   background: radial-gradient(ellipse at 50% 50%, #182b3d 0%, #0d1a28 74%);
-  border: 1px solid var(--line);
-  border-radius: 14px;
   overflow: hidden;
-  min-height: 425px;
-  flex: 1;
 }
 #sky {
   width: 100%;
-  height: 100%;
-  min-height: 425px;
   display: block;
   touch-action: none;
   cursor: grab;
@@ -344,10 +265,8 @@ h2 {
   align-items: center;
   pointer-events: none;
   font-size: 12px;
-  color: var(--muted);
 }
 .scene-badge {
-  color: #ffe1a5;
   background: #59442866;
   border: 1px solid #af864155;
   border-radius: 20px;
@@ -358,7 +277,6 @@ h2 {
   left: 22px;
   bottom: 20px;
   font-size: 12px;
-  color: var(--muted);
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -370,9 +288,6 @@ h2 {
   border-radius: 50%;
   display: inline-block;
   margin-right: 6px;
-}
-.sun-dot {
-  background: var(--gold);
 }
 .summer-dot {
   background: #ff906b;
@@ -391,12 +306,9 @@ h2 {
   right: 20px;
   bottom: 18px;
   font-size: 12px;
-  background: var(--design-canvas-action-surface);
 }
 .timeline {
-  border: 1px solid var(--line);
   background: var(--panel);
-  border-radius: 12px;
   padding: 16px 22px;
   margin-top: 16px;
 }
@@ -414,7 +326,6 @@ h2 {
   font-size: 27px;
   color: var(--gold);
   font-weight: 500;
-  font-variant-numeric: tabular-nums;
 }
 .play-controls {
   display: flex;
@@ -425,14 +336,8 @@ h2 {
   font-size: 13px;
 }
 .play-button {
-  background: var(--gold);
-  color: #1c2630;
-  border-color: var(--gold);
   font-weight: 600;
   min-width: 88px;
-}
-.play-button:hover {
-  background: #ffd483;
 }
 .time-shortcuts {
   display: flex;
@@ -443,10 +348,8 @@ h2 {
   background: transparent;
   font-size: 12px;
   padding: 4px 10px;
-  color: var(--muted);
 }
 .time-shortcuts span {
-  color: var(--text);
   margin-left: 5px;
 }
 .metrics {
@@ -457,9 +360,7 @@ h2 {
 }
 .metrics article {
   padding: 18px 22px;
-  border: 1px solid var(--line);
   background: var(--panel);
-  border-radius: 12px;
 }
 .metrics article > span {
   font-size: 13px;
@@ -470,14 +371,9 @@ h2 {
   font-weight: 500;
   display: block;
   margin: 7px 0 3px;
-  font-variant-numeric: tabular-nums;
-}
-.metrics article:first-child strong {
-  color: var(--gold);
 }
 .metrics small {
   font-size: 12px;
-  color: var(--muted);
   display: block;
 }
 .detail-grid {
@@ -487,8 +383,6 @@ h2 {
   margin-top: 22px;
 }
 .panel {
-  border: 1px solid var(--line);
-  border-radius: 12px;
   padding: 20px 22px;
   background: var(--panel);
   min-width: 0;
@@ -509,7 +403,6 @@ h2 {
   display: block;
   cursor: crosshair;
   margin-top: 12px;
-  touch-action: pan-y;
 }
 .globe-content {
   display: flex;
@@ -524,12 +417,10 @@ h2 {
 }
 .globe-notes {
   font-size: 12px;
-  color: var(--muted);
 }
 .globe-notes strong {
   font-size: 14px;
   font-weight: 500;
-  color: var(--text);
   display: block;
   margin: 4px 0 12px;
 }
@@ -539,15 +430,10 @@ h2 {
 }
 .insight {
   margin-top: 20px;
-  border-left: 3px solid var(--gold);
   padding: 15px 20px;
-  background: #ffc35a09;
-  border-radius: 0 8px 8px 0;
   font-size: 14px;
-  color: #cbd7e3;
 }
 .insight strong {
-  color: var(--gold);
   font-weight: 500;
 }
 footer {
@@ -559,16 +445,9 @@ footer {
 }
 dialog {
   color: var(--text);
-  background: var(--panel);
-  border: 1px solid #40546b;
-  border-radius: 16px;
   padding: 28px;
   max-width: 600px;
   width: calc(100% - 32px);
-}
-dialog::backdrop {
-  background: var(--design-scrim);
-  backdrop-filter: blur(5px);
 }
 .dialog-head {
   display: flex;
@@ -643,15 +522,6 @@ dialog .play-button {
     height: 74px;
     padding: 0 16px;
   }
-  .brand {
-    font-size: 18px;
-  }
-  .brand-mark {
-    font-size: 30px;
-  }
-  .header-end {
-    gap: 7px;
-  }
   .tag {
     display: none;
   }
@@ -663,7 +533,6 @@ dialog .play-button {
     padding: 18px 14px 0;
   }
   .workspace {
-    display: flex;
     flex-direction: column;
   }
   .experiment {
@@ -671,7 +540,6 @@ dialog .play-button {
   }
   .controls {
     order: 1;
-    display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 24px;
   }
@@ -680,11 +548,6 @@ dialog .play-button {
   }
   .controls .observer-card {
     display: none;
-  }
-  .stage,
-  #sky {
-    min-height: 370px;
-    height: 370px;
   }
   .view-head {
     gap: 10px;
@@ -721,22 +584,15 @@ dialog .play-button {
     font-size: 11px;
     letter-spacing: 0;
   }
-  .time-top > div:first-child {
-    gap: 8px;
-  }
   .play-controls {
     gap: 6px;
   }
   .play-button {
     min-width: 70px;
-    padding: 6px 9px;
   }
   .time-shortcuts {
     gap: 6px;
     justify-content: space-between;
-  }
-  .time-shortcuts button {
-    padding: 5px 7px;
   }
   .metrics {
     grid-template-columns: repeat(2, 1fr);
@@ -754,11 +610,7 @@ dialog .play-button {
   .panel {
     padding: 17px;
   }
-  .globe-content {
-    gap: 24px;
-  }
   #globe {
-    width: 180px;
     height: 190px;
   }
   .controls {
@@ -778,11 +630,6 @@ dialog .play-button {
   }
   h2 {
     font-size: 17px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
   }
 }
 
@@ -841,7 +688,6 @@ button:hover {
 .stage {
   border: 0;
   border-radius: 24px;
-  box-shadow: 0 2px 5px var(--design-shadow);
   color: var(--design-night-ink);
 }
 .view-tabs {
@@ -1078,13 +924,6 @@ canvas:focus-visible {
   }
   .view-tabs {
     width: 100%;
-  }
-  .stage,
-  #sky {
-    min-height: 370px;
-  }
-  .brand {
-    font-size: 17px;
   }
   .header-end .tag {
     display: none;
@@ -1359,7 +1198,6 @@ body[data-body='moon'] .stage-key {
 }
 .phase-content {
   margin-top: 12px;
-  background: var(--design-plot);
   border-radius: 15px;
   color: var(--design-night-ink);
   display: grid;
@@ -1791,8 +1629,7 @@ body[data-body='moon'] #sky {
   border-top: 1px solid var(--design-line);
   padding: 2px 0;
 }
-.menu-section > summary,
-.menu-subsection > summary {
+.menu-section > summary {
   list-style: none;
   cursor: pointer;
   position: relative;
@@ -1803,12 +1640,21 @@ body[data-body='moon'] #sky {
   gap: 3px;
   font-size: 14px;
 }
+.menu-subsection > summary {
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+  padding: 14px 25px 14px 0;
+  color: var(--design-ink);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
 .menu-section > summary::-webkit-details-marker,
 .menu-subsection > summary::-webkit-details-marker {
   display: none;
 }
-.menu-section > summary:after,
-.menu-subsection > summary:after {
+.menu-section > summary:after {
   content: '';
   position: absolute;
   right: 3px;
@@ -1819,10 +1665,22 @@ body[data-body='moon'] #sky {
   border-bottom: 2px solid #607795;
   transform: rotate(45deg);
 }
-.menu-section[open] > summary:after,
-.menu-subsection[open] > summary:after {
+.menu-subsection > summary:after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid #607795;
+  border-bottom: 2px solid #607795;
+  transform: rotate(45deg);
+}
+.menu-section[open] > summary:after {
   transform: rotate(225deg);
   top: 24px;
+}
+.menu-subsection[open] > summary:after {
+  transform: rotate(225deg);
 }
 .menu-section-name {
   font-weight: 600;
@@ -2355,7 +2213,9 @@ body[data-body='moon'] .chart-panel {
   font-variant-numeric: tabular-nums;
   color: var(--design-muted);
 }
-#companionObserver p { margin: 0; }
+#companionObserver p {
+  margin: 0;
+}
 .companion-observer-moment {
   display: flex;
   align-items: baseline;
@@ -2363,7 +2223,9 @@ body[data-body='moon'] .chart-panel {
   gap: 12px;
   color: var(--design-ink);
 }
-.companion-observer-moment > * { white-space: nowrap; }
+.companion-observer-moment > * {
+  white-space: nowrap;
+}
 .companion-search-status {
   font-size: 13px;
   color: var(--design-primary);
@@ -2397,7 +2259,6 @@ body[data-body='moon'] .chart-panel {
   font-size: 25px;
   font-weight: 500;
   margin: 3px 0;
-  font-variant-numeric: tabular-nums;
 }
 #companionSky {
   display: block;
@@ -2939,7 +2800,6 @@ body.welcome-open {
   }
   .welcome-footer {
     font-size: 12px;
-    flex-wrap: wrap;
     padding-bottom: 10px;
   }
 }
@@ -3035,13 +2895,10 @@ canvas,
 .analemma-ideal-controls {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin: 20px 0;
 }
 .analemma-ideal-controls label {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   font-size: 14px;
 }
 .analemma-ideal-controls input {
@@ -3200,11 +3057,9 @@ canvas,
 .sundial-card canvas {
   display: block;
   width: 100%;
-  height: 420px;
   background: #f5efdf;
   border-radius: 18px;
   cursor: pointer;
-  touch-action: pan-y;
 }
 .sundial-reading {
   display: flex;
@@ -3267,9 +3122,6 @@ canvas,
   .sundial-card {
     padding: 16px;
   }
-  .sundial-card canvas {
-    height: 410px;
-  }
   .sundial-clock {
     grid-template-columns: 1fr;
     padding: 16px;
@@ -3311,17 +3163,11 @@ canvas,
 }
 
 .solar-date-mode-bar {
-  padding: 14px 18px;
   background: var(--design-surface);
-  border-radius: 20px;
-  margin: 12px 0;
 }
 .solar-date-mode-bar .overlay-toggle {
-  font-size: 14px;
   color: var(--design-primary);
-  justify-content: space-between;
   display: flex;
-  width: 100%;
 }
 .solar-date-mode-bar .micro {
   margin-top: 7px;
@@ -3402,10 +3248,6 @@ canvas,
   .solar-date-mode-bar {
     padding: 12px 14px;
   }
-  .solar-date-mode-bar .overlay-toggle {
-    font-size: 12px;
-    gap: 8px;
-  }
   .solar-date-timeline .time-top {
     flex-direction: column;
     align-items: stretch;
@@ -3452,14 +3294,20 @@ canvas,
   flex-wrap: wrap;
 }
 .sundial-view-controls button,
-.observer-directions button,
-.observer-bodies button {
+.observer-directions button {
   border: 0;
   border-radius: 22px;
   background: var(--design-surface);
   color: var(--design-primary);
   min-height: 44px;
   padding: 8px 14px;
+}
+.observer-bodies button {
+  border: 0;
+  border-radius: 22px;
+  background: var(--design-surface);
+  color: var(--design-primary);
+  min-height: 44px;
 }
 .sundial-view-controls button.active {
   background: var(--design-primary);
@@ -3898,13 +3746,12 @@ body[data-sky-view='observer'] .stage-key {
   font-size: 13px;
   color: var(--design-muted);
 }
-.observer-bearing-panel > label {
-  flex-wrap: wrap;
-}
-.observer-bearing-panel input,
-.observer-clock-panel > input {
+.observer-bearing-panel input {
   width: 100%;
   margin: 18px 0 9px;
+}
+.observer-clock-panel > input {
+  width: 100%;
 }
 .observer-bearing-panel > label input {
   flex-basis: 100%;
@@ -3982,9 +3829,6 @@ body[data-sky-view='observer'] .stage-key {
 .observer-control-row .time-top {
   align-items: center;
 }
-.observer-clock-panel {
-  padding-top: 8px;
-}
 @media (max-width: 760px) {
   .observer-control-row {
     gap: 12px;
@@ -4033,10 +3877,6 @@ body[data-sky-view='observer'] .stage-key {
     padding-top: 2px;
   }
 }
-.observer-bearing-panel > label {
-  min-height: 36px;
-  flex-wrap: nowrap;
-}
 .observer-bearing-panel output {
   font-size: 18px;
   white-space: nowrap;
@@ -4071,7 +3911,6 @@ body[data-sky-view='observer'] .stage-key {
 }
 .observer-time-host #sunTimeline .time-top > div:first-child {
   order: 0;
-  min-height: 36px;
 }
 .observer-time-host #time {
   order: 1;
@@ -4090,9 +3929,6 @@ body[data-sky-view='observer'] .stage-key {
 }
 .observer-time-host #sunTimeline > .time-shortcuts {
   order: 4;
-}
-.observer-clock-panel > label {
-  min-height: 36px;
 }
 .observer-clock-panel {
   padding-top: 0;

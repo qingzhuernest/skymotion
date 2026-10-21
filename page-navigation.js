@@ -3,12 +3,16 @@
  */
 /* Shared experiment layout: plot, controls and timeline occupy separate grid cells. */
 let uiWorkspace = null;
-function uiViewHidden(node, value) { if (node.hidden !== value) node.hidden = value; }
+function uiViewHidden(node, value) {
+  if (node.hidden !== value) node.hidden = value;
+}
 function uiViewText(node, value) {
   const translated = window.skyTranslate ? window.skyTranslate(value) : value;
   if (node.textContent !== translated) node.textContent = translated;
 }
-function uiViewAttribute(node, name, value) { if (node.getAttribute(name) !== value) node.setAttribute(name, value); }
+function uiViewAttribute(node, name, value) {
+  if (node.getAttribute(name) !== value) node.setAttribute(name, value);
+}
 function renderUIWorkspace() {
   if ($('uiPlaceText'))
     uiViewText($('uiPlaceText'), coord(state.lat, 'lat') + ' · ' + coord(state.lon, 'lon'));
@@ -26,19 +30,45 @@ function renderUIWorkspace() {
     u.nodes.forEach((n) => (n.hidden = true));
     if (moon && u.moonPhase) $('phaseContent').hidden = false;
     else $('stage').hidden = false;
-    const building=window.SkyCustomization?.active===true&&u.selected==='sceneBuilder';
-    if(building){u.nodes.forEach(n=>n.hidden=n.id!=='sceneBuilderPanel');}
-    u.plot.dataset.kind = building?'sceneBuilder':moon && u.moonPhase ? 'phase' : 'sky';
-    window.SkySceneBuilder?.sync();window.SkyDiagramTools?.syncVisibility();window.SkyLabComparison?.sync();
+    const building = window.SkyCustomization?.active === true && u.selected === 'sceneBuilder';
+    if (building) {
+      u.nodes.forEach((n) => (n.hidden = n.id !== 'sceneBuilderPanel'));
+    }
+    u.plot.dataset.kind = building ? 'sceneBuilder' : moon && u.moonPhase ? 'phase' : 'sky';
+    window.SkySceneBuilder?.sync();
+    window.SkyDiagramTools?.syncVisibility();
+    window.SkyLabComparison?.sync();
   }
   if (page === 'diagrams') {
-    if (!moon) { u.pendingLunar = false; u.lunarRequested = false; }
+    if (!moon) {
+      u.pendingLunar = false;
+      u.lunarRequested = false;
+    }
     const allowed = moon
-      ? ['contextPanel', 'chartPanel', 'riseSetPanel', 'companionModule', 'lunarOrbit', 'solarCompare', 'sceneBuilder']
-      : ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel', 'solarStudy', 'solarCompare', 'sceneBuilder'];
-    if(window.SkyCustomization?.active===false){
-      if(['sceneBuilder','solarStudy'].includes(u.selected))u.selected='contextPanel';
-      for(const id of ['sceneBuilder','solarStudy']){const i=allowed.indexOf(id);if(i>=0)allowed.splice(i,1);}
+      ? [
+          'contextPanel',
+          'chartPanel',
+          'riseSetPanel',
+          'companionModule',
+          'lunarOrbit',
+          'solarCompare',
+          'sceneBuilder',
+        ]
+      : [
+          'contextPanel',
+          'chartPanel',
+          'riseSetPanel',
+          'solarGeometryPanel',
+          'solarStudy',
+          'solarCompare',
+          'sceneBuilder',
+        ];
+    if (window.SkyCustomization?.active === false) {
+      if (['sceneBuilder', 'solarStudy'].includes(u.selected)) u.selected = 'contextPanel';
+      for (const id of ['sceneBuilder', 'solarStudy']) {
+        const i = allowed.indexOf(id);
+        if (i >= 0) allowed.splice(i, 1);
+      }
     }
     if (!allowed.includes(u.selected)) {
       u.selected = 'contextPanel';
@@ -53,25 +83,30 @@ function renderUIWorkspace() {
     }
     u.lastVisibleDiagram = u.selected;
     u.tabs.querySelectorAll('button').forEach((b) => {
-      uiViewText(b, {
-        contextPanel: moon ? '月相与关系' : '直射点与昼夜',
-        chartPanel: moon ? '逐日照明比例' : '全天高度曲线',
-        riseSetPanel: moon ? '月出月落' : '日出日落',
-        solarGeometryPanel: '地轴与地平面',
-        companionModule: '行星伴月',
-        lunarOrbit: '地升地落',
-        solarCompare: '四图对照',
-        solarStudy: '地点与时间',
-        sceneBuilder: '搭建实验',
-      }[b.dataset.diagram]);
+      uiViewText(
+        b,
+        {
+          contextPanel: moon ? '月相与关系' : '直射点与昼夜',
+          chartPanel: moon ? '逐日照明比例' : '全天高度曲线',
+          riseSetPanel: moon ? '月出月落' : '日出日落',
+          solarGeometryPanel: '地轴与地平面',
+          companionModule: '行星伴月',
+          lunarOrbit: '地升地落',
+          solarCompare: '四图对照',
+          solarStudy: '地点与时间',
+          sceneBuilder: '搭建实验',
+        }[b.dataset.diagram],
+      );
       uiViewHidden(b, !allowed.includes(b.dataset.diagram));
       uiViewAttribute(b, 'aria-selected', String(b.dataset.diagram === u.selected));
       uiViewAttribute(b, 'tabindex', String(b.dataset.diagram === u.selected ? 0 : -1));
-      if (b.dataset.diagram === 'lunarOrbit') uiViewAttribute(b, 'aria-busy', String(!!u.pendingLunar));
+      if (b.dataset.diagram === 'lunarOrbit')
+        uiViewAttribute(b, 'aria-busy', String(!!u.pendingLunar));
     });
     if (u.lastRevealedTab !== u.selected) {
       const activeTab = u.tabs.querySelector('[aria-selected="true"]');
-      if (activeTab) u.tabs.scrollLeft = activeTab.offsetLeft - (u.tabs.clientWidth - activeTab.offsetWidth) / 2;
+      if (activeTab)
+        u.tabs.scrollLeft = activeTab.offsetLeft - (u.tabs.clientWidth - activeTab.offsetWidth) / 2;
       u.lastRevealedTab = u.selected;
     }
     if (window.skyWorkspacePresentation) window.skyWorkspacePresentation.sync();
@@ -95,30 +130,54 @@ function renderUIWorkspace() {
       }
       if (u.lunarActive !== lunar) {
         u.lunarActive = lunar;
-        u.lunarFrame.contentWindow?.postMessage({type:'skymotion:lunar-active',active:lunar},location.origin);
+        u.lunarFrame.contentWindow?.postMessage(
+          { type: 'skymotion:lunar-active', active: lunar },
+          location.origin,
+        );
       }
     }
     u.updateLunarNotice?.();
     const comparing = u.selected === 'solarCompare';
-    for(const [id,node]of [['contextPanel',$('phaseContent')],['solarGeometryPanel',$('companionSky')]]){
-      const target=moon&&comparing?u.cards[id].querySelector('.ui-diagram-surface'):u.plot;
-      if(node.parentElement!==target)target.append(node);
+    for (const [id, node] of [
+      ['contextPanel', $('phaseContent')],
+      ['solarGeometryPanel', $('companionSky')],
+    ]) {
+      const target = moon && comparing ? u.cards[id].querySelector('.ui-diagram-surface') : u.plot;
+      if (node.parentElement !== target) target.append(node);
     }
-    if(moon&&comparing)state.companion=true;
-    const comparisonInfo=document.querySelector('.ui-diagram-details[data-for="solarCompare"]');
-    if(comparisonInfo)for(const child of comparisonInfo.children)if(!child.classList.contains('workspace-note')&&child.id!=='uiCompareSettings')uiViewHidden(child,moon);
-    for(const [id,card]of Object.entries(u.cards)){
-      const text={contextPanel:moon?'月相与关系':'直射点与昼夜',chartPanel:moon?'逐日照明比例':'全天太阳高度',riseSetPanel:moon?'月出月落方位':'日出日落方位',solarGeometryPanel:moon?'行星伴月':'地轴与地平面'}[id];
-      uiViewText(card.querySelector('h2'),text);
+    if (moon && comparing) state.companion = true;
+    const comparisonInfo = document.querySelector('.ui-diagram-details[data-for="solarCompare"]');
+    if (comparisonInfo)
+      for (const child of comparisonInfo.children)
+        if (!child.classList.contains('workspace-note') && child.id !== 'uiCompareSettings')
+          uiViewHidden(child, moon);
+    for (const [id, card] of Object.entries(u.cards)) {
+      const text = {
+        contextPanel: moon ? '月相与关系' : '直射点与昼夜',
+        chartPanel: moon ? '逐日照明比例' : '全天太阳高度',
+        riseSetPanel: moon ? '月出月落方位' : '日出日落方位',
+        solarGeometryPanel: moon ? '行星伴月' : '地轴与地平面',
+      }[id];
+      uiViewText(card.querySelector('h2'), text);
     }
     for (const [id, card] of Object.entries(u.cards)) {
       const visible =
-        (comparing && (!window.skyWorkspacePresentation?.active || window.skyWorkspacePresentation.visibleIds.has(id))) || (id === u.selected && (!moon || ['chartPanel', 'riseSetPanel'].includes(id)));
+        (comparing &&
+          (!window.skyWorkspacePresentation?.active ||
+            window.skyWorkspacePresentation.visibleIds.has(id))) ||
+        (id === u.selected && (!moon || ['chartPanel', 'riseSetPanel'].includes(id)));
       uiViewHidden(card, !visible);
-      if (visible) visibleNodes.add(moon&&id==='contextPanel'?$('phaseContent'):moon&&id==='solarGeometryPanel'?$('companionSky'):card.querySelector('.ui-diagram-surface').firstElementChild);
+      if (visible)
+        visibleNodes.add(
+          moon && id === 'contextPanel'
+            ? $('phaseContent')
+            : moon && id === 'solarGeometryPanel'
+              ? $('companionSky')
+              : card.querySelector('.ui-diagram-surface').firstElementChild,
+        );
     }
     if (chosen) visibleNodes.add(chosen);
-    u.nodes.forEach(n => uiViewHidden(n, !visibleNodes.has(n)));
+    u.nodes.forEach((n) => uiViewHidden(n, !visibleNodes.has(n)));
     u.plot.dataset.kind = u.selected;
     u.plot.closest('.ui-shell').classList.toggle('ui-solar-compare', comparing);
     if ($('uiEarthSettings')) $('uiEarthSettings').hidden = moon;
@@ -153,8 +212,14 @@ function renderUIWorkspace() {
 (() => {
   const page = document.body.dataset.page;
   for (const a of document.querySelectorAll('.page-nav a')) {
-    const target=new URL(a.href,location.href).pathname.replace(/\/$/,'').split('/').pop().replace(/(?:\.en)?\.html$/,'').replace(/\.en$/,'');
-    if(target===page)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
+    const target = new URL(a.href, location.href).pathname
+      .replace(/\/$/, '')
+      .split('/')
+      .pop()
+      .replace(/(?:\.en)?\.html$/, '')
+      .replace(/\.en$/, '');
+    if (target === page) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
   }
   document.body.insertBefore(document.querySelector('.page-nav'), $('labShell'));
   const saved = SkyMotionSession.read();
@@ -164,7 +229,8 @@ function renderUIWorkspace() {
       if (!modeStates[body].manual) modeStates[body].dec = dateDec(modeStates[body].date);
     }
     state = modeStates[saved.body === 'moon' ? 'moon' : 'sun'];
-    if (SkyMotionSession.inRange(saved.sundialLength, 0.06, 0.3)) sundialLength = saved.sundialLength;
+    if (SkyMotionSession.inRange(saved.sundialLength, 0.06, 0.3))
+      sundialLength = saved.sundialLength;
     sundialView = saved.sundialView === 'plate' ? 'plate' : 'device';
   }
   const returnBody = state.body;
@@ -507,14 +573,21 @@ function renderUIWorkspace() {
         };
         bar.append(b);
       }
-      bar.addEventListener('keydown', event => {
-        if (!event.target.matches('[role="tab"]') ||
-            !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      bar.addEventListener('keydown', (event) => {
+        if (
+          !event.target.matches('[role="tab"]') ||
+          !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)
+        )
+          return;
         event.preventDefault();
-        const tabs = [...bar.querySelectorAll('[role="tab"]')].filter(tab => !tab.hidden);
+        const tabs = [...bar.querySelectorAll('[role="tab"]')].filter((tab) => !tab.hidden);
         const index = tabs.indexOf(event.target);
-        const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 :
-          (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+        const next =
+          event.key === 'Home'
+            ? 0
+            : event.key === 'End'
+              ? tabs.length - 1
+              : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
         tabs[next].focus();
         tabs[next].click();
       });
@@ -546,23 +619,33 @@ function renderUIWorkspace() {
       retry.type = 'button';
       notice.append(noticeText, retry);
       plot.append(notice);
-      let loadTimer = 0, loadGeneration = 0;
-      const syncLanguage = () => lunarFrame.contentWindow?.postMessage({
-        type: 'skymotion:language-sync',
-        language: document.documentElement.lang === 'en' ? 'en' : 'zh',
-      }, location.origin);
+      let loadTimer = 0,
+        loadGeneration = 0;
+      const syncLanguage = () =>
+        lunarFrame.contentWindow?.postMessage(
+          {
+            type: 'skymotion:language-sync',
+            language: document.documentElement.lang === 'en' ? 'en' : 'zh',
+          },
+          location.origin,
+        );
       uiWorkspace.updateLunarNotice = () => {
         const english = document.documentElement.lang === 'en';
         const failed = uiWorkspace.lunarError;
-        notice.hidden = state.body !== 'moon' || !(uiWorkspace.pendingLunar ||
-          (failed && uiWorkspace.lunarRequested));
+        notice.hidden =
+          state.body !== 'moon' ||
+          !(uiWorkspace.pendingLunar || (failed && uiWorkspace.lunarRequested));
         noticeText.textContent = failed
-          ? (english ? 'Earthrise could not load. Check your connection and retry.' : '地升地落未能加载，请检查网络后重试。')
-          : (english ? 'Preparing Earthrise… You can keep using the current diagram.' : '正在准备地升地落，可继续操作当前图解。');
+          ? english
+            ? 'Earthrise could not load. Check your connection and retry.'
+            : '地升地落未能加载，请检查网络后重试。'
+          : english
+            ? 'Preparing Earthrise… You can keep using the current diagram.'
+            : '正在准备地升地落，可继续操作当前图解。';
         retry.hidden = !failed;
         retry.textContent = english ? 'Retry' : '重试';
       };
-      const failLunar = generation => {
+      const failLunar = (generation) => {
         if (generation !== loadGeneration || uiWorkspace.lunarReady) return;
         clearTimeout(loadTimer);
         uiWorkspace.lunarError = true;
@@ -577,7 +660,9 @@ function renderUIWorkspace() {
         // Discard adopted controls from a partial attempt before mounting a new document.
         uiWorkspace.lunarLesson?.pause();
         uiWorkspace.lunarLesson = null;
-        document.querySelectorAll('.lunar-controls-host,.lunar-timeline-host').forEach(node => node.remove());
+        document
+          .querySelectorAll('.lunar-controls-host,.lunar-timeline-host')
+          .forEach((node) => node.remove());
         lunarPanel.dataset.preparing = '';
         const lang = document.documentElement.lang === 'en' ? 'index.en.html' : 'index.html';
         lunarFrame.src = 'lunar/' + lang + '?embedded=1&attempt=' + generation;
@@ -591,22 +676,37 @@ function renderUIWorkspace() {
       };
       lunarFrame.addEventListener('load', () => {
         try {
-          const attempt = new URL(lunarFrame.contentWindow.location.href).searchParams.get('attempt');
-          if (attempt === String(loadGeneration) && !lunarFrame.contentWindow.LunarOrbitLesson) failLunar(loadGeneration);
-        } catch { failLunar(loadGeneration); }
+          const attempt = new URL(lunarFrame.contentWindow.location.href).searchParams.get(
+            'attempt',
+          );
+          if (attempt === String(loadGeneration) && !lunarFrame.contentWindow.LunarOrbitLesson)
+            failLunar(loadGeneration);
+        } catch {
+          failLunar(loadGeneration);
+        }
         syncLanguage();
-        lunarFrame.contentWindow?.postMessage({type:'skymotion:lunar-active',active:uiWorkspace.lunarActive===true},location.origin);
+        lunarFrame.contentWindow?.postMessage(
+          { type: 'skymotion:lunar-active', active: uiWorkspace.lunarActive === true },
+          location.origin,
+        );
       });
       document.addEventListener('skymotion:language', () => {
         syncLanguage();
         uiWorkspace.updateLunarNotice();
       });
-      lunarPanel.append(lunarFrame);plot.append(lunarPanel);
-      uiWorkspace.nodes.push(lunarPanel);uiWorkspace.lunarFrame=lunarFrame;
+      lunarPanel.append(lunarFrame);
+      plot.append(lunarPanel);
+      uiWorkspace.nodes.push(lunarPanel);
+      uiWorkspace.lunarFrame = lunarFrame;
       uiWorkspace.lunarRequested = location.hash === '#lunarOrbit';
-      window.addEventListener('message', event => {
-        if (event.origin !== location.origin || event.source !== lunarFrame.contentWindow ||
-            event.data?.type !== 'skymotion:lunar-ready' || event.data.attempt !== String(loadGeneration)) return;
+      window.addEventListener('message', (event) => {
+        if (
+          event.origin !== location.origin ||
+          event.source !== lunarFrame.contentWindow ||
+          event.data?.type !== 'skymotion:lunar-ready' ||
+          event.data.attempt !== String(loadGeneration)
+        )
+          return;
         clearTimeout(loadTimer);
         uiWorkspace.lunarLesson = lunarFrame.contentWindow.LunarOrbitLesson;
         if (!uiWorkspace.lunarLesson) return;
@@ -614,7 +714,8 @@ function renderUIWorkspace() {
         uiWorkspace.lunarError = false;
         delete lunarPanel.dataset.preparing;
         if (uiWorkspace.lunarSnapshot) uiWorkspace.lunarLesson.restore(uiWorkspace.lunarSnapshot);
-        if ((uiWorkspace.pendingLunar || uiWorkspace.lunarRequested) && state.body === 'moon') uiWorkspace.selected = 'lunarOrbit';
+        if ((uiWorkspace.pendingLunar || uiWorkspace.lunarRequested) && state.body === 'moon')
+          uiWorkspace.selected = 'lunarOrbit';
         uiWorkspace.pendingLunar = false;
         syncLanguage();
         renderUIWorkspace();
@@ -753,6 +854,7 @@ function renderUIWorkspace() {
       rail.focus({ preventScroll: true });
       return;
     }
+    updateParameterPresentation();
     if (drawer.open) return;
     stop();
     // Opening controls changes playback UI, not the scientific image.
@@ -816,9 +918,14 @@ function renderUIWorkspace() {
   for (const event of ['pointerup', 'pointercancel', 'lostpointercapture'])
     drawerHeader.addEventListener(event, endDrawerSwipe);
   function updateParameterPresentation() {
-    finishDrawerClose(false);
-    if (drawerMedia.matches) drawer.append(rail);
-    else drawerHome.after(rail);
+    const atDestination = drawerMedia.matches
+      ? rail.parentElement === drawer
+      : rail.parentElement === drawerHome.parentElement;
+    if (!atDestination) {
+      finishDrawerClose(false);
+      if (drawerMedia.matches) drawer.append(rail);
+      else drawerHome.after(rail);
+    }
     schedule();
   }
   drawerMedia.addEventListener('change', updateParameterPresentation);

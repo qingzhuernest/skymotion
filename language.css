@@ -1,6 +1,5 @@
 html:lang(en) {
-  --design-font:
-    "SkyMotion Charter", Charter, "Bitstream Charter", Georgia, serif;
+  --design-font: 'SkyMotion Charter', Charter, 'Bitstream Charter', Georgia, serif;
 }
 html:lang(en) body,
 html:lang(en) :is(button, input, select, textarea, output, dialog) {
@@ -8,7 +7,6 @@ html:lang(en) :is(button, input, select, textarea, output, dialog) {
 }
 html:lang(en) .welcome-quote {
   font-family: var(--design-font);
-  font-style: italic;
 }
 .language-toggle {
   flex-shrink: 0;
@@ -39,8 +37,7 @@ html:lang(en) .welcome-quote {
   color: var(--design-night-ink);
   border-color: var(--design-night-line);
 }
-html:lang(en)
-  :is(.menu-content, .ui-information, .side, .workbench-panel-head) {
+html:lang(en) :is(.menu-content, .ui-information, .side, .workbench-panel-head) {
   overflow-wrap: break-word;
 }
 html:lang(en) .ui-parameters .workbench-extra > label {
@@ -66,36 +63,15 @@ html:lang(en) .ui-viewbar button {
   }
 }
 html:lang(en)
-  :is(
-    h1,
-    h2,
-    h3,
-    h4,
-    p,
-    a,
-    summary,
-    label,
-    strong,
-    small,
-    span,
-    div,
-    li,
-    dt,
-    dd,
-    th,
-    td
-  ) {
+  :is(h1, h2, h3, h4, p, a, summary, label, strong, small, span, div, li, dt, dd, th, td) {
   font-family: var(--design-font);
 }
 html:lang(en) .welcome-quote {
   font-style: italic;
 }
-html:lang(en)
-  body
-  :is(.ui-heading, .space-shell .head, .welcome-intro, .document-header)
-  h1,
+html:lang(en) body :is(.ui-heading, .space-shell .head, .welcome-intro, .document-header) h1,
 html:lang(en) body .document-page :is(h1, h2),
-html:lang(en) body[data-page="contact"] .reading-page > .dialog-head h2 {
+html:lang(en) body[data-page='contact'] .reading-page > .dialog-head h2 {
   font-family: var(--design-font);
 }
 .language-nav {
@@ -115,7 +91,7 @@ html:lang(en) body[data-page="contact"] .reading-page > .dialog-head h2 {
   margin: 0 12px 0 6px;
 }
 body.space-immersive .language-nav,
-body[data-embedded="true"] .language-nav {
+body[data-embedded='true'] .language-nav {
   display: none;
 }
 .language-toggle:disabled {
@@ -127,7 +103,9 @@ body[data-embedded="true"] .language-nav {
 html:lang(en) .page-nav a {
   font-size: 13px;
 }
-html:lang(en) .ui-parameters :is(.micro, .globe-drag-help, .globe-notes, .geometry-notes, .menu-summary) {
+html:lang(en)
+  .ui-parameters
+  :is(.micro, .globe-drag-help, .globe-notes, .geometry-notes, .menu-summary) {
   font-size: 13px;
   line-height: 1.7;
 }
@@ -188,14 +166,16 @@ html:lang(en) .document-page h1 {
   text-wrap: balance;
 }
 /* Brand at left, language action at the right edge of the welcome header. */
-body[data-page="welcome"] .welcome-brand {
+body[data-page='welcome'] .welcome-brand {
   width: 100%;
 }
-body[data-page="welcome"] .welcome-brand .language-toggle {
+body[data-page='welcome'] .welcome-brand .language-toggle {
   margin-left: auto;
 }
 /* English resource labels wrap within the compact welcome action column. */
-html:lang(en) body[data-page="welcome"] :is(.welcome-sky-actions button,.welcome-corner-links > a) {
+html:lang(en)
+  body[data-page='welcome']
+  :is(.welcome-sky-actions button, .welcome-corner-links > a) {
   white-space: normal;
   text-align: center;
   text-wrap: balance;
@@ -204,15 +184,54 @@ html:lang(en) body[data-page="welcome"] :is(.welcome-sky-actions button,.welcome
   line-height: 1.3;
 }
 @media (max-height: 700px) {
-  html:lang(en) body[data-page="welcome"] :is(.welcome-sky-actions button,.welcome-corner-links > a) {
+  html:lang(en)
+    body[data-page='welcome']
+    :is(.welcome-sky-actions button, .welcome-corner-links > a) {
     min-height: 40px;
   }
 }
 /* Global editing mode sits beside language, outside the scientific heading. */
-.language-actions{display:flex;align-items:center;flex:none;gap:8px;margin:0 12px 0 8px;}
-.language-actions :is(.layout-launch,.language-toggle){margin:0;min-height:36px;padding:7px 12px;border-radius:var(--design-radius-control);font:inherit;white-space:nowrap;background:var(--design-surface);color:var(--design-primary);border:1px solid var(--design-line);}
-.language-actions .layout-launch[aria-pressed=true],
-body[data-page="space"].space-immersive .language-actions .layout-launch[aria-pressed=true]{background:var(--design-action,var(--design-primary));border-color:var(--design-action,var(--design-primary));color:var(--design-on-action);}
-.language-actions :is(.layout-launch,.language-toggle):focus-visible{outline:2px solid var(--design-primary);outline-offset:3px;}
-@media(max-width:600px){.language-actions{gap:6px;margin:0 10px 0 6px;font-size:12px;}.language-actions :is(.layout-launch,.language-toggle){padding:6px 9px;min-height:36px;}}
-@media(pointer:coarse){.language-actions :is(.layout-launch,.language-toggle){min-height:44px;}}
+.language-actions {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: 8px;
+  margin: 0 12px 0 8px;
+}
+.language-actions :is(.layout-launch, .language-toggle) {
+  margin: 0;
+  min-height: 36px;
+  padding: 7px 12px;
+  border-radius: var(--design-radius-control);
+  font: inherit;
+  white-space: nowrap;
+  background: var(--design-surface);
+  color: var(--design-primary);
+  border: 1px solid var(--design-line);
+}
+.language-actions .layout-launch[aria-pressed='true'],
+body[data-page='space'].space-immersive .language-actions .layout-launch[aria-pressed='true'] {
+  background: var(--design-action, var(--design-primary));
+  border-color: var(--design-action, var(--design-primary));
+  color: var(--design-on-action);
+}
+.language-actions :is(.layout-launch, .language-toggle):focus-visible {
+  outline: 2px solid var(--design-primary);
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .language-actions {
+    gap: 6px;
+    margin: 0 10px 0 6px;
+    font-size: 12px;
+  }
+  .language-actions :is(.layout-launch, .language-toggle) {
+    padding: 6px 9px;
+    min-height: 36px;
+  }
+}
+@media (pointer: coarse) {
+  .language-actions :is(.layout-launch, .language-toggle) {
+    min-height: 44px;
+  }
+}

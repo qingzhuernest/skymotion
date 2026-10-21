@@ -89,7 +89,6 @@ a:focus-visible {
   line-height: 1.5;
   text-align: center;
   color: #a9bfdc;
-  text-decoration: none;
   border: 1px solid #89a8d044;
   border-radius: 14px;
   white-space: normal;
@@ -103,7 +102,6 @@ a:focus-visible {
 }
 body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data-page='sundial']) {
   height: 100dvh;
-  overflow: hidden;
 }
 body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data-page='sundial'])
   #labShell {
@@ -125,7 +123,6 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  min-height: 44px;
   flex-shrink: 0;
 }
 .ui-heading h1 {
@@ -143,10 +140,6 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 .ui-heading .body-switch {
   margin: 0;
   min-width: 0;
-}
-.ui-heading .body-switch button {
-  padding: 7px 20px;
-  font-size: 14px;
 }
 #uiParametersButton {
   display: none;
@@ -182,12 +175,6 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   padding: 14px;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius);
-  background: var(--design-surface);
-}
-.ui-parameters > h2 {
-  font-size: 16px;
-  margin: 0 0 14px;
-  color: var(--design-ink);
 }
 .ui-parameters .controls {
   background: transparent;
@@ -208,9 +195,6 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 }
 .ui-parameters .menu-section {
   padding: 12px 0;
-}
-.ui-parameters .menu-subsection {
-  margin: 14px 0;
 }
 .ui-parameters .label-row {
   gap: 6px;
@@ -302,7 +286,6 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 }
 .ui-plot > canvas {
   display: block;
-  width: 100%;
   height: 100% !important;
   min-height: 0 !important;
   flex: 1;
@@ -376,7 +359,6 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   flex: 1;
   min-height: 0;
   background: var(--design-on-action);
-  padding: 10px;
 }
 .ui-plot .context-view-switch {
   flex-shrink: 0;
@@ -387,13 +369,9 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   min-height: 0;
   display: flex;
   gap: 10px;
-  align-items: center;
 }
 .ui-plot #globe {
-  height: 100%;
-  flex: 1;
   min-width: 0;
-  width: 100%;
 }
 .ui-plot .globe-notes {
   flex-basis: 130px;
@@ -421,9 +399,6 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   font-size: 11px;
   flex-shrink: 0;
   padding: 4px;
-}
-.ui-plot[data-kind='riseSetPanel'] {
-  background: var(--design-on-action);
 }
 .ui-timeline-host {
   grid-area: timeline;
@@ -506,10 +481,6 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   border: 0;
   border-bottom: 1px solid var(--ui-border);
   padding-bottom: 8px;
-}
-.ui-parameters .workbench-more::details-content {
-  max-height: none;
-  overflow: visible;
 }
 .ui-parameters .workbench-more summary {
   font-size: 13px;
@@ -633,7 +604,6 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 .ui-diagram-details .event-values {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
 }
 .ui-diagram-details .geometry-layout {
   display: block;
@@ -748,18 +718,10 @@ body[data-page='analemma'] .workbench-events {
     padding: 8px 10px 10px;
   }
   .ui-heading {
-    min-height: 38px;
     gap: 8px;
-  }
-  .ui-heading h1 {
-    font-size: 17px;
   }
   .ui-heading #uiPlaceText {
     font-size: 10px;
-  }
-  .ui-heading .body-switch button {
-    font-size: 12px;
-    padding: 5px 11px;
   }
   .ui-grid {
     grid-template-columns: 1fr;
@@ -917,12 +879,6 @@ body[data-page='analemma'] .workbench-events {
     padding: 5px 10px 8px;
     gap: 6px;
   }
-  .ui-heading {
-    min-height: 32px;
-  }
-  .ui-heading h1 {
-    font-size: 16px;
-  }
   .ui-heading #uiPlaceText {
     display: none;
   }
@@ -1063,9 +1019,6 @@ body[data-page='analemma'] .workbench-events {
     min-width: 140px;
     width: 140px;
   }
-  .ui-heading h1 {
-    font-size: 16px;
-  }
 }
 @media (max-height: 500px) {
   .ui-heading {
@@ -1086,12 +1039,6 @@ body[data-page='analemma'] .workbench-events {
   padding: 6px 10px;
   font-size: 13px;
 }
-@media (max-width: 760px) {
-  .ui-heading .body-switch button {
-    font-size: 12px;
-    padding: 5px 8px;
-  }
-}
 /* Material surface hierarchy: results, parameter groups and expanded states. */
 :root {
   --md-primary: var(--design-primary);
@@ -1100,8 +1047,6 @@ body[data-page='analemma'] .workbench-events {
   --md-surface: var(--design-surface);
   --md-surface-container: #eef2f8;
   --md-outline-variant: var(--design-inset);
-  --md-on-surface: var(--design-ink);
-  --md-on-surface-variant: var(--design-muted);
 }
 .ui-parameters {
   background: var(--md-surface-container);
@@ -1795,7 +1740,6 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
   gap: 1px;
-  background: var(--design-night-line);
 }
 .ui-plot[data-kind='solarCompare'] .ui-diagram-card-head {
   display: flex;
@@ -2792,7 +2736,33 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
   font-size: inherit;
 }
 
-.observer-link-settings{display:grid;gap:10px;margin:0 0 16px;padding:0 0 14px;border-bottom:1px solid var(--design-line)}
-.observer-link-settings label{display:grid;gap:6px;color:var(--design-ink);font-size:13px}
-.observer-link-settings select{width:100%;min-width:0;font:inherit;color:var(--design-ink);background:var(--design-surface);border:1px solid var(--design-line);border-radius:var(--design-radius-control);padding:9px}
-.observer-link-settings p{margin:0;color:var(--design-muted);font-size:12px;line-height:1.65;overflow-wrap:anywhere}
+.observer-link-settings {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 0 0 14px;
+  border-bottom: 1px solid var(--design-line);
+}
+.observer-link-settings label {
+  display: grid;
+  gap: 6px;
+  color: var(--design-ink);
+  font-size: 13px;
+}
+.observer-link-settings select {
+  width: 100%;
+  min-width: 0;
+  font: inherit;
+  color: var(--design-ink);
+  background: var(--design-surface);
+  border: 1px solid var(--design-line);
+  border-radius: var(--design-radius-control);
+  padding: 9px;
+}
+.observer-link-settings p {
+  margin: 0;
+  color: var(--design-muted);
+  font-size: 12px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}

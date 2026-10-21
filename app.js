@@ -286,7 +286,7 @@ function drawSkyScene(kind) {
     project = (p) => {
       const az = (Math.atan2(p.x, p.z) * deg + 360) % 360,
         alt = Math.asin(clamp(p.y, -1, 1)) * deg;
-      return { x: 40 + (az / 360) * (w - 80), y: h * 0.69 - (alt / 90) * (h * 0.49),wrap:az };
+      return { x: 40 + (az / 360) * (w - 80), y: h * 0.69 - (alt / 90) * (h * 0.49), wrap: az };
     };
   } else {
     project = (p) => {
@@ -525,7 +525,7 @@ function drawSkyScene(kind) {
   }
   if (state.view === 'top' && kind === 'moon')
     text(c, (kind === 'moon' ? '月球' : '太阳') + '在地平面上的投影', w * 0.5, 65, '#91a5b9', 12);
-  paintLabReferences(c,w,h,project,kind);
+  paintLabReferences(c, w, h, project, kind);
 }
 function drawSunAltitudeChart() {
   if (!canPaint($('chart'))) return;
@@ -620,8 +620,57 @@ function drawSunAltitudeChart() {
     c.arc(x, yy(m.alt), 4, 0, Math.PI * 2);
     c.fill();
   }
-  window.SkyDiagramTools?.paint('chart',{ type:'altitude',canvas:$('chart'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,low:-90,high:90,unit:'°',clip:[left,top,right-left,bottom-top],project:(time,alt)=>({x:xx(time),y:yy(alt)}),value:(time,date)=>{const values=SkyDiagramSampling.memo(JSON.stringify(['altitude',date,state.lat,state.lon,state.manual,state.dec]),()=>Array.from({length:145},(_,i)=>(state.manual?solar(state.lat,state.dec,i*10):skyRaw('Sun',i*10,date,state.lat,state.lon)).alt));const minute=Math.max(0,Math.min(1440,time)),index=minute/10;if(Number.isInteger(index))return values[index];return SkyDiagramSampling.memo(JSON.stringify(['altitude-point',date,state.lat,state.lon,state.manual,state.dec,minute]),()=>(state.manual?solar(state.lat,state.dec,minute):skyRaw('Sun',minute,date,state.lat,state.lon)).alt);},pick:(x)=>({time:Math.max(0,Math.min(1440,(x-left)/(right-left)*1440))})});
-
+  window.SkyDiagramTools?.paint('chart', {
+    type: 'altitude',
+    canvas: $('chart'),
+    c,
+    w,
+    h,
+    body: state.body,
+    date: state.date,
+    time: state.time,
+    lat: state.lat,
+    lon: state.lon,
+    low: -90,
+    high: 90,
+    unit: '°',
+    clip: [left, top, right - left, bottom - top],
+    project: (time, alt) => ({ x: xx(time), y: yy(alt) }),
+    value: (time, date) => {
+      const values = SkyDiagramSampling.memo(
+        JSON.stringify(['altitude', date, state.lat, state.lon, state.manual, state.dec]),
+        () =>
+          Array.from(
+            { length: 145 },
+            (_, i) =>
+              (state.manual
+                ? solar(state.lat, state.dec, i * 10)
+                : skyRaw('Sun', i * 10, date, state.lat, state.lon)
+              ).alt,
+          ),
+      );
+      const minute = Math.max(0, Math.min(1440, time)),
+        index = minute / 10;
+      if (Number.isInteger(index)) return values[index];
+      return SkyDiagramSampling.memo(
+        JSON.stringify([
+          'altitude-point',
+          date,
+          state.lat,
+          state.lon,
+          state.manual,
+          state.dec,
+          minute,
+        ]),
+        () =>
+          (state.manual
+            ? solar(state.lat, state.dec, minute)
+            : skyRaw('Sun', minute, date, state.lat, state.lon)
+          ).alt,
+      );
+    },
+    pick: (x) => ({ time: Math.max(0, Math.min(1440, ((x - left) / (right - left)) * 1440)) }),
+  });
 }
 // Render the orthographic Earth at display resolution on the GPU.
 // The CPU path is reserved for browsers where WebGL is unavailable or lost.
@@ -823,13 +872,33 @@ function renderGlobeOptions() {
     button.classList.toggle('active', active);
     button.setAttribute('aria-pressed', String(active));
   });
-  const english=document.documentElement.lang==='en';
-  $('globeDragExplanation').textContent=english?(linked?'Drag the globe to move the observation location. All solar diagrams update together.':'Drag the observer dot to update every solar diagram. Drag elsewhere to rotate the view only.'):(linked?'拖动地球会改变观测地点，各张太阳图解同时更新。':'拖动观察点可联动各张太阳图解；拖动球面其他位置只旋转视角。');
-  if(state.manual&&state.observerTimeBasis==='utc')state.observerTimeBasis='solar';
-  $('observerTimeBasis').value=state.observerTimeBasis||'solar';$('observerTimeBasis').querySelector('[value=utc]').disabled=state.manual;
-  $('observerConstraint').value=state.observerConstraint||'free';
-  const utc=instantUTC().toISOString().replace('T',' ').slice(0,19)+' UTC';
-  $('observerLinkReadout').textContent=(state.observerTimeBasis==='utc'?(english?'Same instant · ':'同一瞬间 · '):(english?'Same local apparent solar time · ':'同一当地真太阳时 · '))+utc+(state.manual?(english?' · Ideal model: local solar time only.':' · 理想实验仅固定当地真太阳时。'):'');
+  const english = document.documentElement.lang === 'en';
+  $('globeDragExplanation').textContent = english
+    ? linked
+      ? 'Drag the globe to move the observation location. All solar diagrams update together.'
+      : 'Drag the observer dot to update every solar diagram. Drag elsewhere to rotate the view only.'
+    : linked
+      ? '拖动地球会改变观测地点，各张太阳图解同时更新。'
+      : '拖动观察点可联动各张太阳图解；拖动球面其他位置只旋转视角。';
+  if (state.manual && state.observerTimeBasis === 'utc') state.observerTimeBasis = 'solar';
+  $('observerTimeBasis').value = state.observerTimeBasis || 'solar';
+  $('observerTimeBasis').querySelector('[value=utc]').disabled = state.manual;
+  $('observerConstraint').value = state.observerConstraint || 'free';
+  const utc = instantUTC().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+  $('observerLinkReadout').textContent =
+    (state.observerTimeBasis === 'utc'
+      ? english
+        ? 'Same instant · '
+        : '同一瞬间 · '
+      : english
+        ? 'Same local apparent solar time · '
+        : '同一当地真太阳时 · ') +
+    utc +
+    (state.manual
+      ? english
+        ? ' · Ideal model: local solar time only.'
+        : ' · 理想实验仅固定当地真太阳时。'
+      : '');
   const center = globeCenter(),
     p = state.lat * rad,
     cp = center.lat * rad,
@@ -851,13 +920,52 @@ function initGlobeOptions() {
   settings.innerHTML =
     '<span class="field-label">拖动地球</span><div class="globe-drag-options" role="group" aria-label="地球拖动方式"><button type="button" data-globe-drag-mode="view">仅旋转视角</button><button type="button" data-globe-drag-mode="location">联动观察地点</button></div><p id="globeDragExplanation"></p><button type="button" id="globeRecenter">对准观察地点</button><p id="globeObserverVisibility" aria-live="polite"></p>';
   document.querySelector('.globe-notes').prepend(settings);
-  const link=document.createElement('div');link.className='observer-link-settings';link.dataset.i18nSkip='';
-  const english=document.documentElement.lang==='en';
-  link.innerHTML='<label><span data-link-label="basis"></span><select id="observerTimeBasis"><option value="solar"></option><option value="utc"></option></select></label><label><span data-link-label="constraint"></span><select id="observerConstraint"><option value="free"></option><option value="latitude"></option><option value="longitude"></option></select></label><p id="observerLinkReadout" aria-live="off"></p>';
+  const link = document.createElement('div');
+  link.className = 'observer-link-settings';
+  link.dataset.i18nSkip = '';
+  const english = document.documentElement.lang === 'en';
+  link.innerHTML =
+    '<label><span data-link-label="basis"></span><select id="observerTimeBasis"><option value="solar"></option><option value="utc"></option></select></label><label><span data-link-label="constraint"></span><select id="observerConstraint"><option value="free"></option><option value="latitude"></option><option value="longitude"></option></select></label><p id="observerLinkReadout" aria-live="off"></p>';
   settings.before(link);
-  function labels(){const en=document.documentElement.lang==='en';link.querySelector('[data-link-label=basis]').textContent=en?'When moving the location':'移动地点时';link.querySelector('[data-link-label=constraint]').textContent=en?'Movement constraint':'移动范围';for(const [id,values]of [['observerTimeBasis',en?['Keep local apparent solar time','Keep the same instant (UTC)']:['固定当地真太阳时','固定同一瞬间（UTC）']],['observerConstraint',en?['Free movement','Along a parallel (fixed latitude)','Along a meridian (fixed longitude)']:['自由移动','沿纬线（纬度不变）','沿经线（经度不变）']]])[...$(id).options].forEach((o,i)=>o.textContent=values[i]);}
-  labels();document.addEventListener('skymotion:language',()=>{labels();renderGlobeOptions();});
-  for(const id of ['observerTimeBasis','observerConstraint'])$(id).onchange=()=>{stop();state[id]=$(id).value;schedule();};
+  function labels() {
+    const en = document.documentElement.lang === 'en';
+    link.querySelector('[data-link-label=basis]').textContent = en
+      ? 'When moving the location'
+      : '移动地点时';
+    link.querySelector('[data-link-label=constraint]').textContent = en
+      ? 'Movement constraint'
+      : '移动范围';
+    for (const [id, values] of [
+      [
+        'observerTimeBasis',
+        en
+          ? ['Keep local apparent solar time', 'Keep the same instant (UTC)']
+          : ['固定当地真太阳时', '固定同一瞬间（UTC）'],
+      ],
+      [
+        'observerConstraint',
+        en
+          ? [
+              'Free movement',
+              'Along a parallel (fixed latitude)',
+              'Along a meridian (fixed longitude)',
+            ]
+          : ['自由移动', '沿纬线（纬度不变）', '沿经线（经度不变）'],
+      ],
+    ])
+      [...$(id).options].forEach((o, i) => (o.textContent = values[i]));
+  }
+  labels();
+  document.addEventListener('skymotion:language', () => {
+    labels();
+    renderGlobeOptions();
+  });
+  for (const id of ['observerTimeBasis', 'observerConstraint'])
+    $(id).onchange = () => {
+      stop();
+      state[id] = $(id).value;
+      schedule();
+    };
   settings.querySelectorAll('[data-globe-drag-mode]').forEach(
     (button) =>
       (button.onclick = () => {
@@ -1028,9 +1136,58 @@ function drawGlobe() {
   }
   const northPole = proj(90, 0);
   if (northPole.z > 0.05) text(c, '北极', northPole.x, northPole.y - 9, '#afc5db', 10);
-  window.SkyDiagramTools?.paint('earth',{type:'globe',observeLocation:useReferenceObserver,canvas:$('globe'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,sun:context,rayAt:(lat,lon)=>{const a=lat*rad,b=lon*rad,v=[Math.cos(a)*Math.cos(b)+sv[0]*.5,Math.sin(a)+sv[1]*.5,Math.cos(a)*Math.sin(b)+sv[2]*.5],l=g.lon*rad;return {x:cx+r*(-v[0]*Math.sin(l)+v[2]*Math.cos(l)),y:cy-r*(-v[0]*Math.sin(p)*Math.cos(l)+v[1]*Math.cos(p)-v[2]*Math.sin(p)*Math.sin(l))};},project:(lat,lon)=>{const q=proj(lat,lon);return {...q,hidden:q.z<0};},pick:(x,y)=>{const X=(x-cx)/r,Y=-(y-cy)/r,D=1-X*X-Y*Y;if(D<0)return null;const Z=Math.sqrt(D),lat=Math.asin(Math.max(-1,Math.min(1,Y*Math.cos(p)+Z*Math.sin(p))))*deg,lon=g.lon+Math.atan2(X,Z*Math.cos(p)-Y*Math.sin(p))*deg;return {lat,lon:((lon+540)%360)-180};}});
-
+  window.SkyDiagramTools?.paint('earth', {
+    type: 'globe',
+    observeLocation: useReferenceObserver,
+    canvas: $('globe'),
+    c,
+    w,
+    h,
+    body: state.body,
+    date: state.date,
+    time: state.time,
+    lat: state.lat,
+    lon: state.lon,
+    sun: context,
+    rayAt: (lat, lon) => {
+      const a = lat * rad,
+        b = lon * rad,
+        v = [
+          Math.cos(a) * Math.cos(b) + sv[0] * 0.5,
+          Math.sin(a) + sv[1] * 0.5,
+          Math.cos(a) * Math.sin(b) + sv[2] * 0.5,
+        ],
+        l = g.lon * rad;
+      return {
+        x: cx + r * (-v[0] * Math.sin(l) + v[2] * Math.cos(l)),
+        y:
+          cy -
+          r *
+            (-v[0] * Math.sin(p) * Math.cos(l) +
+              v[1] * Math.cos(p) -
+              v[2] * Math.sin(p) * Math.sin(l)),
+      };
+    },
+    project: (lat, lon) => {
+      const q = proj(lat, lon);
+      return { ...q, hidden: q.z < 0 };
+    },
+    pick: (x, y) => {
+      const X = (x - cx) / r,
+        Y = -(y - cy) / r,
+        D = 1 - X * X - Y * Y;
+      if (D < 0) return null;
+      const Z = Math.sqrt(D),
+        lat = Math.asin(Math.max(-1, Math.min(1, Y * Math.cos(p) + Z * Math.sin(p)))) * deg,
+        lon = g.lon + Math.atan2(X, Z * Math.cos(p) - Y * Math.sin(p)) * deg;
+      return { lat, lon: ((lon + 540) % 360) - 180 };
+    },
+  });
 }
+// Scope seasonal shortcuts once: the date picker also owns [data-date] cells.
+const solarSeasonButtons = document.querySelectorAll(
+  '#seasonButtons > button[data-angle][data-month]',
+);
 function updateUI() {
   document.body.dataset.body = state.body;
   document.body.dataset.skyView = state.view;
@@ -1170,15 +1327,12 @@ function updateUI() {
   $('dateMode').textContent = state.manual
     ? '理想化实验 · 太阳赤纬已手动调整'
     : '随日期计算 · 可拖动进行理想化实验';
-  document
-    .querySelectorAll('[data-date]')
-    .forEach((b) =>
-      b.classList.toggle(
-        'selected',
-        !state.manual &&
-          seasonDate(Number(b.dataset.angle), Number(b.dataset.month)) === state.date,
-      ),
-    );
+  solarSeasonButtons.forEach((b) =>
+    b.classList.toggle(
+      'selected',
+      !state.manual && seasonDate(Number(b.dataset.angle), Number(b.dataset.month)) === state.date,
+    ),
+  );
   const context = sunContext();
   $('subsolar').textContent = coord(context.dec, 'lat') + ' / ' + coord(context.lon, 'lon');
   $('observerPos').textContent = coord(state.lat, 'lat') + ' / ' + coord(state.lon, 'lon');
@@ -1317,7 +1471,10 @@ function stop() {
 ['lat', 'lon'].forEach((k) =>
   $(k).addEventListener('input', (e) => {
     stop();
-    chooseMapObserver({lat:state.lat,lon:state.lon,[k]:+e.target.value},{constraint:false});
+    chooseMapObserver(
+      { lat: state.lat, lon: state.lon, [k]: +e.target.value },
+      { constraint: false },
+    );
   }),
 );
 $('place').addEventListener('change', (e) => {
@@ -1338,9 +1495,11 @@ $('place').addEventListener('change', (e) => {
     schedule();
     return;
   }
-  const selectedPlace=option.value;
-  if(chooseMapObserver({lat:values[0],lon:values[1]},{constraint:false})===false)return;
-  state.place=selectedPlace;select.value=selectedPlace;
+  const selectedPlace = option.value;
+  if (chooseMapObserver({ lat: values[0], lon: values[1] }, { constraint: false }) === false)
+    return;
+  state.place = selectedPlace;
+  select.value = selectedPlace;
   $('lat').value = state.lat;
   $('lon').value = state.lon;
   schedule();
@@ -1348,12 +1507,9 @@ $('place').addEventListener('change', (e) => {
 $('date').addEventListener('change', (e) => {
   if (e.target.value) setDate(e.target.value);
 });
-document
-  .querySelectorAll('[data-date]')
-  .forEach(
-    (b) =>
-      (b.onclick = () => setDate(seasonDate(Number(b.dataset.angle), Number(b.dataset.month)))),
-  );
+solarSeasonButtons.forEach(
+  (b) => (b.onclick = () => setDate(seasonDate(Number(b.dataset.angle), Number(b.dataset.month)))),
+);
 $('dec').addEventListener('input', (e) => {
   stop();
   state.dec = +e.target.value;
@@ -1464,7 +1620,9 @@ $('sky').addEventListener('pointermove', (e) => {
     if (drag?.id === e.pointerId) drag = null;
   }),
 );
-window.addEventListener('blur', () => { drag = null; });
+window.addEventListener('blur', () => {
+  drag = null;
+});
 $('sky').addEventListener(
   'wheel',
   (e) => {
@@ -1502,13 +1660,29 @@ globe.removeAttribute('title');
 globe.style.cursor = 'grab';
 globe.style.touchAction = 'none';
 globe.setAttribute('aria-label', '地球昼夜图；拖动旋转并同步改变观察地点，点击选择地点');
-function globeLocationAt(x,y,g){
-  let X=(x-g.cx)/g.r,Y=-(y-g.cy)/g.r;const distance=Math.hypot(X,Y);if(distance>1){X/=distance;Y/=distance;}
-  const Z=Math.sqrt(Math.max(0,1-X*X-Y*Y)),lat=Math.asin(clamp(Y*Math.cos(g.p)+Z*Math.sin(g.p),-1,1))*deg,lon=g.lon+Math.atan2(X,Z*Math.cos(g.p)-Y*Math.sin(g.p))*deg;
-  return {lat,lon:((lon+540)%360)-180};
+function globeLocationAt(x, y, g) {
+  let X = (x - g.cx) / g.r,
+    Y = -(y - g.cy) / g.r;
+  const distance = Math.hypot(X, Y);
+  if (distance > 1) {
+    X /= distance;
+    Y /= distance;
+  }
+  const Z = Math.sqrt(Math.max(0, 1 - X * X - Y * Y)),
+    lat = Math.asin(clamp(Y * Math.cos(g.p) + Z * Math.sin(g.p), -1, 1)) * deg,
+    lon = g.lon + Math.atan2(X, Z * Math.cos(g.p) - Y * Math.sin(g.p)) * deg;
+  return { lat, lon: ((lon + 540) % 360) - 180 };
 }
-function globeObserverPoint(g){const p=state.lat*rad,d=(state.lon-g.lon)*rad;return{x:g.cx+g.r*Math.cos(p)*Math.sin(d),y:g.cy-g.r*(Math.sin(p)*Math.cos(g.p)-Math.cos(p)*Math.sin(g.p)*Math.cos(d)),visible:Math.sin(p)*Math.sin(g.p)+Math.cos(p)*Math.cos(g.p)*Math.cos(d)>=0};}
-globe.tabIndex=0;
+function globeObserverPoint(g) {
+  const p = state.lat * rad,
+    d = (state.lon - g.lon) * rad;
+  return {
+    x: g.cx + g.r * Math.cos(p) * Math.sin(d),
+    y: g.cy - g.r * (Math.sin(p) * Math.cos(g.p) - Math.cos(p) * Math.sin(g.p) * Math.cos(d)),
+    visible: Math.sin(p) * Math.sin(g.p) + Math.cos(p) * Math.cos(g.p) * Math.cos(d) >= 0,
+  };
+}
+globe.tabIndex = 0;
 globe.addEventListener('pointerdown', (e) => {
   if (state.body === 'moon' || !e.isPrimary || e.button !== 0) return;
   const box = globe.getBoundingClientRect(),
@@ -1517,17 +1691,39 @@ globe.addEventListener('pointerdown', (e) => {
     y = (e.clientY - box.top - g.cy) / g.r;
   if (x * x + y * y > 1) return;
   globeMoved = false;
-  const observer=globeObserverPoint(g),direct=state.globeDragMode==='view'&&observer.visible&&Math.hypot(e.clientX-box.left-observer.x,e.clientY-box.top-observer.y)<=18;
-  const before=Object.fromEntries(['lat','lon','date','time','place','dec','globeCameraLat','globeCameraLon','globeCameraReady'].map(k=>[k,state[k]]));
-  if(direct){state.globeCameraLat=g.p*deg;state.globeCameraLon=g.lon;state.globeCameraReady=true;}
+  const observer = globeObserverPoint(g),
+    direct =
+      state.globeDragMode === 'view' &&
+      observer.visible &&
+      Math.hypot(e.clientX - box.left - observer.x, e.clientY - box.top - observer.y) <= 18;
+  const before = Object.fromEntries(
+    [
+      'lat',
+      'lon',
+      'date',
+      'time',
+      'place',
+      'dec',
+      'globeCameraLat',
+      'globeCameraLon',
+      'globeCameraReady',
+    ].map((k) => [k, state[k]]),
+  );
+  if (direct) {
+    state.globeCameraLat = g.p * deg;
+    state.globeCameraLon = g.lon;
+    state.globeCameraReady = true;
+  }
   globeDrag = {
     id: e.pointerId,
     x: e.clientX,
     y: e.clientY,
     lat: g.p * deg,
     lon: g.l * deg,
-    mode: direct?'observer':state.globeDragMode,
-    before,g,instant:instantUTC().getTime(),
+    mode: direct ? 'observer' : state.globeDragMode,
+    before,
+    g,
+    instant: instantUTC().getTime(),
     scale: 90 / g.r,
   };
   stop();
@@ -1540,11 +1736,18 @@ globe.addEventListener('pointermove', (e) => {
     dy = e.clientY - globeDrag.y;
   if (!globeMoved && Math.hypot(dx, dy) < 3) return;
   globeMoved = true;
-  if(globeDrag.mode==='observer'){const box=globe.getBoundingClientRect();chooseMapObserver(globeLocationAt(e.clientX-box.left,e.clientY-box.top,globeDrag.g),{instant:globeDrag.instant,origin:globeDrag.before});return;}
+  if (globeDrag.mode === 'observer') {
+    const box = globe.getBoundingClientRect();
+    chooseMapObserver(globeLocationAt(e.clientX - box.left, e.clientY - box.top, globeDrag.g), {
+      instant: globeDrag.instant,
+      origin: globeDrag.before,
+    });
+    return;
+  }
   const lat = clamp(globeDrag.lat + dy * globeDrag.scale, -90, 90),
     lon = ((((globeDrag.lon - dx * globeDrag.scale + 180) % 360) + 360) % 360) - 180;
   if (globeDrag.mode === 'location') {
-    chooseMapObserver({lat,lon},{instant:globeDrag.instant,origin:globeDrag.before});
+    chooseMapObserver({ lat, lon }, { instant: globeDrag.instant, origin: globeDrag.before });
   } else {
     state.globeCameraLat = lat;
     state.globeCameraLon = lon;
@@ -1554,7 +1757,10 @@ globe.addEventListener('pointermove', (e) => {
 });
 const endGlobeDrag = (e) => {
   if (!globeDrag || e.pointerId !== globeDrag.id) return;
-  if(e.type==='pointercancel'&&globeDrag.mode==='observer'){Object.assign(state,globeDrag.before);schedule();}
+  if (e.type === 'pointercancel' && globeDrag.mode === 'observer') {
+    Object.assign(state, globeDrag.before);
+    schedule();
+  }
   globeDrag = null;
   globe.style.cursor = 'grab';
   if (globe.hasPointerCapture(e.pointerId)) globe.releasePointerCapture(e.pointerId);
@@ -1568,10 +1774,35 @@ globe.onclick = (e) => {
     x = (e.clientX - b.left - g.cx) / g.r,
     y = -(e.clientY - b.top - g.cy) / g.r;
   if (x * x + y * y > 1) return;
-  chooseMapObserver(globeLocationAt(e.clientX-b.left,e.clientY-b.top,g));
+  chooseMapObserver(globeLocationAt(e.clientX - b.left, e.clientY - b.top, g));
 };
-globe.addEventListener('keydown',e=>{if(state.body!=='sun')return;if(e.key==='Escape'&&globeDrag?.mode==='observer'){e.preventDefault();endGlobeDrag({pointerId:globeDrag.id,type:'pointercancel'});return;}if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();const step=e.shiftKey?5:1;chooseMapObserver({lat:clamp(state.lat+(e.key==='ArrowUp'?step:e.key==='ArrowDown'?-step:0),-90,90),lon:((state.lon+(e.key==='ArrowRight'?step:e.key==='ArrowLeft'?-step:0)+540)%360)-180});});
-for(const type of ['blur','resize'])window.addEventListener(type,()=>{if(globeDrag?.mode==='observer')endGlobeDrag({pointerId:globeDrag.id,type:'pointercancel'});});
+globe.addEventListener('keydown', (e) => {
+  if (state.body !== 'sun') return;
+  if (e.key === 'Escape' && globeDrag?.mode === 'observer') {
+    e.preventDefault();
+    endGlobeDrag({ pointerId: globeDrag.id, type: 'pointercancel' });
+    return;
+  }
+  if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+  e.preventDefault();
+  const step = e.shiftKey ? 5 : 1;
+  chooseMapObserver({
+    lat: clamp(
+      state.lat + (e.key === 'ArrowUp' ? step : e.key === 'ArrowDown' ? -step : 0),
+      -90,
+      90,
+    ),
+    lon:
+      ((state.lon + (e.key === 'ArrowRight' ? step : e.key === 'ArrowLeft' ? -step : 0) + 540) %
+        360) -
+      180,
+  });
+});
+for (const type of ['blur', 'resize'])
+  window.addEventListener(type, () => {
+    if (globeDrag?.mode === 'observer')
+      endGlobeDrag({ pointerId: globeDrag.id, type: 'pointercancel' });
+  });
 $('helpBtn').onclick = () => {
   stop();
   $('help').showModal();
@@ -1788,8 +2019,23 @@ function drawLunarMonthChart() {
   c.beginPath();
   c.arc(x, yy(value), 4, 0, Math.PI * 2);
   c.fill();
-  window.SkyDiagramTools?.paint('chart',{ type:'illumination',canvas:$('chart'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,days:values.length,clip:[left,top,right-left,bottom-top],project:(day,value)=>({x:xx(day),y:yy(value)}),value:date=>Astronomy.Illumination('Moon',instantUTC(state.time,date,state.lon)).phase_fraction*100});
-
+  window.SkyDiagramTools?.paint('chart', {
+    type: 'illumination',
+    canvas: $('chart'),
+    c,
+    w,
+    h,
+    body: state.body,
+    date: state.date,
+    time: state.time,
+    lat: state.lat,
+    lon: state.lon,
+    days: values.length,
+    clip: [left, top, right - left, bottom - top],
+    project: (day, value) => ({ x: xx(day), y: yy(value) }),
+    value: (date) =>
+      Astronomy.Illumination('Moon', instantUTC(state.time, date, state.lon)).phase_fraction * 100,
+  });
 }
 function shiftDay(delta) {
   const d = new Date(state.date + 'T12:00:00Z');
@@ -1883,9 +2129,49 @@ new ResizeObserver(schedule).observe($('stage'));
 window.addEventListener('resize', schedule);
 render();
 
-function paintLabReferences(c,w,h,project,kind){
-  if(document.body.dataset.page!=='lab')return;
-  const position=(time,date=state.date)=>kind==='sun'&&state.manual?solar(state.lat,state.dec,time):skyRaw(kind==='moon'?'Moon':'Sun',time,date,state.lat,state.lon);
-  const pick=(x,y)=>{const samples=SkyDiagramSampling.memo(JSON.stringify(['lab-pick',kind,state.date,state.lat,state.lon,state.manual,state.manual?state.dec:0]),()=>Array.from({length:289},(_,i)=>({time:i*5,position:position(i*5)})));let best=null;for(const sample of samples){const p=project(sample.position);if(p.hidden)continue;const d=Math.hypot(p.x-x,p.y-y);if(!best||d<best.d)best={time:sample.time,d};}return best?{time:best.time}:null;};
-  window.SkyDiagramTools?.paint('lab-sky',{type:'sky',canvas:$('sky'),c,w,h,body:kind,date:state.date,time:state.time,lat:state.lat,lon:state.lon,view:state.view,projectSky:project,position,pick,observeLocation:useReferenceObserver});
+function paintLabReferences(c, w, h, project, kind) {
+  if (document.body.dataset.page !== 'lab') return;
+  const position = (time, date = state.date) =>
+    kind === 'sun' && state.manual
+      ? solar(state.lat, state.dec, time)
+      : skyRaw(kind === 'moon' ? 'Moon' : 'Sun', time, date, state.lat, state.lon);
+  const pick = (x, y) => {
+    const samples = SkyDiagramSampling.memo(
+      JSON.stringify([
+        'lab-pick',
+        kind,
+        state.date,
+        state.lat,
+        state.lon,
+        state.manual,
+        state.manual ? state.dec : 0,
+      ]),
+      () => Array.from({ length: 289 }, (_, i) => ({ time: i * 5, position: position(i * 5) })),
+    );
+    let best = null;
+    for (const sample of samples) {
+      const p = project(sample.position);
+      if (p.hidden) continue;
+      const d = Math.hypot(p.x - x, p.y - y);
+      if (!best || d < best.d) best = { time: sample.time, d };
+    }
+    return best ? { time: best.time } : null;
+  };
+  window.SkyDiagramTools?.paint('lab-sky', {
+    type: 'sky',
+    canvas: $('sky'),
+    c,
+    w,
+    h,
+    body: kind,
+    date: state.date,
+    time: state.time,
+    lat: state.lat,
+    lon: state.lon,
+    view: state.view,
+    projectSky: project,
+    position,
+    pick,
+    observeLocation: useReferenceObserver,
+  });
 }

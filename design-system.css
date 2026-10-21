@@ -3,21 +3,21 @@
  * by existing modules; this layer owns typography, surfaces and visual states.
  */
 @font-face {
-  font-family: "SkyMotion Interface";
-  src: url("fonts/interface-regular.woff") format("woff");
+  font-family: 'SkyMotion Interface';
+  src: url('fonts/interface-regular.woff') format('woff');
   font-weight: 400 500;
   font-style: normal;
   font-display: block;
 }
 @font-face {
-  font-family: "SkyMotion Interface";
-  src: url("fonts/interface-bold.woff") format("woff");
+  font-family: 'SkyMotion Interface';
+  src: url('fonts/interface-bold.woff') format('woff');
   font-weight: 600 800;
   font-style: normal;
   font-display: block;
 }
 :root {
-  --design-font: "SkyMotion Reading", "Songti SC", "SimSun", serif;
+  --design-font: 'SkyMotion Reading', 'Songti SC', 'SimSun', serif;
   --design-radius-control: 12px;
   --design-radius-surface: 16px;
   --design-space-tight: 8px;
@@ -60,14 +60,7 @@ body {
 body :is(button, input, select, textarea) {
   font-family: var(--design-font);
 }
-body
-  :is(
-    output,
-    input[type="number"],
-    input[type="time"],
-    input[type="date"],
-    .facts strong
-  ) {
+body :is(output, input[type='number'], input[type='time'], input[type='date'], .facts strong) {
   font-variant-numeric: tabular-nums;
 }
 ::selection {
@@ -111,19 +104,19 @@ body
   color: var(--design-primary);
   background: var(--design-selected);
 }
-.page-nav a[aria-current="page"] {
+.page-nav a[aria-current='page'] {
   color: var(--design-primary);
   background: var(--design-selected);
   font-weight: 600;
 }
-:is(.ui-heading, body[data-page="space"] .head) h1 {
+:is(.ui-heading, body[data-page='space'] .head) h1 {
   color: var(--design-ink);
   font-size: 24px;
   font-weight: 600;
   line-height: 1.35;
   letter-spacing: -0.025em;
 }
-:is(.ui-heading #uiPlaceText, body[data-page="space"] .head p) {
+:is(.ui-heading #uiPlaceText, body[data-page='space'] .head p) {
   color: var(--design-muted);
   font-size: 12px;
   line-height: 1.7;
@@ -140,16 +133,13 @@ body
 .ui-parameters > h2::before {
   display: none;
 }
-.ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information) {
+.ui-parameters :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information) {
   border-color: var(--design-line);
   border-radius: var(--design-radius-control);
   background: var(--design-surface);
   box-shadow: none;
 }
-.ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
-  > summary {
+.ui-parameters :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information) > summary {
   font-size: 13px;
   line-height: 1.65;
   color: var(--design-ink);
@@ -157,13 +147,7 @@ body
   border-radius: 11px;
   padding: 12px 38px 12px 14px;
 }
-.ui-parameters
-  :is(
-    .menu-section,
-    .workbench-more,
-    .analemma-advanced,
-    .ui-information
-  )[open] {
+.ui-parameters :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open] {
   border-color: var(--design-open-border);
   box-shadow: none;
 }
@@ -215,20 +199,13 @@ body
   background: var(--design-selected);
   border-radius: 11px 11px 0 0;
 }
-.ui-parameters
-  :is(.menu-content, .coordinate-editor, .analemma-controls, .ui-field) {
+.ui-parameters :is(.menu-content, .coordinate-editor, .analemma-controls, .ui-field) {
   color: var(--design-ink);
   font-size: 13px;
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .timeline, .scene-tools-panel)
-  :is(
-    select,
-    input[type="number"],
-    input[type="date"],
-    input[type="time"],
-    input[type="text"]
-  ) {
+  :is(select, input[type='number'], input[type='date'], input[type='time'], input[type='text']) {
   color: var(--design-ink);
   border-color: var(--design-line);
   border-radius: var(--design-radius-control);
@@ -241,64 +218,34 @@ body :is(.ui-parameters, .ui-timeline-host, .side, .timeline) select {
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
-  :is(
-    .toggle-row,
-    .overlay-toggle,
-    .toggles > label,
-    .tools-check,
-    .workbench-loop
-  ) {
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop) {
   color: var(--design-ink);
   font-size: 13px;
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
-  :is(
-    .toggle-row,
-    .overlay-toggle,
-    .toggles > label,
-    .tools-check,
-    .workbench-loop
-  )
-  > input[type="checkbox"] {
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+  > input[type='checkbox'] {
   border-color: var(--design-switch-line);
   background: var(--design-switch-idle);
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
-  :is(
-    .toggle-row,
-    .overlay-toggle,
-    .toggles > label,
-    .tools-check,
-    .workbench-loop
-  )
-  > input[type="checkbox"]:checked {
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+  > input[type='checkbox']:checked {
   border-color: var(--design-primary);
   background: var(--design-action);
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
-  :is(
-    .toggle-row,
-    .overlay-toggle,
-    .toggles > label,
-    .tools-check,
-    .workbench-loop
-  )
-  > input[type="checkbox"]::after {
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+  > input[type='checkbox']::after {
   background: var(--design-switch-thumb);
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
-  :is(
-    .toggle-row,
-    .overlay-toggle,
-    .toggles > label,
-    .tools-check,
-    .workbench-loop
-  )
-  > input[type="checkbox"]:checked::after {
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+  > input[type='checkbox']:checked::after {
   background: var(--design-on-action);
 }
 .ui-parameters .study-navigation .page-link {
@@ -311,7 +258,7 @@ body
 .ui-parameters .study-navigation .page-link:hover {
   background: var(--design-selected);
 }
-.ui-parameters .study-navigation .page-link[aria-current="page"] {
+.ui-parameters .study-navigation .page-link[aria-current='page'] {
   background: var(--design-selected);
 }
 body
@@ -340,7 +287,7 @@ body
     .body-switch,
     .space-shell .viewbar
   )
-  button:is(.active, [aria-selected="true"], [aria-pressed="true"]) {
+  button:is(.active, [aria-selected='true'], [aria-pressed='true']) {
   background: var(--design-action);
   color: var(--design-on-action);
   font-weight: 600;
@@ -367,12 +314,11 @@ body
     .body-switch,
     .space-shell .viewbar
   )
-  button:is(.active, [aria-selected="true"], [aria-pressed="true"]):hover {
+  button:is(.active, [aria-selected='true'], [aria-pressed='true']):hover {
   background: var(--design-hover);
   color: var(--design-on-action);
 }
-:is(.ui-shell, .ui-parameter-drawer)
-  :is(.context-view-switch, .globe-drag-options, .body-switch) {
+:is(.ui-shell, .ui-parameter-drawer) :is(.context-view-switch, .globe-drag-options, .body-switch) {
   border-color: var(--design-line);
   background: transparent;
 }
@@ -432,9 +378,7 @@ body
   font-size: 20px;
   font-weight: 500;
 }
-body
-  .ui-timeline-host
-  :is(.play-button, .workbench-calendar button:last-child) {
+body .ui-timeline-host :is(.play-button, .workbench-calendar button:last-child) {
   background: var(--design-action);
   color: var(--design-on-action);
   border-radius: var(--design-radius-control);
@@ -445,7 +389,7 @@ body .ui-timeline-host .workbench-calendar input {
 }
 .ui-parameter-drawer,
 .ui-drawer-header,
-body[data-page="space"] #spaceDrawer {
+body[data-page='space'] #spaceDrawer {
   background: var(--design-paper);
   color: var(--design-ink);
   border-color: var(--design-line);
@@ -462,16 +406,14 @@ body[data-page="space"] #spaceDrawer {
   color: var(--design-primary);
   background: var(--design-selected);
 }
-body
-  :is(.ui-parameters, .ui-viewbar, .side, .timeline)
-  :is(button, input, select):disabled {
+body :is(.ui-parameters, .ui-viewbar, .side, .timeline) :is(button, input, select):disabled {
   color: var(--design-disabled-ink);
   background-color: var(--design-disabled-surface);
   opacity: 0.65;
   cursor: not-allowed;
 }
 /* Three-dimensional workspace shares the same controls, not a separate theme. */
-body[data-page="space"] {
+body[data-page='space'] {
   --space-primary: var(--design-primary);
   --space-line: var(--design-line);
   --space-control-radius: var(--design-radius-control);
@@ -479,106 +421,98 @@ body[data-page="space"] {
   background: var(--design-paper);
   color: var(--design-ink);
 }
-body[data-page="space"] :is(.card, .visual, .timeline) {
+body[data-page='space'] :is(.card, .visual, .timeline) {
   border-color: var(--design-line);
   border-radius: var(--design-radius-surface);
   background: var(--design-surface);
   box-shadow: none;
 }
-body[data-page="space"] .card {
+body[data-page='space'] .card {
   padding: 16px;
 }
-body[data-page="space"] .card h2 {
+body[data-page='space'] .card h2 {
   color: var(--design-ink);
   font-size: 13px;
   font-weight: 600;
 }
-body[data-page="space"] .planet-name {
+body[data-page='space'] .planet-name {
   font-size: 24px;
   font-weight: 600;
   color: var(--design-ink);
 }
-body[data-page="space"]
-  :is(
-    .planet-type,
-    .facts span,
-    .info,
-    .footer-note,
-    .scale,
-    .time-head label,
-    .date-actions
-  ) {
+body[data-page='space']
+  :is(.planet-type, .facts span, .info, .footer-note, .scale, .time-head label, .date-actions) {
   color: var(--design-muted);
 }
-body[data-page="space"] .info {
+body[data-page='space'] .info {
   font-size: 12px;
   line-height: 1.8;
 }
-body[data-page="space"] .facts strong {
+body[data-page='space'] .facts strong {
   color: var(--design-primary);
   font-weight: 600;
 }
-body[data-page="space"] .facts div {
+body[data-page='space'] .facts div {
   border-color: var(--design-line);
   padding-bottom: 8px;
 }
-body[data-page="space"] .planet-picker {
+body[data-page='space'] .planet-picker {
   gap: 6px;
 }
-body[data-page="space"] .planet-picker button {
+body[data-page='space'] .planet-picker button {
   background: var(--design-inset);
   color: var(--design-muted);
   border-radius: 10px;
 }
-body[data-page="space"] .planet-picker button.active {
+body[data-page='space'] .planet-picker button.active {
   background: var(--design-action);
   color: var(--design-on-action);
 }
-body[data-page="space"] .head-actions button {
+body[data-page='space'] .head-actions button {
   border-radius: var(--design-radius-control);
   background: var(--design-inset);
   color: var(--design-primary);
 }
-body[data-page="space"] :is(.focus, #play) {
+body[data-page='space'] :is(.focus, #play) {
   background: var(--design-action);
   color: var(--design-on-action);
   border-radius: var(--design-radius-control);
 }
-body[data-page="space"] .time-head output {
+body[data-page='space'] .time-head output {
   color: var(--design-primary);
   font-size: 18px;
 }
-body[data-page="space"] .existing-compare-link {
+body[data-page='space'] .existing-compare-link {
   color: var(--design-primary);
   background: var(--design-inset);
   border-radius: var(--design-radius-control);
 }
 /* A dark observation surface needs its own legible foreground, including drawers. */
-body[data-page="space"].space-immersive {
+body[data-page='space'].space-immersive {
   color: var(--design-ink);
   background: var(--design-paper);
 }
-body[data-page="space"].space-immersive :is(.head, .viewbar, .timeline) {
+body[data-page='space'].space-immersive :is(.head, .viewbar, .timeline) {
   background: var(--design-paper);
   color: var(--design-ink);
 }
-body[data-page="space"].space-immersive
+body[data-page='space'].space-immersive
   :is(.viewbar button.active, #play, .planet-picker button.active, .focus) {
   background: var(--design-action);
   color: var(--design-on-action);
 }
-body[data-page="space"].space-immersive h1 {
+body[data-page='space'].space-immersive h1 {
   font-size: 16px;
   color: var(--design-ink);
 }
-body[data-page="space"].space-immersive .stage .label {
+body[data-page='space'].space-immersive .stage .label {
   color: var(--design-night-ink);
   background: var(--design-night-label-surface);
 }
-body[data-page="space"].space-immersive .time-head output {
+body[data-page='space'].space-immersive .time-head output {
   color: var(--design-ink);
 }
-body[data-page="space"].space-immersive input[type="date"] {
+body[data-page='space'].space-immersive input[type='date'] {
   color-scheme: dark;
 }
 /* Dark canvas annotation tools are deliberately outside the light controls scope. */
@@ -592,12 +526,12 @@ body[data-page="space"].space-immersive input[type="date"] {
 body .scene-tools-panel :is(.tools-check, .tools-field, p, label, span) {
   color: var(--design-night-tool-muted);
 }
-body .scene-tools-panel :is(select, input[type="number"]) {
+body .scene-tools-panel :is(select, input[type='number']) {
   background: var(--design-night-inset);
   color: var(--design-night-ink);
   border-color: var(--design-night-line);
 }
-body .scene-tools-panel input[type="checkbox"]:checked {
+body .scene-tools-panel input[type='checkbox']:checked {
   background: var(--design-night-tool-selected);
   border-color: var(--design-night-tool-selected);
 }
@@ -644,7 +578,7 @@ body .scene-tools-panel input[type="checkbox"]:checked {
   background: var(--design-inset);
   font-size: 12px;
 }
-.document-links a[aria-current="page"] {
+.document-links a[aria-current='page'] {
   background: var(--design-action);
   color: var(--design-on-action);
 }
@@ -763,7 +697,7 @@ body :is(.page-action, .author-mail-button):hover {
   outline-offset: 3px;
 }
 
-body[data-page="contact"] .reading-page {
+body[data-page='contact'] .reading-page {
   max-width: 880px;
   padding: 36px;
   font-size: 15px;
@@ -777,26 +711,26 @@ body[data-page="contact"] .reading-page {
 .author-email-box > a {
   color: var(--design-primary);
 }
-body[data-page="contact"] :is(h2, h3) {
+body[data-page='contact'] :is(h2, h3) {
   color: var(--design-ink);
   line-height: 1.5;
 }
 /* Welcome retains its original composition and existing star toy. */
-body[data-page="welcome"] .welcome-screen {
+body[data-page='welcome'] .welcome-screen {
   font-family: var(--design-font);
 }
-body[data-page="welcome"] .welcome-intro h1 {
+body[data-page='welcome'] .welcome-intro h1 {
   font-weight: 600;
   letter-spacing: -0.025em;
 }
-body[data-page="welcome"] :is(button, a) {
+body[data-page='welcome'] :is(button, a) {
   font-family: var(--design-font);
 }
-body[data-page="welcome"] .welcome-enter {
+body[data-page='welcome'] .welcome-enter {
   background: var(--design-sun);
   color: var(--design-ink);
 }
-body[data-page="welcome"] .welcome-screen ::selection {
+body[data-page='welcome'] .welcome-screen ::selection {
   background: var(--design-sun);
   color: var(--design-ink);
 }
@@ -809,7 +743,7 @@ body[data-page="welcome"] .welcome-screen ::selection {
     padding-inline: 10px;
     font-size: 11px;
   }
-  :is(.ui-heading, body[data-page="space"] .head) h1 {
+  :is(.ui-heading, body[data-page='space'] .head) h1 {
     font-size: 19px;
   }
   .document-page {
@@ -829,19 +763,19 @@ body[data-page="welcome"] .welcome-screen ::selection {
   .ui-timeline-host .workbench-panel-head output {
     font-size: 18px;
   }
-  body[data-page="contact"] .reading-page {
+  body[data-page='contact'] .reading-page {
     padding: 24px 20px;
     margin: 12px;
   }
 }
 @media (max-width: 420px) {
-  :is(.ui-heading, body[data-page="space"] .head) h1 {
+  :is(.ui-heading, body[data-page='space'] .head) h1 {
     font-size: 17px;
   }
   .ui-parameters :is(.menu-summary, .micro) {
     font-size: 11px;
   }
-  body[data-page="space"] .head-actions button {
+  body[data-page='space'] .head-actions button {
     padding-inline: 8px;
     font-size: 11px;
   }
@@ -860,7 +794,7 @@ body[data-page="welcome"] .welcome-screen ::selection {
 
 /* Reading headings have a distinct, self-hosted Song face; controls stay sans. */
 .document-page :is(h1, h2) {
-  font-family: "SkyMotion Reading", "Songti SC", "SimSun", serif;
+  font-family: 'SkyMotion Reading', 'Songti SC', 'SimSun', serif;
   font-weight: 400;
   letter-spacing: 0;
 }
@@ -875,57 +809,45 @@ body[data-page="welcome"] .welcome-screen ::selection {
   border-color: var(--design-line);
   box-shadow: none;
 }
-body[data-page="space"] .drawer-head {
+body[data-page='space'] .drawer-head {
   background: var(--design-paper);
   border-color: var(--design-line);
 }
-body[data-page="space"] .drawer-head h2 {
+body[data-page='space'] .drawer-head h2 {
   color: var(--design-ink);
 }
-body[data-page="space"] .drawer-head span {
+body[data-page='space'] .drawer-head span {
   color: var(--design-muted);
 }
-body[data-page="space"] .side .kicker {
+body[data-page='space'] .side .kicker {
   display: none;
 }
-body[data-page="space"] .side .toggles > label {
+body[data-page='space'] .side .toggles > label {
   color: var(--design-ink);
 }
-body[data-page="space"]
-  .side
-  .toggles
-  > label
-  > input[type="checkbox"]:checked {
+body[data-page='space'] .side .toggles > label > input[type='checkbox']:checked {
   background: var(--design-action);
   border-color: var(--design-action);
 }
-body[data-page="space"].space-immersive .motion-selection {
+body[data-page='space'].space-immersive .motion-selection {
   background: var(--design-action);
 }
-body
-  :is(.ui-parameters, .time-workbench)
-  input[type="range"]::-webkit-slider-runnable-track {
+body :is(.ui-parameters, .time-workbench) input[type='range']::-webkit-slider-runnable-track {
   background: var(--design-range-track);
 }
-body
-  :is(.ui-parameters, .time-workbench)
-  input[type="range"]::-webkit-slider-thumb {
+body :is(.ui-parameters, .time-workbench) input[type='range']::-webkit-slider-thumb {
   background: var(--design-action);
   border-color: var(--design-surface);
   box-shadow: none;
 }
-body
-  :is(.ui-parameters, .time-workbench)
-  input[type="range"]::-moz-range-track {
+body :is(.ui-parameters, .time-workbench) input[type='range']::-moz-range-track {
   background: var(--design-range-track);
 }
-body
-  :is(.ui-parameters, .time-workbench)
-  input[type="range"]::-moz-range-thumb {
+body :is(.ui-parameters, .time-workbench) input[type='range']::-moz-range-thumb {
   background: var(--design-action);
   border-color: var(--design-surface);
 }
-body[data-page="space"] .timeline input[type="range"] {
+body[data-page='space'] .timeline input[type='range'] {
   accent-color: var(--design-primary);
 }
 body .ui-timeline-host .workbench-calendar button {
@@ -939,41 +861,33 @@ body .ui-timeline-host .play-button {
 }
 /* The user's type direction: Song display titles, sans controls and tabular data. */
 body :is(.ui-heading, .space-shell .head, .welcome-intro, .document-header) h1,
-body[data-page="contact"] .reading-page > .dialog-head h2 {
-  font-family: "SkyMotion Reading", "Songti SC", "SimSun", serif;
+body[data-page='contact'] .reading-page > .dialog-head h2 {
+  font-family: 'SkyMotion Reading', 'Songti SC', 'SimSun', serif;
   font-weight: 400;
   letter-spacing: 0;
 }
 
 /* Review corrections: headings carry identity without redundant eyebrows. */
 .ui-drawer-header > div > span,
-body[data-page="space"] .drawer-head > div > span,
+body[data-page='space'] .drawer-head > div > span,
 #contextEyebrow {
   display: none;
 }
-body[data-page="space"] .stage-reset svg {
+body[data-page='space'] .stage-reset svg {
   width: 18px;
   height: 18px;
   vertical-align: middle;
 }
 
 /* Welcome actions use the same control radius as the rest of the site. */
-body[data-page="welcome"]
+body[data-page='welcome']
   :is(.welcome-enter, .welcome-sky-actions button, .welcome-corner-links > a) {
   border-radius: var(--design-radius-control);
 }
 
 /* Unified Song typography: full UI, native fields and plot annotations. */
 body
-  :is(
-    .page-nav,
-    .ui-shell,
-    .space-shell,
-    .reading-page,
-    dialog,
-    .ui-parameters,
-    .ui-timeline-host
-  ),
+  :is(.page-nav, .ui-shell, .space-shell, .reading-page, dialog, .ui-parameters, .ui-timeline-host),
 body :is(button, input, select, textarea, output) {
   font-family: var(--design-font);
 }
@@ -1003,17 +917,14 @@ body .ui-heading #uiParametersButton {
   color: var(--design-primary);
   border-color: var(--design-line);
 }
-body
-  .ui-timeline-host
-  :is(.workbench-clock-tools, .workbench-look-buttons)
-  button {
+body .ui-timeline-host :is(.workbench-clock-tools, .workbench-look-buttons) button {
   min-height: 36px;
   border: 1px solid var(--design-line);
   border-radius: 12px;
   background: var(--design-inset);
   color: var(--design-primary);
 }
-body .ui-timeline-host :is(input[type="time"], .workbench-calendar input) {
+body .ui-timeline-host :is(input[type='time'], .workbench-calendar input) {
   height: 36px;
   border-radius: 12px;
   font-size: 13px;
@@ -1043,7 +954,6 @@ body .ui-timeline-host :is(input[type="time"], .workbench-calendar input) {
 }
 .observer-explanation {
   font-family: var(--design-font);
-  color: var(--design-ink);
   border-color: var(--design-line);
   background: var(--design-surface);
 }
@@ -1117,14 +1027,14 @@ body .ui-timeline-host :is(input[type="time"], .workbench-calendar input) {
     font-size: 12px;
   }
   .ui-timeline-host .workbench-main,
-  .ui-timeline-host .time-workbench[data-observer="true"] .workbench-main {
+  .ui-timeline-host .time-workbench[data-observer='true'] .workbench-main {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     margin-top: 10px;
     gap: 10px;
   }
   .ui-timeline-host .workbench-panel,
-  .ui-timeline-host .time-workbench[data-observer="true"] #workbenchDatePanel {
+  .ui-timeline-host .time-workbench[data-observer='true'] #workbenchDatePanel {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
@@ -1134,7 +1044,7 @@ body .ui-timeline-host :is(input[type="time"], .workbench-calendar input) {
   }
   .ui-timeline-host .workbench-panel-head,
   .ui-timeline-host
-    .time-workbench[data-observer="true"]
+    .time-workbench[data-observer='true']
     #workbenchDatePanel
     .workbench-panel-head {
     grid-column: 1 / -1;
@@ -1157,7 +1067,7 @@ body .ui-timeline-host :is(input[type="time"], .workbench-calendar input) {
   .ui-timeline-host #workbenchDatePanel output {
     font-size: 13px;
   }
-  .ui-timeline-host .workbench-panel > input[type="range"] {
+  .ui-timeline-host .workbench-panel > input[type='range'] {
     grid-column: 1;
     width: 100%;
     height: 36px;
@@ -1186,15 +1096,13 @@ body .ui-timeline-host :is(input[type="time"], .workbench-calendar input) {
     padding: 4px 6px;
     font-size: 11px;
   }
-  .ui-timeline-host #workbenchDatePanel > input[type="range"] {
+  .ui-timeline-host #workbenchDatePanel > input[type='range'] {
     grid-column: 1 / -1;
   }
   .ui-timeline-host .workbench-date-scale {
     display: none;
   }
-  .ui-timeline-host
-    .time-workbench[data-ideal="true"]
-    #workbenchDatePanel[hidden] {
+  .ui-timeline-host .time-workbench[data-ideal='true'] #workbenchDatePanel[hidden] {
     display: none;
   }
 }
@@ -1204,9 +1112,6 @@ body .ui-viewbar .view-tabs {
   background: transparent;
   border: 0;
   border-radius: 0;
-}
-body .ui-plot #resetView {
-  border-radius: 12px;
 }
 @media (max-width: 360px) and (min-height: 501px) {
   .ui-shell .ui-heading {
@@ -1241,27 +1146,29 @@ body .ui-plot #resetView {
 }
 /* One action treatment, including both date directions and the canvas reset. */
 body .ui-timeline-host #workbenchPrevDate,
-body .ui-timeline-host #workbenchNextDate,
+body .ui-timeline-host #workbenchNextDate {
+  border-radius: 12px;
+}
 body .ui-timeline-host #workbenchPlay,
 body .ui-plot #resetView,
-body[data-page="space"] #play,
-body[data-page="space"] #reset {
+body[data-page='space'] #play {
   background: var(--design-action);
   color: var(--design-on-action);
   border: 1px solid var(--design-action);
   border-radius: 12px;
   box-shadow: none;
 }
-body .ui-timeline-host #workbenchPrevDate:hover,
-body .ui-timeline-host #workbenchNextDate:hover,
+body[data-page='space'] #reset {
+  border: 1px solid var(--design-action);
+  border-radius: 12px;
+  box-shadow: none;
+}
 body .ui-timeline-host #workbenchPlay:hover,
 body .ui-plot #resetView:hover {
   background: var(--design-action-hover);
   color: var(--design-on-action);
   border-color: var(--design-action-hover);
 }
-body .ui-timeline-host #workbenchPrevDate:disabled,
-body .ui-timeline-host #workbenchNextDate:disabled,
 body .ui-timeline-host #workbenchPlay:disabled {
   background: var(--design-disabled-surface);
   color: var(--design-disabled-ink);
@@ -1308,26 +1215,24 @@ body .ui-timeline-host #workbenchPlay:disabled {
   color: var(--design-disabled-ink);
   border-color: var(--design-line);
 }
-body[data-page="space"] .space-sidebar-host > .side {
+body[data-page='space'] .space-sidebar-host > .side {
   background: var(--design-inset);
   border-color: var(--design-line);
   border-radius: 16px;
 }
-body[data-page="space"] .inspection-readout {
+body[data-page='space'] .inspection-readout {
   background: var(--design-night-surface);
   color: var(--design-night-ink);
   border: 1px solid var(--design-night-line);
   border-radius: 12px;
   font-family: var(--design-font);
 }
-body[data-page="space"] .inspection-readout strong {
+body[data-page='space'] .inspection-readout strong {
   color: var(--design-night-ink);
   font-family: var(--design-font);
 }
-body[data-page="space"] .scene-tools summary,
+body[data-page='space'] .scene-tools summary,
 body .ui-plot #viewReset {
-  background: var(--design-action);
-  color: var(--design-on-action);
   border: 1px solid var(--design-action);
   border-radius: 12px;
   font-family: var(--design-font);
@@ -1340,15 +1245,15 @@ body .ui-plot #viewReset {
   border: 1px solid var(--design-line);
   color: var(--design-ink);
 }
-body[data-page="diagrams"] .ui-heading .ui-linked-toggle,
-body[data-page="diagrams"] .ui-heading .ui-linked-toggle[aria-pressed="true"],
-body[data-page="space"] .scene-tools[open] summary {
-  background: var(--design-action);
-  color: var(--design-on-action);
+body[data-page='diagrams'] .ui-heading .ui-linked-toggle {
   border-color: var(--design-action);
   border-radius: 12px;
 }
-body[data-page="diagrams"] .ui-heading .ui-linked-toggle:disabled {
+body[data-page='diagrams'] .ui-heading .ui-linked-toggle[aria-pressed='true'],
+body[data-page='space'] .scene-tools[open] summary {
+  border-radius: 12px;
+}
+body[data-page='diagrams'] .ui-heading .ui-linked-toggle:disabled {
   background: var(--design-disabled-surface);
   color: var(--design-disabled-ink);
   border-color: var(--design-line);
@@ -1389,16 +1294,14 @@ body[data-page="diagrams"] .ui-heading .ui-linked-toggle:disabled {
       font-size: 12px;
     }
     .ui-timeline-host .workbench-main,
-    .ui-timeline-host .time-workbench[data-observer="true"] .workbench-main {
+    .ui-timeline-host .time-workbench[data-observer='true'] .workbench-main {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
       margin-top: 10px;
       gap: 10px;
     }
     .ui-timeline-host .workbench-panel,
-    .ui-timeline-host
-      .time-workbench[data-observer="true"]
-      #workbenchDatePanel {
+    .ui-timeline-host .time-workbench[data-observer='true'] #workbenchDatePanel {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
@@ -1408,7 +1311,7 @@ body[data-page="diagrams"] .ui-heading .ui-linked-toggle:disabled {
     }
     .ui-timeline-host .workbench-panel-head,
     .ui-timeline-host
-      .time-workbench[data-observer="true"]
+      .time-workbench[data-observer='true']
       #workbenchDatePanel
       .workbench-panel-head {
       grid-column: 1 / -1;
@@ -1431,7 +1334,7 @@ body[data-page="diagrams"] .ui-heading .ui-linked-toggle:disabled {
     .ui-timeline-host #workbenchDatePanel output {
       font-size: 13px;
     }
-    .ui-timeline-host .workbench-panel > input[type="range"] {
+    .ui-timeline-host .workbench-panel > input[type='range'] {
       grid-column: 1;
       width: 100%;
       height: 36px;
@@ -1460,15 +1363,13 @@ body[data-page="diagrams"] .ui-heading .ui-linked-toggle:disabled {
       padding: 4px 6px;
       font-size: 11px;
     }
-    .ui-timeline-host #workbenchDatePanel > input[type="range"] {
+    .ui-timeline-host #workbenchDatePanel > input[type='range'] {
       grid-column: 1 / -1;
     }
     .ui-timeline-host .workbench-date-scale {
       display: none;
     }
-    .ui-timeline-host
-      .time-workbench[data-ideal="true"]
-      #workbenchDatePanel[hidden] {
+    .ui-timeline-host .time-workbench[data-ideal='true'] #workbenchDatePanel[hidden] {
       display: none;
     }
   }
@@ -1492,13 +1393,9 @@ body[data-page="diagrams"] .ui-heading .ui-linked-toggle:disabled {
 }
 body .ui-timeline-host .workbench-clock-tools button,
 body .ui-timeline-host .workbench-look-buttons button {
-  background: var(--design-action);
-  color: var(--design-on-action);
   border-color: var(--design-action);
 }
 body .ui-parameters .menu-footer #reset {
-  background: var(--design-action);
-  color: var(--design-on-action);
   border-color: var(--design-action);
   border-radius: 12px;
 }
@@ -1513,19 +1410,9 @@ body .ui-parameters .menu-footer #reset {
 
 body .motion-menu-edge,
 body .ui-parameters > button.motion-menu-grip,
-body[data-page="space"] .side > button.motion-menu-grip {
-  background: var(--design-action);
-  color: var(--design-on-action);
+body[data-page='space'] .side > button.motion-menu-grip {
   border-color: var(--design-action);
   border-radius: 12px;
-}
-body .motion-menu-edge:hover,
-body .ui-parameters > button.motion-menu-grip:hover,
-body[data-page="space"] .side > button.motion-menu-grip:hover,
-body .motion-menu-edge:active {
-  background: var(--design-action-hover);
-  color: var(--design-on-action);
-  border-color: var(--design-action-hover);
 }
 body .motion-menu-edge:focus-visible {
   outline: 2px solid var(--design-action);
@@ -1539,10 +1426,10 @@ body .ui-timeline-host .workbench-look-buttons button,
 body .ui-parameters .observer-bodies button,
 body .ui-parameters .menu-footer #reset,
 body .ui-parameters > button.motion-menu-grip,
-body[data-page="space"] .side > button.motion-menu-grip,
+body[data-page='space'] .side > button.motion-menu-grip,
 body .motion-menu-edge,
-body[data-page="diagrams"] .ui-heading .ui-linked-toggle,
-body[data-page="space"] .focus {
+body[data-page='diagrams'] .ui-heading .ui-linked-toggle,
+body[data-page='space'] .focus {
   background: var(--design-surface);
   color: var(--design-action);
   border: 1px solid var(--design-line);
@@ -1555,16 +1442,16 @@ body .ui-timeline-host .workbench-look-buttons button:hover,
 body .ui-parameters .observer-bodies button:hover,
 body .ui-parameters .menu-footer #reset:hover,
 body .ui-parameters > button.motion-menu-grip:hover,
-body[data-page="space"] .side > button.motion-menu-grip:hover,
+body[data-page='space'] .side > button.motion-menu-grip:hover,
 body .motion-menu-edge:hover,
 body .motion-menu-edge:active,
-body[data-page="diagrams"] .ui-heading .ui-linked-toggle:hover,
-body[data-page="space"] .focus:hover {
+body[data-page='diagrams'] .ui-heading .ui-linked-toggle:hover,
+body[data-page='space'] .focus:hover {
   background: var(--design-selected);
   color: var(--design-action-hover);
   border-color: var(--design-open-border);
 }
-body[data-page="diagrams"] .ui-heading .ui-linked-toggle[aria-pressed="true"] {
+body[data-page='diagrams'] .ui-heading .ui-linked-toggle[aria-pressed='true'] {
   background: var(--design-selected);
   color: var(--design-action);
   border-color: var(--design-open-border);
@@ -1578,9 +1465,9 @@ body .ui-timeline-host #workbenchNextDate:disabled {
 /* Canvas actions stay readable without becoming solid accent blocks. */
 body .ui-plot #viewReset,
 body .ui-plot #viewReset:hover,
-body[data-page="space"] #reset,
-body[data-page="space"] .scene-tools summary,
-body[data-page="space"] .scene-tools[open] summary {
+body[data-page='space'] #reset,
+body[data-page='space'] .scene-tools summary,
+body[data-page='space'] .scene-tools[open] summary {
   background: var(--design-night-surface);
   color: var(--design-night-ink);
   border-color: var(--design-night-line);
@@ -1589,13 +1476,7 @@ body[data-page="space"] .scene-tools[open] summary {
 /* Manual-mode and playback states use the same interface palette. */
 body
   :is(.ui-parameters, .ui-timeline-host)
-  :is(
-    .label-row output,
-    .menu-summary,
-    .text-button,
-    #restoreDate,
-    #dateObservationRestore
-  ) {
+  :is(.label-row output, .menu-summary, .text-button, #restoreDate, #dateObservationRestore) {
   color: var(--design-primary);
 }
 body :is(.ui-parameters, .ui-timeline-host) .text-button:hover {
@@ -1614,7 +1495,7 @@ body #dateObservationRestore {
   margin-top: 4px;
   background: transparent;
 }
-body input[type="checkbox"] {
+body input[type='checkbox'] {
   accent-color: var(--design-primary);
 }
 body :is(.ui-parameters, .ui-timeline-host) .workbench-loop {
@@ -1622,9 +1503,7 @@ body :is(.ui-parameters, .ui-timeline-host) .workbench-loop {
   justify-self: stretch;
 }
 /* Every parameter note and auxiliary reset shares the same quiet treatment. */
-body
-  .ui-parameters
-  :is(.analemma-results, #analemmaDateLinkNote, .model-explanation) {
+body .ui-parameters :is(.analemma-results, #analemmaDateLinkNote, .model-explanation) {
   background: var(--design-inset);
   color: var(--design-muted);
   border-radius: var(--design-radius-control);
@@ -1655,15 +1534,13 @@ body
   background: var(--design-selected);
   color: var(--design-hover);
 }
-body[data-page="space"]
-  :is(#spaceImmersive, #spaceParameters, .existing-compare-link) {
+body[data-page='space'] :is(#spaceImmersive, #spaceParameters, .existing-compare-link) {
   background: var(--design-surface);
   color: var(--design-primary);
   border: 1px solid var(--design-line);
   border-radius: var(--design-radius-control);
 }
-body[data-page="space"]
-  :is(#spaceImmersive, #spaceParameters, .existing-compare-link):hover {
+body[data-page='space'] :is(#spaceImmersive, #spaceParameters, .existing-compare-link):hover {
   background: var(--design-selected);
   color: var(--design-ink);
 }
@@ -1737,18 +1614,24 @@ body .ui-timeline-host .workbench-panel-head output {
   }
 }
 /* Calendar steps share the quiet action treatment in both rail and timeline. */
-body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate) {
+body
+  :is(.ui-parameters, .ui-timeline-host)
+  :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate) {
   background: var(--design-surface);
   color: var(--design-primary);
   border: 1px solid var(--design-line);
   box-shadow: none;
 }
-body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate):hover {
+body
+  :is(.ui-parameters, .ui-timeline-host)
+  :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate):hover {
   background: var(--design-selected);
   color: var(--design-hover);
   border-color: var(--design-open-border);
 }
-body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate):disabled {
+body
+  :is(.ui-parameters, .ui-timeline-host)
+  :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate):disabled {
   background: var(--design-inset);
   color: var(--design-muted);
   border-color: var(--design-line);
@@ -1813,22 +1696,24 @@ body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchN
   }
 }
 /* Authored monochrome SVG silhouettes, independent of OS emoji rendering. */
-body :is(#workbenchPlay, body[data-page="space"] #play) {
+body :is(#workbenchPlay, body[data-page='space'] #play) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
 }
-body :is(#workbenchPlay, body[data-page="space"] #play)::before {
-  content: "";
+body :is(#workbenchPlay, body[data-page='space'] #play)::before {
+  content: '';
   flex: 0 0 14px;
   width: 14px;
   height: 14px;
   background: currentColor;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 2.5 13 8l-9 5.5Z'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 2.5 13 8l-9 5.5Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 2.5 13 8l-9 5.5Z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 2.5 13 8l-9 5.5Z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
-body :is(#workbenchPlay, body[data-page="space"] #play)[aria-pressed="true"]::before {
+body :is(#workbenchPlay, body[data-page='space'] #play)[aria-pressed='true']::before {
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 3h3v10H3zm7 0h3v10h-3z'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 3h3v10H3zm7 0h3v10h-3z'/%3E%3C/svg%3E");
 }
@@ -1866,33 +1751,33 @@ body .ui-sundial-hint {
   background: var(--design-paper);
   color: var(--design-muted);
 }
-body[data-page="space"] .language-nav > .language-toggle {
+body[data-page='space'] .language-nav > .language-toggle {
   background: var(--design-surface);
   color: var(--design-primary);
   border-color: var(--design-line);
 }
-body[data-page="space"] .language-nav > .language-toggle:hover {
+body[data-page='space'] .language-nav > .language-toggle:hover {
   background: var(--design-selected);
 }
-body[data-page="space"] .scene-tools-panel button[data-camera] {
+body[data-page='space'] .scene-tools-panel button[data-camera] {
   background: transparent;
   color: var(--design-night-ink);
   border-color: var(--design-night-line);
 }
-body[data-page="space"] .scene-tools-panel button[data-camera][aria-pressed="true"] {
+body[data-page='space'] .scene-tools-panel button[data-camera][aria-pressed='true'] {
   background: var(--design-action);
   color: var(--design-on-action);
   border-color: var(--design-action);
 }
-body[data-page="space"] .scene-tools-panel button[data-camera]:hover {
+body[data-page='space'] .scene-tools-panel button[data-camera]:hover {
   background: var(--design-night-inset);
 }
-body[data-page="space"] button.label {
+body[data-page='space'] button.label {
   background: var(--design-night-label-soft);
   color: var(--design-night-ink);
   border-color: var(--design-night-line);
 }
-body[data-page="space"] button.label:hover {
+body[data-page='space'] button.label:hover {
   background: var(--design-night-inset);
   color: var(--design-night-ink);
 }
@@ -1919,7 +1804,9 @@ body dialog.site-calendar {
   box-shadow: 0 12px 36px var(--design-shadow-dialog);
   overflow-y: auto;
 }
-.site-calendar::backdrop { background: var(--design-scrim); }
+.site-calendar::backdrop {
+  background: var(--design-scrim);
+}
 body .site-calendar button {
   display: inline-flex;
   align-items: center;
@@ -1933,24 +1820,84 @@ body .site-calendar button {
   background: transparent;
   cursor: pointer;
 }
-body .site-calendar button:hover { background: var(--design-inset); }
-body .site-calendar button[aria-pressed="true"] {
+body .site-calendar button:hover {
+  background: var(--design-inset);
+}
+body .site-calendar button[aria-pressed='true'] {
   background: var(--design-selected);
   border-color: var(--design-open-border);
   color: var(--design-accent-hover);
   font-weight: 700;
 }
-body .site-calendar button:disabled { opacity: .4; cursor: default; }
-.site-calendar-head { display: grid; grid-template-columns: 40px minmax(0,1fr) 40px; gap: 4px; align-items: center; }
-.site-calendar-head svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.site-calendar-year { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 0; font-size: 13px; color: var(--design-muted); }
-body .site-calendar-year input { width: 88px; min-height: 36px; border: 1px solid var(--design-line); border-radius: 8px; padding: 4px 8px; font: inherit; color: var(--design-ink); background: var(--design-on-action); }
-.site-calendar-grid { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 4px; }
-.site-calendar-grid.site-calendar-months { grid-template-columns: repeat(3,minmax(0,1fr)); }
-.site-calendar-weekday { text-align: center; padding: 6px 0; font-size: 12px; color: var(--design-muted); }
-.site-calendar-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--design-line); }
-body .site-calendar-actions button { padding: 6px 16px; border-color: var(--design-line); background: var(--design-on-action); color: var(--design-accent); }
-body .site-calendar-actions button:hover { background: var(--design-selected); }
+body .site-calendar button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.site-calendar-head {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 40px;
+  gap: 4px;
+  align-items: center;
+}
+.site-calendar-head svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.site-calendar-year {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0;
+  font-size: 13px;
+  color: var(--design-muted);
+}
+body .site-calendar-year input {
+  width: 88px;
+  min-height: 36px;
+  border: 1px solid var(--design-line);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font: inherit;
+  color: var(--design-ink);
+  background: var(--design-on-action);
+}
+.site-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+.site-calendar-grid.site-calendar-months {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.site-calendar-weekday {
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--design-muted);
+}
+.site-calendar-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--design-line);
+}
+body .site-calendar-actions button {
+  padding: 6px 16px;
+  border-color: var(--design-line);
+  background: var(--design-on-action);
+  color: var(--design-accent);
+}
+body .site-calendar-actions button:hover {
+  background: var(--design-selected);
+}
 body input.site-date-field {
   min-height: 36px;
   padding: 6px 10px;
@@ -1963,8 +1910,12 @@ body input.site-date-field {
   font-variant-numeric: tabular-nums;
   cursor: pointer;
 }
-body dialog.site-calendar:not([open]) { display: none; }
-body dialog.site-calendar[open] { display: block; }
+body dialog.site-calendar:not([open]) {
+  display: none;
+}
+body dialog.site-calendar[open] {
+  display: block;
+}
 body .site-calendar-year button {
   min-width: 80px;
   min-height: 36px;
@@ -1973,8 +1924,10 @@ body .site-calendar-year button {
   background: var(--design-on-action);
   color: var(--design-accent);
 }
-body dialog.site-calendar:not([open]) { pointer-events: none; }
-body[data-page="space"] #spaceDrawerClose {
+body dialog.site-calendar:not([open]) {
+  pointer-events: none;
+}
+body[data-page='space'] #spaceDrawerClose {
   background: transparent;
   color: var(--design-ink);
   border: 0;
@@ -1987,27 +1940,71 @@ body[data-page="space"] #spaceDrawerClose {
   align-items: center;
   justify-content: center;
 }
-body[data-page="space"].space-immersive #spaceDrawerClose { color: var(--design-night-ink); }
-body[data-page="space"] #spaceDrawerClose:hover { background: var(--design-inset); }
-body[data-page="space"].space-immersive #spaceDrawerClose:hover { background: var(--design-night-inset); }
-#spaceDrawerClose svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
-body :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#workbenchNextMonth,#moonPrevMonth,#moonNextMonth) {
+body[data-page='space'].space-immersive #spaceDrawerClose {
+  color: var(--design-night-ink);
+}
+body[data-page='space'] #spaceDrawerClose:hover {
+  background: var(--design-inset);
+}
+body[data-page='space'].space-immersive #spaceDrawerClose:hover {
+  background: var(--design-night-inset);
+}
+#spaceDrawerClose svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+body
+  :is(
+    #workbenchPrevDate,
+    #workbenchNextDate,
+    #workbenchPrevMonth,
+    #workbenchNextMonth,
+    #moonPrevMonth,
+    #moonNextMonth
+  ) {
   font-size: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
-body :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#workbenchNextMonth,#moonPrevMonth,#moonNextMonth)::before {
-  content: "";
+body
+  :is(
+    #workbenchPrevDate,
+    #workbenchNextDate,
+    #workbenchPrevMonth,
+    #workbenchNextMonth,
+    #moonPrevMonth,
+    #moonNextMonth
+  )::before {
+  content: '';
   display: block;
   width: 18px;
   height: 18px;
   background: currentColor;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m14 5-7 7 7 7' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m14 5-7 7 7 7' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m14 5-7 7 7 7' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m14 5-7 7 7 7' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
-body :is(#workbenchNextDate,#workbenchNextMonth,#moonNextMonth)::before { transform: rotate(180deg); }
-body .ui-shell :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#workbenchNextMonth,#moonPrevMonth,#moonNextMonth) { font-size: 0; }
+body :is(#workbenchNextDate, #workbenchNextMonth, #moonNextMonth)::before {
+  transform: rotate(180deg);
+}
+body
+  .ui-shell
+  :is(
+    #workbenchPrevDate,
+    #workbenchNextDate,
+    #workbenchPrevMonth,
+    #workbenchNextMonth,
+    #moonPrevMonth,
+    #moonNextMonth
+  ) {
+  font-size: 0;
+}
 /* Failure recovery never keeps the whole application behind its font loader. */
 .font-load-notice {
   position: fixed;
@@ -2039,17 +2036,24 @@ body .font-load-notice button {
   font: inherit;
   cursor: pointer;
 }
-body .font-load-notice button:hover { background: var(--design-inset); }
-body .font-load-notice button:disabled { opacity: .6; cursor: wait; }
+body .font-load-notice button:hover {
+  background: var(--design-inset);
+}
+body .font-load-notice button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
 
 /* Corresponding reflections share the bottom position and warm night palette. */
 html:lang(en) .welcome-quote-zh,
-html:not(:lang(en)) .welcome-quote-en { display: none; }
-html:lang(en) body[data-page="welcome"] .welcome-quote {
+html:not(:lang(en)) .welcome-quote-en {
+  display: none;
+}
+html:lang(en) body[data-page='welcome'] .welcome-quote {
   width: min(100%, 72ch);
   align-self: center;
   color: var(--design-welcome-quote);
-  font-family: "SkyMotion Charter", Charter, "Bitstream Charter", Georgia, serif;
+  font-family: 'SkyMotion Charter', Charter, 'Bitstream Charter', Georgia, serif;
   font-style: normal;
   font-size: clamp(14px, 1.2vw, 17px);
   line-height: 1.55;
@@ -2057,33 +2061,63 @@ html:lang(en) body[data-page="welcome"] .welcome-quote {
   text-wrap: balance;
 }
 @media (max-height: 400px) {
-  html:lang(en) body[data-page="welcome"] .welcome-quote { width: 100%; font-size: 12px; line-height: 1.45; }
+  html:lang(en) body[data-page='welcome'] .welcome-quote {
+    width: 100%;
+    font-size: 12px;
+    line-height: 1.45;
+  }
 }
 @media (min-width: 601px) and (max-height: 300px) {
-  body[data-page="welcome"] .welcome-layout { padding: 4px 0; }
-  body[data-page="welcome"] .welcome-intro h1 { font-size: 25px; margin-bottom: 8px; }
-  body[data-page="welcome"] .welcome-intro > p { margin-bottom: 12px; }
-  body[data-page="welcome"] .welcome-enter { min-height: 36px; padding: 6px 16px; }
-  body[data-page="welcome"] :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited),
-  html:lang(en) body[data-page="welcome"] :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited) { min-height: 32px; padding: 3px 8px; }
+  body[data-page='welcome'] .welcome-layout {
+    padding: 4px 0;
+  }
+  body[data-page='welcome'] .welcome-intro h1 {
+    font-size: 25px;
+    margin-bottom: 8px;
+  }
+  body[data-page='welcome'] .welcome-intro > p {
+    margin-bottom: 12px;
+  }
+  body[data-page='welcome'] .welcome-enter {
+    min-height: 36px;
+    padding: 6px 16px;
+  }
+  body[data-page='welcome']
+    :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited),
+  html:lang(en)
+    body[data-page='welcome']
+    :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited) {
+    min-height: 32px;
+    padding: 3px 8px;
+  }
 }
 
 /* Ad astra is drawn by the existing star canvas, never by a font or overlay. */
-html.welcome-opening body[data-page="welcome"] :is(.welcome-brand, .welcome-layout, .welcome-quote) {
+html.welcome-opening
+  body[data-page='welcome']
+  :is(.welcome-brand, .welcome-layout, .welcome-quote) {
   opacity: var(--opening-reveal, 0);
   pointer-events: none;
 }
-html.welcome-opening .welcome-brand .language-toggle { pointer-events: none; }
+html.welcome-opening .welcome-brand .language-toggle {
+  pointer-events: none;
+}
 @media (prefers-reduced-motion: reduce) {
-  html.welcome-opening body[data-page="welcome"] :is(.welcome-brand, .welcome-layout, .welcome-quote) {
+  html.welcome-opening
+    body[data-page='welcome']
+    :is(.welcome-brand, .welcome-layout, .welcome-quote) {
     opacity: 1;
     pointer-events: auto;
   }
 }
 
 /* The font-independent constellation can paint while locale fonts prepare. */
-html.welcome-opening[data-language-pending] { background: var(--design-welcome-night); }
-html.welcome-opening[data-language-pending]::after { display: none; }
+html.welcome-opening[data-language-pending] {
+  background: var(--design-welcome-night);
+}
+html.welcome-opening[data-language-pending]::after {
+  display: none;
+}
 html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeSky) {
   visibility: visible !important;
 }
@@ -2098,19 +2132,23 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
   z-index: 180;
   display: grid;
   align-content: center;
-  padding: max(32px, env(safe-area-inset-top)) clamp(24px, 6vw, 96px) max(84px, env(safe-area-inset-bottom));
+  padding: max(32px, env(safe-area-inset-top)) clamp(24px, 6vw, 96px)
+    max(84px, env(safe-area-inset-bottom));
   background-color: var(--design-paper);
   color: var(--entrance-ink);
   font-family: var(--design-font);
   overflow: auto;
 }
-.document-entrance[data-theme="night"] {
+.document-entrance[data-theme='night'] {
   --entrance-ink: var(--design-welcome-answer);
   --entrance-answer: var(--design-welcome-quote);
   --entrance-last: var(--design-welcome-final);
   background-color: var(--design-welcome-night);
 }
-.entrance-dialogue { width: min(100%, 800px); margin: auto; }
+.entrance-dialogue {
+  width: min(100%, 800px);
+  margin: auto;
+}
 .entrance-sentence {
   opacity: 0;
   margin: 0 0 clamp(14px, 2vh, 24px);
@@ -2120,10 +2158,24 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
   letter-spacing: 0;
   text-wrap: pretty;
 }
-.entrance-sentence:first-child { font-size: clamp(28px, 3.6vw, 46px); margin-bottom: clamp(22px, 3vh, 34px); }
-.entrance-sentence[data-voice="answer"] { margin-left: clamp(18px, 3vw, 42px); color: var(--entrance-answer); }
-.entrance-sentence:last-child { margin-top: 22px; margin-bottom: 0; font-size: clamp(21px, 2.5vw, 31px); color: var(--entrance-last); }
-html:not(:lang(en)) .entrance-sentence { line-height: 1.75; letter-spacing: .025em; }
+.entrance-sentence:first-child {
+  font-size: clamp(28px, 3.6vw, 46px);
+  margin-bottom: clamp(22px, 3vh, 34px);
+}
+.entrance-sentence[data-voice='answer'] {
+  margin-left: clamp(18px, 3vw, 42px);
+  color: var(--entrance-answer);
+}
+.entrance-sentence:last-child {
+  margin-top: 22px;
+  margin-bottom: 0;
+  font-size: clamp(21px, 2.5vw, 31px);
+  color: var(--entrance-last);
+}
+html:not(:lang(en)) .entrance-sentence {
+  line-height: 1.75;
+  letter-spacing: 0.025em;
+}
 .entrance-continue {
   position: fixed;
   bottom: max(24px, env(safe-area-inset-bottom));
@@ -2140,61 +2192,118 @@ html:not(:lang(en)) .entrance-sentence { line-height: 1.75; letter-spacing: .025
   text-underline-offset: 6px;
   cursor: pointer;
 }
-.entrance-continue:hover { color: var(--entrance-ink); background: transparent; }
-.entrance-continue:focus-visible { outline: 1px solid var(--entrance-answer); outline-offset: 6px; }
+.entrance-continue:hover {
+  color: var(--entrance-ink);
+  background: transparent;
+}
+.entrance-continue:focus-visible {
+  outline: 1px solid var(--entrance-answer);
+  outline-offset: 6px;
+}
 @media (max-height: 550px) {
-  .document-entrance { padding-top: 20px; padding-bottom: 64px; }
-  .entrance-sentence { font-size: 17px; line-height: 1.35 !important; margin-bottom: 10px; }
-  .entrance-sentence:first-child { font-size: 25px; margin-bottom: 14px; }
-  .entrance-sentence:last-child { font-size: 19px; margin-top: 12px; }
-  .entrance-continue { bottom: 12px; }
+  .document-entrance {
+    padding-top: 20px;
+    padding-bottom: 64px;
+  }
+  .entrance-sentence {
+    font-size: 17px;
+    line-height: 1.35 !important;
+    margin-bottom: 10px;
+  }
+  .entrance-sentence:first-child {
+    font-size: 25px;
+    margin-bottom: 14px;
+  }
+  .entrance-sentence:last-child {
+    font-size: 19px;
+    margin-top: 12px;
+  }
+  .entrance-continue {
+    bottom: 12px;
+  }
 }
 @media (max-height: 330px) {
-  .entrance-sentence { font-size: 15px; margin-bottom: 5px; }
-  .entrance-sentence:first-child { font-size: 20px; margin-bottom: 8px; }
-  .entrance-sentence:last-child { font-size: 16px; margin-top: 8px; }
+  .entrance-sentence {
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+  .entrance-sentence:first-child {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  .entrance-sentence:last-child {
+    font-size: 16px;
+    margin-top: 8px;
+  }
 }
 @media (max-width: 600px) and (max-height: 700px) {
-  .document-entrance { padding-top: 24px; padding-bottom: 70px; }
-  .entrance-sentence { font-size: 17px; margin-bottom: 12px; line-height: 1.5; }
-  html:not(:lang(en)) .entrance-sentence { line-height: 1.65; }
-  .entrance-sentence:first-child { font-size: 26px; margin-bottom: 18px; }
-  .entrance-sentence:last-child { font-size: 19px; margin-top: 16px; }
+  .document-entrance {
+    padding-top: 24px;
+    padding-bottom: 70px;
+  }
+  .entrance-sentence {
+    font-size: 17px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  html:not(:lang(en)) .entrance-sentence {
+    line-height: 1.65;
+  }
+  .entrance-sentence:first-child {
+    font-size: 26px;
+    margin-bottom: 18px;
+  }
+  .entrance-sentence:last-child {
+    font-size: 19px;
+    margin-top: 16px;
+  }
 }
 
 /* Secondary explanations share the paper palette, including expanded menus. */
-body :is(.ui-parameters, .ui-parameter-drawer) :is(
-  #workbenchHint, #durationDefinition, #globeDragExplanation,
-  .workbench-more p, .year-strip-head > label, .sundial-time-label, .sundial-clock p, .sundial-question p
-),
-body[data-page="diagrams"] .ui-linked-menu-note {
+body
+  :is(.ui-parameters, .ui-parameter-drawer)
+  :is(
+    #workbenchHint,
+    #durationDefinition,
+    #globeDragExplanation,
+    .workbench-more p,
+    .year-strip-head > label,
+    .sundial-time-label,
+    .sundial-clock p,
+    .sundial-question p
+  ),
+body[data-page='diagrams'] .ui-linked-menu-note {
   color: var(--design-muted);
 }
-body[data-page="not-found"] .reading-page a:not(.page-action) {
+body[data-page='not-found'] .reading-page a:not(.page-action) {
   color: var(--design-primary);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
-body[data-page="not-found"] .reading-page a:hover {
+body[data-page='not-found'] .reading-page a:hover {
   color: var(--design-hover);
 }
-body[data-page="not-found"] .language-toggle {
+body[data-page='not-found'] .language-toggle {
   position: fixed;
   top: 16px;
   right: 16px;
   z-index: 20;
 }
 @media (max-width: 760px) {
-  body[data-page="diagrams"] .ui-viewbar.ui-tabs {
+  body[data-page='diagrams'] .ui-viewbar.ui-tabs {
     flex-wrap: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
   }
-  body[data-page="diagrams"] .ui-viewbar.ui-tabs > button {
+  body[data-page='diagrams'] .ui-viewbar.ui-tabs > button {
     flex-shrink: 0;
     white-space: nowrap;
   }
 }
 /* Override the legacy important caption and the relocated needle readout. */
-body #globeDragExplanation { color: var(--design-muted) !important; }
-body #sundialNeedleValue { color: var(--design-primary); }
+body #globeDragExplanation {
+  color: var(--design-muted) !important;
+}
+body #sundialNeedleValue {
+  color: var(--design-primary);
+}

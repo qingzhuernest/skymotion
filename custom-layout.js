@@ -13,7 +13,6 @@
     mobile = matchMedia('(max-width:760px)');
   const words = {
     launch: ['我的工作区', 'My workspace'],
-    standard: ['返回标准视图', 'Standard view'],
     undo: ['撤销布局调整', 'Undo layout change'],
     redo: ['重做布局调整', 'Redo layout change'],
     reset: ['恢复默认布局', 'Reset layout'],
@@ -104,12 +103,24 @@
     added: ['图解已添加。', 'View added.'],
     removed: ['图解已移除，可撤销。', 'View removed. You can undo this change.'],
   };
-  const moonWords={contextPanel:['月相与关系','Moon phase and relationships'],chartPanel:['逐日照明比例','Daily illumination'],riseSetPanel:['月出月落方位','Moonrise and moonset'],solarGeometryPanel:['行星伴月','Moon–planet comparison'],daylight:['月相与照明','Phase and illumination'],bearings:['升落与伴月','Rise/set and planets']};
-  let workspaceBody=state.body,customizing=false,normalSelection=null;
-  const t = (k) => (workspaceBody==='moon'&&moonWords[k]?moonWords[k]:words[k])[document.documentElement.lang === 'en' ? 1 : 0],
+  const moonWords = {
+    contextPanel: ['月相与关系', 'Moon phase and relationships'],
+    chartPanel: ['逐日照明比例', 'Daily illumination'],
+    riseSetPanel: ['月出月落方位', 'Moonrise and moonset'],
+    solarGeometryPanel: ['行星伴月', 'Moon–planet comparison'],
+    daylight: ['月相与照明', 'Phase and illumination'],
+    bearings: ['升落与伴月', 'Rise/set and planets'],
+  };
+  let workspaceBody = state.body,
+    customizing = false,
+    normalSelection = null;
+  const t = (k) =>
+      (workspaceBody === 'moon' && moonWords[k] ? moonWords[k] : words[k])[
+        document.documentElement.lang === 'en' ? 1 : 0
+      ],
     copy = (x) => JSON.parse(JSON.stringify(x));
   const key = (version) =>
-    `skymotion-workspace-v${version || 3}-${mobile.matches ? 'narrow' : 'wide'}${workspaceBody==='moon'?'-moon':''}`;
+    `skymotion-workspace-v${version || 3}-${mobile.matches ? 'narrow' : 'wide'}${workspaceBody === 'moon' ? '-moon' : ''}`;
   const fresh = () => ({
     version: 3,
     enabled: false,
@@ -168,7 +179,7 @@
       return fresh();
     }
   }
-  const profileKey = () => 'skymotion-saved-layouts-v1'+(workspaceBody==='moon'?'-moon':'');
+  const profileKey = () => 'skymotion-saved-layouts-v1' + (workspaceBody === 'moon' ? '-moon' : '');
   function loadProfiles() {
     try {
       const saved = JSON.parse(localStorage.getItem(profileKey()));
@@ -226,9 +237,9 @@
   launch.className = 'layout-launch';
   launch.dataset.i18nSkip = '';
   launch.disabled = true;
-  shell.id||='customizable-workspace';launch.setAttribute('aria-controls',shell.id);
+  shell.id ||= 'customizable-workspace';
+  launch.setAttribute('aria-controls', shell.id);
   shell.querySelector('.ui-heading').append(launch);
-  document.addEventListener('skymotion:ready', () => (launch.disabled = false), { once: true });
   const bar = document.createElement('div');
   bar.id = 'layoutTools';
   bar.className = 'workspace-toolbar';
@@ -305,13 +316,6 @@
     'M4 7h16M4 17h16M8 4v6M16 14v6',
     true,
   );
-  const standardButton = button(
-    actions,
-    'standard',
-    () => setCustomization(false),
-    'm9 5-7 7 7 7M3 12h18',
-  );
-  standardButton.remove(); // Finishing customization has one authoritative header switch.
   const tabs = document.createElement('div');
   tabs.className = 'workspace-tabs';
   tabs.setAttribute('role', 'tablist');
@@ -658,9 +662,24 @@
     active: false,
     visibleIds: new Set(),
     sync() {
-      if(workspaceBody!==state.body){cancel();closeOptions();save();workspaceBody=state.body;data=load();data.enabled=customizing;profiles=loadProfiles();undo=[];redo=[];profileUndo=[];focused=null;editingProfile=null;statusKey='';profileList.dataset.signature='';queueMicrotask(apply);}
-      const active =
-          customizing && data.enabled && uiWorkspace.selected === 'solarCompare',
+      if (workspaceBody !== state.body) {
+        cancel();
+        closeOptions();
+        save();
+        workspaceBody = state.body;
+        data = load();
+        data.enabled = customizing;
+        profiles = loadProfiles();
+        undo = [];
+        redo = [];
+        profileUndo = [];
+        focused = null;
+        editingProfile = null;
+        statusKey = '';
+        profileList.dataset.signature = '';
+        queueMicrotask(apply);
+      }
+      const active = customizing && data.enabled && uiWorkspace.selected === 'solarCompare',
         leaving = api.active && !active,
         entering = !api.active && active;
       api.active = active;
@@ -672,8 +691,6 @@
         focused = null;
         for (const id of ids) plot.insertBefore(cards[id], splitters.x);
       }
-      launch.setAttribute('aria-pressed',String(customizing));
-      document.body.classList.toggle('customization-active',customizing);
       api.visibleIds = new Set(
         mobile.matches ? [data.views[data.active]] : focused ? [focused] : data.views,
       );
@@ -730,7 +747,6 @@
     }
   }
   function labels() {
-    launch.textContent = document.documentElement.lang==='en'?(customizing?'Finish customizing':'Customize'):(customizing?'完成自定义':'进入自定义');
     noteTitle.textContent = t('launch');
     noteShared.textContent = t('shared');
     noteHelp.textContent = t(mobile.matches ? 'phoneHelp' : 'help');
@@ -1084,23 +1100,48 @@
     apply();
     tabs.children[data.active].focus();
   });
-  function setCustomization(value){
-    if(customizing===value)return true;
-    if(!value){
-      if(window.SkyDiagramTools?.leave?.()===false)return false;
-      for(const frame of document.querySelectorAll('iframe')){try{if(frame.contentWindow?.SkyDiagramTools?.leave?.()===false)return false;}catch{}}
-    }
-    cancel();closeOptions();focused=null;
-    if(value){normalSelection=['sceneBuilder','solarStudy'].includes(uiWorkspace.selected)?'contextPanel':uiWorkspace.selected;customizing=true;data.enabled=true;}
-    else{customizing=false;data.enabled=false;uiWorkspace.selected=normalSelection||'contextPanel';}
-    const hash='#'+uiWorkspace.selected;if(location.hash!==hash)history.replaceState(history.state,'',hash);
-    document.body.classList.toggle('customization-active',customizing);
-    document.dispatchEvent(new CustomEvent('skymotion:customization',{detail:{active:customizing}}));
-    for(const frame of document.querySelectorAll('iframe')){try{frame.contentDocument?.dispatchEvent(new CustomEvent('skymotion:customization',{detail:{active:customizing}}));}catch{}}
-    save();apply();launch.focus({preventScroll:true});return true;
-  }
-  window.SkyCustomization={get active(){return customizing;},enter:()=>setCustomization(true),exit:()=>setCustomization(false)};
-  launch.onclick=()=>setCustomization(!customizing);
+  SkyCustomizationMode.install({
+    launch,
+    isActive: () => customizing,
+    canExit() {
+      for (const frame of document.querySelectorAll('iframe')) {
+        try {
+          if (frame.contentWindow?.SkyDiagramTools?.leave?.() === false) return false;
+        } catch {}
+      }
+      return true;
+    },
+    apply(value) {
+      cancel();
+      closeOptions();
+      focused = null;
+      if (value) {
+        normalSelection = ['sceneBuilder', 'solarStudy'].includes(uiWorkspace.selected)
+          ? 'contextPanel'
+          : uiWorkspace.selected;
+        customizing = true;
+        data.enabled = true;
+      } else {
+        customizing = false;
+        data.enabled = false;
+        uiWorkspace.selected = normalSelection || 'contextPanel';
+      }
+      const hash = '#' + uiWorkspace.selected;
+      if (location.hash !== hash) history.replaceState(history.state, '', hash);
+    },
+    changed() {
+      for (const frame of document.querySelectorAll('iframe')) {
+        try {
+          frame.contentDocument?.dispatchEvent(
+            new CustomEvent('skymotion:customization', { detail: { active: customizing } }),
+          );
+        } catch {}
+      }
+      save();
+      apply();
+      launch.focus({ preventScroll: true });
+    },
+  });
   function start(e, id, axis) {
     if (!api.active || mobile.matches || focused || e.button !== 0) return;
     e.preventDefault();
@@ -1280,14 +1321,14 @@
     closeOptions();
     focused = null;
     data = load();
-    data.enabled=customizing;
+    data.enabled = customizing;
     undo = [];
     redo = [];
     // Resizing switches the layout profile, never the diagram being edited.
     apply();
   });
-  if (customizing&&data.enabled && (!location.hash || location.hash === '#solarCompare'))
+  if (customizing && data.enabled && (!location.hash || location.hash === '#solarCompare'))
     uiWorkspace.selected = 'solarCompare';
-    if(state.body==='moon')state.companion=true;
+  if (state.body === 'moon') state.companion = true;
   apply();
 })();

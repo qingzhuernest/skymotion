@@ -8,9 +8,9 @@
 
     <meta content="width=device-width,initial-scale=1" name="viewport" />
     <link href="favicon.svg" rel="icon" />
-    <link rel="stylesheet" href="ui-palette.css?v=20261021-tokens79" />
-    <link href="style.css?v=20261021-tokens79" rel="stylesheet" />
-    <link href="pages.css?v=20261021-tokens79" rel="stylesheet" />
+    <link rel="stylesheet" href="ui-palette.css?v=20261021-refactor81" />
+    <link href="style.css?v=20261021-refactor81" rel="stylesheet" />
+    <link href="pages.css?v=20261021-refactor81" rel="stylesheet" />
     <!-- search-metadata:start -->
     <title>开发说明：完整开发逻辑与维护 · 天体视运动实验室</title>
     <meta
@@ -36,11 +36,11 @@
     <meta content="website" property="og:type" />
     <meta content="zh_CN" property="og:locale" />
     <!-- search-metadata:end -->
-    <link href="documents.css?v=20261021-tokens79" rel="stylesheet" />
-    <link rel="stylesheet" href="design-system.css?v=20261021-tokens79" />
-    <link rel="stylesheet" href="language.css?v=20261021-tokens79" />
+    <link href="documents.css?v=20261021-refactor81" rel="stylesheet" />
+    <link rel="stylesheet" href="design-system.css?v=20261021-refactor81" />
+    <link rel="stylesheet" href="language.css?v=20261021-refactor81" />
     <script src="document-entrance.js?v=20261019-tools66" defer></script>
-<script src="language-data.js?v=20261021-tokens79" defer></script>
+<script src="language-data.js?v=20261021-refactor81" defer></script>
 <script src="language.js?v=20261019-tools66" defer></script>
 <script src="page-cache.js?v=20261019-tools66" defer></script>
   <script src="date-picker.js?v=20261019-tools66" defer></script>
@@ -146,6 +146,9 @@
         <p>
           所有页面先加载 ui-palette.css，统一定义原有绿色主色、表面、文字、边框和状态色；design-system.css 与各模块只引用这些变量，统一字体与控件层级，保留原生表单和现有交互。浅色操作区用于课堂阅读，深色画布用于天体观察；辅助操作以白底细边框呈现，播放与选中状态保留强调色。没有引入完整 UI 组件框架。 沉浸模式仅映射深色表面与文字，操作主色保持不变。新增 UI 不得写入独立色号；tests/ui-palette.cjs 检查颜色来源、页面加载顺序和实际控件的变量联动。
         </p>
+        <p>自定义开关由 customization-mode.js 统一管理标签、退出校验和状态通知，各页面适配器保留自己的布局与路由。编辑器收起后仍同步响应式和沉浸侧栏；Esc 只处理当前编辑操作，原生对话框与其他浮层保留自己的键盘行为。tests/interaction-audit.cjs 覆盖这些故障链，集中审查记录见 docs/ui-code-review.zh.md。</p>
+        <p>日期选择器与四季快捷项都使用日期属性，事件和高亮必须限定在各自容器；季节按钮通过 solarSeasonButtons 节点集合处理，不能再用全局 [data-date] 查询。参数抽屉只在容器确实改变时重置，避免响应式回调关闭刚打开的菜单。</p>
+        <p>自定义源码按职责维护：diagram-tool-definitions.js 只描述工具、字段与中英文名称；customization-mode.js 管理公共开关的状态转换；diagram-tools.js 分别渲染工具库、对象列表和属性面板，并通过 commitReferenceField 提交属性；custom-layout.js 负责组合布局，scene-builder.js 负责实验地面。废弃的入口、锁定状态和无读取者缓存已删除，后续修改直接进入所属模块。样式只保留同一选择器与条件下有效的定义，不再在末尾叠加覆盖。</p>
         <p>
           资源使用相对路径，适合 Cloudflare Pages
           静态托管。核心脚本、样式和纹理在交付包内，不依赖外部字体加载。当前没有

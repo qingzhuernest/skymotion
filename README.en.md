@@ -38,6 +38,8 @@ The generator synchronizes English HTML, `language-data.js` and the preload mani
 
 Interface colors are defined in `ui-palette.css`; controls consume `--design-*` variables instead of defining page-specific colors. The compact object menu keeps history in the action row and expands help on demand, leaving more room for objects and properties.
 
+The [concentrated UI review](docs/ui-code-review.en.md) records reproduced defects, shared mode-switch ownership and validation scope.
+
 ## Automated checks
 
 Use Node 22 or later, Python 3 and Chromium:
