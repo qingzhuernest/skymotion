@@ -1,15 +1,15 @@
 /* A native teaching view: explanations stay in the original left parameter rail. */
-.solar-study-controls{padding:16px 14px;color:var(--design-ink,#292d2b);background:var(--design-surface,#fff);border:1px solid var(--design-line,#d7d7d2);border-radius:var(--design-radius-control,12px);margin:0 0 16px;}
+.solar-study-controls{padding:16px 14px;color:var(--design-ink,#20323e);background:var(--design-surface,#fff);border:1px solid var(--design-line,#cdd9de);border-radius:var(--design-radius-control,12px);margin:0 0 16px;}
 .solar-study-controls h2{margin:0 0 18px;font-size:18px;font-weight:500;}
 .solar-study-switch{display:grid;gap:6px;margin-bottom:16px;}
-.solar-study-controls button{width:100%;font:inherit;font-size:13px;line-height:1.5;min-height:40px;padding:8px 10px;color:var(--design-ink,#292d2b);background:var(--design-surface,#fff);border:1px solid var(--design-line,#d7d7d2);border-radius:var(--design-radius-control,12px);cursor:pointer;box-shadow:none;}
+.solar-study-controls button{width:100%;font:inherit;font-size:13px;line-height:1.5;min-height:40px;padding:8px 10px;color:var(--design-ink,#20323e);background:var(--design-surface,#fff);border:1px solid var(--design-line,#cdd9de);border-radius:var(--design-radius-control,12px);cursor:pointer;box-shadow:none;}
 .solar-study-controls button[aria-pressed=true]{background:var(--design-primary);border-color:var(--design-primary);color:var(--design-surface);}
-.solar-study-controls button:focus-visible,.solar-study-controls input:focus-visible,.solar-study-controls select:focus-visible{outline:2px solid var(--design-muted,#616560);outline-offset:3px;}
-.solar-study-muted,.solar-study-status,.solar-study-primary{font-size:12px;line-height:1.8;color:var(--design-muted,#616560);margin:12px 0;}
+.solar-study-controls button:focus-visible,.solar-study-controls input:focus-visible,.solar-study-controls select:focus-visible{outline:2px solid var(--design-muted,#536975);outline-offset:3px;}
+.solar-study-muted,.solar-study-status,.solar-study-primary{font-size:12px;line-height:1.8;color:var(--design-muted,#536975);margin:12px 0;}
 .solar-study-controls label{display:grid;gap:6px;font-size:12px;min-width:0;}
-.solar-study-controls select,.solar-study-controls input{width:100%;min-width:0;min-height:38px;border:1px solid var(--design-line,#d7d7d2);border-radius:10px;background:var(--design-surface,#fff);color:var(--design-ink,#292d2b);font:inherit;padding:7px;box-sizing:border-box;}
+.solar-study-controls select,.solar-study-controls input{width:100%;min-width:0;min-height:38px;border:1px solid var(--design-line,#cdd9de);border-radius:10px;background:var(--design-surface,#fff);color:var(--design-ink,#20323e);font:inherit;padding:7px;box-sizing:border-box;}
 .solar-study-presets{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-.solar-study-controls fieldset{border:0;border-top:1px solid var(--design-line,#d7d7d2);padding:12px 0;margin:12px 0 0;min-width:0;}
+.solar-study-controls fieldset{border:0;border-top:1px solid var(--design-line,#cdd9de);padding:12px 0;margin:12px 0 0;min-width:0;}
 .solar-study-controls legend{font-size:13px;padding-right:8px;}
 .solar-study-coordinates{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .solar-study-controls [aria-invalid=true]{border-color:#98665b;}

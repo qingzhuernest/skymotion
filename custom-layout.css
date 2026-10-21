@@ -332,7 +332,7 @@
   color: var(--design-ink);
   border: 1px solid var(--design-line);
   border-radius: 10px;
-  box-shadow: 0 6px 22px #292d2b18;
+  box-shadow: 0 6px 22px #20323e18;
   padding: 10px 16px;
   font: 14px var(--design-font);
 }
@@ -366,7 +366,7 @@
   color: var(--design-ink);
   border: 1px solid var(--design-line);
   border-radius: 16px;
-  box-shadow: 0 12px 36px #292d2b1c;
+  box-shadow: 0 12px 36px #20323e1c;
   font: 13px/1.6 var(--design-font);
 }
 .workspace-options::backdrop {

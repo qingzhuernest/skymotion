@@ -93,13 +93,13 @@ body .dt-host .diagram-tool-launch,
 body .ui-plot #viewReset,
 body[data-page=space] #reset.stage-reset{
   min-height:40px;padding:8px 12px;
-  border:1px solid #56605a;border-radius:var(--design-radius-control);
-  background:#202523;color:#edf0ed;box-shadow:none;
+  border:1px solid #3d5b6d;border-radius:var(--design-radius-control);
+  background:#142b3c;color:#e4eef3;box-shadow:none;
   font-family:var(--design-font);font-size:12px;font-weight:400;line-height:1.5;
 }
 body .dt-host .diagram-tool-launch:hover,
 body .ui-plot #viewReset:hover,
-body[data-page=space] #reset.stage-reset:hover{background:#2e3430;border-color:var(--design-line);color:#edf0ed}
+body[data-page=space] #reset.stage-reset:hover{background:#203b4c;border-color:var(--design-line);color:#e4eef3}
 body .dt-host .diagram-tool-launch:focus-visible,
 body .ui-plot #viewReset:focus-visible,
 body[data-page=space] #reset.stage-reset:focus-visible{outline:2px solid var(--design-inset);outline-offset:3px}

@@ -491,7 +491,7 @@ body[data-page='lunar'] {
   margin-top: -7px;
   border: 3px solid white;
   border-radius: 50%;
-  background: #414744;
+  background: #24576b;
   box-shadow: 0 0 0 1px #b8cbd1;
 }
 .lunar-sliders input[type='range']::-moz-range-track {
@@ -504,7 +504,7 @@ body[data-page='lunar'] {
   height: 12px;
   border: 3px solid white;
   border-radius: 50%;
-  background: #414744;
+  background: #24576b;
 }
 .lunar-view-status {
   width: fit-content;

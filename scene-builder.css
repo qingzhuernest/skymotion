@@ -108,7 +108,7 @@ body .sb-object-menu button:hover{background:var(--design-inset)}
 @media(max-width:760px){.sb-surface>.sb-placement-actions{position:absolute;z-index:4;left:12px;right:12px;bottom:44px;margin:0;padding:6px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);background:var(--design-surface)}}
 /* Canvas tools use the same dark auxiliary controls as the native reset. */
 .sb-toolbar{justify-content:flex-end}
-body .sb-toolbar .sb-actions{background:#202523;border-color:#56605a;color:#edf0ed}
-body .sb-toolbar .sb-actions button,body .sb-surface>.sb-placement-actions button,body .sb-mobile-props{background:#202523;color:#edf0ed;border-color:#56605a}
-body .sb-toolbar .sb-actions button:hover,body .sb-surface>.sb-placement-actions button:hover,body .sb-mobile-props:hover{background:#2e3430}
-@media(max-width:760px){body .sb-surface>.sb-placement-actions{background:#202523;border-color:#56605a}}
+body .sb-toolbar .sb-actions{background:#142b3c;border-color:#3d5b6d;color:#e4eef3}
+body .sb-toolbar .sb-actions button,body .sb-surface>.sb-placement-actions button,body .sb-mobile-props{background:#142b3c;color:#e4eef3;border-color:#3d5b6d}
+body .sb-toolbar .sb-actions button:hover,body .sb-surface>.sb-placement-actions button:hover,body .sb-mobile-props:hover{background:#203b4c}
+@media(max-width:760px){body .sb-surface>.sb-placement-actions{background:#142b3c;border-color:#3d5b6d}}

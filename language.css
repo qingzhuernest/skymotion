@@ -35,9 +35,9 @@ html:lang(en) .welcome-quote {
 }
 .welcome-brand .language-toggle {
   margin-left: 18px;
-  background: #202523;
-  color: #edf0ed;
-  border-color: #56605a;
+  background: #142b3c;
+  color: #e4eef3;
+  border-color: #3d5b6d;
 }
 html:lang(en)
   :is(.menu-content, .ui-information, .side, .workbench-panel-head) {
@@ -211,7 +211,8 @@ html:lang(en) body[data-page="welcome"] :is(.welcome-sky-actions button,.welcome
 /* Global editing mode sits beside language, outside the scientific heading. */
 .language-actions{display:flex;align-items:center;flex:none;gap:8px;margin:0 12px 0 8px;}
 .language-actions :is(.layout-launch,.language-toggle){margin:0;min-height:36px;padding:7px 12px;border-radius:var(--design-radius-control);font:inherit;white-space:nowrap;background:var(--design-surface);color:var(--design-primary);border:1px solid var(--design-line);}
-.language-actions .layout-launch[aria-pressed=true]{background:var(--design-inset);border-color:var(--design-muted);color:var(--design-ink);font-weight:600;}
+.language-actions .layout-launch[aria-pressed=true],
+body[data-page="space"].space-immersive .language-actions .layout-launch[aria-pressed=true]{background:var(--design-action,var(--design-primary));border-color:var(--design-action,var(--design-primary));color:#fff;}
 .language-actions :is(.layout-launch,.language-toggle):focus-visible{outline:2px solid var(--design-primary);outline-offset:3px;}
 @media(max-width:600px){.language-actions{gap:6px;margin:0 10px 0 6px;font-size:12px;}.language-actions :is(.layout-launch,.language-toggle){padding:6px 9px;min-height:36px;}}
 @media(pointer:coarse){.language-actions :is(.layout-launch,.language-toggle){min-height:44px;}}
