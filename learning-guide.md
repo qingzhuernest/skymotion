@@ -6,15 +6,16 @@ SKY MOTION LAB · 操作与观察
 
 1. [先完成一次观察](guide.html?lang=zh#start)
 2. [控制区、菜单与撤回](guide.html?lang=zh#controls)
-3. [课堂与自主学习路线](guide.html?lang=zh#lesson)
-4. [太阳任务：一天、季节与纬度](guide.html?lang=zh#sun)
-5. [日影任务：让影子与影尖轨迹更清楚](guide.html?lang=zh#shadow)
-6. [月球任务：按天看月相，按时刻看天空](guide.html?lang=zh#moon)
-7. [仰望天空任务：同时调整方向与时刻](guide.html?lang=zh#sky)
-8. [日晷任务：比较两种装置](guide.html?lang=zh#sundial)
-9. [日行迹任务：观察全年轨迹与“8”字成因](guide.html?lang=zh#analemma)
-10. [太阳系三维任务：区分空间运动与天空视运动](guide.html?lang=zh#space)
-11. [操作遇到问题时](guide.html?lang=zh#help)
+3. [自定义：添加、对照与保存](guide.html?lang=zh#customization)
+4. [课堂与自主学习路线](guide.html?lang=zh#lesson)
+5. [太阳任务：一天、季节与纬度](guide.html?lang=zh#sun)
+6. [日影任务：让影子与影尖轨迹更清楚](guide.html?lang=zh#shadow)
+7. [月球任务：按天看月相，按时刻看天空](guide.html?lang=zh#moon)
+8. [仰望天空任务：同时调整方向与时刻](guide.html?lang=zh#sky)
+9. [日晷任务：比较两种装置](guide.html?lang=zh#sundial)
+10. [日行迹任务：观察全年轨迹与“8”字成因](guide.html?lang=zh#analemma)
+11. [太阳系三维任务：区分空间运动与天空视运动](guide.html?lang=zh#space)
+12. [操作遇到问题时](guide.html?lang=zh#help)
 
 更新：2026年10月21日。正式版已采用统一界面、中英文页面与本地字体；操作说明按当前发布版本核对。模型依据见项目介绍，实现与检查范围见开发说明。
 

@@ -6,17 +6,18 @@ Follow the entry points, operating steps, controlled variables and recording met
 
 1. [Complete your first observation](guide.en.html?lang=en#start)
 2. [Controls, menus and undo](guide.en.html?lang=en#controls)
-3. [Classroom and independent-learning routes](guide.en.html?lang=en#lesson)
-4. [Sun tasks: a day, seasons and latitude](guide.en.html?lang=en#sun)
-5. [Shadow tasks: make shadows and shadow-tip paths clearer](guide.en.html?lang=en#shadow)
-6. [Moon tasks: follow phases by date and the sky by time](guide.en.html?lang=en#moon)
-7. [Looking Up tasks: adjust direction and time together](guide.en.html?lang=en#sky)
-8. [Sundial tasks: compare two instruments](guide.en.html?lang=en#sundial)
-9. [Analemma tasks: the annual path and the origin of the figure eight](guide.en.html?lang=en#analemma)
-10. [3D Solar System tasks: distinguish spatial motion from apparent motion in the sky](guide.en.html?lang=en#space)
-11. [When an operation does not work as expected](guide.en.html?lang=en#help)
+3. [Customization: add, compare and save](guide.en.html#customization)
+4. [Classroom and independent-learning routes](guide.en.html?lang=en#lesson)
+5. [Sun tasks: a day, seasons and latitude](guide.en.html?lang=en#sun)
+6. [Shadow tasks: make shadows and shadow-tip paths clearer](guide.en.html?lang=en#shadow)
+7. [Moon tasks: follow phases by date and the sky by time](guide.en.html?lang=en#moon)
+8. [Looking Up tasks: adjust direction and time together](guide.en.html?lang=en#sky)
+9. [Sundial tasks: compare two instruments](guide.en.html?lang=en#sundial)
+10. [Analemma tasks: the annual path and the origin of the figure eight](guide.en.html?lang=en#analemma)
+11. [3D Solar System tasks: distinguish spatial motion from apparent motion in the sky](guide.en.html?lang=en#space)
+12. [When an operation does not work as expected](guide.en.html?lang=en#help)
 
-Updated October 13, 2026. The production release uses a unified interface, Chinese and English pages, and locally hosted fonts. These instructions describe the current release. See Project Overview for model foundations and Development Guide for implementation and verification limits.
+Updated October 21, 2026. The production release uses a unified interface, Chinese and English pages, and locally hosted fonts. These instructions describe the current release. See Project Overview for model foundations and Development Guide for implementation and verification limits.
 
 The production version supports Chinese and English. The top navigation language button switches menus, reading explanations, diagram annotations and documents without changing location, date, time or experiment settings. This browser remembers your language preference; English mode provides complete English Markdown downloads. The calendar applies a date only when confirmed; cancelling leaves the experiment unchanged.
 
