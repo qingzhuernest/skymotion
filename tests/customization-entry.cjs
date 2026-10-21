@@ -15,7 +15,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    await p.waitForFunction(()=>document.querySelector('.dt-overlay'));
    assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);
    await p.locator('.layout-launch').click();
-   await p.locator('.diagram-tool-launch:visible').waitFor();
+   await p.locator('.dt-panel:visible,.diagram-tool-launch:visible').first().waitFor();
    await p.locator('#spaceImmersive').click();
    await p.waitForFunction(()=>document.querySelector('.head-actions .language-actions'));
    assert(await p.locator('.layout-launch').isVisible());
