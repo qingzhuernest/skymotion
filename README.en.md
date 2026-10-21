@@ -1,18 +1,21 @@
-# SkyMotion — Astronomy and Geography Laboratory
+# SkyMotion · Sky Motion Lab
 
-2026-10-21: customization follows Add–Select–Adjust. Cities and times remain linked across plots, physical objects use the experiment ground, and native controls remain available. The [learning guide](guide.en.html#customization) includes three complete examples.
+A browser laboratory for geography teaching and independent observation. Control location, date and time to explore the Sun, Moon, shadows, sundials and analemmas, then compare related diagrams and 3D views. Native HTML, CSS and ES Modules run without a build step.
 
 [简体中文](README.md) · **English**
 
-## Release status
+[Open the production site](https://skymotion-5md.pages.dev/index.en.html) · [GitHub Pages mirror](https://qingzhuernest.github.io/skymotion/index.en.html)
 
-The October 20, 2026 release publishes reviewed preview 72 customization: fixed navigation, in-Lab place/time comparisons, plot references, construction tools, persistent 3D entry, empty Sun/Moon construction scenes and matching plot colors. Existing Earthrise and production font-loading optimizations are retained. The main branch contains 13 bilingual page pairs; release validation runs all root-level regression scripts.
+## Using the lab and its documentation
 
-[Customization interaction guide](docs/customization-interaction.en.md) · [Release notes](docs/RELEASE-2026-10-21.en.md)
+- [Learning guide](learning-guide.en.md): where to start, what to adjust, and how to compare and record observations.
+- [Project introduction](project-guide.en.md): teaching uses, capabilities, data sources and model scope.
+- [Development guide](development-guide.en.md): code responsibilities, state, calculations, rendering, checks and deployment.
+- [Customization instructions](docs/customization-interaction.en.md): add cities, time markers, reference lines and physical objects, edit their properties and save plans.
 
-The production release includes the reviewed bilingual Impeccable interface. [Cloudflare Pages](https://skymotion-5md.pages.dev/) is the primary site; [GitHub Pages](https://qingzhuernest.github.io/skymotion/) mirrors the same tracked content. Pushing `main` triggers both deployment workflows. Other branches do not deploy production, including manual runs.
+Customize is beside the language button. Observation controls continues to set the baseline experiment; Plot objects adds and adjusts comparisons. Cities and times remain linked across relevant diagrams. Rods, spheres and circles are placed on the experiment ground. See the [customization examples](guide.en.html#customization).
 
-The astronomy engine, ephemerides and scientific models retain the production implementation. The interface adds unified serif typography and color tokens, English Charter fonts, state-preserving language switching, generated English sibling pages and idle browser caching. See the release status above for the current page count.
+Related Diagrams → Moon → Earthrise and Earthset links a lunar-orbit overview with an astronaut view. This independent illustrative orbit retains the left explanation, parameters and bottom controls. It is not a spacecraft trajectory prediction for a real date.
 
 ## Run locally
 
@@ -20,76 +23,46 @@ The astronomy engine, ephemerides and scientific models retain the production im
 python3 -m http.server 8000
 ```
 
-Open `http://localhost:8000/`. English pages use sibling filenames such as `lab.en.html` and `space/index.en.html`.
+Open `http://localhost:8000/`. English has separate pages, such as `lab.en.html` and `space/index.en.html`. A modern browser is required; 3D views require WebGL.
 
-## Regenerate English pages
+## Edit documents and bilingual pages
+
+Chinese HTML is the page source; English pages are generated using dictionaries. After editing source pages or `i18n-*.json`, run:
 
 ```sh
 python3 scripts/prerender-pages.py --dist .
+python3 scripts/prerender-pages.py --check
 ```
 
-Edit the Chinese HTML and `i18n-*.json` dictionaries, then regenerate the English HTML, `language-data.js`, and `page-cache-manifest.json`. Generated pages preserve IDs, form values, numerical attributes and scientific scripts.
+The generator synchronizes English HTML, `language-data.js` and the preload manifest while preserving DOM IDs, form values, numerical attributes and scientific scripts. Keep the Chinese and English Markdown downloads of all three documents aligned. Update the relevant topic rather than appending release logs to the document.
 
-## Documentation and license
+## Automated checks
 
-- Learning guide: [English](learning-guide.en.md) · [简体中文](learning-guide.md)
-- Project introduction: [English](project-guide.en.md) · [简体中文](project-guide.md)
-- Development guide: [English](development-guide.en.md) · [简体中文](development-guide.md)
-- Application: [AGPLv3](LICENSE). Font, image and library licenses: [third-party notices](THIRD-PARTY-NOTICES.md).
-
-The repository does not include GPT Site hosting configuration, temporary credentials, review screenshots or local plugin installations.
-
-## Review regressions
-
-With a local server running and Playwright available, run `node tests/review-regressions.cjs`. Optional `SKY_MOTION_TEST_URL`, `SKY_MOTION_PLAYWRIGHT` and `SKY_MOTION_CHROMIUM` select the test server, module and browser executable. The suite covers stalled-font recovery and retry, explicit-language navigation, calendar month/year values, leap-day clamping, browser undo and keyboard focus at phone/tablet widths.
-
-## Release and rollback — October 13, 2026
-
-Core astronomy libraries and model data are unchanged from production baseline `4390ab1`. UI checks cover 36 control layouts, 44 first disclosures, interaction history, language navigation, font timeout recovery and calendar keyboard use. These are primarily Chromium checks; complete Safari/Firefox and GPU certification remains outside the verified scope.
-
-Regenerate English pages after editing Chinese HTML or dictionaries. Keep all three Chinese and English Markdown downloads synchronized with the reading pages. Font readiness has an eight-second timeout and explicit retry. Cache warming starts after the foreground page is ready, using two low-priority requests; this is not an offline application or a guarantee that all pages are cached immediately.
-
-The previous production commit is tagged `production-before-impeccable-20261013`. Restore it with a new commit if necessary; do not force-push main. Check both deployment workflows before calling the release successful. `tests/deployment-paths.cjs` validates root and GitHub project-path packaging.
-
-## Session hardening and automated deployment gates — October 14, 2026
-
-`experiment-storage.js` validates persisted dates, ranges, types and enumerated choices before restoring laboratory state. Valid legacy sessions remain readable; saves use `schemaVersion: 1`. Invalid fields use defaults, and unknown versions are ignored. Blocked or quota-limited storage falls back to a detached memory snapshot for the current page only. The 3D observer uses the same date and coordinate validation.
-
-Both production workflows require `.github/workflows/validate.yml` to pass before deployment. It installs the locked CI-only Playwright/Chromium tools under `tests/browser`, starts a disposable local server and discovers and runs every root-level `.cjs` suite. No browser tools or test source are packaged into the static site.
-
-To run the same gate locally with Node 22+, Python 3 and installed Chromium:
+Use Node 22 or later, Python 3 and Chromium:
 
 ```sh
 npm ci --prefix tests/browser
 SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" SKY_MOTION_CHROMIUM=/usr/bin/chromium node .github/scripts/verify-site.cjs
 ```
 
-For systems without Chromium, install it with `tests/browser/node_modules/.bin/playwright install --with-deps chromium` and set `SKY_MOTION_CHROMIUM` to the executable path returned by Playwright. Browser regressions primarily verify Chromium; they are not a complete real-device compatibility certification.
+If Chromium is not installed, run `tests/browser/node_modules/.bin/playwright install --with-deps chromium` and point `SKY_MOTION_CHROMIUM` to the installed executable.
 
-## Review follow-up — October 14, 2026
+The verifier discovers every `.cjs` script at the `tests/` root. Checks cover model boundaries, common interactions, customization, save/restore behavior, bilingual content, font loading and deployment paths. Browser tools are not published with the website. Automation primarily uses Chromium and does not replace Safari, Firefox or real touch-device testing.
 
-Historical snapshots are validated before restoration; incompatible entries use a valid fallback, and a generation-aware finally releases the undo lock. Language-switch failures display a visible, localized notice with a retry for the target language. Bilingual CI now checks generated-output freshness, structure and complete English text (excluding intentional bilingual quotes); run `python3 scripts/prerender-pages.py --check` for a read-only check of English HTML, the dictionary bundle and preload manifest. `tests/review-followup.cjs` covers corruption, adapter failure, mobile retry and stale generation; production gates discover all regression scripts automatically.
+## State and resource loading
 
-## Welcome reflections — October 14, 2026
+Session restoration validates dates, numerical ranges, types and choices; unknown versions are ignored. When storage is unavailable, an in-memory backup supports only the current page and cannot guarantee persistence after closing the page or switching devices. Save objects locally or export JSON for backup.
 
-The Chinese welcome page keeps its original handwritten footer. English mode displays the supplied reflection, “Everyone here wants to understand something. What matters is whether you can stay curious when the answers don't come.”, at that same centered bottom position. Both use the existing warm night palette; English uses local Charter. These are locale-specific reflections rather than translations of each other. The sentence no longer appears below the entry action, and the welcome page requires only its selected locale's normal font preparation.
+Only `page-boot.js` blocks parsing to choose the language; other scripts use `defer` in dependency order. The welcome constellation waits for activation. Document introductions respect visit scope and reduced-motion preferences. Font or language-resource failures offer a retry that preserves the experiment settings. Background preloading is not offline installation.
 
-On the first welcome-page visit, stars and connecting lines form Ad Astra. The constellation waits for a click, Enter or Space before dispersing into the interactive sky and revealing the welcome page. It plays once per tab; reduced-motion mode exposes the welcome page directly.
+## Deploy and restore
 
-Ad Astra follows the outlines of local Charter Italic, using approximately 400 warm-white stars and fine gold lines. Pre-generated lettering adds no font request to the opening. Dispersal remains explicitly activated by click, Enter or Space.
+Pushing `main` triggers separate Cloudflare Pages and GitHub Pages workflows. Both pass the shared `validate.yml` gate before packaging the same static website. Other branches do not publish production. Check both deployment results before declaring a release complete.
 
-Each of the three documents opens with a complete original conversation in the selected language: learning geography, models and the world, or observing again when a model fails. Lines appear sequentially from the sides; readers can continue or skip by keyboard. Welcome-page entries transition from dark to paper, while entries from light pages retain paper. Each document plays once per visit, without replaying on internal navigation, return or refresh; a clean external or independent visit may replay it. Opening-star color and brightness blend continuously rather than switching at the end.
+Restore a known good version through a restoration commit that preserves `main` history; do not force-push. `tests/deployment-paths.cjs` checks root and GitHub project-path packaging.
 
-## Loading performance and order
+## License and feedback
 
-Earlier loading measurements: Reading WOFF2 subsets totaled 711,888 bytes (26% smaller), with verified identical character coverage, outlines and advance widths. `scripts/optimize-reading-fonts.py` reproduces the optimization. At the time of that measurement, background warming prioritized the current language, kept all 24 pages, excluded obsolete font variants, and used the same versioned Reading URLs as the foreground. In one controlled Chromium cold-load comparison (80 ms latency, 500 KB/s), Chinese font readiness improved from 3.60 s to 3.10 s; actual device/network timings vary.
+Original application code uses [GNU AGPLv3](LICENSE) (AGPL-3.0-only). Third-party libraries, fonts, imagery and data retain their own licenses; see [NOTICE](NOTICE) and [Third-Party Notices](THIRD-PARTY-NOTICES.md).
 
-Ordered loading: only `page-boot.js` blocks parsing, to choose the correct locale before content. Other external scripts use `defer` and retain dependency order. The Welcome canvas and document conversations start before the shared translation dictionary finishes; their local copy remains bilingual. Deferred language initialization still waits for DOMContentLoaded so experiment globals exist. Cover failure recovery also waits for deferred startup, rather than skipping a healthy opening.
-
-Controlled parser-order comparison (Chromium, 100 ms latency, 500 KB/s): English star-cover script readiness improved from 2.90 s to 1.31 s with identical shared assets. This measures cover startup, not whole-application interactivity or real-device Safari performance.
-
-## Earthrise lesson — production
-
- Linked Diagrams → Moon → Earthrise and Earthset opens an independent circular lunar-orbit model. The original left explanation/parameter rail and bottom workbench remain in place; the right image area uses one WebGL context for an orbit diagram and physical astronaut view. Earthrise playback slows at the limb and pauses once Earth is fully visible; turning away gives an explicit return-to-Earth hint. Adjustable orbital height, geometry, field of view, surface-site comparison and limb-contact playback are presentation controls independent of the dated ephemeris workbench. The lesson prepares its first frame, texture, fonts and sidebar in the background before switching all regions together; cold loading keeps the current diagram visible. There is no new welcome-page entry; this lesson is included in the production release.
-
-Earthrise interaction follow-up: dragging distinguishes the Moon from the orbiter in screen pixels and preserves the initial grab offset. Height changes pause and invalidate guided contacts; guided playback can pause/resume without becoming a normal orbit. The overview responds to height, its observer marker stays identifiable, and the Earth-tracking camera uses a continuous roll reference across zenith.
+For an issue, include the module, location, experiment date and time, reproduction steps, device and browser: [Contact the author](https://skymotion-5md.pages.dev/contact.en.html) · [GitHub Issues](https://github.com/qingzhuernest/skymotion/issues).

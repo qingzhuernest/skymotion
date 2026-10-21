@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="design-system.css?v=20261019-tools66" />
     <link rel="stylesheet" href="language.css?v=20261019-tools66" />
     <script src="document-entrance.js?v=20261019-tools66" defer></script>
-<script src="language-data.js?v=20261019-tools66" defer></script>
+<script src="language-data.js?v=20261021-docs76" defer></script>
 <script src="language.js?v=20261019-tools66" defer></script>
 <script src="page-cache.js?v=20261019-tools66" defer></script>
   <script src="date-picker.js?v=20261019-tools66" defer></script>
@@ -80,9 +80,7 @@
         </ol>
       </details>
       <div class="document-content">
-        <p class="document-updated">
-          更新：2026年10月21日。正式版已采用统一界面、中英文页面与本地字体；操作说明按当前发布版本核对。模型依据见项目介绍，实现与检查范围见开发说明。
-        </p>
+        <p class="document-updated">本指南按操作任务组织：先设置观测条件，再添加对照、读取结果和保存实验。模型依据见项目介绍，实现与检查范围见开发说明。</p>
         <section id="start">
           <blockquote>
             <strong>第一次使用：</strong
@@ -278,8 +276,9 @@
           <p>
             在两个不同经度的地点分别设置12:00真太阳时，是比较各自的当地正午，通常不是比较同一个物理瞬间。做三维对照时用系统同步后的UTC，不要手工把两边数字设为一样。
           </p>
-        </section>
-        <section id="customization"><h2>自定义：添加、对照与保存</h2>
+        <h3>语言切换遇到问题</h3><p>切换语言失败时，使用页面提示中的重试按钮。重试会保留地点、日期、时刻和实验设置；若仍失败，请记录浏览器与操作步骤后反馈。</p>
+</section>
+<section id="customization"><h2>自定义：添加、对照与保存</h2>
 <h3>进入与退出自定义</h3>
 <p>点击语言按钮旁的“进入自定义”。顶部主菜单、原地点与时间控制仍保留；左栏“观测条件”调整原实验，“图中对象”添加和编辑参考。完成后点“完成自定义”，草稿仍在本次会话中保留。</p>
 <h3>例一：同一时间，比较不同城市</h3>
@@ -944,9 +943,9 @@
           <a href="contact.html">联系作者</a>
         </p>
       </div>
-    <section class="review-notes"><h2>后续审查修复：历史恢复、双语新鲜度与语言重试</h2><p>浏览器历史快照与会话缓存使用相同的日期、字段范围和选项校验。异常或不兼容的快照回退到当前有效状态；恢复锁通过代次判断和 finally 释放，避免一次失败阻止后续撤销。摄像机状态仍遵循原历史记录边界。</p><p>双语测试同时检查结构和生成内容是否最新。python3 scripts/prerender-pages.py --check 只读比较英文HTML、language-data.js和资源预热清单；中文原稿、词典或资源更新后忘记重新生成，会使CI失败。修正后运行普通生成命令，并同步文档下载，再重新检查。</p><p>切换语言时若目标字体或语言资源加载失败，页面会显示可见的白底状态提示，并提供目标语言的重试按钮。重试成功后保留日期、地点与实验参数，移除提示；不在失败时偷偷切换字体或重置实验。现行部署门禁包含全部18个回归脚本。</p></section>
-<section class="maintenance-notes"><h2>2026年10月14日：状态恢复与发布门禁</h2><p>缓存中的无效日期、越界数值、错误类型或未知选项会回退到对应默认值；有效观察设置保持不变。旧版未标记版本的会话仍可读取，之后保存为 schemaVersion 1。浏览器禁止存储或写入空间不足时，同一页面内使用内存备份；这种备份不能在页面关闭后或跨页面保证保留。</p><p>普通实验页与三维页通过 experiment-storage.js 读取实验会话。实验模式逐字段校验，经纬度、时刻、日期、视图、倍率和理想参数都有边界；恢复后保持暂停，按真实日期重新求太阳赤纬。未识别的缓存版本不会应用。此处不改天文公式、科学读数或图形颜色。</p><p>两个正式部署工作流都依赖共享 validate.yml：锁定 Playwright 版本、安装 Chromium，运行 tests 根目录全部18个 .cjs 脚本，包括模型、历史、控件、字体、双语结构、损坏缓存恢复和打包检查。任一测试失败会阻止该工作流部署。测试工具只用于维护和 CI，不随网站发布，也不改变零构建运行方式。</p></section>
-<section class="release-notes"><h2>2026年10月13日正式发布说明</h2><p>本版统一浅色操作区、衬线字体和辅助按钮样式，提供24份中英文静态页面；切换语言保留实验状态。菜单弹性展开尊重减少动态效果设置。日期选择器支持年月、闰年、确认与取消；原天文计算、星历、模型数据和科学限制不变。</p><p>发布核对包含六组模型回归、36组控件布局、44个首次展开场景、参数历史、字体超时恢复、语言导航、日期与键盘操作，以及根路径和 GitHub 项目路径打包。检查以 Chromium 自动化为主，不代表完整 Safari、Firefox 或所有 GPU 实机认证。</p><p>正式站为 Cloudflare Pages，GitHub Pages 提供同内容镜像。main 推送触发两个独立工作流；维护者应分别核对部署结论。更新前版本保留为 production-before-impeccable-20261013 标签；需要回滚时从该标签创建恢复提交，不改写主分支历史。</p></section>
+
+
+
         </main>
     <script src="interface-motion.js?v=20261019-tools66" defer></script>
   </body>

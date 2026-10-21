@@ -6,19 +6,20 @@ Developed for geography lessons and independent exploration: controlled-variable
 
 1. [Why This Project Was Developed](project-guide.en.html?lang=en#section-0)
 2. [The Project’s Main Strengths](project-guide.en.html?lang=en#section-1)
-3. [Across Devices: Both Diagrams and Controls Must Remain Usable](project-guide.en.html?lang=en#section-2)
-4. [The Sun: Compare a Day, a Year, and Different Latitudes](project-guide.en.html?lang=en#section-3)
-5. [The Moon: Distinguish Phase, Position, and Visibility](project-guide.en.html?lang=en#section-4)
-6. [Looking Up: Build an Observer’s Sense of Direction](project-guide.en.html?lang=en#section-5)
-7. [Shadows and Sundials: Direction, Length, and Timekeeping](project-guide.en.html?lang=en#section-6)
-8. [The Analemma: Treat the Definition of Time as a Condition](project-guide.en.html?lang=en#section-7)
-9. [The 3D Solar System: Add Spatial Context While Preserving Geographic Readouts](project-guide.en.html?lang=en#section-12)
-10. [Geographic Data and Calculation Sources](project-guide.en.html?lang=en#section-8)
-11. [Model Scope and Verification Findings](project-guide.en.html?lang=en#section-9)
-12. [What Each of the Three Documents Addresses](project-guide.en.html?lang=en#section-10)
-13. [Open Source, Resources, and Feedback](project-guide.en.html?lang=en#section-11)
+3. [Customization: add, compare and save](project-guide.en.html#customization-workflow)
+4. [Across Devices: Both Diagrams and Controls Must Remain Usable](project-guide.en.html?lang=en#section-2)
+5. [The Sun: Compare a Day, a Year, and Different Latitudes](project-guide.en.html?lang=en#section-3)
+6. [The Moon: Distinguish Phase, Position, and Visibility](project-guide.en.html?lang=en#section-4)
+7. [Looking Up: Build an Observer’s Sense of Direction](project-guide.en.html?lang=en#section-5)
+8. [Shadows and Sundials: Direction, Length, and Timekeeping](project-guide.en.html?lang=en#section-6)
+9. [The Analemma: Treat the Definition of Time as a Condition](project-guide.en.html?lang=en#section-7)
+10. [The 3D Solar System: Add Spatial Context While Preserving Geographic Readouts](project-guide.en.html?lang=en#section-12)
+11. [Geographic Data and Calculation Sources](project-guide.en.html?lang=en#section-8)
+12. [Model Scope and Verification Findings](project-guide.en.html?lang=en#section-9)
+13. [What Each of the Three Documents Addresses](project-guide.en.html?lang=en#section-10)
+14. [Open Source, Resources, and Feedback](project-guide.en.html?lang=en#section-11)
 
-Updated October 13, 2026. Checked against the production bilingual interface, current features and local model data. The original astronomical engine and model data remain unchanged.
+This introduction covers teaching uses, capabilities, data sources and model scope. The learning guide provides operating steps; the development guide covers code and maintenance.
 
 ## Why This Project Was Developed
 
@@ -26,9 +27,7 @@ Why does the Sun’s position change with the seasons? How are lunar phases rela
 
 The project is intended for geography classroom demonstrations, students’ independent investigations, and sky enthusiasts. Each observation should have a clear question, fixed conditions, a variable to change, and results to record: predict first, adjust the conditions, then check another diagram or readout, rather than simply watching an animation.
 
-This introduction explains why the project is useful and what it can help you understand.[Learning Guide](guide.en.html?lang=en) provides complete observation steps;[Development Guide](development-guide.en.html?lang=en) records the current technical implementation, maintenance, and publishing process. Updated October 11, 2026.
-
-## The Project’s Main Strengths
+This introduction explains why the project is useful and what it can help you understand.[Learning Guide](guide.en.html?lang=en) provides complete observation steps;[Development Guide](development-guide.en.html?lang=en) records the current technical implementation, maintenance, and publishing process. ## The Project’s Main Strengths
 
 - **Make controlled-variable investigations practical:**Adjust date, time, latitude, and longitude separately. The Sun and Moon retain their own settings, and comparisons within a day are kept separate from comparisons across dates. The analemma’s idealized cause experiment is independent of the actual ephemeris.
 - **Cross-check the same conditions across several diagrams:**The altitude curve, rise and set azimuths, Earth’s day and night, and Earth-axis relationships share observation conditions. The four-diagram comparison helps place an individual geographic question within the larger set of relationships.
@@ -40,6 +39,14 @@ This introduction explains why the project is useful and what it can help you un
 
 The website calculates locally in the browser. Its core libraries and resources are distributed with the static pages, with no required account, database, or live ephemeris service. It can be opened in a modern browser or previewed through a local static server; offline installation is not currently available.
 
+## Customization: add, compare and save
+
+Enter customization beside the language button to add cities, times and reference marks to the original plots, or place rods, spheres, circles and planes on the experiment ground. Original observation controls continue to set the baseline; comparison objects retain their own locations or times.
+
+Cities remain linked across the relevant sky, altitude, rise/set bearing and horizon diagrams. Choose one shared UTC instant or the same local apparent solar time to distinguish a real simultaneous observation from equal local solar-clock readings. The learning guide explains how to add, edit and save objects.
+
+[ Read the customization instructions](guide.en.html#customization)
+
 ## Across Devices: Both Diagrams and Controls Must Remain Usable
 
 At widths above 760 pixels, the parameter sidebar is visible by default, with the diagram and time controls alongside it. Tablets are not forced into a drawer layout simply because they have a touchscreen. The sidebar scrolls independently and can be collapsed to enlarge the scene. At 760 pixels or below, a sliding side menu holds the parameters, while the diagram and timeline remain in the main view. Immersive 3D mode also places detailed parameters in a drawer.
@@ -49,6 +56,14 @@ Similar controls share alignment, corner radii, spacing, and selection feedback.
 The timeline supports dragging, direct input, and small adjustments. Mouse, touch, and supported keyboard operations each have an entry point. Menus and selection controls use restrained spring-like feedback; when the operating system’s reduced-motion preference is enabled, they switch directly. Animation communicates interaction feedback only, while scientific readouts update immediately.
 
 These are layout and interaction goals, not a guarantee of smooth performance on every device. Current layout checks primarily use Chromium automation; Safari, Firefox, and different GPUs still require testing on actual devices.
+
+### Arrange your diagram layout
+
+My workspace in the Sun’s Linked Diagrams supports one to four views, side-by-side or stacked arrangements, and a three-view layout with one main diagram. Choosing a diagram already on screen swaps positions. Drag a grip to reorder or a divider to resize after release. Focus a diagram for a closer look and press Esc to return. Undo and redo layout changes, and save up to five named combinations. Phones use tabs; reorder them in Layout & saved views. Saved combinations contain only the layout, preserving dates, location and scientific parameters. Standard view restores the original arrangement.
+
+In Layout & saved views, choose a diagram to add, make a diagram the main view, or equalize proportions. All these changes can be undone.
+
+Saved layouts support renaming, updating from the current workspace, and undoing changes. A Current layout marker identifies matching arrangements. On desktop, enter column or row proportions from 30% to 70%; the canvas updates only after committing the value.
 
 ## The Sun: Compare a Day, a Year, and Different Latitudes
 
@@ -116,7 +131,7 @@ Rise and set are calculated when the geometric center of a body crosses the 0° 
 
 Distances between planets in 3D are compressed, while sphere and satellite-point sizes are scaled separately for display. Ground-level shadow paths and the unit celestial sphere also use different scales. The Moon’s texture is an appearance illustration, without actual lunar surface orientation, libration, or solar and lunar eclipse occlusion. Nebulae and faint-star backgrounds do not represent real observational limits.
 
-On October 11, 2026, six sets of repository model regressions were rerun, covering planetary and lunar vectors, Earth’s orientation, the stellar catalog, satellite and small-body orbits, local sky positions, and historical paths. All passed internal-consistency and input-boundary assertions. Control checks on the same day covered nine pages at four widths and verified first-opening height, click behavior, and keyboard behavior. These checks are not certification of independently measured accuracy or compatibility with every device.
+Automated checks cover model consistency, input boundaries and common interactions, including menus, pointer actions and keyboard behavior at different screen widths. They help detect features broken by a change; they do not certify independent observational accuracy or every device.
 
 Earlier comparisons with the Meeus/NOAA approximate solar formulas and USNO lunar-phase data are historical sample records; not all have been converted into reproducible scripts. Their differences are not extended into an accuracy guarantee for every date. Reproducible commands, historical evidence, and remaining checks are collected in [the verification section of the Development Guide](development-guide.en.html?lang=en#section-20)。
 
@@ -142,42 +157,3 @@ The original application code is licensed under [GNU AGPLv3](LICENSE)(AGPL-3.0-o
 Interaction references include [Helios](https://github.com/joaopedroalbq/helios)、[Analemma](https://github.com/benlansdell/analemma) and [RotatingSky](https://github.com/OpenLyceum/RotatingSky); citing an interaction reference does not mean adopting all of its calculation models. The NOAA link here points to its publicly available algorithm description.
 
 The production site is [Cloudflare Pages](https://skymotion-5md.pages.dev/), with an identical-content mirror at [GitHub Pages](https://qingzhuernest.github.io/skymotion/); pushes to main trigger publication to both. Teaching questions, feature suggestions, and bugs can be reported through [Contact the Author](contact.en.html?lang=en) or [GitHub Issue](https://github.com/qingzhuernest/skymotion/issues). Please include the module, location, date, time, reproduction steps, and browser information.
-
-## Review follow-up: history recovery, generated-page freshness and language retry
-
-Browser-history snapshots use the same date, range and choice validation as session data. Failed or incompatible snapshots fall back to the current valid state. A generation-aware finally releases the restoration lock so one failure cannot block subsequent undo. Camera state retains the original history boundaries.
-
-Bilingual tests check both structure and generated-output freshness. python3 scripts/prerender-pages.py --check compares English HTML, language-data.js and the preload manifest without writing files. Forgetting to regenerate after source, dictionary or asset changes fails CI. Run the normal generator and synchronize document downloads before checking again.
-
-If the target font or language resources fail during a language switch, a visible white status notice offers a retry for the requested language. Successful retry preserves dates, location and experiment parameters and removes the notice. Failure does not silently change fonts or reset the experiment. The current deployment gate includes all root-level regression scripts.
-
-## October 14, 2026: Session Recovery and Release Gates
-
-Invalid dates, out-of-range numbers, wrong field types and unknown choices in a cached session fall back to their respective defaults. Valid observation settings remain unchanged. Unversioned legacy sessions remain readable and subsequent saves use schemaVersion 1. If browser storage is blocked or its quota is exceeded, a memory snapshot supports the current page; it cannot guarantee persistence after closing the page or navigating elsewhere.
-
-Laboratory and 3D pages read experiment sessions through experiment-storage.js. Each laboratory field is validated, including coordinates, time, date, view, scale and idealized parameters. Restored experiments remain paused, and solar declination is recomputed from the date in ephemeris mode. Unknown session versions are not applied. This change does not alter astronomical formulas, scientific readings or colors.
-
-Both production deployment workflows depend on the shared validate.yml workflow. It installs a pinned Playwright version and Chromium and runs all root-level .cjs scripts at the tests root, covering models, history, controls, fonts, bilingual structure, corrupted-session recovery and packaging. Any failed test blocks that workflow’s deployment. Test tools are used only for maintenance and CI; they are not shipped with the website and do not change its buildless runtime.
-
-## Production release notes — October 13, 2026
-
-This release unifies light control surfaces, serif typography and supporting actions, and provides 24 static Chinese and English pages. Language switching preserves experiment state. Spring menu transitions respect reduced-motion preferences. The calendar supports month/year selection, leap years, confirm and cancel. Original astronomy calculations, ephemerides, model data and scientific limitations remain unchanged.
-
-Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.
-
-Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.
-
-## Custom layout
-
-My workspace in the Sun’s Linked Diagrams supports one to four views, side-by-side or stacked arrangements, and a three-view layout with one main diagram. Choosing a diagram already on screen swaps positions. Drag a grip to reorder or a divider to resize after release. Focus a diagram for a closer look and press Esc to return. Undo and redo layout changes, and save up to five named combinations. Phones use tabs; reorder them in Layout & saved views. Saved combinations contain only the layout, preserving dates, location and scientific parameters. Standard view restores the original arrangement.
-
-In Layout & saved views, choose a diagram to add, make a diagram the main view, or equalize proportions. All these changes can be undone.
-
-Saved layouts support renaming, updating from the current workspace, and undoing changes. A Current layout marker identifies matching arrangements. On desktop, enter column or row proportions from 30% to 70%; the canvas updates only after committing the value.
-
-
-## Unified object workbench and compatibility
-
-Customization preserves the baseline location, date, time and view. Cities and times use the existing shared references, identified by source and object ID. Existing save formats remain valid; objects are not copied and astronomical formulae do not change.
-
-New controls retain the site typography, colors and radii. Light sidebars and dark plot actions stay consistent with their regions. Adding, selecting, editing, saving and returning to the original plot are checked on desktop, tablet and phone sizes; Chromium checks do not replace Safari device testing.

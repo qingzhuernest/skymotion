@@ -23,14 +23,15 @@ For developers and maintainers: source-code responsibilities, state and time con
 17. [17. Complete Updates and Animation Scheduling](development-guide.en.html?lang=en#section-16)
 18. [18. Routing, Links, and Browser History](development-guide.en.html?lang=en#section-17)
 19. [19. Layout and Interaction Principles Across Devices](development-guide.en.html?lang=en#section-18)
-20. [20. Shared Controls and First-Opening Animations](development-guide.en.html?lang=en#shared-controls)
-21. [21. Current Initialization and Generation Methods](development-guide.en.html?lang=en#section-19)
-22. [22. Testing and Acceptance Logic](development-guide.en.html?lang=en#section-20)
-23. [23. Packaging and Publishing to Both Sites](development-guide.en.html?lang=en#section-21)
-24. [24. Resolved Issues and Ongoing Maintenance Boundaries](development-guide.en.html?lang=en#section-22)
-25. [25. Standard Workflow for Adding Features](development-guide.en.html?lang=en#section-23)
+20. [Unified object workbench and compatibility](development-guide.en.html#customization-workflow)
+21. [20. Shared Controls and First-Opening Animations](development-guide.en.html?lang=en#shared-controls)
+22. [21. Current Initialization and Generation Methods](development-guide.en.html?lang=en#section-19)
+23. [22. Testing and Acceptance Logic](development-guide.en.html?lang=en#section-20)
+24. [23. Packaging and Publishing to Both Sites](development-guide.en.html?lang=en#section-21)
+25. [24. Resolved Issues and Ongoing Maintenance Boundaries](development-guide.en.html?lang=en#section-22)
+26. [25. Standard Workflow for Adding Features](development-guide.en.html?lang=en#section-23)
 
-Updated October 13, 2026. The production release uses the reviewed bilingual interface. Comparison with original main commit 4390ab1 confirms that the astronomy engine and core model data are unchanged. Historical checks retain their original dates; new release checks appear at the end of this guide.
+This guide organizes source code, state, models, rendering, testing and deployment by responsibility. Keep the relevant chapters, bilingual pages and Markdown downloads aligned when maintaining a feature.
 
 This document supports continued development and maintenance. Start with the files and data flow, then consult the relevant model, state, and rendering sections. Implementation details are organized by responsibility. For student instructions, see [Learning Guide](guide.en.html?lang=en); for the development purpose and strengths, see [Project Overview](project-guide.en.html?lang=en)。
 
@@ -149,6 +150,12 @@ There is one deliberate exception: when the Moon is overlaid in the Sun interfac
 The standalone sundial and analemma pages use copies of the Sun state and write the relevant fields back to it when saving. The analemma’s daily observation time is stored by `analemmaClock` to avoid confusion with the main lab’s within-day time.
 
 The session uses `sessionStorage` in `skyLabSession` for storage. It is not a server account or permanent synchronization. State is saved when following page links and leaving a page. Restoring a session does not automatically resume playback.
+
+### Validate and restore experiment state
+
+Invalid dates, out-of-range numbers, wrong field types and unknown choices in a cached session fall back to their respective defaults. Valid observation settings remain unchanged. Unversioned legacy sessions remain readable and subsequent saves use schemaVersion 1. If browser storage is blocked or its quota is exceeded, a memory snapshot supports the current page; it cannot guarantee persistence after closing the page or navigating elsewhere.
+
+Laboratory and 3D pages read experiment sessions through experiment-storage.js. Each laboratory field is validated, including coordinates, time, date, view, scale and idealized parameters. Restored experiments remain paused, and solar declination is recomputed from the date in ephemeris mode. Unknown session versions are not applied. This change does not alter astronomical formulas, scientific readings or colors.
 
 ## 7. Time Standards and Date Handling
 
@@ -403,6 +410,10 @@ Acceptance checks must go beyond an address change: verify that the correct canv
 
 `interaction-history.js` Centrally organizes intentional user switches, selections, and parameter adjustments;`lab-history.js` reads and writes the existing state of normal experiments, while `space/history.js` connects the internal adapter on the 3D page. Snapshots are stored in history.state.skyMotionInteraction and include version, page path, scientific state, and form values. The current history entry is frozen before a click, and pushState is called after the operation. Slider adjustments enter history when finished; rapid consecutive typing is grouped into one entry. The first input creates an entry immediately, and subsequent input in the same field within 650 milliseconds updates it with replaceState, preventing a just-entered change from being missed on immediate back navigation. Menu expansion, collapse, scrolling, and camera dragging create no history entries. Canvas gestures exceeding 8 px that change time, date, or observing location still count as parameter adjustments; gestures changing only the view update the current entry. Light taps on the canvas may still record a selection. Restoration first ends any unfinished finite control animation, then writes state and calls the existing renderer, pausing playback. Restoration creates no new entries. Diagram tabs give their hash to the same history transaction, preventing a single switch from creating two entries. Cross-page navigation continues using native links. Returning to or refreshing a page with a snapshot restores that entry rather than adding a false back step. Branching after browser back/forward follows native behavior. Embedded 3D frames create no independent history; body and camera-preset selections are delegated to the parent page, which also owns the comparison switch and scientific clock. Per-frame playback, menus, and camera dragging are not recorded. After 3D restoration, object titles and active tabs synchronize so the interface does not show an old view while the graphic is correct.
 
+### Browser-history restoration boundaries
+
+Browser-history snapshots use the same date, range and choice validation as session data. Failed or incompatible snapshots fall back to the current valid state. A generation-aware finally releases the restoration lock so one failure cannot block subsequent undo. Camera state retains the original history boundaries.
+
 ## 19. Layout and Interaction Principles Across Devices
 
 Layout is determined by actual available width: above 760 pixels, the left parameter rail is shown by default; at 760 pixels or below, a native dialog drawer is used. Touch capability alone does not hide the rail. The graphic and timeline occupy separate grid areas, with internal scrolling in the parameter region so floating controls do not cover the canvas. Standalone 3D follows the same partitioning; immersive layout uses a drawer.
@@ -412,6 +423,12 @@ page-navigation.js and space/ui.js move the same parameter nodes without duplica
 On wide screens, the collapse control for normal experiments and the 3D page sits at the top of the rail. Phones and immersive mode use the heading’s “Parameters” button. Dialogs support keyboard and outside-click dismissal. The trajectory explanation omits a close cross while retaining Esc and overlay dismissal. Short screens compress supplementary text while preserving essential date, time, and exit controls.
 
 CSS controls display geometry and colors; JavaScript controls scientific state, availability, and events. Changing menu hierarchy should move original nodes while preserving IDs, label/input associations, disabled and hidden states, and existing listeners. Duplicating HTML must not create a second set of state.
+
+### Unified object workbench and compatibility
+
+Customization preserves the baseline location, date, time and view. Cities and times use the existing shared references, identified by source and object ID. Existing save formats remain valid; objects are not copied and astronomical formulae do not change.
+
+New controls retain the site typography, colors and radii. Light sidebars and dark plot actions stay consistent with their regions. Adding, selecting, editing, saving and returning to the original plot are checked on desktop, tablet and phone sizes; Chromium checks do not replace Safari device testing.
 
 ## 20. Shared Controls and First-Opening Animations
 
@@ -452,6 +469,12 @@ Experiment pages load basic styles and shared HTML, then define scientific, inte
 Experiment pages already exclude the welcome page and author-contact dialog during generation. The welcome page retains only star-field interaction and native navigation; contact content belongs to a standalone contact page. The complete developer documentation opens as a separate reading page through the project overview and is also available as a Markdown download. Other old experiment structures still have shared initialization dependencies; references must be checked before cleanup.
 
 The current GitHub main branch directly maintains static HTML, CSS, JavaScript, and assets at the repository root, deployable without a build. Older `sunlab/tools/build-pages.py` and similar generation scripts are kept in the historical archive branch and are not runtime prerequisites of the current formal branch. Do not run old paths and overwrite newer pages. Page and style changes should directly maintain root files while updating the three web documents and their Markdown counterparts. If template generation is reintroduced later, existing page behavior must first be incorporated into templates and acceptance checks.
+
+### Bilingual generation and failure recovery
+
+Bilingual tests check both structure and generated-output freshness. python3 scripts/prerender-pages.py --check compares English HTML, language-data.js and the preload manifest without writing files. Forgetting to regenerate after source, dictionary or asset changes fails CI. Run the normal generator and synchronize document downloads before checking again.
+
+If the target font or language resources fail during a language switch, a visible white status notice offers a retry for the requested language. Successful retry preserves dates, location and experiment parameters and removes the notice. Failure does not silently change fonts or reset the experiment.
 
 ## 22. Testing and Acceptance Logic
 
@@ -499,11 +522,11 @@ The browser executable can be specified with SKY_MOTION_CHROMIUM, and the Playwr
 
 ### Current findings and evidence limits
 
-When documentation was checked on October 11, 2026, all six space regression suites were rerun and passed. Earlier that day, layout checks for control fixes covered nine pages at widths of 1280, 960, 390, and 320 pixels, totaling 36 cases. Disclosure animation checks covered 44 first-expansion scenarios across the workbench, analemma, and related diagrams at widths of 1280 and 390 pixels. Text-label clicks, the Space key, hiding solar settings in Moon mode, and immersive controls were also checked.
+The complete check runs the scripts at the tests root, including model values, responsive layouts, first menu openings, pointer and keyboard actions, language switching, custom objects, and save/restore behavior. Checks primarily use Chromium automation; Safari, Firefox and different GPUs still require device testing.
 
 These checks use Chromium and software WebGL to validate state, geometry, and internal consistency. They do not establish actual frame rates on M5, iPad, or Safari. Further performance validation should record initial/repeated operations, long tasks, and layout/paint times, comparing real devices rather than substituting device specifications for diagnosis.
 
-Historical comparisons of Meeus/NOAA solar approximations and USNO lunar phases, trajectory clipping, and old-page checks are evidence from the samples tested at the time. Some scripts exist only in historical records and have not all been archived as reproducible tests. Their maximum differences are not reasserted as accuracy across the current full date range. See historical records in [October 10, 2026 audit record](https://github.com/qingzhuernest/skymotion/blob/main/BUG-AUDIT-2026-10-10.md)。
+Historical comparisons of Meeus/NOAA solar approximations and USNO lunar phases, trajectory clipping, and old-page checks are evidence from the samples tested at the time. Some scripts exist only in historical records and have not all been archived as reproducible tests. Their maximum differences are not reasserted as accuracy across the current full date range. See historical records in [audit evidence](https://github.com/qingzhuernest/skymotion/blob/main/BUG-AUDIT-2026-10-10.md)。
 
 ## 23. Packaging and Publishing to Both Sites
 
@@ -532,11 +555,15 @@ After publication, inspect both workflow results and verify that key live assets
 
 The project-archive branch retains historical ZIP files, generators, and audit records without triggering production deployment. Historical material describes its corresponding version only; old generators must not overwrite main.
 
+### Complete pre-release checks
+
+Both production workflows first call the shared validate.yml workflow, install pinned Playwright and Chromium versions, and discover every .cjs script at the tests root. Checks cover models, interactions, customization, fonts, bilingual pages, storage recovery and deployment paths. Any failure blocks that site’s deployment. Test tools are not included in the published website.
+
 ## 24. Resolved Issues and Ongoing Maintenance Boundaries
 
 ### Maintain the existing boundaries
 
-Existing fixes include sundial readouts and type explanations, synchronized diagram hashes and visible views, analemma touch interaction, duplicate workbench drawing, recovery from invalid locations, protection for zero-sized welcome canvases, and consistent keyboard pitch controls. On October 11, 2026, further fixes addressed conflicting disclosure-height animations, quick content updating after measurement, and alignment, spacing, and hierarchy of switches and diagram entries. Detailed mechanisms are documented in the shared-controls, scheduling, and routing sections.
+Existing fixes include sundial readouts and type explanations, synchronized diagram hashes and visible views, analemma touch interaction, duplicate workbench drawing, recovery from invalid locations, protection for zero-sized welcome canvases, and consistent keyboard pitch controls. further fixes addressed conflicting disclosure-height animations, quick content updating after measurement, and alignment, spacing, and hierarchy of switches and diagram entries. Detailed mechanisms are documented in the shared-controls, scheduling, and routing sections.
 
 Performance and interaction checks are still needed on real Safari, Firefox, and different GPUs. Some legacy DOM dependencies and temporary scientific comparisons also need further organization. Unfinished scope must not be described as “the entire site has no bugs” or “all scientific calculations are completely correct.”
 
@@ -557,34 +584,3 @@ Astronomy Engine and local Three.js retain their MIT licenses. The HYG subset is
 3. **Connect state and interaction:**Update session persistence, history restoration, availability, and pause logic. Retain a single control node, native input semantics, and reversible parameter gestures.
 4. **Validate before refining visuals:**Start with model-boundary and state assertions, then check first interactions, rapid reversals, different widths, reduced motion, and real touch input. Control animation must not delay scientific readouts.
 5. **Synchronize documentation and publication by role:**Update task steps in the learning guide, purpose and capabilities in the project overview, and files, calculations, and validation in the developer notes. Synchronize Markdown and README, check documentation anchors, copyright, and the publication package, then inspect deployment and assets on both sites after committing to main.
-
-## Review follow-up: history recovery, generated-page freshness and language retry
-
-Browser-history snapshots use the same date, range and choice validation as session data. Failed or incompatible snapshots fall back to the current valid state. A generation-aware finally releases the restoration lock so one failure cannot block subsequent undo. Camera state retains the original history boundaries.
-
-Bilingual tests check both structure and generated-output freshness. python3 scripts/prerender-pages.py --check compares English HTML, language-data.js and the preload manifest without writing files. Forgetting to regenerate after source, dictionary or asset changes fails CI. Run the normal generator and synchronize document downloads before checking again.
-
-If the target font or language resources fail during a language switch, a visible white status notice offers a retry for the requested language. Successful retry preserves dates, location and experiment parameters and removes the notice. Failure does not silently change fonts or reset the experiment. The current deployment gate includes all root-level regression scripts.
-
-## October 14, 2026: Session Recovery and Release Gates
-
-Invalid dates, out-of-range numbers, wrong field types and unknown choices in a cached session fall back to their respective defaults. Valid observation settings remain unchanged. Unversioned legacy sessions remain readable and subsequent saves use schemaVersion 1. If browser storage is blocked or its quota is exceeded, a memory snapshot supports the current page; it cannot guarantee persistence after closing the page or navigating elsewhere.
-
-Laboratory and 3D pages read experiment sessions through experiment-storage.js. Each laboratory field is validated, including coordinates, time, date, view, scale and idealized parameters. Restored experiments remain paused, and solar declination is recomputed from the date in ephemeris mode. Unknown session versions are not applied. This change does not alter astronomical formulas, scientific readings or colors.
-
-Both production deployment workflows depend on the shared validate.yml workflow. It installs a pinned Playwright version and Chromium and runs all root-level .cjs scripts at the tests root, covering models, history, controls, fonts, bilingual structure, corrupted-session recovery and packaging. Any failed test blocks that workflow’s deployment. Test tools are used only for maintenance and CI; they are not shipped with the website and do not change its buildless runtime.
-
-## Production release notes — October 13, 2026
-
-This release unifies light control surfaces, serif typography and supporting actions, and provides 24 static Chinese and English pages. Language switching preserves experiment state. Spring menu transitions respect reduced-motion preferences. The calendar supports month/year selection, leap years, confirm and cancel. Original astronomy calculations, ephemerides, model data and scientific limitations remain unchanged.
-
-Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.
-
-Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.
-
-
-## Unified object workbench and compatibility
-
-Customization preserves the baseline location, date, time and view. Cities and times use the existing shared references, identified by source and object ID. Existing save formats remain valid; objects are not copied and astronomical formulae do not change.
-
-New controls retain the site typography, colors and radii. Light sidebars and dark plot actions stay consistent with their regions. Adding, selecting, editing, saving and returning to the original plot are checked on desktop, tablet and phone sizes; Chromium checks do not replace Safari device testing.

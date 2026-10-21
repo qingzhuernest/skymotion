@@ -17,7 +17,7 @@ Follow the entry points, operating steps, controlled variables and recording met
 11. [3D Solar System tasks: distinguish spatial motion from apparent motion in the sky](guide.en.html?lang=en#space)
 12. [When an operation does not work as expected](guide.en.html?lang=en#help)
 
-Updated October 21, 2026. The production release uses a unified interface, Chinese and English pages, and locally hosted fonts. These instructions describe the current release. See Project Overview for model foundations and Development Guide for implementation and verification limits.
+This guide follows observation tasks: set the conditions, add comparisons, read the results and save the experiment. The project introduction explains model sources; the development guide explains implementation and verification.
 
 The production version supports Chinese and English. The top navigation language button switches menus, reading explanations, diagram annotations and documents without changing location, date, time or experiment settings. This browser remembers your language preference; English mode provides complete English Markdown downloads. The calendar applies a date only when confirmed; cancelling leaves the experiment unchanged.
 
@@ -97,6 +97,48 @@ The main time bar uses local apparent solar time. Sundials and analemmas also pr
 **Local apparent solar time:**Follows the local solar hour angle and is useful for comparing solar positions during a day.**Clock time with a fixed UTC offset:**Used for sundial and analemma comparisons. Enter the offset; the project does not automatically apply regional daylight-saving time.**UTC：**The common instant used by the independent 3D page; it does not change with the observation location.
 
 Setting 12:00 apparent solar time at two different longitudes compares their respective local noons, usually not the same physical instant. For 3D comparisons, use the UTC synchronized by the system rather than manually giving both displays the same numbers.
+
+### If language switching fails
+
+If language switching fails, use Retry in the page notice. Retrying preserves the location, date, time and experiment settings. If it still fails, report your browser and the steps you followed.
+
+## Customization: add, compare and save
+
+### Enter and finish customization
+
+Choose Customize beside the language button. The main navigation and original location/time controls remain available. Observation controls adjusts the baseline experiment; Plot objects adds and edits references. Finish customizing closes the tools while keeping the session draft.
+
+### Example 1: compare cities at one time
+
+In the solar Lab, enter customization, choose Add object, select a comparison city such as London, then choose Observer / city. Its comparison appears in the original sky without changing the baseline location.
+
+Select a city to edit its name and coordinates. One shared UTC instant compares the same real moment across places. The same local apparent solar time compares the same solar-clock reading at each place; these are different experiments.
+
+Added cities appear in the linked sky, altitude, rise/set bearing and horizon diagrams. The same city remains editable from Related Diagrams. Identical locations can produce overlapping curves. Only Use as baseline location changes the original observer.
+
+### Example 2: pin different times at one place
+
+Keep the location and date fixed. Choose Add object, then Time marker. Tap the plot as prompted, or choose Place at the center, and enter 09:00 in its properties. Add another marker at 15:00 to compare the Sun at two times.
+
+Time markers use local apparent solar time at the baseline location and accept 00:00–24:00. Adding a marker does not change the active time on the bottom timeline. Date comparison curves likewise leave the global date unchanged.
+
+### Example 3: place a rod and observe its shadow
+
+Under Add object, choose Rod in Experiment objects. This opens the experiment ground. Tap the ground or choose Place at the center. Select the rod to adjust its height, position or tilt; the original date and time controls continue to determine the light.
+
+Drag an object base to move it, drag empty ground to orbit, and use the wheel to zoom. There is no Observe/Build mode switch. Circles, planes and dials are references; mutual object occlusion is not simulated.
+
+In Lab, choose an original view button such as Spatial view to return to the sky. Ground objects remain available and are marked Experiment ground in the object list. Lunar mode also supports ground objects, but omits solar-only city comparisons.
+
+### Select, save and restore
+
+Select an object name to view its properties. Movable objects have handles; drag a handle to adjust it. Empty space retains the original camera gestures. Locked objects can be selected but cannot be dragged. Escape cancels placement or a drag.
+
+The row-end More menu contains Save plot objects, Duplicate and Delete. Undo/redo acts on the source plot being edited. Property changes apply immediately. Saving persists that source plot on this device; Save scene on the experiment ground separately saves its physical objects.
+
+Plans can save, export or import the current plot references. Imports offer merge or replace; clearing is undoable. Download JSON for backup: local saves do not automatically sync across browsers or devices. On phones, use Back to object list from properties; Add object stays available above.
+
+Other tools: altitude plots support date comparisons, reference levels and two-point time/altitude differences. Phase diagrams can capture dated snapshots; planet–Moon diagrams support angular separations and trails. The ground also supports spheres, circles, planes, dials, stations, points and text. Select several objects for Arrange selected objects or Measure and record. Reference A freezes its creation conditions; B follows the current parameters.
 
 ## Classroom and independent-learning routes
 
@@ -366,66 +408,3 @@ The main 3D view illustrates spatial relationships; Local Sky supplies altitude 
 Use the same record when reporting a problem, adding device, browser, click/drag sequence and screenshots. Describe model questions separately from interaction failures so they can be reproduced and checked.
 
 [Enter the Lab](lab.en.html?lang=en) · [Contact the Author](contact.en.html?lang=en)
-
-## Review follow-up: history recovery, generated-page freshness and language retry
-
-Browser-history snapshots use the same date, range and choice validation as session data. Failed or incompatible snapshots fall back to the current valid state. A generation-aware finally releases the restoration lock so one failure cannot block subsequent undo. Camera state retains the original history boundaries.
-
-Bilingual tests check both structure and generated-output freshness. python3 scripts/prerender-pages.py --check compares English HTML, language-data.js and the preload manifest without writing files. Forgetting to regenerate after source, dictionary or asset changes fails CI. Run the normal generator and synchronize document downloads before checking again.
-
-If the target font or language resources fail during a language switch, a visible white status notice offers a retry for the requested language. Successful retry preserves dates, location and experiment parameters and removes the notice. Failure does not silently change fonts or reset the experiment. The current deployment gate includes all root-level regression scripts.
-
-## October 14, 2026: Session Recovery and Release Gates
-
-Invalid dates, out-of-range numbers, wrong field types and unknown choices in a cached session fall back to their respective defaults. Valid observation settings remain unchanged. Unversioned legacy sessions remain readable and subsequent saves use schemaVersion 1. If browser storage is blocked or its quota is exceeded, a memory snapshot supports the current page; it cannot guarantee persistence after closing the page or navigating elsewhere.
-
-Laboratory and 3D pages read experiment sessions through experiment-storage.js. Each laboratory field is validated, including coordinates, time, date, view, scale and idealized parameters. Restored experiments remain paused, and solar declination is recomputed from the date in ephemeris mode. Unknown session versions are not applied. This change does not alter astronomical formulas, scientific readings or colors.
-
-Both production deployment workflows depend on the shared validate.yml workflow. It installs a pinned Playwright version and Chromium and runs all root-level .cjs scripts at the tests root, covering models, history, controls, fonts, bilingual structure, corrupted-session recovery and packaging. Any failed test blocks that workflow’s deployment. Test tools are used only for maintenance and CI; they are not shipped with the website and do not change its buildless runtime.
-
-## Production release notes — October 13, 2026
-
-This release unifies light control surfaces, serif typography and supporting actions, and provides 24 static Chinese and English pages. Language switching preserves experiment state. Spring menu transitions respect reduced-motion preferences. The calendar supports month/year selection, leap years, confirm and cancel. Original astronomy calculations, ephemerides, model data and scientific limitations remain unchanged.
-
-Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.
-
-Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.
-
-
-## Customization: add, compare and save
-
-### Enter and finish customization
-
-Choose Customize beside the language button. The main navigation and original location/time controls remain available. Observation controls adjusts the baseline experiment; Plot objects adds and edits references. Finish customizing closes the tools while keeping the session draft.
-
-### Example 1: compare cities at one time
-
-In the solar Lab, enter customization, choose Add object, select a comparison city such as London, then choose Observer / city. Its comparison appears in the original sky without changing the baseline location.
-
-Select a city to edit its name and coordinates. One shared UTC instant compares the same real moment across places. The same local apparent solar time compares the same solar-clock reading at each place; these are different experiments.
-
-Added cities appear in the linked sky, altitude, rise/set bearing and horizon diagrams. The same city remains editable from Related Diagrams. Identical locations can produce overlapping curves. Only Use as baseline location changes the original observer.
-
-### Example 2: pin different times at one place
-
-Keep the location and date fixed. Choose Add object, then Time marker. Tap the plot as prompted, or choose Place at the center, and enter 09:00 in its properties. Add another marker at 15:00 to compare the Sun at two times.
-
-Time markers use local apparent solar time at the baseline location and accept 00:00–24:00. Adding a marker does not change the active time on the bottom timeline. Date comparison curves likewise leave the global date unchanged.
-
-### Example 3: place a rod and observe its shadow
-
-Under Add object, choose Rod in Experiment objects. This opens the experiment ground. Tap the ground or choose Place at the center. Select the rod to adjust its height, position or tilt; the original date and time controls continue to determine the light.
-
-Drag an object base to move it, drag empty ground to orbit, and use the wheel to zoom. There is no Observe/Build mode switch. Circles, planes and dials are references; mutual object occlusion is not simulated.
-
-In Lab, choose an original view button such as Spatial view to return to the sky. Ground objects remain available and are marked Experiment ground in the object list. Lunar mode also supports ground objects, but omits solar-only city comparisons.
-
-### Select, save and restore
-
-Select an object name to view its properties. Movable objects have handles; drag a handle to adjust it. Empty space retains the original camera gestures. Locked objects can be selected but cannot be dragged. Escape cancels placement or a drag.
-
-The row-end More menu contains Save plot objects, Duplicate and Delete. Undo/redo acts on the source plot being edited. Property changes apply immediately. Saving persists that source plot on this device; Save scene on the experiment ground separately saves its physical objects.
-
-Plans can save, export or import the current plot references. Imports offer merge or replace; clearing is undoable. Download JSON for backup: local saves do not automatically sync across browsers or devices. On phones, use Back to object list from properties; Add object stays available above.
-
-Other tools: altitude plots support date comparisons, reference levels and two-point time/altitude differences. Phase diagrams can capture dated snapshots; planet–Moon diagrams support angular separations and trails. The ground also supports spheres, circles, planes, dials, stations, points and text. Select several objects for Arrange selected objects or Measure and record. Reference A freezes its creation conditions; B follows the current parameters.
