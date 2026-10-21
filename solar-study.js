@@ -76,7 +76,7 @@
   const tableWrap=el('div','solar-study-readings',panel),table=el('table','',tableWrap),tableCaption=el('caption','',table);tableCaption.dataset.word='summary';
   const thead=el('thead','',table),tr=el('tr','',thead);for(const key of ['sample','solar','alt','az']){const th=el('th','',tr);th.scope='col';th.dataset.word=key;}
   const tbody=el('tbody','',table),rows=Array.from({length:3},()=>{const row=el('tr','',tbody);return Array.from({length:4},(_,i)=>{const n=el(i?'td':'th','',row);if(!i)n.scope='row';return n;});});
-  caption('legend',rail);caption('model',rail);
+  const footer=caption('legend',rail);caption('model',rail);
   const grip=uiWorkspace.rail.querySelector('.motion-menu-grip');if(grip)grip.after(rail);else uiWorkspace.rail.prepend(rail);uiWorkspace.details.push(rail);uiWorkspace.nodes.push(panel);
   function project(p){return{x:240+p.x*172,y:255-p.y*172-p.z*45};}
   function path(points){return points.map((p,i)=>`${i?'L':'M'}${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(' ');}
