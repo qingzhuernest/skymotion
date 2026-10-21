@@ -236,7 +236,7 @@ input[type='range']::-webkit-slider-thumb {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #d1dbe4;
+  background: var(--design-inset);
   position: absolute;
   top: 3px;
   left: 3px;
@@ -385,13 +385,13 @@ h2 {
   background: #ff906b;
 }
 .winter-dot {
-  background: #80b9f3;
+  background: var(--design-inset);
 }
 .equinox-dot {
   background: #79d4bf;
 }
 .observer-dot {
-  background: #7acafa;
+  background: var(--design-inset);
 }
 .view-reset {
   position: absolute;
@@ -809,7 +809,7 @@ body {
   color: var(--text);
 }
 header {
-  background: #f5f7fc;
+  background: var(--design-surface);
   border-bottom: 0;
 }
 .brand-mark {
@@ -822,17 +822,17 @@ button,
 select,
 input[type='date'],
 input[type='number'] {
-  background: #edf1f9;
+  background: var(--design-surface);
   color: #273e61;
-  border-color: #d1d9e8;
+  border-color: var(--design-line);
   border-radius: 12px;
 }
 button {
   font-weight: 500;
 }
 button:hover {
-  background: #dce6f7;
-  border-color: #9bb4db;
+  background: var(--design-inset);
+  border-color: var(--design-line);
 }
 .quiet {
   border-radius: 30px;
@@ -841,7 +841,7 @@ button:hover {
   color: #315da8;
 }
 .controls {
-  background: #edf1f9;
+  background: var(--design-surface);
   border: 0;
   border-radius: 24px;
 }
@@ -852,7 +852,7 @@ button:hover {
   color: #eaf0f5;
 }
 .view-tabs {
-  background: #e2e8f3;
+  background: var(--design-inset);
   border: 0;
   border-radius: 24px;
   padding: 4px;
@@ -862,7 +862,7 @@ button:hover {
   color: #4c5c72;
 }
 .view-tabs .active {
-  background: #c7daf7;
+  background: var(--design-inset);
   color: #16366a;
 }
 .timeline {
@@ -877,7 +877,7 @@ button:hover {
   box-shadow: 0 1px 4px #142b4714;
 }
 .metrics article:first-child {
-  background: #dce8fb;
+  background: var(--design-surface);
 }
 .metrics strong {
   color: #243c63;
@@ -888,12 +888,12 @@ button:hover {
 .selected {
   color: #184586 !important;
   border-color: transparent !important;
-  background: #cadcf8 !important;
+  background: var(--design-inset) !important;
 }
 .season-buttons button {
   border-radius: 20px;
   border-color: transparent;
-  background: #e0e7f2;
+  background: var(--design-inset);
 }
 .controls select,
 .controls input[type='date'] {
@@ -904,7 +904,7 @@ button:hover {
   color: #315da8;
 }
 input[type='range'] {
-  background: #c2cfe2;
+  background: var(--design-inset);
   accent-color: #315da8;
 }
 input[type='range']::-webkit-slider-thumb {
@@ -926,7 +926,7 @@ input[type='range']::-webkit-slider-thumb {
   color: white;
 }
 .toggle-row input {
-  background: #b7c2d2;
+  background: var(--design-inset);
   border: 1px solid #76879e;
   height: 23px;
   width: 39px;
@@ -947,7 +947,7 @@ input[type='range']::-webkit-slider-thumb {
   left: 20px;
 }
 .observer-card {
-  border-color: #cdd7e7;
+  border-color: var(--design-line);
 }
 .observer-card > span {
   color: #315da8;
@@ -962,7 +962,7 @@ input[type='range']::-webkit-slider-thumb {
   background: #314a63;
 }
 .time-shortcuts button {
-  border-color: #d7dfec;
+  border-color: var(--design-line);
   border-radius: 20px;
   color: #405777;
 }
@@ -973,7 +973,7 @@ input[type='range']::-webkit-slider-thumb {
   background: #e7a439;
 }
 .insight {
-  background: #e7edf8;
+  background: var(--design-surface);
   border-left: 0;
   border-radius: 18px;
   color: #405574;
@@ -982,10 +982,10 @@ input[type='range']::-webkit-slider-thumb {
   color: #234e95;
 }
 .divider {
-  background: #d1dae8;
+  background: var(--design-inset);
 }
 dialog {
-  background: #f8faff;
+  background: var(--design-surface);
   border: 0;
   border-radius: 28px;
   box-shadow: 0 20px 70px #0b203850;
@@ -1061,7 +1061,7 @@ canvas:focus-visible {
   font-size: 14px;
 }
 .header-end .tag {
-  background: #e4ebf7;
+  background: var(--design-surface);
   color: #365780;
   padding: 6px 12px;
   border-radius: 8px;
@@ -1099,7 +1099,7 @@ canvas:focus-visible {
 }
 .body-switch {
   display: flex;
-  border: 1px solid #8096b5;
+  border: 1px solid var(--design-line);
   border-radius: 24px;
   overflow: hidden;
   margin-bottom: 22px;
@@ -1113,7 +1113,7 @@ canvas:focus-visible {
   font-size: 15px;
 }
 .body-switch .active {
-  background: #c7daf7;
+  background: var(--design-inset);
   color: #153e7a;
 }
 .coordinate-editor {
@@ -1180,7 +1180,7 @@ canvas:focus-visible {
     margin-bottom: 12px;
     border: 0;
     color: #315da8;
-    background: #dae6fa;
+    background: var(--design-inset);
     border-radius: 24px;
     padding: 9px 18px;
   }
@@ -1238,7 +1238,7 @@ canvas:focus-visible {
   margin: 0;
   width: 230px;
   flex-shrink: 0;
-  background: #edf1f9;
+  background: var(--design-surface);
 }
 .experiment-toolbar .body-switch button {
   padding: 8px;
@@ -1259,15 +1259,15 @@ canvas:focus-visible {
   border: 0;
 }
 .date-navigation button:hover {
-  background: #dae6fa;
+  background: var(--design-inset);
 }
 body[data-body='moon'] .stage .dot.sun-dot,
 body[data-body='moon'] .chart-panel .dot.sun-dot {
-  background: #b4cff5;
+  background: var(--design-inset);
 }
 /* The paper illumination card is interface chrome, separate from the dark plot key. */
 body[data-body='moon'] .chart-panel .panel-title .legend > .dot.sun-dot {
-  background: var(--design-primary, #24576b);
+  background: var(--design-primary, #414744);
 }
 body[data-body='moon'] .stage-key {
   color: #afc6df;
@@ -1340,7 +1340,7 @@ body[data-body='moon'] .stage-key {
 }
 .model-switch {
   display: flex;
-  border: 1px solid #a7b8d1;
+  border: 1px solid var(--design-line);
   border-radius: 20px;
   overflow: hidden;
   margin-top: 16px;
@@ -1354,7 +1354,7 @@ body[data-body='moon'] .stage-key {
   padding: 7px 4px;
 }
 .model-switch .active {
-  background: #cadcf8;
+  background: var(--design-inset);
   color: #153e7a;
 }
 .stage-key {
@@ -1456,8 +1456,8 @@ body[data-body='moon'] .stage-key {
   margin: 12px 0 3px;
 }
 .month-navigation input {
-  background: #edf1f9;
-  border: 1px solid #d1d9e8;
+  background: var(--design-surface);
+  border: 1px solid var(--design-line);
   border-radius: 10px;
   padding: 6px 12px;
   color: #273e61;
@@ -1487,7 +1487,7 @@ body[data-body='moon'] .stage-key {
 }
 .lunar-timeline details {
   margin-top: 16px;
-  border-top: 1px solid #e0e6ef;
+  border-top: 1px solid var(--design-line);
   padding-top: 12px;
 }
 .lunar-timeline summary {
@@ -1542,7 +1542,7 @@ body[data-body='moon'] #sky {
   }
 }
 .solar-year-strip {
-  border-bottom: 1px solid #e0e6ef;
+  border-bottom: 1px solid var(--design-line);
   padding-bottom: 14px;
   margin-bottom: 16px;
 }
@@ -1586,7 +1586,7 @@ body[data-body='moon'] #sky {
 .context-view-switch {
   display: flex;
   gap: 4px;
-  background: #e5ebf6;
+  background: var(--design-surface);
   border-radius: 24px;
   padding: 4px;
   margin-top: 12px;
@@ -1599,7 +1599,7 @@ body[data-body='moon'] #sky {
   color: #526681;
 }
 .context-view-switch .active {
-  background: #cadcf8;
+  background: var(--design-inset);
   color: #153e7a;
 }
 .map-key {
@@ -1637,17 +1637,17 @@ body[data-body='moon'] #sky {
 }
 .event-values button {
   text-align: left;
-  border: 1px solid var(--design-line, #cdd9de);
+  border: 1px solid var(--design-line, #d7d7d2);
   background: var(--design-surface, #fff);
   border-radius: 20px;
   padding: 18px;
-  color: var(--design-primary, #24576b);
+  color: var(--design-primary, #414744);
 }
 .event-values button span,
 .event-values button small {
   display: block;
   font-size: 14px;
-  color: var(--design-muted, #536975);
+  color: var(--design-muted, #616560);
 }
 .event-values button strong {
   display: block;
@@ -1657,11 +1657,11 @@ body[data-body='moon'] #sky {
 }
 .event-values button:disabled {
   opacity: 1;
-  background: var(--design-inset, #ecf2f4);
-  color: var(--design-muted, #536975);
+  background: var(--design-inset, #efefec);
+  color: var(--design-muted, #616560);
 }
 .event-values button:not(:disabled):hover {
-  background: var(--design-paper, #f4f7f8);
+  background: var(--design-paper, #f6f6f5);
 }
 #eventCompass {
   width: 160px;
@@ -1706,19 +1706,19 @@ body[data-body='moon'] #sky {
   height: 3px;
   vertical-align: middle;
   margin-right: 7px;
-  background: #a3b6d2;
+  background: var(--design-inset);
 }
 .axis-key {
   background: #fa9c89;
 }
 .equator-key {
-  background: #a5a6f4;
+  background: var(--design-inset);
 }
 .horizon-key {
   background: #76d4bd;
 }
 .zenith-key {
-  background: #82c7ff;
+  background: var(--design-inset);
 }
 .sun-key {
   background: #ffc35a;
@@ -1795,7 +1795,7 @@ body[data-body='moon'] #sky {
   margin: 4px 0 0;
 }
 .menu-section {
-  border-top: 1px solid #d2dcec;
+  border-top: 1px solid var(--design-line);
   padding: 2px 0;
 }
 .menu-section > summary,
@@ -1847,7 +1847,7 @@ body[data-body='moon'] #sky {
   margin-top: 8px;
 }
 .menu-subsection {
-  border-left: 2px solid #c9d6e9;
+  border-left: 2px solid var(--design-line);
   padding-left: 12px;
   margin-top: 13px;
 }
@@ -1870,11 +1870,11 @@ body[data-body='moon'] #sky {
 }
 .menu-divider {
   height: 1px;
-  background: #d2dcec;
+  background: var(--design-inset);
   margin: 14px 0;
 }
 .menu-footer {
-  border-top: 1px solid #d2dcec;
+  border-top: 1px solid var(--design-line);
   padding-top: 18px;
   margin-top: 3px;
 }
@@ -1899,7 +1899,7 @@ body[data-body='moon'] #sky {
   font-size: 14px;
 }
 .study-navigation button:hover {
-  background: #dce6f7;
+  background: var(--design-inset);
 }
 .menu-section.ideal-active > summary .menu-summary {
   color: #244f99;
@@ -1946,7 +1946,7 @@ body[data-body='moon'] #sky {
   top: auto;
   bottom: 0;
   border-radius: 28px 28px 0 0;
-  background: #edf1f9;
+  background: var(--design-surface);
   overscroll-behavior: contain;
 }
 .settings-dialog .controls {
@@ -1958,7 +1958,7 @@ body[data-body='moon'] #sky {
 .settings-dialog .section-head {
   position: sticky;
   top: -20px;
-  background: #edf1f9;
+  background: var(--design-surface);
   margin: 0 -4px;
   padding: 12px 4px;
   z-index: 2;
@@ -2043,7 +2043,7 @@ body[data-body='moon'] #sky {
   }
 }
 #idealDateHint {
-  background: #dfe9f9;
+  background: var(--design-surface);
   padding: 9px 10px;
   border-radius: 10px;
   color: #365780;
@@ -2060,7 +2060,7 @@ body[data-body='moon'] #sky {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  background: #e8eef8;
+  background: var(--design-surface);
   border-radius: 16px;
   padding: 10px 16px;
   margin-bottom: 12px;
@@ -2080,7 +2080,7 @@ body[data-body='moon'] #sky {
   height: 23px;
   border: 1px solid #76879e;
   border-radius: 20px;
-  background: #b7c2d2;
+  background: var(--design-inset);
   position: relative;
   cursor: pointer;
   margin: 0;
@@ -2112,7 +2112,7 @@ body[data-body='moon'] #sky {
   text-align: right;
 }
 .moon-dot {
-  background: #b4cff5 !important;
+  background: var(--design-inset) !important;
 }
 .legend {
   display: flex;
@@ -2329,7 +2329,7 @@ body[data-body='moon'] .chart-panel {
   gap: 8px;
   margin-top: 16px;
   font-size: 14px;
-  color: var(--design-muted, #536975);
+  color: var(--design-muted, #616560);
 }
 .companion-toolbar label {
   font-size: 12px;
@@ -2344,9 +2344,9 @@ body[data-body='moon'] .chart-panel {
   margin: 0;
 }
 .companion-toolbar button {
-  color: var(--design-primary, #24576b);
+  color: var(--design-primary, #414744);
   background: var(--design-surface, #fff);
-  border: 1px solid var(--design-line, #cdd9de);
+  border: 1px solid var(--design-line, #d7d7d2);
   border-radius: var(--design-radius-control, 12px);
   white-space: normal;
   line-height: 1.5;
@@ -2356,11 +2356,11 @@ body[data-body='moon'] .chart-panel {
   gap: 3px;
   margin: 12px 0 0;
   padding-top: 12px;
-  border-top: 1px solid var(--design-line, #cdd9de);
+  border-top: 1px solid var(--design-line, #d7d7d2);
   font-size: 12px;
   line-height: 1.65;
   font-variant-numeric: tabular-nums;
-  color: var(--design-muted, #536975);
+  color: var(--design-muted, #616560);
 }
 #companionObserver p { margin: 0; }
 .companion-observer-moment {
@@ -2368,12 +2368,12 @@ body[data-body='moon'] .chart-panel {
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  color: var(--design-ink, #20323e);
+  color: var(--design-ink, #292d2b);
 }
 .companion-observer-moment > * { white-space: nowrap; }
 .companion-search-status {
   font-size: 13px;
-  color: var(--design-primary, #24576b);
+  color: var(--design-primary, #414744);
   line-height: 1.7;
   margin: 8px 0;
 }
@@ -2388,16 +2388,16 @@ body[data-body='moon'] .chart-panel {
 }
 .companion-measures > div {
   padding: 12px 16px;
-  border: 1px solid var(--design-line, #cdd9de);
+  border: 1px solid var(--design-line, #d7d7d2);
   background: var(--design-surface, #fff);
   border-radius: 16px;
-  color: var(--design-primary, #24576b);
+  color: var(--design-primary, #414744);
 }
 .companion-measures span,
 .companion-measures small {
   display: block;
   font-size: 12px;
-  color: var(--design-muted, #536975);
+  color: var(--design-muted, #616560);
 }
 .companion-measures strong {
   display: block;
@@ -2415,15 +2415,15 @@ body[data-body='moon'] .chart-panel {
 }
 .companion-visibility {
   font-size: 14px;
-  color: var(--design-muted, #536975);
+  color: var(--design-muted, #616560);
   line-height: 1.7;
   margin: 12px 0;
 }
 /* These controls also live outside .ui-parameters after diagram reparenting. */
 .companion-module .companion-toolbar button:hover:not(:disabled) {
-  background: var(--design-inset, #ecf2f4);
-  color: var(--design-hover, #174558);
-  border-color: var(--design-line, #cdd9de);
+  background: var(--design-inset, #efefec);
+  color: var(--design-hover, #303632);
+  border-color: var(--design-line, #d7d7d2);
 }
 @media (max-width: 760px) {
   .companion-measures {
@@ -2602,7 +2602,7 @@ dialog[open]::backdrop {
   min-width: 0;
   box-sizing: border-box;
   padding: 10px;
-  border: 1px solid #bdcbe0;
+  border: 1px solid var(--design-line);
   border-radius: 10px;
   background: #fff;
   color: #304968;
@@ -2621,7 +2621,7 @@ dialog[open]::backdrop {
 .analemma-results {
   font-size: 14px;
   line-height: 1.8;
-  background: #eaf0fb;
+  background: var(--design-surface);
   padding: 12px 16px;
   border-radius: 14px;
   color: #315da8;
@@ -2632,7 +2632,7 @@ dialog[open]::backdrop {
 }
 #analemmaIdealNote button {
   display: block;
-  background: #e1eafb;
+  background: var(--design-surface);
   color: #315da8;
   border: 0;
   margin-top: 10px;
@@ -3005,7 +3005,7 @@ canvas,
 .analemma-advanced button {
   border: 0;
   border-radius: 22px;
-  background: #e1eafb;
+  background: var(--design-surface);
   color: #315da8;
   min-height: 44px;
   padding: 9px 16px;
@@ -3031,7 +3031,7 @@ canvas,
 }
 .analemma-advanced {
   margin-top: 20px;
-  border-top: 1px solid #dbe3ef;
+  border-top: 1px solid var(--design-line);
   padding-top: 16px;
 }
 .analemma-advanced summary {
@@ -3085,12 +3085,12 @@ canvas,
   width: 100%;
   border: 0;
   border-radius: 22px;
-  background: #d9e6fb;
+  background: var(--design-inset);
   color: #315da8;
   min-height: 44px;
 }
 .shadow-tip-dot {
-  background: #8bdbef !important;
+  background: var(--design-inset) !important;
 }
 #shadowTraceKey[hidden],
 #shadowTraceNote[hidden] {
@@ -3138,7 +3138,7 @@ canvas,
 .sundial-toolbar button {
   border: 0;
   border-radius: 22px;
-  background: #e1eafb;
+  background: var(--design-surface);
   color: #315da8;
   min-height: 44px;
 }
@@ -3159,7 +3159,7 @@ canvas,
   grid-template-columns: 1fr 1fr;
   gap: 12px 24px;
   padding: 18px 20px;
-  background: #eaf0fb;
+  background: var(--design-surface);
   border-radius: 18px;
   margin: 18px 0;
 }
@@ -3253,7 +3253,7 @@ canvas,
 }
 .sundial-question {
   margin-top: 18px;
-  border-top: 1px solid #dde5f0;
+  border-top: 1px solid var(--design-line);
   padding-top: 14px;
 }
 .sundial-question summary {
@@ -3319,7 +3319,7 @@ canvas,
 
 .solar-date-mode-bar {
   padding: 14px 18px;
-  background: #e8eef9;
+  background: var(--design-surface);
   border-radius: 20px;
   margin: 12px 0;
 }
@@ -3366,7 +3366,7 @@ canvas,
 .solar-date-results {
   padding: 12px 14px;
   margin: 14px 0;
-  background: #eaf0fb;
+  background: var(--design-surface);
   border-radius: 14px;
   color: #315da8;
   font-size: 13px;
@@ -3380,14 +3380,14 @@ canvas,
 }
 #analemmaDateLinkNote {
   padding: 12px 14px;
-  background: #eaf0fb;
+  background: var(--design-surface);
   border-radius: 14px;
   margin: 14px 0;
 }
 #solarDateUnlink {
   border: 0;
   border-radius: 18px;
-  background: #dce6f8;
+  background: var(--design-inset);
   color: #315da8;
   padding: 6px 12px;
   margin-left: 10px;
@@ -3450,7 +3450,7 @@ canvas,
 .sundial-lab-controls {
   padding: 18px;
   border-radius: 20px;
-  background: #f0f4fc;
+  background: var(--design-surface);
   margin: 16px 0;
 }
 .sundial-view-controls {
@@ -3463,7 +3463,7 @@ canvas,
 .observer-bodies button {
   border: 0;
   border-radius: 22px;
-  background: #e1eafb;
+  background: var(--design-surface);
   color: #315da8;
   min-height: 44px;
   padding: 8px 14px;
@@ -3488,7 +3488,7 @@ canvas,
 }
 .sundial-observation input {
   padding: 9px;
-  border: 1px solid #cad7ed;
+  border: 1px solid var(--design-line);
   border-radius: 10px;
   min-height: 44px;
   background: white;
@@ -3512,7 +3512,7 @@ canvas,
   touch-action: none;
 }
 .observer-controls {
-  background: #eaf0fb;
+  background: var(--design-surface);
   border-radius: 18px;
   padding: 16px;
   margin: 14px 0;
@@ -3633,7 +3633,7 @@ body[data-sky-view='observer'] .stage-key {
   border: 0;
   border-radius: 24px;
   color: #405675;
-  background: #f8faff;
+  background: var(--design-surface);
 }
 .author-contact-dialog::backdrop {
   background: #08142599;
@@ -3655,7 +3655,7 @@ body[data-sky-view='observer'] .stage-key {
   margin: 12px 0;
 }
 .author-email-box {
-  background: #eaf0fb;
+  background: var(--design-surface);
   border-radius: 18px;
   padding: 18px;
   margin: 20px 0;
@@ -3681,7 +3681,7 @@ body[data-sky-view='observer'] .stage-key {
 .author-email-actions > * {
   border: 0;
   border-radius: 24px;
-  background: #d7e4fc;
+  background: var(--design-inset);
   color: #315da8;
   min-height: 44px;
   padding: 10px 16px;
@@ -3699,7 +3699,7 @@ body[data-sky-view='observer'] .stage-key {
   margin-top: 12px;
 }
 .author-feedback-note {
-  border-top: 1px solid #dce4ef;
+  border-top: 1px solid var(--design-line);
   padding-top: 16px;
   color: #60748f;
 }
@@ -3741,7 +3741,7 @@ body[data-sky-view='observer'] .stage-key {
   gap: 12px;
   border: 0;
   border-radius: 24px;
-  background: #e1eafb;
+  background: var(--design-surface);
   color: #315da8;
   min-height: 44px;
   padding: 9px 16px;
@@ -3755,7 +3755,7 @@ body[data-sky-view='observer'] .stage-key {
   box-sizing: border-box;
   border: 0;
   border-radius: 24px;
-  background: #f8faff;
+  background: var(--design-surface);
   color: #405675;
   margin: auto;
 }
@@ -3770,9 +3770,9 @@ body[data-sky-view='observer'] .stage-key {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  background: #f8faff;
+  background: var(--design-surface);
   padding: 20px 0 14px;
-  border-bottom: 1px solid #dce4ef;
+  border-bottom: 1px solid var(--design-line);
 }
 .sundial-dialog-head h2 {
   font-size: 20px;
@@ -3787,7 +3787,7 @@ body[data-sky-view='observer'] .stage-key {
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: #eaf0fb;
+  background: var(--design-surface);
   color: #315da8;
 }
 .sundial-dialog .sundial-content {
@@ -3835,7 +3835,7 @@ body[data-sky-view='observer'] .stage-key {
   display: none;
 }
 .compact-mode-help > summary:hover {
-  background: #d7e4f9;
+  background: var(--design-inset);
 }
 .compact-mode-help::details-content {
   overflow: visible;
@@ -4175,7 +4175,7 @@ body[data-sky-view='observer'] .stage-key {
   width: min(980px, calc(100vw - 32px));
   padding: 12px 18px 6px;
   background: #f8fafff5;
-  border: 1px solid #cad8ed;
+  border: 1px solid var(--design-line);
   border-radius: 22px;
   box-shadow: 0 4px 28px #142b472b;
   backdrop-filter: blur(16px);
@@ -4204,7 +4204,7 @@ body:has(dialog[open]) .time-workbench {
 }
 .workbench-calendar > button {
   border: 0;
-  background: #e5edfb;
+  background: var(--design-surface);
   color: #315da8;
   width: 34px;
   height: 36px;
@@ -4276,7 +4276,7 @@ body:has(dialog[open]) .time-workbench {
 }
 .time-workbench input[type='range']::-webkit-slider-runnable-track {
   height: 5px;
-  background: #bed0eb;
+  background: var(--design-inset);
   border-radius: 5px;
 }
 .time-workbench input[type='range']::-webkit-slider-thumb {
@@ -4285,21 +4285,21 @@ body:has(dialog[open]) .time-workbench {
   width: 26px;
   height: 26px;
   background: #315da8;
-  border: 3px solid #f8faff;
+  border: 3px solid var(--design-line);
   border-radius: 50%;
   margin-top: -10.5px;
   box-shadow: 0 1px 4px #315da833;
 }
 .time-workbench input[type='range']::-moz-range-track {
   height: 5px;
-  background: #bed0eb;
+  background: var(--design-inset);
   border-radius: 5px;
 }
 .time-workbench input[type='range']::-moz-range-thumb {
   width: 21px;
   height: 21px;
   background: #315da8;
-  border: 3px solid #f8faff;
+  border: 3px solid var(--design-line);
   border-radius: 50%;
 }
 .time-workbench input[type='range']:focus-visible {
@@ -4317,7 +4317,7 @@ body:has(dialog[open]) .time-workbench {
 .workbench-clock-tools > button,
 .workbench-look-buttons > button,
 .workbench-events > button {
-  background: #e5edfb;
+  background: var(--design-surface);
   border: 0;
   border-radius: 18px;
   color: #315da8;
@@ -4330,7 +4330,7 @@ body:has(dialog[open]) .time-workbench {
   height: 32px;
   padding: 3px 7px;
   font-size: 13px;
-  border: 1px solid #c9d7ec;
+  border: 1px solid var(--design-line);
   border-radius: 9px;
   background: white;
   color: #315da8;
@@ -4343,7 +4343,7 @@ body:has(dialog[open]) .time-workbench {
   margin-top: 4px;
 }
 .workbench-more {
-  border-top: 1px solid #dce5f2;
+  border-top: 1px solid var(--design-line);
   margin-top: 8px;
 }
 .workbench-more > summary {
@@ -4394,7 +4394,7 @@ body:has(dialog[open]) .time-workbench {
 }
 #workbenchDateMoreHost:not(:empty) {
   padding: 8px 0;
-  border-top: 1px solid #dce5f2;
+  border-top: 1px solid var(--design-line);
 }
 @media (max-width: 760px) {
   .time-workbench {
@@ -4559,17 +4559,17 @@ html:has(.has-time-workbench) {
   height: 32px;
   margin: 2px 0 0;
   touch-action: none;
-  background: linear-gradient(#bed0eb, #bed0eb) center/100% 5px no-repeat;
+  background: linear-gradient(var(--design-inset), var(--design-inset)) center/100% 5px no-repeat;
 }
 .sundial-sticky-clock input::-webkit-slider-thumb {
   width: 25px;
   height: 25px;
-  border: 3px solid #f8faff;
+  border: 3px solid var(--design-line);
 }
 .sundial-sticky-clock input::-moz-range-thumb {
   width: 20px;
   height: 20px;
-  border: 3px solid #f8faff;
+  border: 3px solid var(--design-line);
   background: #315da8;
   border-radius: 50%;
 }
@@ -4584,7 +4584,7 @@ html:has(.has-time-workbench) {
   z-index: 3;
   padding: 12px 0;
   background: #fff;
-  border-bottom: 1px solid #dce5f2;
+  border-bottom: 1px solid var(--design-line);
 }
 @media (min-width: 1101px) {
   .time-workbench {
@@ -4600,7 +4600,7 @@ html:has(.has-time-workbench) {
 .workbench-month-tools button {
   border: 0;
   border-radius: 12px;
-  background: #e5edfb;
+  background: var(--design-surface);
   color: #315da8;
   min-height: 36px;
   padding: 4px 12px;
@@ -4611,7 +4611,7 @@ html:has(.has-time-workbench) {
   font-size: 12px;
   padding: 4px 8px;
   height: 36px;
-  border: 1px solid #c9d7ec;
+  border: 1px solid var(--design-line);
   border-radius: 9px;
   background: #fff;
   color: #315da8;
@@ -4649,7 +4649,7 @@ html:has(.has-time-workbench) {
 }
 .analemma-ideal-controls input[type='range']::-webkit-slider-runnable-track {
   height: 5px;
-  background: #bed0eb;
+  background: var(--design-inset);
   border-radius: 5px;
 }
 .analemma-ideal-controls input[type='range']::-webkit-slider-thumb {
@@ -4664,7 +4664,7 @@ html:has(.has-time-workbench) {
 }
 .analemma-ideal-controls input[type='range']::-moz-range-track {
   height: 5px;
-  background: #bed0eb;
+  background: var(--design-inset);
   border-radius: 5px;
 }
 .analemma-ideal-controls input[type='range']::-moz-range-thumb {

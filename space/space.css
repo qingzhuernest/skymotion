@@ -1,14 +1,14 @@
 /* Independent space workspace. The shared site navigation keeps its existing appearance. */
 body[data-page='space'] {
   margin: 0;
-  background: #f5f7fc;
+  background: var(--design-surface);
   color: #253448;
   font:
     14px/1.6 system-ui,
     -apple-system,
     sans-serif;
-  --space-primary: #315da8;
-  --space-line: #dce5f2;
+  --space-primary: var(--design-primary);
+  --space-line: var(--design-line);
   --space-control-radius: 12px;
 }
 body[data-page='space'] [hidden] {
@@ -21,7 +21,7 @@ body[data-page='space'] :is(button, input, select) {
   font: inherit;
 }
 body[data-page='space'] :is(button, a, input, select):focus-visible {
-  outline: 2px solid #527bd1;
+  outline: 2px solid var(--design-primary);
   outline-offset: 3px;
 }
 body[data-page='space'] :is(button, a) {
@@ -31,13 +31,13 @@ body[data-page='space'] button {
   cursor: pointer;
   border: 1px solid var(--space-line);
   border-radius: var(--space-control-radius);
-  background: #eaf0fc;
+  background: var(--design-surface);
   color: var(--space-primary);
   padding: 7px 12px;
   min-height: 34px;
 }
 body[data-page='space'] button:hover {
-  background: #dbe7fc;
+  background: var(--design-inset);
 }
 body[data-page='space'] button:disabled {
   cursor: default;
@@ -140,7 +140,7 @@ body[data-page='space'] .facts div {
   justify-content: space-between;
   align-items: baseline;
   gap: 8px;
-  border-bottom: 1px solid #edf0f7;
+  border-bottom: 1px solid var(--design-line);
   padding-bottom: 6px;
 }
 body[data-page='space'] .facts span {
@@ -176,7 +176,7 @@ body[data-page='space'] select {
   min-height: 34px;
   border: 1px solid var(--space-line);
   border-radius: var(--space-control-radius);
-  background: #f5f7fc;
+  background: var(--design-surface);
   color: #253448;
   padding: 5px 8px;
 }
@@ -398,7 +398,7 @@ body[data-page='space'] #spaceDrawer {
   border: 1px solid var(--space-line);
   border-radius: 0 24px 24px 0;
   padding: 0;
-  background: #edf2fa;
+  background: var(--design-surface);
   color: #253448;
   overflow: hidden;
 }
@@ -416,7 +416,7 @@ body[data-page='space'] .drawer-head {
   align-items: center;
   gap: 12px;
   padding: max(16px, env(safe-area-inset-top)) 16px 16px;
-  background: #f8faff;
+  background: var(--design-surface);
   border-bottom: 1px solid var(--space-line);
   flex: none;
 }
@@ -593,7 +593,7 @@ body[data-page='space'] .compare-tabs button {
   color: #b8c9df;
 }
 body[data-page='space'] .compare-tabs button.active {
-  background: #315da8;
+  background: var(--design-primary);
   color: white;
 }
 body[data-page='space'] .compare-surface {
@@ -637,7 +637,7 @@ body[data-page='space'] .observer-fields input {
   min-height: 34px;
   border: 1px solid var(--space-line);
   border-radius: var(--space-control-radius);
-  background: #f5f7fc;
+  background: var(--design-surface);
   color: #253448;
   padding: 5px 7px;
   margin-top: 4px;
@@ -865,15 +865,15 @@ body[data-page='space'] .existing-compare-link {
   text-decoration: none;
   border-radius: 14px;
   border: 0;
-  background: #eaf0fc;
-  color: #315da8;
+  background: var(--design-surface);
+  color: var(--design-primary);
   font-size: 12px;
   padding: 7px 12px;
   min-height: 34px;
   white-space: nowrap;
 }
 body[data-page='space'] .existing-compare-link:hover {
-  background: #dbe7fc;
+  background: var(--design-inset);
 }
 @media (max-width: 760px) {
   body[data-page='space'] .existing-compare-link {
@@ -892,9 +892,9 @@ body[data-page='space'] .existing-compare-link:hover {
 /* Match the experiment rail: collapse control sits inside its surface, 14px from the edge. */
 body[data-page='space'] .space-sidebar-host > .side {
   padding: 14px;
-  border: 1px solid #c5d1e2;
+  border: 1px solid var(--design-line);
   border-radius: 18px;
-  background: #eef2f8;
+  background: var(--design-surface);
   scrollbar-gutter: stable;
   contain: layout paint;
 }

@@ -76,7 +76,7 @@
   const tableWrap=el('div','solar-study-readings',panel),table=el('table','',tableWrap),tableCaption=el('caption','',table);tableCaption.dataset.word='summary';
   const thead=el('thead','',table),tr=el('tr','',thead);for(const key of ['sample','solar','alt','az']){const th=el('th','',tr);th.scope='col';th.dataset.word=key;}
   const tbody=el('tbody','',table),rows=Array.from({length:3},()=>{const row=el('tr','',tbody);return Array.from({length:4},(_,i)=>{const n=el(i?'td':'th','',row);if(!i)n.scope='row';return n;});});
-  const footer=caption('legend',panel);caption('model',panel);
+  caption('legend',rail);caption('model',rail);
   const grip=uiWorkspace.rail.querySelector('.motion-menu-grip');if(grip)grip.after(rail);else uiWorkspace.rail.prepend(rail);uiWorkspace.details.push(rail);uiWorkspace.nodes.push(panel);
   function project(p){return{x:240+p.x*172,y:255-p.y*172-p.z*45};}
   function path(points){return points.map((p,i)=>`${i?'L':'M'}${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(' ');}
@@ -89,7 +89,7 @@
   function comparison(){const utc=instantUTC().getTime();if(mode==='place'){if(state.manual)return{blocked:true,samples:[],utc};return{utc,samples:sites().map((s,i)=>{const local=observerClockAt(utc,s.lon);return {...s,name:t(['current','second','third'][i]),date:local?.date,time:local?.time,instant:utc,point:at(utc,s.lat,s.lon)};})};}
     return{utc,samples:[-interval,0,interval].map((offset,i)=>{const raw=state.time+offset,days=Math.floor(raw/1440),minute=raw-days*1440,date=new Date(Date.parse(state.date+'T12:00:00Z')+days*86400000).toISOString().slice(0,10),valid=SkyMotionSession.validDate(date);return{lat:state.lat,lon:state.lon,name:t(['earlier','now','later'][i]),date,time:minute,instant:valid&&!state.manual?instantUTC(minute,date,state.lon).getTime():null,point:valid?(state.manual?solar(state.lat,state.dec,minute):skyRaw('Sun',minute,date,state.lat,state.lon)):null};})};
   }
-  function sync(){active=uiWorkspace.selected==='solarStudy'&&state.body==='sun'&&window.SkyCustomization?.active===true;if(!active)return;const key=JSON.stringify([mode,interval,preset,custom,state.date,state.time,state.lat,state.lon,state.manual,state.dec,english()]);if(key===lastKey)return;lastKey=key;result=comparison();result.conditions={date:state.date,time:state.time,lat:state.lat,lon:state.lon,manual:state.manual,dec:state.dec};panel.dataset.mode=mode;
+  function sync(){const wasActive=active;active=uiWorkspace.selected==='solarStudy'&&state.body==='sun'&&window.SkyCustomization?.active===true;if(!active)return;if(!wasActive)requestAnimationFrame(()=>document.querySelector('[data-rail-section=conditions]')?.click());const key=JSON.stringify([mode,interval,preset,custom,state.date,state.time,state.lat,state.lon,state.manual,state.dec,english()]);if(key===lastKey)return;lastKey=key;result=comparison();result.conditions={date:state.date,time:state.time,lat:state.lat,lon:state.lon,manual:state.manual,dec:state.dec};panel.dataset.mode=mode;
     for(const root of[rail,panel])for(const n of root.querySelectorAll('[data-word]'))text(n,t(n.dataset.word));
     text(help,t(mode==='time'?'timeHelp':'placeHelp'));modes.forEach((b,i)=>b.setAttribute('aria-pressed',String(mode===['time','place'][i])));presets.forEach((b,i)=>b.setAttribute('aria-pressed',String(!custom.some(Boolean)&&preset===['latitude','longitude'][i])));
     timeControls.hidden=mode!=='time';siteControls.hidden=mode!=='place';text(primary,`${t('current')} · ${locationText(state.lat,state.lon)}`);

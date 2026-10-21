@@ -51,11 +51,11 @@ body[data-page='space'] .scene-tools summary::-webkit-details-marker {
   display: none;
 }
 body[data-page='space'] .scene-tools summary:focus-visible {
-  outline: 2px solid #b5d6ff;
+  outline: 2px solid var(--design-inset);
   outline-offset: 3px;
 }
 body[data-page='space'] .scene-tools[open] summary {
-  background: #315da8;
+  background: var(--design-primary);
 }
 body[data-page='space'] .scene-tools-panel {
   position: absolute;
@@ -92,7 +92,7 @@ body[data-page='space'] .camera-presets button {
 }
 body[data-page='space'] .camera-presets button[aria-pressed='true'],
 body[data-page='space'] .camera-presets button:hover {
-  background: #315da8;
+  background: var(--design-primary);
   color: #fff;
 }
 body[data-page='space'] .tools-field,

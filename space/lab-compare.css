@@ -33,22 +33,22 @@
 body[data-page='diagrams'] .ui-linked-toggle {
   min-height: 32px;
   flex-shrink: 0;
-  border: 1px solid #c6d5ed;
+  border: 1px solid var(--design-line);
   border-radius: 18px;
   padding: 5px 12px;
   font-size: 12px;
-  background: #eaf0fb;
-  color: #315da8;
+  background: var(--design-surface);
+  color: var(--design-primary);
   touch-action: manipulation;
 }
 body[data-page='diagrams'] .ui-linked-toggle[aria-pressed='true'] {
-  background: #315da8;
+  background: var(--design-primary);
   color: #fff;
-  border-color: #315da8;
+  border-color: var(--design-primary);
 }
 body[data-page='diagrams'] .ui-linked-toggle:disabled {
   color: #596b80;
-  background: #edf1f7;
+  background: var(--design-surface);
   opacity: 0.72;
 }
 body[data-page='diagrams'] .ui-linked-scenes {

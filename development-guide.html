@@ -8,8 +8,8 @@
 
     <meta content="width=device-width,initial-scale=1" name="viewport" />
     <link href="favicon.svg" rel="icon" />
-    <link href="style.css?v=20261019-tools66" rel="stylesheet" />
-    <link href="pages.css?v=20261019-tools66" rel="stylesheet" />
+    <link href="style.css?v=20261021-ui77" rel="stylesheet" />
+    <link href="pages.css?v=20261021-ui77" rel="stylesheet" />
     <!-- search-metadata:start -->
     <title>开发说明：完整开发逻辑与维护 · 天体视运动实验室</title>
     <meta
@@ -35,11 +35,11 @@
     <meta content="website" property="og:type" />
     <meta content="zh_CN" property="og:locale" />
     <!-- search-metadata:end -->
-    <link href="documents.css?v=20261019-tools66" rel="stylesheet" />
-    <link rel="stylesheet" href="design-system.css?v=20261019-tools66" />
-    <link rel="stylesheet" href="language.css?v=20261019-tools66" />
+    <link href="documents.css?v=20261021-ui77" rel="stylesheet" />
+    <link rel="stylesheet" href="design-system.css?v=20261021-ui77" />
+    <link rel="stylesheet" href="language.css?v=20261021-ui77" />
     <script src="document-entrance.js?v=20261019-tools66" defer></script>
-<script src="language-data.js?v=20261021-docs76" defer></script>
+<script src="language-data.js?v=20261021-ui77" defer></script>
 <script src="language.js?v=20261019-tools66" defer></script>
 <script src="page-cache.js?v=20261019-tools66" defer></script>
   <script src="date-picker.js?v=20261019-tools66" defer></script>
@@ -809,7 +809,7 @@ diagrams.html#chartPanel</code></pre>
 <p>新增控件沿用全站字体、颜色与圆角；浅色侧栏和深色画布按钮按所在区域统一。桌面、平板和手机分别验证添加、选择、属性、保存与返回原图；Chromium 自动检查不代替 Safari 真机验证。</p>
 <h2 id="shared-controls">20. 共享控件与首次展开动画</h2>
         <p>
-          本正式版使用 Impeccable 统一 UI：design-system.css 在原页面样式之后加载，共享浅色操作区、深青蓝选中状态、12px 控件圆角和16px 表面圆角。SkyMotion Reading 的本地常规与粗体字库统一用于标题、正文、参数、按钮、数字及图形注释，欢迎页底部保留原手写字体；字库按页面文字裁剪并本地发布，遵循 SIL OFL 1.1。共享控件与动画样式消费同一套颜色变量，沉浸模式单独映射深色表面与文字。播放与选中项保留深青蓝强调色；日期方向、复位、天体跳转、菜单和三维辅助操作使用白底、青蓝文字与细边框，悬停仅加浅色底，深色画布上的工具保持中性深色；窄控制台按自身宽度将时间、日期与方位排为紧凑完整行，横屏保持原紧凑布局。仰望天空注释按明暗调整文字对比度并避让月球端点标记，不改变天体位置。理想实验提示、赤纬读数与恢复操作共享主题颜色；播放设置里的循环开关与其他参数开关同尺寸并靠右对齐，沉浸工具使用统一深色表面。此次发布保留原天文计算、星历数据与科学状态逻辑；升落读数卡片、文档入口统一白底细边框，不用黄蓝色块区分事件。
+          本正式版使用 Impeccable 统一 UI：design-system.css 在原页面样式之后加载，共享浅色操作区、中性灰选中状态、12px 控件圆角和16px 表面圆角。SkyMotion Reading 的本地常规与粗体字库统一用于标题、正文、参数、按钮、数字及图形注释，欢迎页底部保留原手写字体；字库按页面文字裁剪并本地发布，遵循 SIL OFL 1.1。共享控件与动画样式消费同一套颜色变量，沉浸模式单独映射深色表面与文字。播放与选中项保留深灰强调色；日期方向、复位、天体跳转、菜单和三维辅助操作使用白底、深灰文字与细边框，悬停仅加浅色底，深色画布上的工具保持中性深色；窄控制台按自身宽度将时间、日期与方位排为紧凑完整行，横屏保持原紧凑布局。仰望天空注释按明暗调整文字对比度并避让月球端点标记，不改变天体位置。理想实验提示、赤纬读数与恢复操作共享主题颜色；播放设置里的循环开关与其他参数开关同尺寸并靠右对齐，沉浸工具使用统一深色表面。界面层保留原天文计算、星历数据与科学状态逻辑；升落读数卡片、文档入口统一白底细边框，不用黄蓝色块区分事件。
         </p>
         <h3>中英文呈现与本地字体</h3>
         <p>字体请求设有8秒超时。正常加载仍在指定字体就绪后显示页面；失败或超时会解除页面隐藏并提供“重试字体”，暂用备用字体，防止整页一直卡住。显式语言参数会保留到站内导航。日期选择器切换年月时同步更新草稿日期，并处理月底与闰年；重绘后保留键盘焦点，只有确认才更新实验与返回历史。</p>

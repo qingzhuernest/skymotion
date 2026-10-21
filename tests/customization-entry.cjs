@@ -16,6 +16,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);
    await p.locator('.layout-launch').click();
    await p.locator('.dt-panel:visible,.diagram-tool-launch:visible').first().waitFor();
+   if(!mobile){await p.locator('.dt-panel.dt-docked').waitFor({state:'visible'});const bounds=await p.evaluate(()=>({panel:document.querySelector('.dt-panel').getBoundingClientRect().right,plot:document.querySelector('.stage').getBoundingClientRect().left}));assert(bounds.panel<=bounds.plot,'3D editor stays in the left rail without covering the scene');await p.locator('[data-rail-section=conditions]').click();assert(await p.locator('.side .card').first().isVisible());await p.locator('[data-rail-section=references]').click();}
    await p.locator('#spaceImmersive').click();
    await p.waitForFunction(()=>document.querySelector('.head-actions .language-actions'));
    assert(await p.locator('.layout-launch').isVisible());
@@ -46,6 +47,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    await p.locator('#builderGround').focus();await p.keyboard.press('Enter');
    assert.equal(await p.evaluate(()=>SkySceneBuilder.read().objects.length),1);
    assert.equal(await p.evaluate(()=>SkySceneBuilder.read().objects[0].kind),'circle');
+   await p.goto(base+'analemma'+(mobile?'.en':'')+'.html');await p.waitForFunction(()=>window.SkyCustomization&&!document.querySelector('.layout-launch').disabled&&document.querySelector('.language-actions .layout-launch'));assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);await p.locator('.layout-launch').click();await p.locator('.dt-panel').waitFor({state:'visible'});assert(await p.locator('.language-actions .layout-launch').isVisible());const blue=await p.evaluate(()=>[...document.querySelectorAll('.language-actions button,.dt-panel button,.dt-row')].filter(n=>{const r=n.getBoundingClientRect(),c=getComputedStyle(n).backgroundColor.match(/[\d.]+/g)?.map(Number);return r.width&&r.height&&c&&c[2]>c[0]+10&&c[2]>c[1]+3&&Math.max(...c.slice(0,3))>100}).length);assert.equal(blue,0,'light controls use neutral fills');await p.locator('.layout-launch').click();assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);
    assert.deepEqual(errors,[]);await context.close();
   }
   console.log('PASS persistent 3D customization entry in normal/immersive desktop and phone, explicit mode gate, native Lab comparisons, no invented references, empty solar and lunar builders, matching plot palette and explicit circle placement, original conditions accessible');

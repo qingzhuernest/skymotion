@@ -17,15 +17,15 @@
   font-display: block;
 }
 :root {
-  --design-paper: #f4f7f8;
+  --design-paper: #f6f6f5;
   --design-surface: #ffffff;
-  --design-inset: #ecf2f4;
-  --design-line: #cdd9de;
-  --design-ink: #20323e;
-  --design-muted: #536975;
-  --design-primary: #24576b;
-  --design-hover: #174558;
-  --design-selected: #dcebf0;
+  --design-inset: #efefec;
+  --design-line: #d7d7d2;
+  --design-ink: #292d2b;
+  --design-muted: #616560;
+  --design-primary: #414744;
+  --design-hover: #303632;
+  --design-selected: #ebeeeb;
   --design-sun: #f2d7a3;
   --design-night: #101e2c;
   --design-font: "SkyMotion Reading", "Songti SC", "SimSun", serif;
@@ -175,7 +175,7 @@ body
     .analemma-advanced,
     .ui-information
   )[open] {
-  border-color: #8caebc;
+  border-color: var(--design-line);
   box-shadow: none;
 }
 .ui-parameters
@@ -273,7 +273,7 @@ body
   )
   > input[type="checkbox"] {
   border-color: #8297a3;
-  background: #c7d4db;
+  background: var(--design-inset);
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
@@ -477,7 +477,7 @@ body
   :is(.ui-parameters, .ui-viewbar, .side, .timeline)
   :is(button, input, select):disabled {
   color: #637985;
-  background-color: #e8eef1;
+  background-color: var(--design-surface);
   opacity: 0.65;
   cursor: not-allowed;
 }
@@ -567,14 +567,14 @@ body[data-page="space"] .existing-compare-link {
 /* A dark observation surface needs its own legible foreground, including drawers. */
 body[data-page="space"].space-immersive {
   --design-paper: #101e2c;
-  --design-surface: #142b3c;
-  --design-inset: #203b4c;
-  --design-line: #3d5b6d;
-  --design-ink: #e4eef3;
-  --design-muted: #b7ceda;
-  --design-primary: #a9d5e6;
-  --design-hover: #bce0ec;
-  --design-selected: #284c61;
+  --design-surface: #202523;
+  --design-inset: #2e3430;
+  --design-line: #56605a;
+  --design-ink: #edf0ed;
+  --design-muted: #c1c7c2;
+  --design-primary: #e1e7e1;
+  --design-hover: #ffffff;
+  --design-selected: #39423b;
   color: var(--design-ink);
   background: var(--design-paper);
 }
@@ -592,8 +592,8 @@ body[data-page="space"].space-immersive h1 {
   color: var(--design-ink);
 }
 body[data-page="space"].space-immersive .stage .label {
-  color: #e4eef3;
-  background: #142b3ce6;
+  color: #edf0ed;
+  background: #202523e6;
 }
 body[data-page="space"].space-immersive .time-head output {
   color: var(--design-ink);
@@ -603,19 +603,19 @@ body[data-page="space"].space-immersive input[type="date"] {
 }
 /* Dark canvas annotation tools are deliberately outside the light controls scope. */
 .scene-tools-panel {
-  background: #142b3c;
-  color: #e4eef3;
-  border-color: #3d5b6d;
+  background: #202523;
+  color: #edf0ed;
+  border-color: #56605a;
   border-radius: var(--design-radius-surface);
   box-shadow: none;
 }
 body .scene-tools-panel :is(.tools-check, .tools-field, p, label, span) {
-  color: #c7dde8;
+  color: #d5dad5;
 }
 body .scene-tools-panel :is(select, input[type="number"]) {
-  background: #203b4c;
-  color: #e4eef3;
-  border-color: #3d5b6d;
+  background: #2e3430;
+  color: #edf0ed;
+  border-color: #56605a;
 }
 body .scene-tools-panel input[type="checkbox"]:checked {
   background: #39748c;
@@ -753,7 +753,7 @@ body :is(.page-action, .author-mail-button) {
 body :is(.page-action, .author-mail-button):hover {
   background: var(--design-paper);
   color: var(--design-hover);
-  border-color: #8caebc;
+  border-color: var(--design-line);
 }
 .document-page .page-action {
   color: var(--design-primary);
@@ -775,7 +775,7 @@ body :is(.page-action, .author-mail-button):hover {
 }
 .document-page .article-actions :is(.page-action, .page-link):hover {
   background: var(--design-paper);
-  border-color: #8caebc;
+  border-color: var(--design-line);
   color: var(--design-hover);
 }
 .document-page .article-actions :is(.page-action, .page-link):focus-visible {
@@ -814,11 +814,11 @@ body[data-page="welcome"] :is(button, a) {
 }
 body[data-page="welcome"] .welcome-enter {
   background: var(--design-sun);
-  color: #20323e;
+  color: #292d2b;
 }
 body[data-page="welcome"] .welcome-screen ::selection {
   background: var(--design-sun);
-  color: #20323e;
+  color: #292d2b;
 }
 /* Preserve the existing drawer breakpoint and animation machinery. */
 @media (max-width: 760px) {
@@ -925,7 +925,7 @@ body[data-page="space"].space-immersive .motion-selection {
 body
   :is(.ui-parameters, .time-workbench)
   input[type="range"]::-webkit-slider-runnable-track {
-  background: #c3d8e0;
+  background: var(--design-inset);
 }
 body
   :is(.ui-parameters, .time-workbench)
@@ -937,7 +937,7 @@ body
 body
   :is(.ui-parameters, .time-workbench)
   input[type="range"]::-moz-range-track {
-  background: #c3d8e0;
+  background: var(--design-inset);
 }
 body
   :is(.ui-parameters, .time-workbench)
@@ -1048,7 +1048,7 @@ body .ui-timeline-host :is(input[type="time"], .workbench-calendar input) {
   padding: 0;
   border: 1px solid #73919f;
   border-radius: 12px;
-  color: #e4eef3;
+  color: #edf0ed;
   background: #163245;
   display: flex;
   align-items: center;
@@ -1283,9 +1283,9 @@ body .ui-plot #resetView:hover {
 body .ui-timeline-host #workbenchPrevDate:disabled,
 body .ui-timeline-host #workbenchNextDate:disabled,
 body .ui-timeline-host #workbenchPlay:disabled {
-  background: #e8eef1;
+  background: var(--design-surface);
   color: #637985;
-  border-color: #cdd9de;
+  border-color: #d7d7d2;
 }
 /* Complete the surface audit: legacy cards, body shortcuts and 3D overlays. */
 .ui-parameters .metrics article,
@@ -1324,9 +1324,9 @@ body .ui-timeline-host #workbenchPlay:disabled {
   min-height: 36px;
 }
 .ui-heading .ui-linked-toggle:disabled {
-  background: #e8eef1;
+  background: var(--design-surface);
   color: #637985;
-  border-color: #cdd9de;
+  border-color: #d7d7d2;
 }
 body[data-page="space"] .space-sidebar-host > .side {
   background: var(--design-inset);
@@ -1334,14 +1334,14 @@ body[data-page="space"] .space-sidebar-host > .side {
   border-radius: 16px;
 }
 body[data-page="space"] .inspection-readout {
-  background: #142b3c;
-  color: #e4eef3;
-  border: 1px solid #3d5b6d;
+  background: #202523;
+  color: #edf0ed;
+  border: 1px solid #56605a;
   border-radius: 12px;
   font-family: var(--design-font);
 }
 body[data-page="space"] .inspection-readout strong {
-  color: #e4eef3;
+  color: #edf0ed;
   font-family: var(--design-font);
 }
 body[data-page="space"] .scene-tools summary,
@@ -1369,9 +1369,9 @@ body[data-page="space"] .scene-tools[open] summary {
   border-radius: 12px;
 }
 body[data-page="diagrams"] .ui-heading .ui-linked-toggle:disabled {
-  background: #e8eef1;
+  background: var(--design-surface);
   color: #637985;
-  border-color: #cdd9de;
+  border-color: #d7d7d2;
 }
 
 .ui-timeline-host {
@@ -1532,8 +1532,8 @@ body .ui-parameters .menu-footer #reset {
 }
 
 :root {
-  --design-action: #24576b;
-  --design-action-hover: #174558;
+  --design-action: #414744;
+  --design-action-hover: #303632;
 }
 body .motion-menu-edge,
 body .ui-parameters > button.motion-menu-grip,
@@ -1586,16 +1586,16 @@ body[data-page="diagrams"] .ui-heading .ui-linked-toggle:hover,
 body[data-page="space"] .focus:hover {
   background: var(--design-selected);
   color: var(--design-action-hover);
-  border-color: #8caebc;
+  border-color: var(--design-line);
 }
 body[data-page="diagrams"] .ui-heading .ui-linked-toggle[aria-pressed="true"] {
   background: var(--design-selected);
   color: var(--design-action);
-  border-color: #8caebc;
+  border-color: var(--design-line);
 }
 body .ui-timeline-host #workbenchPrevDate:disabled,
 body .ui-timeline-host #workbenchNextDate:disabled {
-  background: #e8eef1;
+  background: var(--design-surface);
   color: #637985;
   border-color: var(--design-line);
 }
@@ -1605,9 +1605,9 @@ body .ui-plot #viewReset:hover,
 body[data-page="space"] #reset,
 body[data-page="space"] .scene-tools summary,
 body[data-page="space"] .scene-tools[open] summary {
-  background: #142b3c;
-  color: #e4eef3;
-  border-color: #3d5b6d;
+  background: #202523;
+  color: #edf0ed;
+  border-color: #56605a;
 }
 
 /* Manual-mode and playback states use the same interface palette. */
@@ -1770,7 +1770,7 @@ body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchN
 body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate):hover {
   background: var(--design-selected);
   color: var(--design-hover);
-  border-color: #8caebc;
+  border-color: var(--design-line);
 }
 body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate):disabled {
   background: var(--design-inset);
@@ -1870,7 +1870,7 @@ body .author-email-actions > *:hover,
 body .ui-parameters :is(#shadowView, #solarDateShow):hover {
   background: var(--design-selected);
   color: var(--design-hover);
-  border-color: #8caebc;
+  border-color: var(--design-line);
 }
 body .author-email-actions > *:active,
 body .ui-parameters :is(#shadowView, #solarDateShow):active {
@@ -1900,8 +1900,8 @@ body[data-page="space"] .language-nav > .language-toggle:hover {
 }
 body[data-page="space"] .scene-tools-panel button[data-camera] {
   background: transparent;
-  color: #e4eef3;
-  border-color: #3d5b6d;
+  color: #edf0ed;
+  border-color: #56605a;
 }
 body[data-page="space"] .scene-tools-panel button[data-camera][aria-pressed="true"] {
   background: var(--design-action);
@@ -1909,16 +1909,16 @@ body[data-page="space"] .scene-tools-panel button[data-camera][aria-pressed="tru
   border-color: var(--design-action);
 }
 body[data-page="space"] .scene-tools-panel button[data-camera]:hover {
-  background: #203b4c;
+  background: #2e3430;
 }
 body[data-page="space"] button.label {
-  background: #142b3ccc;
-  color: #e4eef3;
-  border-color: #3d5b6d;
+  background: #202523cc;
+  color: #edf0ed;
+  border-color: #56605a;
 }
 body[data-page="space"] button.label:hover {
-  background: #203b4c;
-  color: #e4eef3;
+  background: #2e3430;
+  color: #edf0ed;
 }
 body .author-feedback-note {
   color: var(--design-muted);
@@ -1938,7 +1938,7 @@ body dialog.site-calendar {
   border: 1px solid var(--design-line);
   border-radius: var(--design-radius-surface);
   background: #fff;
-  color: #20323e;
+  color: #292d2b;
   font-family: var(--design-font);
   box-shadow: 0 12px 36px #101e2c26;
   overflow-y: auto;
@@ -1953,28 +1953,28 @@ body .site-calendar button {
   border: 1px solid transparent;
   border-radius: 8px;
   font: inherit;
-  color: #20323e;
+  color: #292d2b;
   background: transparent;
   cursor: pointer;
 }
-body .site-calendar button:hover { background: #ecf2f4; }
+body .site-calendar button:hover { background: #efefec; }
 body .site-calendar button[aria-pressed="true"] {
-  background: #dcebf0;
-  border-color: #8caebc;
-  color: #174558;
+  background: #ebeeeb;
+  border-color: var(--design-line);
+  color: #303632;
   font-weight: 700;
 }
 body .site-calendar button:disabled { opacity: .4; cursor: default; }
 .site-calendar-head { display: grid; grid-template-columns: 40px minmax(0,1fr) 40px; gap: 4px; align-items: center; }
 .site-calendar-head svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.site-calendar-year { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 0; font-size: 13px; color: #536975; }
-body .site-calendar-year input { width: 88px; min-height: 36px; border: 1px solid #cdd9de; border-radius: 8px; padding: 4px 8px; font: inherit; color: #20323e; background: white; }
+.site-calendar-year { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 0; font-size: 13px; color: #616560; }
+body .site-calendar-year input { width: 88px; min-height: 36px; border: 1px solid #d7d7d2; border-radius: 8px; padding: 4px 8px; font: inherit; color: #292d2b; background: white; }
 .site-calendar-grid { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 4px; }
 .site-calendar-grid.site-calendar-months { grid-template-columns: repeat(3,minmax(0,1fr)); }
-.site-calendar-weekday { text-align: center; padding: 6px 0; font-size: 12px; color: #536975; }
-.site-calendar-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #cdd9de; }
-body .site-calendar-actions button { padding: 6px 16px; border-color: #cdd9de; background: white; color: #24576b; }
-body .site-calendar-actions button:hover { background: #dcebf0; }
+.site-calendar-weekday { text-align: center; padding: 6px 0; font-size: 12px; color: #616560; }
+.site-calendar-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #d7d7d2; }
+body .site-calendar-actions button { padding: 6px 16px; border-color: #d7d7d2; background: white; color: #414744; }
+body .site-calendar-actions button:hover { background: #ebeeeb; }
 body input.site-date-field {
   min-height: 36px;
   padding: 6px 10px;
@@ -1993,9 +1993,9 @@ body .site-calendar-year button {
   min-width: 80px;
   min-height: 36px;
   padding: 4px 12px;
-  border: 1px solid #cdd9de;
+  border: 1px solid #d7d7d2;
   background: white;
-  color: #24576b;
+  color: #414744;
 }
 body dialog.site-calendar:not([open]) { pointer-events: none; }
 body[data-page="space"] #spaceDrawerClose {
@@ -2011,9 +2011,9 @@ body[data-page="space"] #spaceDrawerClose {
   align-items: center;
   justify-content: center;
 }
-body[data-page="space"].space-immersive #spaceDrawerClose { color: #e4eef3; }
+body[data-page="space"].space-immersive #spaceDrawerClose { color: #edf0ed; }
 body[data-page="space"] #spaceDrawerClose:hover { background: var(--design-inset); }
-body[data-page="space"].space-immersive #spaceDrawerClose:hover { background: #203b4c; }
+body[data-page="space"].space-immersive #spaceDrawerClose:hover { background: #2e3430; }
 #spaceDrawerClose svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
 body :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#workbenchNextMonth,#moonPrevMonth,#moonNextMonth) {
   font-size: 0;
@@ -2046,24 +2046,24 @@ body .ui-shell :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#wo
   max-width: calc(100vw - 24px);
   padding: 10px 14px;
   box-sizing: border-box;
-  border: 1px solid #cdd9de;
+  border: 1px solid #d7d7d2;
   border-radius: 12px;
   background: #fff;
-  color: #20323e;
+  color: #292d2b;
   font: 14px/1.5 var(--design-font);
 }
 body .font-load-notice button {
   flex-shrink: 0;
   min-height: 36px;
   padding: 6px 10px;
-  border: 1px solid #cdd9de;
+  border: 1px solid #d7d7d2;
   border-radius: 8px;
   background: #fff;
-  color: #24576b;
+  color: #414744;
   font: inherit;
   cursor: pointer;
 }
-body .font-load-notice button:hover { background: #ecf2f4; }
+body .font-load-notice button:hover { background: #efefec; }
 body .font-load-notice button:disabled { opacity: .6; cursor: wait; }
 
 /* Corresponding reflections share the bottom position and warm night palette. */
@@ -2114,8 +2114,8 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
 
 /* A short conversation makes the transition from observing to reading explicit. */
 .document-entrance {
-  --entrance-ink: #20323e;
-  --entrance-answer: #536975;
+  --entrance-ink: #292d2b;
+  --entrance-answer: #616560;
   --entrance-last: #685844;
   position: fixed;
   inset: 0;
@@ -2123,7 +2123,7 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
   display: grid;
   align-content: center;
   padding: max(32px, env(safe-area-inset-top)) clamp(24px, 6vw, 96px) max(84px, env(safe-area-inset-bottom));
-  background-color: #f4f7f8;
+  background-color: #f6f6f5;
   color: var(--entrance-ink);
   font-family: var(--design-font);
   overflow: auto;

@@ -2,7 +2,7 @@
 :root {
   --ui-radius: 18px;
   --ui-gap: 12px;
-  --ui-border: #dce5f2;
+  --ui-border: var(--design-line);
   --ui-nav-height: 48px;
   --ui-control-radius: 12px;
   --ui-control-height: 40px;
@@ -14,7 +14,7 @@
   gap: 6px;
   padding: 6px 20px;
   border-bottom: 1px solid var(--ui-border);
-  background: #f5f7fc;
+  background: var(--design-surface);
   overflow-x: auto;
   white-space: nowrap;
 }
@@ -26,16 +26,16 @@
   min-height: 36px;
   padding: 6px 12px;
   font-size: 13px;
-  color: var(--design-primary, #24576b);
+  color: var(--design-primary, #414744);
   text-decoration: none;
   border-radius: var(--design-radius-control, 12px);
 }
 .page-nav a:hover,
 .page-link:hover {
-  background: var(--design-inset, #ecf2f4);
+  background: var(--design-inset, #efefec);
 }
 a:focus-visible {
-  outline: 2px solid var(--design-primary, #24576b);
+  outline: 2px solid var(--design-primary, #414744);
   outline-offset: 2px;
 }
 .reading-page {
@@ -277,7 +277,7 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 .ui-viewbar button {
   min-height: 32px;
   border: 0;
-  background: #eaf0fb;
+  background: var(--design-surface);
   color: #315da8;
   border-radius: 18px;
   font-size: 12px;
@@ -694,7 +694,7 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 }
 .ui-parameters input[type='range']::-webkit-slider-runnable-track {
   height: 5px;
-  background: #bed0eb;
+  background: var(--design-inset);
   border-radius: 5px;
 }
 .ui-parameters input[type='range']::-webkit-slider-thumb {
@@ -709,7 +709,7 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 }
 .ui-parameters input[type='range']::-moz-range-track {
   height: 5px;
-  background: #bed0eb;
+  background: var(--design-inset);
   border-radius: 5px;
 }
 .ui-parameters input[type='range']::-moz-range-thumb {
@@ -1099,7 +1099,7 @@ body[data-page='analemma'] .workbench-events {
   --md-primary-container: #dce7ff;
   --md-surface: #ffffff;
   --md-surface-container: #eef2f8;
-  --md-outline-variant: #c5d1e2;
+  --md-outline-variant: var(--design-inset);
   --md-on-surface: #253448;
   --md-on-surface-variant: #52647d;
 }
@@ -1137,15 +1137,15 @@ body[data-page='analemma'] .workbench-events {
 /* Rise and set share one quiet readout treatment; labels distinguish the events. */
 .ui-diagram-details .event-values button:not(:disabled) {
   background: var(--design-surface, #fff);
-  color: var(--design-primary, #24576b);
-  border: 1px solid var(--design-line, #cdd9de);
+  color: var(--design-primary, #414744);
+  border: 1px solid var(--design-line, #d7d7d2);
 }
 .ui-diagram-details .event-values button:not(:disabled) :is(span, small) {
-  color: var(--design-muted, #536975);
+  color: var(--design-muted, #616560);
 }
 .ui-diagram-details .event-values button:not(:disabled):hover {
-  background: var(--design-paper, #f4f7f8);
-  border-color: #8caebc;
+  background: var(--design-paper, #f6f6f5);
+  border-color: var(--design-line);
 }
 .ui-parameters > h2 {
   font-size: 14px;
@@ -1224,10 +1224,10 @@ body[data-page='analemma'] .workbench-events {
 .ui-parameters
   :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
   > summary:hover {
-  background: #edf2fb;
+  background: var(--design-surface);
 }
 .ui-parameters :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open] {
-  border-color: #9bb5df;
+  border-color: var(--design-line);
   box-shadow: 0 2px 5px #315da810;
 }
 .ui-parameters
@@ -1236,7 +1236,7 @@ body[data-page='analemma'] .workbench-events {
   background: var(--md-primary-container);
   color: var(--md-on-primary-container);
   border-radius: 13px 13px 0 0;
-  border-bottom: 1px solid #b8ccee;
+  border-bottom: 1px solid var(--design-line);
 }
 .ui-parameters
   :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open]
@@ -1274,7 +1274,7 @@ body[data-page='analemma'] .workbench-events {
   padding: 10px 12px;
   border: 0;
   border-radius: var(--ui-control-radius);
-  background: #f2f5fb;
+  background: var(--design-surface);
   color: var(--md-primary);
   font-size: 13px;
   line-height: 1.5;
@@ -1282,7 +1282,7 @@ body[data-page='analemma'] .workbench-events {
   white-space: normal;
 }
 .ui-parameters .study-navigation .page-link:hover {
-  background: #dce7ff;
+  background: var(--design-surface);
 }
 .ui-parameters .workbench-extra {
   padding: 12px;
@@ -1301,9 +1301,9 @@ body[data-page='analemma'] .workbench-events {
 .ui-parameters .menu-subsection {
   margin: 12px 0;
   padding: 0;
-  border: 1px solid #d6e0ee;
+  border: 1px solid var(--design-line);
   border-radius: 10px;
-  background: #f4f7fc;
+  background: var(--design-surface);
 }
 .ui-parameters .menu-subsection > summary {
   padding: 10px 32px 10px 10px;
@@ -1318,7 +1318,7 @@ body[data-page='analemma'] .workbench-events {
   top: 17px;
 }
 .ui-parameters .menu-subsection[open] > summary {
-  background: #e9effb;
+  background: var(--design-surface);
   color: var(--md-on-primary-container);
   border-radius: 9px 9px 0 0;
 }
@@ -1414,7 +1414,7 @@ body[data-page='analemma'] .workbench-events {
   flex-shrink: 0;
 }
 .metric-definition[open] > summary {
-  background: #e5edfb;
+  background: var(--design-surface);
   color: #224f97;
 }
 .metric-definition > summary:focus-visible {
@@ -1443,9 +1443,9 @@ body[data-page='analemma'] .workbench-events {
 .ui-parameters > .sundial-reading {
   padding: 12px;
   margin: 0 0 12px;
-  border: 1px solid #c5d6ef;
+  border: 1px solid var(--design-line);
   border-radius: 14px;
-  background: #e7effb;
+  background: var(--design-surface);
   flex-wrap: wrap;
   gap: 6px;
 }
@@ -1482,9 +1482,9 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 .development-entry {
   margin: 20px 0;
   padding: 18px;
-  border: 1px solid #c5d6ef;
+  border: 1px solid var(--design-line);
   border-radius: 18px;
-  background: #eaf0fb;
+  background: var(--design-surface);
 }
 .project-article .development-entry h2 {
   margin-top: 0;
@@ -1495,7 +1495,7 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 
 /* Camera-only globe rotation is separate from changing the observation site. */
 .globe-drag-settings {
-  border-bottom: 1px solid #dce5f2;
+  border-bottom: 1px solid var(--design-line);
   padding-bottom: 12px;
   margin-bottom: 14px;
   color: #405675;
@@ -1508,7 +1508,7 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 .globe-drag-options {
   display: flex;
   gap: 4px;
-  background: #edf2fb;
+  background: var(--design-surface);
   padding: 4px;
   border-radius: 14px;
   flex-wrap: wrap;
@@ -1536,7 +1536,7 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 }
 .globe-drag-settings #globeRecenter {
   font-size: 11px;
-  border: 1px solid #c5d5ee;
+  border: 1px solid var(--design-line);
   border-radius: 16px;
   background: #fff;
   color: #315da8;
@@ -1605,11 +1605,11 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
 .ui-parameters button:disabled {
   opacity: 1;
   color: var(--md-on-surface-variant);
-  background: #e9edf3;
+  background: var(--design-surface);
   cursor: default;
 }
 .ui-plot canvas:focus-visible {
-  outline-color: #b5d4ff;
+  outline-color: var(--design-inset);
 }
 .author-email-box > span {
   color: var(--md-on-surface-variant);
@@ -1628,7 +1628,7 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   margin: 0;
   border: 0;
   border-radius: 10px;
-  background: #f2f5fb;
+  background: var(--design-surface);
 }
 .ui-parameters .study-navigation > .menu-subsection > summary {
   min-height: 44px;
@@ -1876,7 +1876,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   gap: 8px;
   padding: 8px 12px;
   border-bottom: 1px solid var(--ui-border);
-  background: #f5f8fe;
+  background: var(--design-surface);
 }
 .ui-sundial-readout .sundial-reading {
   display: flex;
@@ -1906,7 +1906,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   padding: 5px 10px;
   min-height: 30px;
   font-size: 12px;
-  background: #edf2fb;
+  background: var(--design-surface);
   color: var(--md-primary);
 }
 .ui-sundial-camera-tools {
@@ -1933,7 +1933,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   flex-shrink: 0;
   margin: 0;
   padding: 6px 12px;
-  background: #f5f8fe;
+  background: var(--design-surface);
   color: var(--md-on-surface-variant);
   font-size: 11px;
   line-height: 1.5;
@@ -2185,7 +2185,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   border: 0;
   border-radius: 0 20px 20px 0;
   color: var(--md-on-surface);
-  background: #edf2fa;
+  background: var(--design-surface);
   box-shadow: 8px 0 32px #10284335;
   overflow: hidden;
 }
@@ -2203,7 +2203,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   gap: 12px;
   flex-shrink: 0;
   padding: calc(12px + env(safe-area-inset-top)) 12px 12px 16px;
-  background: #f8faff;
+  background: var(--design-surface);
   border-bottom: 1px solid var(--ui-border);
   touch-action: pan-y;
 }
@@ -2228,7 +2228,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   padding: 10px;
   border: 0;
   border-radius: 999px;
-  background: #e8eef9;
+  background: var(--design-surface);
   color: var(--md-primary);
 }
 .ui-drawer-header svg,
@@ -2247,7 +2247,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   padding: 14px 14px calc(14px + env(safe-area-inset-bottom));
   border: 0;
   border-radius: 0;
-  background: #edf2fa;
+  background: var(--design-surface);
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
@@ -2642,7 +2642,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
   cursor: grabbing;
 }
 .ui-plot #phaseOrbit:focus-visible {
-  outline: 2px solid #9dc6ec;
+  outline: 2px solid var(--design-inset);
   outline-offset: -3px;
 }
 @media (max-width: 600px) {
@@ -2717,8 +2717,8 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
   min-height: 36px;
   padding: 6px 10px;
   color: #315da8;
-  background: #edf3ff;
-  border: 1px solid #dce5f2;
+  background: var(--design-surface);
+  border: 1px solid var(--design-line);
   border-radius: var(--ui-control-radius);
   font-size: 12px;
   white-space: nowrap;
@@ -2732,7 +2732,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
   overscroll-behavior: contain;
   color: #253448;
   background: #fff;
-  border: 1px solid #dce5f2;
+  border: 1px solid var(--design-line);
   border-radius: var(--ui-radius);
   font-size: 14px;
   line-height: 1.8;
@@ -2762,7 +2762,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
 .observer-explanation-example {
   padding: 12px;
   border-radius: 12px;
-  background: #edf3ff;
+  background: var(--design-surface);
 }
 @media (max-width: 600px) {
   .observer-explanation {

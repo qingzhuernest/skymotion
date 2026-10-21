@@ -60,7 +60,7 @@ body[data-page='space'].space-immersive
   min-height: 34px;
 }
 body[data-page='space'].space-immersive :is(.viewbar button.active, .time-head button) {
-  background: #315da8;
+  background: var(--design-primary);
   color: #fff;
 }
 body[data-page='space'].space-immersive .timeline {
@@ -114,7 +114,7 @@ body[data-page='space'].space-immersive .date-actions input {
   min-height: 34px;
 }
 body[data-page='space'].space-immersive :is(a, button, input, select):focus-visible {
-  outline-color: #b5d6ff;
+  outline-color: var(--design-inset);
 }
 @media (max-width: 520px) {
   body[data-page='space'] .head-actions {

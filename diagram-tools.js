@@ -213,11 +213,12 @@ let basisHome=null,basisNode=null;
   function open(m,preserveRail=false){if(!customizationOn())return false;if(!panel.hidden){commitActive();if(!validInputs())return false;}if(!preserveRail)railView='references';rememberContext();if(current?.id!==m.id)activeView='objects';++importRequest;finishNudge();cancelDrag();if(current)(current.host||current.canvas).classList.remove('dt-editing');current=m;selectedSource=m.id;editing=true;const s=stateFor(m);selected=s.objects.some(o=>o.id===s.lastSelected)?s.lastSelected:null;armed=null;panel.hidden=false;pendingImport=null;clearPending=false;importReview.replaceChildren();const remembered=s.viewScroll?.[activeView]||0,inspectorPosition=s.inspectorScroll||0,listPosition=s.listScroll||0;scroll.scrollTop=0;draftStatus();update();scroll.scrollTop=remembered;(s.viewScroll??={})[activeView]=remembered;inspector.scrollTop=inspectorPosition;list.scrollTop=listPosition;placePanel();syncLaunchers();panel.dataset.restoring='true';const epoch=importRequest;requestAnimationFrame(()=>requestAnimationFrame(()=>{if(panel.hidden||current?.id!==m.id||epoch!==importRequest)return;scroll.scrollTop=Math.min(remembered,Math.max(0,scroll.scrollHeight-scroll.clientHeight));inspector.scrollTop=inspectorPosition;list.scrollTop=listPosition;panel.dataset.restoring='false';}));repaint();}
   const railPositions={conditions:0,references:0};
   let emptyContext=null;
-  function persistentRailMode(){return ['lab','diagrams'].includes(document.body.dataset.page)&&window.SkyCustomization?.active===true&&!matchMedia('(max-width:760px)').matches;}
+  function parameterRail(){return document.querySelector('.ui-parameters')||document.querySelector('body[data-page=space]:not(.space-immersive) #spaceSidebarHost .side');}
+  function persistentRailMode(){return !!parameterRail()&&window.SkyCustomization?.active===true&&!matchMedia('(max-width:760px)').matches;}
   function visibleModels(){return [...models.values()].filter(m=>(typeof state==='undefined'||m.body===state.body)&&m.canvas.getBoundingClientRect().width>0&&m.canvas.getBoundingClientRect().height>0);}
   function chooseRail(kind){
     commitActive();if(!validInputs()||window.SkyLabComparison?.validate()===false)return false;
-    closeObjectMenu();const rail=document.querySelector('.ui-parameters');if(!rail)return false;
+    closeObjectMenu();const rail=parameterRail();if(!rail)return false;
     railPositions[railView]=rail.scrollTop;
     if(kind==='conditions'){referenceMode=editing;setMode(false);}else{
       const target=current&&visibleModels().some(m=>m.id===current.id)?models.get(current.id):visibleModels()[0];
@@ -230,7 +231,7 @@ let basisHome=null,basisNode=null;
     if(railNavigation?.parentElement===rail)return;
     railNavigation=E('nav','dt-rail-navigation',rail);railNavigation.dataset.i18nSkip='';railNavigation.setAttribute('role','tablist');railNavigation.setAttribute('aria-label',tr('侧栏内容|Sidebar section'));rail.prepend(railNavigation);
     for(const kind of ['conditions','references']){
-      const b=E('button','',railNavigation);b.type='button';b.id='dt-rail-'+kind;b.dataset.railSection=kind;b.setAttribute('role','tab');b.setAttribute('aria-controls',kind==='conditions'?'controls':panel.id);b.onclick=()=>chooseRail(kind);
+      const b=E('button','',railNavigation);b.type='button';b.id='dt-rail-'+kind;b.dataset.railSection=kind;b.setAttribute('role','tab');b.setAttribute('aria-controls',kind==='conditions'?(document.body.dataset.page==='space'?'spaceSidebarHost':'controls'):panel.id);b.onclick=()=>chooseRail(kind);
     }
     railNavigation.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const index=e.key==='Home'?0:e.key==='End'?1:e.target.dataset.railSection==='conditions'?1:0,button=railNavigation.children[index];if(chooseRail(button.dataset.railSection))button.focus({preventScroll:true});});
     emptyContext=E('section','dt-context-empty',rail);emptyContext.dataset.i18nSkip='';emptyContext.id='dt-reference-empty';emptyContext.setAttribute('role','region');emptyContext.setAttribute('aria-labelledby','dt-rail-references');emptyContext.hidden=true;
@@ -238,7 +239,7 @@ let basisHome=null,basisNode=null;
   }
   function syncRailNavigation(){if(!railNavigation)return;railNavigation.setAttribute('aria-label',tr('侧栏内容|Sidebar section'));for(const b of railNavigation.children){const chosen=b.dataset.railSection===railView;b.textContent=tr(b.dataset.railSection==='conditions'?'观测条件|Observation controls':'图中对象|Plot objects');b.setAttribute('aria-selected',String(chosen));b.tabIndex=chosen?0:-1;}}
   function syncRailShell(){
-    const rail=document.querySelector('.ui-parameters');if(!rail)return;
+    const rail=parameterRail();if(!rail)return;
     const persistent=persistentRailMode();if(persistent)ensureRailNavigation(rail);
     rail.classList.toggle('dt-navigation-ready',persistent);
     if(railNavigation){railNavigation.hidden=!persistent&&!mountedRail;if(persistent||mountedRail)rail.dataset.editorView=railView;else delete rail.dataset.editorView;}
@@ -252,7 +253,7 @@ let basisHome=null,basisNode=null;
     previous.scrollTop=railScroll;
   }
   function placePanel(){
-    const rail=document.querySelector('.ui-parameters'),controls=document.getElementById('controls');
+    const rail=parameterRail(),controls=document.getElementById('controls');
     const r=rail?.getBoundingClientRect(),mobile=matchMedia('(max-width:760px)').matches;
     const docked=!mobile&&!!r&&r.width>180&&r.width<450&&r.left>=0&&r.height>180;
     const focused=panel.contains(document.activeElement)?document.activeElement:null;
@@ -540,6 +541,7 @@ let basisHome=null,basisNode=null;
   document.addEventListener('keyup',e=>{if(nudging&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();finishNudge();}},true);
   document.addEventListener('skymotion:language',()=>{syncRailShell();for(const b of portals.values())b.textContent=tr('图内自定义|Customize plot');draftStatus();update();repaint();});
   window.addEventListener('blur',()=>{finishNudge();cancelDrag();});
+  window.addEventListener('space:layout',()=>{if(!panel.hidden){placePanel();syncLaunchers();}});
   window.addEventListener('resize',()=>{finishNudge();cancelDrag();if(!panel.hidden){placePanel();if(form.contains(document.activeElement))revealField(document.activeElement);}});
   if(typeof schedule==='function')schedule();else window.dispatchEvent(new Event('space:layout'));
 })();

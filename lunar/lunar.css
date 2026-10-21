@@ -170,7 +170,7 @@ body[data-page='lunar'] {
 }
 .lunar-camera-tools button[aria-pressed='true'] {
   background: #223b46;
-  border-color: #91aab3;
+  border-color: var(--design-line);
 }
 .lunar-view-status {
   position: absolute;
@@ -481,7 +481,7 @@ body[data-page='lunar'] {
 .lunar-sliders input[type='range']::-webkit-slider-runnable-track {
   height: 4px;
   border-radius: 2px;
-  background: #c3d8df;
+  background: var(--design-inset);
 }
 .lunar-sliders input[type='range']::-webkit-slider-thumb {
   appearance: none;
@@ -491,20 +491,20 @@ body[data-page='lunar'] {
   margin-top: -7px;
   border: 3px solid white;
   border-radius: 50%;
-  background: #24576b;
+  background: #414744;
   box-shadow: 0 0 0 1px #b8cbd1;
 }
 .lunar-sliders input[type='range']::-moz-range-track {
   height: 4px;
   border-radius: 2px;
-  background: #c3d8df;
+  background: var(--design-inset);
 }
 .lunar-sliders input[type='range']::-moz-range-thumb {
   width: 12px;
   height: 12px;
   border: 3px solid white;
   border-radius: 50%;
-  background: #24576b;
+  background: #414744;
 }
 .lunar-view-status {
   width: fit-content;
@@ -566,6 +566,6 @@ body[data-page='lunar'] {
 }
 
 .lunar-view:focus-visible {
-  outline: 2px solid var(--design-night-ink, #e4eef3);
+  outline: 2px solid var(--design-night-ink, var(--design-surface));
   outline-offset: -4px;
 }
