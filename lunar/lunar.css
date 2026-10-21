@@ -83,7 +83,7 @@ body[data-page='lunar'] {
   min-width: 0;
 }
 .lunar-pane + .lunar-pane {
-  border-left: 1px solid #344452;
+  border-left: 1px solid var(--design-night-line);
 }
 .lunar-pane header {
   height: 46px;
@@ -93,9 +93,9 @@ body[data-page='lunar'] {
   justify-content: space-between;
   gap: 12px;
   padding: 0 18px;
-  background: #132333;
-  color: #e4ebed;
-  border-bottom: 1px solid #344452;
+  background: var(--design-night-surface);
+  color: var(--design-night-ink);
+  border-bottom: 1px solid var(--design-night-line);
 }
 .lunar-pane h2 {
   font-size: 14px;
@@ -104,14 +104,14 @@ body[data-page='lunar'] {
   margin: 0;
 }
 .lunar-pane header > span {
-  color: #b6c1ca;
+  color: var(--design-night-muted);
   font-size: 11px;
 }
 .lunar-pane header button {
   font-size: 11px;
   background: transparent;
-  color: #e4ebed;
-  border-color: #59707e;
+  color: var(--design-night-ink);
+  border-color: var(--design-night-line);
   min-height: 28px;
   padding: 3px 9px;
 }
@@ -129,13 +129,13 @@ body[data-page='lunar'] {
   position: absolute;
   pointer-events: none;
   white-space: nowrap;
-  color: #cbd5db;
+  color: var(--design-night-ink);
   font-size: 12px;
   transform: translate(-50%, 5px);
-  text-shadow: 0 1px 4px #000;
+  text-shadow: 0 1px 4px var(--design-print-ink);
 }
 .observer-label {
-  color: #f2d7a3;
+  color: var(--design-sun);
 }
 .lunar-view-help {
   position: absolute;
@@ -143,7 +143,7 @@ body[data-page='lunar'] {
   left: 16px;
   right: 16px;
   margin: 0;
-  color: #bac7cf;
+  color: var(--design-night-muted);
   font-size: 11px;
   line-height: 1.7;
   pointer-events: none;
@@ -156,7 +156,7 @@ body[data-page='lunar'] {
   align-items: center;
   gap: 7px;
   font-size: 11px;
-  color: #cbd5db;
+  color: var(--design-night-ink);
   z-index: 2;
 }
 .lunar-camera-tools button,
@@ -164,12 +164,12 @@ body[data-page='lunar'] {
   font-size: 11px;
   min-height: 30px;
   padding: 3px 8px;
-  background: #172b3a;
-  color: #e4ebed;
-  border-color: #59707e;
+  background: var(--design-night-inset);
+  color: var(--design-night-ink);
+  border-color: var(--design-night-line);
 }
 .lunar-camera-tools button[aria-pressed='true'] {
-  background: #223b46;
+  background: var(--design-action);
   border-color: var(--design-line);
 }
 .lunar-view-status {
@@ -185,18 +185,18 @@ body[data-page='lunar'] {
 .lunar-view-status strong {
   font-size: 15px;
   font-weight: 500;
-  color: #f2d7a3;
+  color: var(--design-sun);
 }
 .lunar-view-status span {
   font-size: 11px;
-  color: #bac7cf;
+  color: var(--design-night-muted);
 }
 .lunar-failure {
   position: absolute;
   inset: 50px 20px auto;
-  background: #132333;
-  color: #e4ebed;
-  border: 1px solid #59707e;
+  background: var(--design-night-surface);
+  color: var(--design-night-ink);
+  border: 1px solid var(--design-night-line);
   padding: 16px;
   border-radius: 10px;
   z-index: 3;
@@ -338,7 +338,7 @@ body[data-page='lunar'] {
   }
   .lunar-pane + .lunar-pane {
     border-left: 0;
-    border-top: 1px solid #344452;
+    border-top: 1px solid var(--design-night-line);
   }
   .lunar-pane header {
     padding: 0 14px;
@@ -491,8 +491,8 @@ body[data-page='lunar'] {
   margin-top: -7px;
   border: 3px solid white;
   border-radius: 50%;
-  background: #24576b;
-  box-shadow: 0 0 0 1px #b8cbd1;
+  background: var(--design-accent);
+  box-shadow: 0 0 0 1px var(--design-night-line);
 }
 .lunar-sliders input[type='range']::-moz-range-track {
   height: 4px;
@@ -504,13 +504,13 @@ body[data-page='lunar'] {
   height: 12px;
   border: 3px solid white;
   border-radius: 50%;
-  background: #24576b;
+  background: var(--design-accent);
 }
 .lunar-view-status {
   width: fit-content;
   padding: 8px 10px;
   border-radius: 8px;
-  background: #102230;
+  background: var(--design-night-surface);
 }
 .lunar-view-status {
   pointer-events: auto;
@@ -521,9 +521,9 @@ body[data-page='lunar'] {
   align-self: flex-start;
   min-height: 30px;
   padding: 4px 10px;
-  color: #e4ebed;
-  background: #172b3a;
-  border-color: #59707e;
+  color: var(--design-night-ink);
+  background: var(--design-night-inset);
+  border-color: var(--design-night-line);
 }
 .lunar-mounted,
 .lunar-mounted .lunar-shell {

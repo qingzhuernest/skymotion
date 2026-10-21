@@ -3,7 +3,7 @@ body[data-page='space'] .space-scenes {
   min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  background: #13283a;
+  background: var(--design-night-surface);
 }
 body[data-page='space'] .space-scenes.is-comparing {
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
@@ -13,8 +13,8 @@ body[data-page='space'] .space-compare {
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  border-left: 1px solid #607d9866;
-  background: #13283a;
+  border-left: 1px solid var(--design-night-line);
+  background: var(--design-night-surface);
 }
 body[data-page='space'] .space-compare-canvas {
   display: block;
@@ -32,7 +32,7 @@ body[data-page='space'] .space-scenes .stage {
   }
   body[data-page='space'] .space-compare {
     border-left: 0;
-    border-top: 1px solid #607d9866;
+    border-top: 1px solid var(--design-night-line);
   }
   body[data-page='space'] .space-scenes.is-comparing .stage-footer {
     display: none;

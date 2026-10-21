@@ -36,6 +36,8 @@ python3 scripts/prerender-pages.py --check
 
 The generator synchronizes English HTML, `language-data.js` and the preload manifest while preserving DOM IDs, form values, numerical attributes and scientific scripts. Keep the Chinese and English Markdown downloads of all three documents aligned. Update the relevant topic rather than appending release logs to the document.
 
+Interface colors are defined in `ui-palette.css`; controls consume `--design-*` variables instead of defining page-specific colors. The compact object menu keeps history in the action row and expands help on demand, leaving more room for objects and properties.
+
 ## Automated checks
 
 Use Node 22 or later, Python 3 and Chromium:

@@ -35,9 +35,9 @@ html:lang(en) .welcome-quote {
 }
 .welcome-brand .language-toggle {
   margin-left: 18px;
-  background: #142b3c;
-  color: #e4eef3;
-  border-color: #3d5b6d;
+  background: var(--design-night-surface);
+  color: var(--design-night-ink);
+  border-color: var(--design-night-line);
 }
 html:lang(en)
   :is(.menu-content, .ui-information, .side, .workbench-panel-head) {
@@ -212,7 +212,7 @@ html:lang(en) body[data-page="welcome"] :is(.welcome-sky-actions button,.welcome
 .language-actions{display:flex;align-items:center;flex:none;gap:8px;margin:0 12px 0 8px;}
 .language-actions :is(.layout-launch,.language-toggle){margin:0;min-height:36px;padding:7px 12px;border-radius:var(--design-radius-control);font:inherit;white-space:nowrap;background:var(--design-surface);color:var(--design-primary);border:1px solid var(--design-line);}
 .language-actions .layout-launch[aria-pressed=true],
-body[data-page="space"].space-immersive .language-actions .layout-launch[aria-pressed=true]{background:var(--design-action,var(--design-primary));border-color:var(--design-action,var(--design-primary));color:#fff;}
+body[data-page="space"].space-immersive .language-actions .layout-launch[aria-pressed=true]{background:var(--design-action,var(--design-primary));border-color:var(--design-action,var(--design-primary));color:var(--design-on-action);}
 .language-actions :is(.layout-launch,.language-toggle):focus-visible{outline:2px solid var(--design-primary);outline-offset:3px;}
 @media(max-width:600px){.language-actions{gap:6px;margin:0 10px 0 6px;font-size:12px;}.language-actions :is(.layout-launch,.language-toggle){padding:6px 9px;min-height:36px;}}
 @media(pointer:coarse){.language-actions :is(.layout-launch,.language-toggle){min-height:44px;}}

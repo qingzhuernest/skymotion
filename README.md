@@ -36,6 +36,8 @@ python3 scripts/prerender-pages.py --check
 
 生成器同步英文 HTML、`language-data.js` 和资源预热清单，同时保留 DOM ID、表单值、数值属性与科学脚本。三份文档的中英文 Markdown 下载文件也须同步。内容按主题更新到原章节，不在文末叠加发布日志。
 
+界面颜色统一在 `ui-palette.css` 定义，控件通过 `--design-*` 变量调用；不要在页面模块里另写色号。对象菜单将撤销、重做并入操作行，帮助按需展开，给列表和属性保留空间。
+
 ## 自动检查
 
 使用 Node 22 或更新版本、Python 3 和 Chromium：

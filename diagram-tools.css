@@ -1,7 +1,7 @@
 /* Unified object workbench: native paper controls around the scientific plot. */
 .dt-host{position:relative}.dt-overlay{position:absolute;inset:0;pointer-events:none}
 body .diagram-tool-launch{position:absolute;right:12px;bottom:12px;z-index:6;font:inherit;cursor:pointer}
-body .dt-panel{--dt-ink:var(--design-ink);--dt-muted:var(--design-muted);--dt-line:var(--design-line);position:fixed;z-index:10020;right:18px;top:110px;bottom:16px;width:320px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 88px);display:flex;flex-direction:column;overflow:hidden;padding:0;border:1px solid var(--dt-line);border-radius:var(--design-radius-surface);background:var(--design-surface);color:var(--dt-ink);box-shadow:none;isolation:isolate;font:inherit;caret-color:var(--design-primary);scrollbar-color:#9eb1bb var(--design-inset)}
+body .dt-panel{--dt-ink:var(--design-ink);--dt-muted:var(--design-muted);--dt-line:var(--design-line);position:fixed;z-index:10020;right:18px;top:110px;bottom:16px;width:320px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 88px);display:flex;flex-direction:column;overflow:hidden;padding:0;border:1px solid var(--dt-line);border-radius:var(--design-radius-surface);background:var(--design-surface);color:var(--dt-ink);box-shadow:none;isolation:isolate;font:inherit;caret-color:var(--design-primary);scrollbar-color:var(--design-scrollbar) var(--design-inset)}
 body .dt-panel[hidden],.dt-panel [hidden],.dt-rail-navigation[hidden],.dt-context-empty[hidden]{display:none!important}
 .dt-panel *{box-sizing:border-box}.dt-panel ::selection{background:var(--design-selected);color:var(--design-ink)}
 body .dt-panel button{min-height:40px;padding:8px 10px;border:1px solid var(--dt-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--dt-ink);font:inherit;font-size:12px;line-height:1.5;cursor:pointer}
@@ -9,24 +9,29 @@ body .dt-panel button:hover{background:var(--design-inset)}
 body .dt-panel button:disabled{opacity:.46;cursor:default}
 body .dt-panel :is(button,input,select):focus-visible{outline:2px solid var(--design-primary);outline-offset:2px}
 .dt-panel>:not(.dt-scroll){flex-shrink:0}
-.dt-head{display:flex;align-items:center;gap:4px;padding:12px 14px 4px}
-body .dt-head h2{flex:1;min-width:0;margin:0;color:var(--dt-ink);font-size:16px;font-weight:500;line-height:1.5}
+.dt-head{display:flex;align-items:center;gap:2px;min-height:40px;padding:4px 10px}
+body .dt-head h2{flex:1;min-width:0;margin:0;color:var(--dt-ink);font-size:16px;font-weight:500;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 body .dt-head button{flex:none;position:relative;width:36px;height:36px;min-height:36px;padding:0;font-size:0;border:0;background:transparent}
 .dt-head button::after{content:'';position:absolute;inset:10px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m5 5 10 10M15 5 5 15' stroke='black' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat}
 .dt-head .dt-collapse::after{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m5 7 5 5 5-5' stroke='black' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
 .dt-panel[data-collapsed=true] .dt-collapse::after{transform:rotate(180deg)}
-.dt-history{display:flex;align-items:center;gap:4px;margin:0;padding:0 14px 6px}
-body .dt-history button{min-height:32px;min-width:44px;border:0;background:transparent;color:var(--dt-muted);padding:4px 6px}
-body .dt-history .dt-help-toggle{margin-left:auto}
-.dt-tabs{display:flex;gap:6px;align-items:center;padding:0 14px 12px;border:0}
-body .dt-panel .dt-tabs button{min-width:0;flex:1;padding:8px 6px;font-size:12px;border-radius:var(--design-radius-control)}
+.dt-history{display:flex;align-items:center;gap:2px;margin:0 0 0 auto;padding:0;flex:none}
+body .dt-panel .dt-history button{flex:none;width:32px;height:36px;min-height:36px;min-width:32px;padding:8px;border:0;background:transparent;color:var(--dt-muted);font-size:0}
+.dt-history button::before{content:'';display:block;width:16px;height:16px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m7 4-4 4 4 4M3 8h8a5 5 0 0 1 0 10' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.dt-history .dt-redo::before{transform:scaleX(-1)}
+body .dt-head .dt-help-toggle::after{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='black' stroke-width='1.5'/%3E%3Cpath d='M8 7a2 2 0 0 1 4 0c0 2-2 2-2 4m0 2v.1' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")}
+body .dt-head .dt-help-toggle[aria-expanded=true]{background:var(--design-selected)}
+.dt-tabs{display:flex;gap:4px;align-items:center;min-height:40px;padding:0 10px 6px;border:0}
+body .dt-panel .dt-tabs>[data-dt-view]{min-width:0;flex:1;padding:6px;font-size:12px;border-radius:var(--design-radius-control)}
 body .dt-tabs [data-dt-view=library]{background:var(--design-surface);color:var(--design-ink)}
 body .dt-tabs [aria-expanded=true]{background:var(--design-inset);border-color:var(--design-muted)}
 body .dt-tabs [data-dt-view=files]{flex:0 0 auto}
-.dt-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:16px 14px;scrollbar-width:thin;border-top:1px solid var(--dt-line)}
+body .dt-panel .dt-tabs>[data-dt-view=objects]{flex:0 0 32px;width:32px;font-size:0;padding:8px}
+.dt-tabs>[data-dt-view=objects]::before{content:"";display:block;width:16px;height:16px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m9 4-6 6 6 6M3 10h14' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.dt-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:12px 10px;scrollbar-width:thin;border-top:1px solid var(--dt-line)}
 .dt-caption,.dt-empty,.dt-hint,.dt-status,.dt-result,.dt-reference-help{font-size:12px;line-height:1.7;color:var(--dt-muted);overflow-wrap:anywhere}
 body .dt-panel h3{margin:0 0 10px;font-size:14px;font-weight:600;color:var(--dt-ink);line-height:1.5}
-.dt-caption{margin:0 0 14px}.dt-empty{margin:0;padding:8px 0 18px}
+.dt-caption{margin:0 0 14px}body .dt-panel:not([data-help=true]) .dt-library>.dt-caption{display:none}.dt-empty{margin:0;padding:8px 0 18px}
 .dt-hint{margin:0 14px 10px}.dt-panel:not([data-help=true]):not([data-placing=true])>.dt-hint{display:none}
 body .dt-place,body .dt-cancel-place{margin:0 14px 8px}
 body .dt-place{background:var(--design-inset)}
@@ -64,17 +69,17 @@ body .dt-panel>.dt-footer{display:flex;gap:8px;padding:10px 14px;border-top:1px 
 body .dt-panel .dt-object-menu{position:fixed;inset:auto;margin:0;min-width:170px;padding:5px;border:1px solid var(--dt-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--dt-ink)}
 .dt-object-menu:not(:popover-open){display:none}body .dt-panel .dt-object-menu button{display:block;width:100%;border:0;text-align:start;background:transparent}
 body .dt-panel .dt-object-menu button:hover{background:var(--design-inset)}
-.dt-field-error{font:inherit;font-size:12px;line-height:1.55;color:#875136}.dt-fields label:has(.dt-field-error){grid-column:1/-1}body .dt-panel [aria-invalid=true]{border-color:#965d3c;background:#fff9f4}
+.dt-field-error{font:inherit;font-size:12px;line-height:1.55;color:var(--design-error-ink)}.dt-fields label:has(.dt-field-error){grid-column:1/-1}body .dt-panel [aria-invalid=true]{border-color:var(--design-error-line);background:var(--design-error-surface)}
 .dt-track-label::before{content:'';display:inline-block;width:9px;height:9px;margin-right:8px;border-radius:50%;background:var(--reference-color);vertical-align:middle}
 body .dt-host canvas:focus-visible,body .dt-host[tabindex]:focus-visible{outline:2px solid var(--design-inset);outline-offset:-2px}
-.dt-rail-navigation{position:sticky;top:0;z-index:3;display:flex;gap:6px;padding:10px 0;margin:0 0 8px;background:var(--design-inset)}
+.dt-rail-navigation{position:sticky;top:0;z-index:3;display:flex;gap:6px;padding:6px 0;margin:0 0 4px;background:var(--design-inset)}
 body .dt-rail-navigation button{flex:1;min-height:40px;padding:6px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--design-primary);font:inherit;font-size:12px;cursor:pointer}
 body .dt-rail-navigation button[aria-selected=true]{border-color:var(--design-muted);color:var(--design-ink)}
 body .dt-rail-navigation button:focus-visible{outline:2px solid var(--design-primary);outline-offset:2px}
 body :is(.ui-parameters,body[data-page=space] .side).dt-navigation-ready,body :is(.ui-parameters,body[data-page=space] .side).dt-rail-active{padding-top:0}
 :is(.ui-parameters,body[data-page=space] .side).dt-navigation-ready[data-editor-view=references]>:not(.dt-rail-navigation):not(.dt-panel):not(.dt-context-empty):not(.sb-controls){display:none!important}
 :is(.ui-parameters,body[data-page=space] .side).dt-navigation-ready[data-editor-view=conditions]>:is(.dt-panel,.dt-context-empty,.sb-controls){display:none!important}
-body .dt-panel.dt-docked{position:relative;inset:auto!important;z-index:auto;width:100%!important;max-width:none;height:calc(100% - 62px);min-height:0;max-height:none;margin:0;border:0;border-radius:0;background:var(--design-inset)}
+body .dt-panel.dt-docked{position:relative;inset:auto!important;z-index:auto;width:100%!important;max-width:none;height:calc(100% - 50px);min-height:0;max-height:none;margin:0;border:0;border-radius:0;background:var(--design-inset)}
 .dt-docked .dt-scroll{background:var(--design-surface)}
 .dt-panel[data-empty=true] .dt-scroll[data-view=objects]{background:transparent;border-top:0}
 body .dt-context-empty{padding:18px 14px;color:var(--design-ink);font:inherit;font-size:13px;line-height:1.7}.dt-context-empty p{margin:0 0 16px}body .dt-context-empty button{width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--design-ink);font:inherit}
@@ -93,13 +98,13 @@ body .dt-host .diagram-tool-launch,
 body .ui-plot #viewReset,
 body[data-page=space] #reset.stage-reset{
   min-height:40px;padding:8px 12px;
-  border:1px solid #3d5b6d;border-radius:var(--design-radius-control);
-  background:#142b3c;color:#e4eef3;box-shadow:none;
+  border:1px solid var(--design-night-line);border-radius:var(--design-radius-control);
+  background:var(--design-night-surface);color:var(--design-night-ink);box-shadow:none;
   font-family:var(--design-font);font-size:12px;font-weight:400;line-height:1.5;
 }
 body .dt-host .diagram-tool-launch:hover,
 body .ui-plot #viewReset:hover,
-body[data-page=space] #reset.stage-reset:hover{background:#203b4c;border-color:var(--design-line);color:#e4eef3}
+body[data-page=space] #reset.stage-reset:hover{background:var(--design-night-inset);border-color:var(--design-line);color:var(--design-night-ink)}
 body .dt-host .diagram-tool-launch:focus-visible,
 body .ui-plot #viewReset:focus-visible,
 body[data-page=space] #reset.stage-reset:focus-visible{outline:2px solid var(--design-inset);outline-offset:3px}
@@ -127,3 +132,9 @@ body .dt-panel .dt-head :is(button,.dt-collapse){font-size:0}
 .dt-panel[data-limit=true]>.dt-hint{display:block}
 
 body[data-page=space] .side.dt-rail-active{gap:0;padding:0;overflow:hidden}
+
+@media(pointer:coarse){body .dt-panel .dt-head button{width:44px;height:44px;min-height:44px}body .dt-panel .dt-history button{width:44px;min-width:44px;min-height:44px;height:44px}body .dt-panel .dt-tabs>[data-dt-view]{min-height:44px}.dt-head{min-height:48px}.dt-tabs{min-height:48px}}
+
+body .dt-panel>.dt-status{margin:0;padding:8px 10px;max-height:58px;overflow:auto;flex:none}
+
+@media(pointer:coarse){body .dt-panel .dt-tabs>[data-dt-view=objects]{width:44px;flex-basis:44px;min-width:44px}}

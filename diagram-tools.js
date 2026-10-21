@@ -56,7 +56,7 @@
     if(key==='files'&&current&&selectedSource!==current.id){selectedSource=current.id;selected=stateFor(current).lastSelected||null;}activeView=key;if(persistedSection!==key){try{sessionStorage.setItem('sky-reference-section-v1',key);persistedSection=key;}catch{}}scroll.dataset.view=key;
     for(const [name,section]of Object.entries(views))section.hidden=name!==key;
     for(const b of tabs.querySelectorAll('[data-dt-view]')){
-      b.textContent=tr(tabLabels[b.dataset.dtView]);b.hidden=b.dataset.dtView==='objects'&&key==='objects';b.setAttribute('aria-expanded',String(b.dataset.dtView===key));
+      b.textContent=tr(tabLabels[b.dataset.dtView]);b.title=b.textContent;b.hidden=b.dataset.dtView==='objects'&&key==='objects';b.setAttribute('aria-expanded',String(b.dataset.dtView===key));
       if(b.dataset.dtView===key)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
     }
     scroll.scrollTop=positions[key]||0;
@@ -81,17 +81,17 @@
   const referenceHelp=E('p','dt-reference-help',inspector);inspector.insertBefore(referenceHelp,form);
   const locationPanel=E('div','dt-location',inspector),locationInfo=E('p','',locationPanel),locationApply=E('button','',locationPanel);inspector.insertBefore(locationPanel,form);locationApply.type='button';locationApply.dataset.observeLocation='';
   const objectActions=E('div','dt-object-actions dt-actions',inspector),historyActions=E('div','dt-history dt-actions',panel);
-  panel.insertBefore(historyActions,tabs);
+  tabs.append(historyActions);
   const help=E('button','dt-help-toggle',historyActions);help.type='button';help.setAttribute('aria-expanded','false');help.setAttribute('aria-controls','dt-help-text');help.onclick=()=>{panel.dataset.help=String(panel.dataset.help!=='true');help.setAttribute('aria-expanded',panel.dataset.help);};
   const hint=E('p','dt-hint',panel),placement=E('button','dt-place',panel),cancelPlacement=E('button','dt-cancel-place',panel);cancelPlacement.type='button';cancelPlacement.hidden=true;cancelPlacement.onclick=()=>{armed=null;placementUI();switchView('objects',true);repaint();};panel.insertBefore(cancelPlacement,tabs);panel.insertBefore(hint,tabs);panel.insertBefore(placement,tabs);
   hint.id='dt-help-text';
   status.setAttribute('role','status');status.id='diagram-tool-status';result.setAttribute('aria-live','polite');placement.type='button';placement.hidden=true;placement.onclick=()=>placeAt(current.w/2,current.h/2);
   const fileTitle=E('h3','',files),fileIntro=E('p','dt-caption',files),fileActions=E('div','dt-file-actions dt-actions',files),importReview=E('div','dt-import-review',files),fileInput=E('input','',files);fileInput.type='file';fileInput.accept='.json,application/json';fileInput.hidden=true;fileInput.onchange=()=>readImport(fileInput.files[0]);
-  function placementUI(){updateMode();help.textContent=tr('操作提示|Help');panel.dataset.placing=String(!!armed);placement.hidden=cancelPlacement.hidden=!armed;panel.dataset.placing=String(!!armed);cancelPlacement.textContent=tr('取消放置|Cancel placement');placement.textContent=tr('直接放在图中央|Place at the center');hint.textContent=armed?tr('已选：|Selected: ')+tr(armed.title)+tr('。点一下画布放置，或点击下方按钮直接添加。点“取消放置”或按 Esc 可取消。|. Tap the plot to place it, or use the button below. Choose Cancel placement or press Esc to cancel.'):tr('点选对象查看属性，拖动手柄调整；空白处沿用原图操作。方向键微调，Ctrl/Cmd+Z 撤销，Esc 取消当前操作。|Select an object to view properties and drag its handle to adjust it. Empty space uses the original plot controls. Arrow keys nudge, Ctrl/Cmd+Z undoes, and Esc cancels the current action.');}
+  function placementUI(){updateMode();help.textContent=tr('操作提示|Help');help.title=help.textContent;panel.dataset.placing=String(!!armed);placement.hidden=cancelPlacement.hidden=!armed;panel.dataset.placing=String(!!armed);cancelPlacement.textContent=tr('取消放置|Cancel placement');placement.textContent=tr('直接放在图中央|Place at the center');hint.textContent=armed?tr('已选：|Selected: ')+tr(armed.title)+tr('。点一下画布放置，或点击下方按钮直接添加。点“取消放置”或按 Esc 可取消。|. Tap the plot to place it, or use the button below. Choose Cancel placement or press Esc to cancel.'):tr('点选对象查看属性，拖动手柄调整；空白处沿用原图操作。方向键微调，Ctrl/Cmd+Z 撤销，Esc 取消当前操作。|Select an object to view properties and drag its handle to adjust it. Empty space uses the original plot controls. Arrow keys nudge, Ctrl/Cmd+Z undoes, and Esc cancels the current action.');}
   function arm(def){finishNudge();editing=true;armed=def;panel.dataset.detail='false';placementUI();if(current.canvas.tabIndex<0)current.canvas.tabIndex=0;current.canvas.focus({preventScroll:true});}
   function placeAt(x,y){if(!armed||!current)return;const def=armed,point=['note','emphasis'].includes(def.id)?{x:x/current.w*100,y:y/current.h*100}:current.pick?.(x,y);if(point===null){status.textContent=tr('请在有效区域内选择|Choose a valid point');return;}armed=null;create(def,point);}
   const action=(zh,en,fn)=>{const b=E('button','',actions);b.type='button';b.dataset.dtLabel=zh+'|'+en;b.onclick=fn;return b;};
-  const undo=action('撤销','Undo',()=>travel('undo','redo')),redo=action('重做','Redo',()=>travel('redo','undo'));historyActions.append(undo,redo,help);
+  const undo=action('撤销','Undo',()=>travel('undo','redo')),redo=action('重做','Redo',()=>travel('redo','undo'));undo.classList.add('dt-undo');redo.classList.add('dt-redo');historyActions.append(undo,redo);head.insertBefore(help,fold);
   const duplicate=action('复制','Duplicate',()=>{if(!validInputs())return;mutate(s=>{const o=s.objects.find(x=>x.id===selected);if(!o||s.objects.length>=40)return;const q=copy(o);q.locked=false;q.id='d'+Date.now()+ ++serial;
     if(o.customLabel){let n=2;while(s.objects.some(x=>x.label===o.label+' '+n))n++;q.label=o.label+' '+n;}
     else{q.copyNumber=Math.max(1,...s.objects.filter(x=>x.type===o.type&&!x.customLabel).map(x=>x.copyNumber||1))+1;const title=defs(selectedOwner()).find(d=>d.id===o.type).title;q.label=title.split('|').map(x=>x+' '+q.copyNumber).join('|');}
@@ -278,7 +278,7 @@ let basisHome=null,basisNode=null;
       if(anchor(selectedOwner(),o)){const row=E('label','dt-lock',form),lock=E('input','',row),text=E('span','',row);lock.type='checkbox';lock.checked=!!o.locked;text.textContent=tr('锁定位置|Lock position');lock.onchange=()=>{if(!validInputs()){lock.checked=!!o.locked;return;}mutate(()=>o.locked=lock.checked,true);for(const field of form.querySelectorAll('[data-field]'))field.disabled=!!o.locked&&['x','y','lat','lon','time'].includes(field.dataset.field);};}
       if(o.type==='camera'){const b=E('button','',form);b.type='button';b.textContent=tr('回到此相机|Restore this camera');b.onclick=()=>current.restoreCamera?.(o.camera);}
     }
-    for(const b of panel.querySelectorAll('[data-dt-label]'))b.textContent=tr(b.dataset.dtLabel);updateFiles();updateLocation();actionState();scroll.scrollTop=scrollBefore;list.scrollTop=listBefore;inspector.scrollTop=inspectorBefore;if(desktopSplit()&&activeView==='objects'&&panel.dataset.collapsed!=='true'){const row=selectedRow();if(row)revealWithin(row,list);}
+    for(const b of panel.querySelectorAll('[data-dt-label]')){b.textContent=tr(b.dataset.dtLabel);b.title=b.textContent;}title.title=title.textContent;updateFiles();updateLocation();actionState();scroll.scrollTop=scrollBefore;list.scrollTop=listBefore;inspector.scrollTop=inspectorBefore;if(desktopSplit()&&activeView==='objects'&&panel.dataset.collapsed!=='true'){const row=selectedRow();if(row)revealWithin(row,list);}
   }
   function selectedRow(){return [...list.querySelectorAll('[data-reference-id]')].find(b=>b.dataset.referenceId===selectedKey());}
   function focusSelectedRow(){const row=selectedRow();(row||undo).focus({preventScroll:true});if(row)revealWithin(row,list);}

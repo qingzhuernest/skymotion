@@ -1,6 +1,6 @@
 /* Only the 3D renderer is embedded. The parent retains navigation, menus and time controls. */
 body[data-page='space'][data-embedded='true'] {
-  background: #13283a;
+  background: var(--design-night-surface);
 }
 body[data-page='space'][data-embedded='true']:not([data-synchronized='true']) .visual {
   visibility: hidden;
@@ -10,7 +10,7 @@ body[data-page='space'][data-embedded='true']:not([data-synchronized='true']) .v
   inset: 50% 0 auto;
   margin: 0;
   text-align: center;
-  color: #c9d8e8;
+  color: var(--design-night-muted);
   font-size: 12px;
 }
 body[data-page='space'][data-embedded='true']
@@ -33,7 +33,7 @@ body[data-page='space'][data-embedded='true'] .space-scenes {
   height: 100%;
 }
 body[data-page='space'][data-embedded='true'] .stage {
-  background: #13283a;
+  background: var(--design-night-surface);
 }
 body[data-page='space'][data-embedded='true'] .stage-note {
   max-width: calc(100% - 56px);

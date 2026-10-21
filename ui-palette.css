@@ -1,0 +1,74 @@
+/* Shared UI palette. Define interface colors here; components only reference roles.
+ * Scientific Canvas/WebGL colors remain owned by their drawing modules. */
+:root {
+  --design-plot: #132438;
+  --design-night-label-soft: #142b3ccc;
+  --design-scrim: #101e2c66;
+  --design-shadow-dialog: #101e2c26;
+  --design-welcome-night: #0b131e;
+  --design-welcome-quote: #c8b99f;
+  --design-welcome-answer: #eee9df;
+  --design-welcome-final: #e9cc9b;
+  --design-reading-final: #685844;
+
+  --design-accent: #24576b;
+  --design-accent-hover: #174558;
+  --design-paper: #f4f7f8;
+  --design-surface: #ffffff;
+  --design-inset: #ecf2f4;
+  --design-line: #cdd9de;
+  --design-ink: #20323e;
+  --design-muted: #536975;
+  --design-selected: #dcebf0;
+  --design-on-selected: #183e50;
+  --design-on-action: #ffffff;
+  --design-sun: #f2d7a3;
+  --design-night: #101e2c;
+  --design-night-surface: #142b3c;
+  --design-night-inset: #203b4c;
+  --design-night-line: #3d5b6d;
+  --design-night-ink: #e4eef3;
+  --design-night-muted: #b7ceda;
+  --design-night-primary: #a9d5e6;
+  --design-night-hover: #bce0ec;
+  --design-night-selected: #284c61;
+  --design-scrollbar: #9eb1bb;
+  --design-open-border: #8caebc;
+  --design-open-muted: #42616f;
+  --design-switch-line: #8297a3;
+  --design-switch-idle: #c7d4db;
+  --design-switch-thumb: #506b79;
+  --design-disabled-ink: #637985;
+  --design-disabled-surface: #e8eef1;
+  --design-night-tool-muted: #c7dde8;
+  --design-night-tool-selected: #39748c;
+  --design-night-label-surface: #142b3ce6;
+  --design-range-track: #c3d8e0;
+  --design-canvas-action-line: #73919f;
+  --design-canvas-action-surface: #163245;
+  --design-print-ink: #000000;
+  --design-daylight-label-ink: #082331;
+  --design-night-plot-label: #d0e5f2;
+  --design-night-plot-axis: #dcebf5;
+  --design-error-ink: #875136;
+  --design-error-line: #965d3c;
+  --design-error-surface: #fff9f4;
+  --design-shadow: #20323e1c;
+  --design-primary: var(--design-accent);
+  --design-hover: var(--design-accent-hover);
+  --design-action: var(--design-accent);
+  --design-action-hover: var(--design-accent-hover);
+}
+
+/* Immersive observation changes surface/foreground roles, never the green action. */
+body[data-page="space"].space-immersive {
+  --design-paper: var(--design-night);
+  --design-surface: var(--design-night-surface);
+  --design-inset: var(--design-night-inset);
+  --design-line: var(--design-night-line);
+  --design-ink: var(--design-night-ink);
+  --design-muted: var(--design-night-muted);
+  --design-primary: var(--design-night-primary);
+  --design-hover: var(--design-night-hover);
+  --design-selected: var(--design-night-selected);
+}

@@ -192,7 +192,7 @@ components:
 
 **Creative North Star: "The Classroom Observatory"**
 
-SkyMotion frames scientific observation with cool paper, clear ink and restrained blue controls. Light operation and document surfaces surround a dark astronomical canvas; the canvas remains a distinct scientific space with its existing data colors.
+SkyMotion frames scientific observation with cool paper, clear ink and restrained original green controls. Light operation and document surfaces surround a dark astronomical canvas; the canvas remains a distinct scientific space with its existing data colors.
 
 The Chinese locale uses one Song-style serif family across headings, text, controls and annotations; the English locale uses locally hosted Bitstream Charter in the same roles. Tabular numbers support repeated changes to location and time, while the welcome page retains its interactive stars and handwritten sentence. The design records the production interface rather than making claims about astronomical accuracy or device performance.
 
@@ -204,12 +204,12 @@ The Chinese locale uses one Song-style serif family across headings, text, contr
 
 ## Colors
 
-The primary palette combines cool paper, navy ink and muted teal blue. Token values in frontmatter are normative; `dist/design-system.css`, loaded after the incumbent styles, is the implementation authority.
+The primary palette combines cool paper, navy ink and the original green accent. Token values in frontmatter are normative; `ui-palette.css`, loaded before all component styles, owns color definitions. `design-system.css` and page modules consume its semantic roles.
 
 ### Primary
 
-- **Ink Blue:** selected controls, links and keyboard focus; the hover shade deepens this same role.
-- **Action Blue:** a separate shared action token with the same light-mode color. Actions use it consistently across light and dark contexts; its hover token supplies the common darker action shade.
+- **Original Green:** selected controls, links and keyboard focus; the hover shade deepens this same role.
+- **Action Green:** a separate shared action token with the same light-mode color. Actions use it consistently across light and dark contexts; its hover token supplies the common darker action shade.
 - **Selected Wash:** lighter selected navigation and open disclosure surfaces, with the dedicated on-selected foreground.
 
 ### Secondary
@@ -221,9 +221,9 @@ The primary palette combines cool paper, navy ink and muted teal blue. Token val
 - **Cool Paper / Surface / Inset:** page ground, white reading or control surfaces, and recessed parameter ground.
 - **Ink / Muted / Line:** primary text, supporting labels and structural dividers.
 - **Auxiliary states:** scrollbar, disclosure border/supporting text, idle switches, disabled controls and range tracks retain the dedicated documented colors. Night tool supporting text, selected toggles, translucent labels and canvas action borders/surfaces belong to dark-canvas legibility. Observer labels retain dedicated daylight ink and night plot label/axis colors rather than inheriting light-panel colors. Print ink is black on white and is not an interface accent.
-- **Night family:** observation ground, tool surface, inset field, border, text and muted text. Immersive space remaps paper, surface, inset, line, ink, muted, primary, hover and selected to their corresponding night tokens. Its filled active buttons and moving selection marker retain light-mode Ink Blue with white text.
+- **Night family:** observation ground, tool surface, inset field, border, text and muted text. Immersive space remaps paper, surface, inset, line, ink, muted, primary, hover and selected to their corresponding night tokens. Its filled active buttons and moving selection marker retain light-mode Original Green with white text.
 
-**The Scientific Color Rule.** Use ink blue for interface selection; retain the existing Sun, Moon, planet and plotted-data colors inside scientific drawings.
+**The Scientific Color Rule.** Use the original green for interface selection; retain the existing Sun, Moon, planet and plotted-data colors inside scientific drawings.
 
 ## Typography
 
@@ -531,3 +531,9 @@ Preview 72 (2026-10-19): persistent 3D Customize entry beside language, includin
 ## 2026-10-21 unified customization
 
 Keep the native main navigation, observation controls and scientific plot. The object workbench has a persistent Add object command, a temporary Plans view, an object list and selection properties. No Observe/Edit switch or Add/Objects/Files tab strip. Empty states contain no disabled inspector. Shared cities/times keep their source identity; physical objects use the existing ground renderer. Match native paper controls and dark plot actions across desktop, tablet and phone.
+
+## Shared color ownership and compact customization
+
+`ui-palette.css` is the only color-definition source for shared controls and 3D UI. `--design-accent` supplies the original green; primary and action roles reference it. Immersive observation remaps surfaces and foregrounds, retaining the action accent. Error and scientific colors remain separate semantic roles. Shared module styles contain no literal color values; `tests/ui-palette.cjs` enforces this and checks that real controls follow an updated accent.
+
+The object editor uses two compact rows: the current plot with Help, Collapse and Close; then Add object / Plans with Undo and Redo. History uses labelled SVG controls with tooltips, not another full row. Observation controls / Plot objects remains the stable rail navigation. Contextual help expands on request. Object rows retain their ellipsis menus.

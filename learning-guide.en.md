@@ -104,6 +104,9 @@ If language switching fails, use Retry in the page notice. Retrying preserves th
 
 ## Customization: add, compare and save
 
+The object menu keeps the plot name at the top; the question-mark button expands help on demand. Add object, Plans, Undo and Redo share one row, leaving more room for the object list and properties below.
+
+
 ### Enter and finish customization
 
 Choose Customize beside the language button. The main navigation and original location/time controls remain available. Observation controls adjusts the baseline experiment; Plot objects adds and edits references. Finish customizing closes the tools while keeping the session draft.

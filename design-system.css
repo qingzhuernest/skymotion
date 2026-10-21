@@ -17,17 +17,6 @@
   font-display: block;
 }
 :root {
-  --design-paper: #f4f7f8;
-  --design-surface: #ffffff;
-  --design-inset: #ecf2f4;
-  --design-line: #cdd9de;
-  --design-ink: #20323e;
-  --design-muted: #536975;
-  --design-primary: #24576b;
-  --design-hover: #174558;
-  --design-selected: #dcebf0;
-  --design-sun: #f2d7a3;
-  --design-night: #101e2c;
   --design-font: "SkyMotion Reading", "Songti SC", "SimSun", serif;
   --design-radius-control: 12px;
   --design-radius-surface: 16px;
@@ -45,9 +34,9 @@
   --ui-control-radius: var(--design-radius-control);
   --md-primary: var(--design-primary);
   --md-primary-hover: var(--design-hover);
-  --md-on-primary: #fff;
+  --md-on-primary: var(--design-on-action);
   --md-primary-container: var(--design-selected);
-  --md-on-primary-container: #183e50;
+  --md-on-primary-container: var(--design-on-selected);
   --md-surface: var(--design-surface);
   --md-surface-container: var(--design-inset);
   --md-surface-container-low: var(--design-paper);
@@ -65,7 +54,7 @@ body {
   text-rendering: optimizeLegibility;
   accent-color: var(--design-primary);
   caret-color: var(--design-primary);
-  scrollbar-color: #9eb1bb var(--design-inset);
+  scrollbar-color: var(--design-scrollbar) var(--design-inset);
   scrollbar-width: thin;
 }
 body :is(button, input, select, textarea) {
@@ -175,14 +164,14 @@ body
     .analemma-advanced,
     .ui-information
   )[open] {
-  border-color: #8caebc;
+  border-color: var(--design-open-border);
   box-shadow: none;
 }
 .ui-parameters
   :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open]
   > summary {
   background: var(--design-selected);
-  color: #183e50;
+  color: var(--design-on-selected);
   border-color: var(--design-line);
   border-radius: 11px 11px 0 0;
 }
@@ -207,7 +196,7 @@ body
   line-height: 1.75;
 }
 .ui-parameters .menu-section[open] > summary .menu-summary {
-  color: #42616f;
+  color: var(--design-open-muted);
 }
 .ui-parameters :is(.menu-subsection, .sun-side-summary) {
   background: var(--design-paper);
@@ -272,8 +261,8 @@ body
     .workbench-loop
   )
   > input[type="checkbox"] {
-  border-color: #8297a3;
-  background: #c7d4db;
+  border-color: var(--design-switch-line);
+  background: var(--design-switch-idle);
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
@@ -286,7 +275,7 @@ body
   )
   > input[type="checkbox"]:checked {
   border-color: var(--design-primary);
-  background: var(--design-primary);
+  background: var(--design-action);
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
@@ -298,7 +287,7 @@ body
     .workbench-loop
   )
   > input[type="checkbox"]::after {
-  background: #506b79;
+  background: var(--design-switch-thumb);
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
@@ -310,7 +299,7 @@ body
     .workbench-loop
   )
   > input[type="checkbox"]:checked::after {
-  background: #fff;
+  background: var(--design-on-action);
 }
 .ui-parameters .study-navigation .page-link {
   color: var(--design-primary);
@@ -352,8 +341,8 @@ body
     .space-shell .viewbar
   )
   button:is(.active, [aria-selected="true"], [aria-pressed="true"]) {
-  background: var(--design-primary);
-  color: #fff;
+  background: var(--design-action);
+  color: var(--design-on-action);
   font-weight: 600;
 }
 body
@@ -380,7 +369,7 @@ body
   )
   button:is(.active, [aria-selected="true"], [aria-pressed="true"]):hover {
   background: var(--design-hover);
-  color: #fff;
+  color: var(--design-on-action);
 }
 :is(.ui-shell, .ui-parameter-drawer)
   :is(.context-view-switch, .globe-drag-options, .body-switch) {
@@ -410,8 +399,8 @@ body
 body
   :is(.ui-parameters, .ui-timeline-host)
   :is(.preset-grid button, .workbench-events button).active {
-  background: var(--design-primary);
-  color: #fff;
+  background: var(--design-action);
+  color: var(--design-on-action);
 }
 body
   :is(.ui-parameters, .ui-heading)
@@ -446,8 +435,8 @@ body
 body
   .ui-timeline-host
   :is(.play-button, .workbench-calendar button:last-child) {
-  background: var(--design-primary);
-  color: #fff;
+  background: var(--design-action);
+  color: var(--design-on-action);
   border-radius: var(--design-radius-control);
   font-size: 12px;
 }
@@ -476,8 +465,8 @@ body[data-page="space"] #spaceDrawer {
 body
   :is(.ui-parameters, .ui-viewbar, .side, .timeline)
   :is(button, input, select):disabled {
-  color: #637985;
-  background-color: #e8eef1;
+  color: var(--design-disabled-ink);
+  background-color: var(--design-disabled-surface);
   opacity: 0.65;
   cursor: not-allowed;
 }
@@ -542,8 +531,8 @@ body[data-page="space"] .planet-picker button {
   border-radius: 10px;
 }
 body[data-page="space"] .planet-picker button.active {
-  background: var(--design-primary);
-  color: #fff;
+  background: var(--design-action);
+  color: var(--design-on-action);
 }
 body[data-page="space"] .head-actions button {
   border-radius: var(--design-radius-control);
@@ -551,8 +540,8 @@ body[data-page="space"] .head-actions button {
   color: var(--design-primary);
 }
 body[data-page="space"] :is(.focus, #play) {
-  background: var(--design-primary);
-  color: #fff;
+  background: var(--design-action);
+  color: var(--design-on-action);
   border-radius: var(--design-radius-control);
 }
 body[data-page="space"] .time-head output {
@@ -566,15 +555,6 @@ body[data-page="space"] .existing-compare-link {
 }
 /* A dark observation surface needs its own legible foreground, including drawers. */
 body[data-page="space"].space-immersive {
-  --design-paper: #101e2c;
-  --design-surface: #142b3c;
-  --design-inset: #203b4c;
-  --design-line: #3d5b6d;
-  --design-ink: #e4eef3;
-  --design-muted: #b7ceda;
-  --design-primary: #a9d5e6;
-  --design-hover: #bce0ec;
-  --design-selected: #284c61;
   color: var(--design-ink);
   background: var(--design-paper);
 }
@@ -585,15 +565,15 @@ body[data-page="space"].space-immersive :is(.head, .viewbar, .timeline) {
 body[data-page="space"].space-immersive
   :is(.viewbar button.active, #play, .planet-picker button.active, .focus) {
   background: var(--design-action);
-  color: #fff;
+  color: var(--design-on-action);
 }
 body[data-page="space"].space-immersive h1 {
   font-size: 16px;
   color: var(--design-ink);
 }
 body[data-page="space"].space-immersive .stage .label {
-  color: #e4eef3;
-  background: #142b3ce6;
+  color: var(--design-night-ink);
+  background: var(--design-night-label-surface);
 }
 body[data-page="space"].space-immersive .time-head output {
   color: var(--design-ink);
@@ -603,23 +583,23 @@ body[data-page="space"].space-immersive input[type="date"] {
 }
 /* Dark canvas annotation tools are deliberately outside the light controls scope. */
 .scene-tools-panel {
-  background: #142b3c;
-  color: #e4eef3;
-  border-color: #3d5b6d;
+  background: var(--design-night-surface);
+  color: var(--design-night-ink);
+  border-color: var(--design-night-line);
   border-radius: var(--design-radius-surface);
   box-shadow: none;
 }
 body .scene-tools-panel :is(.tools-check, .tools-field, p, label, span) {
-  color: #c7dde8;
+  color: var(--design-night-tool-muted);
 }
 body .scene-tools-panel :is(select, input[type="number"]) {
-  background: #203b4c;
-  color: #e4eef3;
-  border-color: #3d5b6d;
+  background: var(--design-night-inset);
+  color: var(--design-night-ink);
+  border-color: var(--design-night-line);
 }
 body .scene-tools-panel input[type="checkbox"]:checked {
-  background: #39748c;
-  border-color: #39748c;
+  background: var(--design-night-tool-selected);
+  border-color: var(--design-night-tool-selected);
 }
 /* Reading: one typographic system, generous paragraph rhythm and narrow measure. */
 .reading-page {
@@ -665,8 +645,8 @@ body .scene-tools-panel input[type="checkbox"]:checked {
   font-size: 12px;
 }
 .document-links a[aria-current="page"] {
-  background: var(--design-primary);
-  color: #fff;
+  background: var(--design-action);
+  color: var(--design-on-action);
 }
 .document-toc {
   background: var(--design-paper);
@@ -753,7 +733,7 @@ body :is(.page-action, .author-mail-button) {
 body :is(.page-action, .author-mail-button):hover {
   background: var(--design-paper);
   color: var(--design-hover);
-  border-color: #8caebc;
+  border-color: var(--design-open-border);
 }
 .document-page .page-action {
   color: var(--design-primary);
@@ -775,7 +755,7 @@ body :is(.page-action, .author-mail-button):hover {
 }
 .document-page .article-actions :is(.page-action, .page-link):hover {
   background: var(--design-paper);
-  border-color: #8caebc;
+  border-color: var(--design-open-border);
   color: var(--design-hover);
 }
 .document-page .article-actions :is(.page-action, .page-link):focus-visible {
@@ -814,11 +794,11 @@ body[data-page="welcome"] :is(button, a) {
 }
 body[data-page="welcome"] .welcome-enter {
   background: var(--design-sun);
-  color: #20323e;
+  color: var(--design-ink);
 }
 body[data-page="welcome"] .welcome-screen ::selection {
   background: var(--design-sun);
-  color: #20323e;
+  color: var(--design-ink);
 }
 /* Preserve the existing drawer breakpoint and animation machinery. */
 @media (max-width: 760px) {
@@ -868,8 +848,8 @@ body[data-page="welcome"] .welcome-screen ::selection {
 }
 @media print {
   body {
-    color: #000;
-    background: #fff;
+    color: var(--design-print-ink);
+    background: var(--design-on-action);
   }
   .document-page {
     border: 0;
@@ -885,7 +865,7 @@ body[data-page="welcome"] .welcome-screen ::selection {
   letter-spacing: 0;
 }
 .motion-selection {
-  background: var(--design-primary);
+  background: var(--design-action);
   border-radius: var(--design-radius-control);
 }
 .motion-menu-grip,
@@ -925,24 +905,24 @@ body[data-page="space"].space-immersive .motion-selection {
 body
   :is(.ui-parameters, .time-workbench)
   input[type="range"]::-webkit-slider-runnable-track {
-  background: #c3d8e0;
+  background: var(--design-range-track);
 }
 body
   :is(.ui-parameters, .time-workbench)
   input[type="range"]::-webkit-slider-thumb {
-  background: var(--design-primary);
+  background: var(--design-action);
   border-color: var(--design-surface);
   box-shadow: none;
 }
 body
   :is(.ui-parameters, .time-workbench)
   input[type="range"]::-moz-range-track {
-  background: #c3d8e0;
+  background: var(--design-range-track);
 }
 body
   :is(.ui-parameters, .time-workbench)
   input[type="range"]::-moz-range-thumb {
-  background: var(--design-primary);
+  background: var(--design-action);
   border-color: var(--design-surface);
 }
 body[data-page="space"] .timeline input[type="range"] {
@@ -954,8 +934,8 @@ body .ui-timeline-host .workbench-calendar button {
   border-radius: var(--design-radius-control);
 }
 body .ui-timeline-host .play-button {
-  background: var(--design-primary);
-  color: #fff;
+  background: var(--design-action);
+  color: var(--design-on-action);
 }
 /* The user's type direction: Song display titles, sans controls and tabular data. */
 body :is(.ui-heading, .space-shell .head, .welcome-intro, .document-header) h1,
@@ -1046,10 +1026,10 @@ body .ui-timeline-host :is(input[type="time"], .workbench-calendar input) {
   width: 36px;
   height: 36px;
   padding: 0;
-  border: 1px solid #73919f;
+  border: 1px solid var(--design-canvas-action-line);
   border-radius: 12px;
-  color: #e4eef3;
-  background: #163245;
+  color: var(--design-night-ink);
+  background: var(--design-canvas-action-surface);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1267,7 +1247,7 @@ body .ui-plot #resetView,
 body[data-page="space"] #play,
 body[data-page="space"] #reset {
   background: var(--design-action);
-  color: #fff;
+  color: var(--design-on-action);
   border: 1px solid var(--design-action);
   border-radius: 12px;
   box-shadow: none;
@@ -1277,15 +1257,15 @@ body .ui-timeline-host #workbenchNextDate:hover,
 body .ui-timeline-host #workbenchPlay:hover,
 body .ui-plot #resetView:hover {
   background: var(--design-action-hover);
-  color: #fff;
+  color: var(--design-on-action);
   border-color: var(--design-action-hover);
 }
 body .ui-timeline-host #workbenchPrevDate:disabled,
 body .ui-timeline-host #workbenchNextDate:disabled,
 body .ui-timeline-host #workbenchPlay:disabled {
-  background: #e8eef1;
-  color: #637985;
-  border-color: #cdd9de;
+  background: var(--design-disabled-surface);
+  color: var(--design-disabled-ink);
+  border-color: var(--design-line);
 }
 /* Complete the surface audit: legacy cards, body shortcuts and 3D overlays. */
 .ui-parameters .metrics article,
@@ -1314,7 +1294,7 @@ body .ui-timeline-host #workbenchPlay:disabled {
 .ui-parameters #reset,
 .ui-heading .ui-linked-toggle {
   background: var(--design-action);
-  color: #fff;
+  color: var(--design-on-action);
   border: 1px solid var(--design-action);
   border-radius: 12px;
   font-family: var(--design-font);
@@ -1324,9 +1304,9 @@ body .ui-timeline-host #workbenchPlay:disabled {
   min-height: 36px;
 }
 .ui-heading .ui-linked-toggle:disabled {
-  background: #e8eef1;
-  color: #637985;
-  border-color: #cdd9de;
+  background: var(--design-disabled-surface);
+  color: var(--design-disabled-ink);
+  border-color: var(--design-line);
 }
 body[data-page="space"] .space-sidebar-host > .side {
   background: var(--design-inset);
@@ -1334,20 +1314,20 @@ body[data-page="space"] .space-sidebar-host > .side {
   border-radius: 16px;
 }
 body[data-page="space"] .inspection-readout {
-  background: #142b3c;
-  color: #e4eef3;
-  border: 1px solid #3d5b6d;
+  background: var(--design-night-surface);
+  color: var(--design-night-ink);
+  border: 1px solid var(--design-night-line);
   border-radius: 12px;
   font-family: var(--design-font);
 }
 body[data-page="space"] .inspection-readout strong {
-  color: #e4eef3;
+  color: var(--design-night-ink);
   font-family: var(--design-font);
 }
 body[data-page="space"] .scene-tools summary,
 body .ui-plot #viewReset {
   background: var(--design-action);
-  color: #fff;
+  color: var(--design-on-action);
   border: 1px solid var(--design-action);
   border-radius: 12px;
   font-family: var(--design-font);
@@ -1364,14 +1344,14 @@ body[data-page="diagrams"] .ui-heading .ui-linked-toggle,
 body[data-page="diagrams"] .ui-heading .ui-linked-toggle[aria-pressed="true"],
 body[data-page="space"] .scene-tools[open] summary {
   background: var(--design-action);
-  color: #fff;
+  color: var(--design-on-action);
   border-color: var(--design-action);
   border-radius: 12px;
 }
 body[data-page="diagrams"] .ui-heading .ui-linked-toggle:disabled {
-  background: #e8eef1;
-  color: #637985;
-  border-color: #cdd9de;
+  background: var(--design-disabled-surface);
+  color: var(--design-disabled-ink);
+  border-color: var(--design-line);
 }
 
 .ui-timeline-host {
@@ -1513,12 +1493,12 @@ body[data-page="diagrams"] .ui-heading .ui-linked-toggle:disabled {
 body .ui-timeline-host .workbench-clock-tools button,
 body .ui-timeline-host .workbench-look-buttons button {
   background: var(--design-action);
-  color: #fff;
+  color: var(--design-on-action);
   border-color: var(--design-action);
 }
 body .ui-parameters .menu-footer #reset {
   background: var(--design-action);
-  color: #fff;
+  color: var(--design-on-action);
   border-color: var(--design-action);
   border-radius: 12px;
 }
@@ -1531,15 +1511,11 @@ body .ui-parameters .menu-footer #reset {
   }
 }
 
-:root {
-  --design-action: #24576b;
-  --design-action-hover: #174558;
-}
 body .motion-menu-edge,
 body .ui-parameters > button.motion-menu-grip,
 body[data-page="space"] .side > button.motion-menu-grip {
   background: var(--design-action);
-  color: #fff;
+  color: var(--design-on-action);
   border-color: var(--design-action);
   border-radius: 12px;
 }
@@ -1548,7 +1524,7 @@ body .ui-parameters > button.motion-menu-grip:hover,
 body[data-page="space"] .side > button.motion-menu-grip:hover,
 body .motion-menu-edge:active {
   background: var(--design-action-hover);
-  color: #fff;
+  color: var(--design-on-action);
   border-color: var(--design-action-hover);
 }
 body .motion-menu-edge:focus-visible {
@@ -1586,17 +1562,17 @@ body[data-page="diagrams"] .ui-heading .ui-linked-toggle:hover,
 body[data-page="space"] .focus:hover {
   background: var(--design-selected);
   color: var(--design-action-hover);
-  border-color: #8caebc;
+  border-color: var(--design-open-border);
 }
 body[data-page="diagrams"] .ui-heading .ui-linked-toggle[aria-pressed="true"] {
   background: var(--design-selected);
   color: var(--design-action);
-  border-color: #8caebc;
+  border-color: var(--design-open-border);
 }
 body .ui-timeline-host #workbenchPrevDate:disabled,
 body .ui-timeline-host #workbenchNextDate:disabled {
-  background: #e8eef1;
-  color: #637985;
+  background: var(--design-disabled-surface);
+  color: var(--design-disabled-ink);
   border-color: var(--design-line);
 }
 /* Canvas actions stay readable without becoming solid accent blocks. */
@@ -1605,9 +1581,9 @@ body .ui-plot #viewReset:hover,
 body[data-page="space"] #reset,
 body[data-page="space"] .scene-tools summary,
 body[data-page="space"] .scene-tools[open] summary {
-  background: #142b3c;
-  color: #e4eef3;
-  border-color: #3d5b6d;
+  background: var(--design-night-surface);
+  color: var(--design-night-ink);
+  border-color: var(--design-night-line);
 }
 
 /* Manual-mode and playback states use the same interface palette. */
@@ -1770,7 +1746,7 @@ body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchN
 body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate):hover {
   background: var(--design-selected);
   color: var(--design-hover);
-  border-color: #8caebc;
+  border-color: var(--design-open-border);
 }
 body :is(.ui-parameters, .ui-timeline-host) :is(#workbenchPrevMonth, #workbenchNextMonth, #workbenchPrevDate, #workbenchNextDate):disabled {
   background: var(--design-inset);
@@ -1870,7 +1846,7 @@ body .author-email-actions > *:hover,
 body .ui-parameters :is(#shadowView, #solarDateShow):hover {
   background: var(--design-selected);
   color: var(--design-hover);
-  border-color: #8caebc;
+  border-color: var(--design-open-border);
 }
 body .author-email-actions > *:active,
 body .ui-parameters :is(#shadowView, #solarDateShow):active {
@@ -1900,25 +1876,25 @@ body[data-page="space"] .language-nav > .language-toggle:hover {
 }
 body[data-page="space"] .scene-tools-panel button[data-camera] {
   background: transparent;
-  color: #e4eef3;
-  border-color: #3d5b6d;
+  color: var(--design-night-ink);
+  border-color: var(--design-night-line);
 }
 body[data-page="space"] .scene-tools-panel button[data-camera][aria-pressed="true"] {
   background: var(--design-action);
-  color: #fff;
+  color: var(--design-on-action);
   border-color: var(--design-action);
 }
 body[data-page="space"] .scene-tools-panel button[data-camera]:hover {
-  background: #203b4c;
+  background: var(--design-night-inset);
 }
 body[data-page="space"] button.label {
-  background: #142b3ccc;
-  color: #e4eef3;
-  border-color: #3d5b6d;
+  background: var(--design-night-label-soft);
+  color: var(--design-night-ink);
+  border-color: var(--design-night-line);
 }
 body[data-page="space"] button.label:hover {
-  background: #203b4c;
-  color: #e4eef3;
+  background: var(--design-night-inset);
+  color: var(--design-night-ink);
 }
 body .author-feedback-note {
   color: var(--design-muted);
@@ -1937,13 +1913,13 @@ body dialog.site-calendar {
   box-sizing: border-box;
   border: 1px solid var(--design-line);
   border-radius: var(--design-radius-surface);
-  background: #fff;
-  color: #20323e;
+  background: var(--design-on-action);
+  color: var(--design-ink);
   font-family: var(--design-font);
-  box-shadow: 0 12px 36px #101e2c26;
+  box-shadow: 0 12px 36px var(--design-shadow-dialog);
   overflow-y: auto;
 }
-.site-calendar::backdrop { background: #101e2c66; }
+.site-calendar::backdrop { background: var(--design-scrim); }
 body .site-calendar button {
   display: inline-flex;
   align-items: center;
@@ -1953,28 +1929,28 @@ body .site-calendar button {
   border: 1px solid transparent;
   border-radius: 8px;
   font: inherit;
-  color: #20323e;
+  color: var(--design-ink);
   background: transparent;
   cursor: pointer;
 }
-body .site-calendar button:hover { background: #ecf2f4; }
+body .site-calendar button:hover { background: var(--design-inset); }
 body .site-calendar button[aria-pressed="true"] {
-  background: #dcebf0;
-  border-color: #8caebc;
-  color: #174558;
+  background: var(--design-selected);
+  border-color: var(--design-open-border);
+  color: var(--design-accent-hover);
   font-weight: 700;
 }
 body .site-calendar button:disabled { opacity: .4; cursor: default; }
 .site-calendar-head { display: grid; grid-template-columns: 40px minmax(0,1fr) 40px; gap: 4px; align-items: center; }
 .site-calendar-head svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.site-calendar-year { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 0; font-size: 13px; color: #536975; }
-body .site-calendar-year input { width: 88px; min-height: 36px; border: 1px solid #cdd9de; border-radius: 8px; padding: 4px 8px; font: inherit; color: #20323e; background: white; }
+.site-calendar-year { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 0; font-size: 13px; color: var(--design-muted); }
+body .site-calendar-year input { width: 88px; min-height: 36px; border: 1px solid var(--design-line); border-radius: 8px; padding: 4px 8px; font: inherit; color: var(--design-ink); background: var(--design-on-action); }
 .site-calendar-grid { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 4px; }
 .site-calendar-grid.site-calendar-months { grid-template-columns: repeat(3,minmax(0,1fr)); }
-.site-calendar-weekday { text-align: center; padding: 6px 0; font-size: 12px; color: #536975; }
-.site-calendar-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #cdd9de; }
-body .site-calendar-actions button { padding: 6px 16px; border-color: #cdd9de; background: white; color: #24576b; }
-body .site-calendar-actions button:hover { background: #dcebf0; }
+.site-calendar-weekday { text-align: center; padding: 6px 0; font-size: 12px; color: var(--design-muted); }
+.site-calendar-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--design-line); }
+body .site-calendar-actions button { padding: 6px 16px; border-color: var(--design-line); background: var(--design-on-action); color: var(--design-accent); }
+body .site-calendar-actions button:hover { background: var(--design-selected); }
 body input.site-date-field {
   min-height: 36px;
   padding: 6px 10px;
@@ -1993,9 +1969,9 @@ body .site-calendar-year button {
   min-width: 80px;
   min-height: 36px;
   padding: 4px 12px;
-  border: 1px solid #cdd9de;
-  background: white;
-  color: #24576b;
+  border: 1px solid var(--design-line);
+  background: var(--design-on-action);
+  color: var(--design-accent);
 }
 body dialog.site-calendar:not([open]) { pointer-events: none; }
 body[data-page="space"] #spaceDrawerClose {
@@ -2011,9 +1987,9 @@ body[data-page="space"] #spaceDrawerClose {
   align-items: center;
   justify-content: center;
 }
-body[data-page="space"].space-immersive #spaceDrawerClose { color: #e4eef3; }
+body[data-page="space"].space-immersive #spaceDrawerClose { color: var(--design-night-ink); }
 body[data-page="space"] #spaceDrawerClose:hover { background: var(--design-inset); }
-body[data-page="space"].space-immersive #spaceDrawerClose:hover { background: #203b4c; }
+body[data-page="space"].space-immersive #spaceDrawerClose:hover { background: var(--design-night-inset); }
 #spaceDrawerClose svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
 body :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#workbenchNextMonth,#moonPrevMonth,#moonNextMonth) {
   font-size: 0;
@@ -2046,24 +2022,24 @@ body .ui-shell :is(#workbenchPrevDate,#workbenchNextDate,#workbenchPrevMonth,#wo
   max-width: calc(100vw - 24px);
   padding: 10px 14px;
   box-sizing: border-box;
-  border: 1px solid #cdd9de;
+  border: 1px solid var(--design-line);
   border-radius: 12px;
-  background: #fff;
-  color: #20323e;
+  background: var(--design-on-action);
+  color: var(--design-ink);
   font: 14px/1.5 var(--design-font);
 }
 body .font-load-notice button {
   flex-shrink: 0;
   min-height: 36px;
   padding: 6px 10px;
-  border: 1px solid #cdd9de;
+  border: 1px solid var(--design-line);
   border-radius: 8px;
-  background: #fff;
-  color: #24576b;
+  background: var(--design-on-action);
+  color: var(--design-accent);
   font: inherit;
   cursor: pointer;
 }
-body .font-load-notice button:hover { background: #ecf2f4; }
+body .font-load-notice button:hover { background: var(--design-inset); }
 body .font-load-notice button:disabled { opacity: .6; cursor: wait; }
 
 /* Corresponding reflections share the bottom position and warm night palette. */
@@ -2072,7 +2048,7 @@ html:not(:lang(en)) .welcome-quote-en { display: none; }
 html:lang(en) body[data-page="welcome"] .welcome-quote {
   width: min(100%, 72ch);
   align-self: center;
-  color: #c8b99f;
+  color: var(--design-welcome-quote);
   font-family: "SkyMotion Charter", Charter, "Bitstream Charter", Georgia, serif;
   font-style: normal;
   font-size: clamp(14px, 1.2vw, 17px);
@@ -2106,7 +2082,7 @@ html.welcome-opening .welcome-brand .language-toggle { pointer-events: none; }
 }
 
 /* The font-independent constellation can paint while locale fonts prepare. */
-html.welcome-opening[data-language-pending] { background: #0b131e; }
+html.welcome-opening[data-language-pending] { background: var(--design-welcome-night); }
 html.welcome-opening[data-language-pending]::after { display: none; }
 html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeSky) {
   visibility: visible !important;
@@ -2114,25 +2090,25 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
 
 /* A short conversation makes the transition from observing to reading explicit. */
 .document-entrance {
-  --entrance-ink: #20323e;
-  --entrance-answer: #536975;
-  --entrance-last: #685844;
+  --entrance-ink: var(--design-ink);
+  --entrance-answer: var(--design-muted);
+  --entrance-last: var(--design-reading-final);
   position: fixed;
   inset: 0;
   z-index: 180;
   display: grid;
   align-content: center;
   padding: max(32px, env(safe-area-inset-top)) clamp(24px, 6vw, 96px) max(84px, env(safe-area-inset-bottom));
-  background-color: #f4f7f8;
+  background-color: var(--design-paper);
   color: var(--entrance-ink);
   font-family: var(--design-font);
   overflow: auto;
 }
 .document-entrance[data-theme="night"] {
-  --entrance-ink: #eee9df;
-  --entrance-answer: #c8b99f;
-  --entrance-last: #e9cc9b;
-  background-color: #0b131e;
+  --entrance-ink: var(--design-welcome-answer);
+  --entrance-answer: var(--design-welcome-quote);
+  --entrance-last: var(--design-welcome-final);
+  background-color: var(--design-welcome-night);
 }
 .entrance-dialogue { width: min(100%, 800px); margin: auto; }
 .entrance-sentence {

@@ -6,14 +6,14 @@ body[data-page='space'].space-immersive .population-tools {
   display: block;
   margin-top: 14px;
   padding-top: 12px;
-  border-top: 1px solid #89aac34d;
+  border-top: 1px solid var(--design-night-line);
 }
 body[data-page='space'] .population-tools button {
   width: 100%;
   margin: 5px 0;
-  background: #1d3b59;
-  color: #e2edfb;
-  border-color: #89aac34d;
+  background: var(--design-night-inset);
+  color: var(--design-night-ink);
+  border-color: var(--design-night-line);
   border-radius: 14px;
   min-height: 34px;
   font-size: 11px;
@@ -24,7 +24,7 @@ body[data-page='space'] .nebula-hint {
   top: 36px;
   z-index: 3;
   margin: 0;
-  color: #adc8e6;
+  color: var(--design-night-muted);
   font-size: 10px;
   pointer-events: none;
   max-width: calc(100% - 80px);
@@ -35,10 +35,10 @@ body[data-page='space'] #nebulaViewer {
   max-width: none;
   max-height: none;
   padding: 16px;
-  border: 1px solid #89aac34d;
+  border: 1px solid var(--design-night-line);
   border-radius: 18px;
-  background: #0b1726;
-  color: #e5edf7;
+  background: var(--design-night);
+  color: var(--design-night-ink);
   overflow: hidden;
 }
 body[data-page='space'] #nebulaViewer[open] {
@@ -47,7 +47,7 @@ body[data-page='space'] #nebulaViewer[open] {
   gap: 10px;
 }
 body[data-page='space'] #nebulaViewer::backdrop {
-  background: #07111fd9;
+  background: var(--design-night-label-surface);
 }
 body[data-page='space'] .nebula-header {
   display: flex;
@@ -64,15 +64,15 @@ body[data-page='space'] #nebulaClose {
   height: 40px;
   padding: 0;
   font-size: 24px;
-  background: #1d3b59;
-  color: #e5edf7;
-  border-color: #89aac34d;
+  background: var(--design-night-inset);
+  color: var(--design-night-ink);
+  border-color: var(--design-night-line);
 }
 body[data-page='space'] #nebulaChoice {
   width: min(100%, 280px);
-  background: #1d3b59;
-  color: #e5edf7;
-  border: 1px solid #89aac34d;
+  background: var(--design-night-inset);
+  color: var(--design-night-ink);
+  border: 1px solid var(--design-night-line);
   border-radius: 14px;
   min-height: 34px;
   padding: 4px 10px;
@@ -97,11 +97,11 @@ body[data-page='space'] #nebulaImage {
 body[data-page='space'] .nebula-caption {
   font-size: 11px;
   line-height: 1.7;
-  color: #adc8e6;
+  color: var(--design-night-muted);
   margin: 0;
 }
 body[data-page='space'] .nebula-caption a {
-  color: #b5d6ff;
+  color: var(--design-night-primary);
 }
 @media (max-width: 520px) {
   body[data-page='space'] #nebulaViewer {
