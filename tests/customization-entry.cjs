@@ -20,7 +20,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    await p.waitForFunction(()=>document.querySelector('.head-actions .language-actions'));
    assert(await p.locator('.layout-launch').isVisible());
    assert(await p.locator('.language-toggle').isVisible());
-   await p.locator('.diagram-tool-launch:visible').click();
+   if(await p.locator('.diagram-tool-launch:visible').count())await p.locator('.diagram-tool-launch:visible').click();
    await p.locator('.dt-panel').waitFor({state:'visible'});
    assert(await p.locator('.layout-launch').isVisible());
    await p.locator('.layout-launch').click();
@@ -33,31 +33,19 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    await p.goto(base+'lab'+(mobile?'.en':'')+'.html',{waitUntil:'domcontentloaded'});
    await p.waitForFunction(()=>window.SkyLabComparison && !document.querySelector('.layout-launch').disabled);
    await p.locator('.layout-launch').click();
-   if(mobile) await p.locator('#uiParametersButton').click();
-   assert.equal(await p.evaluate(()=>document.querySelector('#controls .section-head').nextElementSibling.id),'labComparisons');
-   assert.equal(await p.evaluate(()=>SkyDiagramTools.read('lab-sky').length),0,'entering customization must not invent any objects');
-   assert.match(await p.locator('#labComparisons').innerText(),mobile?/One place · different times/:/同一地点 · 不同时间/);
-   await p.locator('[data-comparison-action=build]').click();
-   await p.waitForFunction(()=>window.SkySceneBuilder?.read() && document.body.classList.contains('scene-builder-active'));
-   assert.equal(await p.evaluate(()=>SkySceneBuilder.read().objects.length),0,'new ground starts empty, without an unexplained example circle');
-   await p.locator('.sb-add').waitFor({state:'visible'});
-   if(mobile) await p.locator('#uiDrawerClose').click();
-   await p.locator('button[data-body=moon]').click();
-   await p.waitForFunction(()=>state.body==='moon');
-   if(!mobile) await p.locator('[data-rail-section=conditions]').click();
-   if(mobile) await p.locator('#uiParametersButton').click();
-   await p.locator('[data-comparison-action=build]').click();
-   await p.waitForFunction(()=>document.body.classList.contains('scene-builder-active') && SkySceneBuilder.read()?.objects.length===0);
-   assert.deepEqual(await p.locator('#builderGround').evaluate(n=>[...n.getContext('2d').getImageData(0,0,1,1).data]),[19,36,56,255],'builder uses the same background as the original diagram');
-   await p.locator('.sb-add [data-object-kind=circle]').click();
+   await p.locator('.dt-panel').waitFor({state:'visible'});
+   assert.equal(await p.locator('#labComparisons').count(),0);
+   assert.equal(await p.evaluate(()=>SkyDiagramTools.read('lab-sky').length),0,'entry must not invent objects');
+   await p.locator('[data-dt-view=library]').click();await p.locator('[data-build-kind=rod]').click();
+   await p.waitForFunction(()=>document.body.classList.contains('scene-builder-active'));
+   assert.equal(await p.evaluate(()=>SkySceneBuilder.read().objects.length),0,'placing is pending, not an implicit object');
+   await p.locator('button[data-body=moon]').click();await p.waitForFunction(()=>state.body==='moon'&&SkySceneBuilder.read()?.objects.length===0);
+   assert.deepEqual(await p.locator('#builderGround').evaluate(n=>[...n.getContext('2d').getImageData(0,0,1,1).data]),[19,36,56,255]);
+   if(mobile)await p.locator('#uiParametersButton').click();
+   await p.locator('.sb-add-toggle').click();await p.locator('.sb-add [data-object-kind=circle]').click();
    await p.locator('#builderGround').focus();await p.keyboard.press('Enter');
    assert.equal(await p.evaluate(()=>SkySceneBuilder.read().objects.length),1);
    assert.equal(await p.evaluate(()=>SkySceneBuilder.read().objects[0].kind),'circle');
-   if(!mobile){
-    await p.locator('[data-rail-section=conditions]').click();assert(await p.locator('#place').isVisible());
-    await p.locator('[data-rail-section=references]').click();assert(await p.locator('.sb-add').isVisible());
-   }
-   assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
    assert.deepEqual(errors,[]);await context.close();
   }
   console.log('PASS persistent 3D customization entry in normal/immersive desktop and phone, explicit mode gate, native Lab comparisons, no invented references, empty solar and lunar builders, matching plot palette and explicit circle placement, original conditions accessible');

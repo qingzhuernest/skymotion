@@ -1,12 +1,14 @@
 # SkyMotion · 天体视运动实验室
 
+2026 年 10 月 21 日：自定义统一为“添加—选择—调整”。城市与时刻在各图联动，物体在实验地面摆放，原控制保留；[学习指南](guide.html#customization) 提供三个完整例子。
+
 **简体中文** · [English](README.en.md)
 
 ## 发布状态
 
 2026 年 10 月 20 日正式版加入已审查的第 72 版自定义功能：固定菜单、实验台内地点与时间对照、图中参考对象、物体搭建、三维常驻入口，以及太阳／月球空白起点和统一配色。保留原有地升地落及字体加载优化。`main` 包含 13 对中英文页面，发布时运行全部根目录回归脚本。
 
-[自定义交互说明](docs/customization-interaction.zh.md) · [本次发布说明](docs/RELEASE-2026-10-20.zh.md)
+[自定义交互说明](docs/customization-interaction.zh.md) · [本次发布说明](docs/RELEASE-2026-10-21.zh.md)
 
 正式版已采用审查过的双语 Impeccable 界面。[Cloudflare Pages](https://skymotion-5md.pages.dev/) 为主站，[GitHub Pages](https://qingzhuernest.github.io/skymotion/) 镜像同一份受版本控制的内容。推送 `main` 会触发两个部署工作流；其他分支不会部署正式站，手动运行也受分支限制。
 

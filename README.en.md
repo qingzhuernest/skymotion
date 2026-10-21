@@ -1,12 +1,14 @@
 # SkyMotion — Astronomy and Geography Laboratory
 
+2026-10-21: customization follows Add–Select–Adjust. Cities and times remain linked across plots, physical objects use the experiment ground, and native controls remain available. The [learning guide](guide.en.html#customization) includes three complete examples.
+
 [简体中文](README.md) · **English**
 
 ## Release status
 
 The October 20, 2026 release publishes reviewed preview 72 customization: fixed navigation, in-Lab place/time comparisons, plot references, construction tools, persistent 3D entry, empty Sun/Moon construction scenes and matching plot colors. Existing Earthrise and production font-loading optimizations are retained. The main branch contains 13 bilingual page pairs; release validation runs all root-level regression scripts.
 
-[Customization interaction guide](docs/customization-interaction.en.md) · [Release notes](docs/RELEASE-2026-10-20.en.md)
+[Customization interaction guide](docs/customization-interaction.en.md) · [Release notes](docs/RELEASE-2026-10-21.en.md)
 
 The production release includes the reviewed bilingual Impeccable interface. [Cloudflare Pages](https://skymotion-5md.pages.dev/) is the primary site; [GitHub Pages](https://qingzhuernest.github.io/skymotion/) mirrors the same tracked content. Pushing `main` triggers both deployment workflows. Other branches do not deploy production, including manual runs.
 

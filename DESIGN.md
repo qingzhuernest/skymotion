@@ -502,7 +502,7 @@ Customization retains the selected diagram; layout controls appear only in four-
 
 ## 预览 68：实验台共用自定义 / Preview 68: Lab customization
 
-实验台在语言旁提供统一自定义开关，保留四个原视角、地点参数与共享时间栏。城市自动参与天空和关联图解对照；天空／高度图的时间标记跨原图显示，同地不同时间不必另开页面。内部导航一次延续编辑状态，会话草稿跨页保留，刷新默认正常模式。实验台添加工具可进入摆放实验物体，点击原视角返回。对象行“···”提供保存、复制、删除。仅发布 GPT Site 预览，正式网站未更新。
+实验台在语言旁提供统一自定义开关，保留四个原视角、地点参数与共享时间栏。城市自动参与天空和关联图解对照；天空／高度图的时间标记跨原图显示，同地不同时间不必另开页面。内部导航一次延续编辑状态，会话草稿跨页保留，刷新默认正常模式。实验台添加工具可进入摆放实验物体，点击原视角返回。对象行“···”提供保存、复制、删除。此功能现已纳入正式版；当前工作台规则见最新统一自定义说明。
 
 Lab shares the customization switch beside language while retaining native viewpoints, observation controls and timeline. Cities appear in sky and related comparisons; pinned times compare within the original diagrams. Internal navigation transfers edit intent once and retains session drafts; refresh starts normally. Lab can open construction from its Add tools and return through a native viewpoint. Row ellipsis contains Save, Duplicate and Delete. GPT Site preview only; official hosting is unchanged.
 
@@ -527,3 +527,7 @@ Primary destinations remain stable across Sun/Moon changes. Desktop customizatio
 
 
 Preview 72 (2026-10-19): persistent 3D Customize entry beside language, including immersive mode; Lab comparisons moved to the original menu top with direct builder access; new construction scenes start empty and examples require a choice. Existing saved scenes are preserved. See bilingual interaction documentation in docs/.
+
+## 2026-10-21 unified customization
+
+Keep the native main navigation, observation controls and scientific plot. The object workbench has a persistent Add object command, a temporary Plans view, an object list and selection properties. No Observe/Edit switch or Add/Objects/Files tab strip. Empty states contain no disabled inspector. Shared cities/times keep their source identity; physical objects use the existing ground renderer. Match native paper controls and dark plot actions across desktop, tablet and phone.

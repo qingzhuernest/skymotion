@@ -1,5 +1,3 @@
-October 20, 2026: customization is included in this production release. The top switch opens place/time comparisons, plot objects and experiment construction; finishing restores the original observation interface. New Sun/Moon construction scenes start empty, saved scenes are identified when restored, and the 3D customization entry stays at the top in immersive mode.
-
 SKY MOTION LAB · DEVELOPMENT AND MAINTENANCE
 
 # Development Guide: Complete Implementation Logic and Maintenance
@@ -583,3 +581,10 @@ This release unifies light control surfaces, serif typography and supporting act
 Release checks cover six model suites, 36 control-layout cases, 44 first-disclosure cases, interaction history, font timeout recovery, language navigation, calendar and keyboard operations, and packaging at root and GitHub project paths. Checks primarily use Chromium automation and do not certify every Safari, Firefox or GPU configuration.
 
 Cloudflare Pages is the production site, with the same content mirrored on GitHub Pages. A push to main triggers two separate workflows; maintainers should check both outcomes. The previous production version is retained under the production-before-impeccable-20261013 tag. To roll back, create a restoration commit from that tag rather than rewriting main history.
+
+
+## Unified object workbench and compatibility
+
+Customization preserves the baseline location, date, time and view. Cities and times use the existing shared references, identified by source and object ID. Existing save formats remain valid; objects are not copied and astronomical formulae do not change.
+
+New controls retain the site typography, colors and radii. Light sidebars and dark plot actions stay consistent with their regions. Adding, selecting, editing, saving and returning to the original plot are checked on desktop, tablet and phone sizes; Chromium checks do not replace Safari device testing.

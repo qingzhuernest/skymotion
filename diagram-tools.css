@@ -1,224 +1,90 @@
-/* A quiet workbench beside the scientific plot. */
-.dt-host{position:relative}
-body .diagram-tool-launch{position:absolute;right:12px;bottom:12px;z-index:6;min-height:40px;padding:8px 13px;border:1px solid var(--design-line);border-radius:9px;background:var(--design-surface);color:var(--design-ink);font:inherit;font-size:12px}
-.dt-overlay{position:absolute;inset:0;pointer-events:none}
-body .dt-panel{--dt-ink:var(--design-ink);--dt-muted:var(--design-muted);--dt-line:var(--design-line);position:fixed;z-index:10020;right:18px;top:110px;bottom:16px;width:320px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 88px);display:flex;flex-direction:column;overflow:hidden;padding:0;border:1px solid var(--dt-line);border-radius:14px;background:var(--design-surface);color:var(--dt-ink);box-shadow:none;isolation:isolate;font:inherit;caret-color:var(--design-muted);scrollbar-color:#9eb1bb var(--design-surface)}
-body .dt-panel[hidden],.dt-panel [hidden]{display:none!important}
-.dt-panel *{box-sizing:border-box}
-.dt-panel ::selection{background:var(--design-selected);color:var(--design-ink)}
-body .dt-panel button{min-height:36px;padding:8px 10px;border:1px solid var(--dt-line);border-radius:8px;background:var(--design-surface);color:var(--dt-ink);font:inherit;font-size:12px;line-height:1.4;cursor:pointer;transition:background .15s ease,border-color .15s ease}
-body .dt-panel button:hover{background:var(--design-inset);border-color:var(--design-muted)}
+/* Unified object workbench: native paper controls around the scientific plot. */
+.dt-host{position:relative}.dt-overlay{position:absolute;inset:0;pointer-events:none}
+body .diagram-tool-launch{position:absolute;right:12px;bottom:12px;z-index:6;font:inherit;cursor:pointer}
+body .dt-panel{--dt-ink:var(--design-ink);--dt-muted:var(--design-muted);--dt-line:var(--design-line);position:fixed;z-index:10020;right:18px;top:110px;bottom:16px;width:320px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 88px);display:flex;flex-direction:column;overflow:hidden;padding:0;border:1px solid var(--dt-line);border-radius:var(--design-radius-surface);background:var(--design-surface);color:var(--dt-ink);box-shadow:none;isolation:isolate;font:inherit;caret-color:var(--design-primary);scrollbar-color:#9eb1bb var(--design-inset)}
+body .dt-panel[hidden],.dt-panel [hidden],.dt-rail-navigation[hidden],.dt-context-empty[hidden]{display:none!important}
+.dt-panel *{box-sizing:border-box}.dt-panel ::selection{background:var(--design-selected);color:var(--design-ink)}
+body .dt-panel button{min-height:40px;padding:8px 10px;border:1px solid var(--dt-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--dt-ink);font:inherit;font-size:12px;line-height:1.5;cursor:pointer}
+body .dt-panel button:hover{background:var(--design-inset)}
 body .dt-panel button:disabled{opacity:.46;cursor:default}
-body .dt-panel button[aria-pressed=true]{background:var(--design-selected);border-color:var(--design-line);color:var(--design-ink)}
 body .dt-panel :is(button,input,select):focus-visible{outline:2px solid var(--design-primary);outline-offset:2px}
-.dt-head{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:17px 16px 4px}
-body .dt-head h2{font-size:19px;font-weight:400;line-height:1.4;margin:0;color:var(--dt-ink)}
-body .dt-head button{flex:none;width:36px;height:36px;font-size:0;border:0;background:transparent;position:relative}
-.dt-head button::after{content:'';position:absolute;inset:10px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m5 5 10 10M15 5 5 15' stroke='black' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat}
-body .dt-collapse{align-self:flex-end;padding:3px 16px;min-height:28px;border:0;background:transparent;color:var(--dt-muted);font-size:12px}
-.dt-modes{display:flex;gap:3px;margin:8px 16px 0;padding:3px;background:var(--design-inset);border-radius:9px}
-body .dt-modes button{flex:1;min-width:0;background:transparent;border-color:transparent}
-body .dt-modes button[aria-pressed=true]{background:var(--design-surface);border-color:var(--design-line)}
-.dt-history{display:flex;gap:6px;padding:10px 16px 0}
-body .dt-history button{padding:4px 9px;min-height:28px;font-size:12px;border:0;background:transparent;color:var(--dt-muted)}
-.dt-hint,.dt-status,.dt-result,.dt-caption,.dt-empty{font-size:12px;line-height:1.7;color:var(--dt-muted);overflow-wrap:anywhere}
-.dt-hint{margin:6px 16px 10px;max-height:4em;overflow:auto}
-.dt-tabs{display:flex;gap:16px;padding:0 16px;border-bottom:1px solid var(--dt-line);flex:none}
-body .dt-tabs button{flex:1;border:0;border-radius:0;background:transparent;padding:10px 0;border-bottom:2px solid transparent;color:var(--dt-muted);font-size:13px}
-body .dt-tabs button[aria-current=page]{border-bottom-color:var(--design-primary);color:var(--design-ink);background:transparent}
-.dt-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:18px 16px 20px;scrollbar-width:thin}
-body .dt-panel h3{margin:0 0 8px;font-size:14px;font-weight:600;color:var(--dt-ink);line-height:1.5}
-.dt-caption{margin:0 0 16px}
-.dt-add{display:grid;grid-template-columns:1fr 1fr;gap:0 12px;margin-bottom:20px}
-body .dt-add button{padding:12px 0;border:0;border-bottom:1px solid var(--dt-line);border-radius:0;text-align:start;background:transparent;min-height:58px;overflow-wrap:anywhere;display:flex;align-items:center;gap:8px}
-.dt-add button::before{content:'';width:18px;height:18px;flex:none;background:var(--design-muted);mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 4v12M4 10h12' stroke='black' stroke-width='1.3' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat}
-body .dt-recipe{width:100%;padding:12px;text-align:start;background:var(--design-inset);border-color:var(--design-line)}
-.dt-list{display:grid;gap:0;margin:0 0 22px;border-bottom:1px solid var(--dt-line);max-height:180px;overflow:auto;scrollbar-width:thin}
-.dt-row{display:flex;align-items:center;gap:2px;border-top:1px solid var(--dt-line)}
-body .dt-row button{flex:1;min-width:0;padding:10px 8px;text-align:start;overflow-wrap:anywhere;border:0;border-radius:0;background:transparent}
-body .dt-row button[aria-pressed=true]{background:var(--design-selected);border:0;box-shadow:inset 2px 0 var(--design-primary)}
-.dt-toggle{display:grid;place-items:center;width:36px;min-height:40px;flex:none;cursor:pointer}
-.dt-row input,.dt-lock input{width:17px;height:17px;accent-color:var(--design-primary);margin:0}
-.dt-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
-.dt-fields label{display:grid;gap:6px;font-size:12px;line-height:1.5;color:var(--dt-muted);min-width:0}
-.dt-fields label:first-child{grid-column:1/-1}
-.dt-fields label:has(select){grid-column:1/-1}
-body .dt-panel input:not([type=checkbox]):not([type=file]),body .dt-panel select{width:100%;min-height:40px;padding:8px 9px;border:1px solid var(--dt-line);border-radius:7px;background:var(--design-surface);color:var(--dt-ink);font:inherit;font-size:15px;font-variant-numeric:tabular-nums}
-body .dt-panel input:disabled{background:var(--design-inset);color:var(--design-muted)}
-body .dt-lock{display:flex;align-items:center;gap:8px;min-height:40px;grid-column:1/-1;font-size:12px}
-.dt-result{margin:12px 0;color:#344e5b;font-variant-numeric:tabular-nums}
-.dt-result:empty{display:none}
-.dt-object-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
-body .dt-object-actions button{font-size:12px;padding:6px 8px}
-.dt-panel>.dt-footer{display:flex;gap:8px;padding:12px 16px 0;border-top:1px solid var(--dt-line)}
-body .dt-panel>.dt-footer button{flex:1;min-height:40px;background:var(--design-selected);border-color:#c2d0d7;font-size:13px}
-.dt-status{margin:6px 16px 12px;min-height:20px;font-size:12px}
-.dt-file-actions{display:grid;gap:8px}
-.dt-file-actions button{text-align:start}
-.dt-import-review{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px}
-.dt-import-review:empty{display:none}
-.dt-import-review p{width:100%;margin:0 0 6px}
-.dt-empty{margin:0;padding:12px 0}
-body .dt-panel [aria-invalid=true]{border-color:#965d3c;background:#fff9f4}
-body .dt-place{margin:0 16px 12px;background:var(--design-selected)}
-body .dt-host canvas:focus-visible,body .dt-host[tabindex]:focus-visible{outline:2px solid #8ca5b0;outline-offset:-2px}
-.dt-editing,.dt-editing .label{touch-action:none}
-body .dt-panel[data-collapsed=true]{bottom:auto!important}
-.dt-panel[data-collapsed=true]>.dt-scroll,.dt-panel[data-collapsed=true]>.dt-tabs,.dt-panel[data-collapsed=true]>.dt-history,.dt-panel[data-collapsed=true]>.dt-actions,.dt-panel[data-collapsed=true]>.dt-hint{display:none}
-.dt-panel[data-collapsed=true][data-placing=true]>.dt-hint{display:block}
-@media(max-width:760px){body .dt-panel{left:12px!important;right:12px;top:auto!important;bottom:12px;width:auto!important;max-height:54dvh;border-radius:16px;box-shadow:0 8px 28px #18273122}body .dt-panel[data-collapsed=true]{bottom:12px!important}.dt-head{padding:12px 14px 0}body .dt-head h2{font-size:17px}.dt-modes{margin:4px 14px 0}.dt-history{padding:3px 14px 0}.dt-hint{margin:4px 14px 8px;font-size:12px}.dt-scroll{padding:14px}.dt-tabs{padding:0 14px}.dt-list{max-height:130px}.dt-add{margin-bottom:14px}body .dt-panel input:not([type=checkbox]):not([type=file]),body .dt-panel select{font-size:16px}.dt-status{margin-bottom:8px}body .dt-panel>.dt-footer{padding-top:8px}body .dt-collapse{min-height:30px;padding:2px 14px}}
-@media(pointer:coarse),(max-width:760px){body .dt-panel button,body .diagram-tool-launch{min-height:44px;min-width:44px}.dt-toggle{width:44px;min-height:44px}body .dt-head button{height:44px}body .dt-history button{min-height:36px}.dt-lock{min-height:44px}}
-@media(prefers-reduced-motion:reduce){body .dt-panel button{transition:none}}
-
-/* Header tools share one row; history never inherits the save footer. */
-.dt-head{gap:4px}.dt-head h2{flex:1;min-width:0}body .dt-head .dt-collapse{align-self:auto;position:relative;width:32px;height:36px;min-width:32px;padding:0;font-size:0;background:transparent;border:0;flex:none}
-.dt-head .dt-collapse::after{content:'';position:absolute;inset:9px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m5 7 5 5 5-5' stroke='black' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
-.dt-panel[data-collapsed=true] .dt-collapse::after{transform:rotate(180deg)}
-body .dt-panel input[type=checkbox]{accent-color:var(--design-primary)!important}
-body .dt-history{border:0;margin:0;flex:none}body .dt-history button{flex:none;min-height:28px;min-width:44px;background:transparent;border:0;padding:4px 9px;font-size:12px}
-@media(max-width:760px){body .dt-head .dt-collapse{width:44px;height:44px;min-width:44px}.dt-head .dt-collapse::after{inset:13px}.dt-list{max-height:96px}.dt-hint{max-height:3.4em}body .dt-history button{min-height:36px}.dt-panel[data-collapsed=true] .dt-head{padding-bottom:0}}
-
 .dt-panel>:not(.dt-scroll){flex-shrink:0}
-@media(max-width:760px){.dt-panel:not([data-placing=true])>.dt-hint{display:none}.dt-panel[data-placing=true]>.dt-hint{max-height:none}.dt-scroll{min-height:32px}}
-@media(pointer:coarse),(max-width:760px){body .dt-panel .dt-history button{min-height:44px;min-width:44px}}
-/* Short viewports need room for properties as well as the persistent controls. */
-@media(max-width:760px) and (max-height:600px){body .dt-panel{max-height:calc(100dvh - 24px)}}
-
-body.diagram-workbench-active #controls .motion-menu-grip{visibility:hidden}
-@media(pointer:coarse),(max-width:760px){body .dt-panel>.dt-footer button{min-height:44px}}
-
-/* Field feedback belongs beside the value as well as in the status footer. */
-.dt-field-error{font:inherit;font-size:12px;line-height:1.55;color:#875136;overflow-wrap:anywhere}
-.dt-fields label:has(.dt-field-error){grid-column:1/-1}
-
-/* Desktop keeps the object navigator in view while its inspector scrolls. */
-.dt-panel:not([data-placing=true]):not([data-help=true])>.dt-hint{display:none}
-.dt-panel[data-help=true]>.dt-hint{display:block}
-body .dt-panel>.dt-footer button:not([data-save]){background:var(--design-surface);border-color:var(--dt-line);font-size:12px;flex:1}
-body .dt-panel>.dt-footer button[data-save]{flex:1.15}
-@media(min-width:1000px) and (min-height:650px){
- .dt-scroll[data-view=objects]{overflow:hidden;display:flex;flex-direction:column}
- .dt-objects:not([hidden]){display:flex;flex-direction:column;width:100%;height:100%;min-height:0}
- .dt-objects>h3{flex:none}
- .dt-list{max-height:clamp(88px,17dvh,170px);flex:none;margin-bottom:16px;overscroll-behavior:contain}
- .dt-inspector{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:2px 3px 16px 0}
- body .dt-history button{font-size:12px;min-height:32px}
- body .dt-history .dt-help-toggle{margin-left:auto}
- body .dt-head h2{font-size:17px}
- .dt-object-actions{margin-top:12px}
-}
-
-/* References and observation conditions are separate until explicitly applied. */
+.dt-head{display:flex;align-items:center;gap:4px;padding:12px 14px 4px}
+body .dt-head h2{flex:1;min-width:0;margin:0;color:var(--dt-ink);font-size:16px;font-weight:500;line-height:1.5}
+body .dt-head button{flex:none;position:relative;width:36px;height:36px;min-height:36px;padding:0;font-size:0;border:0;background:transparent}
+.dt-head button::after{content:'';position:absolute;inset:10px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m5 5 10 10M15 5 5 15' stroke='black' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.dt-head .dt-collapse::after{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m5 7 5 5 5-5' stroke='black' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.dt-panel[data-collapsed=true] .dt-collapse::after{transform:rotate(180deg)}
+.dt-history{display:flex;align-items:center;gap:4px;margin:0;padding:0 14px 6px}
+body .dt-history button{min-height:32px;min-width:44px;border:0;background:transparent;color:var(--dt-muted);padding:4px 6px}
+body .dt-history .dt-help-toggle{margin-left:auto}
+.dt-tabs{display:flex;gap:6px;align-items:center;padding:0 14px 12px;border:0}
+body .dt-panel .dt-tabs button{min-width:0;flex:1;padding:8px 6px;font-size:12px;border-radius:var(--design-radius-control)}
+body .dt-tabs [data-dt-view=library]{background:var(--design-selected);color:var(--design-primary)}
+body .dt-tabs [data-dt-view=files]{flex:0 0 auto}
+.dt-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:16px 14px;scrollbar-width:thin;border-top:1px solid var(--dt-line)}
+.dt-caption,.dt-empty,.dt-hint,.dt-status,.dt-result,.dt-reference-help{font-size:12px;line-height:1.7;color:var(--dt-muted);overflow-wrap:anywhere}
+body .dt-panel h3{margin:0 0 10px;font-size:14px;font-weight:600;color:var(--dt-ink);line-height:1.5}
+.dt-caption{margin:0 0 14px}.dt-empty{margin:0;padding:8px 0 18px}
+.dt-hint{margin:0 14px 10px}.dt-panel:not([data-help=true]):not([data-placing=true])>.dt-hint{display:none}
+body .dt-place,body .dt-cancel-place{margin:0 14px 8px}
+body .dt-place{background:var(--design-selected)}
+.dt-add{display:block}.dt-add-group{margin:18px 0 6px;font:inherit;font-size:12px;font-weight:600;color:var(--dt-muted)}
+.dt-add-group-tools{display:grid;gap:0}
+body .dt-panel .dt-add button{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;border:0;border-bottom:1px solid var(--dt-line);border-radius:0;text-align:start;background:transparent;box-shadow:none}
+.dt-add button::before{content:'';width:14px;height:14px;flex:none;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 4v12M4 10h12' stroke='black' stroke-width='1.3' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat}
+body .dt-panel .dt-add button:hover{background:var(--design-inset)}
+.dt-object-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex:none}
+.dt-list{display:grid;margin:0 0 18px;max-height:210px;overflow:auto;scrollbar-width:thin}
+.dt-row{display:flex;align-items:center;gap:2px;border-bottom:1px solid var(--dt-line)}
+body .dt-panel .dt-row button{flex:1;min-width:0;padding:9px 6px;border:0;border-radius:0;background:transparent;text-align:start;overflow-wrap:anywhere}
+body .dt-panel .dt-row button[aria-pressed=true]{background:var(--design-selected)}
+.dt-toggle{display:grid;place-items:center;width:40px;min-height:40px;flex:none;cursor:pointer}
+body .dt-panel input[type=checkbox]{accent-color:var(--design-primary);width:17px;height:17px;margin:0}
+body .dt-panel .dt-row>:is(.dt-more,.dt-row-more){flex:0 0 36px;width:36px;height:40px;padding:8px;background:transparent;border:0;border-radius:8px;color:var(--dt-muted)}
+:is(.dt-more,.dt-row-more) svg{display:block;width:20px;height:20px;fill:currentColor}
+body .dt-panel .dt-row>:is(.dt-more,.dt-row-more):hover{background:var(--design-inset)}
+.dt-inspector{padding-top:4px}.dt-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.dt-fields label,.dt-city-picker{display:grid;gap:6px;min-width:0;color:var(--dt-muted);font-size:12px;line-height:1.5}
+.dt-fields label:first-child,.dt-fields label:has(select){grid-column:1/-1}
+.dt-city-picker{margin:14px 0}
+body .dt-panel input:not([type=checkbox]):not([type=file]),body .dt-panel select{width:100%;min-height:40px;padding:8px 9px;border:1px solid var(--dt-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--dt-ink);font:inherit;font-size:15px;font-variant-numeric:tabular-nums}
+body .dt-panel input:disabled{background:var(--design-inset);color:var(--dt-muted)}
+body .dt-lock{display:flex;align-items:center;gap:8px;min-height:40px;grid-column:1/-1;font-size:12px}
+.dt-result{margin:12px 0;font-variant-numeric:tabular-nums}.dt-result:empty{display:none}
+.dt-reference-help{margin:0 0 14px}.dt-object-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .dt-location{margin:0 0 16px;padding:0 0 14px;border-bottom:1px solid var(--dt-line)}
-.dt-location p{white-space:pre-line;font-size:13px;line-height:1.65;margin:0 0 10px;color:var(--dt-ink);overflow-wrap:anywhere}
-body .dt-location button{width:100%;font-size:13px;min-height:40px;background:var(--design-selected);border-color:var(--design-line)}
-body .dt-location button:disabled{opacity:1;background:var(--design-paper);color:var(--design-muted);border-color:var(--dt-line)}
-.dt-fields label{font-size:12px}
-.dt-result{font-size:13px}
-
-/* The desktop editor is a page of the original parameter rail, not a floating window. */
-body .dt-panel{--dt-ink:var(--design-ink);--dt-muted:var(--design-muted);--dt-line:var(--design-line);color:var(--dt-ink);font-family:inherit}
-body .ui-parameters.dt-rail-active{overflow:auto;scrollbar-gutter:auto}
-
-body .dt-panel.dt-docked{position:relative;inset:auto!important;z-index:auto;width:100%!important;max-width:none;height:calc(100% - 54px);min-height:400px;max-height:none;border:0;border-radius:0;background:var(--design-inset,#ecf2f4);box-shadow:none}
-.dt-docked .dt-scroll{background:var(--design-surface);border-top:1px solid var(--dt-line)}
-.dt-docked .dt-tabs{border-bottom:0}
-.dt-docked .dt-head{padding-top:14px}
-body .dt-panel button,body .dt-panel input:not([type=checkbox]):not([type=file]),body .dt-panel select{border-radius:var(--design-radius-control,12px);border-color:var(--dt-line);color:var(--dt-ink)}
-body .dt-panel button[aria-pressed=true],body .dt-panel>.dt-footer button[data-save]{background:var(--design-inset,#ecf2f4);border-color:var(--dt-line)}
-body .dt-row button[aria-pressed=true]{background:var(--design-inset,#ecf2f4);box-shadow:inset 1px 0 var(--design-muted);border-radius:0}
-body .dt-tabs button{border-radius:0}
-body .dt-panel.dt-docked[data-collapsed=true]{height:auto}
-
-@media(max-width:760px){body .dt-panel{box-shadow:none;background:var(--design-surface);border-color:var(--design-line);border-radius:var(--design-radius-surface,16px)}.dt-panel .dt-modes{background:var(--design-inset,#ecf2f4)}}
-/* Preserve tab and mode semantics when native rail button rules also apply. */
-body .dt-panel .dt-tabs button{border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;box-shadow:none}
-body .dt-panel .dt-tabs button[aria-current=page]{border-bottom-color:var(--design-muted);color:var(--dt-ink)}
-body .dt-panel .dt-modes button{background:transparent;border-color:transparent}
-body .dt-panel .dt-modes button[aria-pressed=true]{background:var(--design-surface);border-color:var(--dt-line)}
-body .dt-panel .dt-row button{border:0;border-radius:0;background:transparent}
-body .dt-panel .dt-row button[aria-pressed=true]{background:var(--design-inset,#ecf2f4)}
-
-.dt-reference-help{margin:0 0 14px;font-size:13px;line-height:1.65;color:var(--dt-muted)}
-.dt-track-label::before{content:'';display:inline-block;width:10px;height:10px;margin-right:8px;border-radius:50%;background:var(--reference-color);border:1px solid var(--design-muted);vertical-align:middle}
-/* Editing adds tools; it never disables the original observation controls. */
-.dt-rail-navigation{position:sticky;top:-14px;z-index:3;display:flex;gap:6px;padding:8px 0;background:var(--design-inset);margin-bottom:10px;}
-body .dt-rail-navigation button{flex:1;min-height:36px;padding:6px;font:inherit;font-size:12px;color:var(--design-primary);background:var(--design-surface);border:1px solid var(--design-line);border-radius:var(--design-radius-control);cursor:pointer;}
-body .dt-rail-navigation button:focus-visible{outline:2px solid var(--design-primary);outline-offset:2px;}
-body .dt-panel.dt-docked{border:1px solid var(--design-line);border-radius:var(--design-radius-control);margin-top:16px;}
-body .dt-panel.dt-docked[data-collapsed=true]{min-height:0;}
-/* Short desktop rails reserve usable property space before expanding the object list. */
-@media(min-width:1000px) and (min-height:650px){
- .dt-scroll[data-view=objects]{padding-top:14px;padding-bottom:14px;}
- .dt-objects .dt-list{flex:0 1 auto;min-height:44px;}
- .dt-objects .dt-inspector{flex:1 0 100px;}
-}
-/* One native palette and predictable controls for the reference workbench. */
-body .dt-panel .dt-add{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:8px;margin-bottom:16px}
-body .dt-panel .dt-add button{min-width:0;min-height:64px;height:100%;padding:10px 8px;display:flex;align-items:center;gap:6px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--design-ink);box-shadow:none;font:inherit;font-size:12px;line-height:1.6;text-align:start;overflow-wrap:break-word}
-body .dt-panel .dt-add button::before{width:14px;height:14px;flex:0 0 14px;background:var(--design-muted)}
-body .dt-panel .dt-add button:hover{background:var(--design-inset);border-color:var(--design-line)}
-body .dt-panel .dt-add button:focus-visible{outline:2px solid var(--design-primary);outline-offset:2px}
-body .dt-panel .dt-add button:active{background:var(--design-selected)}
-body .dt-panel .dt-recipe{padding:10px 12px;min-height:44px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--design-ink);box-shadow:none}
-body .ui-parameters.dt-rail-active{padding-top:0}
-.dt-rail-navigation{position:sticky;top:0;margin:0 0 12px;padding:10px 0;background:var(--design-inset)}
-body .dt-rail-navigation button{border-radius:var(--design-radius-control);min-height:40px}
-body .dt-rail-navigation button[aria-selected=true]{background:var(--design-surface);border-color:var(--design-muted);color:var(--design-ink)}
-.ui-parameters.dt-rail-active[data-editor-view=references]>:not(.dt-rail-navigation):not(.dt-panel){display:none!important}
-.ui-parameters.dt-rail-active[data-editor-view=conditions]>.dt-panel{display:none!important}
-body .dt-panel.dt-docked{height:calc(100% - 62px);min-height:400px;margin:0;border:0;border-radius:0}
-body .dt-panel>.dt-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;border-top:1px solid var(--design-line);background:var(--design-inset)}
-body .dt-panel .dt-footer>.dt-status{flex:1;min-height:0;margin:0;padding:0;font-size:12px}
-body .dt-panel .dt-footer>.dt-more{flex:0 0 36px;width:36px;min-width:36px;height:36px;min-height:36px;padding:7px;background:var(--design-surface)}
-.dt-more svg{width:20px;height:20px;display:block;fill:currentColor}
-body .dt-panel .dt-object-menu{position:fixed;inset:auto;margin:0;min-width:150px;padding:5px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--design-ink);box-shadow:none}
-.dt-object-menu:not(:popover-open){display:none}
-body .dt-panel .dt-object-menu button{display:block;width:100%;min-height:40px;padding:9px 12px;text-align:left;border:0;border-radius:8px;background:transparent;font:inherit;font-size:13px;color:var(--design-ink)}
+.dt-location p{white-space:pre-line;font-size:12px;line-height:1.7;margin:0 0 10px;color:var(--dt-muted)}
+body .dt-location button{width:100%;background:var(--design-selected)}
+.dt-location .observer-link-settings{margin:12px 0 0}.dt-location .observer-link-settings label:has(#observerConstraint),.dt-location #observerLinkReadout{display:none}
+.dt-file-actions{display:grid;gap:8px}.dt-file-actions button{text-align:start}.dt-import-review{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}.dt-import-review:empty{display:none}.dt-import-review p{width:100%;margin:0}
+body .dt-panel>.dt-footer{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--dt-line);background:var(--design-inset)}
+.dt-panel .dt-footer>.dt-status{flex:1;margin:0;min-height:20px;font-size:12px}
+body .dt-panel .dt-object-menu{position:fixed;inset:auto;margin:0;min-width:170px;padding:5px;border:1px solid var(--dt-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--dt-ink)}
+.dt-object-menu:not(:popover-open){display:none}body .dt-panel .dt-object-menu button{display:block;width:100%;border:0;text-align:start;background:transparent}
 body .dt-panel .dt-object-menu button:hover{background:var(--design-inset)}
-body .dt-panel .dt-object-menu button:disabled{opacity:.45}
-.dt-location .observer-link-settings{margin:12px 0 0}
-.dt-location .observer-link-settings label:has(#observerConstraint),.dt-location #observerLinkReadout{display:none}
-@media(pointer:coarse){body .dt-panel .dt-footer>.dt-more{flex-basis:44px;width:44px;height:44px;min-height:44px}body .dt-panel .dt-object-menu button{min-height:44px}}
-
-body .dt-panel .dt-footer.dt-actions>button.dt-more{flex:0 0 36px;width:36px;min-width:36px;max-width:36px;}
-@media(pointer:coarse){body .dt-panel .dt-footer.dt-actions>button.dt-more{flex-basis:44px;width:44px;min-width:44px;max-width:44px;}}
-
-/* Context actions belong to the object row, beside visibility. */
-body .dt-panel .dt-row>button.dt-more,body .dt-panel .dt-row>button.dt-row-more{flex:0 0 32px;width:32px;min-width:32px;max-width:32px;height:40px;min-height:40px;padding:6px;border:0;border-radius:8px;background:transparent;color:var(--design-muted);box-shadow:none;}
-.dt-row-more svg{width:20px;height:20px;display:block;fill:currentColor;}
-body .dt-panel .dt-row>:is(.dt-more,.dt-row-more):hover{background:var(--design-inset);}
-body .dt-panel>.dt-footer{justify-content:flex-start;}
-@media(pointer:coarse){body .dt-panel .dt-row>button.dt-more,body .dt-panel .dt-row>button.dt-row-more{flex-basis:44px;width:44px;min-width:44px;max-width:44px;min-height:44px;}}
-
-/* In customization, sidebar navigation belongs to the page, not the selected plot. */
-body .ui-parameters.dt-navigation-ready{padding-top:0}
-.dt-rail-navigation[hidden],.dt-context-empty[hidden]{display:none!important}
+.dt-field-error{font:inherit;font-size:12px;line-height:1.55;color:#875136}.dt-fields label:has(.dt-field-error){grid-column:1/-1}body .dt-panel [aria-invalid=true]{border-color:#965d3c;background:#fff9f4}
+.dt-track-label::before{content:'';display:inline-block;width:9px;height:9px;margin-right:8px;border-radius:50%;background:var(--reference-color);vertical-align:middle}
+body .dt-host canvas:focus-visible,body .dt-host[tabindex]:focus-visible{outline:2px solid #b7ceda;outline-offset:-2px}
+.dt-rail-navigation{position:sticky;top:0;z-index:3;display:flex;gap:6px;padding:10px 0;margin:0 0 8px;background:var(--design-inset)}
+body .dt-rail-navigation button{flex:1;min-height:40px;padding:6px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--design-primary);font:inherit;font-size:12px;cursor:pointer}
+body .dt-rail-navigation button[aria-selected=true]{border-color:var(--design-muted);color:var(--design-ink)}
+body .dt-rail-navigation button:focus-visible{outline:2px solid var(--design-primary);outline-offset:2px}
+body .ui-parameters.dt-navigation-ready,body .ui-parameters.dt-rail-active{padding-top:0}
 .ui-parameters.dt-navigation-ready[data-editor-view=references]>:not(.dt-rail-navigation):not(.dt-panel):not(.dt-context-empty):not(.sb-controls){display:none!important}
-.ui-parameters.dt-navigation-ready[data-editor-view=conditions]>.dt-panel,.ui-parameters.dt-navigation-ready[data-editor-view=conditions]>.dt-context-empty{display:none!important}
-body .dt-context-empty{padding:18px 14px;color:var(--design-ink);font:inherit;font-size:13px;line-height:1.7}
-body .dt-context-empty p{margin:0 0 16px}
-body .dt-context-empty button{width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--design-ink);font:inherit}
-body .dt-context-empty button:disabled{opacity:.45}
-body .dt-context-empty button:focus-visible{outline:2px solid var(--design-primary);outline-offset:2px}
-
-/* The builder supplies the object content without replacing the sidebar tabs. */
-body.scene-builder-active .ui-parameters.dt-navigation-ready[data-editor-view=references]>.sb-controls{display:block!important}
-body.scene-builder-active .ui-parameters.dt-navigation-ready>.dt-context-empty{display:none!important}
-
-.ui-parameters.dt-navigation-ready[data-editor-view=conditions]>.sb-controls{display:none!important}
-/* New space actions retain the existing paper control palette. */
-body[data-page=space] .head-actions .language-actions :is(.layout-launch,.language-toggle){background:var(--design-surface);color:var(--design-primary);border:1px solid var(--design-line);box-shadow:none}
-body[data-page=space] .head-actions .language-actions .layout-launch[aria-pressed=true]{background:var(--design-primary);color:var(--design-surface);border-color:var(--design-primary)}
-body[data-page=space] .head-actions .language-actions{margin:0;gap:6px}
-@media(max-width:600px){body[data-page=space].space-immersive .head{flex-wrap:wrap;gap:6px}body[data-page=space].space-immersive .head .head-actions{flex-wrap:wrap;margin-left:auto}}
-
-/* Keep the next add action visible while inspecting an existing reference. */
-.dt-object-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;flex:none}
-body .dt-object-heading h3{margin:0;min-width:0}
-body .dt-object-heading .dt-add-another{min-height:44px;flex:none;color:var(--design-primary);border-radius:var(--design-radius-control)}
-.dt-city-picker{display:grid;gap:6px;margin:0 0 14px;font-size:12px;color:var(--design-muted)}
-.dt-panel[data-placing=true] .dt-hint{display:block;max-height:none;overflow:visible}
+.ui-parameters.dt-navigation-ready[data-editor-view=conditions]>:is(.dt-panel,.dt-context-empty,.sb-controls){display:none!important}
+body .dt-panel.dt-docked{position:relative;inset:auto!important;z-index:auto;width:100%!important;max-width:none;height:calc(100% - 62px);min-height:0;max-height:none;margin:0;border:0;border-radius:0;background:var(--design-inset)}
+.dt-docked .dt-scroll{background:var(--design-surface)}
+.dt-panel[data-empty=true] .dt-scroll[data-view=objects]{background:transparent;border-top:0}
+body .dt-context-empty{padding:18px 14px;color:var(--design-ink);font:inherit;font-size:13px;line-height:1.7}.dt-context-empty p{margin:0 0 16px}body .dt-context-empty button{width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--design-ink);font:inherit}
+body.scene-builder-active .ui-parameters.dt-navigation-ready[data-editor-view=references]>.sb-controls{display:block!important}body.scene-builder-active .ui-parameters.dt-navigation-ready>.dt-context-empty{display:none!important}
+body .dt-back-list{display:none}
+.dt-panel[data-collapsed=true]>.dt-scroll,.dt-panel[data-collapsed=true]>.dt-tabs,.dt-panel[data-collapsed=true]>.dt-history,.dt-panel[data-collapsed=true]>.dt-actions,.dt-panel[data-collapsed=true]>.dt-hint{display:none}
+body .dt-panel[data-collapsed=true]{height:auto;bottom:auto!important}
+@media(min-width:1000px) and (min-height:650px){.dt-scroll[data-view=objects]{overflow:hidden;display:flex;flex-direction:column}.dt-objects:not([hidden]){display:flex;flex-direction:column;min-height:0;height:100%}.dt-list{flex:0 1 auto;max-height:30dvh;min-height:40px}.dt-inspector{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding-right:3px}}
+@media(max-width:760px){body .dt-panel{left:12px!important;right:12px;top:auto!important;bottom:12px;width:auto!important;max-height:58dvh;border-radius:var(--design-radius-surface)}.dt-head{padding-top:8px}.dt-history{padding-bottom:4px}.dt-tabs{padding-bottom:8px}.dt-scroll{padding:14px}.dt-panel[data-detail=true] .dt-object-heading,.dt-panel[data-detail=true] .dt-list{display:none}body .dt-panel[data-detail=true] .dt-back-list{display:block;position:sticky;top:-14px;margin:0 0 14px;width:100%;z-index:2;background:var(--design-inset)}.dt-panel[data-detail=false] .dt-inspector{display:none}.dt-panel[data-placing=true] .dt-scroll,.dt-panel[data-placing=true] .dt-history{display:none}.dt-panel[data-placing=true]{max-height:44dvh}.dt-list{max-height:none}body .dt-panel input:not([type=checkbox]):not([type=file]),body .dt-panel select{font-size:16px}}
+@media(max-width:760px) and (max-height:600px){body .dt-panel{max-height:calc(100dvh - 24px)}}
+@media(pointer:coarse),(max-width:760px){body .dt-panel button,body .diagram-tool-launch{min-height:44px;min-width:44px}.dt-toggle{width:44px;min-height:44px}body .dt-panel input:not([type=checkbox]):not([type=file]),body .dt-panel select{min-height:44px}}
 
 /* All plot-overlay actions share the established dark canvas control palette.
    Light menus and timeline playback retain their existing roles. */
@@ -245,3 +111,16 @@ body[data-page=space] #reset.stage-reset{width:40px;min-width:40px;padding:8px;f
 }
 
 body[data-page=space] .stage-hint{right:64px}
+
+body .dt-panel .dt-head :is(button,.dt-collapse){font-size:0}
+
+/* Resolve touch ownership before pointerdown, including labels above WebGL. */
+.dt-editing,.dt-editing .label,body.customization-active .dt-host .label{touch-action:none}
+@media(max-width:760px){body .dt-panel[data-collapsed=true]{bottom:12px!important}}
+
+@media(min-width:1000px) and (min-height:650px){.dt-list{max-height:clamp(44px,16dvh,150px);min-height:44px}.dt-inspector{flex:1 0 120px;min-height:100px}}
+
+.dt-scroll,.dt-inspector,.dt-list{overflow-anchor:none}
+.dt-panel[data-placing=true]>.dt-hint{display:block}
+
+.dt-panel[data-limit=true]>.dt-hint{display:block}

@@ -1,77 +1,43 @@
-# SkyMotion customization interaction rules
+# Customization interaction (current production release)
 
-Scope: GPT Site preview 71. The official website is unchanged.
+## Customization: add, compare and save
 
-## Entry and exit
+### Enter and finish customization
 
-Lab and Related Diagrams place Customize / Finish customizing beside language. Normal mode retains native controls, diagrams and the shared timeline. Entry preserves the current plot, observer, date, time and camera. Reference and construction tools require explicit customization. Layout controls appear only in the related four-plot workspace.
+Choose Customize beside the language button. The main navigation and original location/time controls remain available. Observation controls adjusts the baseline experiment; Plot objects adds and edits references. Finish customizing closes the tools while keeping the session draft.
 
-Finishing hides editors and reference layers while retaining drafts. Refresh and direct entry start in normal mode. Clicking an internal link between Lab and Related Diagrams transfers editing intent once. Customization uses the existing scientific conditions.
+### Example 1: compare cities at one time
 
-## Native controls and object editing
+In the solar Lab, enter customization, choose Add object, select a comparison city such as London, then choose Observer / city. Its comparison appears in the original sky without changing the baseline location.
 
-- Desktop switches the original left rail between Observation conditions and Plot objects, retaining both tasks. The original bottom date, time and playback controls stay available.
-- Lab retains its four native Space, Top, Horizon and Look up viewpoints. Switching views keeps references. Moon retains its native phase / sky controls.
-- Move plot markers edits references; Use original controls restores native camera gestures.
-- Creation opens properties. List arrows and Home/End select; Enter edits. Escape in a property restores unapplied field input and returns to the list. Text composition remains native.
-- Each row places an ellipsis after its name and visibility checkbox, containing Save, Duplicate and Delete. The footer only reports status. Menus support arrow keys and Escape.
-- Invalid fields block saving, finishing and task switching and receive focus. Changes support undo/redo; cancelling a drag restores its data.
-- Phones retain the native parameter drawer and use a bottom reference workbench with touch controls.
+Select a city to edit its name and coordinates. One shared UTC instant compares the same real moment across places. The same local apparent solar time compares the same solar-clock reading at each place; these are different experiments.
 
-## Compare cities and times in the original diagrams
+Added cities appear in the linked sky, altitude, rise/set bearing and horizon diagrams. The same city remains editable from Related Diagrams. Identical locations can produce overlapping curves. Only Use as baseline location changes the original observer.
 
-Add Observer / city in Earth daylight or Lab sky, then edit its coordinates and name. Visible cities participate in Lab sky, altitude, rise/set bearings and axis/horizon comparisons. Consistent city colors connect the plots; editing, hiding or deleting updates comparisons.
+### Example 2: pin different times at one place
 
-The original time rule distinguishes:
+Keep the location and date fixed. Choose Add object, then Time marker. Tap the plot as prompted, or choose Place at the center, and enter 09:00 in its properties. Add another marker at 15:00 to compare the Sun at two times.
 
-- **Fixed apparent solar time:** each site uses the same local apparent solar clock time.
-- **Fixed UTC instant:** all sites use one physical timestamp, converted to each site's apparent solar date and time.
+Time markers use local apparent solar time at the baseline location and accept 00:00–24:00. Adding a marker does not change the active time on the bottom timeline. Date comparison curves likewise leave the global date unchanged.
 
-Comparison cities leave the baseline observer unchanged. Use as baseline location explicitly changes it. Ideal declination models support solar-clock comparisons only.
+### Example 3: place a rod and observe its shadow
 
-Add multiple Time markers in Lab sky or the altitude plot to compare different times at the same place within the original diagrams. Markers appear in sky, altitude, bearing and horizon geometry; Earth daylight shows their subsolar points, using the baseline site's apparent solar time on the current date. They do not change playback time. Date comparison curves remain attached to their own plot and do not replace the global date. Below-horizon sky paths are dashed; azimuth seams split; Look up clips to its visible hemisphere.
+Under Add object, choose Rod in Experiment objects. This opens the experiment ground. Tap the ground or choose Place at the center. Select the rod to adjust its height, position or tilt; the original date and time controls continue to determine the light.
 
-Session storage retains drafts across pages in the same tab. Explicit Save writes the device archive. Files supports JSON export/import, merge/replace and undoable clearing.
+Drag an object base to move it, drag empty ground to orbit, and use the wheel to zoom. There is no Observe/Build mode switch. Circles, planes and dials are references; mutual object occlusion is not simulated.
 
-## Construct an experiment
+In Lab, choose an original view button such as Spatial view to return to the sky. Ground objects remain available and are marked Experiment ground in the object list. Lunar mode also supports ground objects, but omits solar-only city comparisons.
 
-Choose Place experiment objects in Lab sky's Add tools, or Build experiment in Related Diagrams. Rods, spheres, circles, planes, dials, stations, points and notes support position, dimensions, tilt and placement constraints. Multiple selection, arrangement, distance/angle measurement, shadow-tip records and frozen-condition comparisons remain available. A native Lab viewpoint button returns to sky without losing the scene. Original place and time controls remain available.
+### Select, save and restore
 
-Rods and spheres use geometric projection. Reference objects do not block light; mutual occlusion is not modeled. Follow each diagram's stated illustrative scales.
+Select an object name to view its properties. Movable objects have handles; drag a handle to adjust it. Empty space retains the original camera gestures. Locked objects can be selected but cannot be dragged. Escape cancels placement or a drag.
 
-## Visual consistency and verification
+The row-end More menu contains Save plot objects, Duplicate and Delete. Undo/redo acts on the source plot being edited. Property changes apply immediately. Saving persists that source plot on this device; Save scene on the experiment ground separately saves its physical objects.
 
-Controls reuse the original design tokens, borders, radii and bilingual serif fonts. No separate blue-purple or green UI theme is introduced. Scientific data colors remain distinct.
+Plans can save, export or import the current plot references. Imports offer merge or replace; clearing is undoable. Download JSON for backup: local saves do not automatically sync across browsers or devices. On phones, use Back to object list from properties; Add object stays available above.
 
-Regression checks cover native controls, row menus, field recovery, session drafts, navigation intent, city clock semantics, synchronized plots, construction, and English/Chinese desktop and phone layouts. Browser automation uses Chromium; Safari hardware verification remains outstanding.
+Customization preserves the baseline location, date, time and view. Cities and times use the existing shared references, identified by source and object ID. Existing save formats remain valid; objects are not copied and astronomical formulae do not change.
 
+New controls retain the site typography, colors and radii. Light sidebars and dark plot actions stay consistent with their regions. Adding, selecting, editing, saving and returning to the original plot are checked on desktop, tablet and phone sizes; Chromium checks do not replace Safari device testing.
 
-Clean deployment URLs: editing intent recognizes both `.html` and extensionless routes; refresh still starts in normal mode.
-
-
-## Inline Lab controls (preview 70)
-
-After entering customization, open Compare places and times inside the original Date and location menu. Pin current time adds a marker directly to the original sky; edit HH:MM, including 24:00. Choose Add place from the native city list, then expand its name to edit the name and coordinates. Cities and markers created in Related Diagrams appear here too and can be edited without navigation. The original UTC / apparent-solar-time selector is reused. Row visibility and ellipsis Save / Duplicate / Delete remain available; Undo / Redo use the last edited source plot. Adding comparisons preserves the baseline location, date, time and camera. Phones use the existing settings drawer.
-
-
-## Stable navigation hierarchy (preview 71)
-
-Primary navigation keeps the same destinations and order across Sun/Moon changes, including Analemma. Current-page highlighting supports both languages. During desktop customization, Observation controls / Plot objects belongs to the page and stays present when the plot editor closes. Closing replaces only the content with a continuation action. Changing plots updates the editing target and tools, while retaining the chosen Add / Objects / Files section regardless of object count. Empty plots show empty content. Explicit object creation still reveals its properties for editing. Phones retain their native bottom workbench and selected section. Finishing customization restores normal mode.
-
-
-## Preview 72: visible entry and an empty starting point
-
-- Standalone 3D Solar system has the same Customize switch beside the language action. Immersive mode moves that same action group into its top controls. Embedded views keep the parent's mode without a duplicate switch.
-- In Lab customization, Compare places and times is at the top of the original observation menu. One place / different times and one time / different places are explicit; the latter explains shared UTC versus equal local apparent solar time using the existing time-basis control. Comparisons use the shared references without changing baseline conditions.
-- Place rods, spheres and circles opens the builder directly. New scenes start empty; two-rod and circular examples require an explicit choice. Previously saved scenes are preserved.
-- The center ring in the original sky marks the original observer. It is not a circle automatically added by customization. Restored user references remain editable and removable in Plot objects.
-
-Solar and lunar construction both start without an automatic circle. The canvas takes its background from the original `.ui-plot`; ground, grid and labels follow the existing plot palette rather than a separate green gradient. Restoring an existing saved scene is explained beside the introduction, with Empty ground and object deletion available.
-
-The lunar Lab keeps Experiment objects in the same menu position, with direct construction access; solar-only city and time comparisons stay hidden.
-
-### Adding objects and touch placement
-
-Use Add object beside the object list to add another reference without closing properties. In the solar sky, choose a city before adding an observer. The baseline stays unchanged; identical locations have overlapping curves. Position-based tools display placement instructions: tap the plot, or choose Place at the center. Creation opens the new object’s properties. Save, duplicate and delete remain in the row’s More menu.
-
-Customize plot and Reset view use the same dark auxiliary-button styling inside plots: matching background, text, border, radius and touch size. Light sidebars and timeline playback retain their existing styling.
+Other tools: altitude plots support date comparisons, reference levels and two-point time/altitude differences. Phase diagrams can capture dated snapshots; planet–Moon diagrams support angular separations and trails. The ground also supports spheres, circles, planes, dials, stations, points and text. Select several objects for Arrange selected objects or Measure and record. Reference A freezes its creation conditions; B follows the current parameters.

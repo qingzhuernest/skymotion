@@ -1,5 +1,3 @@
-October 20, 2026: customization is included in this production release. The top switch opens place/time comparisons, plot objects and experiment construction; finishing restores the original observation interface. New Sun/Moon construction scenes start empty, saved scenes are identified when restored, and the 3D customization entry stays at the top in immersive mode.
-
 SKY MOTION LAB · PROJECT AND MODELS
 
 # Project Introduction: Purpose, Features, and Geographic Models
@@ -176,3 +174,10 @@ My workspace in the Sun’s Linked Diagrams supports one to four views, side-by-
 In Layout & saved views, choose a diagram to add, make a diagram the main view, or equalize proportions. All these changes can be undone.
 
 Saved layouts support renaming, updating from the current workspace, and undoing changes. A Current layout marker identifies matching arrangements. On desktop, enter column or row proportions from 30% to 70%; the canvas updates only after committing the value.
+
+
+## Unified object workbench and compatibility
+
+Customization preserves the baseline location, date, time and view. Cities and times use the existing shared references, identified by source and object ID. Existing save formats remain valid; objects are not copied and astronomical formulae do not change.
+
+New controls retain the site typography, colors and radii. Light sidebars and dark plot actions stay consistent with their regions. Adding, selecting, editing, saving and returning to the original plot are checked on desktop, tablet and phone sizes; Chromium checks do not replace Safari device testing.

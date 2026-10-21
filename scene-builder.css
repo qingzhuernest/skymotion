@@ -91,3 +91,24 @@ body .sb-tool-grid button { padding-inline:6px; font-size:12px; }
 
 body .sb-controls input[type='checkbox'] {accent-color:var(--design-primary);}
 body .sb-native-conditions{width:100%;margin-bottom:16px;}
+
+/* Object manipulation uses the same list, property and placement conventions. */
+.scene-builder [hidden]{display:none!important}
+body .sb-add-toggle{width:100%;min-height:44px;margin:12px 0;background:var(--design-selected);color:var(--design-primary)}
+.sb-placement-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+body .sb-placement-actions button{min-height:44px}
+.sb-object-row{grid-template-columns:minmax(0,1fr) 24px 40px}
+body .sb-object-row .sb-row-more{min-width:40px;min-height:44px;padding:8px;border:0;background:transparent}
+.sb-row-more svg{display:block;width:20px;height:20px;fill:currentColor}
+body .sb-object-menu{position:fixed;inset:auto;margin:0;padding:5px;min-width:160px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);background:var(--design-surface);color:var(--design-ink)}
+.sb-object-menu:not(:popover-open){display:none}
+body .sb-object-menu button{display:block;width:100%;min-height:44px;border:0;text-align:start;background:transparent;color:var(--design-ink);font:inherit;font-size:13px}
+body .sb-object-menu button:hover{background:var(--design-inset)}
+
+@media(max-width:760px){.sb-surface>.sb-placement-actions{position:absolute;z-index:4;left:12px;right:12px;bottom:44px;margin:0;padding:6px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);background:var(--design-surface)}}
+/* Canvas tools use the same dark auxiliary controls as the native reset. */
+.sb-toolbar{justify-content:flex-end}
+body .sb-toolbar .sb-actions{background:#142b3c;border-color:#3d5b6d;color:#e4eef3}
+body .sb-toolbar .sb-actions button,body .sb-surface>.sb-placement-actions button,body .sb-mobile-props{background:#142b3c;color:#e4eef3;border-color:#3d5b6d}
+body .sb-toolbar .sb-actions button:hover,body .sb-surface>.sb-placement-actions button:hover,body .sb-mobile-props:hover{background:#203b4c}
+@media(max-width:760px){body .sb-surface>.sb-placement-actions{background:#142b3c;border-color:#3d5b6d}}
