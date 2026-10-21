@@ -1262,13 +1262,13 @@
     return true;
   }
   function ensureRailNavigation(rail) {
-    if (railNavigation?.parentElement === rail) return;
+    if (railNavigation?.closest('.ui-parameters, .side') === rail) return;
     rail.id ||= 'diagram-parameter-rail';
     railNavigation = E('nav', 'dt-rail-navigation', rail);
     railNavigation.dataset.i18nSkip = '';
     railNavigation.setAttribute('role', 'tablist');
     railNavigation.setAttribute('aria-label', tr('侧栏内容|Sidebar section'));
-    rail.prepend(railNavigation);
+    (rail.querySelector(':scope > .motion-menu-header') || rail).append(railNavigation);
     for (const kind of ['conditions', 'references']) {
       const b = E('button', '', railNavigation);
       b.type = 'button';
@@ -1322,7 +1322,7 @@
     }
   }
   function syncRailShell() {
-    const rail = parameterRail() || railNavigation?.parentElement;
+    const rail = parameterRail() || railNavigation?.closest('.ui-parameters, .side');
     if (!rail) return;
     const persistent = persistentRailMode();
     if (persistent) ensureRailNavigation(rail);

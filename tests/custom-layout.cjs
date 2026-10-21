@@ -62,16 +62,16 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await p.locator('.ui-diagram-card:visible .workspace-grip').first().focus();
     await p.keyboard.press('ArrowRight');
     assert.deepEqual((await stored()).views, ['chartPanel', 'contextPanel']);
-    await p.locator('[data-word="undo"]').click();
+    await require('./diagram-test-helpers.cjs').layoutAction(p, 'undo');
     assert.deepEqual((await stored()).views, ['contextPanel', 'chartPanel']);
-    await p.locator('[data-word="four"]').click();
+    await require('./diagram-test-helpers.cjs').layoutAction(p, 'four');
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 4);
-    await p.locator('[data-word="one"]').click();
+    await require('./diagram-test-helpers.cjs').layoutAction(p, 'one');
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 1);
     assert(await p.locator('.ui-diagram-card:visible [data-word="close"]').isDisabled());
     await p.locator('.ui-diagram-card:visible select').selectOption('solarGeometryPanel');
     assert(await p.locator('#resetGeometryView').isVisible());
-    await p.locator('[data-word="two"]').click();
+    await require('./diagram-test-helpers.cjs').layoutAction(p, 'two');
     await p.locator('.ui-diagram-card:visible [data-word="close"]').first().click();
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 1);
     await p.locator('[data-word="options"]').click();
@@ -119,7 +119,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     assert(await p.locator('.workspace-tabs').isVisible());
     await p.locator('.workspace-tabs button').nth(1).click();
     assert(await p.locator('#chart').isVisible());
-    await p.locator('[data-word="four"]').click();
+    await require('./diagram-test-helpers.cjs').layoutAction(p, 'four');
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 1);
     assert.equal(await p.locator('.workspace-tabs button').count(), 4);
     await p.locator('.workspace-tabs [aria-selected="true"]').focus();
@@ -173,7 +173,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await q.goto(base + 'diagrams.en.html');
     await q.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
     await q.locator('.layout-launch').click();await q.locator('[data-diagram=solarCompare]').click();await q.waitForFunction(()=>skyWorkspacePresentation.active);
-    await q.locator('[data-word="four"]').click();
+    await require('./diagram-test-helpers.cjs').layoutAction(q, 'four');
     assert.equal(await q.locator('.ui-diagram-card:visible').count(), 4);
     await q.locator('[data-word="options"]').click();
     await q.locator('.workspace-save-form input').fill('Temporary');
@@ -249,9 +249,9 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await r.mouse.up();
     assert((await richSaved()).rowRatio > 50);
     const heightRatio = (await richSaved()).rowRatio;
-    await r.locator('[data-word="undo"]').click();
+    await require('./diagram-test-helpers.cjs').layoutAction(r, 'undo');
     assert.equal((await richSaved()).rowRatio, 50);
-    await r.locator('[data-word="redo"]').click();
+    await require('./diagram-test-helpers.cjs').layoutAction(r, 'redo');
     assert.equal((await richSaved()).rowRatio, heightRatio);
     await options();
     await r.keyboard.press('Escape');
@@ -267,7 +267,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     );
     await r.keyboard.press('Escape');
     assert.equal(await r.locator('.ui-diagram-card:visible').count(), 2);
-    await r.locator('[data-word="add"]').click();
+    await require('./diagram-test-helpers.cjs').layoutAction(r, 'add');
     assert.equal((await richSaved()).views.length, 3);
     await options();
     await r.locator('[data-word="columns"]').click();
@@ -299,7 +299,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await r.locator(`[data-add-view="${missing}"]`).click();
     assert.equal((await richSaved()).views.at(-1), missing, 'Add the requested diagram directly');
     await r.keyboard.press('Escape');
-    await r.locator('[data-word="undo"]').click();
+    await require('./diagram-test-helpers.cjs').layoutAction(r, 'undo');
     await options();
     await r.locator(`[data-main-view="${originalOrder.at(-1)}"]`).click();
     assert.equal(
@@ -308,7 +308,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
       'Any diagram can become the main view',
     );
     await r.keyboard.press('Escape');
-    await r.locator('[data-word="undo"]').click();
+    await require('./diagram-test-helpers.cjs').layoutAction(r, 'undo');
     await options();
     await r.locator('[data-word="equalize"]').click();
     assert.equal((await richSaved()).ratio, 50);

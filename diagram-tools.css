@@ -571,7 +571,9 @@ body :is(.ui-parameters, body[data-page='space'] .side).dt-rail-active {
     .ui-parameters,
     body[data-page='space'] .side
   ).dt-navigation-ready[data-editor-view='references']
-  > :not(.dt-rail-navigation):not(.dt-panel):not(.dt-context-empty):not(.sb-controls) {
+  > :not(.dt-rail-navigation):not(.motion-menu-header):not(.dt-panel):not(.dt-context-empty):not(
+    .sb-controls
+  ) {
   display: none !important;
 }
 :is(
@@ -581,13 +583,19 @@ body :is(.ui-parameters, body[data-page='space'] .side).dt-rail-active {
   > :is(.dt-panel, .dt-context-empty, .sb-controls) {
   display: none !important;
 }
+body .dt-rail-active[data-editor-view='references']:has(> .dt-panel:not([hidden])) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 body .dt-panel.dt-docked {
   position: relative;
   inset: auto !important;
   z-index: auto;
   width: 100% !important;
   max-width: none;
-  height: calc(100% - 50px);
+  flex: 1;
+  height: auto;
   min-height: 0;
   max-height: none;
   margin: 0;

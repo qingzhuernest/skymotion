@@ -82,7 +82,7 @@
             [0, 1.085, 0.975, 1].map((progress, i) => ({
               height: `${Math.max(closedHeight, from + (to - from) * progress)}px`,
               offset: [0, 0.55, 0.79, 1][i],
-        easing: i === 0 ? easing : 'ease-in-out',
+              easing: i === 0 ? easing : 'ease-in-out',
             })),
             { duration: 420, easing: springEasing },
           );
@@ -229,7 +229,12 @@
     grip.className = 'motion-menu-grip';
     grip.textContent = '‹ 收起菜单';
     grip.title = '点击或向左拖动收起菜单';
-    rail.prepend(grip);
+    const menuHeader = document.createElement('div');
+    menuHeader.className = 'motion-menu-header';
+    menuHeader.append(grip);
+    const navigation = rail.querySelector(':scope > .dt-rail-navigation');
+    if (navigation) menuHeader.append(navigation);
+    rail.prepend(menuHeader);
     function sync() {
       const modal = mobile.matches || overlay();
       shell.classList.toggle('motion-rail-collapsed', collapsed && !modal);

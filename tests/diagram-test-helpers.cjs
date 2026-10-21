@@ -7,3 +7,15 @@ exports.enterCustomization=async(page)=>{if(!await page.locator('.layout-launch'
 exports.objectAction=async(page,name)=>{if(!await page.locator('#dt-object-menu').isVisible()){const tab=page.locator('[data-dt-view=objects]');if(await tab.isVisible())await tab.click();if(await page.locator('.dt-back-list').isVisible())await page.locator('.dt-back-list').click();await page.locator('.dt-more').click();}await page.getByRole('menuitem',{name:name==='保存'?'保存本图对象':name==='Save'?'Save plot objects':name,exact:true}).click();};
 
 exports.builderAction=async(page,kind)=>{const selected=page.locator('.sb-object[aria-pressed=true]').locator('..').locator('.sb-row-more');await selected.click();const en=await page.evaluate(()=>document.documentElement.lang==='en');await page.getByRole('menuitem',{name:kind==='copy'?(en?'Duplicate':'复制'):(en?'Delete':'删除'),exact:true}).click();};
+
+/* Secondary layout actions live in the existing Layout & saved views panel. */
+exports.layoutAction = async (page, word) => {
+  const trigger = page.locator('[data-word="options"]');
+  const wasOpen = await trigger.getAttribute('aria-expanded') === 'true';
+  if (!wasOpen) await trigger.click();
+  const target = word === 'add'
+    ? page.locator('.workspace-add-choices button:visible').first()
+    : page.locator(`[data-word="${word}"]`);
+  await target.click();
+  if (!wasOpen) await page.keyboard.press('Escape');
+};

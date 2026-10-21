@@ -19,7 +19,6 @@
     one: ['单图', 'One view'],
     two: ['双图', 'Two views'],
     four: ['四图', 'Four views'],
-    add: ['添加图解', 'Add a view'],
     options: ['布局与收藏', 'Layout & saved views'],
     choose: ['选择要添加的图解', 'Choose a diagram to add'],
     main: ['设为主图', 'Make main view'],
@@ -47,6 +46,7 @@
     chartPanel: ['全天太阳高度', 'Daily altitude'],
     riseSetPanel: ['日出日落方位', 'Sunrise and sunset'],
     solarGeometryPanel: ['地轴与地平面', 'Axis and horizon'],
+    count: ['图解数量', 'View count'],
     arrange: ['排列方式', 'Arrangement'],
     columns: ['左右并排', 'Side by side'],
     rows: ['上下排列', 'Stacked'],
@@ -244,11 +244,14 @@
   bar.id = 'layoutTools';
   bar.className = 'workspace-toolbar';
   bar.dataset.i18nSkip = '';
-  shell.querySelector('.ui-visual').prepend(bar);
+  const viewbar = shell.querySelector('.ui-viewbar'),
+    navigation = document.createElement('div');
+  navigation.className = 'workspace-navigation';
+  viewbar.before(navigation);
+  navigation.append(viewbar, bar);
   const presets = document.createElement('div');
   presets.className = 'workspace-presets';
   presets.setAttribute('role', 'group');
-  bar.append(presets);
   const presetButtons = [1, 2, 4].map((n, i) =>
     button(
       presets,
@@ -263,6 +266,7 @@
         : n === 2
           ? 'M4 5h16v14H4zM12 5v14'
           : 'M4 5h16v14H4zM12 5v14M4 12h16',
+      true,
     ),
   );
   const backButton = button(
@@ -275,19 +279,8 @@
     'm9 5-7 7 7 7M3 12h18',
     true,
   );
-  const addButton = button(
-    bar,
-    'add',
-    () =>
-      change(() => {
-        data.views.push(ids.find((id) => !data.views.includes(id)));
-        data.active = data.views.length - 1;
-      }, 'added'),
-    'M12 5v14M5 12h14',
-  );
-  const actions = document.createElement('div');
-  actions.className = 'workspace-actions';
-  bar.append(actions);
+  const layoutHistory = document.createElement('div');
+  layoutHistory.className = 'workspace-layout-history';
   function travel(from, to) {
     if (!from.length) return;
     cancel();
@@ -298,19 +291,21 @@
     apply();
   }
   const undoButton = button(
-    actions,
+    layoutHistory,
     'undo',
     () => travel(undo, redo),
     'M9 5 4 10l5 5M4 10h10a5 5 0 0 1 0 10',
+    true,
   );
   const redoButton = button(
-    actions,
+    layoutHistory,
     'redo',
     () => travel(redo, undo),
     'm15 5 5 5-5 5M20 10H10a5 5 0 0 0 0 10',
+    true,
   );
   const optionsButton = button(
-    actions,
+    bar,
     'options',
     () => toggleOptions(),
     'M4 7h16M4 17h16M8 4v6M16 14v6',
@@ -319,7 +314,7 @@
   const tabs = document.createElement('div');
   tabs.className = 'workspace-tabs';
   tabs.setAttribute('role', 'tablist');
-  bar.append(tabs);
+  navigation.after(tabs);
   const live = document.createElement('span');
   live.className = 'workspace-sr';
   live.setAttribute('role', 'status');
@@ -342,7 +337,7 @@
   const panelTitle = document.createElement('h2');
   panelHead.append(panelTitle);
   button(panelHead, 'closeOptions', () => closeOptions(true), 'm7 7 10 10M17 7 7 17');
-  panel.append(panelHead);
+  panel.append(panelHead, layoutHistory);
   function section(word) {
     const wrap = document.createElement('section'),
       h = document.createElement('h3');
@@ -351,6 +346,8 @@
     panel.append(wrap);
     return wrap;
   }
+  const quickLayout = section('count');
+  quickLayout.append(presets);
   const arrange = section('arrange'),
     axisGroup = document.createElement('div');
   axisGroup.className = 'workspace-choice-group';
@@ -964,8 +961,7 @@
     plot.dataset.workspaceFocus = String(Boolean(focused));
     undoButton.disabled = !undo.length;
     redoButton.disabled = !redo.length;
-    addButton.disabled = data.views.length === 4;
-    presets.hidden = Boolean(focused);
+    quickLayout.hidden = Boolean(focused);
     backButton.hidden = !focused;
     arrange.hidden = mobile.matches || data.views.length === 1;
     axisGroup.hidden = data.views.length === 4;

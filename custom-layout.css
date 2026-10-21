@@ -28,24 +28,35 @@
 .layout-launch:disabled {
   opacity: 0.5;
 }
+.workspace-navigation {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  border-bottom: 1px solid var(--design-line);
+  background: var(--design-surface);
+}
+.workspace-navigation > .ui-viewbar {
+  flex: 1;
+  min-width: 0;
+  border-bottom: 0;
+}
 .workspace-toolbar {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
   padding: 9px 12px;
-  border-bottom: 1px solid var(--design-line);
   background: var(--design-surface);
   flex-shrink: 0;
 }
 .workspace-presets,
-.workspace-actions {
+.workspace-layout-history {
   display: flex;
   gap: 5px;
   align-items: center;
 }
-.workspace-actions {
-  margin-left: auto;
+.workspace-presets {
+  flex-wrap: wrap;
 }
 .workspace-toolbar button {
   display: inline-flex;
@@ -85,9 +96,6 @@
 .workspace-pane-tools,
 .workspace-divider,
 .workspace-tabs {
-  display: none !important;
-}
-.workspace-active .ui-viewbar {
   display: none !important;
 }
 .workspace-active .ui-plot {
@@ -545,7 +553,7 @@
     display: none;
   }
   .workspace-presets,
-  .workspace-actions {
+  .workspace-layout-history {
     gap: 4px;
   }
   .workspace-active .ui-plot[data-workspace-count][data-workspace-axis][data-workspace-featured] {
@@ -713,8 +721,4 @@ body[data-page='diagrams']:not(.customization-active) [data-diagram='sceneBuilde
 .layout-launch[aria-pressed='true'] {
   background: var(--design-inset);
   border-color: var(--design-primary);
-}
-/* The normal diagram tabs remain available inside the custom workspace. */
-body.customization-active .workspace-active .ui-viewbar {
-  display: flex !important;
 }

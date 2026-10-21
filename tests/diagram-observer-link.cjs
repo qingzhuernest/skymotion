@@ -5,7 +5,7 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8982/').replace(/
 (async()=>{const browser=await chromium.launch({executablePath:process.env.SKY_MOTION_CHROMIUM||'/usr/bin/chromium',args:['--no-sandbox','--disable-gpu','--use-angle=swiftshader']});const errors=[];try{
  const p=await browser.newPage({viewport:{width:1280,height:960},hasTouch:true});p.on('pageerror',e=>errors.push(e.message));await p.goto(base+'diagrams.html');await require('./diagram-test-helpers.cjs').enterCustomization(p);await p.waitForFunction(()=>window.SkyDiagramTools&&window.SkyMotionHistory);
  await p.evaluate(()=>{window.linkModels={};const paint=SkyDiagramTools.paint;SkyDiagramTools.paint=(id,m)=>{linkModels[id]={lat:m.lat,lon:m.lon};return paint(id,m);};});
- await p.locator('[data-diagram=solarCompare]').click();await p.locator('.workspace-presets button').nth(2).click();await p.waitForFunction(()=>['earth','chart','bearings','geometry'].every(id=>linkModels[id]));
+ await p.locator('[data-diagram=solarCompare]').click();await require('./diagram-test-helpers.cjs').layoutAction(p, 'four');await p.waitForFunction(()=>['earth','chart','bearings','geometry'].every(id=>linkModels[id]));
  const initial=await p.evaluate(()=>({lat:state.lat,lon:state.lon}));await p.locator('#globe').locator('..').locator('.diagram-tool-launch').click();await addTool(p,'observer');await p.keyboard.press('Enter');
  const raw=await p.evaluate(()=>SkyDiagramTools.read('earth')[0]);const lat=p.locator('.dt-fields [data-field=lat]'),lon=p.locator('.dt-fields [data-field=lon]'),apply=p.locator('[data-observe-location]');
  for(const input of [lat,lon])assert.match(await input.inputValue(),/^-?\d+(\.\d{1,4})?$/,'picked coordinates are readable without modifying stored precision');

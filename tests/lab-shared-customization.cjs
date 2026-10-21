@@ -28,7 +28,7 @@ const {addTool}=require('./diagram-test-helpers.cjs');
  // Full navigation transfers editing intent once and keeps session references without Save.
  await p.locator('.page-nav a').filter({hasText:'关联图解'}).click();await p.waitForFunction(()=>window.SkyCustomization?.active===true&&window.SkyObserverComparison);
  assert.equal(await p.evaluate(()=>SkyObserverComparison.sites()[0].id),city.id);
- await p.locator('[data-diagram=solarCompare]').click();await p.locator('.workspace-presets button').nth(2).click();
+ await p.locator('[data-diagram=solarCompare]').click();await require('./diagram-test-helpers.cjs').layoutAction(p, 'four');
  await p.waitForFunction(()=>['globe','altitude','azimuth','geometry'].every(k=>SkyObserverComparison.read()[k]?.times.length===1));
  const report=await p.evaluate(()=>SkyObserverComparison.read());for(const type of ['globe','altitude','azimuth','geometry']){assert.equal(report[type].sites[0].id,city.id);assert.equal(report[type].times[0].time,600);assert.equal(report[type].basis,'utc');}
  await p.screenshot({path:'tests/artifacts/review68-shared.png'});

@@ -111,6 +111,8 @@ The object menu keeps the plot name at the top; the question-mark button expands
 
 Choose Customize beside the language button. The main navigation and original location/time controls remain available. Observation controls adjusts the baseline experiment; Plot objects adds and edits references. Finish customizing closes the tools while keeping the session draft.
 
+Collapse menu stays at the top of both Observation controls and Plot objects, including while scrolling. After collapsing, use the handle on the left of the canvas to reopen it. Diagram navigation and Layout & saved views share one row in comparison mode. Choose the number of views, undo or redo layout changes, and add diagrams inside Layout & saved views. On phones, close the parameter drawer to return to the canvas.
+
 ### Example 1: compare cities at one time
 
 In the solar Lab, enter customization, choose Add object, select a comparison city such as London, then choose Observer / city. Its comparison appears in the original sky without changing the baseline location.
