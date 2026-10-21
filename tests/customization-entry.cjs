@@ -20,7 +20,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    await p.waitForFunction(()=>document.querySelector('.head-actions .language-actions'));
    assert(await p.locator('.layout-launch').isVisible());
    assert(await p.locator('.language-toggle').isVisible());
-   if(await p.locator('.diagram-tool-launch:visible').count())await p.locator('.diagram-tool-launch:visible').click();
+   await require('./diagram-test-helpers.cjs').openWorkbench(p);
    await p.locator('.dt-panel').waitFor({state:'visible'});
    assert(await p.locator('.layout-launch').isVisible());
    await p.locator('.layout-launch').click();

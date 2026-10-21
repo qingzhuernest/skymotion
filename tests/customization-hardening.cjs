@@ -10,7 +10,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8972/').repla
     page.on('pageerror', error => errors.push(error.message));
     page.on('console', m => { if (m.type() === 'warning' && /reference rejected/i.test(m.text())) errors.push(m.text()); });
     await page.goto(base + 'diagrams.html#chartPanel');await require('./diagram-test-helpers.cjs').enterCustomization(page);
-    if(await page.locator('.diagram-tool-launch:visible').count())await page.locator('.diagram-tool-launch:visible').click();
+    await require('./diagram-test-helpers.cjs').openWorkbench(page);
     await addTool(page,'curve');
     await page.waitForFunction(() => document.querySelector('.dt-result').textContent.includes('2026'));
     await addTool(page,'measure');
@@ -34,7 +34,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8972/').repla
     await page.locator('.dt-head button').last().click();
     await page.locator('.language-toggle').click();
     await page.waitForFunction(() => document.documentElement.lang === 'en');
-    if(await page.locator('.diagram-tool-launch:visible').count())await page.locator('.diagram-tool-launch:visible').click();
+    await require('./diagram-test-helpers.cjs').openWorkbench(page);
     const labels = await page.locator('.dt-row button').allTextContents();
     assert(labels.includes('Date comparison curve 2'));
     assert(labels.every(label => !/[\u3400-\u9fff]/.test(label)));
@@ -52,13 +52,13 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8972/').repla
       sessionStorage.removeItem('sky-diagram-draft-v2:chart:sun'); // Simulate a legacy device archive, without a newer visit draft.
     });
     await page.reload();await require('./diagram-test-helpers.cjs').enterCustomization(page);
-    if(await page.locator('.diagram-tool-launch:visible').count())await page.locator('.diagram-tool-launch:visible').click();
+    await require('./diagram-test-helpers.cjs').openWorkbench(page);
     assert((await page.locator('.dt-row button').allTextContents()).includes('Date comparison curve 2'));
     assert((await page.locator('.dt-row button').allTextContents()).includes('个人测量 Personal'));
     await page.locator('.dt-head button').last().click();
     await page.locator('[data-diagram="contextPanel"]').click();
     await page.waitForFunction(() => document.querySelector('.ui-plot').dataset.kind === 'contextPanel');
-    if(await page.locator('.diagram-tool-launch:visible').count())await page.locator('.diagram-tool-launch:visible').click();
+    await require('./diagram-test-helpers.cjs').openWorkbench(page);
     const location = await page.evaluate(() => [state.lat, state.lon]);
     await addTool(page,'note');
     assert.equal(await page.evaluate(() => document.activeElement.id), 'globe');
@@ -101,7 +101,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8972/').repla
     console.log('PASS invalid frozen conditions discarded without losing objects or throwing, valid frozen leap-day reference retained');
     for (const path of ['lunar/index.en.html', 'space/index.en.html']) {
       const p = await browser.newPage(); p.on('pageerror', e => errors.push(e.message));
-      await p.goto(base + path);await require('./diagram-test-helpers.cjs').enterCustomization(p); if(await p.locator('.diagram-tool-launch:visible').count())await p.locator('.diagram-tool-launch:visible').click();
+      await p.goto(base + path);await require('./diagram-test-helpers.cjs').enterCustomization(p); await require('./diagram-test-helpers.cjs').openWorkbench(p);
       await addTool(p,'note'); await p.keyboard.press('Enter');
       const id = path.startsWith('lunar') ? 'lunar' : 'solar-system';
       assert.equal(await p.evaluate(id => SkyDiagramTools.read(id).length, id), 1);
@@ -109,7 +109,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8972/').repla
     }
     const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
     await mobile.goto(base + 'diagrams.en.html#chartPanel');await require('./diagram-test-helpers.cjs').enterCustomization(mobile);
-    if(await mobile.locator('.diagram-tool-launch:visible').count())await mobile.locator('.diagram-tool-launch:visible').click();
+    await require('./diagram-test-helpers.cjs').openWorkbench(mobile);
     await addTool(mobile,'measure');
     const sizes = await mobile.locator('.dt-panel button:visible').evaluateAll(nodes => nodes.map(n => ({ w: n.getBoundingClientRect().width, h: n.getBoundingClientRect().height })));
     assert(sizes.every(n => n.w >= 44 && n.h >= 44));
