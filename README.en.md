@@ -70,3 +70,6 @@ Restore a known good version through a restoration commit that preserves `main` 
 Original application code uses [GNU AGPLv3](LICENSE) (AGPL-3.0-only). Third-party libraries, fonts, imagery and data retain their own licenses; see [NOTICE](NOTICE) and [Third-Party Notices](THIRD-PARTY-NOTICES.md).
 
 For an issue, include the module, location, experiment date and time, reproduction steps, device and browser: [Contact the author](https://skymotion-5md.pages.dev/contact.en.html) · [GitHub Issues](https://github.com/qingzhuernest/skymotion/issues).
+
+
+Customization starts from experiment goals for cities, times and dates. Selected references support slider previews, precise inputs, grouped undo and cancellation. See the [learning guide](learning-guide.en.md).

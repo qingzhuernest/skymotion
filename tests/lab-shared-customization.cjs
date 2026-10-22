@@ -8,7 +8,7 @@ const {addTool}=require('./diagram-test-helpers.cjs');
  const original=await p.evaluate(()=>({views:document.querySelector('.view-tabs').textContent,conditions:[state.lat,state.lon,state.date,state.time],view:state.view}));
  assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);assert.equal(await p.locator('.language-actions .layout-launch').count(),1);
  await p.locator('.layout-launch').click();assert.equal(await p.evaluate(()=>state.view),original.view);assert.deepEqual(await p.evaluate(()=>[state.lat,state.lon,state.date,state.time]),original.conditions);
- await require('./diagram-test-helpers.cjs').openWorkbench(p);await p.locator('[data-dt-view=library]').click();assert(await p.locator('.dt-add button').count()>=6);
+ await require('./diagram-test-helpers.cjs').openWorkbench(p);await require('./diagram-test-helpers.cjs').openLibrary(p);assert(await p.locator('.dt-add button').count()>=6);
  await addTool(p,'observer');
  async function field(key,value){const f=p.locator('.dt-fields [data-field="'+key+'"]');await f.fill(String(value));await f.press('Tab');}
  await field('label','Sydney');await field('lat',-33.9);await field('lon',151.2);

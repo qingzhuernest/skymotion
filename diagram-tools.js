@@ -164,8 +164,41 @@
     citySelect = E('select', '', cityPicker),
     add = E('div', 'dt-add', library),
     recipe = E('button', 'dt-recipe', library);
+  const goalLabel = E('div', 'dt-goal'),
+    goalTitle = E('label', '', goalLabel),
+    goal = E('select', '', goalLabel);
+  goal.id = 'dt-experiment-goal';
+  goalTitle.htmlFor = goal.id;
+  goal.dataset.experimentGoal = '';
+  library.insertBefore(goalLabel, cityPicker);
+  const goalHelp = E('p', 'dt-purpose-help', goalLabel);
+  const advanced = E('details', 'dt-advanced', library),
+    advancedTitle = E('summary', '', advanced);
+  advanced.append(add);
+  goalLabel.append(cityPicker, recipe);
+  goal.onchange = () => {
+    recipe.hidden = !goal.value;
+    if (goal.value === 'places' && citySelect.value === [current.lat, current.lon].join(','))
+      citySelect.value = current.lat === -33.9 ? '51.5,-0.1' : '-33.9,151.2';
+    goalHelp.textContent =
+      goal.value === 'places'
+        ? tr(
+            '使用同一 UTC 瞬间；选下方城市，随后可拖动经纬度。原地点保持不变。|Compare one shared UTC instant. Choose a city below, then drag its coordinates. The baseline stays unchanged.',
+          )
+        : goal.value === 'times'
+          ? tr(
+              '固定当前地点与日期，加入 09:00 和 15:00 两个时刻；拖动各自的时间滑条继续比较。|Keep this location and date; add 09:00 and 15:00 markers, then drag their time sliders.',
+            )
+          : goal.value === 'shadow'
+            ? tr(
+                '进入实验地面，点击放置一根杆；原地点、日期与时间仍决定光照。|Open the experiment ground and click to place a rod; the original location, date and time determine the light.',
+              )
+            : tr(
+                '保留原图条件，加入另一日期或地点的对照；可在属性中拖动调整。|Keep the baseline and add a comparison; drag its properties to explore.',
+              );
+  };
   recipe.type = 'button';
-  recipe.onclick = addRecipe;
+  recipe.onclick = startExperiment;
   recipe.hidden = true;
   citySelect.id = 'dt-add-city';
   cityCaption.textContent = tr('新增观察点的地点|Location for the new observer');
@@ -203,11 +236,11 @@
   };
   objects.insertBefore(mobileBack, inspector);
   const referenceHelp = E('p', 'dt-reference-help', inspector);
-  inspector.insertBefore(referenceHelp, form);
+  form.after(referenceHelp);
   const locationPanel = E('div', 'dt-location', inspector),
     locationInfo = E('p', '', locationPanel),
     locationApply = E('button', '', locationPanel);
-  inspector.insertBefore(locationPanel, form);
+  referenceHelp.after(locationPanel);
   locationApply.type = 'button';
   locationApply.dataset.observeLocation = '';
   const objectActions = E('div', 'dt-object-actions dt-actions', inspector),
@@ -268,6 +301,33 @@
       : tr(
           '点选对象查看属性，拖动手柄调整；空白处沿用原图操作。方向键微调，Ctrl/Cmd+Z 撤销，Esc 取消当前操作。|Select an object to view properties and drag its handle to adjust it. Empty space uses the original plot controls. Arrow keys nudge, Ctrl/Cmd+Z undoes, and Esc cancels the current action.',
         );
+  }
+  const guideLink = E('a', 'dt-guide-link', hint);
+  function contextualHelp() {
+    if (armed) return;
+    const descriptions = {
+      sky: '原观测条件控制底部时间栏；所选对照有自己的滑条。经度比较先区分同一 UTC 瞬间与各地真太阳时。|The bottom timeline controls the baseline; comparisons have their own sliders. Distinguish one UTC instant from each location’s apparent solar time.',
+      analemma:
+        '赤纬与时角不随纬度变化；要比较纬度，请使用天空视图。钟表时与真太阳时产生的轨迹不同。|Declination and hour angle do not change with latitude; use the sky view to compare latitudes. Clock time and apparent solar time produce different tracks.',
+      phase:
+        '月相由日地月几何关系决定；示意中的距离与天体大小不是同一比例。|Moon phases follow Sun–Earth–Moon geometry; displayed distances and body sizes use different scales.',
+      space:
+        '相机移动只改变观察视角；观察站改变真实观测位置。天体大小和轨道距离采用教学尺度。|Moving the camera changes your viewpoint; moving a station changes the observer. Body sizes and orbital distances use teaching scales.',
+      companion:
+        '画面上的靠近不代表真实空间距离接近；地平线以下的位置不能直接观测。|Nearby positions on the plot do not imply nearby bodies in space. Positions below the horizon are not directly observable.',
+    };
+    hint.textContent = tr(
+      descriptions[current?.type] ||
+        '拖动滑条连续预览，输入框精确设置。方向键微调，Ctrl/Cmd+Z 撤销；拖动中按 Esc 恢复。保存仅写入此设备，不会跨浏览器同步。|Drag sliders to preview or type precise values. Arrow keys fine-tune, Ctrl/Cmd+Z undoes, and Escape cancels a drag. Saves stay on this device and do not sync across browsers.',
+    );
+    guideLink.textContent = tr('查看操作指南|Read the guide');
+    guideLink.href =
+      (document.body.dataset.page === 'space' || document.body.dataset.page === 'lunar'
+        ? '../'
+        : '') +
+      (en() ? 'guide.en.html' : 'guide.html') +
+      '#customization';
+    hint.append(document.createTextNode(' '), guideLink);
   }
   function arm(def) {
     finishNudge();
@@ -675,83 +735,80 @@
     }
     return o;
   }
-  function addRecipe() {
-    selectedSource = current.id;
+  function startExperiment() {
     commitActive();
-    if (!validInputs()) return;
-    const recipes = {
-      globe: [
-        ['observer', { lat: current.lat, lon: current.lon }],
-        ['observer', { lat: current.lat, lon: ((current.lon + 360) % 360) - 180 }],
-        ['ray', { lat: 0, lon: current.lon }],
-      ],
-      altitude: [
-        ['time', { time: 600 }],
-        ['time', { time: 840 }],
-        ['measure', {}],
-      ],
-      illumination: [
-        ['date', {}],
-        ['level', { value: 50 }],
-      ],
-      sky: [
-        ['time', { time: 600 }],
-        ['time', { time: 840 }],
-      ],
-      azimuth: [
-        ['direction', { az: 90 }],
-        ['direction', { az: 270 }],
-        ['ring', {}],
-      ],
-      geometry: [
-        ['ring', {}],
-        ['angle', {}],
-      ],
-      phase: [
-        ['phase', { angle: 90 }],
-        ['phase', { angle: 270 }],
-        ['rays', {}],
-      ],
-      companion: [
-        ['snapshot', {}],
-        ['trail', {}],
-      ],
-      analemma: [
-        ['track', { clock: 600 }],
-        ['track', { clock: 840 }],
-      ],
-      lunar: [
-        ['station', { angle: 0 }],
-        ['station', { angle: 180 }],
-        ['sight', {}],
-      ],
-      space: [
-        ['distance', {}],
-        ['angle', {}],
-        ['plane', {}],
-      ],
-    };
-    const available = defs(current),
-      items = (recipes[current.type] || []).filter(([id]) => available.some((d) => d.id === id));
-    if (stateFor(selectedOwner()).objects.length + items.length > 40) {
-      status.textContent = tr(
-        '空间不足；请先删除一些对象。|Not enough room; remove some references first.',
-      );
+    if (!validInputs() || !goal.value) return;
+    if (goal.value === 'shadow') {
+      SkySceneBuilder.open({ kind: 'rod' });
       return;
     }
-    editing = true;
+    if (goal.value === 'places') {
+      const coords = citySelect.value.split(',').map(Number);
+      const values = {
+        lat: coords[0],
+        lon: coords[1],
+        label: cityLabel(),
+        autoLabel: cityLabel(),
+        customLabel: false,
+      };
+      if (!coords.every(Number.isFinite)) return;
+      const basis = document.querySelector('#observerTimeBasis');
+      if (basis) {
+        basis.value = 'utc';
+        basis.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      const def = defs(current).find(
+        (d) => d.id === 'observer' && d.fields.some((f) => f.name === 'lat'),
+      );
+      if (def && ['lab-sky', 'earth', 'world-map'].includes(current.id)) create(def, values);
+      else {
+        const id = comparisons.add('observer', values);
+        if (id) {
+          update();
+          selectReference('lab-sky:' + id);
+        }
+      }
+      return;
+    }
+    const kind =
+      goal.value === 'times'
+        ? 'time'
+        : goal.value === 'track'
+          ? 'track'
+          : current.type === 'phase'
+            ? 'snapshot'
+            : 'curve';
+    const def = defs(current).find((d) => d.id === kind);
+    if (!def) return;
+    selectedSource = current.id;
+    const s = stateFor(current);
+    if (s.objects.length + (kind === 'time' ? 2 : 1) > 40) return;
     mutate((s) => {
-      for (const [id, values] of items) {
-        const o = makeObject(
-          available.find((d) => d.id === id),
-          values,
-        );
-        s.objects.push(o);
-        selected = o.id;
+      for (const value of kind === 'time' ? [540, 900] : [null]) {
+        const point =
+          kind === 'time'
+            ? { time: value }
+            : kind === 'track'
+              ? current.view === 'equatorial'
+                ? { clock: ((current.clock ?? current.time ?? 720) + 180) % 1440 }
+                : { lat: current.lat > 0 ? -Math.abs(current.lat) : Math.abs(current.lat) || 40 }
+              : {
+                  date:
+                    current.date.slice(0, 4) +
+                    (current.date.slice(5) < '07-01' ? '-12-21' : '-06-21'),
+                };
+        const object = makeObject(def, point);
+        s.objects.push(object);
+        selected = object.id;
       }
     });
     switchView('objects', true);
+    showInspector();
+    status.textContent = tr(
+      '已建立对照。拖动所选对象的滑条继续探索；原观测条件保持不变。|Comparison ready. Drag the selected reference sliders to explore; the baseline is unchanged.',
+    );
   }
+
   const draftKey = (m) => 'sky-diagram-draft-v2:' + m.id + ':' + (m.body || 'shared');
   function persist(m, s) {
     try {
@@ -868,7 +925,10 @@
               ? '已保存到此设备|Saved to this device'
               : '没有未保存的修改|No unsaved changes',
           )
-        : tr('有未保存的修改|Unsaved changes');
+        : tr('草稿已保留 · 有未保存的修改|Draft retained · Unsaved changes');
+    status.title = tr(
+      '草稿仅保留本次会话；保存本图对象会写入此设备，布局和实验物体分别保存。|Drafts last for this session. Save plot objects stores this plot on this device; layouts and ground objects are saved separately.',
+    );
   }
   function record(s, before, beforeSelected = selected, model = selectedOwner()) {
     if (JSON.stringify(before) === JSON.stringify(s.objects)) return;
@@ -918,7 +978,9 @@
     const text =
       tr(
         same
-          ? '所有图解正在使用此观测地点。|All diagrams use this observation location.'
+          ? linked
+            ? '对照与基准地点相同，轨迹重合；拖动经纬度滑条即可分开比较。|Comparison and baseline locations match, so their paths overlap. Drag the coordinate sliders to separate them.'
+            : '所有图解正在使用此观测地点。|All diagrams use this observation location.'
           : linked
             ? '对照城市，已同步到高度曲线、升落方位和地平面图。|Comparison city: synchronized with altitude, bearings and horizon diagrams.'
             : '独立参考点。|Independent reference.',
@@ -1002,7 +1064,9 @@
       const o = s.objects.find((o) => o.id === b.dataset.referenceId.split(':').at(-1));
       if (o) {
         const label = o.customLabel ? o.label : tr(o.label);
+        const swatch = b.querySelector('.dt-reference-swatch');
         b.textContent = label;
+        if (swatch) b.prepend(swatch);
         b.parentElement
           .querySelector('input')
           ?.setAttribute('aria-label', tr('显示|Show') + ' ' + label);
@@ -1010,6 +1074,31 @@
     }
     if (!s.objects.find((o) => o.id === selected)?.visible) result.textContent = '';
     updateLocation();
+    const selectedObject = s.objects.find((o) => o.id === selected);
+    const nameInput = form.querySelector('[data-field=label]');
+    if (
+      selectedObject &&
+      nameInput &&
+      !selectedObject.customLabel &&
+      document.activeElement !== nameInput
+    ) {
+      nameInput.value = tr(selectedObject.label);
+      nameInput.dataset.committedValue = nameInput.value;
+    }
+    const cities = form.querySelector('[data-city-edit]');
+    if (cities && selectedObject)
+      cities.value =
+        [...cities.options].find(
+          (option) =>
+            option.value &&
+            option.value
+              .split(',')
+              .map(Number)
+              .every(
+                (value, index) => Math.abs(value - selectedObject[index ? 'lon' : 'lat']) < 1e-6,
+              ),
+        )?.value || '';
+    for (const input of form.querySelectorAll('[data-field]')) SkyParameterControls.sync(input);
     actionState();
   }
   function mutate(fn, keepFields = false) {
@@ -1389,6 +1478,40 @@
   }
   // Tool creation, object navigation and properties render independently.
   function renderToolLibrary() {
+    const available = defs(current),
+      previous = goal.value;
+    goal.replaceChildren();
+    const choices = [['', '选择实验目的|Choose an experiment']];
+    if (current.body === 'sun' && ['lab', 'diagrams'].includes(document.body.dataset.page))
+      choices.push(['places', '同一时间 · 不同地点|Same instant · different places']);
+    if (available.some((d) => d.id === 'time'))
+      choices.push(['times', '同一地点 · 不同时刻|Same place · different times']);
+    if (available.some((d) => ['curve', 'snapshot'].includes(d.id)))
+      choices.push(['dates', '同一地点 · 不同日期|Same place · different dates']);
+    if (available.some((d) => d.id === 'track'))
+      choices.push([
+        'track',
+        current.view === 'equatorial'
+          ? '比较不同时刻的日行迹|Compare analemmas at different times'
+          : '比较不同纬度的日行迹|Compare analemmas at different latitudes',
+      ]);
+    if (window.SkySceneBuilder && ['lab', 'diagrams'].includes(document.body.dataset.page))
+      choices.push(['shadow', '摆放竖杆 · 观察影子|Place a rod · observe its shadow']);
+    for (const [value, title] of choices) {
+      const option = E('option', '', goal);
+      option.value = value;
+      option.textContent = tr(title);
+    }
+    goal.value = choices.some(([key]) => key === previous) ? previous : '';
+    goalLabel.hidden = choices.length === 1;
+    const context = current.id + ':' + current.body + ':' + current.type;
+    if (advanced.dataset.context !== context) {
+      advanced.open = choices.length === 1;
+      advanced.dataset.context = context;
+    }
+    goalTitle.textContent = tr('我想做什么实验|What would you like to compare?');
+    advancedTitle.textContent = tr('自由添加工具|Add individual tools');
+    goal.onchange();
     add.replaceChildren();
     const groups = new Map();
     for (const def of defs(current)) {
@@ -1489,6 +1612,12 @@
           trackColors[s.objects.filter((q) => q.type === 'track').indexOf(o) % trackColors.length],
         );
       }
+      if (o.type === 'observer' && current.body === 'sun' && window.SkyObserverComparison) {
+        const swatch = E('span', 'dt-reference-swatch');
+        swatch.setAttribute('aria-hidden', 'true');
+        swatch.style.setProperty('--reference-color', SkyObserverComparison.color(o.id));
+        b.prepend(swatch);
+      }
       b.onclick = () => selectReference(token);
       const toggle = E('label', 'dt-toggle', row),
         visible = E('input', '', toggle);
@@ -1548,6 +1677,80 @@
     }
   }
 
+  function referenceNameAtLocation(o) {
+    if (
+      o.customLabel ||
+      o.type !== 'observer' ||
+      !Number.isFinite(o.lat) ||
+      !Number.isFinite(o.lon)
+    )
+      return;
+    const option = [...citySelect.options].find((option) => {
+      const [lat, lon] = option.value.split(',').map(Number);
+      return Math.abs(lat - o.lat) < 1e-6 && Math.abs(lon - o.lon) < 1e-6;
+    });
+    if (option) {
+      const text = option.textContent,
+        dict = window.skyEnglishDictionary || {};
+      const zh = en() ? Object.keys(dict).find((key) => dict[key] === text) || text : text;
+      o.label = o.autoLabel = zh + '|' + (dict[zh] || text);
+    } else
+      o.label = o.autoLabel =
+        '自定义地点 ' + coordinates(o.lat, o.lon) + '|Custom location ' + coordinates(o.lat, o.lon);
+  }
+  function attachReferenceControl(input, field, object) {
+    if (field.options || (field.min === undefined && field.value !== 'date')) return;
+    const owner = selectedOwner(),
+      s = stateFor(owner);
+    SkyParameterControls.attach(input, {
+      kind: field.value === 'date' ? 'date' : 'number',
+      label: tr(field.title),
+      min: field.min,
+      max: field.max,
+      step: field.step,
+      save,
+      undo: (redo) => travel(redo ? 'redo' : 'undo', redo ? 'undo' : 'redo'),
+      read: () => object[field.name],
+      format: (value) => String(displayValue(field.name, value)),
+      begin() {
+        finishNudge();
+        if (typeof stop === 'function') stop();
+        else owner.pause?.();
+        return { objects: copy(s.objects), object: copy(object) };
+      },
+      preview(value) {
+        object[field.name] = value;
+        if (['lat', 'lon'].includes(field.name)) referenceNameAtLocation(object);
+        input.value = displayValue(field.name, value);
+        input.dataset.committedValue = input.value;
+        clearFieldError(input);
+        updateSmall();
+        status.textContent = tr(
+          '预览中 · 松手应用，Esc 取消|Preview · release to apply, Escape to cancel',
+        );
+        const name = form.querySelector('[data-field=label]');
+        if (name && !object.customLabel) name.value = tr(object.label);
+        repaint();
+        document.dispatchEvent(new Event('skymotion:references'));
+      },
+      commit(before) {
+        record(s, before.objects, selected, owner);
+        draftStatus();
+        updateSmall();
+      },
+      cancel(before) {
+        for (const key of Object.keys(object)) if (!(key in before.object)) delete object[key];
+        Object.assign(object, before.object);
+        input.value = displayValue(field.name, object[field.name]);
+        input.dataset.committedValue = input.value;
+        draftStatus();
+        updateSmall();
+        repaint();
+        document.dispatchEvent(new Event('skymotion:references'));
+      },
+    });
+  }
+
   // One validation/commit path for every reference property, regardless of page.
   function commitReferenceField(n, f, o) {
     let v = n.value;
@@ -1585,10 +1788,17 @@
     n.value = displayValue(f.name, v);
     clearFieldError(n);
     n.dataset.committedValue = n.value;
-    mutate(() => (o[f.name] = v), true);
+    mutate(() => {
+      o[f.name] = v;
+      if (['lat', 'lon'].includes(f.name)) referenceNameAtLocation(o);
+    }, true);
+    SkyParameterControls.sync(n);
     if (current.type === 'analemma' && f.name === 'basis') {
       const offset = form.querySelector('[data-field=offset]');
-      if (offset) offset.disabled = v === 'apparent';
+      if (offset) {
+        offset.disabled = v === 'apparent';
+        SkyParameterControls.sync(offset);
+      }
     }
     if (current.type === 'illumination' && f.value === 'date')
       requestAnimationFrame(() => {
@@ -1618,7 +1828,17 @@
     ) {
       referenceHelp.hidden = false;
       referenceHelp.textContent = tr(
-        '这是额外的地点对照，不会移动原观察者。修改下方经纬度即可更新对照；若与原地点相同，曲线会重合。继续添加请点上方“添加对象”。|This is an extra location comparison; your original observer stays unchanged. Change the coordinates below to update it. Identical locations overlap. Use Add object above to add another.',
+        '仅调整这个对照地点，原观察者不变。同地点的轨迹会重合。|Only this comparison location changes; the baseline stays fixed. Identical locations overlap.',
+      );
+    }
+    if (
+      o &&
+      ['time', 'curve', 'snapshot', 'track'].includes(o.type) &&
+      current.type !== 'analemma'
+    ) {
+      referenceHelp.hidden = false;
+      referenceHelp.textContent = tr(
+        '只调整这个对照对象。拖动滑条立即预览；输入框用于精确设置。原地点、日期和底部时间栏保持不变。|Only this comparison changes. Drag to preview or type a precise value. The baseline location, date and bottom timeline stay unchanged.',
       );
     }
     inspectorTitle.textContent = tr(
@@ -1631,7 +1851,7 @@
     }
     if (o) {
       const def = defs(selectedOwner()).find((d) => d.id === o.type);
-      const label = E('label', '', form);
+      const label = E('label', 'dt-name-edit', form);
       label.append(document.createTextNode(tr('名称 / 说明|Name / note')));
       const input = E('input', '', label);
       input.value = o.customLabel ? o.label : tr(o.label);
@@ -1648,6 +1868,41 @@
         input.value = value || tr(def.title);
         input.dataset.committedValue = input.value;
       };
+      if (
+        def.fields.some((f) => f.name === 'lat') &&
+        def.fields.some((f) => f.name === 'lon') &&
+        citySelect.options.length
+      ) {
+        const label = E('label', 'dt-city-edit', form);
+        label.append(
+          document.createTextNode(tr('选择城市，再拖动微调|Choose a city, then drag to adjust')),
+        );
+        const cities = E('select', '', label);
+        cities.dataset.cityEdit = '';
+        const custom = E('option', '', cities);
+        custom.value = '';
+        custom.textContent = tr('自定义地点|Custom location');
+        for (const option of citySelect.options) cities.append(option.cloneNode(true));
+        cities.value =
+          [...cities.options].find((option) => {
+            const values = option.value.split(',').map(Number);
+            return (
+              values.length === 2 &&
+              Math.abs(values[0] - o.lat) < 1e-6 &&
+              Math.abs(values[1] - o.lon) < 1e-6
+            );
+          })?.value || '';
+        cities.onchange = () => {
+          if (!cities.value || !validInputs()) return;
+          const [lat, lon] = cities.value.split(',').map(Number);
+          mutate(() => {
+            o.lat = lat;
+            o.lon = lon;
+            referenceNameAtLocation(o);
+          });
+          form.querySelector('[data-city-edit]')?.focus({ preventScroll: true });
+        };
+      }
       for (const f of def.fields) {
         const l = E('label', '', form);
         l.append(document.createTextNode(tr(f.title)));
@@ -1667,8 +1922,11 @@
             n.step = f.step;
           }
           if (f.value === 'date') {
-            n.placeholder = 'YYYY-MM-DD';
-            n.maxLength = 10;
+            n.type = 'date';
+            n.dataset.nativeDate = '';
+            n.classList.add('dt-date-input');
+            n.min = '1900-01-01';
+            n.max = '2100-12-31';
           }
           n.setAttribute('aria-describedby', status.id);
         }
@@ -1689,7 +1947,9 @@
           n.disabled = true;
         if (o.locked && ['x', 'y', 'lat', 'lon', 'time'].includes(f.name)) n.disabled = true;
         n.onchange = () => commitReferenceField(n, f, o);
+        attachReferenceControl(n, f, o);
       }
+      form.append(label);
       if (anchor(selectedOwner(), o)) {
         const row = E('label', 'dt-lock', form),
           lock = E('input', '', row),
@@ -1703,9 +1963,11 @@
             return;
           }
           mutate(() => (o.locked = lock.checked), true);
-          for (const field of form.querySelectorAll('[data-field]'))
+          for (const field of form.querySelectorAll('[data-field]')) {
             field.disabled =
               !!o.locked && ['x', 'y', 'lat', 'lon', 'time'].includes(field.dataset.field);
+            SkyParameterControls.sync(field);
+          }
         };
       }
       if (o.type === 'camera') {
@@ -1740,15 +2002,16 @@
     objectTitle.textContent = tr('图中对象|Plot objects') + ' · ' + allEntries.length;
     addAnother.textContent = tr('添加对象|Add object');
     cityPicker.hidden = !(
-      current.type === 'sky' &&
-      current.body !== 'moon' &&
+      current.body === 'sun' &&
+      ['lab', 'diagrams'].includes(document.body.dataset.page) &&
       citySelect.options.length
     );
     cityCaption.textContent = tr('新增观察点的地点|Location for the new observer');
-    recipe.textContent = tr('添加一组常用参考|Add a useful reference set');
+    recipe.textContent = tr('开始这个实验|Start this experiment');
     switchView(activeView, true);
     close.setAttribute('aria-label', tr('收起图中编辑|Close plot editor'));
     placementUI();
+    contextualHelp();
     panel.dataset.limit = String(stateFor(current).objects.length >= 40);
     if (stateFor(current).objects.length >= 40)
       hint.textContent = tr(
@@ -2704,7 +2967,7 @@
       ['observer', 'time'].includes(o.type) &&
       typeof o.label === 'string' &&
       o.label.trim().length > 0 &&
-      o.label.length <= 60 &&
+      o.label.length <= (o.customLabel ? 60 : 160) &&
       (o.type === 'time'
         ? Number.isFinite(o.time) && o.time >= 0 && o.time <= 1440
         : Number.isFinite(o.lat) &&
@@ -3034,6 +3297,7 @@
     (e) => {
       if (panel.hidden || e.isComposing || e.keyCode === 229 || objectMenu.contains(e.target))
         return;
+      if (e.target.matches('.parameter-scrub')) return;
       const modal = e.target.closest?.('dialog[open],:popover-open');
       if (modal && !panel.contains(modal)) return;
       const local = panel.contains(e.target) || e.target === current.canvas;

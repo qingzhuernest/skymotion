@@ -37,7 +37,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    await p.locator('.dt-panel').waitFor({state:'visible'});
    assert.equal(await p.locator('#labComparisons').count(),0);
    assert.equal(await p.evaluate(()=>SkyDiagramTools.read('lab-sky').length),0,'entry must not invent objects');
-   await p.locator('[data-dt-view=library]').click();await p.locator('[data-build-kind=rod]').click();
+   await require('./diagram-test-helpers.cjs').openLibrary(p);await p.locator('[data-build-kind=rod]').click();
    await p.waitForFunction(()=>document.body.classList.contains('scene-builder-active'));
    assert.equal(await p.evaluate(()=>SkySceneBuilder.read().objects.length),0,'placing is pending, not an implicit object');
    await p.locator('button[data-body=moon]').click();await p.waitForFunction(()=>state.body==='moon'&&SkySceneBuilder.read()?.objects.length===0);

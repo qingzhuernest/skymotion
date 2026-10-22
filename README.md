@@ -70,3 +70,6 @@ SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" SKY_MOTION_CH
 原创应用代码采用 [GNU AGPLv3](LICENSE)（AGPL-3.0-only），第三方库、字体、图片与数据保留各自许可，见 [NOTICE](NOTICE) 和[第三方声明](THIRD-PARTY-NOTICES.md)。
 
 问题反馈请附模块、地点、实验日期与时刻、复现步骤，以及设备和浏览器信息：[联系作者](https://skymotion-5md.pages.dev/contact.html) · [GitHub Issues](https://github.com/qingzhuernest/skymotion/issues)。
+
+
+自定义可按实验目的建立城市、时刻和日期对照，所选对象支持滑条预览、精确输入、整段撤销与取消；用法见[学习指南](learning-guide.md)。

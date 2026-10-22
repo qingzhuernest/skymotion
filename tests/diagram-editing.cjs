@@ -13,6 +13,8 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8973/').repla
   await addTool(p,'note');await p.keyboard.press('Enter');
   const location=await p.evaluate(()=>[state.lat,state.lon]);
   await p.locator('.dt-fields [data-field="x"]').fill('45');await p.locator('.dt-fields [data-field="x"]').press('Tab');
+  assert.equal(await p.evaluate(()=>document.activeElement.dataset.scrub),'x', 'Tab reaches the coordinate slider');
+  await p.keyboard.press('Tab');
   assert.equal(await p.evaluate(()=>document.activeElement.dataset.field),'y');
   await p.keyboard.type('35');await p.keyboard.press('Tab');
   assert.equal((await read()).y,35);

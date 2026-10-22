@@ -85,7 +85,7 @@
   document.addEventListener('skymotion:language',()=>{if(dialog.open)render()});
   function install() {
     document.querySelectorAll('input[type="date"],input[type="month"]').forEach(input=>{
-      if(installed.has(input))return;installed.add(input);input.dataset.calendarType=input.type;input.type='text';input.classList.add('site-date-field');input.readOnly=true;
+      if(installed.has(input)||input.hasAttribute('data-native-date'))return;installed.add(input);input.dataset.calendarType=input.type;input.type='text';input.classList.add('site-date-field');input.readOnly=true;
       input.setAttribute('aria-haspopup','dialog');
       input.addEventListener('click',event=>{event.preventDefault();open(input)});
       input.addEventListener('keydown',event=>{if(['Enter',' ','ArrowDown'].includes(event.key)){event.preventDefault();open(input)}});

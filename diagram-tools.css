@@ -377,7 +377,7 @@ body .dt-panel .dt-row > :is(.dt-more, .dt-row-more):hover {
   font-size: 12px;
   line-height: 1.5;
 }
-.dt-fields label:first-child,
+.dt-fields .dt-name-edit,
 .dt-fields label:has(select) {
   grid-column: 1/-1;
 }

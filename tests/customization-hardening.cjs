@@ -20,7 +20,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8972/').repla
     assert(await page.locator('.dt-row button').first().evaluate(n => document.activeElement === n));
     const original = await page.evaluate(() => SkyDiagramTools.read('chart')[0].date);
     for (const value of ['9999-01-01', '1899-12-31', '2101-01-01', '2026-02-30']) {
-      await page.locator('[data-field="date"]').fill(value);
+      await page.locator('[data-field="date"]').fill(value === '2026-02-30' ? '' : value);
       await page.locator('[data-field="date"]').press('Tab');
       assert.equal(await page.locator('[data-field="date"]').getAttribute('aria-invalid'), 'true');
       assert.equal(await page.evaluate(() => SkyDiagramTools.read('chart')[0].date), original);

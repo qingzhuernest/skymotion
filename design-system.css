@@ -1409,8 +1409,8 @@ body .ui-parameters .menu-footer #reset {
 }
 
 body .motion-menu-edge,
-body .ui-parameters > button.motion-menu-grip,
-body[data-page='space'] .side > button.motion-menu-grip {
+body .ui-parameters .motion-menu-header > button.motion-menu-grip,
+body[data-page='space'] .side .motion-menu-header > button.motion-menu-grip {
   border-color: var(--design-action);
   border-radius: 12px;
 }
@@ -1425,8 +1425,8 @@ body .ui-timeline-host .workbench-clock-tools button,
 body .ui-timeline-host .workbench-look-buttons button,
 body .ui-parameters .observer-bodies button,
 body .ui-parameters .menu-footer #reset,
-body .ui-parameters > button.motion-menu-grip,
-body[data-page='space'] .side > button.motion-menu-grip,
+body .ui-parameters .motion-menu-header > button.motion-menu-grip,
+body[data-page='space'] .side .motion-menu-header > button.motion-menu-grip,
 body .motion-menu-edge,
 body[data-page='diagrams'] .ui-heading .ui-linked-toggle,
 body[data-page='space'] .focus {
@@ -1441,8 +1441,8 @@ body .ui-timeline-host .workbench-clock-tools button:hover,
 body .ui-timeline-host .workbench-look-buttons button:hover,
 body .ui-parameters .observer-bodies button:hover,
 body .ui-parameters .menu-footer #reset:hover,
-body .ui-parameters > button.motion-menu-grip:hover,
-body[data-page='space'] .side > button.motion-menu-grip:hover,
+body .ui-parameters .motion-menu-header > button.motion-menu-grip:hover,
+body[data-page='space'] .side .motion-menu-header > button.motion-menu-grip:hover,
 body .motion-menu-edge:hover,
 body .motion-menu-edge:active,
 body[data-page='diagrams'] .ui-heading .ui-linked-toggle:hover,

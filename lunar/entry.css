@@ -7,7 +7,7 @@ body.lunar-orbit-active .lunar-controls-host,
 .ui-lunar-orbit .lunar-timeline-host {
   display: block;
 }
-body.lunar-orbit-active .ui-parameters > :not(.lunar-controls-host):not(.motion-menu-grip),
+body.lunar-orbit-active .ui-parameters > :not(.lunar-controls-host):not(.motion-menu-header),
 .ui-lunar-orbit .ui-timeline-host > :not(.lunar-timeline-host),
 .ui-lunar-orbit .ui-linked-toggle {
   display: none !important;

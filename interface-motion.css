@@ -213,8 +213,8 @@
 }
 
 /* Identical collapse control in conventional and three-dimensional parameter rails. */
-.ui-parameters > button.motion-menu-grip,
-body[data-page='space'] .side > .motion-menu-grip {
+.ui-parameters .motion-menu-header > button.motion-menu-grip,
+body[data-page='space'] .side .motion-menu-header > .motion-menu-grip {
   height: 36px;
   min-height: 36px;
   padding: 6px 12px;

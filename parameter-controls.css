@@ -1,0 +1,72 @@
+/* Sliders share the existing palette and leave native inputs available for precision. */
+body input.parameter-scrub[type='range'] {
+  width: 100%;
+  min-width: 0;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  margin: 3px 0 0;
+  border: 0;
+  box-shadow: none;
+  accent-color: var(--design-primary);
+  cursor: ew-resize;
+  touch-action: pan-y;
+}
+body input.parameter-scrub:focus-visible {
+  outline: 2px solid var(--design-primary);
+  outline-offset: 2px;
+}
+.parameter-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.parameter-field[hidden] {
+  display: none;
+}
+.dt-fields .parameter-field:has(.dt-date-input),
+.dt-fields .parameter-field:has(.dt-field-error),
+.dt-fields .dt-city-edit {
+  grid-column: 1 / -1;
+}
+.dt-goal {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.dt-advanced {
+  margin-top: 16px;
+}
+.dt-advanced > summary {
+  cursor: pointer;
+  color: var(--design-primary);
+  padding: 8px 0;
+}
+.dt-row [data-reference-id] {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.dt-reference-swatch {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--reference-color);
+}
+.dt-guide-link {
+  color: var(--design-primary);
+  text-underline-offset: 0.15em;
+}
+.dt-purpose-help {
+  margin: 6px 0;
+  color: var(--design-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+@media (pointer: coarse) {
+  body input.parameter-scrub[type='range'] {
+    height: 40px;
+    min-height: 40px;
+  }
+}

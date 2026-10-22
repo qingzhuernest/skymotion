@@ -37,13 +37,13 @@
     <meta content="zh_CN" property="og:locale" />
     <!-- search-metadata:end -->
     <link href="documents.css?v=20261021-refactor81" rel="stylesheet" />
-    <link rel="stylesheet" href="design-system.css?v=20261021-refactor81" />
+    <link rel="stylesheet" href="design-system.css?v=20261021-explore83" />
     <link rel="stylesheet" href="language.css?v=20261021-refactor81" />
     <script src="document-entrance.js?v=20261019-tools66" defer></script>
 <script src="language-data.js?v=20261021-refactor81" defer></script>
 <script src="language.js?v=20261019-tools66" defer></script>
 <script src="page-cache.js?v=20261019-tools66" defer></script>
-  <script src="date-picker.js?v=20261019-tools66" defer></script>
+  <script src="date-picker.js?v=20261021-explore83" defer></script>
 
 </head>
   <body data-page="development">
@@ -1035,7 +1035,8 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory /tmp/skymotion-preview<
             >学习指南更新任务步骤，项目介绍更新目的与能力，开发说明更新文件、计算和验证。同步Markdown与README，核对文档锚点、版权和发布包，提交main后检查双站点部署与资源。
           </li>
         </ol>
-      </div>
+      <h2>可拖动参数与实验目的</h2><p>parameter-controls.js 与 parameter-controls.css 统一参考对象和实验物体的滑条：同一帧的输入合批预览，change 提交一次历史，Escape／pointercancel 恢复起点。日期以 UTC 整数日映射所选年份，保留闰日；精确输入与滑条写入同一个对象，锁定和几何约束共用原校验。实验目的复用现有创建与撤销流程；同一瞬间不同地点明确设置 UTC。observer-comparison.js 缓存共享地点解算，列表与图例复用同一色标，标签按可用空间避让。已有隐藏画布停止绘制、后台暂停和 DPR 上限保留。桌面检查包含常用逻辑分辨率和 1.25／1.5 像素比；Chromium 的这些检查不等同于 Windows Edge 或 Safari 真机认证。</p>
+</div>
 
 
 

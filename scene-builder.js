@@ -29,10 +29,11 @@
     remove: ['删除', 'Delete'],
     undo: ['撤销', 'Undo'],
     redo: ['重做', 'Redo'],
-    save: ['保存方案', 'Save scene'],
+    save: ['保存地面方案', 'Save ground scene'],
     reset: ['清空地面', 'Clear ground'],
     saved: ['已保存到此设备', 'Saved to this device'],
-    dirty: ['方案有未保存的修改', 'Scene has unsaved changes'],
+    preview: ['预览中 · 松手应用，Esc 取消', 'Preview · release to apply, Escape to cancel'],
+    dirty: ['本次访问的草稿 · 方案有未保存的修改', 'Session draft · Scene has unsaved changes'],
     memory: [
       '浏览器无法保存，仅本次访问有效。',
       'Browser storage is unavailable; this scene lasts for this visit.',
@@ -414,6 +415,34 @@
         if (key === 'name') o.autoName = false;
       });
     };
+    if (input.type === 'number')
+      SkyParameterControls.attach(input, {
+        save,
+        undo: (forward) => travel(forward ? redo : undo, forward ? undo : redo),
+        label: () => t(key),
+        min: +input.min,
+        max: +input.max,
+        step: +input.step,
+        read: () => data?.objects.find((o) => o.id === selected)?.[key] ?? +input.min,
+        begin() {
+          stop();
+          return clone(data);
+        },
+        preview(value) {
+          if (current()) current()[key] = value;
+          input.value = value;
+          draw();
+          status.textContent = t('preview');
+        },
+        commit(before) {
+          record(before);
+          update();
+        },
+        cancel(before) {
+          data = clone(before);
+          update();
+        },
+      });
   }
   const uprightLabel = node('label', 'sb-lock', props),
     upright = node('input', '', uprightLabel);
@@ -1171,6 +1200,7 @@
             ((o.kind === 'rod' && o.upright) ||
               (['circle', 'planeObject'].includes(o.kind) && o.plane !== 'inclined'))) ||
           (k === 'elevation' && o.grounded);
+        SkyParameterControls.sync(input);
       }
       locked.checked = o.locked;
       upright.checked = o.upright;

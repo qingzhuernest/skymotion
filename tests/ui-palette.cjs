@@ -7,6 +7,7 @@ const shared = [
   'design-system.css',
   'controls.css',
   'diagram-tools.css',
+  'parameter-controls.css',
   'custom-layout.css',
   'documents.css',
   'language.css',
