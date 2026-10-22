@@ -263,6 +263,8 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     const options = async () => {
       if ((await r.locator('[data-word="options"]').getAttribute('aria-expanded')) !== 'true')
         await r.locator('[data-word="options"]').click();
+      if (await r.evaluate(() => matchMedia('(max-width:760px)').matches))
+        await require('./diagram-test-helpers.cjs').openDrawer(r);
     };
     assert.equal(await r.locator('.ui-diagram-card:visible').count(), 2, 'Old v2 layouts migrate');
     assert.equal(
@@ -509,7 +511,10 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     );
     await options();
     const bounds = await r.locator('#workspaceOptions').boundingBox();
-    assert(bounds.x >= 0 && bounds.x + bounds.width <= 320, 'Settings stay inside narrow screens');
+    assert(
+      bounds.x >= 0 && bounds.x + bounds.width <= 320,
+      'Settings stay inside narrow screens: ' + JSON.stringify(bounds),
+    );
     await r.keyboard.press('Escape');
     assert.deepEqual(richErrors, []);
     await rich.close();
