@@ -33,7 +33,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8973/').repla
   await p.locator('.dt-head button').last().click();
   await p.locator('#globe').click({position:{x:gr.width/2+150,y:gr.height/2+15}});
   assert.notDeepEqual(await p.evaluate(()=>[state.lat,state.lon]),location);
-  await p.locator('[data-diagram="chartPanel"]').click();await p.waitForFunction(()=>document.querySelector('.ui-plot').dataset.kind==='chartPanel');await require('./diagram-test-helpers.cjs').openWorkbench(p);
+  await require('./diagram-test-helpers.cjs').selectDiagram(p, 'chartPanel');await p.waitForFunction(()=>document.querySelector('.ui-plot').dataset.kind==='chartPanel');await require('./diagram-test-helpers.cjs').openWorkbench(p);
   await addTool(p,'time');await p.keyboard.press('Enter');
   const r=await p.locator('#chart').boundingBox();const point=await p.evaluate(()=>{const c=document.getElementById('chart'),r=c.getBoundingClientRect(),time=SkyDiagramTools.read('chart')[0].time;const left=35,right=r.width-12,top=r.height<100?10:14,bottom=r.height-(r.height<100?22:27),alt=skyRaw('Sun',time,state.date,state.lat,state.lon).alt;return{x:left+(right-left)*time/1440,y:bottom-(alt+90)/180*(bottom-top)};});
   // Use the native canvas drawing coordinates (read from its accessibility-neutral time handle).
@@ -42,7 +42,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8973/').repla
   const after=await p.evaluate(()=>SkyDiagramTools.read('chart')[0].time);assert(after>before);
   await p.screenshot({path:'tests/artifacts/edit53-desktop.png'});await p.close();
   console.log('PASS tab order, compact properties, mouse dragging, one-step undo/redo, Esc rollback, selected/draft restoration, no observer changes and time-marker movement');
-  const m=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});m.on('pageerror',e=>errors.push(e.message));await m.goto(base+'diagrams.en.html#chartPanel');await require('./diagram-test-helpers.cjs').enterCustomization(m);await require('./diagram-test-helpers.cjs').openWorkbench(m);await addTool(m,'note');await m.keyboard.press('Enter');await m.locator('.dt-collapse').click();
+  const m=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});m.on('pageerror',e=>errors.push(e.message));await m.goto(base+'diagrams.en.html#chartPanel');await require('./diagram-test-helpers.cjs').enterCustomization(m);await require('./diagram-test-helpers.cjs').openWorkbench(m);await addTool(m,'note');await m.keyboard.press('Enter');await m.locator('.dt-collapse').click();await require('./diagram-test-helpers.cjs').closeDrawer(m);
   const c=await m.locator('#chart').boundingBox(),x=c.x+c.width/2,y=c.y+c.height/2,cdp=await m.context().newCDPSession(m);
   await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y,id:1}]});for(let i=1;i<=5;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+i*8,y:y-i*4,id:1}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
   assert((await m.evaluate(()=>SkyDiagramTools.read('chart')[0].x))>50);

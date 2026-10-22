@@ -52,7 +52,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     await frame.waitForFunction(() => !!window.LunarOrbitLesson);
     await p.waitForFunction(() => uiWorkspace.lunarReady && uiWorkspace.selected === 'lunarOrbit');
     assert.equal(
-      await p.locator('[data-diagram="lunarOrbit"]').getAttribute('aria-selected'),
+      await p.locator('[data-diagram="lunarOrbit"]').getAttribute('aria-pressed'),
       'true',
     );
     assert(await p.locator('.ui-timeline-host').isVisible());
@@ -194,11 +194,11 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     await p.locator('#seekRise').click();
     await frame.waitForTimeout(180);
     assert((await frame.evaluate(() => LunarOrbitLesson.read())).playing);
-    await p.locator('[data-diagram="chartPanel"]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(p, 'chartPanel');
     await frame.waitForFunction(() => !LunarOrbitLesson.read().playing);
     assert(await p.locator('.ui-timeline-host').isVisible());
     assert.deepEqual(await science(), initial);
-    await p.locator('[data-diagram="lunarOrbit"]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(p, 'lunarOrbit');
     assert.equal(await p.locator('#lunarOrbitPanel iframe').count(), 1);
     await p.locator('.language-toggle').click();
     await frame.waitForFunction(() => document.documentElement.lang === 'en');
@@ -263,7 +263,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     await delayed.waitForSelector('.language-toggle:not(:disabled)');
     await delayed.locator('[data-body="moon"]').click();
     await delayed.waitForSelector('#lunarOrbitPanel iframe[src]', { state: 'attached' });
-    await delayed.locator('[data-diagram="lunarOrbit"]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(delayed, 'lunarOrbit');
     await delayed.waitForFunction(() => uiWorkspace.pendingLunar);
     assert(
       await delayed.locator('#phaseContent').isVisible(),
@@ -277,7 +277,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
       await delayed.evaluate(() => document.body.classList.contains('lunar-orbit-active')),
       false,
     );
-    await delayed.locator('[data-diagram="chartPanel"]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(delayed, 'chartPanel');
     release();
     await delayed.waitForFunction(() => uiWorkspace.lunarReady);
     assert.equal(
@@ -285,7 +285,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
       'chartPanel',
       'Late readiness cannot steal selection',
     );
-    await delayed.locator('[data-diagram="lunarOrbit"]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(delayed, 'lunarOrbit');
     await delayed.waitForFunction(() => document.body.classList.contains('lunar-orbit-active'));
     assert(await delayed.locator('.lunar-controls-host').isVisible());
     await delayed.close();

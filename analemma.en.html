@@ -9,14 +9,14 @@
     <link rel="icon" href="favicon.svg" />
     <link rel="stylesheet" href="ui-palette.css?v=20261021-refactor81" />
     <link rel="stylesheet" href="style.css?v=20261021-refactor81" />
-    <link rel="stylesheet" href="pages.css?v=20261021-refactor81" />
+    <link rel="stylesheet" href="pages.css?v=20261022-unified86" />
     <!-- search-metadata:start -->
-    <title data-i18n-cn="{&quot;Analemma and Its Causes · Sky Motion Lab&quot;:&quot;8字日行迹与成因 · 天体视运动实验室&quot;}">Analemma and Its Causes · Sky Motion Lab</title>
-    <meta name="description" content="比较一年中固定时刻的太阳位置，探索均时差、黄赤交角与地球公转偏心率如何形成8字日行迹。" />
-    <link rel="canonical" href="https://skymotion-5md.pages.dev/analemma" />
-    <meta property="og:title" content="8字日行迹与成因 · 天体视运动实验室" />
-    <meta property="og:description" content="比较一年中固定时刻的太阳位置，探索均时差、黄赤交角与地球公转偏心率如何形成8字日行迹。" />
-    <meta property="og:url" content="https://skymotion-5md.pages.dev/analemma" />
+    <title data-i18n-cn="{&quot;Unified Workbench · Sky Motion Lab&quot;:&quot;统一实验台 · 天体视运动实验室&quot;}">Unified Workbench · Sky Motion Lab</title>
+    <meta name="description" content="通过联动图解理解太阳直射点、昼夜、升落方位、月相与行星伴月，配合日期和时间观察变化。" />
+    <link rel="canonical" href="https://skymotion-5md.pages.dev/diagrams" />
+    <meta property="og:title" content="统一实验台 · 天体视运动实验室" />
+    <meta property="og:description" content="通过联动图解理解太阳直射点、昼夜、升落方位、月相与行星伴月，配合日期和时间观察变化。" />
+    <meta property="og:url" content="https://skymotion-5md.pages.dev/diagrams" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_CN" />
     <!-- search-metadata:end -->
@@ -24,17 +24,23 @@
     <link rel="stylesheet" href="controls.css?v=20261021-refactor81" />
       <link rel="stylesheet" href="design-system.css?v=20261021-explore83" />
   <link rel="stylesheet" href="language.css?v=20261021-refactor81" />
-<script src="language-data.js?v=20261022-review85" defer></script>
+<script src="language-data.js?v=20261022-unified86" defer></script>
 <script src="language.js?v=20261022-review85" defer></script>
 <script src="page-cache.js?v=20261019-tools66" defer></script>
 <script src="date-picker.js?v=20261021-explore83" defer></script>
+<link rel="stylesheet" href="custom-layout.css?v=20261022-unified86" />
+<link rel="stylesheet" href="lunar/lunar.css?v=20261021-refactor81" />
+    <link rel="stylesheet" href="lunar/entry.css?v=20261021-explore83">
+<link rel="stylesheet" href="solar-study.css?v=20261022-study84" />
+<link rel="stylesheet" href="scene-builder.css?v=20261021-refactor81" />
 <link rel="stylesheet" href="parameter-controls.css?v=20261021-explore83" />
-<link rel="stylesheet" href="diagram-tools.css?v=20261021-explore83" />
+<link rel="stylesheet" href="diagram-tools.css?v=20261022-unified86" />
+<link rel="stylesheet" href="workbench-menu.css?v=20261022-unified86" />
 </head>
-  <body data-page="analemma">
+  <body data-page="diagrams" data-entry-view="analemmaPanel">
     <div id="labShell" hidden inert>
       <nav class="page-nav" aria-label="Page navigation" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;页面导航&quot;}">
-        <a href="index.en.html" data-cn-href="index.html" data-i18n-cn="{&quot;Welcome&quot;:&quot;欢迎页&quot;}">Welcome</a><a href="lab.en.html" data-cn-href="lab.html" data-i18n-cn="{&quot;Lab&quot;:&quot;实验台&quot;}">Lab</a><a href="guide.en.html" data-cn-href="guide.html" data-i18n-cn="{&quot;Learning Guide&quot;:&quot;学习指南&quot;}">Learning Guide</a><a href="diagrams.en.html" data-cn-href="diagrams.html" data-i18n-cn="{&quot;Related Diagrams&quot;:&quot;关联图解&quot;}">Related Diagrams</a><a href="analemma.en.html" aria-current="page" data-cn-href="analemma.html" data-i18n-cn="{&quot;Analemma&quot;:&quot;日行迹&quot;}">Analemma</a>
+        <a href="index.en.html" data-cn-href="index.html" data-i18n-cn="{&quot;Welcome&quot;:&quot;欢迎页&quot;}">Welcome</a><a href="lab.en.html" data-cn-href="lab.html" data-i18n-cn="{&quot;Lab&quot;:&quot;实验台&quot;}">Lab</a><a href="guide.en.html" data-cn-href="guide.html" data-i18n-cn="{&quot;Learning Guide&quot;:&quot;学习指南&quot;}">Learning Guide</a>
       <a href="space/index.en.html" data-cn-href="space/" data-i18n-cn="{&quot;3D Sky&quot;:&quot;三维天空&quot;}">3D Sky</a>
     </nav>
       <header>
@@ -766,7 +772,7 @@
     </div>
     <script src="astronomy.js?v=20261019-tools66" defer></script>
     <script src="moon.js?v=20261019-tools66" defer></script>
-    <script src="coverage.js?v=20261019-tools68" defer></script>
+    <script src="coverage.js?v=20261022-unified86" defer></script>
     <script src="menu.js?v=20261022-review85" defer></script>
     <script src="workspace.js?v=20261019-tools66" defer></script>
     <script src="companion.js?v=20261019-tools66" defer></script>
@@ -776,19 +782,25 @@
     <script src="sundial.js?v=20261019-tools66" defer></script>
     <script src="observer.js?v=20261019-tools68" defer></script>
     <script src="solar-date.js?v=20261019-tools66" defer></script>
-    <script src="time-workbench.js?v=20261019-tools66" defer></script>
+    <script src="time-workbench.js?v=20261022-unified86" defer></script>
     <script src="motion.js?v=20261019-tools66" defer></script>
-    <script src="app.js?v=20261021-refactor81" defer></script>
+    <script src="app.js?v=20261022-unified86" defer></script>
     <script src="interface-motion.js?v=20261022-review85" defer></script>
     <script src="experiment-storage.js?v=20261019-tools66" defer></script>
-    <script src="page-navigation.js?v=20261022-review85" defer></script>
+    <script src="page-navigation.js?v=20261022-unified86" defer></script>
+<script src="observer-explanation.js?v=20261022-unified86" defer></script>
+    <script src="solar-study.js?v=20261022-unified86" defer></script>
+    <script src="parameter-controls.js?v=20261021-explore83" defer></script>
+<script src="scene-builder.js?v=20261022-unified86" defer></script>
+    <script src="customization-mode.js?v=20261021-refactor81" defer></script>
+<script src="custom-layout.js?v=20261022-unified86" defer></script>
     <script src="interaction-history.js?v=20261019-tools66" defer></script>
     <script src="lab-history.js?v=20261019-tools66" defer></script>
-  <script src="customization-mode.js?v=20261021-refactor81" defer></script>
-<script src="lab-customization.js?v=20261021-refactor81" defer></script>
-<script src="diagram-sampling.js?v=20261019-tools66" defer></script>
-<script src="parameter-controls.js?v=20261021-explore83" defer></script>
+  <script src="diagram-sampling.js?v=20261019-tools66" defer></script>
+<script src="observer-comparison.js?v=20261021-explore83" defer></script>
+<script src="customization-session.js?v=20261019-tools70" defer></script>
 <script src="diagram-tool-definitions.js?v=20261021-refactor81" defer></script>
-<script src="diagram-tools.js?v=20261022-review85" defer></script>
+<script src="diagram-tools.js?v=20261022-unified86" defer></script>
+<script src="workbench-menu.js?v=20261022-unified86" defer></script>
 </body>
 </html>

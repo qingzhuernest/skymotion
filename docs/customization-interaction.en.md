@@ -1,14 +1,27 @@
 # Customization interaction
 
+## Unified workbench: observe views together
+
+Lab, related diagrams and analemma share one workspace. Existing URLs still select their corresponding views, and the top navigation stays stable. In the left sidebar choose Views & layout, expand Sky & shadows, Related diagrams or Annual changes, and select a named view. Observation controls retains location, date, time and the original experiment settings.
+
+To show sky, Earth, altitude and analemma together, start with Space view, enter customization beside language, then use the add controls beside the view names in Views & layout. An included view offers removal; selecting its name still displays it or replaces the selected pane. Additional views extend below the fold after four panes.
+
+Arrangement & saved layouts is an inline sidebar section rather than an overlay. Choose one through four views, adjust arrangement and save combinations there. Collapse menu and sidebar navigation remain available. Finishing customization retains the combination and keeps observation controls usable; phones reuse the existing parameter drawer.
+
+Views share location, date and the common observation time. Analemma separately labels its fixed annual sampling clock, retaining civil-clock time by default to show equation-of-time motion. Linking to the common apparent solar clock removes that horizontal component. Editing its sampling clock or basis unlinks it without changing the shared observation time.
+
+Drag solar and lunar rise/set compasses to rotate them, or scroll/pinch to zoom. Compass labels rotate with the view while true bearing readings stay unchanged. Select an event point to jump to its time, use arrow keys to rotate, Home to reset and Escape to cancel a drag. Poles and days without events do not produce invented markers.
+
+
 ## Customization: add, compare and save
 
 ### Enter and finish customization
 
 Choose Customize beside the language button. The main navigation and original location/time controls remain available. Observation controls adjusts the baseline experiment; Plot objects adds and edits references. Finish customizing closes the tools while keeping the session draft.
 
-Collapse menu stays at the top of both Observation controls and Plot objects, including while scrolling. After collapsing, use the handle on the left of the canvas to reopen it. Diagram navigation and Layout & saved views share one row in comparison mode. Choose the number of views, undo or redo layout changes, and add diagrams inside Layout & saved views. On phones, close the parameter drawer to return to the canvas.
+Collapse menu and the section tabs stay available while scrolling. Use the handle at the left of the canvas to reopen the sidebar. Under Views & layout, choose a category and a diagram. While customizing, use the control beside a diagram to add it to a combination; Arrangement & saved layouts contains view count, arrangement, proportions and saved layouts. On phones, close the original parameter drawer to return to the canvas.
 
-When desktop space allows, Layout & saved views opens inside the left parameter rail, leaving its collapse button, section tabs and chart previews visible. Close it to return to the original controls. With the sidebar collapsed or on narrow screens, the panel fits the available screen space. Choose One view, Two views, Three views or Four views directly in this panel.
+Expand Arrangement & saved layouts to reveal settings inside the left menu without covering the diagrams. Phones use the same content inside the original parameter drawer. Choose a one-, two-, three- or four-view preset, or add more diagrams from the catalog. Switch to Observation controls to adjust the baseline experiment.
 
 Date comparisons can be dragged too: start Same place · different dates, then use the selected reference’s annual slider or calendar. The range follows its year, including 366 days in leap years. This changes the comparison date, not the bottom timeline.
 
@@ -40,7 +53,7 @@ Start Place a rod · observe its shadow, then click the ground or Place at the c
 
 Drag an object base to move it, drag empty ground to orbit, and use the wheel to zoom. There is no Observe/Build mode switch. Circles, planes and dials are references; mutual object occlusion is not simulated.
 
-In Lab, choose an original view button such as Spatial view to return to the sky. Ground objects remain available and are marked Experiment ground in the object list. Lunar mode also supports ground objects, but omits solar-only city comparisons.
+Choose a view under Views & layout → Sky & shadows to return from the experiment ground to the sky. Ground objects remain available and are marked Experiment ground in the object list. Lunar mode supports ground objects, but omits solar-only city comparisons.
 
 ### Select, save and restore
 

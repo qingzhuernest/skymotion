@@ -917,5 +917,10 @@
   "继续地升": "Resume Earthrise",
   "搭建实验": "Build experiment",
   "拖动地球上的观察点可联动四图；拖动其他球面位置或地轴图只改变视角。移动地点可选择固定同一 UTC 瞬间或当地真太阳时，也可沿纬线或经线移动。地轴图中红色为地轴、紫色为赤道面、绿色为地平面、蓝色为天顶、黄色为太阳方向。点击上方单图标签可放大查看。": "Drag the observer dot on Earth to update all four diagrams. Drag elsewhere on Earth or on the axis diagram to rotate the view only. When moving the location, keep either the same UTC instant or local apparent solar time, and optionally follow a parallel or meridian. The axis diagram uses red for the axis, purple for the equatorial plane, green for the horizon, blue for the zenith and yellow for the Sun direction. Select an individual diagram tab for a larger view.",
-  "地点与时间": "Place & time"
+  "地点与时间": "Place & time",
+  "统一实验台 · 天体视运动实验室": "Unified Workbench · Sky Motion Lab",
+  "天空与日影": "Sky & shadows",
+  " · 实验台": " · Lab",
+  "拖动旋转方位盘 · 点击升落点跳转时刻 · Home 复位": "Drag to rotate · Select rise/set points to change time · Home to reset",
+  "升落方位图；拖动旋转，双指或滚轮缩放，点击升落点跳转时刻，方向键旋转，Home复位": "Rise/set compass; drag or arrow keys to rotate, pinch or scroll to zoom, select event points to change time, Home to reset"
 }

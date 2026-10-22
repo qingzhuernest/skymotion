@@ -218,8 +218,8 @@
   flex-shrink: 0;
   border-bottom: 1px solid var(--design-line);
 }
-.workspace-active .ui-diagram-card-head > h2,
-.workspace-active .ui-diagram-card-head > span {
+.customization-active .workspace-active .ui-diagram-card-head > h2,
+.customization-active .workspace-active .ui-diagram-card-head > span:not(.workbench-sampling-clock) {
   display: none !important;
 }
 .workspace-active .workspace-pane-tools {
@@ -363,22 +363,12 @@
   outline-offset: -2px;
 }
 .workspace-options {
-  position: fixed;
-  inset: auto;
   margin: 0;
-  padding: 16px;
-  z-index: 250;
-  overflow: auto;
-  overscroll-behavior: contain;
-  background: var(--design-surface);
+  padding: 12px 0;
+  width: 100%;
+  min-width: 0;
   color: var(--design-ink);
-  border: 1px solid var(--design-line);
-  border-radius: 16px;
-  box-shadow: 0 12px 36px var(--design-shadow);
   font: 13px/1.6 var(--design-font);
-}
-.workspace-options::backdrop {
-  background: transparent;
 }
 .workspace-options-head {
   display: flex;
@@ -700,18 +690,11 @@
 }
 /* Keep the exit available while editing collections near the bottom of the panel. */
 .workspace-options-head {
-  position: sticky;
-  top: -16px;
-  z-index: 2;
+  position: static;
   background: var(--design-surface);
   padding: 10px 0;
   margin-top: -10px;
   margin-bottom: 6px;
-}
-@media (max-width: 760px) {
-  .workspace-options-head {
-    top: -14px;
-  }
 }
 
 /* One explicit gate separates presentation editing from normal observation. */

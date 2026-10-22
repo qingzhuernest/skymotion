@@ -10,7 +10,7 @@
     <link href="favicon.svg" rel="icon" />
     <link rel="stylesheet" href="ui-palette.css?v=20261021-refactor81" />
     <link href="style.css?v=20261021-refactor81" rel="stylesheet" />
-    <link href="pages.css?v=20261021-refactor81" rel="stylesheet" />
+    <link href="pages.css?v=20261022-unified86" rel="stylesheet" />
     <!-- search-metadata:start -->
     <title>项目介绍：目的、特点与地理模型 · 天体视运动实验室</title>
     <meta
@@ -32,7 +32,7 @@
       <link rel="stylesheet" href="design-system.css?v=20261021-explore83" />
   <link rel="stylesheet" href="language.css?v=20261021-refactor81" />
 <script src="document-entrance.js?v=20261019-tools66" defer></script>
-<script src="language-data.js?v=20261022-review85" defer></script>
+<script src="language-data.js?v=20261022-unified86" defer></script>
 <script src="language.js?v=20261022-review85" defer></script>
 <script src="page-cache.js?v=20261019-tools66" defer></script>
 <script src="date-picker.js?v=20261021-explore83" defer></script>
@@ -41,7 +41,7 @@
   <body>
     <nav aria-label="页面导航" class="page-nav">
       <a href="index.html">欢迎页</a><a href="lab.html">实验台</a><a href="guide.html">学习指南</a
-      ><a href="diagrams.html">关联图解</a><a href="analemma.html">日行迹</a>
+      >
       <a href="space/">三维天空</a>
     </nav>
     <main class="reading-page document-page">
@@ -78,6 +78,7 @@
         </ol>
       </details>
       <div class="document-content">
+<section id="unified-workbench"><h2>统一实验台：同屏观察</h2><p>实验台、关联图解和日行迹现共用一个工作区。原网址仍可打开对应视图；顶部主菜单保持稳定。左侧先选“视图与布局”，展开“天空与日影”“关联图解”或“全年变化”，点击具体图名查看；切到“观测条件”继续调地点、日期、时刻与原来的实验参数。</p><p>要在实验台同屏显示天空、地球、高度曲线和日行迹：先打开空间视图，再从语言旁进入自定义，切到“视图与布局”，依次点击这些图名右侧的加入控件。已加入的控件表示移除；点击图名仍用于查看或替换当前画格。更多图可以继续加入，超过四图后向下滚动查看。</p><p>“排列与收藏”是左侧菜单中的折叠内容，不再弹出覆盖画面的面板；在这里选择单图、双图、三图或四图，调整排列并收藏组合。“收起菜单”与栏目切换始终保留。完成自定义会保留当前组合，观测条件继续可用；手机使用原参数抽屉。</p><p>各图共享地点、日期和公共观测时刻。日行迹另有明确标注的全年固定采样时刻，默认保留钟表时，以显示均时差形成的左右变化；勾选跟随公共真太阳时后，固定真太阳时采样不包含这部分左右变化。改变采样时刻或依据会解除联动，不会偷偷改变下方正在观察的时刻。</p><p>日出日落和月出月落方位盘可直接拖动旋转，滚轮或双指缩放；方向标签随盘面旋转，真实方位读数不变。点击升落点跳到对应事件时刻，方向键可旋转，Home 复位，拖动中 Esc 取消。极点或当天没有升落事件时不创建虚构标记。</p></section>
         <p class="document-updated">本篇说明项目的教学用途、主要能力、数据依据与模型范围。具体操作见学习指南，代码和维护方式见开发说明。</p>
         <section id="section-0">
           <h2>为什么开发这个项目</h2>

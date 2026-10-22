@@ -18,7 +18,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8999/').repla
       );
       const grip = page.locator('.motion-menu-grip');
       await grip.waitFor({ state: 'visible' });
-      await page.locator('.layout-launch').click();
+      await require('./diagram-test-helpers.cjs').toggleCustomization(page);
       for (const section of ['references', 'conditions', 'references']) {
         await page.locator(`[data-rail-section="${section}"]`).click();
         assert(await grip.isVisible(), route + ': collapse survives sidebar changes');
@@ -36,15 +36,15 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8999/').repla
         assert(await grip.isVisible());
       }
       if (route.startsWith('diagrams')) {
-        await page.locator('[data-diagram=solarCompare]').click();
+        await require('./diagram-test-helpers.cjs').selectDiagram(page, 'solarCompare');
         await page.waitForFunction(() => skyWorkspacePresentation.active);
         const toolbar = page.locator('.workspace-toolbar');
         assert.equal(await toolbar.locator('button:visible').count(), 1);
         const barBox = await toolbar.boundingBox();
-        const tabsBox = await page.locator('.ui-viewbar').boundingBox();
+        const tabsBox = await page.locator('.workspace-navigation').boundingBox();
         assert(
           Math.abs(barBox.y - tabsBox.y) < 2,
-          'Layout entry shares the diagram navigation row',
+          'Layout entry stays within the compact workspace header',
         );
         assert.equal(await page.locator('.workspace-presets').isVisible(), false);
         await require('./diagram-test-helpers.cjs').layoutAction(page, 'four');
@@ -65,7 +65,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8999/').repla
           false,
         );
       }
-      await page.locator('.layout-launch').click();
+      await require('./diagram-test-helpers.cjs').toggleCustomization(page);
       if (!route.startsWith('diagrams')) assert(await grip.isVisible());
       assert.deepEqual(errors, []);
       await page.close();

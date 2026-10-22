@@ -8,7 +8,7 @@ const server=http.createServer(async(req,res)=>{try{const url=new URL(req.url,'h
   const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
   const response=await page.goto(base+'lab'+suffix+'.html');assert(response.request().redirectedFrom(),'real server redirect precedes the page');await page.waitForFunction(()=>window.SkyCustomization&&!document.querySelector('.layout-launch').disabled);assert.equal(new URL(page.url()).pathname.replace(/\.html$/,''),'/lab'+suffix);
   await page.locator('.layout-launch').click();await require('./diagram-test-helpers.cjs').addTool(page,'observer');
-  await page.locator('.page-nav a[href*="diagrams"]').click();await page.waitForFunction(()=>window.SkyCustomization?.active===true&&window.SkyObserverComparison?.sites().length===1);assert.equal(new URL(page.url()).pathname.replace(/\.html$/,''),'/diagrams'+suffix);
+  await require('./diagram-test-helpers.cjs').selectDiagram(page,'contextPanel');await page.waitForFunction(()=>window.SkyCustomization?.active===true&&window.SkyObserverComparison?.sites().length===1);assert.equal(new URL(page.url()).pathname.replace(/\.html$/,''),'/lab'+suffix);
   await page.reload();await page.waitForFunction(()=>!!window.SkyCustomization);assert.equal(await page.evaluate(()=>SkyCustomization.active),false);
   await page.locator('.page-nav a[href*="lab"]').click();await page.waitForFunction(()=>!!window.SkyCustomization);assert.equal(await page.evaluate(()=>SkyCustomization.active),false);
   assert.deepEqual(errors,[]);await page.close();

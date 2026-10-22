@@ -1,26 +1,28 @@
 /** Explain view clipping without altering the sky projection or scientific trajectory. */
 (() => {
-  if (document.body.dataset.page !== "lab") return;
+  if (document.body.dataset.page !== 'lab' && !document.body.hasAttribute('data-entry-view'))
+    return;
   document.addEventListener(
-    "DOMContentLoaded",
+    'DOMContentLoaded',
     () => {
-      const bar = document.querySelector(".ui-viewbar");
-      const plot = document.querySelector(".ui-plot");
+      const bar =
+        document.querySelector('#stage .view-tabs') || document.querySelector('.ui-viewbar');
+      const plot = document.querySelector('#stage') || document.querySelector('.ui-plot');
       if (!bar || !plot) return;
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "observer-explanation-button";
-      button.setAttribute("aria-label", "轨迹说明");
-      button.title = "轨迹说明";
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'observer-explanation-button';
+      button.setAttribute('aria-label', '轨迹说明');
+      button.title = '轨迹说明';
       button.innerHTML =
         '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></svg>';
-      button.setAttribute("aria-haspopup", "dialog");
-      button.setAttribute("aria-controls", "observerExplanation");
-      const dialog = document.createElement("dialog");
-      dialog.id = "observerExplanation";
-      dialog.className = "observer-explanation";
+      button.setAttribute('aria-haspopup', 'dialog');
+      button.setAttribute('aria-controls', 'observerExplanation');
+      const dialog = document.createElement('dialog');
+      dialog.id = 'observerExplanation';
+      dialog.className = 'observer-explanation';
       dialog.tabIndex = -1;
-      dialog.setAttribute("aria-labelledby", "observerExplanationTitle");
+      dialog.setAttribute('aria-labelledby', 'observerExplanationTitle');
       dialog.innerHTML = `
       <header><h2 id="observerExplanationTitle">为什么轨迹没有接到地平线？</h2></header>
       <p>金黄色是太阳、浅蓝色是月球的当天轨迹。天空与地面的分界线表示<strong>高度0°的地平线</strong>；天体升落是视线方向穿过地平线，并不是天体落到地面。</p>
@@ -32,7 +34,7 @@
       <p class="observer-explanation-example">例如：北京夏至附近，太阳从东北升起、西北落下。面向南时，升落位置在身后，因此前方太阳轨迹的两端可以停在空中；转向东、北或西再比较。</p>`;
       plot.append(button);
       document.body.append(dialog);
-      const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)');
       let animation = null,
         generation = 0;
       function close() {
@@ -43,15 +45,15 @@
           ? null
           : dialog.animate(
               [
-                { opacity: 1, transform: "translateY(0) scale(1)" },
+                { opacity: 1, transform: 'translateY(0) scale(1)' },
                 {
                   opacity: 1,
-                  transform: "translateY(-1px) scale(1.012)",
+                  transform: 'translateY(-1px) scale(1.012)',
                   offset: 0.18,
                 },
-                { opacity: 0, transform: "translateY(12px) scale(.96)" },
+                { opacity: 0, transform: 'translateY(12px) scale(.96)' },
               ],
-              { duration: 240, easing: "cubic-bezier(.2,0,0,1)" },
+              { duration: 240, easing: 'cubic-bezier(.2,0,0,1)' },
             );
         (animation?.finished.catch(() => {}) || Promise.resolve()).then(() => {
           if (token !== generation) return;
@@ -66,28 +68,28 @@
         if (!reduced.matches)
           animation = dialog.animate(
             [
-              { opacity: 0.35, transform: "translateY(12px) scale(.94)" },
+              { opacity: 0.35, transform: 'translateY(12px) scale(.94)' },
               {
                 opacity: 1,
-                transform: "translateY(-1px) scale(1.016)",
+                transform: 'translateY(-1px) scale(1.016)',
                 offset: 0.7,
               },
               {
                 opacity: 1,
-                transform: "translateY(.3px) scale(.997)",
+                transform: 'translateY(.3px) scale(.997)',
                 offset: 0.87,
               },
-              { opacity: 1, transform: "translateY(0) scale(1)" },
+              { opacity: 1, transform: 'translateY(0) scale(1)' },
             ],
-            { duration: 320, easing: "cubic-bezier(.2,0,0,1)" },
+            { duration: 320, easing: 'cubic-bezier(.2,0,0,1)' },
           );
         dialog.focus({ preventScroll: true });
       };
-      dialog.addEventListener("cancel", (event) => {
+      dialog.addEventListener('cancel', (event) => {
         event.preventDefault();
         close();
       });
-      dialog.addEventListener("click", (event) => {
+      dialog.addEventListener('click', (event) => {
         if (event.target !== dialog) return;
         const box = dialog.getBoundingClientRect();
         if (
@@ -99,18 +101,18 @@
           close();
       });
       function sync() {
-        button.hidden =
-          state.view !== "observer" || plot.dataset.kind !== "sky";
+        button.hidden = state.view !== 'observer';
       }
+      window.SkyObserverExplanation = { sync };
       const observer = new MutationObserver(sync);
       observer.observe(bar, {
         attributes: true,
         subtree: true,
-        attributeFilter: ["aria-pressed"],
+        attributeFilter: ['aria-pressed', 'class'],
       });
       observer.observe(plot, {
         attributes: true,
-        attributeFilter: ["data-kind"],
+        attributeFilter: ['data-kind'],
       });
       sync();
     },

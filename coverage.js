@@ -215,8 +215,29 @@ function drawWorldMap() {
     coord(state.lat, 'lat') +
     ' / ' +
     coord(state.lon, 'lon');
-  window.SkyDiagramTools?.paint('world-map',{type:'globe',observeLocation:useReferenceObserver,canvas:$('worldMap'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,sun:context,rayAt:(lat,lon)=>{const a=solar(lat,context.dec,720+(lon-context.lon)*4).az*rad;return {x:xx(lon)+40*Math.sin(a),y:yy(lat)-40*Math.cos(a)};},project:(lat,lon)=>({x:xx(lon),y:yy(lat)}),pick:(x,y)=>x<g.left||x>g.right||y<g.top||y>g.bottom?null:{lat:90-(y-g.top)/mh*180,lon:(x-g.left)/mw*360-180}});
-
+  window.SkyDiagramTools?.paint('world-map', {
+    type: 'globe',
+    observeLocation: useReferenceObserver,
+    canvas: $('worldMap'),
+    c,
+    w,
+    h,
+    body: state.body,
+    date: state.date,
+    time: state.time,
+    lat: state.lat,
+    lon: state.lon,
+    sun: context,
+    rayAt: (lat, lon) => {
+      const a = solar(lat, context.dec, 720 + (lon - context.lon) * 4).az * rad;
+      return { x: xx(lon) + 40 * Math.sin(a), y: yy(lat) - 40 * Math.cos(a) };
+    },
+    project: (lat, lon) => ({ x: xx(lon), y: yy(lat) }),
+    pick: (x, y) =>
+      x < g.left || x > g.right || y < g.top || y > g.bottom
+        ? null
+        : { lat: 90 - ((y - g.top) / mh) * 180, lon: ((x - g.left) / mw) * 360 - 180 },
+  });
 }
 function updateEarthView(paint = true) {
   renderGlobeOptions();
@@ -251,7 +272,7 @@ function updateEvents(paint = true) {
   if (
     document.body.dataset.page === 'diagrams' &&
     typeof uiWorkspace !== 'undefined' &&
-    uiWorkspace?.selected !== 'riseSetPanel'
+    uiWorkspace?.selected !== 'riseSetPanel' && !window.skyWorkspacePresentation?.visibleIds.has('riseSetPanel')
   )
     return;
   const m = eventModel(),
@@ -279,28 +300,23 @@ function updateEvents(paint = true) {
         : '') + '方位角从正北顺时针量起；按天体中心穿越几何地平线计算，未计大气折射。';
   if (paint) drawEventCompass(m);
 }
+const eventCompassCamera = { rotation: 0, zoom: 1 };
+let eventCompassLayout = null;
 function drawEventCompass(m) {
   if (!canPaint($('eventCompass'))) return;
   const { c, w, h } = resize($('eventCompass')),
     cx = w / 2,
     cy = h / 2,
-    r = Math.max(12, Math.min(Math.min(w, h) * 0.39, Math.min(w, h) / 2 - 24));
-  poly(
-    c,
-    [
-      { x: cx - r, y: cy },
-      { x: cx + r, y: cy },
-    ],
-    '#60799777',
-  );
-  poly(
-    c,
-    [
-      { x: cx, y: cy - r },
-      { x: cx, y: cy + r },
-    ],
-    '#60799777',
-  );
+    r =
+      Math.max(12, Math.min(Math.min(w, h) * 0.34, Math.min(w, h) / 2 - 36)) *
+      eventCompassCamera.zoom;
+  const project = (az, scale = 1) => ({
+    x: cx + r * scale * Math.sin((az + eventCompassCamera.rotation) * rad),
+    y: cy - r * scale * Math.cos((az + eventCompassCamera.rotation) * rad),
+  });
+  eventCompassLayout = { cx, cy, r, project, model: m };
+  poly(c, [project(270), project(90)], '#60799777');
+  poly(c, [project(0), project(180)], '#60799777');
   c.strokeStyle = '#7996b477';
   c.beginPath();
   c.arc(cx, cy, r, 0, Math.PI * 2);
@@ -311,14 +327,7 @@ function drawEventCompass(m) {
     ['南', 180],
     ['西', 270],
   ])
-    text(
-      c,
-      label,
-      cx + (r + 12) * Math.sin(a * rad),
-      cy - (r + 12) * Math.cos(a * rad),
-      '#c4d6e9',
-      12,
-    );
+    text(c, label, project(a, (r + 12) / r).x, project(a, (r + 12) / r).y, '#c4d6e9', 12);
   if (!m.pole)
     for (const [key, col] of [
       ['rise', '#ffc35a'],
@@ -326,8 +335,7 @@ function drawEventCompass(m) {
     ]) {
       const e = m[key];
       if (!e.position) continue;
-      const a = e.position.az * rad,
-        p = { x: cx + r * Math.sin(a), y: cy - r * Math.cos(a) };
+      const p = project(e.position.az);
       poly(c, [{ x: cx, y: cy }, p], col, 2);
       c.fillStyle = col;
       c.beginPath();
@@ -336,8 +344,8 @@ function drawEventCompass(m) {
       text(
         c,
         key === 'rise' ? '出' : '落',
-        cx + r * 0.62 * Math.sin(a),
-        cy - r * 0.62 * Math.cos(a),
+        project(e.position.az, 0.62).x,
+        project(e.position.az, 0.62).y,
         col,
         12,
       );
@@ -346,8 +354,179 @@ function drawEventCompass(m) {
   c.beginPath();
   c.arc(cx, cy, 3, 0, Math.PI * 2);
   c.fill();
-  window.SkyDiagramTools?.paint('bearings',{type:'azimuth',canvas:$('eventCompass'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,radius:r,project:(az,scale)=>({x:cx+r*scale*Math.sin(az*rad),y:cy-r*scale*Math.cos(az*rad)}),events:(date,threshold)=>SkyDiagramSampling.events(date,threshold,state.body==='moon'?'Moon':'Sun',state.lat,state.lon,state.body==='sun'&&state.manual?state.dec:null)});
+  window.SkyDiagramTools?.paint('bearings', {
+    type: 'azimuth',
+    canvas: $('eventCompass'),
+    c,
+    w,
+    h,
+    body: state.body,
+    date: state.date,
+    time: state.time,
+    lat: state.lat,
+    lon: state.lon,
+    radius: r,
+    project,
+    events: (date, threshold) =>
+      SkyDiagramSampling.events(
+        date,
+        threshold,
+        state.body === 'moon' ? 'Moon' : 'Sun',
+        state.lat,
+        state.lon,
+        state.body === 'sun' && state.manual ? state.dec : null,
+      ),
+  });
 
+  text(
+    c,
+    '拖动旋转方位盘 · 点击升落点跳转时刻 · Home 复位',
+    w / 2,
+    h - 12,
+    '#a4bad0',
+    w < 350 ? 9 : 11,
+  );
+}
+/** View gestures change the compass camera; event selection changes the shared clock. */
+function initEventCompassInteraction() {
+  const canvas = $('eventCompass'),
+    pointers = new Map();
+  let gesture = null;
+  canvas.tabIndex = 0;
+  canvas.style.touchAction = 'none';
+  canvas.style.cursor = 'grab';
+  canvas.setAttribute(
+    'aria-label',
+    '升落方位图；拖动旋转，双指或滚轮缩放，点击升落点跳转时刻，方向键旋转，Home复位',
+  );
+  const angle = (p) => {
+    const b = canvas.getBoundingClientRect();
+    return (
+      Math.atan2(p.y - b.top - eventCompassLayout.cy, p.x - b.left - eventCompassLayout.cx) * deg
+    );
+  };
+  const distance = () => {
+    const [a, b] = [...pointers.values()];
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  };
+  canvas.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0 || !eventCompassLayout || pointers.size >= 2) return;
+    if (!pointers.size) {
+      const b = canvas.getBoundingClientRect(),
+        g = eventCompassLayout;
+      const hit = ['rise', 'set'].find((key) => {
+        const event = g.model[key];
+        if (!event.position || g.model.pole) return false;
+        const p = g.project(event.position.az);
+        return Math.hypot(e.clientX - b.left - p.x, e.clientY - b.top - p.y) <= 20;
+      });
+      gesture = {
+        origin: { ...eventCompassCamera },
+        x: e.clientX,
+        y: e.clientY,
+        moved: false,
+        hit,
+        body: state.body,
+        date: state.date,
+      };
+    } else gesture.moved = true;
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    canvas.setPointerCapture(e.pointerId);
+    canvas.focus({ preventScroll: true });
+    canvas.dataset.dragging = 'true';
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    const before = pointers.get(e.pointerId);
+    if (!before || !gesture || !eventCompassLayout) return;
+    const oldDistance = pointers.size === 2 ? distance() : null;
+    const now = { x: e.clientX, y: e.clientY };
+    pointers.set(e.pointerId, now);
+    if (!gesture.moved && Math.hypot(now.x - gesture.x, now.y - gesture.y) < 4) return;
+    gesture.moved = true;
+    if (oldDistance !== null) {
+      if (oldDistance > 0)
+        eventCompassCamera.zoom = clamp(
+          (eventCompassCamera.zoom * distance()) / oldDistance,
+          0.65,
+          1.2,
+        );
+    } else {
+      eventCompassCamera.rotation += ((angle(now) - angle(before) + 540) % 360) - 180;
+    }
+    schedule();
+  });
+  function finish(e) {
+    if (!pointers.has(e.pointerId)) return;
+    pointers.delete(e.pointerId);
+    if (e.type !== 'pointerup' && gesture) Object.assign(eventCompassCamera, gesture.origin);
+    if (!pointers.size) {
+      const g = gesture;
+      gesture = null;
+      canvas.dataset.dragging = 'false';
+      if (
+        g &&
+        e.type === 'pointerup' &&
+        !g.moved &&
+        g.hit &&
+        g.body === state.body &&
+        g.date === state.date
+      ) {
+        const time = eventModel()[g.hit].time;
+        if (time !== null) {
+          stop();
+          state.time = time;
+        }
+      }
+    }
+    if (canvas.hasPointerCapture(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
+    schedule();
+  }
+  for (const event of ['pointerup', 'pointercancel', 'lostpointercapture'])
+    canvas.addEventListener(event, finish);
+  function cancel() {
+    if (gesture) Object.assign(eventCompassCamera, gesture.origin);
+    gesture = null;
+    for (const id of [...pointers.keys()]) {
+      pointers.delete(id);
+      if (canvas.hasPointerCapture(id)) canvas.releasePointerCapture(id);
+    }
+    canvas.dataset.dragging = 'false';
+    schedule();
+  }
+  canvas.addEventListener(
+    'wheel',
+    (e) => {
+      e.preventDefault();
+      eventCompassCamera.zoom = clamp(
+        eventCompassCamera.zoom * Math.exp(-e.deltaY * 0.001),
+        0.65,
+        1.2,
+      );
+      schedule();
+    },
+    { passive: false },
+  );
+  canvas.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && gesture) {
+      e.preventDefault();
+      e.stopPropagation();
+      cancel();
+      return;
+    }
+    if (!['ArrowLeft', 'ArrowRight', 'Home', '+', '=', '-'].includes(e.key)) return;
+    e.preventDefault();
+    if (e.key === 'Home') Object.assign(eventCompassCamera, { rotation: 0, zoom: 1 });
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight')
+      eventCompassCamera.rotation += e.key === 'ArrowLeft' ? -5 : 5;
+    else
+      eventCompassCamera.zoom = clamp(
+        eventCompassCamera.zoom * (e.key === '-' ? 0.9 : 1.1),
+        0.65,
+        1.2,
+      );
+    schedule();
+  });
+  window.addEventListener('blur', cancel);
 }
 function geometryModel() {
   const p = state.lat * rad,
@@ -496,14 +675,15 @@ function drawEarthGeometry() {
     }
     poly(c, ps, color, width, front ? [] : [3, 4]);
   }
-  if(window.SkyDiagramTools?.visible('geometry','equator')!==false)ring([0, 0, 0], [1, 0, 0], [0, 0, 1], 1, '#abaef4', 1.5);
+  if (window.SkyDiagramTools?.visible('geometry', 'equator') !== false)
+    ring([0, 0, 0], [1, 0, 0], [0, 0, 1], 1, '#abaef4', 1.5);
   ring([0, 0, 0], [1, 0, 0], [0, 1, 0], 1, '#7394b760');
   const axisTop = project([0, 1.3, 0]),
     axisBottom = project([0, -1.3, 0]);
-  if(window.SkyDiagramTools?.visible('geometry','axis')!==false){
-  poly(c, [axisBottom, axisTop], '#fa9c89', 2);
-  label(compact ? '北极' : '北极 / 地轴', axisTop.x, axisTop.y - 12, '#fac0b0', 12);
-  label('南极', axisBottom.x, axisBottom.y + 13, '#fac0b0', 12);
+  if (window.SkyDiagramTools?.visible('geometry', 'axis') !== false) {
+    poly(c, [axisBottom, axisTop], '#fa9c89', 2);
+    label(compact ? '北极' : '北极 / 地轴', axisTop.x, axisTop.y - 12, '#fac0b0', 12);
+    label('南极', axisBottom.x, axisBottom.y + 13, '#fac0b0', 12);
   }
   if (m.eclipticNormal) {
     const tip = project(scale(m.eclipticNormal, 1.22));
@@ -521,24 +701,24 @@ function drawEarthGeometry() {
         ),
       ),
     );
-  if(window.SkyDiagramTools?.visible('geometry','horizon')!==false){
-  c.beginPath();
-  plane.forEach((p, i) => (i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)));
-  c.closePath();
-  c.fillStyle = '#76d4bd30';
-  c.fill();
-  poly(c, plane, '#76d4bd', 1.5);
+  if (window.SkyDiagramTools?.visible('geometry', 'horizon') !== false) {
+    c.beginPath();
+    plane.forEach((p, i) => (i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)));
+    c.closePath();
+    c.fillStyle = '#76d4bd30';
+    c.fill();
+    poly(c, plane, '#76d4bd', 1.5);
   }
   const observer = project(m.q),
     zenith = project(scale(m.q, 1.55));
-  if(window.SkyDiagramTools?.visible('geometry','zenith')!==false){
-  poly(c, [project([0, 0, 0]), zenith], '#82c7ff', 1.5, [4, 4]);
-  if (!compact) label('当地天顶', zenith.x, zenith.y - 13, '#a4d7ff', 12);
+  if (window.SkyDiagramTools?.visible('geometry', 'zenith') !== false) {
+    poly(c, [project([0, 0, 0]), zenith], '#82c7ff', 1.5, [4, 4]);
+    if (!compact) label('当地天顶', zenith.x, zenith.y - 13, '#a4d7ff', 12);
   }
   const rayEnd = project(add(m.q, scale(m.sun, 0.83)));
-  if(window.SkyDiagramTools?.visible('geometry','sun')!==false){
-  poly(c, [rayEnd, observer], '#ffc35a', 2, bodyPosition().alt < 0 ? [4, 4] : []);
-  glow(c, rayEnd.x, rayEnd.y, 5);
+  if (window.SkyDiagramTools?.visible('geometry', 'sun') !== false) {
+    poly(c, [rayEnd, observer], '#ffc35a', 2, bodyPosition().alt < 0 ? [4, 4] : []);
+    glow(c, rayEnd.x, rayEnd.y, 5);
   }
   c.fillStyle = '#82c7ff';
   c.strokeStyle = '#fff';
@@ -547,7 +727,8 @@ function drawEarthGeometry() {
   c.fill();
   c.stroke();
   if (h >= 100) label('观察者', observer.x, observer.y + 17, '#c5e6ff', 12);
-  if(window.SkyDiagramTools?.visible('geometry','sun')!==false)label('太阳', rayEnd.x + 12, rayEnd.y + 7, '#ffda8b', 12, 'left');
+  if (window.SkyDiagramTools?.visible('geometry', 'sun') !== false)
+    label('太阳', rayEnd.x + 12, rayEnd.y + 7, '#ffda8b', 12, 'left');
   $('geometryObserver').textContent =
     '观察纬度 ' + coord(state.lat, 'lat') + ' · 太阳高度 ' + bodyPosition().alt.toFixed(1) + '°';
   $('geometryExplanation').textContent =
@@ -557,8 +738,22 @@ function drawEarthGeometry() {
     (m.obliquity === null
       ? '理想实验不对应实际公转位置，隐藏黄道法线。'
       : '地轴与黄道法线实际夹角约 ' + m.obliquity.toFixed(2) + '°，图上的投影夹角不等于实际夹角。');
-  window.SkyDiagramTools?.paint('geometry',{type:'geometry',observeLocation:useReferenceObserver,canvas:$('earthGeometry'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,...m,lon:state.lon,project});
-
+  window.SkyDiagramTools?.paint('geometry', {
+    type: 'geometry',
+    observeLocation: useReferenceObserver,
+    canvas: $('earthGeometry'),
+    c,
+    w,
+    h,
+    body: state.body,
+    date: state.date,
+    time: state.time,
+    lat: state.lat,
+    lon: state.lon,
+    ...m,
+    lon: state.lon,
+    project,
+  });
 }
 function renderSolarCoverage() {
   updateYearSlider();
@@ -572,29 +767,73 @@ function renderLunarCoverage() {
 }
 // Applying an independent reference is an explicit, reversible observation change.
 function useReferenceObserver(location) {
-  if(!location||!Number.isFinite(location.lat)||!Number.isFinite(location.lon)||Math.abs(location.lat)>90||Math.abs(location.lon)>180)return;
+  if (
+    !location ||
+    !Number.isFinite(location.lat) ||
+    !Number.isFinite(location.lon) ||
+    Math.abs(location.lat) > 90 ||
+    Math.abs(location.lon) > 180
+  )
+    return;
   window.SkyMotionHistory?.beginExternal();
-  const moved=chooseMapObserver(location,{constraint:false});
-  requestAnimationFrame(()=>window.SkyMotionHistory?.flush());
+  const moved = chooseMapObserver(location, { constraint: false });
+  requestAnimationFrame(() => window.SkyMotionHistory?.flush());
   return moved;
 }
 // Invert the apparent-solar clock at a fixed UTC instant, including local date rollover.
-function observerClockAt(instant,lon){
-  const t=new Date(instant),time=720+4*sunHourAngle(t,lon),estimate=new Date(instant+lon*240000).toISOString().slice(0,10);let best=null;
-  for(const offset of [0,-1,1]){const d=new Date(estimate+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+offset);const date=d.toISOString().slice(0,10);if(!SkyMotionSession.validDate(date))continue;const error=Math.abs(instantUTC(time,date,lon).getTime()-instant);if(!best||error<best.error)best={date,time,error};if(error<2)return best;}
-  return best&&best.error<1000?best:null;
+function observerClockAt(instant, lon) {
+  const t = new Date(instant),
+    time = 720 + 4 * sunHourAngle(t, lon),
+    estimate = new Date(instant + lon * 240000).toISOString().slice(0, 10);
+  let best = null;
+  for (const offset of [0, -1, 1]) {
+    const d = new Date(estimate + 'T12:00:00Z');
+    d.setUTCDate(d.getUTCDate() + offset);
+    const date = d.toISOString().slice(0, 10);
+    if (!SkyMotionSession.validDate(date)) continue;
+    const error = Math.abs(instantUTC(time, date, lon).getTime() - instant);
+    if (!best || error < best.error) best = { date, time, error };
+    if (error < 2) return best;
+  }
+  return best && best.error < 1000 ? best : null;
 }
-function chooseMapObserver(location,options={}) {
-  if(!location||!Number.isFinite(location.lat)||!Number.isFinite(location.lon))return false;
-  stop();const origin=options.origin||state,sun=state.body==='sun',constraint=sun&&options.constraint!==false?state.observerConstraint:'free';
-  const lat=constraint==='latitude'?origin.lat:clamp(location.lat,-90,90),lon=constraint==='longitude'?origin.lon:clamp(location.lon,-180,180);
-  const instant=sun&&state.observerTimeBasis==='utc'&&!state.manual?(options.instant??instantUTC().getTime()):null,clock=instant===null?null:observerClockAt(instant,lon);
-  if(instant!==null&&!clock){$('place').value=state.place;const note=$('observerLinkReadout');if(note)note.textContent=document.documentElement.lang==='en'?'This move would leave the supported date range (1900–2100).':'此移动将超出支持日期范围（1900—2100 年）。';return false;}
-  state.lat=lat;state.lon=lon;state.place='custom';
-  if(clock){state.date=clock.date;state.time=clock.time;state.dec=dateDec(state.date);}
-  $('place').value='custom';schedule();return true;
+function chooseMapObserver(location, options = {}) {
+  if (!location || !Number.isFinite(location.lat) || !Number.isFinite(location.lon)) return false;
+  stop();
+  const origin = options.origin || state,
+    sun = state.body === 'sun',
+    constraint = sun && options.constraint !== false ? state.observerConstraint : 'free';
+  const lat = constraint === 'latitude' ? origin.lat : clamp(location.lat, -90, 90),
+    lon = constraint === 'longitude' ? origin.lon : clamp(location.lon, -180, 180);
+  const instant =
+      sun && state.observerTimeBasis === 'utc' && !state.manual
+        ? (options.instant ?? instantUTC().getTime())
+        : null,
+    clock = instant === null ? null : observerClockAt(instant, lon);
+  if (instant !== null && !clock) {
+    $('place').value = state.place;
+    const note = $('observerLinkReadout');
+    if (note)
+      note.textContent =
+        document.documentElement.lang === 'en'
+          ? 'This move would leave the supported date range (1900–2100).'
+          : '此移动将超出支持日期范围（1900—2100 年）。';
+    return false;
+  }
+  state.lat = lat;
+  state.lon = lon;
+  state.place = 'custom';
+  if (clock) {
+    state.date = clock.date;
+    state.time = clock.time;
+    state.dec = dateDec(state.date);
+  }
+  $('place').value = 'custom';
+  schedule();
+  return true;
 }
 function initCoverage() {
+  initEventCompassInteraction();
   initGeometryCamera();
   $('solarYearDay').oninput = (e) =>
     setDate(dateAtYearDay(Number(state.date.slice(0, 4)), Number(e.target.value)));

@@ -14,7 +14,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    assert.equal(await p.evaluate(()=>SkyCustomization.active),false);
    await p.waitForFunction(()=>document.querySelector('.dt-overlay'));
    assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);
-   await p.locator('.layout-launch').click();
+   await require('./diagram-test-helpers.cjs').toggleCustomization(p);
    await p.locator('.dt-panel:visible,.diagram-tool-launch:visible').first().waitFor();
    if(!mobile){await p.locator('.dt-panel.dt-docked').waitFor({state:'visible'});const bounds=await p.evaluate(()=>({panel:document.querySelector('.dt-panel').getBoundingClientRect().right,plot:document.querySelector('.stage').getBoundingClientRect().left}));assert(bounds.panel<=bounds.plot,'3D editor stays in the left rail without covering the scene');await p.locator('[data-rail-section=conditions]').click();assert(await p.locator('.side .card').first().isVisible());await p.locator('[data-rail-section=references]').click();}
    await p.locator('#spaceImmersive').click();
@@ -22,9 +22,9 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    assert(await p.locator('.layout-launch').isVisible());
    assert(await p.locator('.language-toggle').isVisible());
    await require('./diagram-test-helpers.cjs').openWorkbench(p);
-   await p.locator('.dt-panel').waitFor({state:'visible'});
+   await require('./diagram-test-helpers.cjs').openWorkbench(p);await p.locator('.dt-panel').waitFor({state:'visible'});
    assert(await p.locator('.layout-launch').isVisible());
-   await p.locator('.layout-launch').click();
+   await require('./diagram-test-helpers.cjs').toggleCustomization(p);
    assert.equal(await p.evaluate(()=>SkyCustomization.active),false);
    assert.equal(await p.locator('.dt-panel').isVisible(),false);
    assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);
@@ -32,22 +32,22 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    await p.waitForFunction(()=>document.querySelector('.language-nav > .language-actions'));
    assert(await p.locator('.layout-launch').isVisible());
    await p.goto(base+'lab'+(mobile?'.en':'')+'.html',{waitUntil:'domcontentloaded'});
-   await p.waitForFunction(()=>window.SkyLabComparison && !document.querySelector('.layout-launch').disabled);
-   await p.locator('.layout-launch').click();
-   await p.locator('.dt-panel').waitFor({state:'visible'});
+   await p.waitForFunction(()=>window.SkyWorkbenchMenu && !document.querySelector('.layout-launch').disabled);
+   await require('./diagram-test-helpers.cjs').toggleCustomization(p);
+   await require('./diagram-test-helpers.cjs').openWorkbench(p);await p.locator('.dt-panel').waitFor({state:'visible'});
    assert.equal(await p.locator('#labComparisons').count(),0);
    assert.equal(await p.evaluate(()=>SkyDiagramTools.read('lab-sky').length),0,'entry must not invent objects');
    await require('./diagram-test-helpers.cjs').openLibrary(p);await p.locator('[data-build-kind=rod]').click();
    await p.waitForFunction(()=>document.body.classList.contains('scene-builder-active'));
    assert.equal(await p.evaluate(()=>SkySceneBuilder.read().objects.length),0,'placing is pending, not an implicit object');
-   await p.locator('button[data-body=moon]').click();await p.waitForFunction(()=>state.body==='moon'&&SkySceneBuilder.read()?.objects.length===0);
+   await require('./diagram-test-helpers.cjs').closeDrawer(p);await p.locator('button[data-body=moon]').click();await p.waitForFunction(()=>state.body==='moon'&&SkySceneBuilder.read()?.objects.length===0);
    assert.deepEqual(await p.locator('#builderGround').evaluate(n=>[...n.getContext('2d').getImageData(0,0,1,1).data]),[19,36,56,255]);
-   if(mobile)await p.locator('#uiParametersButton').click();
+   if(mobile)await require('./diagram-test-helpers.cjs').openDrawer(p);
    await p.locator('.sb-add-toggle').click();await p.locator('.sb-add [data-object-kind=circle]').click();
-   await p.locator('#builderGround').focus();await p.keyboard.press('Enter');
+   await require('./diagram-test-helpers.cjs').closeDrawer(p);await p.locator('#builderGround').focus();await p.keyboard.press('Enter');
    assert.equal(await p.evaluate(()=>SkySceneBuilder.read().objects.length),1);
    assert.equal(await p.evaluate(()=>SkySceneBuilder.read().objects[0].kind),'circle');
-   await p.goto(base+'analemma'+(mobile?'.en':'')+'.html');await p.waitForFunction(()=>window.SkyCustomization&&!document.querySelector('.layout-launch').disabled&&document.querySelector('.language-actions .layout-launch'));assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);await p.locator('.layout-launch').click();await p.locator('.dt-panel').waitFor({state:'visible'});assert(await p.locator('.language-actions .layout-launch').isVisible());const palette=await p.evaluate(()=>{const token=name=>{const probe=document.createElement('i');probe.style.color=`var(${name})`;document.body.append(probe);const value=getComputedStyle(probe).color;probe.remove();return value};return {primary:token('--design-primary'),surface:token('--design-surface'),active:getComputedStyle(document.querySelector('.language-actions .layout-launch')).backgroundColor,buttons:[...document.querySelectorAll('.language-actions button,.dt-panel button')].filter(n=>n.getBoundingClientRect().width&&n.getBoundingClientRect().height).map(n=>getComputedStyle(n).backgroundColor)}});assert.equal(palette.primary,'rgb(36, 87, 107)','the original approved green accent is retained');assert.equal(palette.active,palette.primary,'Finish customizing uses the same original green');assert(palette.buttons.every(color=>!['rgb(234, 240, 252)','rgb(219, 231, 252)','rgb(225, 237, 255)','rgb(220, 234, 255)'].includes(color)),'legacy blue control fills are absent');await p.locator('.layout-launch').click();assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);
+   await p.goto(base+'analemma'+(mobile?'.en':'')+'.html');await p.waitForFunction(()=>window.SkyCustomization&&!document.querySelector('.layout-launch').disabled&&document.querySelector('.language-actions .layout-launch'));assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);await require('./diagram-test-helpers.cjs').toggleCustomization(p);await require('./diagram-test-helpers.cjs').openWorkbench(p);await p.locator('.dt-panel').waitFor({state:'visible'});assert(await p.locator('.language-actions .layout-launch').isVisible());const palette=await p.evaluate(()=>{const token=name=>{const probe=document.createElement('i');probe.style.color=`var(${name})`;document.body.append(probe);const value=getComputedStyle(probe).color;probe.remove();return value};return {primary:token('--design-primary'),surface:token('--design-surface'),active:getComputedStyle(document.querySelector('.language-actions .layout-launch')).backgroundColor,buttons:[...document.querySelectorAll('.language-actions button,.dt-panel button')].filter(n=>n.getBoundingClientRect().width&&n.getBoundingClientRect().height).map(n=>getComputedStyle(n).backgroundColor)}});assert.equal(palette.primary,'rgb(36, 87, 107)','the original approved green accent is retained');assert.equal(palette.active,palette.primary,'Finish customizing uses the same original green');assert(palette.buttons.every(color=>!['rgb(234, 240, 252)','rgb(219, 231, 252)','rgb(225, 237, 255)','rgb(220, 234, 255)'].includes(color)),'legacy blue control fills are absent');await require('./diagram-test-helpers.cjs').toggleCustomization(p);assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);
    assert.deepEqual(errors,[]);await context.close();
   }
   console.log('PASS persistent 3D customization entry in normal/immersive desktop and phone, explicit mode gate, native Lab comparisons, no invented references, empty solar and lunar builders, matching plot palette and explicit circle placement, original conditions accessible');

@@ -244,7 +244,7 @@
   const rail = node('div', 'scene-builder sb-controls', uiWorkspace.rail);
   rail.dataset.i18nSkip = '';
   const grip = uiWorkspace.rail.querySelector('.motion-menu-grip');
-  if (grip) grip.after(rail);
+  if (grip) (grip.closest('.motion-menu-header') || grip).after(rail);
   else uiWorkspace.rail.prepend(rail);
   const conditions = node('button', 'sb-native-conditions', rail);
   conditions.hidden = true;
@@ -1913,10 +1913,6 @@
         uiWorkspace.selected === 'sceneBuilder' && window.SkyCustomization?.active !== false;
       if (active && !next) {
         cancelGesture();
-        if (window.SkyCustomization?.active)
-          requestAnimationFrame(() =>
-            requestAnimationFrame(() => window.SkyDiagramTools?.openObjects()),
-          );
       }
       if (next && !active) document.dispatchEvent(new Event('skymotion:builder-open'));
       active = next;

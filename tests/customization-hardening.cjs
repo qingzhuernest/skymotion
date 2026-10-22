@@ -56,7 +56,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8972/').repla
     assert((await page.locator('.dt-row button').allTextContents()).includes('Date comparison curve 2'));
     assert((await page.locator('.dt-row button').allTextContents()).includes('个人测量 Personal'));
     await page.locator('.dt-head button').last().click();
-    await page.locator('[data-diagram="contextPanel"]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(page, 'contextPanel');
     await page.waitForFunction(() => document.querySelector('.ui-plot').dataset.kind === 'contextPanel');
     await require('./diagram-test-helpers.cjs').openWorkbench(page);
     const location = await page.evaluate(() => [state.lat, state.lon]);

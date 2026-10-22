@@ -1,0 +1,188 @@
+/* The content catalog and layout settings belong to the existing parameter rail. */
+.workbench-views {
+  min-width: 0;
+  padding: 0 0 12px;
+}
+.workbench-views[hidden],
+.workbench-content-row[hidden],
+.workbench-content-group[hidden] {
+  display: none !important;
+}
+body
+  .ui-parameters[data-editor-view='views']
+  > :not(.motion-menu-header):not(.dt-rail-navigation):not(.workbench-views) {
+  display: none !important;
+}
+body .ui-parameters[data-editor-view='views'] {
+  display: block;
+  overflow-y: auto;
+}
+.workbench-route-tabs {
+  display: none !important;
+}
+.workbench-content-group,
+.workbench-layout-section {
+  border-bottom: 1px solid var(--design-line);
+}
+.workbench-content-group > summary,
+.workbench-layout-section > summary {
+  padding: 12px 4px;
+  cursor: pointer;
+  color: var(--design-ink);
+  font-weight: 600;
+}
+.workbench-content-row {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  margin: 3px 0;
+}
+.workbench-content-row button {
+  min-height: 36px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--design-primary);
+  font: inherit;
+  cursor: pointer;
+}
+.workbench-content-row > button:first-child {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  padding: 7px 10px;
+}
+.workbench-content-row button:hover {
+  background: var(--design-inset);
+}
+.workbench-content-row button[aria-pressed='true'] {
+  background: var(--design-selected);
+  border-color: var(--design-primary);
+}
+.workbench-add-view {
+  width: 34px;
+  flex: none;
+  padding: 7px;
+}
+.workbench-add-view svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+.workbench-add-view[aria-pressed='true'] svg {
+  transform: rotate(45deg);
+}
+.workbench-content-row button:focus-visible {
+  outline: 2px solid var(--design-primary);
+  outline-offset: 1px;
+}
+.workbench-clock-link {
+  display: flex;
+  align-items: start;
+  gap: 8px;
+  margin: 8px 0 16px;
+  font-size: 12px;
+}
+.workbench-clock-link input {
+  accent-color: var(--design-primary);
+}
+body[data-entry-view] .workspace-toolbar {
+  padding: 5px 8px;
+}
+body[data-entry-view] .workspace-navigation:has(> .workspace-toolbar[hidden]) {
+  display: none;
+}
+body[data-entry-view] .workspace-options-head h2 {
+  font-size: 14px;
+}
+body[data-entry-view] .workspace-options-head {
+  padding: 0;
+  margin: 0 0 10px;
+}
+body[data-entry-view] .ui-diagram-surface > #stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+}
+body[data-entry-view] #stage > .view-tabs {
+  position: absolute;
+  border-radius: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  gap: 4px;
+  padding: 7px;
+  background: var(--design-surface);
+}
+body[data-entry-view] #stage > .view-tabs button {
+  color: var(--design-primary);
+  background: var(--design-surface);
+  border: 1px solid var(--design-line);
+  padding: 5px 7px;
+  border-radius: 7px;
+  font: 12px var(--design-font);
+}
+body[data-entry-view] #stage > .view-tabs button.active {
+  color: var(--design-on-action);
+  background: var(--design-primary);
+}
+body[data-entry-view] #stage .stage-top {
+  top: 48px;
+}
+body[data-entry-view]:not(.customization-active) .workspace-active .workspace-pane-tools {
+  display: none !important;
+}
+body[data-entry-view]:not(.customization-active) .workspace-grip,
+body[data-entry-view]:not(.customization-active) .workspace-divider {
+  display: none !important;
+}
+.workspace-active .ui-plot[data-workspace-many='true'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-rows: none !important;
+  grid-auto-rows: minmax(280px, 48%);
+  overflow-y: auto;
+}
+body[data-entry-view] .dt-rail-navigation {
+  gap: 4px;
+}
+body[data-entry-view] .dt-rail-navigation button {
+  padding-inline: 5px;
+  font-size: 12px;
+}
+#eventCompass {
+  cursor: grab;
+  touch-action: none;
+}
+#eventCompass[data-dragging='true'] {
+  cursor: grabbing;
+}
+@media (max-width: 760px) {
+  .workbench-content-row button {
+    min-height: 42px;
+  }
+}
+
+.workbench-sampling-clock {
+  margin-left: auto;
+  color: var(--design-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+body[data-entry-view]:not(.customization-active) .workspace-active .ui-diagram-card-head h2 {
+  display: block;
+}
+
+.ui-diagram-card-head > .workbench-sampling-clock {
+  display: inline;
+  max-width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

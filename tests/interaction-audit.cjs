@@ -103,7 +103,7 @@ const helpers = require('./diagram-test-helpers.cjs');
       } else {
         await page.setViewportSize({ width: 390, height: 844 });
         await page.waitForFunction(
-          () => !document.querySelector('.ui-parameters').classList.contains('dt-navigation-ready'),
+          () => document.querySelector('.ui-parameters').classList.contains('dt-navigation-ready'),
         );
         await page.locator('#uiParametersButton').click();
         await page.waitForFunction(() => {
@@ -118,6 +118,7 @@ const helpers = require('./diagram-test-helpers.cjs');
           await page.locator('#uiParameterDrawer').evaluate((n) => n.open),
           'responsive synchronization does not close a newly opened drawer',
         );
+        await page.locator('[data-rail-section=conditions]').click();
         assert(
           await page
             .locator(route === 'analemma.html' ? '.ui-parameters .analemma-controls' : '#controls')

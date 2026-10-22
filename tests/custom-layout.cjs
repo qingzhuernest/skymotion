@@ -27,7 +27,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
       stored = () =>
         p.evaluate(() => JSON.parse(localStorage.getItem('skymotion-workspace-v3-wide')));
     await p.locator('.layout-launch').click();
-    await p.locator('[data-diagram=solarCompare]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(p, 'solarCompare');
     await p.waitForFunction(() => skyWorkspacePresentation.active);
     await p.waitForFunction(
       () =>
@@ -94,20 +94,24 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     const railBox = await p.locator('.ui-parameters').boundingBox();
     const menuHeaderBox = await p.locator('.motion-menu-header').boundingBox();
     const plotBox = await p.locator('.ui-plot').boundingBox();
-    assert.equal(Math.round(optionsBox.x), Math.round(railBox.x));
-    assert(optionsBox.width <= railBox.width + 1, 'Desktop options dock in the parameter rail');
+    assert(
+      optionsBox.x >= railBox.x && optionsBox.x + optionsBox.width <= railBox.x + railBox.width + 1,
+    );
     assert(
       optionsBox.x + optionsBox.width <= plotBox.x,
-      'Options leave the chart preview unobscured',
+      'Inline settings leave the chart unobscured',
     );
-    assert(optionsBox.height <= 520, 'Desktop options remain bounded and internally scrollable');
-    assert(
-      optionsBox.y >= menuHeaderBox.y + menuHeaderBox.height,
-      'Persistent sidebar navigation remains visible',
+    assert.equal(
+      await p.locator('.workspace-options').evaluate((node) => getComputedStyle(node).position),
+      'static',
+    );
+    assert.equal(
+      await p.locator('.workspace-options').evaluate((node) => node.hasAttribute('popover')),
+      false,
     );
     assert(
-      optionsBox.y + optionsBox.height <= railBox.y + railBox.height,
-      'Options fit within the sidebar',
+      await p.locator('.motion-menu-header').isVisible(),
+      'Persistent navigation remains reachable',
     );
     await p.locator('[data-word="reset"]').click();
     await p.keyboard.press('Escape');
@@ -117,7 +121,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await p.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
     assert.equal(await p.evaluate(() => SkyCustomization.active), false);
     await p.locator('.layout-launch').click();
-    await p.locator('[data-diagram=solarCompare]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(p, 'solarCompare');
     await p.waitForFunction(() => skyWorkspacePresentation.active);
     assert(await p.locator('.workspace-active').isVisible());
     // Repeated renders must not reparent scientific settings or rewrite translated tab labels.
@@ -137,20 +141,23 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     });
     assert.equal(writes, 0);
     await p.locator('.layout-launch').click();
-    assert.equal(await p.locator('.workspace-active').count(), 0);
-    assert.deepEqual(
-      await p
-        .locator('.ui-plot > [data-diagram-card]')
-        .evaluateAll((ns) => ns.map((n) => n.dataset.diagramCard)),
-      ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel'],
-      'Standard view restores the original DOM and visual order',
+    assert.equal(await p.locator('.workspace-active').count(), 1);
+    assert.equal(
+      await p.locator('.ui-diagram-card:visible').count(),
+      2,
+      'Finishing customization retains the selected arrangement',
     );
-    await p.locator('[data-diagram="chartPanel"]').click();
+    assert.equal(
+      await p.locator('.ui-plot > [data-diagram-card]').count(),
+      6,
+      'Views share one retained canvas instance',
+    );
+    await require('./diagram-test-helpers.cjs').selectDiagram(p, 'chartPanel');
     assert(await p.locator('#chart').isVisible());
     await p.setViewportSize({ width: 390, height: 844 });
     await p.waitForTimeout(250);
     await p.locator('.layout-launch').click();
-    await p.locator('[data-diagram=solarCompare]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(p, 'solarCompare');
     await p.waitForFunction(() => skyWorkspacePresentation.active);
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 1);
     assert(await p.locator('.workspace-tabs').isVisible());
@@ -193,12 +200,8 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     assert(await p.locator('#phaseContent').isVisible());
     assert.equal(await p.locator('.layout-launch').getAttribute('aria-pressed'), 'true');
     await p.locator('.layout-launch').click();
-    assert.deepEqual(
-      await p
-        .locator('.ui-plot > [data-diagram-card]')
-        .evaluateAll((ns) => ns.map((n) => n.dataset.diagramCard)),
-      ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel'],
-    );
+    assert.equal(await p.locator('.ui-plot > [data-diagram-card]').count(), 6);
+    assert(await p.locator('#phaseContent').isVisible());
     assert.deepEqual(errors, []);
     await c.close();
     const blocked = await b.newContext(),
@@ -213,7 +216,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await q.goto(base + 'diagrams.en.html');
     await q.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
     await q.locator('.layout-launch').click();
-    await q.locator('[data-diagram=solarCompare]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(q, 'solarCompare');
     await q.waitForFunction(() => skyWorkspacePresentation.active);
     await require('./diagram-test-helpers.cjs').layoutAction(q, 'four');
     assert.equal(await q.locator('.ui-diagram-card:visible').count(), 4);
@@ -244,7 +247,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await r.goto(base + 'diagrams.en.html');
     await r.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
     await r.locator('.layout-launch').click();
-    await r.locator('[data-diagram=solarCompare]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(r, 'solarCompare');
     await r.waitForFunction(() => skyWorkspacePresentation.active);
     const richSaved = () =>
       r.evaluate(() => JSON.parse(localStorage.getItem('skymotion-workspace-v3-wide')));
@@ -379,7 +382,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await r.reload();
     await r.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
     await r.locator('.layout-launch').click();
-    await r.locator('[data-diagram=solarCompare]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(r, 'solarCompare');
     await r.waitForFunction(() => skyWorkspacePresentation.active);
     assert.equal(await r.locator('.ui-diagram-card:visible').count(), 3);
     await options();
@@ -477,6 +480,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     assert.equal(await r.locator('.ui-diagram-card:visible').count(), 1);
     assert.equal(await r.locator('.workspace-tabs button').count(), 3);
     await r.keyboard.press('Escape');
+    await require('./diagram-test-helpers.cjs').closeDrawer(r);
     await r.locator('.workspace-tabs button').first().click();
     await options();
     const oldOrder = await r.evaluate(
@@ -493,14 +497,15 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
       'Reordering keeps the selected diagram',
     );
     await r.keyboard.press('Escape');
+    await require('./diagram-test-helpers.cjs').closeDrawer(r);
     await r.setViewportSize({ width: 320, height: 760 });
     await r.waitForTimeout(100);
     assert.equal(await r.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
     const moonChoice = await r.locator('.ui-heading button[data-body="moon"]').boundingBox(),
-      compareEntry = await r.locator('.ui-linked-toggle').boundingBox();
+      heading = await r.locator('.ui-heading').boundingBox();
     assert(
-      moonChoice.x + moonChoice.width <= compareEntry.x,
-      'Narrow header choices do not overlap',
+      moonChoice.x + moonChoice.width <= heading.x + heading.width,
+      'Narrow body choices stay inside the workbench heading',
     );
     await options();
     const bounds = await r.locator('#workspaceOptions').boundingBox();

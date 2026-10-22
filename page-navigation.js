@@ -20,25 +20,6 @@ function renderUIWorkspace() {
   const u = uiWorkspace,
     moon = state.body === 'moon',
     page = document.body.dataset.page;
-  if (page === 'lab') {
-    u.title.textContent = moon ? '月相与月球视运动' : '太阳视运动';
-    u.phaseButton.hidden = !moon;
-    u.skyButton.hidden = !moon;
-    u.phaseButton.setAttribute('aria-pressed', String(u.moonPhase));
-    u.skyButton.setAttribute('aria-pressed', String(!u.moonPhase));
-    document.querySelector('.view-tabs').hidden = moon && u.moonPhase;
-    u.nodes.forEach((n) => (n.hidden = true));
-    if (moon && u.moonPhase) $('phaseContent').hidden = false;
-    else $('stage').hidden = false;
-    const building = window.SkyCustomization?.active === true && u.selected === 'sceneBuilder';
-    if (building) {
-      u.nodes.forEach((n) => (n.hidden = n.id !== 'sceneBuilderPanel'));
-    }
-    u.plot.dataset.kind = building ? 'sceneBuilder' : moon && u.moonPhase ? 'phase' : 'sky';
-    window.SkySceneBuilder?.sync();
-    window.SkyDiagramTools?.syncVisibility();
-    window.SkyLabComparison?.sync();
-  }
   if (page === 'diagrams') {
     if (!moon) {
       u.pendingLunar = false;
@@ -46,6 +27,7 @@ function renderUIWorkspace() {
     }
     const allowed = moon
       ? [
+          'skyPanel',
           'contextPanel',
           'chartPanel',
           'riseSetPanel',
@@ -55,11 +37,13 @@ function renderUIWorkspace() {
           'sceneBuilder',
         ]
       : [
+          'skyPanel',
           'contextPanel',
           'chartPanel',
           'riseSetPanel',
           'solarGeometryPanel',
           'solarStudy',
+          'analemmaPanel',
           'solarCompare',
           'sceneBuilder',
         ];
@@ -86,6 +70,8 @@ function renderUIWorkspace() {
       uiViewText(
         b,
         {
+          skyPanel: moon ? '月球天空' : '天空与日影',
+          analemmaPanel: '日行迹',
           contextPanel: moon ? '月相与关系' : '直射点与昼夜',
           chartPanel: moon ? '逐日照明比例' : '全天高度曲线',
           riseSetPanel: moon ? '月出月落' : '日出日落',
@@ -95,12 +81,12 @@ function renderUIWorkspace() {
           solarCompare: '四图对照',
           solarStudy: '地点与时间',
           sceneBuilder: '搭建实验',
-        }[b.dataset.diagram],
+        }[b.dataset.routeDiagram],
       );
-      uiViewHidden(b, !allowed.includes(b.dataset.diagram));
-      uiViewAttribute(b, 'aria-selected', String(b.dataset.diagram === u.selected));
-      uiViewAttribute(b, 'tabindex', String(b.dataset.diagram === u.selected ? 0 : -1));
-      if (b.dataset.diagram === 'lunarOrbit')
+      uiViewHidden(b, !allowed.includes(b.dataset.routeDiagram));
+      uiViewAttribute(b, 'aria-selected', String(b.dataset.routeDiagram === u.selected));
+      uiViewAttribute(b, 'tabindex', String(b.dataset.routeDiagram === u.selected ? 0 : -1));
+      if (b.dataset.routeDiagram === 'lunarOrbit')
         uiViewAttribute(b, 'aria-busy', String(!!u.pendingLunar));
     });
     if (u.lastRevealedTab !== u.selected) {
@@ -112,6 +98,8 @@ function renderUIWorkspace() {
     if (window.skyWorkspacePresentation) window.skyWorkspacePresentation.sync();
     const visibleNodes = new Set();
     const chosen = {
+      skyPanel: $('stage'),
+      analemmaPanel: $('analemmaCanvas'),
       contextPanel: moon ? $('phaseContent') : $('sunContextContent'),
       chartPanel: $('chart'),
       riseSetPanel: $('eventCompass'),
@@ -153,6 +141,8 @@ function renderUIWorkspace() {
           uiViewHidden(child, moon);
     for (const [id, card] of Object.entries(u.cards)) {
       const text = {
+        skyPanel: moon ? '月球天空' : '天空与日影',
+        analemmaPanel: '日行迹',
         contextPanel: moon ? '月相与关系' : '直射点与昼夜',
         chartPanel: moon ? '逐日照明比例' : '全天太阳高度',
         riseSetPanel: moon ? '月出月落方位' : '日出日落方位',
@@ -165,7 +155,7 @@ function renderUIWorkspace() {
         (comparing &&
           (!window.skyWorkspacePresentation?.active ||
             window.skyWorkspacePresentation.visibleIds.has(id))) ||
-        (id === u.selected && (!moon || ['chartPanel', 'riseSetPanel'].includes(id)));
+        (id === u.selected && (!moon || ['skyPanel', 'chartPanel', 'riseSetPanel'].includes(id)));
       uiViewHidden(card, !visible);
       if (visible)
         visibleNodes.add(
@@ -193,17 +183,27 @@ function renderUIWorkspace() {
     $('track').closest('label').hidden = true;
     $('angles').closest('label').hidden = true;
     $('shadowMenu').hidden = true;
-    const showOverlay = !moon && (u.selected === 'chartPanel' || comparing);
-    $('displayMenu').hidden = !showOverlay;
+    const skyVisible =
+      u.selected === 'skyPanel' ||
+      (comparing && window.skyWorkspacePresentation?.visibleIds.has('skyPanel'));
+    const showOverlay = !moon && (skyVisible || u.selected === 'chartPanel' || comparing);
+    $('displayMenu').hidden = !showOverlay && !skyVisible;
+    $('track').closest('label').hidden = !skyVisible;
+    $('angles').closest('label').hidden = !skyVisible;
+    $('shadowMenu').hidden = moon || !skyVisible;
     $('solarOverlayBar').hidden = !showOverlay;
     $('displayContextNote').hidden = true;
-    uiViewText($('displayMenu').querySelector('.menu-section-name'), '曲线叠加');
+    uiViewText(
+      $('displayMenu').querySelector('.menu-section-name'),
+      skyVisible ? '显示辅助' : '曲线叠加',
+    );
     uiViewText($('displaySummary'), '同一地点与时刻的太阳、月球');
     uiViewText($('modelMenu').querySelector('.menu-section-name'), '太阳计算方式');
     $('compareControl').hidden = moon || !(u.selected === 'chartPanel' || comparing);
     $('modelMenu').querySelector('.menu-divider').hidden = true;
     uiViewText($('reset'), '重置当前图解条件');
-    uiViewText(u.title, (moon ? '月球' : '太阳') + ' · 关联图解');
+    uiViewText(u.title, (moon ? '月球' : '太阳') + ' · 实验台');
+    window.SkyWorkbenchMenu?.sync();
     window.SkySceneBuilder?.sync();
     window.SkySolarStudy?.sync();
     window.SkyDiagramTools?.syncVisibility();
@@ -218,7 +218,7 @@ function renderUIWorkspace() {
       .pop()
       .replace(/(?:\.en)?\.html$/, '')
       .replace(/\.en$/, '');
-    if (target === page) a.setAttribute('aria-current', 'page');
+    if (target === (page === 'diagrams' ? 'lab' : page)) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
   }
   document.body.insertBefore(document.querySelector('.page-nav'), $('labShell'));
@@ -338,45 +338,7 @@ function renderUIWorkspace() {
     rail.append(label, $('coordinatesMenu'));
     $('coordinatesMenu').open = true;
   }
-  if (page === 'analemma') {
-    title.textContent = '日行迹与“8”字成因';
-    state.analemma = true;
-    plot.append($('analemmaCanvas'));
-    function group(name, open = false) {
-      const d = document.createElement('details');
-      d.className = 'menu-section';
-      d.open = open;
-      const summary = document.createElement('summary');
-      summary.textContent = name;
-      const content = document.createElement('div');
-      content.className = 'menu-content';
-      d.append(summary, content);
-      rail.append(d);
-      return content;
-    }
-    const observation = group('观测与图解', true);
-    observation.append(
-      document.querySelector('.analemma-controls'),
-      document.querySelector('.analemma-comparison'),
-    );
-    addPlace();
-    const location = group('观察地点');
-    location.append(rail.querySelector('.ui-field'), $('coordinatesMenu'));
-    $('coordinatesMenu').open = true;
-    const advanced = document.querySelector('.analemma-advanced');
-    advanced.open = false;
-    rail.append(advanced);
-    const reading = group('轨迹读数与说明');
-    for (const id of [
-      'analemmaLegend',
-      'analemmaConditions',
-      'analemmaViewHint',
-      'analemmaResults',
-      'analemmaExplanation',
-    ])
-      reading.append($(id));
-    $('analemmaDay').hidden = true;
-  } else if (page === 'sundial') {
+  if (page === 'sundial') {
     title.textContent = '日晷实验台';
     const panel = $('sundialPanel');
     panel.open = true;
@@ -502,294 +464,287 @@ function renderUIWorkspace() {
       plot,
       rail,
       details: [],
-      selected: location.hash.slice(1) || 'contextPanel',
+      selected: location.hash.slice(1) || document.body.dataset.entryView || 'contextPanel',
       moonPhase: true,
       nodes: [],
       cards: {},
     };
-    if (page === 'lab') {
-      bar.append(document.querySelector('.view-tabs'));
-      const phase = document.createElement('button');
-      phase.type = 'button';
-      phase.textContent = '月相';
-      phase.className = 'ui-phase-button';
-      bar.prepend(phase);
-      uiWorkspace.phaseButton = phase;
-      phase.onclick = () => {
-        uiWorkspace.moonPhase = true;
+    bar.classList.add('ui-tabs');
+    bar.setAttribute('role', 'tablist');
+    uiWorkspace.tabs = bar;
+    for (const [id, name] of [
+      ['skyPanel', '天空与日影'],
+      ['analemmaPanel', '日行迹'],
+      ['contextPanel', '地球 / 月相'],
+      ['chartPanel', '变化曲线'],
+      ['riseSetPanel', '升落方位'],
+      ['solarGeometryPanel', '地轴与地平面'],
+      ['companionModule', '行星伴月'],
+      ['lunarOrbit', '地升地落'],
+      ['solarCompare', '四图对照'],
+      ['solarStudy', '地点与时间'],
+      ['sceneBuilder', '搭建实验'],
+    ]) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.dataset.routeDiagram = id;
+      b.textContent = name;
+      b.setAttribute('role', 'tab');
+      b.onclick = () => {
+        uiWorkspace.pendingLunar = false;
+        uiWorkspace.lunarRequested = id === 'lunarOrbit';
+        uiWorkspace.selected = id;
+        if (id === 'companionModule') state.companion = true;
+        if (id === 'lunarOrbit') stop();
+        if (location.hash !== '#' + id) {
+          if (window.SkyMotionHistory) SkyMotionHistory.setRoute('#' + id);
+          else history.pushState(null, '', '#' + id);
+        }
+        if (id === 'lunarOrbit' && uiWorkspace.lunarReady) {
+          renderUIWorkspace();
+          uiWorkspace.lunarLesson?.paint();
+        }
         schedule();
       };
-      const sky = document.createElement('button');
-      sky.type = 'button';
-      sky.textContent = '月球天空';
-      sky.className = 'ui-moon-sky-button';
-      bar.prepend(sky);
-      uiWorkspace.skyButton = sky;
-      sky.onclick = () => {
-        uiWorkspace.moonPhase = false;
-        schedule();
-      };
-      for (const id of ['stage', 'phaseContent']) {
-        plot.append($(id));
-        uiWorkspace.nodes.push($(id));
-      }
-      rail.append(document.querySelector('.metrics'), document.querySelector('.model-explanation'));
-      $('settingsBtn').onclick = $('uiParametersButton').onclick;
-    } else {
-      bar.classList.add('ui-tabs');
-      bar.setAttribute('role', 'tablist');
-      uiWorkspace.tabs = bar;
-      for (const [id, name] of [
-        ['contextPanel', '地球 / 月相'],
-        ['chartPanel', '变化曲线'],
-        ['riseSetPanel', '升落方位'],
-        ['solarGeometryPanel', '地轴与地平面'],
-        ['companionModule', '行星伴月'],
-        ['lunarOrbit', '地升地落'],
-        ['solarCompare', '四图对照'],
-        ['solarStudy', '地点与时间'],
-        ['sceneBuilder', '搭建实验'],
-      ]) {
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.dataset.diagram = id;
-        b.textContent = name;
-        b.setAttribute('role', 'tab');
-        b.onclick = () => {
-          uiWorkspace.pendingLunar = false;
-          uiWorkspace.lunarRequested = id === 'lunarOrbit';
-          uiWorkspace.selected = id;
-          if (id === 'companionModule') state.companion = true;
-          if (id === 'lunarOrbit') stop();
-          if (location.hash !== '#' + id) {
-            if (window.SkyMotionHistory) SkyMotionHistory.setRoute('#' + id);
-            else history.pushState(null, '', '#' + id);
-          }
-          if (id === 'lunarOrbit' && uiWorkspace.lunarReady) {
-            renderUIWorkspace();
-            uiWorkspace.lunarLesson?.paint();
-          }
-          schedule();
-        };
-        bar.append(b);
-      }
-      bar.addEventListener('keydown', (event) => {
-        if (
-          !event.target.matches('[role="tab"]') ||
-          !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)
-        )
-          return;
-        event.preventDefault();
-        const tabs = [...bar.querySelectorAll('[role="tab"]')].filter((tab) => !tab.hidden);
-        const index = tabs.indexOf(event.target);
-        const next =
-          event.key === 'Home'
-            ? 0
-            : event.key === 'End'
-              ? tabs.length - 1
-              : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
-        tabs[next].focus();
-        tabs[next].click();
-      });
-      for (const id of [
-        'sunContextContent',
-        'phaseContent',
-        'chart',
-        'eventCompass',
-        'earthGeometry',
-        'companionSky',
-      ]) {
-        plot.append($(id));
-        uiWorkspace.nodes.push($(id));
-      }
-      const lunarPanel = document.createElement('section');
-      lunarPanel.id = 'lunarOrbitPanel';
-      lunarPanel.hidden = true;
-      lunarPanel.dataset.preparing = '';
-      const lunarFrame = document.createElement('iframe');
-      lunarFrame.title = '地升地落互动演示';
-      lunarFrame.setAttribute('allow', 'fullscreen');
-      const notice = document.createElement('aside');
-      notice.className = 'lunar-load-notice';
-      notice.dataset.i18nSkip = '';
-      notice.setAttribute('role', 'status');
-      notice.hidden = true;
-      const noticeText = document.createElement('span');
-      const retry = document.createElement('button');
-      retry.type = 'button';
-      notice.append(noticeText, retry);
-      plot.append(notice);
-      let loadTimer = 0,
-        loadGeneration = 0;
-      const syncLanguage = () =>
-        lunarFrame.contentWindow?.postMessage(
-          {
-            type: 'skymotion:language-sync',
-            language: document.documentElement.lang === 'en' ? 'en' : 'zh',
-          },
-          location.origin,
-        );
-      uiWorkspace.updateLunarNotice = () => {
-        const english = document.documentElement.lang === 'en';
-        const failed = uiWorkspace.lunarError;
-        notice.hidden =
-          state.body !== 'moon' ||
-          !(uiWorkspace.pendingLunar || (failed && uiWorkspace.lunarRequested));
-        noticeText.textContent = failed
-          ? english
-            ? 'Earthrise could not load. Check your connection and retry.'
-            : '地升地落未能加载，请检查网络后重试。'
-          : english
-            ? 'Preparing Earthrise… You can keep using the current diagram.'
-            : '正在准备地升地落，可继续操作当前图解。';
-        retry.hidden = !failed;
-        retry.textContent = english ? 'Retry' : '重试';
-      };
-      const failLunar = (generation) => {
-        if (generation !== loadGeneration || uiWorkspace.lunarReady) return;
-        clearTimeout(loadTimer);
-        uiWorkspace.lunarError = true;
-        uiWorkspace.pendingLunar = false;
-        renderUIWorkspace();
-      };
-      uiWorkspace.loadLunar = () => {
-        clearTimeout(loadTimer);
-        const generation = ++loadGeneration;
-        uiWorkspace.lunarError = false;
-        uiWorkspace.lunarReady = false;
-        // Discard adopted controls from a partial attempt before mounting a new document.
-        uiWorkspace.lunarLesson?.pause();
-        uiWorkspace.lunarLesson = null;
-        document
-          .querySelectorAll('.lunar-controls-host,.lunar-timeline-host')
-          .forEach((node) => node.remove());
-        lunarPanel.dataset.preparing = '';
-        const lang = document.documentElement.lang === 'en' ? 'index.en.html' : 'index.html';
-        lunarFrame.src = 'lunar/' + lang + '?embedded=1&attempt=' + generation;
-        loadTimer = setTimeout(() => failLunar(generation), 15000);
-        uiWorkspace.updateLunarNotice();
-      };
-      retry.onclick = () => {
-        uiWorkspace.pendingLunar = true;
-        uiWorkspace.loadLunar();
-        renderUIWorkspace();
-      };
-      lunarFrame.addEventListener('load', () => {
-        try {
-          const attempt = new URL(lunarFrame.contentWindow.location.href).searchParams.get(
-            'attempt',
-          );
-          if (attempt === String(loadGeneration) && !lunarFrame.contentWindow.LunarOrbitLesson)
-            failLunar(loadGeneration);
-        } catch {
-          failLunar(loadGeneration);
-        }
-        syncLanguage();
-        lunarFrame.contentWindow?.postMessage(
-          { type: 'skymotion:lunar-active', active: uiWorkspace.lunarActive === true },
-          location.origin,
-        );
-      });
-      document.addEventListener('skymotion:language', () => {
-        syncLanguage();
-        uiWorkspace.updateLunarNotice();
-      });
-      lunarPanel.append(lunarFrame);
-      plot.append(lunarPanel);
-      uiWorkspace.nodes.push(lunarPanel);
-      uiWorkspace.lunarFrame = lunarFrame;
-      uiWorkspace.lunarRequested = location.hash === '#lunarOrbit';
-      window.addEventListener('message', (event) => {
-        if (
-          event.origin !== location.origin ||
-          event.source !== lunarFrame.contentWindow ||
-          event.data?.type !== 'skymotion:lunar-ready' ||
-          event.data.attempt !== String(loadGeneration)
-        )
-          return;
-        clearTimeout(loadTimer);
-        uiWorkspace.lunarLesson = lunarFrame.contentWindow.LunarOrbitLesson;
-        if (!uiWorkspace.lunarLesson) return;
-        uiWorkspace.lunarReady = true;
-        uiWorkspace.lunarError = false;
-        delete lunarPanel.dataset.preparing;
-        if (uiWorkspace.lunarSnapshot) uiWorkspace.lunarLesson.restore(uiWorkspace.lunarSnapshot);
-        if ((uiWorkspace.pendingLunar || uiWorkspace.lunarRequested) && state.body === 'moon')
-          uiWorkspace.selected = 'lunarOrbit';
-        uiWorkspace.pendingLunar = false;
-        syncLanguage();
-        renderUIWorkspace();
-        if (uiWorkspace.lunarActive) uiWorkspace.lunarLesson.paint();
-      });
-
-      // Reuse the same canvases in single and comparison views; no duplicate pipelines.
-      for (const [id, nodeId, name] of [
-        ['contextPanel', 'sunContextContent', '直射点与昼夜'],
-        ['chartPanel', 'chart', '全天太阳高度'],
-        ['riseSetPanel', 'eventCompass', '日出日落方位'],
-        ['solarGeometryPanel', 'earthGeometry', '地轴与地平面'],
-      ]) {
-        const card = document.createElement('section');
-        card.className = 'ui-diagram-card';
-        card.dataset.diagramCard = id;
-        card.hidden = true;
-        const header = document.createElement('div');
-        header.className = 'ui-diagram-card-head';
-        const heading = document.createElement('h2');
-        heading.textContent = name;
-        header.append(heading);
-        if (id === 'solarGeometryPanel') {
-          card.classList.add('ui-geometry-card');
-          const hint = document.createElement('span');
-          hint.textContent = '拖动旋转 · 双指缩放';
-          const reset = document.createElement('button');
-          reset.type = 'button';
-          reset.id = 'resetGeometryView';
-          reset.textContent = '复位视角';
-          reset.onclick = resetGeometryCamera;
-          header.append(hint, reset);
-        }
-        const surface = document.createElement('div');
-        surface.className = 'ui-diagram-surface';
-        surface.append($(nodeId));
-        card.append(header, surface);
-        plot.append(card);
-        uiWorkspace.cards[id] = card;
-      }
-      const comparisonDetails = document.createElement('div');
-      comparisonDetails.className = 'ui-diagram-details';
-      comparisonDetails.dataset.for = 'solarCompare';
-      comparisonDetails.innerHTML =
-        '<h2>四图对照</h2><p>四张图共用同一地点、日期和观测时刻。拖动下方时间或日期滑块，同时比较太阳高度、升落方位、昼夜分布与当地地平面。</p><p>拖动地球上的观察点可联动四图；拖动其他球面位置或地轴图只改变视角。移动地点可选择固定同一 UTC 瞬间或当地真太阳时，也可沿纬线或经线移动。地轴图中红色为地轴、紫色为赤道面、绿色为地平面、蓝色为天顶、黄色为太阳方向。点击上方单图标签可放大查看。</p><div id="uiCompareSettings"></div>';
-      rail.prepend(comparisonDetails);
-      uiWorkspace.details.push(comparisonDetails);
-      for (const id of [
-        'contextPanel',
-        'chartPanel',
-        'riseSetPanel',
-        'solarGeometryPanel',
-        'companionModule',
-      ]) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'ui-diagram-details';
-        wrapper.dataset.for = id;
-        wrapper.append($(id));
-        rail.prepend(wrapper);
-        uiWorkspace.details.push(wrapper);
-      }
-      const earthSettings = document.createElement('div');
-      earthSettings.id = 'uiEarthSettings';
-      earthSettings.append(
-        document.querySelector('.context-view-switch'),
-        document.querySelector('.globe-notes'),
-      );
-      $('contextPanel').append(earthSettings);
-      if (uiWorkspace.selected === 'companionModule') state.companion = true;
+      bar.append(b);
     }
+    bar.addEventListener('keydown', (event) => {
+      if (
+        !event.target.matches('[role="tab"]') ||
+        !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)
+      )
+        return;
+      event.preventDefault();
+      const tabs = [...bar.querySelectorAll('[role="tab"]')].filter((tab) => !tab.hidden);
+      const index = tabs.indexOf(event.target);
+      const next =
+        event.key === 'Home'
+          ? 0
+          : event.key === 'End'
+            ? tabs.length - 1
+            : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      tabs[next].focus();
+      tabs[next].click();
+    });
+    for (const id of [
+      'sunContextContent',
+      'phaseContent',
+      'chart',
+      'eventCompass',
+      'earthGeometry',
+      'companionSky',
+    ]) {
+      plot.append($(id));
+      uiWorkspace.nodes.push($(id));
+    }
+    $('stage').prepend(document.querySelector('.view-tabs'));
+    const lunarPanel = document.createElement('section');
+    lunarPanel.id = 'lunarOrbitPanel';
+    lunarPanel.hidden = true;
+    lunarPanel.dataset.preparing = '';
+    const lunarFrame = document.createElement('iframe');
+    lunarFrame.title = '地升地落互动演示';
+    lunarFrame.setAttribute('allow', 'fullscreen');
+    const notice = document.createElement('aside');
+    notice.className = 'lunar-load-notice';
+    notice.dataset.i18nSkip = '';
+    notice.setAttribute('role', 'status');
+    notice.hidden = true;
+    const noticeText = document.createElement('span');
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    notice.append(noticeText, retry);
+    plot.append(notice);
+    let loadTimer = 0,
+      loadGeneration = 0;
+    const syncLanguage = () =>
+      lunarFrame.contentWindow?.postMessage(
+        {
+          type: 'skymotion:language-sync',
+          language: document.documentElement.lang === 'en' ? 'en' : 'zh',
+        },
+        location.origin,
+      );
+    uiWorkspace.updateLunarNotice = () => {
+      const english = document.documentElement.lang === 'en';
+      const failed = uiWorkspace.lunarError;
+      notice.hidden =
+        state.body !== 'moon' ||
+        !(uiWorkspace.pendingLunar || (failed && uiWorkspace.lunarRequested));
+      noticeText.textContent = failed
+        ? english
+          ? 'Earthrise could not load. Check your connection and retry.'
+          : '地升地落未能加载，请检查网络后重试。'
+        : english
+          ? 'Preparing Earthrise… You can keep using the current diagram.'
+          : '正在准备地升地落，可继续操作当前图解。';
+      retry.hidden = !failed;
+      retry.textContent = english ? 'Retry' : '重试';
+    };
+    const failLunar = (generation) => {
+      if (generation !== loadGeneration || uiWorkspace.lunarReady) return;
+      clearTimeout(loadTimer);
+      uiWorkspace.lunarError = true;
+      uiWorkspace.pendingLunar = false;
+      renderUIWorkspace();
+    };
+    uiWorkspace.loadLunar = () => {
+      clearTimeout(loadTimer);
+      const generation = ++loadGeneration;
+      uiWorkspace.lunarError = false;
+      uiWorkspace.lunarReady = false;
+      // Discard adopted controls from a partial attempt before mounting a new document.
+      uiWorkspace.lunarLesson?.pause();
+      uiWorkspace.lunarLesson = null;
+      document
+        .querySelectorAll('.lunar-controls-host,.lunar-timeline-host')
+        .forEach((node) => node.remove());
+      lunarPanel.dataset.preparing = '';
+      const lang = document.documentElement.lang === 'en' ? 'index.en.html' : 'index.html';
+      lunarFrame.src = 'lunar/' + lang + '?embedded=1&attempt=' + generation;
+      loadTimer = setTimeout(() => failLunar(generation), 15000);
+      uiWorkspace.updateLunarNotice();
+    };
+    retry.onclick = () => {
+      uiWorkspace.pendingLunar = true;
+      uiWorkspace.loadLunar();
+      renderUIWorkspace();
+    };
+    lunarFrame.addEventListener('load', () => {
+      try {
+        const attempt = new URL(lunarFrame.contentWindow.location.href).searchParams.get('attempt');
+        if (attempt === String(loadGeneration) && !lunarFrame.contentWindow.LunarOrbitLesson)
+          failLunar(loadGeneration);
+      } catch {
+        failLunar(loadGeneration);
+      }
+      syncLanguage();
+      lunarFrame.contentWindow?.postMessage(
+        { type: 'skymotion:lunar-active', active: uiWorkspace.lunarActive === true },
+        location.origin,
+      );
+    });
+    document.addEventListener('skymotion:language', () => {
+      syncLanguage();
+      uiWorkspace.updateLunarNotice();
+    });
+    lunarPanel.append(lunarFrame);
+    plot.append(lunarPanel);
+    uiWorkspace.nodes.push(lunarPanel);
+    uiWorkspace.lunarFrame = lunarFrame;
+    uiWorkspace.lunarRequested = location.hash === '#lunarOrbit';
+    window.addEventListener('message', (event) => {
+      if (
+        event.origin !== location.origin ||
+        event.source !== lunarFrame.contentWindow ||
+        event.data?.type !== 'skymotion:lunar-ready' ||
+        event.data.attempt !== String(loadGeneration)
+      )
+        return;
+      clearTimeout(loadTimer);
+      uiWorkspace.lunarLesson = lunarFrame.contentWindow.LunarOrbitLesson;
+      if (!uiWorkspace.lunarLesson) return;
+      uiWorkspace.lunarReady = true;
+      uiWorkspace.lunarError = false;
+      delete lunarPanel.dataset.preparing;
+      if (uiWorkspace.lunarSnapshot) uiWorkspace.lunarLesson.restore(uiWorkspace.lunarSnapshot);
+      if ((uiWorkspace.pendingLunar || uiWorkspace.lunarRequested) && state.body === 'moon')
+        uiWorkspace.selected = 'lunarOrbit';
+      uiWorkspace.pendingLunar = false;
+      syncLanguage();
+      renderUIWorkspace();
+      if (uiWorkspace.lunarActive) uiWorkspace.lunarLesson.paint();
+    });
+
+    // Reuse the same canvases in single and comparison views; no duplicate pipelines.
+    for (const [id, nodeId, name] of [
+      ['contextPanel', 'sunContextContent', '直射点与昼夜'],
+      ['chartPanel', 'chart', '全天太阳高度'],
+      ['riseSetPanel', 'eventCompass', '日出日落方位'],
+      ['solarGeometryPanel', 'earthGeometry', '地轴与地平面'],
+      ['skyPanel', 'stage', '天空与日影'],
+      ['analemmaPanel', 'analemmaCanvas', '日行迹'],
+    ]) {
+      const card = document.createElement('section');
+      card.className = 'ui-diagram-card';
+      card.dataset.diagramCard = id;
+      card.hidden = true;
+      const header = document.createElement('div');
+      header.className = 'ui-diagram-card-head';
+      const heading = document.createElement('h2');
+      heading.textContent = name;
+      header.append(heading);
+      if (id === 'solarGeometryPanel') {
+        card.classList.add('ui-geometry-card');
+        const hint = document.createElement('span');
+        hint.textContent = '拖动旋转 · 双指缩放';
+        const reset = document.createElement('button');
+        reset.type = 'button';
+        reset.id = 'resetGeometryView';
+        reset.textContent = '复位视角';
+        reset.onclick = resetGeometryCamera;
+        header.append(hint, reset);
+      }
+      const surface = document.createElement('div');
+      surface.className = 'ui-diagram-surface';
+      surface.append($(nodeId));
+      card.append(header, surface);
+      plot.append(card);
+      uiWorkspace.cards[id] = card;
+    }
+    const comparisonDetails = document.createElement('div');
+    comparisonDetails.className = 'ui-diagram-details';
+    comparisonDetails.dataset.for = 'solarCompare';
+    comparisonDetails.innerHTML =
+      '<h2>四图对照</h2><p>四张图共用同一地点、日期和观测时刻。拖动下方时间或日期滑块，同时比较太阳高度、升落方位、昼夜分布与当地地平面。</p><p>拖动地球上的观察点可联动四图；拖动其他球面位置或地轴图只改变视角。移动地点可选择固定同一 UTC 瞬间或当地真太阳时，也可沿纬线或经线移动。地轴图中红色为地轴、紫色为赤道面、绿色为地平面、蓝色为天顶、黄色为太阳方向。点击上方单图标签可放大查看。</p><div id="uiCompareSettings"></div>';
+    rail.prepend(comparisonDetails);
+    uiWorkspace.details.push(comparisonDetails);
+    for (const id of [
+      'contextPanel',
+      'chartPanel',
+      'riseSetPanel',
+      'solarGeometryPanel',
+      'companionModule',
+    ]) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'ui-diagram-details';
+      wrapper.dataset.for = id;
+      wrapper.append($(id));
+      rail.prepend(wrapper);
+      uiWorkspace.details.push(wrapper);
+    }
+    const skySettings = document.createElement('div');
+    skySettings.className = 'ui-diagram-details';
+    skySettings.dataset.for = 'skyPanel';
+    skySettings.append(
+      document.querySelector('.metrics'),
+      document.querySelector('.model-explanation'),
+    );
+    rail.prepend(skySettings);
+    uiWorkspace.details.push(skySettings);
+    const annualSettings = document.createElement('div');
+    annualSettings.className = 'ui-diagram-details';
+    annualSettings.dataset.for = 'analemmaPanel';
+    for (const selector of ['.analemma-controls', '.analemma-comparison', '.analemma-advanced']) {
+      const node = document.querySelector(selector);
+      if (node) annualSettings.append(node);
+    }
+    rail.prepend(annualSettings);
+    uiWorkspace.details.push(annualSettings);
+    uiWorkspace.analemmaClockLinked = false;
+    const earthSettings = document.createElement('div');
+    earthSettings.id = 'uiEarthSettings';
+    earthSettings.append(
+      document.querySelector('.context-view-switch'),
+      document.querySelector('.globe-notes'),
+    );
+    $('contextPanel').append(earthSettings);
+    if (uiWorkspace.selected === 'companionModule') state.companion = true;
     $('lunarSkyDetails').open = true;
     if (page === 'diagrams') {
       const restoreDiagram = () => {
-        uiWorkspace.selected = location.hash.slice(1) || 'contextPanel';
+        uiWorkspace.selected =
+          location.hash.slice(1) || document.body.dataset.entryView || 'contextPanel';
         if (uiWorkspace.selected === 'companionModule' && state.body === 'moon')
           state.companion = true;
         schedule();
@@ -827,6 +782,7 @@ function renderUIWorkspace() {
     drawerAnimation?.cancel();
     drawer.style.transform = '';
     if (drawer.open) drawer.close();
+    window.SkyDiagramTools?.syncVisibility();
     drawerClosing = false;
     parameterButton.setAttribute('aria-expanded', 'false');
     if (restoreFocus && drawerMedia.matches && drawerReturnFocus?.isConnected)

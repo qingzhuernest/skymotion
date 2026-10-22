@@ -27,6 +27,7 @@ const helpers = require('./diagram-test-helpers.cjs');
       );
       const baseline = await page.evaluate(() => [state.lat, state.lon, state.date, state.time]);
       await page.locator('.layout-launch').click();
+      await helpers.openWorkbench(page);
       await page.locator('[data-dt-view=library]').click();
       assert.equal(await page.locator('.dt-advanced').getAttribute('open'), null);
       await page.locator('[data-experiment-goal]').selectOption('places');
@@ -102,6 +103,7 @@ const helpers = require('./diagram-test-helpers.cjs');
         'Save shortcut works while a slider has focus',
       );
       assert.equal(await page.evaluate(() => SkyDiagramTools.comparisons.list()[0].lat), 51.5);
+      await helpers.openWorkbench(page);
       await page.locator('[data-dt-view=library]').click();
       await page.locator('[data-experiment-goal]').selectOption('times');
       await page.locator('.dt-recipe').click();

@@ -70,7 +70,10 @@ function renderTimeWorkbench() {
   const moon = state.body === 'moon',
     ideal = !moon && state.manual,
     observer =
-      document.body.dataset.page === 'lab' &&
+      (document.body.dataset.page === 'lab' ||
+        (typeof uiWorkspace !== 'undefined' &&
+          (uiWorkspace?.selected === 'skyPanel' ||
+            window.skyWorkspacePresentation?.visibleIds.has('skyPanel')))) &&
       state.view === 'observer' &&
       (state.body === 'sun' || !uiWorkspace?.moonPhase),
     basis = workbenchBasis(),
@@ -184,7 +187,9 @@ function renderTimeWorkbench() {
           ? '▶ 从年初播放'
           : '▶ 按天播放';
   // Keep the button's text node stable while frames update, including during a pointer press.
-  const displayPlayLabel = (window.skyTranslate ? window.skyTranslate(playLabel) : playLabel).replace(/^[▶⏸]\s*/, "");
+  const displayPlayLabel = (
+    window.skyTranslate ? window.skyTranslate(playLabel) : playLabel
+  ).replace(/^[▶⏸]\s*/, '');
   if ($('workbenchPlay').textContent !== displayPlayLabel)
     $('workbenchPlay').textContent = displayPlayLabel;
   $('workbenchPlay').setAttribute('aria-pressed', String(workbenchIsPlaying()));

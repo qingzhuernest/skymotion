@@ -46,3 +46,5 @@ Lab shares the customization switch beside language while retaining native viewp
 预览 69 / Preview 69：修复 GPT Site 将 `.html` 跳转为简洁地址时，跨页自定义状态无法延续的问题；中英文两套路由均有重定向回归检查。 Clean-URL redirects now retain one-use customization intent in both languages; refresh still starts normally.
 
 2026-10-21: 用户批准统一自定义交互，并明确要求直接发布正式网站、同步中英文文档和学习指南中的实际用法。保留顶部主菜单与原观测控制。
+
+统一实验台：实验台、关联图解、日行迹共享工作区与状态。左栏固定“视图与布局／观测条件／图中对象”，按内容分类展开选择；布局与收藏内嵌侧栏。旧网址保留为内容入口。原有绿色主题、天文模型和顶部主菜单稳定。

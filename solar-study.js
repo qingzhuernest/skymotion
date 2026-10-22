@@ -621,8 +621,8 @@
     read: () => (result ? JSON.parse(JSON.stringify({ mode, ...result })) : null),
   };
   new ResizeObserver(() => {
-    if (!active) return;
-    const tab = uiWorkspace.tabs.querySelector('[data-diagram=solarStudy]'),
+    if (!active || uiWorkspace.tabs.classList.contains('workbench-route-tabs')) return;
+    const tab = uiWorkspace.tabs.querySelector('[data-route-diagram=solarStudy]'),
       a = tab.getBoundingClientRect(),
       b = uiWorkspace.tabs.getBoundingClientRect();
     if (a.left < b.left || a.right > b.right)

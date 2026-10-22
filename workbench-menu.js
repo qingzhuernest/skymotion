@@ -1,0 +1,250 @@
+/** One content tree for the sky laboratory, related diagrams and annual observations. */
+(() => {
+  if (!document.body.hasAttribute('data-entry-view') || !uiWorkspace) return;
+  const rail = uiWorkspace.rail;
+  const menu = document.createElement('section');
+  menu.id = 'workbenchViews';
+  menu.className = 'workbench-views';
+  menu.dataset.i18nSkip = '';
+  menu.hidden = true;
+  rail.append(menu);
+  const english = () => document.documentElement.lang === 'en';
+  const tr = (zh, en) => (english() ? en : zh);
+  const tree = document.createElement('div');
+  tree.className = 'workbench-view-tree';
+  menu.append(tree);
+  const entries = [];
+  const groups = [
+    [
+      '天空与日影',
+      'Sky & shadows',
+      [
+        ['skyPanel', '空间视图', 'Space view', 'orbit'],
+        ['skyPanel', '俯视日影', 'Overhead shadow', 'top'],
+        ['skyPanel', '地平视角', 'Horizon view', 'horizon'],
+        ['skyPanel', '仰望天空', 'Looking up', 'observer'],
+      ],
+    ],
+    [
+      '关联图解',
+      'Related diagrams',
+      [
+        ['contextPanel', '地球与昼夜', 'Earth & daylight'],
+        ['chartPanel', '全天高度曲线', 'Daily altitude'],
+        ['riseSetPanel', '日出日落方位', 'Rise/set bearings'],
+        ['solarGeometryPanel', '地轴与地平面', 'Axis & horizon'],
+        ['companionModule', '行星伴月', 'Moon & planets'],
+        ['lunarOrbit', '地升地落', 'Earthrise'],
+      ],
+    ],
+    ['全年变化', 'Annual changes', [['analemmaPanel', '日行迹', 'Analemma']]],
+    [
+      '对照与搭建',
+      'Compare & build',
+      [
+        ['solarCompare', '组合视图', 'Combined views'],
+        ['solarStudy', '地点与时间对照', 'Place & time comparison'],
+        ['sceneBuilder', '搭建实验', 'Build experiment'],
+      ],
+    ],
+  ];
+  function select(id, view) {
+    if (view) state.view = view;
+    const layoutId = state.body === 'moon' && id === 'companionModule' ? 'solarGeometryPanel' : id;
+    if (!window.skyWorkspacePresentation?.selectView(layoutId)) {
+      const tab = uiWorkspace.tabs.querySelector(`[data-route-diagram="${id}"]`);
+      if (!tab || tab.hidden) return;
+      tab.click();
+    }
+    schedule();
+  }
+  for (const [zh, en, items] of groups) {
+    const group = document.createElement('details');
+    group.open = true;
+    group.className = 'workbench-content-group';
+    const summary = document.createElement('summary');
+    group.append(summary);
+    tree.append(group);
+    for (const [id, name, translation, view] of items) {
+      const row = document.createElement('div');
+      row.className = 'workbench-content-row';
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.workbenchView = id;
+      if (!view || view === 'orbit') button.dataset.diagram = id;
+      if (view) button.dataset.skyView = view;
+      button.onclick = () => select(id, view);
+      row.append(button);
+      const add = document.createElement('button');
+      add.type = 'button';
+      add.className = 'workbench-add-view';
+      add.innerHTML =
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+      add.onclick = () => {
+        if (view) state.view = view;
+        const api = window.skyWorkspacePresentation;
+        const layoutId =
+          state.body === 'moon' && id === 'companionModule' ? 'solarGeometryPanel' : id;
+        if (api.views.includes(layoutId) && uiWorkspace.selected === 'solarCompare')
+          api.removeView(layoutId);
+        else api.addView(layoutId);
+        sync();
+      };
+      row.append(add);
+      group.append(row);
+      entries.push({ id, name, translation, view, button, add, row });
+    }
+    group.dataset.zh = zh;
+    group.dataset.en = en;
+  }
+  const layout = document.createElement('details');
+  layout.className = 'workbench-layout-section';
+  const summary = document.createElement('summary');
+  layout.append(summary);
+  const options = document.getElementById('workspaceOptions');
+  if (options) layout.append(options);
+  menu.append(layout);
+  const annual = rail.querySelector('[data-for="analemmaPanel"]');
+  const clockLink = document.createElement('label');
+  clockLink.className = 'workbench-clock-link';
+  const follow = document.createElement('input');
+  follow.type = 'checkbox';
+  follow.id = 'analemmaFollowClock';
+  follow.checked = uiWorkspace.analemmaClockLinked;
+  follow.onchange = () => {
+    stop();
+    uiWorkspace.analemmaClockLinked = follow.checked;
+    schedule();
+  };
+  const followText = document.createElement('span');
+  const samplingClock = document.createElement('span');
+  samplingClock.className = 'workbench-sampling-clock';
+  uiWorkspace.cards.analemmaPanel.querySelector('.ui-diagram-card-head').append(samplingClock);
+  clockLink.append(follow, followText);
+  annual?.prepend(clockLink);
+  for (const id of ['analemmaClock', 'analemmaBasis']) {
+    document.getElementById(id).addEventListener('change', () => {
+      uiWorkspace.analemmaClockLinked = false;
+      follow.checked = false;
+    });
+  }
+  function sync() {
+    const moon = state.body === 'moon';
+    const api = window.skyWorkspacePresentation;
+    const editing = window.SkyCustomization?.active === true;
+    const visible = api?.active ? api.visibleIds : new Set([uiWorkspace.selected]);
+    for (const group of tree.children) {
+      const title = group.querySelector('summary');
+      uiViewText(title, tr(group.dataset.zh, group.dataset.en));
+    }
+    for (const entry of entries) {
+      const available = uiWorkspace.tabs.querySelector(`[data-route-diagram="${entry.id}"]`);
+      uiViewHidden(entry.row, !available || available.hidden);
+      const labels = moon
+        ? {
+            contextPanel: ['月相关系', 'Phase relationships'],
+            chartPanel: ['逐日照明比例', 'Daily illumination'],
+            riseSetPanel: ['月出月落方位', 'Moonrise & moonset'],
+          }
+        : {};
+      const label = labels[entry.id];
+      const name = label ? tr(...label) : tr(entry.name, entry.translation);
+      uiViewText(entry.button, name);
+      const selected = visible?.has(entry.id) && (!entry.view || state.view === entry.view);
+      uiViewAttribute(entry.button, 'aria-pressed', String(!!selected));
+      uiViewAttribute(
+        entry.button,
+        'aria-busy',
+        String(entry.id === 'lunarOrbit' && !!uiWorkspace.pendingLunar),
+      );
+      const layoutId = moon && entry.id === 'companionModule' ? 'solarGeometryPanel' : entry.id;
+      uiViewHidden(
+        entry.add,
+        !editing ||
+          !Object.hasOwn(uiWorkspace.cards, layoutId) ||
+          (!!entry.view && entry.view !== 'orbit'),
+      );
+      const included = api?.active && api.views.includes(layoutId);
+      uiViewAttribute(
+        entry.add,
+        'aria-label',
+        tr(included ? '移除：' : '加入组合：', included ? 'Remove: ' : 'Add to layout: ') + name,
+      );
+      uiViewAttribute(entry.add, 'aria-pressed', String(!!included));
+      entry.add.disabled = !!included && api.views.length === 1;
+    }
+    for (const group of tree.children)
+      uiViewHidden(
+        group,
+        ![...group.querySelectorAll('.workbench-content-row')].some((row) => !row.hidden),
+      );
+    uiViewText(summary, tr('排列与收藏', 'Arrangement & saved layouts'));
+    uiViewHidden(layout, !editing);
+    follow.checked = uiWorkspace.analemmaClockLinked;
+    uiViewText(
+      followText,
+      tr(
+        '跟随下方真太阳时（不含均时差的左右变化）',
+        'Follow the apparent solar clock (removes equation-of-time motion)',
+      ),
+    );
+    uiViewText(
+      samplingClock,
+      hhmm(state.analemmaClock) +
+        ' · ' +
+        tr(
+          state.analemmaBasis === 'clock' ? '固定钟表时' : '固定真太阳时',
+          state.analemmaBasis === 'clock' ? 'Fixed civil clock' : 'Fixed apparent solar time',
+        ),
+    );
+    document.body.classList.toggle('workbench-editing', editing);
+    window.SkyObserverExplanation?.sync();
+  }
+  window.SkyWorkbenchMenu = {
+    sync,
+    select,
+    prepare() {
+      const visible = window.skyWorkspacePresentation?.active
+        ? window.skyWorkspacePresentation.visibleIds
+        : new Set([uiWorkspace.selected]);
+      state.analemma = state.body === 'sun' && visible.has('analemmaPanel');
+      if (state.analemma && uiWorkspace.analemmaClockLinked) {
+        state.analemmaBasis = 'solar';
+        state.analemmaClock = Math.min(1439, state.time);
+      }
+    },
+    openLayout() {
+      if (window.SkyDiagramTools?.selectSidebar('views') === false) return;
+      layout.open = true;
+      menu.hidden = false;
+      options.hidden = false;
+      const revealLayout = () => {
+        const header = rail.querySelector('.motion-menu-header');
+        rail.scrollTop +=
+          layout.getBoundingClientRect().top -
+          (header?.getBoundingClientRect().bottom || rail.getBoundingClientRect().top) -
+          8;
+      };
+      requestAnimationFrame(() => {
+        revealLayout();
+        Promise.all(
+          layout.getAnimations().map((animation) => animation.finished.catch(() => {})),
+        ).then(revealLayout);
+      });
+      if (
+        matchMedia('(max-width:760px)').matches &&
+        !document.getElementById('uiParameterDrawer').open
+      )
+        document.getElementById('uiParametersButton').click();
+    },
+  };
+  layout.addEventListener('toggle', () => {
+    if (layout.open && options.hidden && window.SkyCustomization?.active)
+      window.skyWorkspacePresentation.openOptions();
+  });
+  document.addEventListener('skymotion:language', sync);
+  document.addEventListener('skymotion:customization', sync);
+  // The existing tabs remain the routing mechanism; the sidebar is the sole visible catalog.
+  uiWorkspace.tabs.classList.add('workbench-route-tabs');
+  sync();
+})();

@@ -15,7 +15,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8986/').repla
     assert.equal(await p.evaluate(() => SkyCustomization.active), false);
     assert.equal(await p.locator('[data-diagram=solarStudy]').isVisible(), false);
     await p.locator('.layout-launch').click();
-    await p.locator('[data-diagram=solarStudy]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(p, 'solarStudy');
     await p.waitForFunction(() => SkySolarStudy.read());
     assert(await p.locator('#solarStudyPanel').isVisible());
     await p.locator('[data-rail-section=conditions]').click();
@@ -151,10 +151,10 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8986/').repla
       null,
       'date boundary has an explicit unavailable comparison',
     );
-    await p.locator('[data-diagram=contextPanel]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(p, 'contextPanel');
     await p.locator('#solarStudyPanel').waitFor({ state: 'hidden' });
     assert.equal(await p.locator('#solarStudyPanel').isVisible(), false);
-    await p.locator('[data-diagram=solarStudy]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(p, 'solarStudy');
     await p.locator('.solar-study-switch button').nth(1).click();
     await set({ date: '2026-06-21', time: 720, lat: 39.9, lon: 116.4 });
     await p.locator('.solar-study-presets button').first().click();
@@ -190,7 +190,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8986/').repla
     await m.goto(base + 'diagrams.en.html#solarStudy');
     await m.waitForFunction(() => window.SkySolarStudy && window.SkyCustomization);
     await m.locator('.layout-launch').click();
-    await m.locator('[data-diagram=solarStudy]').click();
+    await require('./diagram-test-helpers.cjs').selectDiagram(m, 'solarStudy');
     await m.waitForFunction(() => SkySolarStudy.read());
     await m.locator('#uiParametersButton').click();
     await m.locator('.solar-study-switch button').nth(1).click();

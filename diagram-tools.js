@@ -109,7 +109,7 @@
     mountedRail = null,
     railScroll = 0,
     railNavigation = null,
-    railView = 'references',
+    railView = 'conditions',
     referenceMode = true;
   const views = { library, objects, files },
     tabLabels = {
@@ -307,13 +307,17 @@
         tr(
           '。点一下画布放置，或点击下方按钮直接添加。点“取消放置”或按 Esc 可取消。|. Tap the plot to place it, or use the button below. Choose Cancel placement or press Esc to cancel.',
         )
-      : tr(
-          '点选对象查看属性，拖动手柄调整；空白处沿用原图操作。方向键微调，Ctrl/Cmd+Z 撤销，Esc 取消当前操作。|Select an object to view properties and drag its handle to adjust it. Empty space uses the original plot controls. Arrow keys nudge, Ctrl/Cmd+Z undoes, and Esc cancels the current action.',
-        );
+      : current && stateFor(current).objects.length >= 40
+        ? tr(
+            '已达到 40 个参考对象上限；删除一个后可继续添加。|40-reference limit reached; remove one to add another.',
+          )
+        : tr(
+            '点选对象查看属性，拖动手柄调整；空白处沿用原图操作。方向键微调，Ctrl/Cmd+Z 撤销，Esc 取消当前操作。|Select an object to view properties and drag its handle to adjust it. Empty space uses the original plot controls. Arrow keys nudge, Ctrl/Cmd+Z undoes, and Esc cancels the current action.',
+          );
   }
   const guideLink = E('a', 'dt-guide-link', hint);
   function contextualHelp() {
-    if (armed) return;
+    if (armed || (current && stateFor(current).objects.length >= 40)) return;
     const descriptions = {
       sky: '原观测条件控制底部时间栏；所选对照有自己的滑条。经度比较先区分同一 UTC 瞬间与各地真太阳时。|The bottom timeline controls the baseline; comparisons have their own sliders. Distinguish one UTC instant from each location’s apparent solar time.',
       analemma:
@@ -345,7 +349,9 @@
     panel.dataset.detail = 'false';
     placementUI();
     if (current.canvas.tabIndex < 0) current.canvas.tabIndex = 0;
-    current.canvas.focus({ preventScroll: true });
+    if (document.getElementById('uiParameterDrawer')?.open)
+      placement.focus({ preventScroll: true });
+    else current.canvas.focus({ preventScroll: true });
   }
   function placeAt(x, y) {
     if (!armed || !current) return;
@@ -1065,6 +1071,9 @@
     switchView('objects', true);
     status.textContent =
       bad.dataset.error || tr('请先修正标记的输入。|Correct the marked input first.');
+    const drawer = document.getElementById('uiParameterDrawer');
+    if (drawer?.contains(panel) && !drawer.open)
+      document.getElementById('uiParametersButton')?.click();
     bad.focus({ preventScroll: true });
     revealField(bad);
     return false;
@@ -1317,6 +1326,13 @@
     inspector.scrollTop = inspectorPosition;
     list.scrollTop = listPosition;
     placePanel();
+    if (
+      !preserveRail &&
+      document.body.hasAttribute('data-entry-view') &&
+      matchMedia('(max-width:760px)').matches &&
+      !document.getElementById('uiParameterDrawer')?.open
+    )
+      document.getElementById('uiParametersButton')?.click();
     syncLaunchers();
     panel.dataset.restoring = 'true';
     const epoch = importRequest;
@@ -1334,7 +1350,7 @@
     );
     repaint();
   }
-  const railPositions = { conditions: 0, references: 0 };
+  const railPositions = { views: 0, conditions: 0, references: 0 };
   let emptyContext = null;
   function parameterRail() {
     return (
@@ -1345,8 +1361,8 @@
   function persistentRailMode() {
     return (
       !!parameterRail() &&
-      window.SkyCustomization?.active === true &&
-      !matchMedia('(max-width:760px)').matches
+      (document.body.hasAttribute('data-entry-view') ||
+        (window.SkyCustomization?.active === true && !matchMedia('(max-width:760px)').matches))
     );
   }
   function visibleModels() {
@@ -1364,7 +1380,7 @@
     const rail = parameterRail();
     if (!rail) return false;
     railPositions[railView] = rail.scrollTop;
-    if (kind === 'conditions') {
+    if (kind !== 'references') {
       referenceMode = editing;
       setEditing(false);
     } else {
@@ -1389,27 +1405,32 @@
     railNavigation.setAttribute('role', 'tablist');
     railNavigation.setAttribute('aria-label', tr('侧栏内容|Sidebar section'));
     (rail.querySelector(':scope > .motion-menu-header') || rail).append(railNavigation);
-    for (const kind of ['conditions', 'references']) {
+    for (const kind of document.body.hasAttribute('data-entry-view')
+      ? ['views', 'conditions', 'references']
+      : ['conditions', 'references']) {
       const b = E('button', '', railNavigation);
       b.type = 'button';
       b.id = 'dt-rail-' + kind;
       b.dataset.railSection = kind;
       b.setAttribute('role', 'tab');
-      b.setAttribute('aria-controls', kind === 'conditions' ? rail.id : panel.id);
+      b.setAttribute(
+        'aria-controls',
+        kind === 'views' ? 'workbenchViews' : kind === 'conditions' ? rail.id : panel.id,
+      );
       b.onclick = () => chooseRail(kind);
     }
     railNavigation.addEventListener('keydown', (e) => {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
       e.preventDefault();
+      const buttons = [...railNavigation.children].filter((button) => !button.hidden);
+      const currentIndex = buttons.indexOf(e.target);
       const index =
-          e.key === 'Home'
-            ? 0
-            : e.key === 'End'
-              ? 1
-              : e.target.dataset.railSection === 'conditions'
-                ? 1
-                : 0,
-        button = railNavigation.children[index];
+        e.key === 'Home'
+          ? 0
+          : e.key === 'End'
+            ? buttons.length - 1
+            : (currentIndex + (e.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
+      const button = buttons[index];
       if (chooseRail(button.dataset.railSection)) button.focus({ preventScroll: true });
     });
     emptyContext = E('section', 'dt-context-empty', rail);
@@ -1431,11 +1452,14 @@
     if (!railNavigation) return;
     railNavigation.setAttribute('aria-label', tr('侧栏内容|Sidebar section'));
     for (const b of railNavigation.children) {
+      b.hidden = b.dataset.railSection === 'references' && !customizationOn();
       const chosen = b.dataset.railSection === railView;
       b.textContent = tr(
-        b.dataset.railSection === 'conditions'
-          ? '观测条件|Observation controls'
-          : '图中对象|Plot objects',
+        b.dataset.railSection === 'views'
+          ? '视图与布局|Views & layout'
+          : b.dataset.railSection === 'conditions'
+            ? '观测条件|Observation controls'
+            : '图中对象|Plot objects',
       );
       b.setAttribute('aria-selected', String(chosen));
       b.tabIndex = chosen ? 0 : -1;
@@ -1444,6 +1468,9 @@
   function syncRailShell() {
     const rail = parameterRail() || railNavigation?.closest('.ui-parameters, .side');
     if (!rail) return;
+    if (railView === 'references' && !customizationOn()) railView = 'conditions';
+    const viewMenu = document.getElementById('workbenchViews');
+    if (viewMenu) viewMenu.hidden = railView !== 'views';
     const persistent = persistentRailMode();
     if (persistent) ensureRailNavigation(rail);
     rail.classList.toggle('dt-navigation-ready', persistent);
@@ -1486,7 +1513,9 @@
     const r = rail?.getBoundingClientRect(),
       mobile = matchMedia('(max-width:760px)').matches;
     const docked =
-      !mobile && !!r && r.width > 180 && r.width < 450 && r.left >= 0 && r.height > 180;
+      !!rail &&
+      (document.body.hasAttribute('data-entry-view') ||
+        (!mobile && !!r && r.width > 180 && r.width < 450 && r.left >= 0 && r.height > 180));
     const focused = panel.contains(document.activeElement) ? document.activeElement : null;
     if (mountedRail && (!docked || mountedRail !== rail)) unmountPanel();
     panel.classList.toggle('dt-docked', docked);
@@ -2627,7 +2656,11 @@
       return false;
     });
     if (!o) return false;
-    if (panel.hidden || current?.id !== id || railView !== 'references') open(m);
+    if (panel.hidden || current?.id !== id || railView !== 'references') {
+      const keepCanvas =
+        document.body.hasAttribute('data-entry-view') && matchMedia('(max-width:760px)').matches;
+      open(m, keepCanvas);
+    }
     editing = true;
     if (typeof state !== 'undefined' && typeof stop === 'function') stop();
     else m.pause?.();
@@ -2906,7 +2939,7 @@
   function syncLaunchers() {
     for (const [key, button] of portals) {
       const source = models.get(key)?.canvas,
-        active = !panel.hidden && current?.id === key;
+        active = !panel.hidden && current?.id === key && panel.getClientRects().length > 0;
       button.hidden =
         !customizationOn() ||
         active ||
@@ -3139,6 +3172,7 @@
     },
   };
   window.SkyDiagramTools = {
+    selectSidebar: chooseRail,
     openObjects(options = {}) {
       if (!customizationOn()) return false;
       const available = visibleModels(),

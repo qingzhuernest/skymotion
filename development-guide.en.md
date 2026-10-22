@@ -2,6 +2,19 @@ SKY MOTION LAB · DEVELOPMENT AND MAINTENANCE
 
 # Development Guide: Complete Implementation Logic and Maintenance
 
+## Unified workbench: observe views together
+
+Lab, related diagrams and analemma share one workspace. Existing URLs still select their corresponding views, and the top navigation stays stable. In the left sidebar choose Views & layout, expand Sky & shadows, Related diagrams or Annual changes, and select a named view. Observation controls retains location, date, time and the original experiment settings.
+
+To show sky, Earth, altitude and analemma together, start with Space view, enter customization beside language, then use the add controls beside the view names in Views & layout. An included view offers removal; selecting its name still displays it or replaces the selected pane. Additional views extend below the fold after four panes.
+
+Arrangement & saved layouts is an inline sidebar section rather than an overlay. Choose one through four views, adjust arrangement and save combinations there. Collapse menu and sidebar navigation remain available. Finishing customization retains the combination and keeps observation controls usable; phones reuse the existing parameter drawer.
+
+Views share location, date and the common observation time. Analemma separately labels its fixed annual sampling clock, retaining civil-clock time by default to show equation-of-time motion. Linking to the common apparent solar clock removes that horizontal component. Editing its sampling clock or basis unlinks it without changing the shared observation time.
+
+Drag solar and lunar rise/set compasses to rotate them, or scroll/pinch to zoom. Compass labels rotate with the view while true bearing readings stay unchanged. Select an event point to jump to its time, use arrow keys to rotate, Home to reset and Escape to cancel a drag. Poles and days without events do not produce invented markers.
+
+
 For developers and maintainers: source-code responsibilities, state and time conventions, astronomical models, rendering and control animations, regression testing, AGPLv3, and publishing to both sites.
 
 1. [1. Project Goals and Planning Order](development-guide.en.html?lang=en#section-1)
@@ -93,7 +106,7 @@ The mobile parameter menu is managed centrally by page-navigation.js, using a na
 | `contact.html` | Contact the author, send feedback, and copy the email address | Welcome |
 | `geography-review.html` | Compatibility redirects for old documentation addresses | Old links |
 
-Global navigation provides Welcome, Lab, Learning Guide, Linked Diagrams, and 3D Sky. Sun pages also have a small Analemma link; the Lab and Linked Diagrams hide this Sun-specific link when switched to the Moon. The sundial is reached through the Sun lab’s linked-diagram menu. Each page organizes its parameter menu around its tasks; the menus are not required to contain identical items.
+Global navigation stays Welcome, Lab, Learning guide and 3D sky. Inside Lab, Views & layout groups sky views, related diagrams, analemma and comparison experiments. Previous diagram and analemma URLs remain compatible entry points. Changing a body or plot never changes the main navigation. The sundial retains its existing URL and solar settings entry.
 
 Sun diagrams include the subsolar point and day/night, the daily altitude curve, sunrise/sunset, and Earth’s axis and the horizon plane. Moon diagrams include phases and spatial relationships, daily illumination fraction, moonrise/moonset, and planetary encounters with the Moon. After switching bodies, a diagram that does not apply to the new body falls back to a valid default diagram.
 
@@ -107,6 +120,7 @@ Sun diagrams include the subsolar point and day/night, the daily altitude curve,
 | `workspace.js` | Sun/Moon workspace state and a Moon overlay at the same instant |
 | `menu.js` | Menu summaries, availability, and related events; retains some compatibility logic for older menus |
 | `page-navigation.js` | Current multipage workspace layout, DOM reorganization, session restoration, page navigation, and diagram routing |
+| `workbench-menu.js`, `workbench-menu.css` | Unified content hierarchy, view combinations, inline layout settings and the analemma sampling clock |
 | `time-workbench.js` | Controls and shortcut events for commonly used times, dates, directions, playback, and looping |
 | `motion.js` | The single primary animation scheduler, visual interpolation, camera easing, visible-canvas checks, and coordinated rendering |
 | `solar-date.js` | Daily Sun observations at a fixed time, annual Sun/shadow-tip paths, and their synchronization |

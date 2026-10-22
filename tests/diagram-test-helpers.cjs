@@ -1,10 +1,37 @@
 /* Use the same tab navigation a person uses in the reference workbench. */
+exports.selectDiagram = async (page, id) => {
+  const viewTab = page.locator('[data-rail-section="views"]');
+  if (await viewTab.count()) {
+    if (await page.evaluate(() => matchMedia('(max-width:760px)').matches))
+      await exports.openDrawer(page);
+    await viewTab.click();
+    const entry = page.locator(`[data-diagram="${id}"]`);
+    await entry.evaluate((node) => {
+      const group = node.closest('details');
+      if (group) group.open = true;
+    });
+    await entry.click();
+    await page.evaluate(
+      () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+    );
+    if (await page.locator('#uiParameterDrawer').evaluate((node) => node.open))
+      await page.locator('#uiDrawerClose').click();
+    await page.waitForFunction(() => !document.getElementById('uiParameterDrawer').open);
+  } else await page.locator(`[data-diagram="${id}"]`).click();
+};
 exports.openWorkbench = async (page) => {
   if (await page.evaluate(() => window.SkyCustomization?.active === false))
     await page.locator('.layout-launch').click();
   await page.evaluate(
     () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
   );
+  const references = page.locator('[data-rail-section="references"]');
+  if (await page.locator('#workbenchViews').count()) {
+    if (await page.evaluate(() => matchMedia('(max-width:760px)').matches))
+      await exports.openDrawer(page);
+    await references.click();
+    if (await page.locator('.dt-panel').isVisible()) return;
+  }
   const source = await page.locator('.dt-panel').getAttribute('data-canvas');
   if (
     !(await page.locator('.dt-panel').isVisible()) ||
@@ -41,7 +68,7 @@ exports.enterCustomization = async (page) => {
   if (!selected) return;
   const tab = page.locator(`[data-diagram="${selected}"]`);
   if (await tab.count()) {
-    await tab.click();
+    await exports.selectDiagram(page, selected);
     await page.waitForFunction(
       (selected) =>
         uiWorkspace.selected === selected &&
@@ -86,6 +113,7 @@ exports.builderAction = async (page, kind) => {
 
 /* Secondary layout actions live in the existing Layout & saved views panel. */
 exports.layoutAction = async (page, word) => {
+  const drawerWasOpen = await page.locator('#uiParameterDrawer').evaluate((node) => node.open);
   const trigger = page.locator('[data-word="options"]');
   const wasOpen = (await trigger.getAttribute('aria-expanded')) === 'true';
   if (!wasOpen) await trigger.click();
@@ -95,13 +123,49 @@ exports.layoutAction = async (page, word) => {
       : page.locator(`#workspaceOptions [data-word="${word}"]`);
   await target.click();
   if (!wasOpen) await page.keyboard.press('Escape');
+  if (!drawerWasOpen && (await page.locator('#uiParameterDrawer').evaluate((node) => node.open))) {
+    await page.locator('#uiDrawerClose').click();
+    await page.waitForFunction(() => !document.getElementById('uiParameterDrawer').open);
+  }
 };
 
 exports.openLibrary = async (page) => {
+  if (!(await page.locator('[data-dt-view=library]').isVisible()))
+    await exports.openWorkbench(page);
   await page.locator('[data-dt-view=library]').click();
   const tools = page.locator('.dt-advanced');
   if (!(await tools.evaluate((node) => node.open))) await tools.locator('summary').click();
   // The native disclosure can animate before its children become visible.
   // Wait for the tools a user can actually see, rather than only its open attribute.
   await tools.locator('[data-tool-type]').first().waitFor({ state: 'visible' });
+};
+
+// Phone editors live in the original modal parameter drawer. Close it before
+// using the main navigation or plot, just as a person returns to the canvas.
+exports.closeDrawer = async (page) => {
+  const drawer = page.locator('#uiParameterDrawer');
+  if ((await drawer.count()) && (await drawer.evaluate((node) => node.open))) {
+    await page.locator('#uiDrawerClose').click();
+    await page.waitForFunction(() => !document.getElementById('uiParameterDrawer').open);
+  }
+};
+exports.toggleCustomization = async (page) => {
+  await exports.closeDrawer(page);
+  await page.locator('.layout-launch').click();
+};
+
+exports.openDrawer = async (page) => {
+  await page.locator('#uiParameterDrawer').evaluate(async (node) => {
+    await Promise.all(node.getAnimations().map((animation) => animation.finished.catch(() => {})));
+  });
+  if (!(await page.locator('#uiParameterDrawer').evaluate((node) => node.open)))
+    await page.locator('#uiParametersButton').click();
+  await page.waitForFunction(() => {
+    const node = document.getElementById('uiParameterDrawer');
+    return (
+      node.open &&
+      node.getBoundingClientRect().left >= -1 &&
+      node.getAnimations().every((animation) => animation.playState !== 'running')
+    );
+  });
 };

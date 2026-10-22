@@ -2,6 +2,19 @@ SKY MOTION LAB · OPERATIONS AND OBSERVATION
 
 # Learning Guide: Operations and Observation Tasks
 
+## Unified workbench: observe views together
+
+Lab, related diagrams and analemma share one workspace. Existing URLs still select their corresponding views, and the top navigation stays stable. In the left sidebar choose Views & layout, expand Sky & shadows, Related diagrams or Annual changes, and select a named view. Observation controls retains location, date, time and the original experiment settings.
+
+To show sky, Earth, altitude and analemma together, start with Space view, enter customization beside language, then use the add controls beside the view names in Views & layout. An included view offers removal; selecting its name still displays it or replaces the selected pane. Additional views extend below the fold after four panes.
+
+Arrangement & saved layouts is an inline sidebar section rather than an overlay. Choose one through four views, adjust arrangement and save combinations there. Collapse menu and sidebar navigation remain available. Finishing customization retains the combination and keeps observation controls usable; phones reuse the existing parameter drawer.
+
+Views share location, date and the common observation time. Analemma separately labels its fixed annual sampling clock, retaining civil-clock time by default to show equation-of-time motion. Linking to the common apparent solar clock removes that horizontal component. Editing its sampling clock or basis unlinks it without changing the shared observation time.
+
+Drag solar and lunar rise/set compasses to rotate them, or scroll/pinch to zoom. Compass labels rotate with the view while true bearing readings stay unchanged. Select an event point to jump to its time, use arrow keys to rotate, Home to reset and Escape to cancel a drag. Poles and days without events do not produce invented markers.
+
+
 Follow the entry points, operating steps, controlled variables and recording methods to observe the Sun, Moon, shadows, sundials, analemmas and 3D Solar System. Start with the five-minute task, then choose a topic.
 
 1. [Complete your first observation](guide.en.html?lang=en#start)
@@ -50,8 +63,8 @@ At widths of 760 pixels or less, select “Parameters” beside the title to ope
 
 ### Understand buttons, switches and expandable sections
 
-- A row of buttons selects one mode or view; the blue item is the current selection. Ordinary links open another page.
-- A switch has its label on the left and control on the right. Click either to toggle it; blue means on. Long labels may wrap. Gray means off. Only a faded control that cannot be operated is disabled; the current mode's prerequisites must be met first.
+- A row of buttons chooses a mode or view; green marks the current selection. Ordinary links open another page.
+- Switch labels sit on the left, controls on the right. Click either to toggle; green means on and gray means off. Long labels may wrap. A faded, inoperable control is disabled until its prerequisites are met.
 - Arrow headings expand subordinate settings in the same panel, after peer buttons and switches. In the Sun experiment, “Display Aids” lists paths, guides and the Moon overlay first, followed by “Shadows and Gnomon-tip Paths.” In Related Diagrams, “Spatial Models” is last in the entry list.
 - Related Diagrams supplies menus appropriate to the current body and tab, hiding irrelevant Sun-path and shadow controls. Sundials and analemmas are Sun tasks.
 
@@ -59,7 +72,7 @@ At widths of 760 pixels or less, select “Parameters” beside the title to ope
 
 1. Expand “Playback and Quick Times” and choose what to advance: “Time within a Day” for one day, or “Date (Fixed Time)” for comparing dates.
 2. Set the speed and looping, then select Play on the time bar. Manually changing a date or time pauses playback so you can read the values.
-3. The Sun's date slider covers the current year; the Moon's covers the current month. Use the calendar to cross months, or change the month in playback settings. Analemma playback advances through the year, with its fixed observation time set on its own time bar.
+3. The Sun date slider covers the year; the Moon slider covers the month. Use the calendar or playback month settings to cross months. Analemma shares the bottom date control with the other plots; its fixed annual sampling clock is set in Observation controls and shown above its plot.
 4. Quick buttons for sunrise, culmination and sunset jump to events calculated for the current conditions. “None Today” means there is no corresponding geometric event that day.
 
 ### Back to undo, Forward to redo
@@ -111,9 +124,9 @@ The object menu keeps the plot name at the top; the question-mark button expands
 
 Choose Customize beside the language button. The main navigation and original location/time controls remain available. Observation controls adjusts the baseline experiment; Plot objects adds and edits references. Finish customizing closes the tools while keeping the session draft.
 
-Collapse menu stays at the top of both Observation controls and Plot objects, including while scrolling. After collapsing, use the handle on the left of the canvas to reopen it. Diagram navigation and Layout & saved views share one row in comparison mode. Choose the number of views, undo or redo layout changes, and add diagrams inside Layout & saved views. On phones, close the parameter drawer to return to the canvas.
+Collapse menu and the section tabs stay available while scrolling. Use the handle at the left of the canvas to reopen the sidebar. Under Views & layout, choose a category and a diagram. While customizing, use the control beside a diagram to add it to a combination; Arrangement & saved layouts contains view count, arrangement, proportions and saved layouts. On phones, close the original parameter drawer to return to the canvas.
 
-When desktop space allows, Layout & saved views opens inside the left parameter rail, leaving its collapse button, section tabs and chart previews visible. Close it to return to the original controls. With the sidebar collapsed or on narrow screens, the panel fits the available screen space. Choose One view, Two views, Three views or Four views directly in this panel.
+Expand Arrangement & saved layouts to reveal settings inside the left menu without covering the diagrams. Phones use the same content inside the original parameter drawer. Choose a one-, two-, three- or four-view preset, or add more diagrams from the catalog. Switch to Observation controls to adjust the baseline experiment.
 
 Date comparisons can be dragged too: start Same place · different dates, then use the selected reference’s annual slider or calendar. The range follows its year, including 366 days in leap years. This changes the comparison date, not the bottom timeline.
 
@@ -147,7 +160,7 @@ Start Place a rod · observe its shadow, then click the ground or Place at the c
 
 Drag an object base to move it, drag empty ground to orbit, and use the wheel to zoom. There is no Observe/Build mode switch. Circles, planes and dials are references; mutual object occlusion is not simulated.
 
-In Lab, choose an original view button such as Spatial view to return to the sky. Ground objects remain available and are marked Experiment ground in the object list. Lunar mode also supports ground objects, but omits solar-only city comparisons.
+Choose a view under Views & layout → Sky & shadows to return from the experiment ground to the sky. Ground objects remain available and are marked Experiment ground in the object list. Lunar mode supports ground objects, but omits solar-only city comparisons.
 
 ### Select, save and restore
 
@@ -322,7 +335,7 @@ When changing observation time, first inspect the Sun's local sky position and p
 
 Enter through “Lab → Related Diagrams → Spatial Models,” the Spatial Models menu on Related Diagrams, or the 3D Sky top link. Choose 3D Solar System for the eight planets or Sun–Earth–Moon Relationships for Earth and Moon directly. This page uses independent UTC time and does not change the original lab's location, date or time.
 
-1. Choose Solar System, pause playback and select a planet in Parameters. Read its mean solar distance, mean orbital period and radius. Use the blue “Observe … Up Close” button to inspect its sphere; select Solar System to return to the overview.
+1. Choose Solar system, pause and select a planet in Parameters. Read its mean solar distance, orbital period and radius. Use the green Observe up close button to inspect its sphere; choose Solar system to return to the overview.
 2. Drag to rotate the camera and use the wheel or pinch to zoom. Rotation changes only the viewing angle, not the date or physical coordinates. The upper-right reset button restores the current view. On a computer, arrow keys rotate and plus/minus keys zoom.
 3. Drag the date axis below the drawing or use the calendar. The calendar selects 12:00 UTC on the chosen date; continuous dragging and playback retain fractional-day time. Read the UTC time beside the date rather than interpreting it as local apparent solar time.
 4. Fix the camera, set days advanced per second and select Play to compare inner and outer planets over the same interval. With “Loop Current Year” off, playback stops at the year's date-axis endpoint. Use the calendar to select another year before a cross-year observation.

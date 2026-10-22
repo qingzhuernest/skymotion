@@ -3,7 +3,7 @@ const {chromium}=require(process.env.SKY_MOTION_PLAYWRIGHT||'playwright');
 const {addTool}=require('./diagram-test-helpers.cjs');
 const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8977/').replace(/\/?$/,'/');
 (async()=>{const b=await chromium.launch({executablePath:process.env.SKY_MOTION_CHROMIUM||'/usr/bin/chromium',args:['--no-sandbox','--disable-gpu','--use-angle=swiftshader']});const errors=[];try{
- const p=await b.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});p.on('pageerror',e=>errors.push(e.message));await p.goto(base+'diagrams.en.html#chartPanel');await require('./diagram-test-helpers.cjs').enterCustomization(p);await require('./diagram-test-helpers.cjs').openWorkbench(p);await addTool(p,'curve');
+ const p=await b.newPage({viewport:{width:390,height:600},isMobile:true,hasTouch:true});p.on('pageerror',e=>errors.push(e.message));await p.goto(base+'diagrams.en.html#chartPanel');await require('./diagram-test-helpers.cjs').enterCustomization(p);await require('./diagram-test-helpers.cjs').openWorkbench(p);await addTool(p,'curve');
  const read=()=>p.evaluate(()=>SkyDiagramTools.read('chart')),date=p.locator('.dt-fields [data-field=date]');
  await date.fill('');await date.press('Tab');await p.locator('.dt-scroll').evaluate(n=>n.scrollTop=0);const pageY=await p.evaluate(()=>scrollY);await require('./diagram-test-helpers.cjs').objectAction(p,'Save');
  assert.equal(await date.getAttribute('aria-invalid'),'true');assert(await p.locator('.dt-field-error').isVisible());assert.equal(await date.evaluate(n=>document.getElementById(n.getAttribute('aria-errormessage')).textContent.includes('1900')),true);

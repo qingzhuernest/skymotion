@@ -1418,6 +1418,7 @@ function renderLunarPipeline() {
 }
 let framePending = false;
 function render() {
+  window.SkyWorkbenchMenu?.prepare();
   prepareSolarDateMode();
   syncMotionTarget();
   updateWorkspaceLayout();
@@ -2130,7 +2131,7 @@ window.addEventListener('resize', schedule);
 render();
 
 function paintLabReferences(c, w, h, project, kind) {
-  if (document.body.dataset.page !== 'lab') return;
+  if (document.body.dataset.page !== 'lab' && !document.body.hasAttribute('data-entry-view')) return;
   const position = (time, date = state.date) =>
     kind === 'sun' && state.manual
       ? solar(state.lat, state.dec, time)

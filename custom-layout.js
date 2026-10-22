@@ -44,6 +44,8 @@
       '点击标签切换图解。在“布局与收藏”中调整顺序，保存常用组合。',
       'Switch diagrams with the tabs. Reorder and save combinations in Layout & saved views.',
     ],
+    skyPanel: ['天空与日影', 'Sky & shadows'],
+    analemmaPanel: ['日行迹', 'Analemma'],
     contextPanel: ['直射点与昼夜', 'Subsolar point'],
     chartPanel: ['全天太阳高度', 'Daily altitude'],
     riseSetPanel: ['日出日落方位', 'Sunrise and sunset'],
@@ -106,6 +108,7 @@
     removed: ['图解已移除，可撤销。', 'View removed. You can undo this change.'],
   };
   const moonWords = {
+    skyPanel: ['月球天空', 'Lunar sky'],
     contextPanel: ['月相与关系', 'Moon phase and relationships'],
     chartPanel: ['逐日照明比例', 'Daily illumination'],
     riseSetPanel: ['月出月落方位', 'Moonrise and moonset'],
@@ -139,7 +142,7 @@
       ![2, 3].includes(d.version) ||
       !Array.isArray(d.views) ||
       !d.views.length ||
-      d.views.length > 4 ||
+      d.views.length > ids.length ||
       new Set(d.views).size !== d.views.length ||
       d.views.some((id) => !ids.includes(id)) ||
       !Number.isFinite(d.ratio) ||
@@ -332,13 +335,9 @@
   panel.className = 'workspace-options';
   panel.dataset.i18nSkip = '';
   panel.hidden = true;
-  panel.setAttribute('role', 'dialog');
-  panel.setAttribute('aria-modal', 'false');
-  document.body.append(panel);
+  parameterRail.append(panel);
   optionsButton.setAttribute('aria-controls', panel.id);
   optionsButton.setAttribute('aria-expanded', 'false');
-  const nativePopover = typeof panel.showPopover === 'function';
-  if (nativePopover) panel.setAttribute('popover', 'auto');
   const panelHead = document.createElement('div');
   panelHead.className = 'workspace-options-head';
   const panelTitle = document.createElement('h2');
@@ -437,7 +436,7 @@
   const templates = [
     ['daylight', ['contextPanel', 'chartPanel']],
     ['bearings', ['riseSetPanel', 'solarGeometryPanel']],
-    ['overview', ids],
+    ['overview', ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel']],
   ];
   for (const [word, views] of templates)
     button(quick, word, () =>
@@ -663,6 +662,45 @@
   note.append(noteTitle, noteShared, noteHelp);
   document.querySelector('.ui-diagram-details[data-for=solarCompare]').prepend(note);
   const api = (window.skyWorkspacePresentation = {
+    selectView(id) {
+      if (!ids.includes(id) || !data.enabled || uiWorkspace.selected !== 'solarCompare')
+        return false;
+      change(() => {
+        const existing = data.views.indexOf(id);
+        if (existing >= 0) data.active = existing;
+        else data.views[data.active] = id;
+      });
+      return true;
+    },
+    get views() {
+      return [...data.views];
+    },
+    get editing() {
+      return customizing;
+    },
+    addView(id) {
+      if (!customizing || !ids.includes(id) || (workspaceBody === 'moon' && id === 'analemmaPanel'))
+        return false;
+      const previous = uiWorkspace.selected;
+      if (!api.active) data.views = [Object.hasOwn(cards, previous) ? previous : 'contextPanel'];
+      uiWorkspace.selected = 'solarCompare';
+      data.enabled = true;
+      change(() => {
+        if (!data.views.includes(id)) data.views.push(id);
+        data.active = data.views.indexOf(id);
+      }, 'added');
+      apply();
+      return true;
+    },
+    removeView(id) {
+      if (!customizing || data.views.length < 2) return false;
+      change(() => {
+        data.views = data.views.filter((view) => view !== id);
+        data.active = Math.min(data.active, data.views.length - 1);
+      }, 'removed');
+      return true;
+    },
+    openOptions: toggleOptions,
     active: false,
     visibleIds: new Set(),
     sync() {
@@ -683,7 +721,10 @@
         profileList.dataset.signature = '';
         queueMicrotask(apply);
       }
-      const active = customizing && data.enabled && uiWorkspace.selected === 'solarCompare',
+      if (workspaceBody === 'moon') data.views = data.views.filter((id) => id !== 'analemmaPanel');
+      data.active = Math.min(data.active, data.views.length - 1);
+      if (uiWorkspace.selected === 'solarCompare') data.enabled = true;
+      const active = data.enabled && uiWorkspace.selected === 'solarCompare',
         leaving = api.active && !active,
         entering = !api.active && active;
       api.active = active;
@@ -699,7 +740,7 @@
         mobile.matches ? [data.views[data.active]] : focused ? [focused] : data.views,
       );
       shell.classList.toggle('workspace-active', active);
-      uiViewHidden(bar, !active);
+      uiViewHidden(bar, !active || !customizing);
       uiViewHidden(launch, false);
     },
   });
@@ -771,7 +812,11 @@
     for (const [id, c] of controls) {
       labelButtons(c.handle.parentElement);
       c.select.setAttribute('aria-label', t(id));
-      for (const o of c.select.options) o.textContent = t(o.value);
+      for (const o of c.select.options) {
+        o.textContent = t(o.value);
+        o.disabled = workspaceBody === 'moon' && o.value === 'analemmaPanel';
+        o.hidden = o.disabled;
+      }
       c.select.value = id;
       c.close.disabled = data.views.length === 1;
       c.focus.disabled = data.views.length === 1;
@@ -963,6 +1008,7 @@
     plot.style.setProperty('--workspace-ratio', data.ratio + '%');
     plot.style.setProperty('--workspace-row-ratio', data.rowRatio + '%');
     plot.dataset.workspaceCount = data.views.length;
+    plot.dataset.workspaceMany = String(data.views.length > 4);
     plot.dataset.workspaceAxis = data.axis;
     plot.dataset.workspaceFeatured = String(data.featured);
     plot.dataset.workspaceFocus = String(Boolean(focused));
@@ -975,7 +1021,8 @@
     equalizeButton.disabled = data.ratio === 50 && data.rowRatio === 50;
     available.hidden = data.views.length === ids.length;
     availableButtons.forEach((b, i) => {
-      b.hidden = data.views.includes(ids[i]);
+      b.hidden =
+        data.views.includes(ids[i]) || (workspaceBody === 'moon' && ids[i] === 'analemmaPanel');
     });
     featuredGroup.hidden = data.views.length !== 3;
     proportionFields.forEach((input, i) => {
@@ -1027,7 +1074,6 @@
     if (optionOpen) {
       renderOrder();
       renderProfiles();
-      placeOptions();
     }
     renderUIWorkspace();
     if (
@@ -1039,38 +1085,12 @@
       previousFocus.focus({ preventScroll: true });
     schedule();
   }
-  function placeOptions() {
-    if (!optionOpen) return;
-    const r = optionsButton.getBoundingClientRect(),
-      compactDesktop = matchMedia('(min-width:1000px) and (min-height:650px)').matches,
-      railRect = parameterRail?.getBoundingClientRect(),
-      headerRect = parameterRail?.querySelector('.motion-menu-header')?.getBoundingClientRect(),
-      railTop = (headerRect?.bottom || railRect?.top || 0) + 8,
-      dockInRail =
-        compactDesktop &&
-        !shell.classList.contains('motion-rail-collapsed') &&
-        railRect &&
-        railRect.width > 100 &&
-        railRect.bottom - railTop > 180,
-      width = Math.min(dockInRail ? railRect.width : 360, innerWidth - 24);
-    panel.style.width = width + 'px';
-    panel.style.left = dockInRail
-      ? Math.max(12, Math.min(innerWidth - width - 12, railRect.left)) + 'px'
-      : Math.max(12, Math.min(innerWidth - width - 12, r.right - width)) + 'px';
-    const bottom = Math.min(innerHeight - 12, dockInRail ? railRect.bottom - 12 : innerHeight - 12),
-      top = Math.max(12, Math.min(dockInRail ? railTop : r.bottom + 8, bottom - 150)),
-      availableHeight = bottom - top;
-    panel.style.top = top + 'px';
-    panel.style.maxHeight =
-      Math.min(availableHeight, compactDesktop ? 520 : availableHeight) + 'px';
-  }
   function closeOptions(restore = false) {
     if (!optionOpen) return;
     optionOpen = false;
     editingProfile = null;
     statusKey = '';
     optionsButton.setAttribute('aria-expanded', 'false');
-    if (nativePopover && panel.matches(':popover-open')) panel.hidePopover();
     panel.hidden = true;
     if (restore) optionsButton.focus();
   }
@@ -1086,25 +1106,10 @@
     labels();
     renderOrder();
     renderProfiles();
-    placeOptions();
     optionsButton.setAttribute('aria-expanded', 'true');
-    if (nativePopover) panel.showPopover();
+    window.SkyWorkbenchMenu?.openLayout();
     panel.querySelector('button:not(:disabled)')?.focus();
   }
-  if (nativePopover)
-    panel.addEventListener('toggle', (e) => {
-      if (e.newState === 'closed' && optionOpen) {
-        editingProfile = null;
-        optionOpen = false;
-        statusKey = '';
-        panel.hidden = true;
-        optionsButton.setAttribute('aria-expanded', 'false');
-      }
-    });
-  document.addEventListener('pointerdown', (e) => {
-    if (optionOpen && !panel.contains(e.target) && !optionsButton.contains(e.target))
-      closeOptions();
-  });
   tabs.addEventListener('keydown', (e) => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
     e.preventDefault();
@@ -1142,8 +1147,10 @@
         data.enabled = true;
       } else {
         customizing = false;
-        data.enabled = false;
-        uiWorkspace.selected = normalSelection || 'contextPanel';
+        if (uiWorkspace.selected !== 'solarCompare') {
+          data.enabled = false;
+          uiWorkspace.selected = normalSelection || 'skyPanel';
+        }
       }
       const hash = '#' + uiWorkspace.selected;
       if (location.hash !== hash) history.replaceState(history.state, '', hash);
@@ -1326,9 +1333,7 @@
   });
   window.addEventListener('resize', () => {
     cancel();
-    placeOptions();
   });
-  if (parameterRail) new ResizeObserver(placeOptions).observe(parameterRail);
   document.addEventListener('skymotion:language', () => {
     labels();
     if (optionOpen) {

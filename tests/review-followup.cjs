@@ -29,7 +29,7 @@ try{
  for(const route of ['diagrams.html','diagrams.en.html']){
   await q.goto(base+route);await q.waitForSelector('.language-toggle:not(:disabled)');
   await q.locator('button[data-body="moon"]').click();
-  await q.locator('[data-diagram="companionModule"]').click();
+  await require('./diagram-test-helpers.cjs').selectDiagram(q, 'companionModule');
   assert.equal(await q.locator('#companionClock').count(),0,'Redundant time shortcut is removed');
   await q.setViewportSize({width:1280,height:900});
   const dateBefore=await q.evaluate(()=>state.date);
@@ -44,6 +44,7 @@ try{
    await q.waitForFunction(width=>Boolean(document.querySelector('.ui-parameters').closest('#uiParameterDrawer'))===(width<=760),width);
    if(width<=760){if(!await q.locator('#uiParameterDrawer').evaluate(d=>d.open))await q.locator('#uiParametersButton').click();}
    else if(await q.locator('.motion-menu-edge').isVisible())await q.locator('.motion-menu-edge').click();
+   await q.locator('[data-rail-section=conditions]').click();
    await q.locator('#companionPlanet').waitFor({state:'visible'});
    const alignment=await q.evaluate(()=>{
     const rect=s=>document.querySelector(s).getBoundingClientRect().toJSON();
@@ -66,7 +67,7 @@ try{
    assert.equal(theme.status.color,theme.primary);
    await q.evaluate(()=>{const d=document.getElementById('uiParameterDrawer');if(d?.open)d.close()});
   }
-  await q.locator('[data-diagram="chartPanel"]').click();
+  await require('./diagram-test-helpers.cjs').selectDiagram(q, 'chartPanel');
   for(const width of [1280,960,390]){
    await q.setViewportSize({width,height:900});
    const marker=await q.evaluate(()=>{
