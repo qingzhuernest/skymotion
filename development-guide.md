@@ -448,7 +448,7 @@ language.js 负责共享语言状态，以 skymotion-language 为 localStorage �
 
 中文使用本地 SkyMotion Reading；英文使用本地 SkyMotion Charter。首屏预加载当前语言的常规和粗体；Charter 的斜体与粗斜体文件也随站点分发，当前样式中的斜体可由浏览器合成。Charter 按 Bitstream 原始通知允许使用和再分发，完整通知在 fonts/LICENSE-Charter.txt；Reading 的 OFL 通知随字体保留。语言、字体和文档下载同时用于正式站与镜像。
 
-静态英文入口由 scripts/prerender-pages.py 从原始 HTML 与翻译字典生成，共有12个 .en.html 对应页；生成过程保留节点 ID、数字与表单值，以及原科学脚本。中英文共24份页面 HTML 合计约1.5MB，体积会随内容变化，样式、脚本、字体和影像仍共享。language-data.js 同步提供动态标签字典，data-i18n-cn 元数据支持原位恢复中文并保留实验状态；page-boot.js 选择静态语言入口。page-boot.js 在文档头部立即加载所选语言的常规与粗体字体，字体就绪即可显示静态页面，不等待实验初始化；page-cache.js 在首屏字体与当前页面加载完成后，以最多两路并发预热整站 HTML、脚本、样式、字体、图片、数据和文档下载的普通 HTTP 缓存，不运行隐藏实验或三维场景，也不使用 Service Worker；常规托管的访问要求不变。这套预渲染与缓存安排用于正式发布。预热需要网络与时间，不能保证首次访问时全部资源已在缓存，也不保证离线可用。
+静态英文入口由 scripts/prerender-pages.py 从原始 HTML 与翻译字典生成，共有13个 .en.html 对应页；生成过程保留节点 ID、数字与表单值，以及原科学脚本。中英文共26份页面 HTML 合计约1.5MB，体积会随内容变化，样式、脚本、字体和影像仍共享。language-data.js 同步提供动态标签字典，data-i18n-cn 元数据支持原位恢复中文并保留实验状态；page-boot.js 选择静态语言入口。page-boot.js 在文档头部立即加载所选语言的常规与粗体字体，字体就绪即可显示静态页面，不等待实验初始化；page-cache.js 在首屏字体与当前页面加载完成后，以最多两路并发预热整站 HTML、脚本、样式、字体、图片、数据和文档下载的普通 HTTP 缓存，不运行隐藏实验或三维场景，也不使用 Service Worker；常规托管的访问要求不变。这套预渲染与缓存安排用于正式发布。预热需要网络与时间，不能保证首次访问时全部资源已在缓存，也不保证离线可用。
 
 ### 统一参数行与菜单顺序
 
@@ -501,11 +501,16 @@ interface-motion.js为受控details添加motion-disclosure。controls的几何�
 | tests/deployment-paths.cjs | 根路径与项目子路径的资源清单、404恢复资源 |
 | tests/session-validation.cjs | 字段范围、旧缓存兼容、版本、日期与存储降级 |
 | tests/storage-recovery.cjs | 损坏缓存与禁用存储后的实际页面和时间控件 |
-| tests/bilingual-pages.cjs | 12组已提交中英文页面的结构、属性、表单与脚本 |
+| tests/bilingual-pages.cjs | 13组已提交中英文页面的结构、属性、表单与脚本 |
 | tests/document-entrance.cjs | 三篇文档的完整双语对话、入口配色、单次访问、跳过与恢复 |
 | tests/welcome-opening.cjs | 欢迎页星座开场、双语显露、返回、点击开始与减少动态效果 |
 | tests/custom-layout.cjs | 布局拖动、大小调整、撤销、恢复、保存、手机与科学参数 |
 | tests/review-followup.cjs | 损坏历史恢复、异常解锁、手机语言重试与生成内容新鲜度 |
+| tests/guided-experiments.cjs | 实验目标、独立滑条、整段撤销、Esc取消、城市选择、闰日及物体参数 |
+| tests/menu-simplicity.cjs | 收起菜单常驻、精简布局入口、四类页面与手机溢出 |
+| tests/city-comparison-math.cjs | 同一瞬间与当地太阳时、日期边界、极点及语言缓存 |
+| tests/analemma-references.cjs | 日行迹对照、时间依据、时区及纬度语义 |
+| tests/ui-palette.cjs | 共享颜色变量、旧蓝色排查及沉浸三维主题一致性 |
 
 ### 运行方式
 
