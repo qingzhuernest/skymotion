@@ -22,5 +22,9 @@ exports.layoutAction = async (page, word) => {
 
 exports.openLibrary = async page => {
   await page.locator('[data-dt-view=library]').click();
-  await page.locator('.dt-advanced').evaluate(node => node.open = true);
+  const tools = page.locator('.dt-advanced');
+  if (!await tools.evaluate(node => node.open)) await tools.locator('summary').click();
+  // The native disclosure can animate before its children become visible.
+  // Wait for the tools a user can actually see, rather than only its open attribute.
+  await tools.locator('[data-tool-type]').first().waitFor({ state: 'visible' });
 };
