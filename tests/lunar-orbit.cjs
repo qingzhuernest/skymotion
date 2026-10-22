@@ -46,7 +46,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     const p = await b.newPage({ viewport: { width: 1280, height: 1000 } }),
       errors = [];
     p.on('pageerror', (e) => errors.push(e.message));
-    await p.goto(base + 'diagrams.html#lunarOrbit');
+    await p.goto(base + 'diagrams.html#lunarOrbit', { waitUntil: 'domcontentloaded' });
     await p.waitForSelector('#lunarOrbitPanel iframe[src]');
     const frame = await (await p.locator('#lunarOrbitPanel iframe').elementHandle()).contentFrame();
     await frame.waitForFunction(() => !!window.LunarOrbitLesson);

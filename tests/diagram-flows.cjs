@@ -256,11 +256,8 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8974/').repla
     });
     await c.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     assert.notDeepEqual(await m.evaluate(() => SkyDiagramTools.read('chart')[0]), original);
-    await m.locator('.dt-collapse').click();
-    await require('./diagram-test-helpers.cjs').closeDrawer(m);
     await addTool(m, 'emphasis');
     await m.locator('.dt-collapse').click();
-    await require('./diagram-test-helpers.cjs').closeDrawer(m);
     assert(await m.locator('.dt-place').isVisible());
     assert(await m.locator('.dt-hint').isVisible());
     await m.locator('.dt-place').click();
