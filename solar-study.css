@@ -134,6 +134,9 @@
 .solar-study-drawings {
   display: flex;
   align-items: center;
+  flex: 1 0 auto;
+  padding: 12px 0;
+  min-height: 0;
   gap: 12px;
 }
 .solar-study-card {
@@ -151,6 +154,7 @@
   display: block;
   width: 100%;
   overflow: visible;
+  max-height: 360px;
   font-family: inherit;
 }
 .solar-study-readings {
@@ -249,43 +253,25 @@
     padding: 14px;
   }
 }
-/* Let the drawings keep their intrinsic height instead of overflowing a shrunken flex row. */
-.solar-study-heading {
-  height: auto;
-  max-width: none;
-}
-.solar-study-drawings {
-  flex: 1 0 auto;
-  min-height: 0;
-  padding: 12px 0;
-}
-.solar-study-card svg {
-  max-height: 300px;
-}
-.solar-study-panel[data-mode='time'] .solar-study-card svg {
-  max-height: clamp(300px, 42dvh, 480px);
-}
-@media (max-width: 600px) {
-  .solar-study-card svg {
-    max-height: 300px;
-  }
-  .solar-study-panel[data-mode='time'] .solar-study-card svg {
-    max-height: clamp(300px, 42dvh, 480px);
-  }
-  .solar-study-panel[data-mode='place'] .solar-study-drawings {
-    padding: 0;
-  }
-}
 @media (pointer: coarse) {
   .solar-study-controls :is(button, input, select) {
     min-height: 44px;
   }
 }
-
 @media (min-width: 761px) {
   .ui-plot > .solar-study-panel {
     display: grid;
     grid-template-rows: auto minmax(220px, 1fr) auto;
+  }
+  .solar-study-panel[data-mode='time'] {
+    grid-template-columns: minmax(0, 1fr) minmax(190px, 230px);
+    grid-template-rows: auto minmax(280px, 1fr);
+    column-gap: 24px;
+  }
+  .solar-study-heading {
+    height: auto;
+    max-width: none;
+    grid-column: 1 / -1;
   }
   .solar-study-drawings {
     min-height: 0;
@@ -301,11 +287,54 @@
   .solar-study-card figcaption {
     flex: none;
   }
-  .solar-study-card svg,
-  .solar-study-panel[data-mode='time'] .solar-study-card svg {
+  .solar-study-card svg {
     flex: 1;
     min-height: 0;
     height: 0;
     max-height: none;
+  }
+  .solar-study-panel[data-mode='time'] .solar-study-readings {
+    align-self: center;
+  }
+  .solar-study-panel[data-mode='time'] table,
+  .solar-study-panel[data-mode='time'] caption {
+    display: block;
+    width: 100%;
+  }
+  .solar-study-panel[data-mode='time'] thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .solar-study-panel[data-mode='time'] tbody {
+    display: grid;
+    gap: 14px;
+  }
+  .solar-study-panel[data-mode='time'] tr {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .solar-study-panel[data-mode='time'] :is(th, td) {
+    border: 0;
+    padding: 1px 0;
+    white-space: normal;
+  }
+  .solar-study-panel[data-mode='time'] tbody th {
+    color: var(--design-night-muted);
+  }
+  .solar-study-panel[data-mode='time'] tbody td:nth-child(2) {
+    font-size: 15px;
+  }
+  .solar-study-panel[data-mode='time'] tbody td:nth-child(n + 3) {
+    font-size: 12px;
+  }
+  .solar-study-panel[data-mode='time'] tbody tr + tr {
+    border-top: 1px solid var(--design-night-line);
+    padding-top: 12px;
+  }
+  .solar-study-panel[data-mode='time'] td[data-label]::before {
+    content: attr(data-label) ' ';
   }
 }

@@ -119,6 +119,8 @@ Dragging previews continuously and commits one change on release, so one undo re
 
 Expand Add individual tools for reference lines, measurements, snapshots and text. The question-mark help explains the current plot’s time rules, projection or teaching scale and links to the guide. City list swatches match their comparison colors; overlapping comparison labels try alternative positions.
 
+In Place & time, choose Compare times or Compare places. For times, drag the bottom timeline to move the current, earlier and later markers together; Before / after the current time sets the interval. Desktop readings sit beside the diagram and show each time, altitude and azimuth. For places, select cities A and B, then refine their coordinates with the sliders. These changes affect only comparison sites; the baseline stays unchanged. Press Escape during a drag to cancel.
+
 ### Example 1: compare cities at one time
 
 In the solar Lab, enter customization, choose Add object, select Same instant · different places and a comparison city, then Start this experiment. The comparison uses one shared UTC instant and selects the new city; the baseline location, date and bottom timeline stay unchanged.
