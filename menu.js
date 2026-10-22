@@ -71,8 +71,25 @@ function initMenu() {
     dock.append(controls);
     document.body.classList.remove('menu-open');
     $('settingsBtn').setAttribute('aria-expanded', 'false');
-    if (menuReturnFocus?.isConnected) menuReturnFocus.focus({ preventScroll: true });
+    const returnFocus = menuReturnFocus;
     menuReturnFocus = null;
+    requestAnimationFrame(() => {
+      const canFocus = (node) =>
+        node?.isConnected && !node.closest('[inert]') && node.getClientRects().length > 0;
+      if (canFocus(returnFocus)) {
+        returnFocus.focus({ preventScroll: true });
+        return;
+      }
+      const fallback = [
+        '.motion-menu-edge:not([hidden])',
+        '.motion-menu-grip:not([hidden])',
+        '#uiParametersButton:not([hidden])',
+        '#settingsBtn:not([hidden])',
+      ]
+        .map((selector) => document.querySelector(selector))
+        .find(canFocus);
+      fallback?.focus({ preventScroll: true });
+    });
     schedule();
   });
   dialog.addEventListener('click', (e) => {

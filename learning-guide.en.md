@@ -113,11 +113,17 @@ Choose Customize beside the language button. The main navigation and original lo
 
 Collapse menu stays at the top of both Observation controls and Plot objects, including while scrolling. After collapsing, use the handle on the left of the canvas to reopen it. Diagram navigation and Layout & saved views share one row in comparison mode. Choose the number of views, undo or redo layout changes, and add diagrams inside Layout & saved views. On phones, close the parameter drawer to return to the canvas.
 
+When desktop space allows, Layout & saved views opens inside the left parameter rail, leaving its collapse button, section tabs and chart previews visible. Close it to return to the original controls. With the sidebar collapsed or on narrow screens, the panel fits the available screen space. Choose One view, Two views, Three views or Four views directly in this panel.
+
 Date comparisons can be dragged too: start Same place · different dates, then use the selected reference’s annual slider or calendar. The range follows its year, including 366 days in leap years. This changes the comparison date, not the bottom timeline.
 
 Dragging previews continuously and commits one change on release, so one undo restores the whole drag. Arrow keys fine-tune sliders; Escape cancels an active drag and Ctrl/Cmd+Z undoes. Visible keyboard focus identifies the active control.
 
 Expand Add individual tools for reference lines, measurements, snapshots and text. The question-mark help explains the current plot’s time rules, projection or teaching scale and links to the guide. City list swatches match their comparison colors; overlapping comparison labels try alternative positions.
+
+Observe in the lower-right corner of 3D Space opens camera and display settings. In immersive mode, Escape first closes an open Observe menu; press it again to leave immersive mode. When the phone parameter drawer returns to desktop width, keyboard focus moves to a visible menu control.
+
+If a shared instant maps a comparison location outside the supported years 1900–2100, that location is unavailable and its solar point and daily path are omitted. Adjust the date or longitude to resume the comparison.
 
 In Place & time, choose Compare times or Compare places. For times, drag the bottom timeline to move the current, earlier and later markers together; Before / after the current time sets the interval. Desktop readings sit beside the diagram and show each time, altitude and azimuth. For places, select cities A and B, then refine their coordinates with the sliders. These changes affect only comparison sites; the baseline stays unchanged. Press Escape during a drag to cancel.
 
@@ -148,6 +154,8 @@ In Lab, choose an original view button such as Spatial view to return to the sky
 Select an object name to view its properties. Movable objects have handles; drag a handle to adjust it. Empty space retains the original camera gestures. Locked objects can be selected but cannot be dragged. Escape cancels placement or a drag.
 
 The row-end More menu contains Save plot objects, Duplicate and Delete. Drafts last for this session. Save plot objects stores the source plot references on this device; Save ground scene stores physical objects; Layout & saved views stores arrangements only. These saves do not overwrite one another or sync automatically to other devices.
+
+Loading older saves normalizes duplicate object IDs and invalid properties, retaining up to 40 valid plot references. If a normalization notice appears, review the restored objects and save them. Invalid ground measurements are ignored while other valid objects remain usable.
 
 Plans can save, export or import the current plot references. Imports offer merge or replace; clearing is undoable. Download JSON for backup: local saves do not automatically sync across browsers or devices. On phones, use Back to object list from properties; Add object stays available above.
 

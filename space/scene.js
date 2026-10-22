@@ -50,8 +50,7 @@
   try {
     const saved = SkyMotionSession.read();
     const date = saved?.[saved.body || 'sun']?.date;
-    if (SkyMotionSession.validDate(date))
-      initial = new Date(date + 'T12:00:00Z');
+    if (SkyMotionSession.validDate(date)) initial = new Date(date + 'T12:00:00Z');
   } catch {}
   if (
     !Number.isFinite(initial.getTime()) ||
@@ -70,8 +69,10 @@
   try {
     const saved = SkyMotionSession.read();
     const source = saved?.[saved.body === 'moon' ? 'moon' : 'sun'];
-    if (SkyMotionSession.inRange(source?.lat, -90, 90)) observer.lat = Math.max(-90, Math.min(90, source.lat));
-    if (SkyMotionSession.inRange(source?.lon, -180, 180)) observer.lon = Math.max(-180, Math.min(180, source.lon));
+    if (SkyMotionSession.inRange(source?.lat, -90, 90))
+      observer.lat = Math.max(-90, Math.min(90, source.lat));
+    if (SkyMotionSession.inRange(source?.lon, -180, 180))
+      observer.lon = Math.max(-180, Math.min(180, source.lon));
   } catch {}
   $('observerLat').value = observer.lat;
   $('observerLon').value = observer.lon;
@@ -325,6 +326,7 @@
   });
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && $('sceneTools').open) {
+      event.preventDefault();
       $('sceneTools').open = false;
       $('sceneTools').querySelector('summary').focus();
     }
@@ -1065,8 +1067,49 @@
         });
     }
     if (window.SkyDiagramTools && !comparing) {
-      const project=p=>{const q=new THREE.Vector3(...p).project(camera);return {x:(q.x+1)*stage.clientWidth/2,y:(1-q.y)*stage.clientHeight/2,hidden:q.z>1||q.z< -1};};
-      window.SkyDiagramTools.overlay('solar-system',{type:'space',pause,canvas:renderer.domElement,body:'space',date:utcDate().toISOString().slice(0,10),time:720,lat:0,lon:0,project,planet:id=>{const q=physical.planets.find(p=>p.id===id);if(!q)return null;const position=planets[Model.bodies.findIndex(p=>p.id===id)].mesh.getWorldPosition(new THREE.Vector3());return {physical:[q.physical.x,q.physical.y,q.physical.z],display:[position.x,position.y,position.z]};},captureCamera:()=>({azimuth,elevation,distance:targetDistance,selected,view,inspectingMoon}),restoreCamera:q=>{if(!q)return;window.SolarSpaceView.restoreSelection({...q,cameraPreset:'custom',fields:[]});},redraw:invalidate});
+      const project = (p) => {
+        const q = new THREE.Vector3(...p).project(camera);
+        return {
+          x: ((q.x + 1) * stage.clientWidth) / 2,
+          y: ((1 - q.y) * stage.clientHeight) / 2,
+          hidden: q.z > 1 || q.z < -1,
+        };
+      };
+      window.SkyDiagramTools.overlay('solar-system', {
+        type: 'space',
+        pause,
+        canvas: renderer.domElement,
+        body: 'space',
+        date: utcDate().toISOString().slice(0, 10),
+        time: 720,
+        lat: 0,
+        lon: 0,
+        project,
+        planet: (id) => {
+          const q = physical.planets.find((p) => p.id === id);
+          if (!q) return null;
+          const position = planets[
+            Model.bodies.findIndex((p) => p.id === id)
+          ].mesh.getWorldPosition(new THREE.Vector3());
+          return {
+            physical: [q.physical.x, q.physical.y, q.physical.z],
+            display: [position.x, position.y, position.z],
+          };
+        },
+        captureCamera: () => ({
+          azimuth,
+          elevation,
+          distance: targetDistance,
+          selected,
+          view,
+          inspectingMoon,
+        }),
+        restoreCamera: (q) => {
+          if (!q) return;
+          window.SolarSpaceView.restoreSelection({ ...q, cameraPreset: 'custom', fields: [] });
+        },
+        redraw: invalidate,
+      });
     }
     frames++;
     labelBounds = [];

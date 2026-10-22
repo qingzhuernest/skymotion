@@ -1,29 +1,106 @@
 /* Use the same tab navigation a person uses in the reference workbench. */
-exports.openWorkbench=async(page)=>{if(await page.evaluate(()=>window.SkyCustomization?.active===false))await page.locator('.layout-launch').click();await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));const source=await page.locator('.dt-panel').getAttribute('data-canvas');if(!await page.locator('.dt-panel').isVisible()||source&&!await page.locator('#'+source).isVisible())await page.locator('.diagram-tool-launch:visible').first().click();};
-exports.addTool=async(page,type)=>{await exports.openWorkbench(page);const fold=page.locator('.dt-collapse');if(await fold.getAttribute('aria-expanded')==='false')await fold.click();if(await page.locator('[data-dt-view=library]').getAttribute('aria-current')!=='page')await page.locator('[data-dt-view=library]').click();await page.locator('.dt-advanced').evaluate(node => node.open = true);if(type==='build')await page.locator('[data-build-kind=rod]').click();else await page.locator(`[data-tool-type="${type}"]`).click();};
+exports.openWorkbench = async (page) => {
+  if (await page.evaluate(() => window.SkyCustomization?.active === false))
+    await page.locator('.layout-launch').click();
+  await page.evaluate(
+    () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+  );
+  const source = await page.locator('.dt-panel').getAttribute('data-canvas');
+  if (
+    !(await page.locator('.dt-panel').isVisible()) ||
+    (source && !(await page.locator('#' + source).isVisible()))
+  )
+    await page.locator('.diagram-tool-launch:visible').first().click();
+};
+exports.addTool = async (page, type) => {
+  await exports.openWorkbench(page);
+  const fold = page.locator('.dt-collapse');
+  if ((await fold.getAttribute('aria-expanded')) === 'false') await fold.click();
+  if ((await page.locator('[data-dt-view=library]').getAttribute('aria-current')) !== 'page')
+    await page.locator('[data-dt-view=library]').click();
+  await page.locator('.dt-advanced').evaluate((node) => (node.open = true));
+  if (type === 'build') await page.locator('[data-build-kind=rod]').click();
+  else await page.locator(`[data-tool-type="${type}"]`).click();
+};
 
-exports.enterCustomization=async(page)=>{if(!await page.locator('.layout-launch').count())return;await page.waitForFunction(()=>!!window.SkyCustomization);if(await page.evaluate(()=>SkyCustomization.active))return;const selected=await page.evaluate(()=>typeof uiWorkspace==='undefined'||!uiWorkspace?null:location.hash==='#sceneBuilder'?'sceneBuilder':uiWorkspace.selected);await page.locator('.layout-launch').click();await page.waitForTimeout(60);if(await page.locator('.dt-panel').isVisible())await page.locator('.dt-head button').last().click();if(!selected)return;const tab=page.locator(`[data-diagram="${selected}"]`);if(await tab.count()){await tab.click();await page.waitForFunction(selected=>uiWorkspace.selected===selected&&(selected==='solarCompare'?skyWorkspacePresentation.active:!skyWorkspacePresentation.active),selected);}};
+exports.enterCustomization = async (page) => {
+  if (!(await page.locator('.layout-launch').count())) return;
+  await page.waitForFunction(() => !!window.SkyCustomization);
+  if (await page.evaluate(() => SkyCustomization.active)) return;
+  const selected = await page.evaluate(() =>
+    typeof uiWorkspace === 'undefined' || !uiWorkspace
+      ? null
+      : location.hash === '#sceneBuilder'
+        ? 'sceneBuilder'
+        : uiWorkspace.selected,
+  );
+  await page.locator('.layout-launch').click();
+  await page.waitForTimeout(60);
+  if (await page.locator('.dt-panel').isVisible())
+    await page.locator('.dt-head button').last().click();
+  if (!selected) return;
+  const tab = page.locator(`[data-diagram="${selected}"]`);
+  if (await tab.count()) {
+    await tab.click();
+    await page.waitForFunction(
+      (selected) =>
+        uiWorkspace.selected === selected &&
+        (selected === 'solarCompare'
+          ? skyWorkspacePresentation.active
+          : !skyWorkspacePresentation.active),
+      selected,
+    );
+  }
+};
 
-exports.objectAction=async(page,name)=>{if(!await page.locator('#dt-object-menu').isVisible()){const tab=page.locator('[data-dt-view=objects]');if(await tab.isVisible())await tab.click();if(await page.locator('.dt-back-list').isVisible())await page.locator('.dt-back-list').click();await page.locator('.dt-more').click();}await page.getByRole('menuitem',{name:name==='保存'?'保存本图对象':name==='Save'?'Save plot objects':name,exact:true}).click();};
+exports.objectAction = async (page, name) => {
+  if (!(await page.locator('#dt-object-menu').isVisible())) {
+    const tab = page.locator('[data-dt-view=objects]');
+    if (await tab.isVisible()) await tab.click();
+    if (await page.locator('.dt-back-list').isVisible())
+      await page.locator('.dt-back-list').click();
+    await page.locator('.dt-more').click();
+  }
+  await page
+    .getByRole('menuitem', {
+      name: name === '保存' ? '保存本图对象' : name === 'Save' ? 'Save plot objects' : name,
+      exact: true,
+    })
+    .click();
+};
 
-exports.builderAction=async(page,kind)=>{const selected=page.locator('.sb-object[aria-pressed=true]').locator('..').locator('.sb-row-more');await selected.click();const en=await page.evaluate(()=>document.documentElement.lang==='en');await page.getByRole('menuitem',{name:kind==='copy'?(en?'Duplicate':'复制'):(en?'Delete':'删除'),exact:true}).click();};
+exports.builderAction = async (page, kind) => {
+  const selected = page
+    .locator('.sb-object[aria-pressed=true]')
+    .locator('..')
+    .locator('.sb-row-more');
+  await selected.click();
+  const en = await page.evaluate(() => document.documentElement.lang === 'en');
+  await page
+    .getByRole('menuitem', {
+      name: kind === 'copy' ? (en ? 'Duplicate' : '复制') : en ? 'Delete' : '删除',
+      exact: true,
+    })
+    .click();
+};
 
 /* Secondary layout actions live in the existing Layout & saved views panel. */
 exports.layoutAction = async (page, word) => {
   const trigger = page.locator('[data-word="options"]');
-  const wasOpen = await trigger.getAttribute('aria-expanded') === 'true';
+  const wasOpen = (await trigger.getAttribute('aria-expanded')) === 'true';
   if (!wasOpen) await trigger.click();
-  const target = word === 'add'
-    ? page.locator('.workspace-add-choices button:visible').first()
-    : page.locator(`[data-word="${word}"]`);
+  const target =
+    word === 'add'
+      ? page.locator('.workspace-add-choices button:visible').first()
+      : page.locator(`#workspaceOptions [data-word="${word}"]`);
   await target.click();
   if (!wasOpen) await page.keyboard.press('Escape');
 };
 
-exports.openLibrary = async page => {
+exports.openLibrary = async (page) => {
   await page.locator('[data-dt-view=library]').click();
   const tools = page.locator('.dt-advanced');
-  if (!await tools.evaluate(node => node.open)) await tools.locator('summary').click();
+  if (!(await tools.evaluate((node) => node.open))) await tools.locator('summary').click();
   // The native disclosure can animate before its children become visible.
   // Wait for the tools a user can actually see, rather than only its open attribute.
   await tools.locator('[data-tool-type]').first().waitFor({ state: 'visible' });

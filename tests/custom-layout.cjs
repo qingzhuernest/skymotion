@@ -27,8 +27,15 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
       stored = () =>
         p.evaluate(() => JSON.parse(localStorage.getItem('skymotion-workspace-v3-wide')));
     await p.locator('.layout-launch').click();
-    await p.locator('[data-diagram=solarCompare]').click();await p.waitForFunction(()=>skyWorkspacePresentation.active);
-    await p.waitForFunction(()=>skyWorkspacePresentation.active && [...document.querySelectorAll('.ui-diagram-card')].filter(n=>n.getBoundingClientRect().width>0&&n.getBoundingClientRect().height>0).length===2);
+    await p.locator('[data-diagram=solarCompare]').click();
+    await p.waitForFunction(() => skyWorkspacePresentation.active);
+    await p.waitForFunction(
+      () =>
+        skyWorkspacePresentation.active &&
+        [...document.querySelectorAll('.ui-diagram-card')].filter(
+          (n) => n.getBoundingClientRect().width > 0 && n.getBoundingClientRect().height > 0,
+        ).length === 2,
+    );
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 2);
     assert(await p.locator('.ui-timeline-host').isVisible());
     assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
@@ -66,6 +73,14 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     assert.deepEqual((await stored()).views, ['contextPanel', 'chartPanel']);
     await require('./diagram-test-helpers.cjs').layoutAction(p, 'four');
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 4);
+    await require('./diagram-test-helpers.cjs').layoutAction(p, 'three');
+    assert.equal(await p.locator('.ui-diagram-card:visible').count(), 3);
+    assert.equal(
+      await p.locator('.workspace-presets [data-word="three"]').getAttribute('aria-pressed'),
+      'true',
+    );
+    await require('./diagram-test-helpers.cjs').layoutAction(p, 'undo');
+    assert.equal(await p.locator('.ui-diagram-card:visible').count(), 4);
     await require('./diagram-test-helpers.cjs').layoutAction(p, 'one');
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 1);
     assert(await p.locator('.ui-diagram-card:visible [data-word="close"]').isDisabled());
@@ -75,14 +90,35 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await p.locator('.ui-diagram-card:visible [data-word="close"]').first().click();
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 1);
     await p.locator('[data-word="options"]').click();
+    const optionsBox = await p.locator('.workspace-options').boundingBox();
+    const railBox = await p.locator('.ui-parameters').boundingBox();
+    const menuHeaderBox = await p.locator('.motion-menu-header').boundingBox();
+    const plotBox = await p.locator('.ui-plot').boundingBox();
+    assert.equal(Math.round(optionsBox.x), Math.round(railBox.x));
+    assert(optionsBox.width <= railBox.width + 1, 'Desktop options dock in the parameter rail');
+    assert(
+      optionsBox.x + optionsBox.width <= plotBox.x,
+      'Options leave the chart preview unobscured',
+    );
+    assert(optionsBox.height <= 520, 'Desktop options remain bounded and internally scrollable');
+    assert(
+      optionsBox.y >= menuHeaderBox.y + menuHeaderBox.height,
+      'Persistent sidebar navigation remains visible',
+    );
+    assert(
+      optionsBox.y + optionsBox.height <= railBox.y + railBox.height,
+      'Options fit within the sidebar',
+    );
     await p.locator('[data-word="reset"]').click();
     await p.keyboard.press('Escape');
     assert.deepEqual((await stored()).views, ['contextPanel', 'chartPanel']);
     assert.deepEqual(await science(), initial);
     await p.reload();
     await p.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
-    assert.equal(await p.evaluate(()=>SkyCustomization.active),false);
-    await p.locator('.layout-launch').click();await p.locator('[data-diagram=solarCompare]').click();await p.waitForFunction(()=>skyWorkspacePresentation.active);
+    assert.equal(await p.evaluate(() => SkyCustomization.active), false);
+    await p.locator('.layout-launch').click();
+    await p.locator('[data-diagram=solarCompare]').click();
+    await p.waitForFunction(() => skyWorkspacePresentation.active);
     assert(await p.locator('.workspace-active').isVisible());
     // Repeated renders must not reparent scientific settings or rewrite translated tab labels.
     const writes = await p.evaluate(async () => {
@@ -114,11 +150,15 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await p.setViewportSize({ width: 390, height: 844 });
     await p.waitForTimeout(250);
     await p.locator('.layout-launch').click();
-    await p.locator('[data-diagram=solarCompare]').click();await p.waitForFunction(()=>skyWorkspacePresentation.active);
+    await p.locator('[data-diagram=solarCompare]').click();
+    await p.waitForFunction(() => skyWorkspacePresentation.active);
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 1);
     assert(await p.locator('.workspace-tabs').isVisible());
     await p.locator('.workspace-tabs button').nth(1).click();
     assert(await p.locator('#chart').isVisible());
+    await require('./diagram-test-helpers.cjs').layoutAction(p, 'three');
+    assert.equal(await p.locator('.ui-diagram-card:visible').count(), 1);
+    assert.equal(await p.locator('.workspace-tabs button').count(), 3);
     await require('./diagram-test-helpers.cjs').layoutAction(p, 'four');
     assert.equal(await p.locator('.ui-diagram-card:visible').count(), 1);
     assert.equal(await p.locator('.workspace-tabs button').count(), 4);
@@ -149,7 +189,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     );
     assert.equal(await p.locator('.workspace-active').count(), 1);
     await p.locator('.workspace-tabs button').first().click();
-    await p.locator('#phaseContent').waitFor({state:'visible'});
+    await p.locator('#phaseContent').waitFor({ state: 'visible' });
     assert(await p.locator('#phaseContent').isVisible());
     assert.equal(await p.locator('.layout-launch').getAttribute('aria-pressed'), 'true');
     await p.locator('.layout-launch').click();
@@ -172,7 +212,9 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     );
     await q.goto(base + 'diagrams.en.html');
     await q.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
-    await q.locator('.layout-launch').click();await q.locator('[data-diagram=solarCompare]').click();await q.waitForFunction(()=>skyWorkspacePresentation.active);
+    await q.locator('.layout-launch').click();
+    await q.locator('[data-diagram=solarCompare]').click();
+    await q.waitForFunction(() => skyWorkspacePresentation.active);
     await require('./diagram-test-helpers.cjs').layoutAction(q, 'four');
     assert.equal(await q.locator('.ui-diagram-card:visible').count(), 4);
     await q.locator('[data-word="options"]').click();
@@ -201,7 +243,9 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     });
     await r.goto(base + 'diagrams.en.html');
     await r.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
-    await r.locator('.layout-launch').click();await r.locator('[data-diagram=solarCompare]').click();await r.waitForFunction(()=>skyWorkspacePresentation.active);
+    await r.locator('.layout-launch').click();
+    await r.locator('[data-diagram=solarCompare]').click();
+    await r.waitForFunction(() => skyWorkspacePresentation.active);
     const richSaved = () =>
       r.evaluate(() => JSON.parse(localStorage.getItem('skymotion-workspace-v3-wide')));
     const inputState = () =>
@@ -334,7 +378,9 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     assert.equal((await richSaved()).views.length, 3);
     await r.reload();
     await r.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
-    await r.locator('.layout-launch').click();await r.locator('[data-diagram=solarCompare]').click();await r.waitForFunction(()=>skyWorkspacePresentation.active);
+    await r.locator('.layout-launch').click();
+    await r.locator('[data-diagram=solarCompare]').click();
+    await r.waitForFunction(() => skyWorkspacePresentation.active);
     assert.equal(await r.locator('.ui-diagram-card:visible').count(), 3);
     await options();
     assert.equal(
@@ -420,7 +466,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     );
     await r.setViewportSize({ width: 390, height: 844 });
     await r.waitForTimeout(100);
-    assert.equal(await r.evaluate(()=>SkyCustomization.active),true);
+    assert.equal(await r.evaluate(() => SkyCustomization.active), true);
     await options();
     assert.equal(
       await r.locator('.workspace-profile-row').count(),

@@ -652,6 +652,22 @@
     if (which !== 'ring') rods[1].height = 2.5;
     return { version: 1, labels: true, objects: [circle, ...rods, make('marker', 0, -2.5)] };
   }
+  function measurementObjects(measurement, objects) {
+    const count = { distance: 2, bearingMeasure: 2, angleMeasure: 3, shadowMeasure: 1 }[
+      measurement?.kind
+    ];
+    if (
+      !count ||
+      !Array.isArray(measurement.ids) ||
+      measurement.ids.length !== count ||
+      new Set(measurement.ids).size !== count
+    )
+      return null;
+    const selected = measurement.ids.map((id) => objects.find((o) => o.id === id));
+    if (selected.some((o) => !o)) return null;
+    if (measurement.kind === 'shadowMeasure' && selected[0].kind !== 'rod') return null;
+    return selected;
+  }
   function sanitize(raw) {
     if (!raw || raw.version !== 1 || !Array.isArray(raw.objects) || raw.objects.length > 32)
       return null;
@@ -704,8 +720,9 @@
     result.recordMotion = raw.recordMotion === true;
     result.measurements = Array.isArray(raw.measurements)
       ? raw.measurements
-          .filter((x) => x && typeof x.kind === 'string' && Array.isArray(x.ids))
+          .filter((x) => measurementObjects(x, result.objects))
           .slice(0, 30)
+          .map((x) => ({ kind: x.kind, ids: [...x.ids] }))
       : [];
     result.trails = Array.isArray(raw.trails)
       ? raw.trails
@@ -775,11 +792,12 @@
       }
       if (raw) {
         try {
-          const clean = sanitize(JSON.parse(raw));
+          const parsed = JSON.parse(raw),
+            clean = sanitize(parsed);
           if (clean) {
             data = clean;
             statusKey = 'restored';
-            if (JSON.parse(raw).reference && !clean.reference) statusKey = 'invalidReference';
+            if (parsed.reference && !clean.reference) statusKey = 'invalidReference';
             seq = Math.max(seq, ...data.objects.map((o) => o.number));
           } else statusKey = 'invalid';
         } catch {
@@ -1015,7 +1033,7 @@
       return;
     }
     change(() => {
-      const text = `${state.date} ${String(Math.floor(time / 60)).padStart(2, '0')}:${String(Math.round(time % 60)).padStart(2, '0')} · ${t(kind === 'now' ? 'event' : kind === 'rise' ? 'riseRecord' : kind === 'set' ? 'setRecord' : 'noonRecord')}`;
+      const text = `${state.date} ${hhmm(time, true)} · ${t(kind === 'now' ? 'event' : kind === 'rise' ? 'riseRecord' : kind === 'set' ? 'setRecord' : 'noonRecord')}`;
       (data.notes ??= []).push({ text, time, date: state.date });
     });
   }
@@ -1031,8 +1049,8 @@
     return Math.hypot(b.x - a.x, b.z - a.z);
   }
   function measurementValue(m, light) {
-    const objects = m.ids.map((id) => data.objects.find((o) => o.id === id));
-    if (objects.some((o) => !o)) return null;
+    const objects = measurementObjects(m, data.objects);
+    if (!objects) return null;
     const [a, b, c] = objects;
     if (m.kind === 'shadowMeasure') {
       const top = topOf(a);

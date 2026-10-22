@@ -25,8 +25,12 @@
     }
   }
 
-  function enter() { layout(true); }
-  function exit() { layout(false); }
+  function enter() {
+    layout(true);
+  }
+  function exit() {
+    layout(false);
+  }
   button.addEventListener('click', () => {
     if (active) exit();
     else enter();
@@ -35,6 +39,7 @@
     if (
       event.key === 'Escape' &&
       active &&
+      !event.defaultPrevented &&
       !document.querySelector('dialog[open]')
     )
       void exit();

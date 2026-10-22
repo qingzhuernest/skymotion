@@ -814,7 +814,8 @@ function renderUIWorkspace() {
   let drawerAnimation = null,
     drawerClosing = false,
     drawerReturnFocus = null,
-    drawerGeneration = 0;
+    drawerGeneration = 0,
+    previousDrawerMobile = drawerMedia.matches;
   const lowMotion = matchMedia('(prefers-reduced-motion:reduce)');
   function animateDrawer(frames, duration) {
     drawerAnimation?.cancel();
@@ -918,6 +919,13 @@ function renderUIWorkspace() {
   for (const event of ['pointerup', 'pointercancel', 'lostpointercapture'])
     drawerHeader.addEventListener(event, endDrawerSwipe);
   function updateParameterPresentation() {
+    const mobile = drawerMedia.matches,
+      changed = mobile !== previousDrawerMobile,
+      focusWasInMovingContent =
+        rail.contains(document.activeElement) ||
+        drawer.contains(document.activeElement) ||
+        document.activeElement === parameterButton;
+    previousDrawerMobile = mobile;
     const atDestination = drawerMedia.matches
       ? rail.parentElement === drawer
       : rail.parentElement === drawerHome.parentElement;
@@ -925,6 +933,16 @@ function renderUIWorkspace() {
       finishDrawerClose(false);
       if (drawerMedia.matches) drawer.append(rail);
       else drawerHome.after(rail);
+    }
+    if (changed && focusWasInMovingContent) {
+      requestAnimationFrame(() => {
+        const target = mobile
+          ? parameterButton
+          : document.querySelector('.motion-menu-edge:not([hidden])') ||
+            document.querySelector('.motion-menu-grip:not([hidden])');
+        if (target?.isConnected && !target.closest('[inert]') && target.getClientRects().length)
+          target.focus({ preventScroll: true });
+      });
     }
     schedule();
   }

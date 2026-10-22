@@ -216,6 +216,7 @@
     try {
       collapsed = sessionStorage.getItem('sky-menu-collapsed') === 'true';
     } catch (_) {}
+    let previousModal = mobile.matches || overlay();
     rail.id ||= 'motionParameterRail';
     const handle = document.createElement('button');
     handle.type = 'button';
@@ -237,6 +238,9 @@
     rail.prepend(menuHeader);
     function sync() {
       const modal = mobile.matches || overlay();
+      const focusedBeforeSync = document.activeElement,
+        focusWasOnButton = focusedBeforeSync === button,
+        focusWasInRail = rail.contains(focusedBeforeSync);
       shell.classList.toggle('motion-rail-collapsed', collapsed && !modal);
       rail.inert = collapsed && !modal;
       rail.setAttribute('aria-hidden', String(collapsed && !modal));
@@ -259,6 +263,15 @@
         'aria-label',
         modal ? '打开实验参数菜单' : collapsed ? '展开实验参数菜单' : '收起实验参数菜单',
       );
+      if (previousModal !== modal) {
+        previousModal = modal;
+        if (modal && focusWasInRail && !rail.closest('dialog')?.open)
+          button.focus({ preventScroll: true });
+        else if (!modal && (focusWasOnButton || (collapsed && focusWasInRail)))
+          (collapsed ? handle : grip).focus({ preventScroll: true });
+      } else if (!modal && collapsed && focusWasInRail) {
+        handle.focus({ preventScroll: true });
+      }
     }
     let railMotion = [],
       finishRailMotion = null;

@@ -377,6 +377,7 @@
     return p;
   }
   function clock(value) {
+    if (!Number.isFinite(value)) return '—';
     const n = ((Math.round(value) % 1440) + 1440) % 1440;
     return `${String(Math.floor(n / 60)).padStart(2, '0')}:${String(n % 60).padStart(2, '0')}`;
   }
@@ -409,7 +410,7 @@
             date: local?.date,
             time: local?.time,
             instant: utc,
-            point: at(utc, s.lat, s.lon),
+            point: local ? at(utc, s.lat, s.lon) : null,
           };
         }),
       };
@@ -561,8 +562,11 @@
       card.card.hidden = mode === 'time' && i > 0;
       if (card.card.hidden) return;
       const sample = result.samples[i],
-        local = sample.date || state.date,
-        p = dayPath(local, sample.lat, sample.lon);
+        pathDate = mode === 'place' ? sample.date : state.date,
+        p =
+          pathDate && (mode !== 'place' || sample.point)
+            ? dayPath(pathDate, sample.lat, sample.lon)
+            : { above: '', below: '' };
       card.visible.setAttribute('d', p.above);
       card.hidden.setAttribute('d', p.below);
       card.visible.setAttribute('stroke', mode === 'time' ? '#b9c5c6' : colors[i]);

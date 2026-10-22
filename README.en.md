@@ -1,6 +1,6 @@
 # SkyMotion · Sky Motion Lab
 
-A browser laboratory for geography teaching and independent observation. Control location, date and time to explore the Sun, Moon, shadows, sundials and analemmas, then compare related diagrams and 3D views. Native HTML, CSS and ES Modules run without a build step.
+A browser laboratory for geography teaching and independent observation. Control location, date and time to explore the Sun, Moon, shadows, sundials and analemmas, then compare related diagrams and 3D views. Native HTML, CSS and JavaScript run without a build step.
 
 [简体中文](README.md) · **English**
 
@@ -51,7 +51,7 @@ SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" SKY_MOTION_CH
 
 If Chromium is not installed, run `tests/browser/node_modules/.bin/playwright install --with-deps chromium` and point `SKY_MOTION_CHROMIUM` to the installed executable.
 
-The verifier discovers every `.cjs` script at the `tests/` root. Checks cover model boundaries, common interactions, customization, save/restore behavior, bilingual content, font loading and deployment paths. Browser tools are not published with the website. Automation primarily uses Chromium and does not replace Safari, Firefox or real touch-device testing.
+The verifier uses an isolated temporary port and discovers `.cjs` tests at the `tests/` root, excluding helper modules. Append filenames for a focused run, such as `node .github/scripts/verify-site.cjs session-validation.cjs`. Checks cover model boundaries, common interactions, customization, save/restore behavior, bilingual content, font loading and deployment paths. Browser tools are not published with the website. Automation primarily uses Chromium and does not replace Safari, Firefox or real touch-device testing.
 
 ## State and resource loading
 

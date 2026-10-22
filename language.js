@@ -321,12 +321,9 @@
       button.textContent = language === "en" ? "中文" : "English";
       button.setAttribute("aria-label", "Switch language / 切换语言");
       button.addEventListener("click", () => {
-        if (dictionaryReady)
-          change(language === "en" ? "zh" : "en").catch(console.error);
-        else
-          init()
-            .then(() => change("en"))
-            .catch(error => failure(error, "en"));
+        const next = language === "en" ? "zh" : "en";
+        if (dictionaryReady) change(next).catch(console.error);
+        else init().then(() => change(next)).catch(error => failure(error, next));
       });
       const nav = document.querySelector(".page-nav");
       if (nav) {

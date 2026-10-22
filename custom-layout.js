@@ -7,6 +7,7 @@
   )
     return;
   const shell = document.querySelector('.ui-shell'),
+    parameterRail = document.querySelector('.ui-parameters'),
     plot = uiWorkspace.plot,
     cards = uiWorkspace.cards;
   const ids = Object.keys(cards),
@@ -18,6 +19,7 @@
     reset: ['恢复默认布局', 'Reset layout'],
     one: ['单图', 'One view'],
     two: ['双图', 'Two views'],
+    three: ['三图', 'Three views'],
     four: ['四图', 'Four views'],
     options: ['布局与收藏', 'Layout & saved views'],
     choose: ['选择要添加的图解', 'Choose a diagram to add'],
@@ -252,20 +254,25 @@
   const presets = document.createElement('div');
   presets.className = 'workspace-presets';
   presets.setAttribute('role', 'group');
-  const presetButtons = [1, 2, 4].map((n, i) =>
+  const layoutPresets = [
+    ['one', 1, 'M4 5h16v14H4z'],
+    ['two', 2, 'M4 5h16v14H4zM12 5v14'],
+    ['three', 3, 'M4 5h16v14H4zM12 5v14M12 12h8'],
+    ['four', 4, 'M4 5h16v14H4zM12 5v14M4 12h16'],
+  ];
+  const presetButtons = layoutPresets.map(([word, count, path]) =>
     button(
       presets,
-      ['one', 'two', 'four'][i],
+      word,
       () =>
         change(() => {
-          data.views = [...data.views, ...ids.filter((id) => !data.views.includes(id))].slice(0, n);
-          data.active = Math.min(data.active, n - 1);
+          data.views = [...data.views, ...ids.filter((id) => !data.views.includes(id))].slice(
+            0,
+            count,
+          );
+          data.active = Math.min(data.active, count - 1);
         }),
-      n === 1
-        ? 'M4 5h16v14H4z'
-        : n === 2
-          ? 'M4 5h16v14H4zM12 5v14'
-          : 'M4 5h16v14H4zM12 5v14M4 12h16',
+      path,
       true,
     ),
   );
@@ -747,7 +754,7 @@
     noteTitle.textContent = t('launch');
     noteShared.textContent = t('shared');
     noteHelp.textContent = t(mobile.matches ? 'phoneHelp' : 'help');
-    presets.setAttribute('aria-label', t('arrange'));
+    presets.setAttribute('aria-label', t('count'));
     panelTitle.textContent = t('options');
     panel.setAttribute('aria-label', t('options'));
     nameInput.setAttribute('aria-label', t('name'));
@@ -984,7 +991,7 @@
       b.setAttribute('aria-pressed', String(data.featured === [false, true][i])),
     );
     presetButtons.forEach((b, i) =>
-      b.setAttribute('aria-pressed', String(data.views.length === [1, 2, 4][i])),
+      b.setAttribute('aria-pressed', String(data.views.length === layoutPresets[i][1])),
     );
     for (const [id, card] of Object.entries(cards))
       card.dataset.workspacePosition = String(data.views.indexOf(id));
@@ -1035,11 +1042,27 @@
   function placeOptions() {
     if (!optionOpen) return;
     const r = optionsButton.getBoundingClientRect(),
-      width = Math.min(360, innerWidth - 24);
+      compactDesktop = matchMedia('(min-width:1000px) and (min-height:650px)').matches,
+      railRect = parameterRail?.getBoundingClientRect(),
+      headerRect = parameterRail?.querySelector('.motion-menu-header')?.getBoundingClientRect(),
+      railTop = (headerRect?.bottom || railRect?.top || 0) + 8,
+      dockInRail =
+        compactDesktop &&
+        !shell.classList.contains('motion-rail-collapsed') &&
+        railRect &&
+        railRect.width > 100 &&
+        railRect.bottom - railTop > 180,
+      width = Math.min(dockInRail ? railRect.width : 360, innerWidth - 24);
     panel.style.width = width + 'px';
-    panel.style.left = Math.max(12, Math.min(innerWidth - width - 12, r.right - width)) + 'px';
-    panel.style.top = Math.max(12, Math.min(r.bottom + 8, innerHeight - 180)) + 'px';
-    panel.style.maxHeight = Math.max(150, innerHeight - parseFloat(panel.style.top) - 12) + 'px';
+    panel.style.left = dockInRail
+      ? Math.max(12, Math.min(innerWidth - width - 12, railRect.left)) + 'px'
+      : Math.max(12, Math.min(innerWidth - width - 12, r.right - width)) + 'px';
+    const bottom = Math.min(innerHeight - 12, dockInRail ? railRect.bottom - 12 : innerHeight - 12),
+      top = Math.max(12, Math.min(dockInRail ? railTop : r.bottom + 8, bottom - 150)),
+      availableHeight = bottom - top;
+    panel.style.top = top + 'px';
+    panel.style.maxHeight =
+      Math.min(availableHeight, compactDesktop ? 520 : availableHeight) + 'px';
   }
   function closeOptions(restore = false) {
     if (!optionOpen) return;
@@ -1305,6 +1328,7 @@
     cancel();
     placeOptions();
   });
+  if (parameterRail) new ResizeObserver(placeOptions).observe(parameterRail);
   document.addEventListener('skymotion:language', () => {
     labels();
     if (optionOpen) {

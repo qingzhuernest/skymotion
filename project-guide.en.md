@@ -45,6 +45,8 @@ Enter customization beside the language button to add cities, times and referenc
 
 Cities remain linked across the relevant sky, altitude, rise/set bearing and horizon diagrams. Choose one shared UTC instant or the same local apparent solar time to distinguish a real simultaneous observation from equal local solar-clock readings. The learning guide explains how to add, edit and save objects.
 
+Customization retains the baseline experiment and normalizes older object saves to supported fields and limits. Invalid measurements do not block a valid ground scene. Desktop layout settings open in the parameter rail so the diagrams remain visible.
+
 [ Read the customization instructions](guide.en.html#customization)
 
 ## Across Devices: Both Diagrams and Controls Must Remain Usable

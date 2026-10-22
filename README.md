@@ -1,6 +1,6 @@
 # SkyMotion · 天体视运动实验室
 
-面向地理课堂和自主观察的浏览器实验室。用地点、日期和时刻控制太阳、月球、日影、日晷与日行迹，通过关联图解和三维视图核对结果。原生 HTML、CSS 和 ES Modules，无需构建即可运行。
+面向地理课堂和自主观察的浏览器实验室。用地点、日期和时刻控制太阳、月球、日影、日晷与日行迹，通过关联图解和三维视图核对结果。原生 HTML、CSS 和 JavaScript，无需构建即可运行。
 
 **简体中文** · [English](README.en.md)
 
@@ -51,7 +51,7 @@ SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" SKY_MOTION_CH
 
 未安装 Chromium 时，可运行 `tests/browser/node_modules/.bin/playwright install --with-deps chromium`，并把 `SKY_MOTION_CHROMIUM` 指向安装后的浏览器。
 
-检查自动发现 `tests/` 根目录全部 `.cjs` 脚本，覆盖模型边界、常见交互、自定义、保存恢复、双语内容、字体加载和打包路径。浏览器工具不随网站发布。自动检查主要使用 Chromium，不能替代 Safari、Firefox 和实际触屏设备验证。
+检查使用独立临时端口，自动发现 `tests/` 根目录的 `.cjs` 测试，排除辅助模块；可在命令末尾指定文件名，如 `node .github/scripts/verify-site.cjs session-validation.cjs`。检查覆盖模型边界、常见交互、自定义、保存恢复、双语内容、字体加载和打包路径。浏览器工具不随网站发布。自动检查主要使用 Chromium，不能替代 Safari、Firefox 和实际触屏设备验证。
 
 ## 状态与资源加载
 

@@ -159,6 +159,28 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8986/').repla
     await set({ date: '2026-06-21', time: 720, lat: 39.9, lon: 116.4 });
     await p.locator('.solar-study-presets button').first().click();
     await p.screenshot({ path: 'tests/artifacts/study66-place-desktop.png' });
+    await set({ date: '1900-01-01', time: 0, lat: 0, lon: 180, manual: false });
+    await p.locator('.solar-study-presets button').nth(1).click();
+    data = await p.evaluate(() => SkySolarStudy.read());
+    assert.equal(
+      data.samples[1].date,
+      undefined,
+      'unsupported comparison dates have no local clock',
+    );
+    assert.equal(
+      data.samples[1].point,
+      null,
+      'unsupported comparison dates do not show an ephemeris marker',
+    );
+    assert(
+      await p
+        .locator('.solar-study-card')
+        .nth(1)
+        .locator('svg > g:nth-of-type(3) path')
+        .evaluateAll((ns) => ns.every((n) => !n.getAttribute('d'))),
+      'unsupported local dates do not draw a path using the baseline date',
+    );
+    assert.doesNotMatch(await p.locator('#solarStudyPanel').innerText(), /NaN/);
     const m = await browser.newPage({
       viewport: { width: 390, height: 844 },
       isMobile: true,

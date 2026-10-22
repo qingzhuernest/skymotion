@@ -13,6 +13,17 @@
 | Top actions changed position after immersive mode | The 3D customization and language actions moved to the start of the main navigation | Normal mode restores them to the end; immersive mode uses the existing header container |
 | Deferred layout synchronization closed a newly opened phone drawer | Resize quickly to phone width and open parameters: the following presentation update closes the drawer again | Synchronize placement before opening; an already-correct destination does not reset the drawer |
 | Global date selectors collided | Calendar cells and seasonal shortcuts shared data-date; rendering after opening the calendar passed missing seasonal parameters into calculations and produced NaN | Cache the seasonal buttons in their own container and use that collection for binding and selection |
+| Duplicate or excessive saved references | Duplicate IDs made selection and deletion ambiguous; oversized saves were discarded in full | Repair duplicate IDs, retain up to 40 valid references, and prompt users to review and save normalized contents |
+| Invalid ground measurements crashed a scene | Empty angle measurements, missing points or incompatible object types reached rendering after restoration | Validate measurement type, point count, unique object identities and rod requirements while retaining valid scene contents |
+| Recorded times displayed 09:60 | Rounding minutes did not carry into the hour | Reuse the shared clock formatter for minute carry and 24:00 |
+| Out-of-range comparison dates still drew paths | A shared UTC instant outside a site's supported local years fell back to the baseline date and could show a NaN clock | Omit that site's solar point and daily path and use an unavailable time readout |
+| Drawer-to-desktop transitions lost keyboard focus | The opener became hidden and focus fell back to the page body | Return focus to a visible menu control when closing or moving the parameter rail |
+| Language clicks during dictionary loading chose the wrong locale | Clicking Chinese from an English page before dictionary readiness still selected English | Capture the intended locale at click time and apply it after loading |
+| One Escape closed two immersive layers | Closing Observe also exited immersive mode on the same keypress | The disclosure consumes its Escape; a subsequent Escape exits immersive mode |
+| Layout settings obscured the preview | Desktop layout adjustments covered the right-hand chart | Dock settings in the parameter rail when space permits, leaving persistent navigation visible; retain the narrow-screen popover |
+| Three views lacked a direct preset | Users had to choose two views, then add a third diagram | The existing layout menu offers one through four views with consistent selection and undo |
+| Individual tools were difficult to discover | Experiment shortcuts obscured how to add a city, marker or note individually | The Add section explains both experiment shortcuts and the expandable individual tools, with task-specific guidance |
+| Regressions could reach an unrelated local server | A response from an occupied fixed port could be mistaken for test-server readiness | Reserve an OS-assigned port and use only the address reported by that server process |
 
 The date picker already had its own keyboard protection, which remains intact. The trajectory explanation retains native dialog cancellation and focus recovery.
 
@@ -41,6 +52,12 @@ Compared actual control styles before and after cleanup across four pages, two s
 
 ## Validation and scope
 
+All 54 regression scripts passed. Desktop and phone three-view selection, bilingual generation consistency, and packaging for both deployment paths also passed focused verification.
+
 `tests/interaction-audit.cjs` covers the reproduced failure sequences, modal keyboard ownership, exit validation and transition notifications on all four scientific pages. Existing checks continue to cover linked cities, object editing, layouts, bilingual pages, corrupt storage, packaging and deployment; `tests/ui-palette.cjs` checks shared color ownership and actual control propagation.
+
+Additional checks in `tests/diagram-flows.cjs`, `tests/scene-builder-recovery.cjs`, `tests/solar-study.cjs`, `tests/shared-ui-lifecycle.cjs`, `tests/space-immersive-escape.cjs` and `tests/custom-layout.cjs` cover reference normalization, ground recovery and minute carry, cross-location date boundaries, focus and language startup, immersive Escape ordering, and unobscured layout previews.
+
+Rejected candidates receive no functional changes: 3D Observe is a native disclosure; city fields and sliders, shared city references, and the distinction between UTC and local apparent solar time are covered by existing checks. Valid saved references with a different JSON key order do not trigger a normalization notice.
 
 Validation uses Chromium automation and desktop, tablet and phone browser dimensions. It does not establish coverage of every physical Safari device, GPU or possible interaction sequence. New menus should reuse the shared mode switch and color roles, and regressions should reproduce real failures rather than introduce another independent state or palette.

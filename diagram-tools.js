@@ -4,7 +4,16 @@
     states = new Map(),
     portals = new Map();
   const R = Math.PI / 180,
-    copy = (x) => JSON.parse(JSON.stringify(x));
+    copy = (x) => JSON.parse(JSON.stringify(x)),
+    stableJSON = (value) =>
+      JSON.stringify(value, (key, item) => {
+        if (!item || Array.isArray(item) || typeof item !== 'object') return item;
+        return Object.fromEntries(
+          Object.keys(item)
+            .sort()
+            .map((name) => [name, item[name]]),
+        );
+      });
   const validDate = (value) => window.SkyMotionSession.validDate(value);
   const en = () => document.documentElement.lang === 'en';
   const tr = (x) =>
@@ -176,26 +185,26 @@
     advancedTitle = E('summary', '', advanced);
   advanced.append(add);
   goalLabel.append(cityPicker, recipe);
+  const goalHints = {
+    places:
+      '使用同一 UTC 瞬间；选下方城市，随后可拖动经纬度。原地点保持不变。|Compare one shared UTC instant. Choose a city below, then drag its coordinates. The baseline stays unchanged.',
+    times:
+      '固定当前地点与日期，加入 09:00 和 15:00 两个时刻；拖动各自的时间滑条继续比较。|Keep this location and date; add 09:00 and 15:00 markers, then drag their time sliders.',
+    shadow:
+      '进入实验地面，点击放置一根杆；原地点、日期与时间仍决定光照。|Open the experiment ground and click to place a rod; the original location, date and time determine the light.',
+    dates:
+      '保留当前地点，添加另一个日期进行比较；可在对象属性中调整日期。|Keep this location and add another date to compare; adjust it in the object properties.',
+    track:
+      '比较不同纬度或时刻的日行迹；可在属性中独立调整每条轨迹。|Compare analemmas at different latitudes or times; adjust each track independently in its properties.',
+  };
   goal.onchange = () => {
     recipe.hidden = !goal.value;
     if (goal.value === 'places' && citySelect.value === [current.lat, current.lon].join(','))
       citySelect.value = current.lat === -33.9 ? '51.5,-0.1' : '-33.9,151.2';
-    goalHelp.textContent =
-      goal.value === 'places'
-        ? tr(
-            '使用同一 UTC 瞬间；选下方城市，随后可拖动经纬度。原地点保持不变。|Compare one shared UTC instant. Choose a city below, then drag its coordinates. The baseline stays unchanged.',
-          )
-        : goal.value === 'times'
-          ? tr(
-              '固定当前地点与日期，加入 09:00 和 15:00 两个时刻；拖动各自的时间滑条继续比较。|Keep this location and date; add 09:00 and 15:00 markers, then drag their time sliders.',
-            )
-          : goal.value === 'shadow'
-            ? tr(
-                '进入实验地面，点击放置一根杆；原地点、日期与时间仍决定光照。|Open the experiment ground and click to place a rod; the original location, date and time determine the light.',
-              )
-            : tr(
-                '保留原图条件，加入另一日期或地点的对照；可在属性中拖动调整。|Keep the baseline and add a comparison; drag its properties to explore.',
-              );
+    goalHelp.textContent = tr(
+      goalHints[goal.value] ||
+        '选择实验目的，或展开下方“自由添加工具”逐个放置标记和说明。原图观测条件保持不变。|Choose an experiment, or expand Add individual tools below to place markers and notes one at a time. The original observation conditions stay unchanged.',
+    );
   };
   recipe.type = 'button';
   recipe.onclick = startExperiment;
@@ -819,12 +828,21 @@
     const key = m.id + ':' + (m.body || 'shared');
     if (!states.has(key)) {
       let objects = [],
-        stored = false;
+        stored = false,
+        repairNeeded = false;
       try {
-        const v = JSON.parse(localStorage.getItem('sky-diagram-tools-v1:' + key));
-        if (v?.version === 1 && Array.isArray(v.objects)) {
-          objects = clean(v.objects, m);
-          stored = true;
+        const raw = localStorage.getItem('sky-diagram-tools-v1:' + key);
+        if (raw !== null) {
+          try {
+            const v = JSON.parse(raw);
+            if (v?.version === 1 && Array.isArray(v.objects)) {
+              objects = clean(v.objects, m);
+              stored = true;
+              repairNeeded = stableJSON(objects) !== stableJSON(v.objects);
+            } else repairNeeded = true;
+          } catch {
+            repairNeeded = true;
+          }
         }
       } catch {}
       const saved = JSON.stringify(objects);
@@ -832,19 +850,28 @@
         const v = JSON.parse(sessionStorage.getItem(draftKey(m)));
         if (v?.version === 1 && Array.isArray(v.objects)) objects = clean(v.objects, m);
       } catch {}
-      states.set(key, { objects, undo: [], redo: [], stored, saved });
+      states.set(key, { objects, undo: [], redo: [], stored, saved, repairNeeded });
     }
     return states.get(key);
   }
   function clean(objects, m) {
-    if (objects.length > 40) return [];
+    // A legacy or hand-edited save may exceed the current limit. Keep its
+    // oldest supported objects so one bad record cannot erase the whole plot.
     const out = [];
+    const ids = new Set();
     for (const raw of objects) {
+      if (out.length === 40) break;
       if (!raw || typeof raw !== 'object') continue;
       const def = defs(m).find((d) => d.id === raw.type);
       if (!def || typeof raw.id !== 'string') continue;
+      let id = raw.id.slice(0, 80);
+      if (!id || ids.has(id)) {
+        do id = 'd' + Date.now() + ++serial;
+        while (ids.has(id));
+      }
+      ids.add(id);
       const o = {
-        id: raw.id.slice(0, 80),
+        id,
         type: def.id,
         label: typeof raw.label === 'string' ? raw.label.slice(0, 60) : def.title,
         customLabel: raw.customLabel === true,
@@ -918,8 +945,11 @@
   function draftStatus() {
     if (!current) return;
     const s = stateFor(selectedOwner());
-    status.textContent =
-      JSON.stringify(s.objects) === s.saved
+    status.textContent = s.repairNeeded
+      ? tr(
+          '已整理存档中的不兼容内容；保存以保留修正|Incompatible saved references were normalized; save to keep changes',
+        )
+      : JSON.stringify(s.objects) === s.saved
         ? tr(
             s.stored
               ? '已保存到此设备|Saved to this device'
@@ -1154,6 +1184,7 @@
       );
       s.saved = JSON.stringify(s.objects);
       s.stored = true;
+      s.repairNeeded = false;
       status.textContent = tr('已保存到此设备|Saved to this device');
     } catch {
       status.textContent = tr(
