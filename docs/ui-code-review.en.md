@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | Views could not be combined in Lab | Sky, related diagrams and analemma required separate pages | Shared containers and a fixed two-level catalog combine them in one workspace |
 | Layout overlay still obscured controls | Arrangement settings covered the sidebar | Inline sidebar disclosure, reusing the mobile parameter drawer |
-| Rise/set compasses lacked direct manipulation | Solar and lunar bearings could not be rotated | Rotation, zoom, event selection, keyboard and cancellation preserve scientific bearing values |
+| Rise/set markers could not change actual bearings | Dragging only rotated the compass | Marker dragging resolves a date at the fixed location and updates linked views; zoom, click-to-time, date keys and cancellation remain; no bearings are invented |
 | Closed editors stopped synchronizing their sidebar | Close the desktop object editor and resize to phone width: the old Plot objects state still hides the native controls | Closed editors also synchronize responsive navigation and remove inapplicable sidebar state |
 | Immersive mode retained a stale editor rail | Close the 3D editor, enter immersive mode, finish customizing, then return to normal: native parameter cards remain hidden | Immersive transitions clean the previous rail; normal mode restores the original controls |
 | Editor Escape handling intercepted unrelated dialogs | Open the sky-trajectory explanation and press Escape: the dialog stays open while the editor behind it closes | Dialogs and popovers own their keyboard events; Escape outside the editor does not close it |

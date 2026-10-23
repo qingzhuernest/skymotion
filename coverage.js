@@ -272,7 +272,8 @@ function updateEvents(paint = true) {
   if (
     document.body.dataset.page === 'diagrams' &&
     typeof uiWorkspace !== 'undefined' &&
-    uiWorkspace?.selected !== 'riseSetPanel' && !window.skyWorkspacePresentation?.visibleIds.has('riseSetPanel')
+    uiWorkspace?.selected !== 'riseSetPanel' &&
+    !window.skyWorkspacePresentation?.visibleIds.has('riseSetPanel')
   )
     return;
   const m = eventModel(),
@@ -300,8 +301,9 @@ function updateEvents(paint = true) {
         : '') + '方位角从正北顺时针量起；按天体中心穿越几何地平线计算，未计大气折射。';
   if (paint) drawEventCompass(m);
 }
-const eventCompassCamera = { rotation: 0, zoom: 1 };
-let eventCompassLayout = null;
+const eventCompassCamera = { zoom: 1 };
+let eventCompassLayout = null,
+  eventCompassFeedback = '';
 function drawEventCompass(m) {
   if (!canPaint($('eventCompass'))) return;
   const { c, w, h } = resize($('eventCompass')),
@@ -311,10 +313,10 @@ function drawEventCompass(m) {
       Math.max(12, Math.min(Math.min(w, h) * 0.34, Math.min(w, h) / 2 - 36)) *
       eventCompassCamera.zoom;
   const project = (az, scale = 1) => ({
-    x: cx + r * scale * Math.sin((az + eventCompassCamera.rotation) * rad),
-    y: cy - r * scale * Math.cos((az + eventCompassCamera.rotation) * rad),
+    x: cx + r * scale * Math.sin(az * rad),
+    y: cy - r * scale * Math.cos(az * rad),
   });
-  eventCompassLayout = { cx, cy, r, project, model: m };
+  eventCompassLayout = { cx, cy, r, project, model: m, body: state.body, date: state.date };
   poly(c, [project(270), project(90)], '#60799777');
   poly(c, [project(0), project(180)], '#60799777');
   c.strokeStyle = '#7996b477';
@@ -380,64 +382,176 @@ function drawEventCompass(m) {
 
   text(
     c,
-    '拖动旋转方位盘 · 点击升落点跳转时刻 · Home 复位',
+    eventCompassFeedback ||
+      (document.documentElement.lang === 'en'
+        ? 'Drag a rise/set point to change date · Click to jump to its time'
+        : '拖动升落点调整日期与方位 · 点击跳转升落时刻'),
     w / 2,
     h - 12,
     '#a4bad0',
     w < 350 ? 9 : 11,
   );
 }
-/** View gestures change the compass camera; event selection changes the shared clock. */
+/** Drag a physical rise/set marker to the nearest achievable bearing at the same location.
+ * Dates are ranked by declination, then verified against the native geometric crossings.
+ * Nothing assigns a freely invented azimuth to an astronomical event.
+ */
+function eventBearingCandidates(origin) {
+  const moon = origin.body === 'moon',
+    day = 86400000;
+  const start = Date.parse(origin.date + 'T12:00:00Z');
+  const year = Number(origin.date.slice(0, 4));
+  const first = moon ? start - 35 * day : Date.UTC(year, 0, 1, 12);
+  const last = moon ? start + 35 * day : Date.UTC(year + 1, 0, 1, 12) - day;
+  const candidates = [];
+  for (let instant = first; instant <= last; instant += day) {
+    const date = new Date(instant).toISOString().slice(0, 10);
+    if (date < '1900-01-01' || date > '2100-12-31') continue;
+    const p = skyRaw(moon ? 'Moon' : 'Sun', 720, date, origin.lat, origin.lon);
+    const sinDec =
+      Math.sin(origin.lat * rad) * Math.sin(p.alt * rad) +
+      Math.cos(origin.lat * rad) * Math.cos(p.alt * rad) * Math.cos(p.az * rad);
+    const cosAz = sinDec / Math.cos(origin.lat * rad);
+    candidates.push({
+      date,
+      distance: Math.abs(instant - start),
+      az: Math.acos(clamp(cosAz, -1, 1)) * deg,
+      events: null,
+    });
+  }
+  return candidates;
+}
+function eventBearingDate(candidates, target, kind, origin) {
+  const distance = (a, b) => Math.abs(((a - b + 540) % 360) - 180);
+  const ranked = candidates
+    .map((candidate) => ({
+      candidate,
+      error: distance(kind === 'rise' ? candidate.az : 360 - candidate.az, target),
+    }))
+    .sort((a, b) => a.error - b.error || a.candidate.distance - b.candidate.distance);
+  let best = null;
+  for (const { candidate } of ranked.slice(0, 16)) {
+    candidate.events ||= SkyDiagramSampling.events(
+      candidate.date,
+      0,
+      origin.body === 'moon' ? 'Moon' : 'Sun',
+      origin.lat,
+      origin.lon,
+    );
+    for (const event of candidate.events) {
+      const position = (time) =>
+        skyRaw(
+          origin.body === 'moon' ? 'Moon' : 'Sun',
+          time,
+          candidate.date,
+          origin.lat,
+          origin.lon,
+        );
+      const rising = position(event.time + 0.05).alt > position(event.time - 0.05).alt;
+      if (rising !== (kind === 'rise')) continue;
+      const error = distance(event.az, target);
+      // Bearings within a fraction of a degree favour the closer date, avoiding seasonal jumps.
+      if (
+        !best ||
+        error < best.error - 0.15 ||
+        (Math.abs(error - best.error) <= 0.15 && candidate.distance < best.distance)
+      )
+        best = { date: candidate.date, distance: candidate.distance, error };
+    }
+  }
+  return best;
+}
 function initEventCompassInteraction() {
   const canvas = $('eventCompass'),
     pointers = new Map();
-  let gesture = null;
+  let gesture = null,
+    pending = null,
+    frame = null;
   canvas.tabIndex = 0;
   canvas.style.touchAction = 'none';
-  canvas.style.cursor = 'grab';
+  canvas.style.cursor = 'default';
   canvas.setAttribute(
     'aria-label',
-    '升落方位图；拖动旋转，双指或滚轮缩放，点击升落点跳转时刻，方向键旋转，Home复位',
+    '升落方位图；拖动升落点改变日期和方位，点击跳转时刻，左右方向键调整日期，滚轮缩放，Home复位',
   );
-  const angle = (p) => {
-    const b = canvas.getBoundingClientRect();
-    return (
-      Math.atan2(p.y - b.top - eventCompassLayout.cy, p.x - b.left - eventCompassLayout.cx) * deg
-    );
-  };
   const distance = () => {
     const [a, b] = [...pointers.values()];
     return Math.hypot(a.x - b.x, a.y - b.y);
   };
+  function restore(g) {
+    Object.assign(eventCompassCamera, g.camera);
+    Object.assign(state, { date: g.date, manual: g.manual, dec: g.dec });
+    $('date').value = state.date;
+    eventCompassFeedback = '';
+  }
+  function adjust() {
+    frame = null;
+    const g = gesture,
+      p = pending;
+    pending = null;
+    if (
+      !g?.hit ||
+      !p ||
+      g.pinch ||
+      g.body !== state.body ||
+      g.lat !== state.lat ||
+      g.lon !== state.lon
+    )
+      return;
+    g.candidates ||= eventBearingCandidates(g);
+    const b = canvas.getBoundingClientRect(),
+      layout = eventCompassLayout;
+    const target =
+      (Math.atan2(p.x - b.left - layout.cx, layout.cy - (p.y - b.top)) * deg + 360) % 360;
+    const best = eventBearingDate(g.candidates, target, g.hit, g);
+    if (best) {
+      setDate(best.date);
+      eventCompassFeedback =
+        best.error > 0.75
+          ? (document.documentElement.lang === 'en'
+              ? 'Nearest achievable bearing · '
+              : '已到可实现的最近方位 · ') + best.date
+          : best.date;
+      schedule();
+    }
+  }
   canvas.addEventListener('pointerdown', (e) => {
     if (e.button !== 0 || !eventCompassLayout || pointers.size >= 2) return;
     if (!pointers.size) {
       const b = canvas.getBoundingClientRect(),
-        g = eventCompassLayout;
+        layout = eventCompassLayout;
       const hit = ['rise', 'set'].find((key) => {
-        const event = g.model[key];
-        if (!event.position || g.model.pole) return false;
-        const p = g.project(event.position.az);
+        const event = layout.model[key];
+        if (!event.position || layout.model.pole) return false;
+        const p = layout.project(event.position.az);
         return Math.hypot(e.clientX - b.left - p.x, e.clientY - b.top - p.y) <= 20;
       });
       gesture = {
-        origin: { ...eventCompassCamera },
+        camera: { ...eventCompassCamera },
         x: e.clientX,
         y: e.clientY,
         moved: false,
         hit,
         body: state.body,
         date: state.date,
+        lat: state.lat,
+        lon: state.lon,
+        manual: state.manual,
+        dec: state.dec,
       };
-    } else gesture.moved = true;
+      eventCompassFeedback = '';
+    } else {
+      restore(gesture);
+      gesture.pinch = true;
+      gesture.moved = true;
+    }
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     canvas.setPointerCapture(e.pointerId);
     canvas.focus({ preventScroll: true });
-    canvas.dataset.dragging = 'true';
+    canvas.dataset.dragging = String(!!gesture.hit);
   });
   canvas.addEventListener('pointermove', (e) => {
-    const before = pointers.get(e.pointerId);
-    if (!before || !gesture || !eventCompassLayout) return;
+    if (!pointers.has(e.pointerId) || !gesture) return;
     const oldDistance = pointers.size === 2 ? distance() : null;
     const now = { x: e.clientX, y: e.clientY };
     pointers.set(e.pointerId, now);
@@ -450,19 +564,25 @@ function initEventCompassInteraction() {
           0.65,
           1.2,
         );
-    } else {
-      eventCompassCamera.rotation += ((angle(now) - angle(before) + 540) % 360) - 180;
+      schedule();
+    } else if (gesture.hit && !gesture.pinch) {
+      pending = now;
+      if (frame === null) frame = requestAnimationFrame(adjust);
     }
-    schedule();
   });
   function finish(e) {
     if (!pointers.has(e.pointerId)) return;
+    const g = gesture;
+    if (e.type === 'pointerup' && pending && !g.pinch) {
+      if (frame !== null) cancelAnimationFrame(frame);
+      adjust();
+    }
     pointers.delete(e.pointerId);
-    if (e.type !== 'pointerup' && gesture) Object.assign(eventCompassCamera, gesture.origin);
+    if (e.type !== 'pointerup' && g) {
+      restore(g);
+      eventCompassFeedback = '';
+    }
     if (!pointers.size) {
-      const g = gesture;
-      gesture = null;
-      canvas.dataset.dragging = 'false';
       if (
         g &&
         e.type === 'pointerup' &&
@@ -477,6 +597,9 @@ function initEventCompassInteraction() {
           state.time = time;
         }
       }
+      gesture = null;
+      pending = null;
+      canvas.dataset.dragging = 'false';
     }
     if (canvas.hasPointerCapture(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
     schedule();
@@ -484,8 +607,12 @@ function initEventCompassInteraction() {
   for (const event of ['pointerup', 'pointercancel', 'lostpointercapture'])
     canvas.addEventListener(event, finish);
   function cancel() {
-    if (gesture) Object.assign(eventCompassCamera, gesture.origin);
+    if (gesture) restore(gesture);
     gesture = null;
+    pending = null;
+    eventCompassFeedback = '';
+    if (frame !== null) cancelAnimationFrame(frame);
+    frame = null;
     for (const id of [...pointers.keys()]) {
       pointers.delete(id);
       if (canvas.hasPointerCapture(id)) canvas.releasePointerCapture(id);
@@ -515,10 +642,12 @@ function initEventCompassInteraction() {
     }
     if (!['ArrowLeft', 'ArrowRight', 'Home', '+', '=', '-'].includes(e.key)) return;
     e.preventDefault();
-    if (e.key === 'Home') Object.assign(eventCompassCamera, { rotation: 0, zoom: 1 });
-    else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight')
-      eventCompassCamera.rotation += e.key === 'ArrowLeft' ? -5 : 5;
-    else
+    if (e.key === 'Home') Object.assign(eventCompassCamera, { zoom: 1 });
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      const date = new Date(state.date + 'T12:00:00Z');
+      date.setUTCDate(date.getUTCDate() + (e.key === 'ArrowLeft' ? -1 : 1));
+      setDate(date.toISOString().slice(0, 10));
+    } else
       eventCompassCamera.zoom = clamp(
         eventCompassCamera.zoom * (e.key === '-' ? 0.9 : 1.1),
         0.65,

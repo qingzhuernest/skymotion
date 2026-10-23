@@ -537,7 +537,6 @@ function renderUIWorkspace() {
       plot.append($(id));
       uiWorkspace.nodes.push($(id));
     }
-    $('stage').prepend(document.querySelector('.view-tabs'));
     const lunarPanel = document.createElement('section');
     lunarPanel.id = 'lunarOrbitPanel';
     lunarPanel.hidden = true;
@@ -692,6 +691,9 @@ function renderUIWorkspace() {
       plot.append(card);
       uiWorkspace.cards[id] = card;
     }
+    uiWorkspace.cards.skyPanel
+      .querySelector('.ui-diagram-card-head')
+      .append(document.querySelector('.view-tabs'));
     const comparisonDetails = document.createElement('div');
     comparisonDetails.className = 'ui-diagram-details';
     comparisonDetails.dataset.for = 'solarCompare';

@@ -30,8 +30,24 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44125/').repl
       await selectDiagram(page, 'skyPanel');
       assert(await page.locator('#sky').isVisible());
     }
+    await page.locator('[data-rail-section=views]').click();
+    await page.locator('[data-diagram=solarCompare]').click();
+    await page.waitForFunction(() => skyWorkspacePresentation.active);
+    assert.equal(await page.evaluate(() => SkyCustomization.active), false);
+    assert(
+      (await page.locator('.ui-diagram-card:visible').count()) >= 2,
+      'Combined views works before customization',
+    );
+    // Return to a single view for the following composition gesture.
+    await page.goto(base + 'lab.en.html');
+    await page.waitForFunction(() => !!window.SkyWorkbenchMenu);
     await page.locator('.layout-launch').click();
     await page.locator('[data-rail-section=views]').click();
+    assert.equal(
+      await page.locator('[data-workbench-view=skyPanel]').count(),
+      1,
+      'Viewpoints have one native control rather than duplicate menu entries',
+    );
     for (const id of ['contextPanel', 'chartPanel', 'analemmaPanel'])
       await page
         .locator(`[data-workbench-view=${id}]`)
@@ -51,6 +67,31 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44125/').repl
     assert(await page.locator('#chart').isVisible());
     assert(await page.locator('#analemmaCanvas').isVisible());
     assert(await page.locator('.workbench-sampling-clock').isVisible());
+    const rowWidths = await page
+      .locator('.workbench-content-row:visible > button:first-child')
+      .evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().width));
+    assert(Math.max(...rowWidths) - Math.min(...rowWidths) < 1, 'Menu labels share one column');
+    const tabsOutsideCanvas = await page
+      .locator('.view-tabs')
+      .evaluate((node) => !!node.closest('.ui-diagram-card-head') && !node.closest('#stage'));
+    assert(tabsOutsideCanvas, 'View controls do not overlay the canvas');
+    const selectedView = await page.locator('.view-tabs').evaluate((node) => {
+      const group = node.getBoundingClientRect();
+      const marker = node.querySelector('.motion-selection').getBoundingClientRect();
+      return {
+        left: marker.left - group.left,
+        right: group.right - marker.right,
+        top: marker.top - group.top,
+        bottom: group.bottom - marker.bottom,
+      };
+    });
+    assert(
+      Object.values(selectedView).every((value) => value >= -1),
+      'The selected background stays aligned inside the viewpoint control',
+    );
+    await page.locator('#chart').click({ position: { x: 80, y: 80 } });
+    assert.equal(await page.evaluate(() => skyWorkspacePresentation.activeView), 'chartPanel');
+    assert.equal(await page.locator('[data-workspace-current=true]').count(), 1);
     const oldPlace = await page.evaluate(() => state.lat);
     await page.locator('[data-rail-section=conditions]').click();
     await page.locator('#lat').evaluate((node) => {
@@ -98,20 +139,12 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44125/').repl
         lon: state.lon,
       }));
       const box = await page.locator('#eventCompass').boundingBox();
-      const rotation = await page.evaluate(() => eventCompassCamera.rotation);
+      // Dragging empty space cannot change orientation or scientific state.
       await page.mouse.move(box.x + box.width * 0.7, box.y + box.height * 0.5);
       await page.mouse.down();
       await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.7, { steps: 8 });
       await page.mouse.up();
-      assert(
-        Math.abs((await page.evaluate(() => eventCompassCamera.rotation)) - rotation) > 30,
-        JSON.stringify({
-          body,
-          rotation,
-          after: await page.evaluate(() => eventCompassCamera.rotation),
-          box,
-        }),
-      );
+      assert.equal(await page.evaluate(() => eventCompassCamera.zoom), 1);
       assert.deepEqual(
         await page.evaluate(() => ({
           date: state.date,
@@ -121,15 +154,65 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44125/').repl
         })),
         scientific,
       );
+      await page.waitForFunction(
+        () => eventCompassLayout.body === state.body && eventCompassLayout.date === state.date,
+      );
+      const marker = await page.evaluate(() => {
+        const az = eventCompassLayout.model.rise.position?.az;
+        if (az === undefined) return null;
+        const target = Math.abs(az - 90) > 5 ? (az + 90) / 2 : az + 8;
+        return {
+          az,
+          target,
+          from: eventCompassLayout.project(az),
+          to: eventCompassLayout.project(target),
+        };
+      });
+      if (marker) {
+        await page.mouse.move(box.x + marker.from.x, box.y + marker.from.y);
+        await page.mouse.down();
+        await page.mouse.move(box.x + marker.to.x, box.y + marker.to.y, { steps: 6 });
+        await page.mouse.up();
+        await page.waitForFunction(() => eventCompassLayout.date === state.date);
+        const after = await page.evaluate(() => ({
+          date: state.date,
+          lat: state.lat,
+          lon: state.lon,
+          az: eventCompassLayout.model.rise.position.az,
+        }));
+        assert.notEqual(after.date, scientific.date, 'Marker drag changes the shared date');
+        assert.equal(after.lat, scientific.lat);
+        assert.equal(after.lon, scientific.lon);
+        assert(
+          Math.abs(after.az - marker.target) < Math.abs(marker.az - marker.target),
+          JSON.stringify({ body, marker, after }),
+        );
+        // Escape rolls a live drag back to its original scientific condition.
+        const from = await page.evaluate(() =>
+          eventCompassLayout.project(eventCompassLayout.model.rise.position.az),
+        );
+        await page.mouse.move(box.x + from.x, box.y + from.y);
+        await page.mouse.down();
+        await page.mouse.move(box.x + marker.from.x, box.y + marker.from.y, { steps: 4 });
+        await page.keyboard.press('Escape');
+        await page.mouse.up();
+        assert.equal(await page.evaluate(() => state.date), after.date);
+      }
       await page.locator('#eventCompass').press('Home');
-      assert.equal(await page.evaluate(() => eventCompassCamera.rotation), 0);
+      assert.equal(await page.evaluate(() => eventCompassCamera.zoom), 1);
+      await page.waitForFunction(
+        () => eventCompassLayout.date === state.date && eventCompassLayout.body === state.body,
+      );
       const event = await page.evaluate(() => {
         const e = eventCompassLayout.model.rise;
         return e.position ? { ...eventCompassLayout.project(e.position.az), time: e.time } : null;
       });
       if (event) {
         await page.mouse.click(box.x + event.x, box.y + event.y);
-        assert(Math.abs((await page.evaluate(() => state.time)) - event.time) < 0.01);
+        assert(
+          Math.abs((await page.evaluate(() => state.time)) - event.time) < 0.01,
+          JSON.stringify({ body, event, actual: await page.evaluate(() => state.time) }),
+        );
       }
     }
     await page.setViewportSize({ width: 390, height: 844 });

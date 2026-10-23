@@ -324,7 +324,7 @@
     c.font = `11px ${getComputedStyle(document.body).fontFamily}`;
     c.textAlign = 'left';
     let x = m.clip ? m.clip[0] + 4 : 12,
-      y = m.type === 'sky' ? 52 : 18;
+      y = m.type === 'sky' ? 64 : 18;
     for (const o of list) {
       let text = o.name + (!o.clockValid ? (en() ? ' · date out of range' : ' · 日期越界') : '');
       if (text.length > 14) text = text.slice(0, 12) + '…';
@@ -333,7 +333,7 @@
         x = 12;
         y += 17;
       }
-      if (y > Math.min(m.type === 'sky' ? 86 : 65, m.h * 0.25)) break;
+      if (y > Math.min(m.type === 'sky' ? 98 : 65, m.h * 0.25)) break;
       c.fillStyle = o.color;
       c.fillRect(x, y - 7, 10, 2);
       if (window.skyFillText) skyFillText(c, text, x + 15, y - 3);

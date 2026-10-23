@@ -31,38 +31,48 @@ body .ui-parameters[data-editor-view='views'] {
   color: var(--design-ink);
   font-weight: 600;
 }
-.workbench-content-row {
-  display: flex;
+/* A shared label column keeps every content row aligned, including rows without actions. */
+body .ui-parameters .workbench-content-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
   gap: 4px;
-  margin: 3px 0;
+  margin: 4px 0;
 }
-.workbench-content-row button {
+body.workbench-editing .ui-parameters .workbench-content-row {
+  grid-template-columns: minmax(0, 1fr) 36px;
+}
+body .ui-parameters .workbench-content-row button {
+  margin: 0;
   min-height: 36px;
   border: 1px solid transparent;
-  border-radius: 7px;
+  border-radius: var(--design-radius-control);
   background: transparent;
   color: var(--design-primary);
   font: inherit;
   cursor: pointer;
 }
-.workbench-content-row > button:first-child {
-  flex: 1;
+body .ui-parameters .workbench-content-row > button:first-child {
   min-width: 0;
   text-align: left;
   padding: 7px 10px;
+  line-height: 1.5;
 }
-.workbench-content-row button:hover {
-  background: var(--design-inset);
+body .ui-parameters .workbench-content-row button:hover {
+  background: var(--design-surface);
 }
-.workbench-content-row button[aria-pressed='true'] {
+body .ui-parameters .workbench-content-row button[aria-pressed='true'] {
   background: var(--design-selected);
+}
+body .ui-parameters .workbench-current-view > button:first-child {
   border-color: var(--design-primary);
 }
-.workbench-add-view {
-  width: 34px;
-  flex: none;
+body .ui-parameters .workbench-add-view {
+  width: 36px;
   padding: 7px;
+  display: grid;
+  place-items: center;
+  border-color: var(--design-line);
 }
 .workbench-add-view svg {
   width: 18px;
@@ -110,32 +120,45 @@ body[data-entry-view] .ui-diagram-surface > #stage {
   border-radius: 0;
   margin: 0;
 }
-body[data-entry-view] #stage > .view-tabs {
-  position: absolute;
-  border-radius: 0;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 3;
+/* Native viewpoints share the pane header rather than covering the scientific canvas. */
+body[data-entry-view] .ui-diagram-card:has(#stage) > .ui-diagram-card-head {
   display: flex;
-  gap: 4px;
-  padding: 7px;
-  background: var(--design-surface);
+  flex-wrap: wrap;
+  gap: 4px 8px;
 }
-body[data-entry-view] #stage > .view-tabs button {
-  color: var(--design-primary);
-  background: var(--design-surface);
-  border: 1px solid var(--design-line);
-  padding: 5px 7px;
+body[data-entry-view] .ui-diagram-card-head > .view-tabs {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  margin: 0 0 0 auto;
+  padding: 2px;
+  border: 0;
+  border-radius: var(--design-radius-control);
+  background: var(--design-inset);
+}
+body[data-entry-view] .ui-diagram-card-head > .view-tabs button {
+  margin: 0;
+  min-height: 30px;
+  padding: 4px 8px;
+  border: 0;
   border-radius: 7px;
+  color: var(--design-primary);
+  background: transparent;
   font: 12px var(--design-font);
+  white-space: nowrap;
 }
-body[data-entry-view] #stage > .view-tabs button.active {
+body[data-entry-view] .ui-diagram-card-head > .view-tabs button.active {
   color: var(--design-on-action);
   background: var(--design-primary);
 }
 body[data-entry-view] #stage .stage-top {
-  top: 48px;
+  top: 10px;
+}
+body.workbench-editing .ui-diagram-card[data-workspace-current='true'] {
+  outline: 1px solid var(--design-primary);
+  outline-offset: -1px;
 }
 body[data-entry-view]:not(.customization-active) .workspace-active .workspace-pane-tools {
   display: none !important;
@@ -165,8 +188,24 @@ body[data-entry-view] .dt-rail-navigation button {
   cursor: grabbing;
 }
 @media (max-width: 760px) {
-  .workbench-content-row button {
-    min-height: 42px;
+  body.workbench-editing .ui-parameters .workbench-content-row {
+    grid-template-columns: minmax(0, 1fr) 44px;
+  }
+  body .ui-parameters .workbench-content-row button {
+    min-height: 44px;
+  }
+  body .ui-parameters .workbench-add-view {
+    width: 44px;
+  }
+  body[data-entry-view] .ui-diagram-card-head > .view-tabs {
+    flex: 1 1 100%;
+    margin: 0;
+  }
+  body[data-entry-view] .ui-diagram-card-head > .view-tabs button {
+    flex: 1;
+    min-height: 44px;
+    padding-inline: 3px;
+    font-size: 11px;
   }
 }
 
@@ -185,4 +224,10 @@ body[data-entry-view]:not(.customization-active) .workspace-active .ui-diagram-c
   max-width: 40%;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Keep the native reset separate from the reference editor launcher. */
+body[data-entry-view] #stage:has(> .diagram-tool-launch:not([hidden])) > .view-reset {
+  bottom: 58px;
+  right: 12px;
 }

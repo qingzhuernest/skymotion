@@ -15,16 +15,7 @@
   menu.append(tree);
   const entries = [];
   const groups = [
-    [
-      '天空与日影',
-      'Sky & shadows',
-      [
-        ['skyPanel', '空间视图', 'Space view', 'orbit'],
-        ['skyPanel', '俯视日影', 'Overhead shadow', 'top'],
-        ['skyPanel', '地平视角', 'Horizon view', 'horizon'],
-        ['skyPanel', '仰望天空', 'Looking up', 'observer'],
-      ],
-    ],
+    ['天空与日影', 'Sky & shadows', [['skyPanel', '天空与日影', 'Sky & shadows']]],
     [
       '关联图解',
       'Related diagrams',
@@ -48,8 +39,13 @@
       ],
     ],
   ];
-  function select(id, view) {
-    if (view) state.view = view;
+  function select(id) {
+    if (id === 'solarCompare') {
+      window.skyWorkspacePresentation.openOverview();
+      uiWorkspace.tabs.querySelector('[data-route-diagram=solarCompare]').click();
+      schedule();
+      return;
+    }
     const layoutId = state.body === 'moon' && id === 'companionModule' ? 'solarGeometryPanel' : id;
     if (!window.skyWorkspacePresentation?.selectView(layoutId)) {
       const tab = uiWorkspace.tabs.querySelector(`[data-route-diagram="${id}"]`);
@@ -65,15 +61,14 @@
     const summary = document.createElement('summary');
     group.append(summary);
     tree.append(group);
-    for (const [id, name, translation, view] of items) {
+    for (const [id, name, translation] of items) {
       const row = document.createElement('div');
       row.className = 'workbench-content-row';
       const button = document.createElement('button');
       button.type = 'button';
       button.dataset.workbenchView = id;
-      if (!view || view === 'orbit') button.dataset.diagram = id;
-      if (view) button.dataset.skyView = view;
-      button.onclick = () => select(id, view);
+      button.dataset.diagram = id;
+      button.onclick = () => select(id);
       row.append(button);
       const add = document.createElement('button');
       add.type = 'button';
@@ -81,7 +76,6 @@
       add.innerHTML =
         '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
       add.onclick = () => {
-        if (view) state.view = view;
         const api = window.skyWorkspacePresentation;
         const layoutId =
           state.body === 'moon' && id === 'companionModule' ? 'solarGeometryPanel' : id;
@@ -92,7 +86,7 @@
       };
       row.append(add);
       group.append(row);
-      entries.push({ id, name, translation, view, button, add, row });
+      entries.push({ id, name, translation, button, add, row });
     }
     group.dataset.zh = zh;
     group.dataset.en = en;
@@ -142,6 +136,7 @@
       uiViewHidden(entry.row, !available || available.hidden);
       const labels = moon
         ? {
+            skyPanel: ['月球天空', 'Lunar sky'],
             contextPanel: ['月相关系', 'Phase relationships'],
             chartPanel: ['逐日照明比例', 'Daily illumination'],
             riseSetPanel: ['月出月落方位', 'Moonrise & moonset'],
@@ -149,21 +144,27 @@
         : {};
       const label = labels[entry.id];
       const name = label ? tr(...label) : tr(entry.name, entry.translation);
+      const layoutId = moon && entry.id === 'companionModule' ? 'solarGeometryPanel' : entry.id;
       uiViewText(entry.button, name);
-      const selected = visible?.has(entry.id) && (!entry.view || state.view === entry.view);
+      uiViewAttribute(
+        entry.button,
+        'title',
+        api?.active && Object.hasOwn(uiWorkspace.cards, layoutId) && !visible.has(layoutId)
+          ? tr('在当前图位显示：', 'Show in the current pane: ') + name
+          : tr('查看：', 'View: ') + name,
+      );
+      entry.row.classList.toggle(
+        'workbench-current-view',
+        api?.active ? api.activeView === layoutId : uiWorkspace.selected === entry.id,
+      );
+      const selected = entry.id === 'solarCompare' ? !!api?.active : visible?.has(layoutId);
       uiViewAttribute(entry.button, 'aria-pressed', String(!!selected));
       uiViewAttribute(
         entry.button,
         'aria-busy',
         String(entry.id === 'lunarOrbit' && !!uiWorkspace.pendingLunar),
       );
-      const layoutId = moon && entry.id === 'companionModule' ? 'solarGeometryPanel' : entry.id;
-      uiViewHidden(
-        entry.add,
-        !editing ||
-          !Object.hasOwn(uiWorkspace.cards, layoutId) ||
-          (!!entry.view && entry.view !== 'orbit'),
-      );
+      uiViewHidden(entry.add, !editing || !Object.hasOwn(uiWorkspace.cards, layoutId));
       const included = api?.active && api.views.includes(layoutId);
       uiViewAttribute(
         entry.add,

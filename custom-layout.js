@@ -608,6 +608,8 @@
     );
     head.prepend(tools);
     controls.set(id, { handle, select, focus, close });
+    for (const event of ['pointerdown', 'focusin'])
+      cards[id].addEventListener(event, () => activate(id));
     handle.addEventListener('pointerdown', (e) => start(e, id));
     handle.addEventListener('lostpointercapture', cancel);
     handle.addEventListener('keydown', (e) => {
@@ -662,14 +664,30 @@
   note.append(noteTitle, noteShared, noteHelp);
   document.querySelector('.ui-diagram-details[data-for=solarCompare]').prepend(note);
   const api = (window.skyWorkspacePresentation = {
+    get activeView() {
+      return data.views[data.active];
+    },
+    openOverview() {
+      if (data.views.length < 2) {
+        const current = Object.hasOwn(cards, uiWorkspace.selected)
+          ? uiWorkspace.selected
+          : data.views[0];
+        data.views = [current, current === 'chartPanel' ? 'contextPanel' : 'chartPanel'];
+        data.active = 0;
+      }
+      data.enabled = true;
+      uiWorkspace.selected = 'solarCompare';
+      save();
+      apply();
+    },
     selectView(id) {
       if (!ids.includes(id) || !data.enabled || uiWorkspace.selected !== 'solarCompare')
         return false;
-      change(() => {
-        const existing = data.views.indexOf(id);
-        if (existing >= 0) data.active = existing;
-        else data.views[data.active] = id;
-      });
+      if (data.views.includes(id)) activate(id);
+      else
+        change(() => {
+          data.views[data.active] = id;
+        });
       return true;
     },
     get views() {
@@ -740,10 +758,27 @@
         mobile.matches ? [data.views[data.active]] : focused ? [focused] : data.views,
       );
       shell.classList.toggle('workspace-active', active);
+      markActive();
       uiViewHidden(bar, !active || !customizing);
       uiViewHidden(launch, false);
     },
   });
+  function markActive() {
+    for (const [id, card] of Object.entries(cards))
+      uiViewAttribute(card, 'data-workspace-current', String(api.active && id === api.activeView));
+  }
+  function activate(id) {
+    const index = data.views.indexOf(id);
+    if (!api.active || index < 0 || index === data.active) return;
+    data.active = index;
+    save();
+    if (mobile.matches || focused) {
+      if (focused) focused = id;
+      apply();
+    } else markActive();
+    window.SkyWorkbenchMenu?.sync();
+    schedule();
+  }
   function save() {
     try {
       localStorage.setItem(key(), JSON.stringify(data));

@@ -12,7 +12,9 @@ Arrangement & saved layouts is an inline sidebar section rather than an overlay.
 
 Views share location, date and the common observation time. Analemma separately labels its fixed annual sampling clock, retaining civil-clock time by default to show equation-of-time motion. Linking to the common apparent solar clock removes that horizontal component. Editing its sampling clock or basis unlinks it without changing the shared observation time.
 
-Drag solar and lunar rise/set compasses to rotate them, or scroll/pinch to zoom. Compass labels rotate with the view while true bearing readings stay unchanged. Select an event point to jump to its time, use arrow keys to rotate, Home to reset and Escape to cancel a drag. Poles and days without events do not produce invented markers.
+Drag a solar or lunar rise/set point to adjust the shared date while keeping the location fixed. The actual bearing approaches the target and other views update with the date. Solar dates are searched within the current year; lunar dates within five weeks of the original date. Unreachable bearings stop at the nearest achievable position with an explanation, without inventing astronomical readings. Click a point to jump to its time; left/right arrows change the date, scroll or pinch to zoom, Home resets zoom, and Escape cancels a drag and restores its original date. Poles and days without events do not produce invented markers.
+
+Combined views opens a multi-view comparison even outside customization; adding, removing and arranging views still require customization. The sidebar has one sky entry, with its four viewpoints in the sky pane header. While customizing, click a pane to mark it with a green outline and the matching sidebar entry. Selecting an absent view name replaces this pane; its add control adds another pane instead.
 
 
 For developers and maintainers: source-code responsibilities, state and time conventions, astronomical models, rendering and control animations, regression testing, AGPLv3, and publishing to both sites.

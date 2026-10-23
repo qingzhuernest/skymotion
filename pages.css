@@ -1747,7 +1747,9 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
 .ui-plot[data-kind='solarCompare'] .ui-diagram-card-head h2 {
   display: block;
 }
-.ui-plot[data-kind='solarCompare'] .ui-diagram-card-head span:not(.workbench-sampling-clock) {
+.ui-plot[data-kind='solarCompare']
+  .ui-diagram-card-head
+  span:not(.workbench-sampling-clock):not(.motion-selection) {
   display: none;
 }
 @media (max-width: 760px), (max-height: 540px) {
