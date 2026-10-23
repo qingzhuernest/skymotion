@@ -487,6 +487,9 @@
                 }
               ]
             }
+          ],
+          "aliases": [
+            "unified-workbench"
           ]
         },
         {
@@ -2045,7 +2048,8 @@
           "aliases": [
             "section-0",
             "section-1",
-            "unified-workbench"
+            "unified-workbench",
+            "section-10"
           ]
         },
         {
@@ -2280,6 +2284,10 @@
                 "Display aids offer tracks, angle references, shadows, tip traces and lunar overlays where supported. At night, during polar conditions or close to the horizon, shadow readings may be absent or extend beyond the canvas."
               ]
             }
+          ],
+          "aliases": [
+            "section-3",
+            "section-5"
           ]
         },
         {
@@ -2442,6 +2450,9 @@
                 "A close approach is directional, not a collision or necessarily close physical spacing. Search results do not fully assess weather, terrain, sky brightness or visual detection limits."
               ]
             }
+          ],
+          "aliases": [
+            "section-4"
           ]
         },
         {
@@ -2527,6 +2538,9 @@
                 ]
               ]
             }
+          ],
+          "aliases": [
+            "section-7"
           ]
         },
         {
@@ -2564,6 +2578,9 @@
                 ]
               ]
             }
+          ],
+          "aliases": [
+            "section-6"
           ]
         },
         {
@@ -3028,6 +3045,9 @@
                 "Lab’s 3D comparison retains the local scientific view alongside a linked spatial scene. UTC is shared while cameras remain independent. If WebGL is unavailable, continue in the 2D Lab."
               ]
             }
+          ],
+          "aliases": [
+            "section-12"
           ]
         },
         {
@@ -3065,6 +3085,9 @@
                 ]
               ]
             }
+          ],
+          "aliases": [
+            "section-2"
           ]
         },
         {
@@ -3136,6 +3159,11 @@
                 }
               ]
             }
+          ],
+          "aliases": [
+            "section-8",
+            "section-9",
+            "section-11"
           ]
         }
       ]
@@ -3194,6 +3222,10 @@
                 "The dictionaries cover every shared initial-state field and core subsystem structures. Equations explain calculation-local quantities. The source index lists file responsibilities and declared functions for following specific scopes; loop counters are not public interfaces."
               ]
             }
+          ],
+          "aliases": [
+            "section-1",
+            "section-2"
           ]
         },
         {
@@ -3303,6 +3335,9 @@
                 ]
               ]
             }
+          ],
+          "aliases": [
+            "section-5"
           ]
         },
         {
@@ -3589,7 +3624,8 @@
             }
           ],
           "aliases": [
-            "section-8"
+            "section-8",
+            "section-11"
           ]
         },
         {
@@ -4044,7 +4080,8 @@
             }
           ],
           "aliases": [
-            "section-10"
+            "section-10",
+            "section-15"
           ]
         },
         {
@@ -4377,6 +4414,10 @@
                 "SkyWorkbenchMenu selects content beneath stable top navigation; skyWorkspacePresentation manages composition. Object selection must not rewrite the main menu. Selecting a pane updates active/highlight state without remounting all canvases. Small screens reuse the native parameter drawer instead of another floating editor."
               ]
             }
+          ],
+          "aliases": [
+            "unified-workbench",
+            "section-3"
           ]
         },
         {
@@ -4935,7 +4976,8 @@
             }
           ],
           "aliases": [
-            "section-17"
+            "section-17",
+            "section-16"
           ]
         },
         {
@@ -5068,7 +5110,8 @@
           ],
           "aliases": [
             "section-20",
-            "section-23"
+            "section-23",
+            "section-22"
           ]
         },
         {
@@ -5208,6 +5251,9 @@
             {
               "kind": "source-index"
             }
+          ],
+          "aliases": [
+            "section-4"
           ]
         }
       ]
