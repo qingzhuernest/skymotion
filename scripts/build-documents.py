@@ -5,7 +5,7 @@ from pathlib import Path
 import argparse, html, json, re
 ROOT=Path(__file__).resolve().parents[1]
 SOURCE=ROOT/'docs/document-content.json'
-VERSION='20261023-docs90'
+VERSION='20261023-docs91'
 LINKS=[('docs','文档中心','Documentation'),('guide','学习指南','Learning guide'),('project-guide','项目介绍与功能使用','Project & feature manual'),('development-guide','开发者文档','Developer reference')]
 def esc(value):return html.escape(str(value),quote=True)
 def fields():
@@ -49,7 +49,7 @@ def generate(data):
             if markdown:out.append(f'| [{path}]({url}) | {label} | {names} |')
             else:out.append(f'<tr><td><a href="{esc(url)}"><code>{esc(path)}</code></a></td><td>{esc(label)}</td><td>{esc(names)}</td></tr>')
         if markdown:return '\n'.join([('| 源码文件 | 职责 | 声明的函数 |' if lang==0 else '| File | Responsibility | Declared functions |'),'| --- | --- | --- |',*out])
-        return '<div class="document-table"><table><thead><tr><th>'+pair(['源码文件','Source file'],lang)+'</th><th>'+pair(['职责','Responsibility'],lang)+'</th><th>'+pair(['声明的函数','Declared functions'],lang)+'</th></tr></thead><tbody>'+''.join(out)+'</tbody></table></div>'
+        return '<div class="document-table"><table class="document-source-table"><colgroup><col><col><col></colgroup><thead><tr><th>'+pair(['源码文件','Source file'],lang)+'</th><th>'+pair(['职责','Responsibility'],lang)+'</th><th>'+pair(['声明的函数','Declared functions'],lang)+'</th></tr></thead><tbody>'+''.join(out)+'</tbody></table></div>'
     def render(block,lang,markdown=False):
         block=expanded(block);kind=block['kind']
         if kind=='source-index':return source_index(lang,markdown)

@@ -23,6 +23,20 @@ const documents = ['docs', 'guide', 'project-guide', 'development-guide'];
           assert.match(await page.locator('.page-nav [aria-current="page"]').getAttribute('href'),/docs/);
           assert.equal(await page.locator('.document-links a').count(),4);
           assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth),false,`${document}/${width}`);
+          // A contained table can still be unreadable when long tokens squeeze its columns.
+          const narrowCells = await page.locator('.document-page table').evaluateAll(tables =>
+            tables.flatMap(table => [...table.rows].flatMap(row => [...row.cells]
+              .filter(cell => cell.getBoundingClientRect().width < 140)
+              .map(cell => cell.textContent.slice(0,60)))));
+          assert.deepEqual(narrowCells,[],`${document}/${language}/${width}: compressed table columns`);
+          if (document === 'development-guide') {
+            const columns = await page.locator('.document-source-table tbody tr').first().locator('td').evaluateAll(cells =>
+              cells.map(cell => cell.getBoundingClientRect().width));
+            assert(columns[0] >= 190 && columns[1] >= 200,`Source index columns: ${columns}`);
+            const firstFile = page.locator('.document-source-table tbody code').first();
+            const fileLines = await firstFile.evaluate(code => code.getClientRects().length);
+            assert.equal(fileLines,1,'app.js remains a readable single-line filename');
+          }
           const links = await page.locator('.document-page a[href]').evaluateAll(ns => ns.map(n => n.getAttribute('href')));
           for (const href of links) {
             if (/^https?:/.test(href)) continue;

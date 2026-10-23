@@ -162,7 +162,19 @@
   border-collapse: collapse;
   width: 100%;
   font-size: 13px;
-  min-width: 440px;
+  min-width: 640px;
+  table-layout: fixed;
+}
+/* Long identifiers must not determine the widths of neighboring columns. */
+.document-page .document-source-table {
+  min-width: 760px;
+}
+.document-source-table col:nth-child(1) { width: 26%; }
+.document-source-table col:nth-child(2) { width: 28%; }
+.document-source-table col:nth-child(3) { width: 46%; }
+.document-page :is(th, td) {
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 .document-page :is(th, td) {
   text-align: left;
@@ -300,7 +312,8 @@
   .document-table {
     overflow: visible;
   }
-  .document-page table {
+  .document-page table,
+  .document-page .document-source-table {
     min-width: 0;
   }
 }
