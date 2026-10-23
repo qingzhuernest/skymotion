@@ -283,7 +283,7 @@ function renderUIWorkspace() {
   lifeEntry.className = 'life-devices-entry';
   lifeEntry.append($('sundialLink'));
   life.replaceWith(lifeEntry);
-  link('helpBtn', 'guide.html');
+  link('helpBtn', 'docs.html', '文档中心');
   link('openSundials', 'sundial.html', '日晷实验台');
   link('sundialLink', 'sundial.html', '日晷实验台');
   link('analemmaLink', 'analemma.html', '日行迹与“8”字成因');

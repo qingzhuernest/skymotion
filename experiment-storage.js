@@ -19,7 +19,7 @@
   };
   const choices = {
     view: ['orbit', 'top', 'horizon', 'observer'], earthView: ['globe', 'map'],
-    globeDragMode: ['view', 'location'], observerTimeBasis: ['solar','utc'], observerConstraint: ['free','latitude','longitude'], analemmaBasis: ['clock', 'solar'],
+    globeDragMode: ['view', 'location'], observerTimeBasis: ['solar','utc'], observerConstraint: ['free','latitude','longitude'], analemmaBasis: ['clock', 'apparent'],
     analemmaView: ['dome', 'sky', 'equatorial'], planet: ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn'],
     shadowZoom: [1, 2, 4, 8, 16], speed: [20, 60, 180], daysRate: [0.5, 1, 3], solarDateRate: [1, 3, 10],
   };
@@ -33,7 +33,8 @@
     const result = { ...defaults, playing: false, solarDateLinkBackup: null };
     if (!record(source)) return result;
     for (const field of Object.keys(defaults)) {
-      const value = source[field];
+      // Normalize the former workspace token to the sampler's canonical value.
+      const value = field === 'analemmaBasis' && source[field] === 'solar' ? 'apparent' : source[field];
       if (field === 'body' || field === 'playing' || field === 'solarDateLinkBackup' || field === 'place') continue;
       if (field === 'date') { if (validDate(value)) result[field] = value; }
       else if (field === 'companionSearchResult') result[field] = searchResult(value);

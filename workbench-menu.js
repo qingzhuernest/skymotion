@@ -210,7 +210,7 @@
         : new Set([uiWorkspace.selected]);
       state.analemma = state.body === 'sun' && visible.has('analemmaPanel');
       if (state.analemma && uiWorkspace.analemmaClockLinked) {
-        state.analemmaBasis = 'solar';
+        state.analemmaBasis = 'apparent';
         state.analemmaClock = Math.min(1439, state.time);
       }
     },

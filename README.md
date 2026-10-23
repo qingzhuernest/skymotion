@@ -14,8 +14,9 @@
 
 ## 使用与文档
 
-- [学习指南](learning-guide.md)：从哪里进入、怎样调节、怎样对照和记录。
-- [项目介绍](project-guide.md)：教学用途、功能、数据依据和模型范围。
+- [文档中心](docs.html)：顶部统一入口，按教学、功能使用和开发查阅。
+- [学习指南](learning-guide.md)：课程设计、探究任务、观察记录和评价。
+- [项目介绍与功能使用](project-guide.md)：全部模块、参数、对照、自定义、保存与操作方法。
 - [开发说明](development-guide.md)：源码职责、状态、计算、渲染、检查与部署。
 - [自定义操作](docs/customization-interaction.zh.md)：添加城市、时间标记、参考线和实验物体，编辑属性并保存方案。
 
@@ -33,9 +34,10 @@ python3 -m http.server 8000
 
 ## 修改文档与双语页面
 
-中文 HTML 是页面原稿；英文页面通过字典生成。修改原稿或 `i18n-*.json` 后运行：
+文档中心与三份手册的双语原稿统一保存在 `docs/document-content.json`。先生成 HTML 和 Markdown，再生成英文页面与共享字典：
 
 ```sh
+python3 scripts/build-documents.py
 python3 scripts/prerender-pages.py --dist .
 python3 scripts/prerender-pages.py --check
 ```

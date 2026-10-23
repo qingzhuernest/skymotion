@@ -245,7 +245,8 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44125/').repl
       }),
     );
     assert(
-      targets.every((target) => target.width >= 44 && target.height >= 44),
+      // DOM geometry can differ by one layout subpixel after a CSS transform.
+      targets.every((target) => target.width >= 44 - 1 / 64 && target.height >= 44 - 1 / 64),
       JSON.stringify(targets),
     );
     await page.screenshot({ path: 'tests/artifacts/unified-workbench-phone.png' });

@@ -32,3 +32,6 @@ assert.equal(blocked.read(),null);assert(blocked.write({body:'sun',sun:valid}));
 const quota = load({getItem:()=>null,setItem(){throw Error('quota')}}).api;
 assert(quota.write({body:'moon'}));assert.equal(quota.read().body,'moon');
 console.log('PASS invalid session fields, legacy/versioned data, leap days, valid observations and storage-denied/quota fallback');
+
+for (const basis of ['clock', 'apparent']) assert.equal(api.sanitizeMode({analemmaBasis:basis},defaults.sun).analemmaBasis,basis);
+assert.equal(api.sanitizeMode({analemmaBasis:'solar'},defaults.sun).analemmaBasis,'apparent');

@@ -14,8 +14,9 @@ To show sky, Earth, altitude and analemma together, start with Space view, enter
 
 ## Using the lab and its documentation
 
-- [Learning guide](learning-guide.en.md): where to start, what to adjust, and how to compare and record observations.
-- [Project introduction](project-guide.en.md): teaching uses, capabilities, data sources and model scope.
+- [Documentation center](docs.en.html): one top-menu entry for teaching, feature usage and development.
+- [Learning guide](learning-guide.en.md): lesson design, investigations, recording and assessment.
+- [Project & feature manual](project-guide.en.md): all modules, controls, comparisons, customization, saving and interaction.
 - [Development guide](development-guide.en.md): code responsibilities, state, calculations, rendering, checks and deployment.
 - [Customization instructions](docs/customization-interaction.en.md): add cities, time markers, reference lines and physical objects, edit their properties and save plans.
 
@@ -33,9 +34,10 @@ Open `http://localhost:8000/`. English has separate pages, such as `lab.en.html`
 
 ## Edit documents and bilingual pages
 
-Chinese HTML is the page source; English pages are generated using dictionaries. After editing source pages or `i18n-*.json`, run:
+The bilingual source for the documentation center and three manuals is `docs/document-content.json`. Generate HTML and Markdown first, then English pages and the shared dictionary:
 
 ```sh
+python3 scripts/build-documents.py
 python3 scripts/prerender-pages.py --dist .
 python3 scripts/prerender-pages.py --check
 ```
