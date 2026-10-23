@@ -119,7 +119,7 @@ exports.layoutAction = async (page, word) => {
   if (!wasOpen) await trigger.click();
   const target =
     word === 'add'
-      ? page.locator('.workspace-add-choices button:visible').first()
+      ? page.locator('.workbench-add-view[aria-pressed="false"]:visible').first()
       : page.locator(`#workspaceOptions [data-word="${word}"]`);
   await target.click();
   if (!wasOpen) await page.keyboard.press('Escape');
