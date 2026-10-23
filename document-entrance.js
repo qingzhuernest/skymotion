@@ -4,18 +4,60 @@
   if (!context || window.skyPageRedirecting) return;
   window.skyDocumentEntranceInitialized = true;
   const copy = {
-    guide: {
-      zh: ['为何学习地理？','为了读懂我们生活的大地。','知道世界是什么样，便足够了吗？','还要理解，我们如何与它相处。','那么，理解从何处开始？','从愿意再看一眼那些自以为熟悉的事物开始。'],
-      en: ['Why do we study geography?','To understand the Earth we live on.','Is knowing the world enough?','Only if we also learn how to live within it.','Then where does understanding begin?','With the patience to look again at what we thought we knew.'],
+    "guide": {
+      "zh": [
+        "每天都能看见的天空，为什么还值得学习？",
+        "因为熟悉一种现象，并不等于理解它。",
+        "理解，只是知道一个正确答案吗？",
+        "还要知道答案从何而来，又在什么条件下成立。",
+        "那么，学习会有终点吗？",
+        "一个答案可以结束一道题，理解却让我们有能力提出新的问题。"
+      ],
+      "en": [
+        "Why study a sky we see every day?",
+        "Familiarity with a phenomenon is not the same as understanding it.",
+        "Does understanding mean knowing the right answer?",
+        "It also means knowing where an answer comes from, and when it holds.",
+        "Then does learning ever come to an end?",
+        "An answer may finish an exercise. Understanding makes new questions possible."
+      ]
     },
-    'project-guide': {
-      zh: ['模型有什么用？','让复杂的世界，暂时变得清晰。','那么，模型就是世界本身吗？','不。它只是观看世界的一种方式。','它未能呈现的部分呢？','那里，仍有值得我们继续追问的真实。'],
-      en: ['What is a model for?','To make a complicated world easier to understand.','So, is the model the world?','No. It is a way of looking at it.','And what lies beyond what it shows?','The part of the world that keeps us asking better questions.'],
+    "project-guide": {
+      "zh": [
+        "模型与真实之间，隔着什么？",
+        "隔着我们的选择：留下哪些关系，暂且舍去哪些细节。",
+        "有所省略的模型，还能帮助我们认识真实吗？",
+        "可以。取舍让问题变得清晰，也为解释划定了边界。",
+        "那么，模型没有解释的部分呢？",
+        "承认尚未解释的部分，才能让新的观察继续修正我们的理解。"
+      ],
+      "en": [
+        "What stands between a model and reality?",
+        "Our choices: which relationships to retain, and which details to set aside.",
+        "Can a model that leaves things out still help us understand?",
+        "Yes. Simplification clarifies a question, while setting limits on its explanation.",
+        "What about everything the model leaves unexplained?",
+        "Recognizing those gaps lets new observations reshape our understanding."
+      ]
     },
-    'development-guide': {
-      zh: ['为何建立模型？','为了解释所见，也试着预知将发生的事。','可当模型失效，又该怎么办？','回到观察，问一问：我们遗漏了什么？','这是否意味着，先前的理解全无意义？','并非如此。地理的趣味，正从此处展开。'],
-      en: ['Why do we build models?','To explain what we see, and predict what may happen.','But what happens when our models fail?','We return to observation, and ask what we have overlooked.','Does that mean we have understood nothing?','No. That is when geography becomes interesting.'],
-    },
+    "development-guide": {
+      "zh": [
+        "程序运行正确，就意味着理解正确吗？",
+        "计算可以忠于规则，规则却未必忠于现实。",
+        "那么，怎样让一份实现值得信赖？",
+        "让假设可以追溯，让推导可以复查，让结论接受证据的检验。",
+        "当新的证据推翻了原来的设计呢？",
+        "让实现随认识修正，也把修正的理由清楚地留下。"
+      ],
+      "en": [
+        "Does correct execution mean correct understanding?",
+        "A calculation can obey its rules even when those rules misdescribe reality.",
+        "Then what makes an implementation trustworthy?",
+        "Traceable assumptions, inspectable reasoning, and conclusions tested against evidence.",
+        "What if new evidence overturns the original design?",
+        "As understanding changes, revise the implementation and record why."
+      ]
+    }
   };
   const root = document.documentElement, english = root.lang === 'en';
   const reduced = matchMedia('(prefers-reduced-motion:reduce)');

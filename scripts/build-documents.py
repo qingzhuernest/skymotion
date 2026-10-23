@@ -5,7 +5,7 @@ from pathlib import Path
 import argparse, html, json, re
 ROOT=Path(__file__).resolve().parents[1]
 SOURCE=ROOT/'docs/document-content.json'
-VERSION='20261023-docs91'
+VERSION='20261023-entrance92'
 LINKS=[('docs','文档中心','Documentation'),('guide','学习指南','Learning guide'),('project-guide','项目介绍与功能使用','Project & feature manual'),('development-guide','开发者文档','Developer reference')]
 def esc(value):return html.escape(str(value),quote=True)
 def fields():
