@@ -1667,6 +1667,9 @@
                 "Identify one deliberately exaggerated display quantity and one quantity computed from the ephemeris, explaining their different purposes."
               ]
             }
+          ],
+          "aliases": [
+            "immersive"
           ]
         },
         {
@@ -2867,6 +2870,9 @@
                 "The catalog is the single add-view entry; saved-layout settings do not repeat those buttons. Finishing retains the composition while hiding editing handles and dividers."
               ]
             }
+          ],
+          "aliases": [
+            "custom-layout"
           ]
         },
         {
@@ -3163,7 +3169,8 @@
           "aliases": [
             "section-8",
             "section-9",
-            "section-11"
+            "section-11",
+            "license"
           ]
         }
       ]
@@ -4566,6 +4573,9 @@
                 "Add/patch updates a reference without relocating the baseline. observeLocation or Make baseline explicitly applies the site. Names, sliders, inputs and cross-view colors must share one reference rather than disconnected city arrays."
               ]
             }
+          ],
+          "aliases": [
+            "customization-workflow"
           ]
         },
         {
