@@ -7,7 +7,9 @@ body.lunar-orbit-active .lunar-controls-host,
 .ui-lunar-orbit .lunar-timeline-host {
   display: block;
 }
-body.lunar-orbit-active .ui-parameters > :not(.lunar-controls-host):not(.motion-menu-header),
+body.lunar-orbit-active
+  .ui-parameters:not([data-editor-view='views']):not([data-editor-view='references'])
+  > :not(.lunar-controls-host):not(.motion-menu-header),
 .ui-lunar-orbit .ui-timeline-host > :not(.lunar-timeline-host),
 .ui-lunar-orbit .ui-linked-toggle {
   display: none !important;
@@ -115,7 +117,9 @@ body.lunar-orbit-active .ui-parameters > :not(.lunar-controls-host):not(.motion-
 }
 
 /* Failure feedback belongs to the light control surface, never replaces the plot. */
-body[data-page='diagrams'] .ui-plot { position: relative; }
+body[data-page='diagrams'] .ui-plot {
+  position: relative;
+}
 .lunar-load-notice {
   position: absolute;
   z-index: 5;
@@ -133,14 +137,18 @@ body[data-page='diagrams'] .ui-plot { position: relative; }
   line-height: 1.6;
   box-shadow: 0 4px 14px rgb(32 50 62 / 12%);
 }
-.lunar-load-notice[hidden] { display: none; }
+.lunar-load-notice[hidden] {
+  display: none;
+}
 .lunar-load-notice button {
   flex-shrink: 0;
   background: var(--design-surface);
   color: var(--design-ink);
   border-color: var(--design-line);
 }
-.lunar-load-notice button:hover { background: var(--design-inset); }
+.lunar-load-notice button:hover {
+  background: var(--design-inset);
+}
 .lunar-load-notice button:focus-visible {
   outline: 2px solid var(--design-primary);
   outline-offset: 3px;

@@ -13,6 +13,8 @@ Views share location, date and the common observation time. Analemma separately 
 Drag solar and lunar rise/set compasses to rotate them, or scroll/pinch to zoom. Compass labels rotate with the view while true bearing readings stay unchanged. Select an event point to jump to its time, use arrow keys to rotate, Home to reset and Escape to cancel a drag. Poles and days without events do not produce invented markers.
 
 
+Earthrise uses the same hierarchy: choose Views & layout → Related diagrams to open it or switch plots. Observation controls contains orbital position, height and playback; the view catalog remains available.
+
 ## Customization: add, compare and save
 
 ### Enter and finish customization

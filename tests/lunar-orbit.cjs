@@ -199,6 +199,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     assert(await p.locator('.ui-timeline-host').isVisible());
     assert.deepEqual(await science(), initial);
     await require('./diagram-test-helpers.cjs').selectDiagram(p, 'lunarOrbit');
+    await p.locator('[data-rail-section=conditions]').click();
     assert.equal(await p.locator('#lunarOrbitPanel iframe').count(), 1);
     await p.locator('.language-toggle').click();
     await frame.waitForFunction(() => document.documentElement.lang === 'en');
@@ -287,6 +288,11 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     );
     await require('./diagram-test-helpers.cjs').selectDiagram(delayed, 'lunarOrbit');
     await delayed.waitForFunction(() => document.body.classList.contains('lunar-orbit-active'));
+    assert(
+      await delayed.locator('#workbenchViews').isVisible(),
+      'Earthrise retains the selected content menu',
+    );
+    await delayed.locator('[data-rail-section=conditions]').click();
     assert(await delayed.locator('.lunar-controls-host').isVisible());
     await delayed.close();
     console.log('PASS cold loading preserves both regions and late readiness respects navigation');

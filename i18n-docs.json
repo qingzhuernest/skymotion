@@ -922,5 +922,6 @@
   "连排按钮用于选择一个模式或视图，绿色选中项表示当前选择；普通链接进入另一页面。": "A row of buttons chooses a mode or view; green marks the current selection. Ordinary links open another page.",
   "开关文字在左、控制器在右，点文字或开关均可切换；绿色表示开启。较长文字可以换行。灰色表示关闭；变淡且无法操作的控件才是禁用，需要先满足当前模式条件。": "Switch labels sit on the left, controls on the right. Click either to toggle; green means on and gray means off. Long labels may wrap. A faded, inoperable control is disabled until its prerequisites are met.",
   "先选“太阳系”，暂停播放，在参数区选择一颗行星，读出平均太阳距离、平均公转周期和半径。点绿色“靠近…观察”按钮看它的球体；点“太阳系”回到总览。": "Choose Solar system, pause and select a planet in Parameters. Read its mean solar distance, orbital period and radius. Use the green Observe up close button to inspect its sphere; choose Solar system to return to the overview.",
-  "统一实验台的分层内容目录、视图组合入口、内嵌布局设置与日行迹采样时刻说明": "Unified content hierarchy, view combinations, inline layout settings and the analemma sampling clock"
+  "统一实验台的分层内容目录、视图组合入口、内嵌布局设置与日行迹采样时刻说明": "Unified content hierarchy, view combinations, inline layout settings and the analemma sampling clock",
+  "地升地落也使用同一层级菜单：在“视图与布局 → 关联图解”中进入或切换其他图；选择“观测条件”调整绕月位置、高度和播放，不会隐藏视图目录入口。": "Earthrise uses the same hierarchy: choose Views & layout → Related diagrams to open it or switch plots. Observation controls contains orbital position, height and playback; the view catalog remains available."
 }

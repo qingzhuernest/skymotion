@@ -34,6 +34,8 @@ This guide follows observation tasks: set the conditions, add comparisons, read 
 
 The production version supports Chinese and English. The top navigation language button switches menus, reading explanations, diagram annotations and documents without changing location, date, time or experiment settings. This browser remembers your language preference; English mode provides complete English Markdown downloads. The calendar applies a date only when confirmed; cancelling leaves the experiment unchanged.
 
+Earthrise uses the same hierarchy: choose Views & layout → Related diagrams to open it or switch plots. Observation controls contains orbital position, height and playback; the view catalog remains available.
+
 ## Complete your first observation
 
 Before an experiment, write a question and decide what to hold constant, what single variable to change and which reading will determine the result. This guide provides operating routes, worksheets and recording tables. Project Overview explains the purpose, data sources and scope; Development Guide describes the code and validation for maintainers.
