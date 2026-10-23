@@ -858,7 +858,9 @@
       } catch {}
       states.set(key, { objects, undo: [], redo: [], stored, saved, repairNeeded });
     }
-    return states.get(key);
+    const entry = states.get(key);
+    entry.model = { id: m.id, type: m.type, body: m.body || 'shared' };
+    return entry;
   }
   function clean(objects, m) {
     // A legacy or hand-edited save may exceed the current limit. Keep its
@@ -963,7 +965,7 @@
           )
         : tr('草稿已保留 · 有未保存的修改|Draft retained · Unsaved changes');
     status.title = tr(
-      '草稿仅保留本次会话；保存本图对象会写入此设备，布局和实验物体分别保存。|Drafts last for this session. Save plot objects stores this plot on this device; layouts and ground objects are saved separately.',
+      '草稿仅保留本次会话；保存本图对象只保存当前图。“排列与收藏”可连同观测条件保存完整实验。|Drafts last for this session. Save plot objects saves this plot only. Arrangement & saved layouts can include conditions and all experiment objects.',
     );
   }
   function record(s, before, beforeSelected = selected, model = selectedOwner()) {
@@ -2896,6 +2898,12 @@
                   ]
                 : null;
           H.width = m.type === 'analemma' && o.type === 'track' && o.id === selected ? 2.5 : 1.5;
+          const focus = window.SkyDiagramTools.selectedReference;
+          if (focus && ['observer', 'time'].includes(o.type)) {
+            const on = focus.id === o.id && focus.source === m.id;
+            m.c.globalAlpha = on ? 1 : 0.3;
+            if (on) H.width = 2.5;
+          }
           if (m.clip && !['note', 'emphasis'].includes(o.type)) {
             m.c.beginPath();
             m.c.rect(...m.clip);
@@ -3172,6 +3180,64 @@
     },
   };
   window.SkyDiagramTools = {
+    get selectedReference() {
+      if (!current || !customizationOn()) return null;
+      const owner = selectedOwner();
+      const object = stateFor(owner).objects.find((o) => o.id === selected);
+      return object && ['observer', 'time'].includes(object.type)
+        ? { id: object.id, source: owner.id }
+        : null;
+    },
+    snapshotExperiment() {
+      commitActive();
+      if (!validInputs()) return null;
+      return [...states.values()]
+        .filter((s) => s.model?.body === state.body)
+        .map((s) => ({ ...s.model, objects: copy(s.objects) }));
+    },
+    prepareExperiment(raw) {
+      if (!Array.isArray(raw) || raw.length > 30) return null;
+      const keys = new Set(),
+        result = [];
+      for (const item of raw) {
+        if (
+          !item ||
+          typeof item.id !== 'string' ||
+          !/^[a-zA-Z0-9-]{1,60}$/.test(item.id) ||
+          item.body !== state.body ||
+          !Object.hasOwn(definitions, item.type) ||
+          !Array.isArray(item.objects) ||
+          item.objects.length > 40 ||
+          keys.has(item.id)
+        )
+          return null;
+        keys.add(item.id);
+        const objects = clean(item.objects, item);
+        if (objects.length !== item.objects.length) return null;
+        result.push({ id: item.id, type: item.type, body: item.body, objects });
+      }
+      return result;
+    },
+    restoreExperiment(raw) {
+      const prepared = this.prepareExperiment(raw);
+      if (!prepared) return false;
+      hide();
+      const incoming = new Map(prepared.map((item) => [item.id, item]));
+      for (const s of states.values())
+        if (s.model?.body === state.body && !incoming.has(s.model.id))
+          incoming.set(s.model.id, { ...s.model, objects: [] });
+      for (const item of incoming.values()) {
+        const s = stateFor(item);
+        s.objects = copy(item.objects);
+        s.lastSelected = null;
+        s.undo = [];
+        s.redo = [];
+        persist(item, s);
+      }
+      selected = null;
+      schedule();
+      return true;
+    },
     selectSidebar: chooseRail,
     openObjects(options = {}) {
       if (!customizationOn()) return false;

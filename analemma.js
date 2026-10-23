@@ -355,15 +355,23 @@ function drawAnalemma() {
     }
   }
   c.restore();
-  for (const p of points) {
-    if (!p.date.endsWith('-01')) continue;
-    const q = plot(p);
+  const monthLabels = [], currentMonth = Number(state.date.slice(5, 7));
+  const compactLabels = w < 500 || h < 280;
+  const months = points.filter(p => p.date.endsWith('-01'))
+    .sort((a,b) => Number(Number(b.date.slice(5,7))===currentMonth)-Number(Number(a.date.slice(5,7))===currentMonth));
+  for (const p of months) {
+    const q = plot(p), month = Number(p.date.slice(5,7));
     c.fillStyle = '#a8caff';
-    c.beginPath();
-    c.arc(q.x, q.y, 2.7, 0, Math.PI * 2);
-    c.fill();
-    if (!state.analemmaCompare)
-      text(c, Number(p.date.slice(5, 7)) + '月', q.x + 6, q.y - 8, '#bcd5f4', 11, 'left');
+    c.beginPath(); c.arc(q.x,q.y,2.7,0,Math.PI*2); c.fill();
+    if (state.analemmaCompare || (compactLabels && month!==currentMonth && (month-1)%3!==0)) continue;
+    const value = month+'月';
+    c.font = `11px ${getComputedStyle(document.body).fontFamily}`;
+    const width = c.measureText(value).width;
+    const x = Math.max(8,Math.min(w-width-8,q.x+6)), y = Math.max(18,Math.min(h-20,q.y-8));
+    const box = {x,y:y-12,w:width+8,h:18};
+    if (monthLabels.some(a=>box.x<a.x+a.w && box.x+box.w>a.x && box.y<a.y+a.h && box.y+box.h>a.y)) continue;
+    monthLabels.push(box);
+    text(c,value,x,y,'#bcd5f4',11,'left');
   }
   const exact = plot(selected),
     markerKey = [

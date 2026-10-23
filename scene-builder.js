@@ -1886,6 +1886,34 @@
   );
   new ResizeObserver(resize).observe(canvas);
   window.SkySceneBuilder = {
+    snapshotExperiment() {
+      if (body !== state.body) selectBody();
+      return { recordMotion: false, measurements: [], notes: [], trails: [], ...clone(data) };
+    },
+    prepareExperiment(raw) {
+      const previous = seq;
+      try {
+        return sanitize(raw);
+      } finally {
+        seq = previous;
+      }
+    },
+    restoreExperiment(raw) {
+      const checked = this.prepareExperiment(raw);
+      if (!checked) return false;
+      cancelGesture();
+      if (body !== state.body) selectBody();
+      data = checked;
+      seq = Math.max(seq, ...data.objects.map((o) => o.number));
+      undo = [];
+      redo = [];
+      selected = null;
+      selectedMany.clear();
+      pending = null;
+      update();
+      schedule();
+      return true;
+    },
     open(options = {}) {
       if (window.SkyCustomization?.active !== true) return;
       if (window.SkyDiagramTools?.leave() === false) return;

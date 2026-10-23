@@ -127,10 +127,11 @@
       state.manual ? state.dec : null,
     );
   }
+  let emphasis = false;
   function stroke(c, pts, color, dash = []) {
     let previous = null;
     c.strokeStyle = color;
-    c.lineWidth = 1.5;
+    c.lineWidth = emphasis ? 2.5 : 1.5;
     c.setLineDash(dash);
     c.beginPath();
     for (const p of pts) {
@@ -150,7 +151,7 @@
     if (!p || p.hidden || !Number.isFinite(p.x) || !Number.isFinite(p.y)) return;
     c.fillStyle = color;
     c.beginPath();
-    c.arc(p.x, p.y, r, 0, Math.PI * 2);
+    c.arc(p.x, p.y, emphasis ? r + 2 : r, 0, Math.PI * 2);
     c.fill();
   }
   let occupiedLabels = [];
@@ -217,10 +218,22 @@
       return;
     const list = sites(),
       marks = times();
+    const selection = window.SkyDiagramTools?.selectedReference;
+    const chosen = [...list, ...marks].find(
+      (o) => o.id === selection?.id && o.source === selection.source,
+    );
+    const isChosen = (o) => !!chosen && o.id === chosen.id && o.source === chosen.source;
+    const highlight = (o) => {
+      emphasis = isChosen(o);
+      m.c.globalAlpha = chosen && !emphasis ? 0.3 : 1;
+    };
     report.set(m.type, {
       basis: basis(),
+      selected: chosen ? { id: chosen.id, source: chosen.source } : null,
       sites: list.map((o) => ({
         id: o.id,
+        source: o.source,
+        emphasized: isChosen(o),
         lat: o.lat,
         lon: o.lon,
         utc: o.utc,
@@ -248,6 +261,7 @@
         c.clip();
       }
       for (const o of list) {
+        highlight(o);
         if (m.type === 'globe') {
           if (o.source !== m.id) {
             const p = m.project(o.lat, o.lon);
@@ -282,6 +296,7 @@
         }
       }
       for (const o of marks) {
+        highlight(o);
         const text = SkyDiagramSampling.clock(o.time);
         if (m.type === 'globe') {
           const utc = state.manual ? null : instantUTC(o.time),
@@ -318,6 +333,7 @@
         }
       }
     } finally {
+      emphasis = false;
       c.restore();
     }
     c.save();
@@ -325,7 +341,8 @@
     c.textAlign = 'left';
     let x = m.clip ? m.clip[0] + 4 : 12,
       y = m.type === 'sky' ? 64 : 18;
-    for (const o of list) {
+    for (const o of [...list].sort((a, b) => Number(isChosen(b)) - Number(isChosen(a)))) {
+      highlight(o);
       let text = o.name + (!o.clockValid ? (en() ? ' · date out of range' : ' · 日期越界') : '');
       if (text.length > 14) text = text.slice(0, 12) + '…';
       const width = c.measureText(text).width + 22;
@@ -340,6 +357,7 @@
       else c.fillText(text, x + 15, y - 3);
       x += width;
     }
+    emphasis = false;
     c.restore();
   }
   window.SkyObserverComparison = {

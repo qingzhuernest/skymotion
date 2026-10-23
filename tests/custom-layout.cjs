@@ -221,7 +221,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await require('./diagram-test-helpers.cjs').layoutAction(q, 'four');
     assert.equal(await q.locator('.ui-diagram-card:visible').count(), 4);
     await q.locator('[data-word="options"]').click();
-    await q.locator('.workspace-save-form input').fill('Temporary');
+    await q.locator('.workspace-save-form input[type=text]').fill('Temporary');
     await q.locator('[data-word="save"]').click();
     assert.match(await q.locator('.workspace-settings-status').innerText(), /unavailable/);
     await blocked.close();
@@ -345,7 +345,11 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     const missing = ['contextPanel', 'chartPanel', 'riseSetPanel', 'solarGeometryPanel'].find(
       (id) => !originalOrder.includes(id),
     );
-    await r.locator(`[data-add-view="${missing}"]`).click();
+    await r
+      .locator(`[data-workbench-view="${missing}"]`)
+      .locator('..')
+      .locator('.workbench-add-view')
+      .click();
     assert.equal((await richSaved()).views.at(-1), missing, 'Add the requested diagram directly');
     await r.keyboard.press('Escape');
     await require('./diagram-test-helpers.cjs').layoutAction(r, 'undo');
@@ -368,10 +372,10 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
       scienceBefore,
       'New customization controls leave science untouched',
     );
-    await r.locator('.workspace-save-form input').fill('Observation');
+    await r.locator('.workspace-save-form input[type=text]').fill('Observation');
     await r.locator('[data-word="save"]').click();
     assert.equal(await r.locator('.workspace-profile-row').count(), 1);
-    await r.locator('.workspace-save-form input').fill('Observation');
+    await r.locator('.workspace-save-form input[type=text]').fill('Observation');
     await r.locator('[data-word="save"]').click();
     assert.equal(
       await r.locator('.workspace-profile-row').count(),
@@ -438,10 +442,10 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await r.locator('[data-word="equalize"]').click();
     assert.deepEqual(await inputState(), scienceBefore);
     for (let i = 2; i <= 5; i++) {
-      await r.locator('.workspace-save-form input').fill('Layout ' + i);
+      await r.locator('.workspace-save-form input[type=text]').fill('Layout ' + i);
       await r.locator('[data-word="save"]').click();
     }
-    await r.locator('.workspace-save-form input').fill('Sixth');
+    await r.locator('.workspace-save-form input[type=text]').fill('Sixth');
     await r.locator('[data-word="save"]').click();
     assert.equal(await r.locator('.workspace-profile-row').count(), 5);
     assert.match(await r.locator('.workspace-settings-status').innerText(), /five/);

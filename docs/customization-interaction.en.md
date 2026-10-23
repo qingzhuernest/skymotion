@@ -14,6 +14,10 @@ Drag a solar or lunar rise/set point to adjust the shared date while keeping the
 
 Combined views opens a multi-view comparison even outside customization; adding, removing and arranging views still require customization. The sidebar has one sky entry, with its four viewpoints in the sky pane header. While customizing, click a pane to mark it with a green outline and the matching sidebar entry. Selecting an absent view name replaces this pane; its add control adds another pane instead.
 
+Selecting a comparison city highlights its matching curves, positions and legends across the related views while dimming other comparisons. Switch cities to compare. In smaller analemma panes, month labels adapt to the available space, retain the current month and avoid collisions.
+
+In Arrangement & saved layouts, select Include conditions and objects, enter a name and save. This saves the current body’s location, date, time, layout, references and constructed objects. Select a saved item marked Full experiment to restore it paused; damaged records do not partially replace the current experiment. Leave the option off to save only the layout. Existing individual object and scene saves remain available. Saved items stay on this device and do not automatically synchronize across devices.
+
 
 Earthrise uses the same hierarchy: choose Views & layout → Related diagrams to open it or switch plots. Observation controls contains orbital position, height and playback; the view catalog remains available.
 

@@ -18,7 +18,7 @@
             ].includes(key),
         ),
       );
-    SkyMotionHistory.register({
+    const adapter = {
       parameterGesture(before, after) {
         return ['lat', 'lon', 'date', 'time', 'dec', 'manual', 'height'].some(
           (key) => before.active[key] !== after.active[key],
@@ -49,8 +49,10 @@
           if (backup && typeof backup === 'object' && !Array.isArray(backup)) {
             const checked = SkyMotionSession.sanitizeMode(backup, defaults);
             const fields = ['analemma', 'analemmaBasis', 'analemmaClock', 'analemmaIdeal'];
-            if (fields.every(key => backup[key] === checked[key]))
-              value.solarDateLinkBackup = Object.fromEntries(fields.map(key => [key, checked[key]]));
+            if (fields.every((key) => backup[key] === checked[key]))
+              value.solarDateLinkBackup = Object.fromEntries(
+                fields.map((key) => [key, checked[key]]),
+              );
           }
           if (!value.manual) value.dec = dateDec(value.date);
           return value;
@@ -63,9 +65,11 @@
           state = modeStates[snapshot.body === 'moon' ? 'moon' : 'sun'];
           Object.assign(state, clean(snapshot.active, state));
         }
-        if (SkyMotionSession.inRange(snapshot.sundialLength, 0.06, 0.3)) sundialLength = snapshot.sundialLength;
+        if (SkyMotionSession.inRange(snapshot.sundialLength, 0.06, 0.3))
+          sundialLength = snapshot.sundialLength;
         if (['plate', 'device'].includes(snapshot.sundialView)) sundialView = snapshot.sundialView;
-        if (['orbit', 'time'].includes(snapshot.sundialDragMode)) sundialDragMode = snapshot.sundialDragMode;
+        if (['orbit', 'time'].includes(snapshot.sundialDragMode))
+          sundialDragMode = snapshot.sundialDragMode;
         if (uiWorkspace) {
           if (typeof snapshot.selected === 'string') uiWorkspace.selected = snapshot.selected;
           if (typeof snapshot.moonPhase === 'boolean') uiWorkspace.moonPhase = snapshot.moonPhase;
@@ -79,6 +83,8 @@
         render();
         window.SolarSpaceLabCompare?.restore?.(snapshot.linked === true, snapshot.linkedSelection);
       },
-    });
+    };
+    window.SkyLabExperiment = { snapshot: adapter.read, restore: adapter.restore };
+    SkyMotionHistory.register(adapter);
   });
 })();

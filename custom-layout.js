@@ -14,6 +14,19 @@
     mobile = matchMedia('(max-width:760px)');
   const words = {
     launch: ['我的工作区', 'My workspace'],
+    fullExperiment: ['连同观测与对象保存', 'Include conditions and objects'],
+    fullMarker: ['完整实验', 'Full experiment'],
+    experimentName: ['实验名称', 'Experiment name'],
+    fullHint: [
+      '保存本天体的地点、日期、时刻、布局、图中对象和实验物体；在此设备恢复。',
+      'Save this body’s location, date, time, layout, references and ground objects on this device.',
+    ],
+    saveExperiment: ['保存实验', 'Save experiment'],
+    updateExperiment: ['更新完整实验', 'Update full experiment'],
+    invalidExperiment: [
+      '实验内容不完整或已损坏，当前实验未改变。',
+      'The saved experiment is incomplete or damaged. The current experiment is unchanged.',
+    ],
     undo: ['撤销布局调整', 'Undo layout change'],
     redo: ['重做布局调整', 'Redo layout change'],
     reset: ['恢复默认布局', 'Reset layout'],
@@ -22,7 +35,6 @@
     three: ['三图', 'Three views'],
     four: ['四图', 'Four views'],
     options: ['布局与收藏', 'Layout & saved views'],
-    choose: ['选择要添加的图解', 'Choose a diagram to add'],
     main: ['设为主图', 'Make main view'],
     equalize: ['恢复均等比例', 'Equalize proportions'],
     closeOptions: ['关闭布局设置', 'Close layout settings'],
@@ -63,7 +75,7 @@
     order: ['图解顺序', 'View order'],
     before: ['向前移', 'Move earlier'],
     after: ['向后移', 'Move later'],
-    saved: ['我的收藏', 'Saved layouts'],
+    saved: ['我的收藏', 'Saved items'],
     name: ['组合名称', 'Layout name'],
     rename: ['重命名收藏', 'Rename saved layout'],
     saveName: ['保存名称', 'Save name'],
@@ -205,7 +217,11 @@
           return true;
         })
         .slice(0, 5)
-        .map((p) => ({ name: p.name, layout: sanitize(p.layout) }));
+        .map((p) => ({
+          name: p.name,
+          layout: sanitize(p.layout),
+          ...(p.experiment ? { experiment: copy(p.experiment) } : {}),
+        }));
     } catch {
       return [];
     }
@@ -417,20 +433,6 @@
   proportionHint.dataset.wordHeading = 'proportionHint';
   proportions.append(proportionHint);
   arrange.append(proportions);
-  const available = section('choose'),
-    availableChoices = document.createElement('div');
-  availableChoices.className = 'workspace-choice-group workspace-add-choices';
-  available.append(availableChoices);
-  const availableButtons = ids.map((id) => {
-    const b = button(availableChoices, id, () =>
-      change(() => {
-        data.views.push(id);
-        data.active = data.views.length - 1;
-      }, 'added'),
-    );
-    b.dataset.addView = id;
-    return b;
-  });
   const quick = section('templates');
   quick.className = 'workspace-quick';
   const templates = [
@@ -468,6 +470,15 @@
   nameInput.maxLength = 40;
   nameInput.autocomplete = 'off';
   saveForm.append(nameInput);
+  const experimentOption = document.createElement('label');
+  experimentOption.className = 'workspace-save-scope';
+  const includeExperiment = document.createElement('input');
+  includeExperiment.type = 'checkbox';
+  includeExperiment.id = 'workspaceIncludeExperiment';
+  const experimentLabel = document.createElement('span');
+  experimentOption.append(includeExperiment, experimentLabel);
+  saveForm.prepend(experimentOption);
+  includeExperiment.onchange = () => labels();
   const saveButton = button(saveForm, 'save', () => {});
   saveButton.type = 'submit';
   savedSection.append(saveForm);
@@ -500,13 +511,71 @@
       announce('limit');
       return;
     }
+    const experiment = includeExperiment.checked ? captureExperiment() : null;
+    if (includeExperiment.checked && !experiment) return;
     mutateProfiles(() => {
-      const item = { name, layout: copy(data) };
+      const item = { name, layout: copy(data), ...(experiment ? { experiment } : {}) };
       if (existing >= 0) profiles[existing] = item;
       else profiles.push(item);
     }, 'savedStatus');
     nameInput.value = '';
   };
+  function captureExperiment() {
+    const references = window.SkyDiagramTools?.snapshotExperiment();
+    const conditions = window.SkyLabExperiment?.snapshot();
+    const ground = window.SkySceneBuilder?.snapshotExperiment();
+    if (!references || !conditions || !ground) return null;
+    return { version: 1, body: workspaceBody, conditions, references, ground };
+  }
+  function prepareExperiment(raw) {
+    const S = window.SkyMotionSession;
+    if (
+      !raw ||
+      raw.version !== 1 ||
+      raw.body !== workspaceBody ||
+      JSON.stringify(raw).length > 600000 ||
+      !raw.conditions ||
+      raw.conditions.body !== workspaceBody
+    )
+      return null;
+    for (const field of ['active', 'sun', 'moon']) {
+      const mode = raw.conditions[field];
+      if (
+        !mode ||
+        !S.validDate(mode.date) ||
+        !S.inRange(mode.lat, -90, 90) ||
+        !S.inRange(mode.lon, -180, 180) ||
+        !S.inRange(mode.time, 0, 1440)
+      )
+        return null;
+    }
+    const references = window.SkyDiagramTools?.prepareExperiment(raw.references);
+    const ground = window.SkySceneBuilder?.prepareExperiment(raw.ground);
+    if (!references || !ground) return null;
+    return { ...raw, references, ground };
+  }
+  function applyProfile(profile) {
+    const experiment = profile.experiment ? prepareExperiment(profile.experiment) : null;
+    if (profile.experiment && !experiment) {
+      announce('invalidExperiment');
+      return;
+    }
+    if (window.SkyDiagramTools?.leave() === false) return;
+    window.SkyMotionHistory?.beginExternal();
+    change(() => {
+      data = { ...copy(profile.layout), enabled: true };
+      if (experiment) {
+        window.SkyLabExperiment.restore(experiment.conditions);
+        window.SkyDiagramTools.restoreExperiment(experiment.references);
+        window.SkySceneBuilder.restoreExperiment(experiment.ground);
+      } else uiWorkspace.selected = 'solarCompare';
+    }, 'applied');
+    // The layout may be identical while the scientific state has changed.
+    save();
+    apply();
+    announce('applied');
+    window.SkyMotionHistory?.endExternal();
+  }
   function persistProfiles(word) {
     const active = document.activeElement,
       action = active?.dataset.word,
@@ -833,13 +902,16 @@
     presets.setAttribute('aria-label', t('count'));
     panelTitle.textContent = t('options');
     panel.setAttribute('aria-label', t('options'));
-    nameInput.setAttribute('aria-label', t('name'));
-    nameInput.placeholder = t('name');
+    nameInput.setAttribute('aria-label', t(includeExperiment.checked ? 'experimentName' : 'name'));
+    nameInput.placeholder = t(includeExperiment.checked ? 'experimentName' : 'name');
+    experimentLabel.textContent = t('fullExperiment');
+    saveButton.dataset.word = includeExperiment.checked ? 'saveExperiment' : 'save';
     if (statusKey) {
       live.textContent = t(statusKey);
       panelStatus.textContent = t(statusKey);
     }
-    saveHint.textContent = profiles.length >= 5 ? t('limit') : t('saveHint');
+    saveHint.textContent =
+      profiles.length >= 5 ? t('limit') : t(includeExperiment.checked ? 'fullHint' : 'saveHint');
     labelButtons(bar);
     labelButtons(panel);
     for (const h of panel.querySelectorAll('[data-word-heading]'))
@@ -920,12 +992,13 @@
     const signature = document.documentElement.lang + JSON.stringify(profiles) + editingProfile;
     for (const row of profileList.querySelectorAll('[data-saved-name]')) {
       const profile = profiles.find((p) => p.name === row.dataset.savedName);
-      const same = profile && presentation(profile.layout) === presentation(data);
+      const same =
+        profile && !profile.experiment && presentation(profile.layout) === presentation(data);
       row.dataset.current = String(Boolean(same));
       const marker = row.querySelector('.workspace-current-marker');
       if (marker) {
-        marker.hidden = !same;
-        marker.textContent = t('current');
+        marker.hidden = !profile?.experiment && !same;
+        marker.textContent = t(profile?.experiment ? 'fullMarker' : 'current');
       }
       const update = row.querySelector('[data-word="update"]');
       if (update) update.disabled = Boolean(same);
@@ -943,7 +1016,9 @@
       const row = document.createElement('div');
       row.className = 'workspace-profile-row';
       row.dataset.savedName = profile.name;
-      row.dataset.current = String(presentation(profile.layout) === presentation(data));
+      row.dataset.current = String(
+        !profile.experiment && presentation(profile.layout) === presentation(data),
+      );
       if (editingProfile === profile.name) {
         const form = document.createElement('form'),
           input = document.createElement('input');
@@ -987,25 +1062,26 @@
         marker = document.createElement('small');
       title.textContent = profile.name;
       marker.className = 'workspace-current-marker';
-      marker.textContent = t('current');
-      marker.hidden = presentation(profile.layout) !== presentation(data);
+      marker.textContent = t(profile.experiment ? 'fullMarker' : 'current');
+      marker.hidden = !profile.experiment && presentation(profile.layout) !== presentation(data);
       apply.append(title, marker);
-      apply.onclick = () =>
-        change(() => {
-          data = { ...copy(profile.layout), enabled: true };
-        }, 'applied');
+      apply.onclick = () => applyProfile(profile);
       row.append(apply);
       const update = button(
         row,
-        'update',
-        () =>
+        profile.experiment ? 'updateExperiment' : 'update',
+        () => {
+          const experiment = profile.experiment ? captureExperiment() : null;
+          if (profile.experiment && !experiment) return;
           mutateProfiles(() => {
             profile.layout = copy(data);
-          }, 'updated'),
+            if (experiment) profile.experiment = experiment;
+          }, 'updated');
+        },
         'M4 4h14l2 2v14H4zM8 4v6h8V4M8 20v-6h8v6',
       );
       update.dataset.profileName = profile.name;
-      update.disabled = presentation(profile.layout) === presentation(data);
+      update.disabled = !profile.experiment && presentation(profile.layout) === presentation(data);
       const rename = button(
         row,
         'rename',
@@ -1035,7 +1111,8 @@
       profileList.append(row);
     }
     labelButtons(profileList);
-    saveHint.textContent = profiles.length >= 5 ? t('limit') : t('saveHint');
+    saveHint.textContent =
+      profiles.length >= 5 ? t('limit') : t(includeExperiment.checked ? 'fullHint' : 'saveHint');
   }
   function apply() {
     const previousFocus = document.activeElement;
@@ -1054,11 +1131,6 @@
     arrange.hidden = mobile.matches || data.views.length === 1;
     axisGroup.hidden = data.views.length === 4;
     equalizeButton.disabled = data.ratio === 50 && data.rowRatio === 50;
-    available.hidden = data.views.length === ids.length;
-    availableButtons.forEach((b, i) => {
-      b.hidden =
-        data.views.includes(ids[i]) || (workspaceBody === 'moon' && ids[i] === 'analemmaPanel');
-    });
     featuredGroup.hidden = data.views.length !== 3;
     proportionFields.forEach((input, i) => {
       const axis = i ? 'rows' : 'columns';
@@ -1127,6 +1199,7 @@
     statusKey = '';
     optionsButton.setAttribute('aria-expanded', 'false');
     panel.hidden = true;
+    panel.closest('.workbench-layout-section')?.removeAttribute('open');
     if (restore) optionsButton.focus();
   }
   function toggleOptions() {

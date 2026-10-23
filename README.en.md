@@ -1,5 +1,7 @@
 # SkyMotion · Sky Motion Lab
 
+Customization highlights selected cities across views. Saved layouts can optionally include observation conditions, reference objects and constructed scenes as a full experiment.
+
 A browser laboratory for geography teaching and independent observation. Control location, date and time to explore the Sun, Moon, shadows, sundials and analemmas, then compare related diagrams and 3D views. Native HTML, CSS and JavaScript run without a build step.
 
 [简体中文](README.md) · **English**
