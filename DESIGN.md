@@ -542,8 +542,13 @@ The object editor uses two compact rows: the current plot with Help, Collapse an
 
 All application controls use the Material Design 3 component language. Preserve the existing green accent and scientific visualization colors. The palette is defined only in ui-palette.css; design-system.css maps it to md-sys-color roles, shape, state and motion tokens. Every UI role preserves the requested self-hosted fonts: SkyMotion Reading (Song) for Chinese and SkyMotion Charter for English. Material component roles never replace these fonts.
 
-- App bar: observation identity at the left, stable main navigation, one native outlined Sun/Moon selector, then customization and language. Narrow screens use a compact two-row layout.
+- App bar: observation identity at the left, stable main navigation, direct Sun/Moon segmented buttons, then customization and language. Narrow screens use a compact two-row layout.
 - Navigation: left-side expandable lists use one row height, trailing disclosure chevron, container selection, and shared padding. Sky viewpoints are children of Sky & shadows, never a second toolbar on the canvas.
 - Actions: primary filled actions, secondary outlined/tonal actions, text actions and icon buttons share shape and interaction-state tokens. Navigation selection uses the primary container; scientific series colors do not become control colors.
 - Forms: outlined fields, visible labels or accessible names, persistent focus indicators, shared checkbox/switch/range accent, and consistent disabled/error roles. Pointer targets expand for touch.
 - Sheets and menus share surface roles and elevation semantics; layout settings remain inline. Reduced motion bypasses decorative transitions.
+
+
+## Task-oriented Material controls
+
+Sun and Moon remain direct segmented buttons. Playback layout has one owner, `time-workbench.css`, loaded after shared component styles. The precise clock field shares the slider heading; five-minute steps flank the slider. Moon places the date control first without changing shared date or location state. Native keyboard operation and 48px coarse-pointer targets remain available. The opening has explicit start and skip actions, and documentation presents three task-based manual entries rather than a duplicated table and link list.

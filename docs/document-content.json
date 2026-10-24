@@ -20,70 +20,21 @@
           ],
           "blocks": [
             {
-              "kind": "table",
-              "headers": [
-                [
-                  "文档",
-                  "Document"
-                ],
-                [
-                  "适合谁",
-                  "Audience"
-                ],
-                [
-                  "主要内容",
-                  "Focus"
-                ]
-              ],
-              "rows": [
-                [
-                  [
+              "kind": "document-list",
+              "items": [
+                {
+                  "title": [
                     "学习指南",
                     "Learning guide"
                   ],
-                  [
+                  "audience": [
                     "教师、学生与自主学习者",
                     "Teachers, students and independent learners"
                   ],
-                  [
+                  "description": [
                     "教学目标、控制变量、探究步骤、记录表与评价",
                     "Learning objectives, controlled variables, investigations, records and assessment"
-                  ]
-                ],
-                [
-                  [
-                    "项目介绍与功能使用",
-                    "Project & feature manual"
                   ],
-                  [
-                    "第一次使用网站、查找功能和解决操作问题的人",
-                    "First-time users and anyone finding features or troubleshooting"
-                  ],
-                  [
-                    "网站结构、全部模块、自定义、对照、保存和快捷操作",
-                    "Site structure, all modules, customization, comparisons, saving and shortcuts"
-                  ]
-                ],
-                [
-                  [
-                    "开发者文档",
-                    "Developer reference"
-                  ],
-                  [
-                    "继续开发、审查模型或维护部署的人",
-                    "Developers, model reviewers and maintainers"
-                  ],
-                  [
-                    "文件职责、数据流、状态字段、单位、公式、接口、测试与部署",
-                    "File responsibilities, data flow, state fields, units, equations, interfaces, tests and deployment"
-                  ]
-                ]
-              ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
                   "text": [
                     "阅读学习指南",
                     "Read the learning guide"
@@ -91,6 +42,18 @@
                   "href": "guide.html"
                 },
                 {
+                  "title": [
+                    "项目介绍与功能使用",
+                    "Project & feature manual"
+                  ],
+                  "audience": [
+                    "第一次使用网站、查找功能和解决操作问题的人",
+                    "First-time users and anyone finding features or troubleshooting"
+                  ],
+                  "description": [
+                    "网站结构、全部模块、自定义、对照、保存和快捷操作",
+                    "Site structure, all modules, customization, comparisons, saving and shortcuts"
+                  ],
                   "text": [
                     "阅读项目介绍与功能使用",
                     "Read the project and feature manual"
@@ -98,6 +61,18 @@
                   "href": "project-guide.html"
                 },
                 {
+                  "title": [
+                    "开发者文档",
+                    "Developer reference"
+                  ],
+                  "audience": [
+                    "继续开发、审查模型或维护部署的人",
+                    "Developers, model reviewers and maintainers"
+                  ],
+                  "description": [
+                    "文件职责、数据流、状态字段、单位、公式、接口、测试与部署",
+                    "File responsibilities, data flow, state fields, units, equations, interfaces, tests and deployment"
+                  ],
                   "text": [
                     "阅读开发者文档",
                     "Read the developer reference"
@@ -603,6 +578,18 @@
                 "用高度曲线和空间图各提供一条证据；说明为何地平线下的虚线不表示地下有一条真实轨道。",
                 "Give one piece of evidence from each view and explain why the dashed path below the horizon is not a physical underground orbit."
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "text": [
+                    "进入实验台实践本节",
+                    "Practice this chapter in the laboratory"
+                  ],
+                  "href": "lab.html#skyPanel"
+                }
+              ]
             }
           ]
         },
@@ -709,6 +696,18 @@
               "text": [
                 "解释地球与昼夜图中的直射点纬度如何与曲线峰值对应，并指出比较时必须固定哪些条件。",
                 "Connect the subsolar latitude to the curve peak and name the conditions that must remain fixed."
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "text": [
+                    "进入实验台实践本节",
+                    "Practice this chapter in the laboratory"
+                  ],
+                  "href": "diagrams.html#chartPanel"
+                }
               ]
             }
           ]
@@ -817,6 +816,18 @@
                 "分别写出普通升落、极昼、极夜和相切的判据，并用曲线而非只凭一帧图像说明理由。",
                 "Describe ordinary crossings, continuous daylight, continuous darkness and tangency, using the curve rather than one image as evidence."
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "text": [
+                    "进入实验台实践本节",
+                    "Practice this chapter in the laboratory"
+                  ],
+                  "href": "diagrams.html#contextPanel"
+                }
+              ]
             }
           ]
         },
@@ -923,6 +934,18 @@
               "text": [
                 "画出一个两列记录表，分别标记固定UTC和固定真太阳时，不能只写同一时间。",
                 "Make a two-column record explicitly labeled fixed UTC and fixed apparent solar time rather than simply same time."
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "text": [
+                    "进入实验台实践本节",
+                    "Practice this chapter in the laboratory"
+                  ],
+                  "href": "diagrams.html#solarCompare"
+                }
               ]
             }
           ]
@@ -1031,6 +1054,18 @@
                 "分别说明改变杆高、相机缩放、显示倍率会改变什么，并解释为什么不能用截断影子验证公式。",
                 "State what rod height, camera zoom and display magnification each change, and explain why a clipped shadow cannot validate the formula."
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "text": [
+                    "进入实验台实践本节",
+                    "Practice this chapter in the laboratory"
+                  ],
+                  "href": "lab.html#skyPanel"
+                }
+              ]
             }
           ]
         },
@@ -1137,6 +1172,18 @@
               "text": [
                 "指出至少两个导致实物日晷读数与手机时间不同的原因。",
                 "Give at least two reasons why a physical sundial may disagree with a phone clock."
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "text": [
+                    "进入实验台实践本节",
+                    "Practice this chapter in the laboratory"
+                  ],
+                  "href": "sundial.html"
+                }
               ]
             }
           ]
@@ -1245,6 +1292,18 @@
                 "用两组记录分别解释月相月周期和一天内高度变化，并指出二者各自应固定哪些条件。",
                 "Use separate records to explain monthly phase variation and daily altitude change, naming the controls held fixed in each."
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "text": [
+                    "进入实验台实践本节",
+                    "Practice this chapter in the laboratory"
+                  ],
+                  "href": "lab.html#skyPanel"
+                }
+              ]
             }
           ]
         },
@@ -1351,6 +1410,18 @@
               "text": [
                 "解释一次伴月搜索结果不能保证肉眼可见，并写出还需核对的观测条件。",
                 "Explain why a search result does not guarantee naked-eye visibility and list additional observing conditions to check."
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "text": [
+                    "进入实验台实践本节",
+                    "Practice this chapter in the laboratory"
+                  ],
+                  "href": "diagrams.html#companionModule"
+                }
               ]
             }
           ]
@@ -1459,6 +1530,18 @@
                 "在记录表中明确写出采样依据、UTC偏移、采样时刻、地点与模型模式，缺一项就难以复现实验。",
                 "Record sampling basis, UTC offset, sample clock, location and model mode; omitting any of them makes reproduction difficult."
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "text": [
+                    "进入实验台实践本节",
+                    "Practice this chapter in the laboratory"
+                  ],
+                  "href": "analemma.html"
+                }
+              ]
             }
           ]
         },
@@ -1566,6 +1649,18 @@
                 "画出观察者、月球边缘和地球的视线关系，并解释转头、绕月移动和改变光照构型分别改变什么。",
                 "Sketch the observer–limb–Earth sight line and distinguish turning the camera, moving in orbit and changing illumination geometry."
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "text": [
+                    "进入实验台实践本节",
+                    "Practice this chapter in the laboratory"
+                  ],
+                  "href": "lunar/index.html"
+                }
+              ]
             }
           ]
         },
@@ -1672,6 +1767,18 @@
               "text": [
                 "说明一个模型有意夸大的量和一个仍由真实星历计算的量，并说明用途不同。",
                 "Identify one deliberately exaggerated display quantity and one quantity computed from the ephemeris, explaining their different purposes."
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "text": [
+                    "进入实验台实践本节",
+                    "Practice this chapter in the laboratory"
+                  ],
+                  "href": "space/index.html"
+                }
               ]
             }
           ],
@@ -2053,6 +2160,13 @@
                 "原实验台、关联图解与日行迹网址仍可打开相应内容。它们是统一工作区的兼容入口，不是互不相通的三套实验。",
                 "The original Lab, Diagrams and Analemma URLs still open their corresponding content. They are compatible entries into one workspace rather than three disconnected experiments."
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "太阳与月球使用顶部并列按钮直接切换，也可聚焦后使用左右方向键。底部时间栏把精确时刻与滑块放在一起，两侧按钮每次调整五分钟；月球优先呈现日期控制。观测条件先显示当前模式、地点和日期，计算与比例说明按需展开。",
+                "Switch Sun and Moon directly with the top segmented buttons, or focus them and use the left/right arrow keys. The compact playback panel groups the exact clock with its slider; the flanking buttons step by five minutes. Moon puts date controls first. Observation settings begin with mode, place and date; calculation and scale notes expand on demand."
+              ]
             }
           ],
           "aliases": [
@@ -2107,8 +2221,8 @@
             {
               "kind": "paragraph",
               "text": [
-                "实验台顶部左侧显示标题和地点，随后是主菜单；太阳与月球通过单个选择框切换。自定义和语言入口保持在顶部右侧，窄屏按可用宽度排列。“三维对照”位于左侧“视图与布局”，可与原科学图共享UTC并排观察。",
-                "The app bar starts with observation identity, followed by the main menu and a single Sun/Moon selector. Customization and language stay on the right, with a compact reflow on narrow screens. Find 3D comparison in Views & layout to observe the original scientific diagram alongside a scene sharing the same UTC."
+                "实验台顶部左侧显示标题和地点，随后是主菜单；太阳与月球通过并列的双按钮直接切换。自定义和语言入口保持在顶部右侧，窄屏按可用宽度排列。“三维对照”位于左侧“视图与布局”，可与原科学图共享UTC并排观察。",
+                "The app bar starts with observation identity, followed by the main menu and direct Sun/Moon segmented buttons. Customization and language stay on the right, with a compact reflow on narrow screens. Find 3D comparison in Views & layout to observe the original scientific diagram alongside a scene sharing the same UTC."
               ]
             }
           ]
@@ -6120,6 +6234,10 @@
     "lab-controls.js": [
       "观测输入事件、地点日期与表单展示",
       "Observation input events, location/date controls and form presentation"
+    ],
+    "document-navigation.js": [
+      "文档目录、章节定位与阅读进度；原生锚点作为无脚本后备",
+      "Document contents, current chapter and reading progress; native anchors provide a no-script fallback"
     ]
   }
 }

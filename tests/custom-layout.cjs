@@ -190,7 +190,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await p.locator('.language-toggle').click();
     await p.waitForFunction(() => document.documentElement.lang === 'zh-CN');
     assert.match(await p.locator('.layout-launch').innerText(), /完成自定义/);
-    await p.locator('#observationBody').selectOption('moon');
+    await p.locator('button[data-body=moon]').click();
     await p.waitForFunction(
       () => state.body === 'moon' && !!document.querySelector('.workspace-active'),
     );

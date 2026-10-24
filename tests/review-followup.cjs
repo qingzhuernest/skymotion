@@ -28,7 +28,7 @@ try{
  assert.equal(await q.locator('.language-load-notice').count(),0);assert.deepEqual(await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat})),initial); // Diagram routing moves companion controls outside .ui-parameters. Theme the component itself.
  for(const route of ['diagrams.html','diagrams.en.html']){
   await q.goto(base+route);await q.waitForSelector('.language-toggle:not(:disabled)');
-  await q.locator('#observationBody').selectOption('moon');
+  await q.locator('button[data-body=moon]').click();
   await require('./diagram-test-helpers.cjs').selectDiagram(q, 'companionModule');
   assert.equal(await q.locator('#companionClock').count(),0,'Redundant time shortcut is removed');
   await q.setViewportSize({width:1280,height:900});

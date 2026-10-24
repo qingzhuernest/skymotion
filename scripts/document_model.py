@@ -6,7 +6,7 @@ from urllib.parse import unquote, urlsplit
 from html.parser import HTMLParser
 from site_sources import load_state
 
-KINDS = {"paragraph", "heading", "note", "code", "list", "steps", "table", "links", "source-index", "state-table"}
+KINDS = {"paragraph", "heading", "note", "code", "list", "steps", "table", "links", "document-list", "source-index", "state-table"}
 
 
 def bilingual(value):
@@ -81,9 +81,12 @@ def validate(data, root):
                             raise ValueError("Mismatched table columns: " + page)
                         for cell in row:
                             bilingual(cell)
-                elif kind == "links":
+                elif kind in {"links", "document-list"}:
                     for item in block["items"]:
                         bilingual(item["text"])
+                        if kind == "document-list":
+                            for field in ("title", "audience", "description"):
+                                bilingual(item[field])
                         links.append((page, item["href"]))
                 elif kind == "code" and not isinstance(block["text"], str):
                     raise ValueError("Code must be text")

@@ -79,7 +79,12 @@ function renderTimeWorkbench() {
     basis = workbenchBasis(),
     datePanel = $('workbenchDatePanel'),
     dateHome = $('workbenchMain');
-  if (datePanel.parentNode !== dateHome) dateHome.append(datePanel);
+  const clockPanel = $('workbenchClockPanel');
+  if (moon) {
+    if (datePanel.nextElementSibling !== clockPanel)
+      dateHome.insertBefore(datePanel, clockPanel);
+  } else if (datePanel !== dateHome.lastElementChild) dateHome.append(datePanel);
+  root.dataset.observationBody = state.body;
   if (workbenchLastBody !== state.body) {
     $('workbenchMore').open = false;
     workbenchLastBody = state.body;
@@ -92,7 +97,8 @@ function renderTimeWorkbench() {
   $('workbenchDate').disabled = ideal;
   $('workbenchPrevDate').disabled = ideal || state.date === '1900-01-01';
   $('workbenchNextDate').disabled = ideal || state.date === '2100-12-31';
-  if (document.activeElement !== $('workbenchDate')) $('workbenchDate').value = state.date;
+  if (document.activeElement !== $('workbenchDate'))
+    $('workbenchDate').value = state.date;
   $('workbenchContext').textContent = moon
     ? '月球 · ' + (basis === 'date' ? '日期变化' : '一天内的时间变化')
     : ideal
@@ -109,6 +115,8 @@ function renderTimeWorkbench() {
       ? '固定观测时刻 · 当地真太阳时'
       : '观测时刻 · 当地真太阳时';
   $('workbenchClockText').textContent = hhmm(clock, true);
+  $('workbenchClockText').hidden = clock < 1440;
+  $('workbenchClockInput').hidden = clock >= 1440;
   const max = workbenchTimeMax();
   $('workbenchTime').max = max;
   $('workbenchTime').value = clock;
@@ -170,7 +178,8 @@ function renderTimeWorkbench() {
     );
     rate.dataset.key = rateKey;
   }
-  rate.value = basis === 'day' ? state.speed : moon ? state.daysRate : state.solarDateRate;
+  rate.value =
+    basis === 'day' ? state.speed : moon ? state.daysRate : state.solarDateRate;
   $('workbenchLoop').checked =
     basis === 'day' ? state.loop : moon ? state.monthLoop : state.solarDateLoop;
   $('workbenchLoopLabel').textContent =
@@ -193,6 +202,8 @@ function renderTimeWorkbench() {
   if ($('workbenchPlay').textContent !== displayPlayLabel)
     $('workbenchPlay').textContent = displayPlayLabel;
   $('workbenchPlay').setAttribute('aria-pressed', String(workbenchIsPlaying()));
+  $('workbenchPlay').setAttribute('aria-label', displayPlayLabel);
+  $('workbenchPlay').title = displayPlayLabel;
   $('workbenchHint').textContent = ideal
     ? '日期不参与理想实验；拖动时刻观察太阳与日影。'
     : basis === 'date'
@@ -248,7 +259,8 @@ function initTimeWorkbench() {
   ])
     $(id).onclick = () =>
       workbenchSetTime(
-        (document.body.dataset.page === 'analemma' ? state.analemmaClock : state.time) + amount,
+        (document.body.dataset.page === 'analemma' ? state.analemmaClock : state.time) +
+          amount,
       );
   $('workbenchMonth').onchange = (e) => {
     selectMonth(e.target.value);
@@ -348,7 +360,8 @@ function initTimeWorkbench() {
   };
   const resize = new ResizeObserver((entries) => {
     const h =
-      entries[0].borderBoxSize?.[0]?.blockSize || entries[0].target.getBoundingClientRect().height;
+      entries[0].borderBoxSize?.[0]?.blockSize ||
+      entries[0].target.getBoundingClientRect().height;
     if (h > 0)
       document.documentElement.style.setProperty(
         '--time-workbench-space',

@@ -1,0 +1,309 @@
+/* Playback layout owner. Shared theme roles live in design-system.css. */
+.ui-timeline-host {
+  grid-area: timeline;
+  min-width: 0;
+  min-height: 0;
+  container-type: inline-size;
+  container-name: time-controls;
+}
+.time-workbench {
+  --time-range-height: max(44px, var(--md-sys-size-target));
+  position: static;
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--design-line);
+  border-radius: var(--design-radius-surface);
+  background: var(--design-surface);
+  color: var(--design-ink);
+  font-family: var(--design-font);
+}
+.time-workbench .workbench-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.time-workbench #workbenchContext {
+  flex: 1;
+  min-width: 0;
+  color: var(--design-muted);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.time-workbench .workbench-calendar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  min-width: 0;
+}
+.time-workbench .workbench-calendar input {
+  width: 136px;
+  min-width: 0;
+  height: var(--md-sys-size-target);
+  min-height: var(--md-sys-size-target);
+  padding: 6px 8px;
+  border: 1px solid var(--design-line);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: var(--design-surface);
+  color: var(--design-ink);
+  font: 14px/1.25 var(--design-font);
+}
+.time-workbench
+  :is(
+    .workbench-calendar button,
+    .workbench-clock-tools button,
+    .workbench-look-buttons button
+  ) {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--md-sys-size-target);
+  min-width: var(--md-sys-size-target);
+  height: var(--md-sys-size-target);
+  min-height: var(--md-sys-size-target);
+  padding: 0;
+  border: 1px solid var(--design-line);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--design-surface);
+  color: var(--design-primary);
+  font: 13px/1.25 var(--design-font);
+}
+.time-workbench .workbench-calendar button {
+  font-size: 0;
+}
+.time-workbench .workbench-calendar button::before {
+  content: '';
+  display: block;
+  width: 18px;
+  height: 18px;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m12 4-6 6 6 6' stroke='black' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center/contain no-repeat;
+}
+.time-workbench #workbenchNextDate::before {
+  transform: rotate(180deg);
+}
+.time-workbench #workbenchPlay {
+  flex: none;
+  min-height: var(--md-sys-size-target);
+  padding: 8px 16px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--design-on-action);
+  background: var(--design-primary);
+  font: 500 14px/1.4 var(--design-font);
+  white-space: nowrap;
+}
+.time-workbench .workbench-main {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  min-width: 0;
+  margin: 0;
+}
+.time-workbench[data-observer='true'] .workbench-main {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.time-workbench[data-ideal='true']:not([data-observer='true']) .workbench-main {
+  grid-template-columns: minmax(0, 1fr);
+}
+.time-workbench .workbench-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(var(--md-sys-size-target), auto) var(--time-range-height);
+  gap: 0;
+  min-width: 0;
+}
+.time-workbench .workbench-panel-head {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  min-height: var(--md-sys-size-target);
+}
+.time-workbench .workbench-panel-head label {
+  min-width: 0;
+  color: var(--design-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.time-workbench .workbench-panel-head output {
+  flex: none;
+  color: var(--design-primary);
+  font-size: 16px;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+.time-workbench #workbenchClockInput {
+  flex: none;
+  width: 128px;
+  min-width: 0;
+  min-height: var(--md-sys-size-target);
+  height: var(--md-sys-size-target);
+  padding: 4px 8px;
+  border: 1px solid var(--design-line);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: var(--design-surface);
+  color: var(--design-primary);
+  font: 16px/1.25 var(--design-font);
+  font-variant-numeric: tabular-nums;
+}
+.time-workbench .workbench-clock-tools {
+  display: grid;
+  grid-template-columns: var(--md-sys-size-target) minmax(0, 1fr) var(
+      --md-sys-size-target
+    );
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+}
+.time-workbench input[type='range'] {
+  display: block;
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  height: var(--time-range-height);
+  min-height: var(--md-sys-size-target);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: ew-resize;
+  touch-action: none;
+  accent-color: var(--design-primary);
+}
+.time-workbench input[type='range']::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 4px;
+  background: var(--design-range-track);
+}
+.time-workbench input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: -8px;
+  border: 2px solid var(--design-surface);
+  border-radius: 50%;
+  background: var(--design-primary);
+}
+.time-workbench input[type='range']::-moz-range-track {
+  height: 4px;
+  border-radius: 4px;
+  background: var(--design-range-track);
+}
+.time-workbench input[type='range']::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--design-surface);
+  border-radius: 50%;
+  background: var(--design-primary);
+}
+.time-workbench #workbenchDatePanel > input {
+  grid-column: 1;
+  grid-row: 2;
+}
+.time-workbench .workbench-date-scale {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 8px;
+  margin: 0;
+  color: var(--design-muted);
+  font-size: 10px;
+  line-height: 11px;
+  pointer-events: none;
+}
+.time-workbench #workbenchBearingPanel {
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 8px;
+}
+.time-workbench #workbenchBearingPanel > input {
+  grid-column: 1;
+  grid-row: 2;
+}
+.time-workbench .workbench-look-buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+}
+.time-workbench[data-observation-body='moon'] #workbenchDatePanel output {
+  font-size: 18px;
+}
+.time-workbench [hidden] {
+  display: none;
+}
+@container time-controls (max-width: 1000px) {
+  .time-workbench[data-observer='true'] .workbench-main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .time-workbench[data-observer='true'] #workbenchBearingPanel {
+    grid-column: 1 / -1;
+  }
+}
+@container time-controls (max-width: 600px) {
+  .time-workbench {
+    padding: 8px;
+  }
+  .time-workbench #workbenchContext {
+    display: none;
+  }
+  .time-workbench .workbench-calendar {
+    flex: 1;
+  }
+  .time-workbench .workbench-calendar input {
+    flex: 1;
+    width: 0;
+  }
+  .time-workbench .workbench-main,
+  .time-workbench[data-observer='true'] .workbench-main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .time-workbench #workbenchDatePanel {
+    grid-template-columns: 92px minmax(0, 1fr);
+    grid-template-rows: var(--time-range-height);
+    column-gap: 8px;
+  }
+  .time-workbench #workbenchDatePanel .workbench-panel-head {
+    grid-column: 1;
+    grid-row: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+  }
+  .time-workbench #workbenchDatePanel > input,
+  .time-workbench #workbenchDatePanel .workbench-date-scale {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .time-workbench #workbenchDatePanel output {
+    font-size: 14px;
+  }
+}
+@container time-controls (max-width: 360px) {
+  .time-workbench #workbenchPlay {
+    width: var(--md-sys-size-target);
+    min-width: var(--md-sys-size-target);
+    padding: 0;
+    font-size: 0;
+    gap: 0;
+  }
+}

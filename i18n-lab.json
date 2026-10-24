@@ -234,7 +234,7 @@
   "日期 · 本月": "Date · This month",
   "日期与地点": "Date and location",
   "日期播放速度": "Date playback speed",
-  "日期观测": "Ephemeris mode",
+  "日期观测": "Date observation",
   "日期观测对应实际日期；理想实验用于单独研究纬度和太阳赤纬。": "Ephemeris mode uses actual dates; the idealized experiment isolates latitude and solar declination.",
   "日期（固定时刻）": "Date (fixed time)",
   "日落": "Sunset",
@@ -283,7 +283,7 @@
   "点击或拖动曲线切换时间，虚线表示地平线。": "Click or drag the curve to change time. The dashed line marks the horizon.",
   "球面视图": "Globe",
   "理想两至 / 分日对比": "Ideal solstice / equinox comparison",
-  "理想实验": "Idealized experiment",
+  "理想实验": "Ideal experiment",
   "理想实验不使用日期。": "The idealized experiment does not use a date.",
   "理想实验固定赤纬，无法表示真实的全年日行迹。": "The idealized experiment fixes declination and cannot reproduce the actual annual analemma.",
   "理解日影：": "Understand shadows:",
@@ -922,5 +922,9 @@
   "天空与日影": "Sky & shadows",
   " · 实验台": " · Lab",
   "拖动旋转方位盘 · 点击升落点跳转时刻 · Home 复位": "Drag to rotate · Select rise/set points to change time · Home to reset",
-  "升落方位图；拖动旋转，双指或滚轮缩放，点击升落点跳转时刻，方向键旋转，Home复位": "Rise/set compass; drag or arrow keys to rotate, pinch or scroll to zoom, select event points to change time, Home to reset"
+  "升落方位图；拖动旋转，双指或滚轮缩放，点击升落点跳转时刻，方向键旋转，Home复位": "Rise/set compass; drag or arrow keys to rotate, pinch or scroll to zoom, select event points to change time, Home to reset",
+  "展开星空": "Open the sky",
+  "跳过开场": "Skip opening",
+  "开场操作": "Opening controls",
+  "计算与比例说明": "Calculation and scale notes"
 }

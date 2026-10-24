@@ -1467,7 +1467,11 @@ function updateUI() {
     insight = `当前太阳直射<strong>${side === '赤道' ? '赤道' : side + '半球'}</strong>，当地昼长约 <strong>${Math.floor(length / 60)} 小时 ${length % 60} 分</strong>。${s.alt > 0 ? '太阳越高，影子越短；切到俯视日影观察方向。' : '太阳已经落到地平线下；拖动时间回到白昼观察日影。'}`;
   }
   $('insight').innerHTML = insight;
-  $('observationBody').value = state.body;
+  document.querySelectorAll('.body-switch [data-body]').forEach((button) => {
+    const active = button.dataset.body === state.body;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
   document.querySelectorAll('[data-view]').forEach((b) => {
     const on = b.dataset.view === state.view;
     b.classList.toggle('active', on);

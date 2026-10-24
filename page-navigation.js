@@ -20,6 +20,14 @@ function renderUIWorkspace() {
       coord(state.lat, 'lat') + ' · ' + coord(state.lon, 'lon'),
     );
   if (!uiWorkspace) return;
+  if ($('observationContext')) {
+    const mode = state.body === 'sun' && state.manual ? '理想实验' : '日期观测';
+    const translate = (value) =>
+      window.skyTranslate ? window.skyTranslate(value) : value;
+    const parts = [translate(mode), translate(selectedPlaceName()), state.date];
+    if (state.body === 'sun' && state.manual) parts.pop();
+    uiViewText($('observationContext'), parts.join(' · '));
+  }
   const u = uiWorkspace,
     moon = state.body === 'moon',
     page = document.body.dataset.page;
@@ -724,10 +732,21 @@ function renderUIWorkspace() {
     const skySettings = document.createElement('div');
     skySettings.className = 'ui-diagram-details';
     skySettings.dataset.for = 'skyPanel';
-    skySettings.append(
-      document.querySelector('.metrics'),
-      document.querySelector('.model-explanation'),
-    );
+    const context = document.createElement('p');
+    context.className = 'ui-observation-context';
+    context.id = 'observationContext';
+    const explanation = document.querySelector('.model-explanation');
+    const modelDetails = document.createElement('details');
+    modelDetails.className = 'ui-model-details';
+    const modelSummary = document.createElement('summary');
+    uiViewText(modelSummary, '计算与比例说明');
+    modelDetails.append(modelSummary);
+    for (const id of ['modelNote', 'plotNote', 'shadowScale', 'shadowTraceNote']) {
+      const paragraph = document.getElementById(id);
+      if (paragraph) modelDetails.append(paragraph);
+    }
+    explanation.append(modelDetails);
+    skySettings.append(context, document.querySelector('.metrics'), explanation);
     rail.prepend(skySettings);
     uiWorkspace.details.push(skySettings);
     const annualSettings = document.createElement('div');

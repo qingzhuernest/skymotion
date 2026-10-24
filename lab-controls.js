@@ -404,8 +404,7 @@ $('fullBtn').onclick = async () => {
     $('fullBtn').textContent = '浏览器未支持全屏';
   }
 };
-$('observationBody').onchange = (event) => {
-  const body = event.target.value;
+function selectObservationBody(body) {
   if (!Object.hasOwn(modeStates, body) || state.body === body) return;
   stop();
   state = modeStates[body];
@@ -416,7 +415,30 @@ $('observationBody').onchange = (event) => {
   // Body selection is a mode boundary, not a continuous slider gesture. Finish
   // swapping body-owned views and layout buckets before the next action runs.
   render();
-};
+}
+const observationBodyButtons = [...document.querySelectorAll('.body-switch [data-body]')];
+for (const button of observationBodyButtons)
+  button.onclick = () => selectObservationBody(button.dataset.body);
+$('observationBody').addEventListener('keydown', (event) => {
+  if (
+    !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key) ||
+    !event.target.matches('[data-body]')
+  )
+    return;
+  event.preventDefault();
+  const index = observationBodyButtons.indexOf(event.target);
+  const next =
+    event.key === 'Home'
+      ? 0
+      : event.key === 'End'
+        ? observationBodyButtons.length - 1
+        : (index +
+            (event.key === 'ArrowRight' ? 1 : -1) +
+            observationBodyButtons.length) %
+          observationBodyButtons.length;
+  observationBodyButtons[next].focus();
+  observationBodyButtons[next].click();
+});
 ['lat', 'lon'].forEach((k) =>
   $(k + 'Input').addEventListener('change', (e) => {
     stop();

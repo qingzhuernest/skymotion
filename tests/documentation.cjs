@@ -49,7 +49,7 @@ const documents = ['docs', 'guide', 'project-guide', 'development-guide'];
             }
           }
           assert(await page.locator('a[download]').isVisible());
-          await page.locator('.document-toc summary').click();
+          if (!(await page.locator('.document-toc').getAttribute('open') !== null)) await page.locator('.document-toc summary').click();
           await page.locator('.document-toc ol').waitFor({state:'visible'});
         }
       }

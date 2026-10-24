@@ -126,7 +126,7 @@
 
   function installSegments() {
     const selector =
-      '.body-switch,.model-switch,.view-tabs,.context-view-switch,.globe-drag-options,.ui-viewbar,.ui-sundial-types,.sundial-view-controls,.ui-sundial-camera-tools [role="group"],.view-group';
+      '.model-switch,.view-tabs,.context-view-switch,.globe-drag-options,.ui-viewbar,.ui-sundial-types,.sundial-view-controls,.ui-sundial-camera-tools [role="group"],.view-group';
     document.querySelectorAll(selector).forEach((group) => {
       const buttons = [...group.children].filter((node) => node.tagName === 'BUTTON');
       if (
@@ -208,9 +208,15 @@
         if (!nextVisible) reveals.get(group)?.cancel();
         visible = nextVisible;
       }).observe(group, { attributes: true, attributeFilter: ['hidden'] });
-      document.querySelector('.body-switch')?.addEventListener('change', () => {
-        requestAnimationFrame(() => revealOptions(group));
-      });
+      document.querySelector('.body-switch')?.addEventListener(
+        'click',
+        (event) => {
+          const choice = event.target.closest('[data-body]');
+          if (choice && choice.dataset.body !== state.body)
+            requestAnimationFrame(() => revealOptions(group));
+        },
+        true,
+      );
     });
   }
 

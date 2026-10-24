@@ -18,7 +18,7 @@ LINKS = [
     ("development-guide", "开发者文档", "Developer reference"),
 ]
 STYLES = ["ui-palette.css", "style.css", "pages.css", "documents.css", "interface-motion.css", "design-system.css", "language.css"]
-SCRIPTS = ["document-entrance.js", "language-data.js", "language.js", "page-cache.js", "date-picker.js"]
+SCRIPTS = ["document-entrance.js", "document-navigation.js", "language-data.js", "language.js", "page-cache.js", "date-picker.js"]
 
 
 def escape(value):
@@ -108,6 +108,15 @@ class DocumentRenderer:
                 return "\n".join((str(i + 1) + ". " if kind == "steps" else "- ") + value for i, value in enumerate(values))
             tag = "ol" if kind == "steps" else "ul"
             return "<" + tag + ">" + "".join("<li>" + escape(value) + "</li>" for value in values) + "</" + tag + ">"
+        if kind == "document-list":
+            rows = []
+            for item in block["items"]:
+                title, audience, description, action = [self.text(item[key], language) for key in ("title", "audience", "description", "text")]
+                if markdown:
+                    rows.append("### " + title + "\n\n" + audience + "\n\n" + description + "\n\n[" + action + "](" + localized(item["href"], language) + ")")
+                else:
+                    rows.append('<li><a href="' + escape(item["href"]) + '"><strong>' + escape(title) + '</strong><span class="document-audience">' + escape(audience) + '</span><span>' + escape(description) + '</span><span class="document-list-action">' + escape(action) + ' →</span></a></li>')
+            return "\n\n".join(rows) if markdown else '<ul class="document-manual-list">' + "".join(rows) + '</ul>'
         if kind == "links":
             if markdown:
                 return "\n".join("- [" + self.text(item["text"], language) + "](" + localized(item["href"], language) + ")" for item in block["items"])
@@ -121,9 +130,17 @@ class DocumentRenderer:
 
     def page(self, doc):
         sections = []
-        for section in doc["sections"]:
+        for index, section in enumerate(doc["sections"]):
             aliases = "".join('<span id="' + escape(alias) + '" aria-hidden="true"></span>' for alias in section.get("aliases", []))
-            sections.append('<section id="' + escape(section["id"]) + '">' + aliases + "<h2>" + escape(self.text(section["title"])) + "</h2>" + "".join(self.block(block) for block in section["blocks"]) + "</section>")
+            adjacent = []
+            if index:
+                previous = doc["sections"][index - 1]
+                adjacent.append('<a rel="prev" href="#' + previous["id"] + '">← ' + escape(self.text(previous["title"])) + '</a>')
+            if index + 1 < len(doc["sections"]):
+                following = doc["sections"][index + 1]
+                adjacent.append('<a rel="next" href="#' + following["id"] + '">' + escape(self.text(following["title"])) + ' →</a>')
+            chapter_links = '<nav class="document-chapter-links" aria-label="章节导航">' + "".join(adjacent) + '</nav>' if doc["page"] != "docs" else ""
+            sections.append('<section id="' + escape(section["id"]) + '">' + aliases + "<h2>" + escape(self.text(section["title"])) + "</h2>" + "".join(self.block(block) for block in section["blocks"]) + chapter_links + "</section>")
         siblings = '<nav class="document-links" aria-label="文档分类">' + "".join('<a href="' + page + '.html"' + (' aria-current="page"' if page == doc["page"] else "") + ">" + label + "</a>" for page, label, _ in LINKS) + "</nav>"
         contents = '<details class="document-toc"><summary>本页目录</summary><ol>' + "".join('<li><a href="#' + section["id"] + '">' + escape(self.text(section["title"])) + "</a></li>" for section in doc["sections"]) + "</ol></details>"
         return self.template.substitute(
@@ -149,7 +166,7 @@ class DocumentRenderer:
                 result[localized(doc["markdown"], language)] = self.markdown(doc, language)
         for _, zh, en in LINKS:
             self.dictionary[zh] = en
-        self.dictionary.update({"文档分类": "Document categories", "本页目录": "Contents", "下载本文 Markdown": "Download this document as Markdown", "返回文档中心": "Back to documentation"})
+        self.dictionary.update({"章节导航": "Chapter navigation", "阅读进度": "Reading progress", "文档分类": "Document categories", "本页目录": "Contents", "下载本文 Markdown": "Download this document as Markdown", "返回文档中心": "Back to documentation"})
         existing = json.loads((self.root / "i18n-docs.json").read_text())
         existing.update(self.dictionary)
         result["i18n-docs.json"] = json.dumps(existing, ensure_ascii=False, indent=2) + "\n"

@@ -60,7 +60,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
       assert.match(result.font, route.includes('.en.') ? /SkyMotion Charter/ : /SkyMotion Reading/);
       assert.equal(result.overflow, false, route + ' horizontal overflow');
       if (route.startsWith('lab.')) {
-        await page.locator('#observationBody').selectOption('moon');
+        await page.locator('button[data-body=moon]').click();
         await page.waitForFunction(() => state.body === 'moon');
         if (width < 760) await require('./diagram-test-helpers.cjs').openDrawer(page);
         await page.locator('[data-rail-section=views]').click();
@@ -104,9 +104,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
       skyWorkspacePresentation.addView('chartPanel');
     });
     await immediate.evaluate(() => {
-      const select = document.getElementById('observationBody');
-      select.value = 'moon';
-      select.dispatchEvent(new Event('change', { bubbles: true }));
+      document.querySelector('button[data-body=moon]').click();
       if (document.body.dataset.body !== 'moon')
         throw Error('Body UI must switch before the change handler returns');
       SkySceneBuilder.open({ kind: 'rod' });
@@ -118,7 +116,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
     );
     await immediate.close();
     console.log(
-      'PASS Material roles, preserved accent, typography, nested viewpoints, native body selection and responsive layouts across 13 application/document/embedded route variants',
+      'PASS Material roles, preserved accent, typography, nested viewpoints, direct body switching and responsive layouts across 13 application/document/embedded route variants',
     );
   } finally {
     await browser.close();

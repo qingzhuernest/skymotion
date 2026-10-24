@@ -59,10 +59,12 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   await slow.keyboard.press('Enter');
   await slow.waitForFunction(()=>!document.documentElement.classList.contains('welcome-opening'));
   await slowContext.close();
-  for(const kind of ['reduced','keyboard','touch']) {
+  for(const kind of ['reduced','keyboard','touch','start','skip']) {
    const context=await browser.newContext({viewport:{width:320,height:568},reducedMotion:kind==='reduced'?'reduce':'no-preference',hasTouch:kind==='touch'}),page=await context.newPage();
    await page.goto(base+'index.html');
    if(kind==='keyboard'){await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.documentElement.classList.contains('welcome-opening')),true);await page.keyboard.press('Enter');}
+   if(kind==='start')await page.locator('#startOpening').click();
+   if(kind==='skip')await page.locator('#skipOpening').click();
    if(kind==='touch')await page.locator('#welcomeSky').tap({position:{x:160,y:180}});
    await page.waitForFunction(()=>!document.documentElement.classList.contains('welcome-opening'));
    assert.equal(await page.locator('.welcome-layout').evaluate(n=>n.inert),false);

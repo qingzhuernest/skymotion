@@ -6,6 +6,7 @@ const root = path.resolve(__dirname, '..');
 const shared = [
   'design-system.css',
   'controls.css',
+  'time-workbench.css',
   'diagram-tools.css',
   'parameter-controls.css',
   'custom-layout.css',

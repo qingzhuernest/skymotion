@@ -62,7 +62,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
           const nav = await page.locator('.page-nav').boundingBox();
           assert(boxes.heading.right <= nav.x + 1, 'Observation identity precedes main navigation');
         }
-        assert.equal(await page.locator('.body-switch option').count(), 2);
+        assert.equal(await page.locator('.body-switch button').count(), 2);
         assert.equal(await page.locator('.ui-diagram-card-head [data-view]').count(), 0);
         assert.equal(await page.locator('#workbenchViews [data-view]').count(), 4);
         assert.equal(
@@ -71,7 +71,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
           'A single diagram must not show combination tabs',
         );
         const navigation = await page.locator('.page-nav a').allTextContents();
-        await page.locator('#observationBody').selectOption('moon');
+        await page.locator('button[data-body=moon]').click();
         await page.waitForFunction(() => state.body === 'moon');
         assert.deepEqual(await page.locator('.page-nav a').allTextContents(), navigation);
         await page.screenshot({

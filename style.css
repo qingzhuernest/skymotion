@@ -3995,156 +3995,12 @@ body[data-sky-view='observer'] .stage-key {
   font-weight: 500;
   margin-bottom: 12px;
 }
-.time-workbench {
-  position: fixed;
-  z-index: 20;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: max(10px, env(safe-area-inset-bottom));
-  width: min(980px, calc(100vw - 32px));
-  padding: 12px 18px 6px;
-  background: var(--design-surface);
-  border: 1px solid var(--design-line);
-  border-radius: 22px;
-  box-shadow: 0 4px 28px var(--design-shadow);
-  backdrop-filter: blur(16px);
-  color: var(--design-muted);
-}
-.welcome-open .time-workbench,
-body:has(dialog[open]) .time-workbench {
-  visibility: hidden;
-  pointer-events: none;
-}
-.workbench-top {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-}
-.workbench-top > span {
-  font-size: 12px;
-  color: var(--design-muted);
-}
-.workbench-calendar {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: auto;
-}
-.workbench-calendar > button {
-  border: 0;
-  background: var(--design-surface);
-  color: var(--design-primary);
-  width: 34px;
-  height: 36px;
-  min-width: 34px;
-  padding: 0;
-  border-radius: 12px;
-  font-size: 21px;
-}
-.workbench-calendar > input {
-  height: 36px;
-  min-width: 0;
-  width: 142px;
-  padding: 4px 8px;
-  font-size: 12px;
-  background: var(--design-on-action);
-}
-.workbench-top > .play-button {
-  min-height: 38px;
-  padding: 7px 15px;
-  font-size: 13px;
-  white-space: nowrap;
-}
-.workbench-main {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 20px;
-  margin-top: 8px;
-}
-.time-workbench[data-ideal='true']:not([data-observer='true']) .workbench-main {
-  grid-template-columns: minmax(0, 1fr);
-}
-.workbench-panel {
-  min-width: 0;
-}
-.workbench-panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  min-height: 36px;
-}
-.workbench-panel-head > label {
-  font-size: 12px;
-  line-height: 1.4;
-  min-width: 0;
-}
-.workbench-panel-head > output {
-  font-size: 23px;
-  line-height: 1.2;
-  font-variant-numeric: tabular-nums;
-  color: var(--design-primary);
-  flex-shrink: 0;
-}
+
 #workbenchDatePanel output,
 #workbenchBearingPanel output {
   font-size: 17px;
 }
-.time-workbench input[type='range'] {
-  display: block;
-  appearance: none;
-  -webkit-appearance: none;
-  width: 100%;
-  height: 40px;
-  background: transparent;
-  margin: 0;
-  touch-action: none;
-  cursor: ew-resize;
-  accent-color: var(--design-primary);
-}
-.time-workbench input[type='range']::-webkit-slider-runnable-track {
-  height: 5px;
-  background: var(--design-inset);
-  border-radius: 5px;
-}
-.time-workbench input[type='range']::-webkit-slider-thumb {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 26px;
-  height: 26px;
-  background: var(--design-primary);
-  border: 3px solid var(--design-line);
-  border-radius: 50%;
-  margin-top: -10.5px;
-  box-shadow: 0 1px 4px var(--design-shadow);
-}
-.time-workbench input[type='range']::-moz-range-track {
-  height: 5px;
-  background: var(--design-inset);
-  border-radius: 5px;
-}
-.time-workbench input[type='range']::-moz-range-thumb {
-  width: 21px;
-  height: 21px;
-  background: var(--design-primary);
-  border: 3px solid var(--design-line);
-  border-radius: 50%;
-}
-.time-workbench input[type='range']:focus-visible {
-  outline: 2px solid var(--design-action);
-  outline-offset: 2px;
-  border-radius: 12px;
-}
-.workbench-clock-tools,
-.workbench-look-buttons {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 32px;
-}
-.workbench-clock-tools > button,
-.workbench-look-buttons > button,
+
 .workbench-events > button {
   background: var(--design-surface);
   border: 0;
@@ -4154,23 +4010,7 @@ body:has(dialog[open]) .time-workbench {
   padding: 5px 10px;
   min-height: 32px;
 }
-.workbench-clock-tools input {
-  width: 94px;
-  height: 32px;
-  padding: 3px 7px;
-  font-size: 13px;
-  border: 1px solid var(--design-line);
-  border-radius: 9px;
-  background: var(--design-surface);
-  color: var(--design-primary);
-}
-.workbench-date-scale {
-  display: flex;
-  justify-content: space-between;
-  color: var(--design-muted);
-  font-size: 11px;
-  margin-top: 4px;
-}
+
 .workbench-more {
   border-top: 1px solid var(--design-line);
   margin-top: 8px;
@@ -4226,77 +4066,11 @@ body:has(dialog[open]) .time-workbench {
   border-top: 1px solid var(--design-line);
 }
 @media (max-width: 760px) {
-  .time-workbench {
-    width: calc(100vw - 20px);
-    padding: 10px 12px 4px;
-    border-radius: 18px;
-    bottom: max(6px, env(safe-area-inset-bottom));
-  }
-  .workbench-top {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 5px 8px;
-  }
-  .workbench-top > span {
-    grid-column: 1/-1;
-    font-size: 11px;
-    line-height: 1.3;
-  }
-  .workbench-calendar {
-    margin-left: 0;
-    gap: 3px;
-  }
-  .workbench-calendar > input {
-    width: 127px;
-    height: 34px;
-    font-size: 11px;
-    padding: 3px 5px;
-  }
-  .workbench-calendar > button {
-    width: 27px;
-    min-width: 27px;
-    height: 34px;
-  }
-  .workbench-top > .play-button {
-    padding: 6px 11px;
-    font-size: 12px;
-    min-height: 34px;
-  }
-  .workbench-main {
-    gap: 12px;
-    margin-top: 5px;
-  }
-  .workbench-panel-head {
-    gap: 5px;
-    min-height: 36px;
-  }
-  .workbench-panel-head > label {
-    font-size: 10px;
-  }
-  .workbench-panel-head > output {
-    font-size: 20px;
-  }
   #workbenchDatePanel output,
   #workbenchBearingPanel output {
     font-size: 13px;
   }
-  .workbench-clock-tools,
-  .workbench-look-buttons {
-    gap: 4px;
-  }
-  .workbench-clock-tools input {
-    width: 69px;
-    padding: 2px 4px;
-    font-size: 11px;
-  }
-  .workbench-clock-tools > button,
-  .workbench-look-buttons > button {
-    padding: 4px 6px;
-    font-size: 10px;
-  }
-  .workbench-look-buttons > button {
-    min-width: 28px;
-  }
+
   .workbench-more > summary {
     font-size: 11px;
   }
@@ -4312,29 +4086,12 @@ body:has(dialog[open]) .time-workbench {
   .workbench-events button {
     font-size: 10px;
   }
-  .workbench-date-scale {
-    font-size: 10px;
-  }
 }
-.workbench-clock-tools input {
-  min-width: 0;
-  flex: 1;
-  max-width: 94px;
-}
-.workbench-clock-tools > button {
-  flex-shrink: 0;
-}
-.workbench-clock-tools input::-webkit-calendar-picker-indicator {
-  width: 12px;
-  padding: 0;
-  margin: 0;
-}
+
 html:has(.has-time-workbench) {
   scroll-padding-bottom: var(--time-workbench-space);
 }
-.time-workbench {
-  overflow-anchor: none;
-}
+
 .has-time-workbench #stage,
 .has-time-workbench #sky,
 .has-time-workbench #moonSkyHost > .stage {
@@ -4388,7 +4145,8 @@ html:has(.has-time-workbench) {
   height: 32px;
   margin: 2px 0 0;
   touch-action: none;
-  background: linear-gradient(var(--design-inset), var(--design-inset)) center/100% 5px no-repeat;
+  background: linear-gradient(var(--design-inset), var(--design-inset)) center/100% 5px
+    no-repeat;
 }
 .sundial-sticky-clock input::-webkit-slider-thumb {
   width: 25px;
@@ -4415,12 +4173,7 @@ html:has(.has-time-workbench) {
   background: var(--design-on-action);
   border-bottom: 1px solid var(--design-line);
 }
-@media (min-width: 1101px) {
-  .time-workbench {
-    left: calc(50% + 152px);
-    width: min(980px, calc(100vw - 392px));
-  }
-}
+
 .workbench-month-tools {
   display: flex;
   align-items: center;

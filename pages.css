@@ -410,82 +410,7 @@ body:is(
   flex-shrink: 0;
   padding: 4px;
 }
-.ui-timeline-host {
-  grid-area: timeline;
-  min-width: 0;
-  min-height: 0;
-}
-.ui-timeline-host .time-workbench {
-  position: static !important;
-  transform: none !important;
-  width: 100% !important;
-  max-width: none;
-  min-width: 0;
-  margin: 0;
-  padding: 10px 14px;
-  background: var(--design-on-action);
-  border: 1px solid var(--ui-border);
-  border-radius: var(--ui-radius);
-  box-shadow: none;
-  backdrop-filter: none;
-  visibility: visible;
-  pointer-events: auto;
-}
-.ui-timeline-host .workbench-top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.ui-timeline-host .workbench-top > span {
-  font-size: 12px;
-  white-space: nowrap;
-}
-.ui-timeline-host .workbench-calendar {
-  margin-left: auto;
-}
-.ui-timeline-host .workbench-main {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 6px;
-}
-.ui-timeline-host .time-workbench[data-observer='true'] .workbench-main {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.ui-timeline-host .time-workbench[data-ideal='true'] .workbench-main {
-  grid-template-columns: minmax(0, 1fr);
-}
-.ui-timeline-host .workbench-panel-head {
-  min-height: 30px;
-  gap: 6px;
-}
-.ui-timeline-host .workbench-panel-head label {
-  font-size: 11px;
-}
-.ui-timeline-host .workbench-panel-head output {
-  font-size: 21px;
-}
-.ui-timeline-host #workbenchDatePanel output,
-.ui-timeline-host #workbenchBearingPanel output {
-  font-size: 15px;
-}
-.ui-timeline-host .workbench-clock-tools,
-.ui-timeline-host .workbench-look-buttons {
-  min-height: 28px;
-}
-.ui-timeline-host .workbench-clock-tools input {
-  height: 28px;
-  font-size: 12px;
-}
-.ui-timeline-host .workbench-clock-tools button,
-.ui-timeline-host .workbench-look-buttons button {
-  min-height: 28px;
-  font-size: 11px;
-}
-.ui-timeline-host .workbench-date-scale {
-  font-size: 11px;
-  margin-top: 2px;
-}
+
 .ui-parameters .workbench-more {
   margin: 0 0 16px;
   border: 0;
@@ -758,93 +683,7 @@ body[data-page='analemma'] .workbench-events {
     font-size: 11px;
     padding: 4px 9px;
   }
-  .ui-timeline-host .time-workbench {
-    padding: 8px 10px;
-  }
-  .ui-timeline-host .workbench-top {
-    gap: 6px;
-  }
-  .ui-timeline-host .workbench-top > span {
-    display: none;
-  }
-  .ui-timeline-host .workbench-calendar {
-    margin-left: 0;
-    flex: 1;
-    gap: 3px;
-  }
-  .ui-timeline-host .workbench-calendar input {
-    width: 125px;
-    font-size: 11px;
-    height: 30px;
-  }
-  .ui-timeline-host .workbench-calendar button {
-    width: 26px;
-    min-width: 26px;
-    height: 30px;
-  }
-  .ui-timeline-host .workbench-top > .play-button {
-    font-size: 11px;
-    padding: 5px 9px;
-    min-height: 30px;
-  }
-  .ui-timeline-host .workbench-main {
-    gap: 10px;
-    margin-top: 2px;
-  }
-  .ui-timeline-host .workbench-panel-head {
-    min-height: 28px;
-    gap: 4px;
-  }
-  .ui-timeline-host .workbench-panel-head label {
-    font-size: 10px;
-  }
-  .ui-timeline-host .workbench-panel-head output {
-    font-size: 17px;
-  }
-  .ui-timeline-host #workbenchDatePanel output,
-  .ui-timeline-host #workbenchBearingPanel output {
-    font-size: 12px;
-  }
-  .ui-timeline-host .workbench-clock-tools {
-    gap: 3px;
-  }
-  .ui-timeline-host .workbench-clock-tools input {
-    width: 66px;
-    font-size: 10px;
-    padding: 2px 3px;
-  }
-  .ui-timeline-host .workbench-clock-tools button,
-  .ui-timeline-host .workbench-look-buttons button {
-    font-size: 10px;
-    padding: 3px 4px;
-  }
-  .ui-timeline-host .workbench-look-buttons {
-    gap: 3px;
-  }
-  .ui-timeline-host .time-workbench[data-observer='true'] .workbench-main {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .ui-timeline-host .time-workbench[data-observer='true'] #workbenchDatePanel {
-    grid-column: 1/-1;
-    display: grid;
-    grid-template-columns: 100px minmax(0, 1fr);
-    align-items: center;
-    gap: 6px;
-  }
-  .ui-timeline-host
-    .time-workbench[data-observer='true']
-    #workbenchDatePanel
-    .workbench-date-scale {
-    display: none;
-  }
-  .ui-timeline-host
-    .time-workbench[data-observer='true']
-    #workbenchDatePanel
-    .workbench-panel-head {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
-  }
+
   .ui-plot .stage-top {
     font-size: 10px;
   }
@@ -906,52 +745,7 @@ body[data-page='analemma'] .workbench-events {
     padding: 3px 9px;
     font-size: 11px;
   }
-  .ui-timeline-host .workbench-top > span {
-    display: none;
-  }
-  .ui-timeline-host .time-workbench {
-    padding: 6px 10px;
-  }
-  .ui-timeline-host .workbench-main {
-    margin-top: 0;
-    gap: 10px;
-  }
-  .ui-timeline-host .workbench-panel-head {
-    min-height: 26px;
-  }
-  .ui-timeline-host .workbench-clock-tools,
-  .ui-timeline-host .workbench-look-buttons {
-    display: none;
-  }
-  .ui-timeline-host .workbench-date-scale {
-    display: none;
-  }
-  .ui-timeline-host .workbench-calendar {
-    margin-left: 0;
-  }
-  .ui-timeline-host .workbench-top > .play-button {
-    margin-left: auto;
-    font-size: 11px;
-    padding: 5px 10px;
-    min-height: 30px;
-  }
-  .ui-timeline-host .time-workbench input[type='range'] {
-    height: 32px;
-  }
-  .ui-timeline-host .time-workbench[data-observer='true'] .workbench-main {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .ui-timeline-host .time-workbench[data-observer='true'] #workbenchDatePanel {
-    grid-column: auto;
-    display: block;
-  }
-  .ui-timeline-host
-    .time-workbench[data-observer='true']
-    #workbenchDatePanel
-    .workbench-panel-head {
-    flex-direction: row;
-    align-items: center;
-  }
+
   .ui-parameters {
     padding: 10px;
   }

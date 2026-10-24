@@ -125,7 +125,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44125/').repl
     assert(await page.locator('.motion-menu-grip').isVisible());
     // Selecting a calculated event is different from rotating its display.
     for (const body of ['sun', 'moon']) {
-      await page.locator('#observationBody').selectOption(body);
+      await page.locator(`button[data-body=${body}]`).click();
       await selectDiagram(page, 'riseSetPanel');
       await page.waitForFunction(
         () =>
