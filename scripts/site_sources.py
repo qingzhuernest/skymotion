@@ -25,6 +25,8 @@ def load_catalog(root=ROOT):
     if len(ids) != len(set(ids)):
         raise ValueError("Duplicate view ID")
     for view in catalog["views"]:
+        if view.get("sidebar") not in (None, "conditions", "references"):
+            raise ValueError("Invalid view sidebar: " + view["id"])
         if not 0 <= view["group"] < len(catalog["groups"]):
             raise ValueError("Unknown view group: " + view["id"])
         for body, labels in view["labels"].items():

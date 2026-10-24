@@ -549,13 +549,14 @@
   .workspace-layout-history {
     gap: 4px;
   }
-  .workspace-active .ui-plot[data-workspace-count][data-workspace-axis][data-workspace-featured] {
+  .workspace-active
+    .ui-plot[data-workspace-count][data-workspace-axis][data-workspace-featured] {
     grid-template-columns: minmax(0, 1fr) !important;
     grid-template-rows: minmax(0, 1fr) !important;
     gap: 0 !important;
     padding: 5px !important;
   }
-  .workspace-tabs {
+  .workspace-active .workspace-tabs {
     display: flex !important;
     overflow-x: auto;
     width: 100%;

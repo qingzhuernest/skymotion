@@ -5,7 +5,7 @@
   // BEGIN GENERATED CATALOG
   // prettier-ignore
   const catalog = {
-    "resourceVersion": "20261024-quality93",
+    "resourceVersion": "20261024-workbench94",
     "pages": [
       {
         "path": "index.html",
@@ -213,7 +213,8 @@
             "Place & time comparison"
           ]
         },
-        "editing": true
+        "editing": true,
+        "sidebar": "conditions"
       },
       {
         "id": "sceneBuilder",
@@ -228,7 +229,8 @@
             "Build experiment"
           ]
         },
-        "editing": true
+        "editing": true,
+        "sidebar": "references"
       }
     ],
     "navigation": [

@@ -1341,7 +1341,7 @@
         m.canvas.getBoundingClientRect().height > 0,
     );
   }
-  function chooseRail(kind) {
+  function chooseRail(kind, { open: openEditor = true } = {}) {
     commitActive();
     if (!validInputs() || window.SkyLabComparison?.validate() === false) return false;
     closeObjectMenu();
@@ -1357,6 +1357,7 @@
           ? models.get(current.id)
           : visibleModels()[0];
       if (
+        openEditor &&
         panel.hidden &&
         target &&
         !document.body.classList.contains('scene-builder-active')

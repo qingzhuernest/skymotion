@@ -2096,6 +2096,13 @@
                 "鼠标拖动、滑条拖动和键盘操作具有不同对象：先看当前图位和当前选中对象。不要把移动相机、移动基准地点和移动附加城市混为一谈。",
                 "Mouse, slider and keyboard gestures can target different objects. Check the active pane and selected reference before acting; distinguish camera motion, baseline relocation and comparison-site movement."
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "实验台顶部把主菜单、观测信息、天体切换、自定义和语言入口放在同一个顶栏中；窄屏按可用宽度排列。“三维对照”位于左侧“视图与布局”，可与原科学图共享UTC并排观察。",
+                "Lab combines the main menu, observation context, body selector, customization and language in one header, adapting to narrow screens. Find 3D comparison in Views & layout to observe the original scientific diagram alongside a scene sharing the same UTC."
+              ]
             }
           ]
         },

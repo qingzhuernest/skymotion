@@ -1,9 +1,5 @@
 /* Preserve the original plot/canvas identities and its existing scientific controls. */
-@media (max-width: 1024px), (pointer: coarse) and (max-width: 1366px) {
-  body[data-page='diagrams'] .ui-heading {
-    grid-template-columns: minmax(0, 1fr) auto auto auto;
-  }
-}
+
 @media (max-width: 600px) and (min-height: 541px) {
   body[data-page='diagrams'] .ui-heading {
     grid-template-columns: minmax(0, 1fr) auto auto;
@@ -31,10 +27,11 @@
   }
 }
 body[data-page='diagrams'] .ui-linked-toggle {
-  min-height: 32px;
+  min-height: 36px;
+  width: 100%;
   flex-shrink: 0;
   border: 1px solid var(--design-line);
-  border-radius: 18px;
+  border-radius: var(--design-radius-control);
   padding: 5px 12px;
   font-size: 12px;
   background: var(--design-surface);
@@ -177,5 +174,16 @@ body[data-page='diagrams'] .ui-linked-menu-note {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+
+.ui-linked-settings {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--design-line);
+}
+@media (pointer: coarse) {
+  body[data-page='diagrams'] .ui-linked-toggle {
+    min-height: 44px;
   }
 }

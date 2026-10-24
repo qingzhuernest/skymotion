@@ -1304,10 +1304,15 @@
       closeOptions();
       focused = null;
       if (value) {
-        normalSelection = ['sceneBuilder', 'solarStudy'].includes(uiWorkspace.selected)
+        const editViews = window.SkySiteCatalog.availableViews(state.body)
+          .filter((view) => view.editing)
+          .map((view) => view.id);
+        normalSelection = editViews.includes(uiWorkspace.selected)
           ? 'contextPanel'
           : uiWorkspace.selected;
         customizing = true;
+        const intent = location.hash.slice(1);
+        if (editViews.includes(intent)) uiWorkspace.selected = intent;
         data.enabled = true;
       } else {
         customizing = false;

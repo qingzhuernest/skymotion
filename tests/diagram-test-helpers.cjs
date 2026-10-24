@@ -65,8 +65,10 @@ exports.enterCustomization = async (page) => {
   const selected = await page.evaluate(() =>
     typeof uiWorkspace === 'undefined' || !uiWorkspace
       ? null
-      : location.hash === '#sceneBuilder'
-        ? 'sceneBuilder'
+      : window.SkySiteCatalog.availableViews(state.body).some(
+            (view) => view.editing && view.id === location.hash.slice(1),
+          )
+        ? location.hash.slice(1)
         : uiWorkspace.selected,
   );
   await page.locator('.layout-launch').click();

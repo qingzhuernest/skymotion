@@ -32,6 +32,13 @@ function renderUIWorkspace() {
       state.body,
       window.SkyCustomization?.active !== false,
     ).map((view) => view.id);
+    const requested = window.SkySiteCatalog.availableViews(state.body).find(
+      (view) => view.id === u.selected,
+    );
+    // Editing-only deep links remain pending while the ordinary workspace is shown.
+    // Do not rewrite their route before the explicit customization switch is used.
+    if (window.SkyCustomization?.active === false && requested?.editing)
+      u.selected = 'contextPanel';
     if (!allowed.includes(u.selected)) {
       u.selected = 'contextPanel';
       if (window.SkyMotionHistory && !SkyMotionHistory.restoring)
@@ -480,6 +487,9 @@ function renderUIWorkspace() {
         uiWorkspace.pendingLunar = false;
         uiWorkspace.lunarRequested = id === 'lunarOrbit';
         uiWorkspace.selected = id;
+        const entry = window.SkySiteCatalog.views.find((view) => view.id === id);
+        if (entry?.sidebar)
+          window.SkyDiagramTools?.selectSidebar(entry.sidebar, { open: false });
         if (id === 'companionModule') state.companion = true;
         if (id === 'lunarOrbit') stop();
         if (location.hash !== '#' + id) {

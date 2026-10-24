@@ -3,9 +3,11 @@
   'use strict';
   if (document.body.dataset.page !== 'diagrams' || !uiWorkspace) return;
   const plot = uiWorkspace.plot;
-  const heading = document.querySelector('.ui-heading');
-  const parameters = document.getElementById('uiParametersButton');
-  if (!plot || !heading) return;
+  const rail = document.querySelector('.ui-parameters');
+  if (!plot || !rail) return;
+  const settings = document.createElement('section');
+  settings.className = 'ui-linked-settings';
+  rail.append(settings);
 
   const button = document.createElement('button');
   button.type = 'button';
@@ -13,15 +15,16 @@
   button.textContent = '三维对照';
   button.setAttribute('aria-pressed', 'false');
   button.setAttribute('aria-controls', 'uiLinkedScenes');
-  // Keep it outside the diagram tablist: tab routing only accepts diagram buttons.
-  heading.insertBefore(button, parameters || null);
+  // The view catalog mounts this existing control in Views & layout.
+  settings.append(button);
 
   const wrapper = document.createElement('div');
   wrapper.id = 'uiLinkedScenes';
   wrapper.className = 'ui-linked-scenes';
   const note = document.createElement('p');
   note.className = 'ui-linked-note';
-  note.textContent = '原图解显示当地 / 全球条件；三维说明空间关系，地球姿态按UTC，比例为示意。';
+  note.textContent =
+    '原图解显示当地 / 全球条件；三维说明空间关系，地球姿态按UTC，比例为示意。';
   const pane = document.createElement('section');
   pane.className = 'ui-linked-space';
   pane.setAttribute('aria-label', '同一 UTC 时刻的三维空间关系');
@@ -32,9 +35,15 @@
   explanation.className = 'ui-linked-menu-note';
   explanation.textContent =
     '三维对照：原图解用于读取当地或全球条件；三维画面解释空间关系，使用同一 UTC。大小与距离为示意，地球姿态按UTC计算，不代替原图解的地理读数。';
-  const rail = document.querySelector('.ui-parameters');
-  if (rail) rail.append(explanation);
+  explanation.hidden = true;
+  settings.append(explanation);
 
+  const captions = new Map([
+    [button, button.textContent],
+    [note, note.textContent],
+    [explanation, explanation.textContent],
+  ]);
+  const translate = (value) => (window.skyTranslate ? window.skyTranslate(value) : value);
   let enabled = false;
   let frame = null;
   let lastMessage = '';
@@ -42,8 +51,10 @@
 
   function blockReason() {
     if (uiWorkspace.selected === 'lunarOrbit') return '地升地落演示使用独立的绕月控制。';
-    if (state.body === 'sun' && state.manual) return '先切回日期观测，再与真实星历三维模型对照。';
-    if (uiWorkspace.selected === 'solarCompare') return '请选择单张关联图解，再开启三维对照。';
+    if (state.body === 'sun' && state.manual)
+      return '先切回日期观测，再与真实星历三维模型对照。';
+    if (uiWorkspace.selected === 'solarCompare')
+      return '请选择单张关联图解，再开启三维对照。';
     return '';
   }
 
@@ -59,6 +70,7 @@
     if (next && blockReason()) return;
     if (enabled === next) return;
     enabled = next;
+    explanation.hidden = !enabled;
     if (enabled && typeof settleMotion === 'function') settleMotion();
     wrapper.classList.toggle('is-linked', enabled);
     button.setAttribute('aria-pressed', String(enabled));
@@ -83,10 +95,17 @@
   }
 
   function sync() {
+    for (const [element, source] of captions) {
+      const value = translate(source);
+      if (element.textContent !== value) element.textContent = value;
+    }
     const reason = blockReason();
     button.disabled = Boolean(reason);
     button.removeAttribute('title');
-    button.setAttribute('aria-label', reason || '三维对照：原关联图解与三维空间关系并排，共用下方时间控制');
+    button.setAttribute(
+      'aria-label',
+      translate(reason || '三维对照：原关联图解与三维空间关系并排，共用下方时间控制'),
+    );
     if (reason && enabled) setEnabled(false);
     if (!enabled || !frame?.contentWindow) return;
     const date = instantUTC(state.time, state.date, state.lon);
@@ -102,6 +121,7 @@
     frame.contentWindow.postMessage(message, location.origin);
   }
 
+  document.addEventListener('skymotion:language', sync);
   button.addEventListener('click', () => setEnabled(!enabled));
   window.addEventListener('message', (event) => {
     if (
@@ -121,7 +141,8 @@
       const current = frame;
       if (!selection || !current) return;
       const apply = () => {
-        if (frame === current) current.contentWindow?.SolarSpaceView?.restoreSelection(selection);
+        if (frame === current)
+          current.contentWindow?.SolarSpaceView?.restoreSelection(selection);
       };
       if (current.contentWindow?.SolarSpaceView) apply();
       else current.addEventListener('load', apply, { once: true });

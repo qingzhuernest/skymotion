@@ -100,12 +100,22 @@ a:focus-visible {
 .welcome-screen {
   min-height: 100dvh;
 }
-body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data-page='sundial']) {
+body:is(
+  [data-page='lab'],
+  [data-page='diagrams'],
+  [data-page='analemma'],
+  [data-page='sundial']
+) {
   height: 100dvh;
 }
-body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data-page='sundial'])
+body:is(
+    [data-page='lab'],
+    [data-page='diagrams'],
+    [data-page='analemma'],
+    [data-page='sundial']
+  )
   #labShell {
-  height: calc(100dvh - var(--ui-nav-height));
+  height: calc(100dvh - var(--ui-header-height, var(--ui-nav-height)));
   padding: 0 !important;
 }
 .ui-shell {
@@ -1124,7 +1134,9 @@ body[data-page='analemma'] .workbench-events {
     border-color 180ms ease,
     box-shadow 180ms ease;
 }
-.ui-parameters :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information) > summary {
+.ui-parameters
+  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
+  > summary {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -1171,7 +1183,8 @@ body[data-page='analemma'] .workbench-events {
   > summary:hover {
   background: var(--design-surface);
 }
-.ui-parameters :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open] {
+.ui-parameters
+  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open] {
   border-color: var(--design-line);
   box-shadow: 0 2px 5px var(--design-shadow);
 }
@@ -1403,12 +1416,22 @@ body[data-page='analemma'] .workbench-events {
 }
 /* Keep document focus/scroll helpers from shifting the viewport; panels scroll inside. */
 html:has(
-  body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data-page='sundial'])
+  body:is(
+    [data-page='lab'],
+    [data-page='diagrams'],
+    [data-page='analemma'],
+    [data-page='sundial']
+  )
 ) {
   height: 100%;
   overflow: hidden;
 }
-body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data-page='sundial']) {
+body:is(
+  [data-page='lab'],
+  [data-page='diagrams'],
+  [data-page='analemma'],
+  [data-page='sundial']
+) {
   position: fixed;
   inset: 0;
   overflow: hidden;
@@ -1617,7 +1640,9 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   max-width: 100%;
   box-sizing: border-box;
 }
-:is(.ui-shell, .ui-parameter-drawer) :is(.context-view-switch, .globe-drag-options) button {
+:is(.ui-shell, .ui-parameter-drawer)
+  :is(.context-view-switch, .globe-drag-options)
+  button {
   border-radius: var(--ui-control-radius);
   min-height: var(--ui-control-height);
   padding: 7px 10px;
@@ -1627,7 +1652,9 @@ body:is([data-page='lab'], [data-page='diagrams'], [data-page='analemma'], [data
   min-width: 0;
   background: var(--md-surface-container);
 }
-:is(.ui-shell, .ui-parameter-drawer) :is(.context-view-switch, .globe-drag-options) button.active {
+:is(.ui-shell, .ui-parameter-drawer)
+  :is(.context-view-switch, .globe-drag-options)
+  button.active {
   background: var(--md-primary);
   color: var(--md-on-primary);
 }
@@ -2015,7 +2042,13 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
 }
 :is(.ui-shell, .ui-parameter-drawer)
   .ui-parameters
-  :is(select, input[type='number'], input[type='date'], input[type='time'], input[type='month']) {
+  :is(
+    select,
+    input[type='number'],
+    input[type='date'],
+    input[type='time'],
+    input[type='month']
+  ) {
   height: var(--ui-control-height);
   min-height: var(--ui-control-height);
   padding: 8px 10px;
@@ -2063,7 +2096,9 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   font-size: 12px;
   white-space: normal;
 }
-.ui-parameters :is(.context-view-switch, .globe-drag-options, .model-switch) button.active,
+.ui-parameters
+  :is(.context-view-switch, .globe-drag-options, .model-switch)
+  button.active,
 .ui-parameters .season-buttons button.selected {
   background: var(--md-primary) !important;
   color: var(--md-on-primary) !important;
@@ -2421,7 +2456,11 @@ body[data-page='welcome'] .welcome-corner-links {
   gap: 8px;
 }
 body[data-page='welcome']
-  :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited) {
+  :is(
+    .welcome-sky-actions button,
+    .welcome-corner-links > a,
+    .welcome-corner-links > a:visited
+  ) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2438,7 +2477,8 @@ body[data-page='welcome']
   text-decoration: none;
   white-space: nowrap;
 }
-body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links > a):hover {
+body[data-page='welcome']
+  :is(.welcome-sky-actions button, .welcome-corner-links > a):hover {
   background: #23354b;
   color: var(--design-on-action);
 }
@@ -2474,7 +2514,8 @@ body[data-page='welcome'] .welcome-quote {
 }
 @media (max-width: 760px) {
   body[data-page='welcome'] .welcome-screen {
-    padding: max(20px, env(safe-area-inset-top)) 20px max(16px, env(safe-area-inset-bottom));
+    padding: max(20px, env(safe-area-inset-top)) 20px
+      max(16px, env(safe-area-inset-bottom));
   }
 }
 @media (max-height: 700px) {
@@ -2489,7 +2530,11 @@ body[data-page='welcome'] .welcome-quote {
     padding: 8px 18px;
   }
   body[data-page='welcome']
-    :is(.welcome-sky-actions button, .welcome-corner-links > a, .welcome-corner-links > a:visited) {
+    :is(
+      .welcome-sky-actions button,
+      .welcome-corner-links > a,
+      .welcome-corner-links > a:visited
+    ) {
     min-height: 36px;
     font-size: 11px !important;
     padding: 3px 8px;

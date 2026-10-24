@@ -1,22 +1,28 @@
 /** Shared bilingual presentation. Astronomy values, DOM IDs and input values remain unchanged. */
 (() => {
-  const base = new URL(".", document.currentScript.src);
-  const storageKey = "skymotion-language";
-  let language = window.skyPageLanguage || document.documentElement.dataset.renderedLanguage || "zh";
+  const base = new URL('.', document.currentScript.src);
+  const storageKey = 'skymotion-language';
+  let language =
+    window.skyPageLanguage || document.documentElement.dataset.renderedLanguage || 'zh';
   if (!window.skyPageLanguage) {
-    try { language = new URLSearchParams(location.search).get("lang") || localStorage.getItem(storageKey) || language; } catch {}
+    try {
+      language =
+        new URLSearchParams(location.search).get('lang') ||
+        localStorage.getItem(storageKey) ||
+        language;
+    } catch {}
   }
-  language = language === "en" ? "en" : "zh";
+  language = language === 'en' ? 'en' : 'zh';
   let dictionary = {},
     fragments = null;
   const cache = new Map(),
     originals = new WeakMap(),
     attributes = new WeakMap();
   const chinese = /[\u3400-\u9fff]/;
-  const normalize = (value) => String(value).replace(/\s+/g, " ").trim();
-  const escape = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const normalize = (value) => String(value).replace(/\s+/g, ' ').trim();
+  const escape = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   function installDictionary(maps) {
-    const merged = Object.assign({}, ...maps, { "☾ 月相": "☾ Moon" });
+    const merged = Object.assign({}, ...maps, { '☾ 月相': '☾ Moon' });
     dictionary = {};
     // Prefer canonical keys: raw whitespace variants must not swallow word separators.
     for (const [key, value] of Object.entries(merged))
@@ -26,12 +32,12 @@
     const terms = Object.keys(dictionary)
       .filter((key) => chinese.test(key) && key.length <= 120)
       .sort((a, b) => b.length - a.length);
-    fragments = new RegExp(terms.map(escape).join("|"), "g");
+    fragments = new RegExp(terms.map(escape).join('|'), 'g');
     cache.clear();
   }
   if (window.skyEnglishDictionary) installDictionary([window.skyEnglishDictionary]);
   function translate(value) {
-    if (language !== "en" || !chinese.test(String(value))) return value;
+    if (language !== 'en' || !chinese.test(String(value))) return value;
     const source = String(value),
       key = normalize(source);
     if (cache.has(source)) return cache.get(source);
@@ -40,14 +46,13 @@
       result = key
         .replace(
           /(\d{4})年(\d{1,2})月(\d{1,2})日/g,
-          (_, y, m, d) => `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`,
+          (_, y, m, d) => `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`,
         )
         .replace(
           /(\d{1,2})月(\d{1,2})日/g,
-          (_, m, d) => `${m.padStart(2, "0")}/${d.padStart(2, "0")}`,
+          (_, m, d) => `${m.padStart(2, '0')}/${d.padStart(2, '0')}`,
         );
-      if (fragments)
-        result = result.replace(fragments, (match) => dictionary[match]);
+      if (fragments) result = result.replace(fragments, (match) => dictionary[match]);
     }
     if (cache.size >= 4096) cache.clear();
     cache.set(source, result);
@@ -56,12 +61,14 @@
   window.skyTranslate = translate;
   window.skyLanguage = () => language;
   // Canvas annotations share the same translations and English font as DOM controls.
-  for (const method of ["fillText", "strokeText", "measureText"]) {
+  for (const method of ['fillText', 'strokeText', 'measureText']) {
     const native = CanvasRenderingContext2D.prototype[method];
-    if(method==='fillText')window.skyFillText=(context,value,...args)=>native.call(context,value,...args);
+    if (method === 'fillText')
+      window.skyFillText = (context, value, ...args) =>
+        native.call(context, value, ...args);
     CanvasRenderingContext2D.prototype[method] = function (value, ...args) {
       const font = this.font;
-      if (language === "en")
+      if (language === 'en')
         this.font = font.replace(
           /"SkyMotion Reading"|SkyMotion Reading/g,
           '"SkyMotion Charter"',
@@ -73,19 +80,19 @@
       }
     };
   }
-  const skipped = (element) =>
-    element.closest("script,style,code,pre,[data-i18n-skip]");
+  const skipped = (element) => element.closest('script,style,code,pre,[data-i18n-skip]');
   function text(node) {
     if (!node.parentElement || skipped(node.parentElement)) return;
     const current = node.nodeValue;
     if (!originals.has(node) && node.parentElement.dataset.i18nCn) {
       try {
         const pairs = JSON.parse(node.parentElement.dataset.i18nCn);
-        if (Object.prototype.hasOwnProperty.call(pairs,current)) originals.set(node,{zh:pairs[current],en:current});
+        if (Object.prototype.hasOwnProperty.call(pairs, current))
+          originals.set(node, { zh: pairs[current], en: current });
       } catch {}
     }
     const saved = originals.get(node);
-    if (language === "zh") {
+    if (language === 'zh') {
       if (saved && current === saved.en) node.nodeValue = saved.zh;
       return;
     }
@@ -97,33 +104,36 @@
       /[A-Za-z0-9]$/.test(node.previousSibling.textContent) &&
       /^[A-Za-z0-9]/.test(en)
     )
-      en = " " + en;
+      en = ' ' + en;
     if (
       node.nextSibling?.nodeType === Node.ELEMENT_NODE &&
       /[A-Za-z0-9]$/.test(en) &&
       /^[A-Za-z0-9]/.test(node.nextSibling.textContent)
     )
-      en += " ";
+      en += ' ';
     if (en !== current) {
       originals.set(node, { zh: current, en });
       node.nodeValue = en;
     }
   }
-  const translatedAttributes = ["title", "aria-label", "placeholder", "alt"];
+  const translatedAttributes = ['title', 'aria-label', 'placeholder', 'alt'];
   function element(node) {
     if (skipped(node)) return;
     let saved = attributes.get(node);
     if (!saved) {
       saved = {};
       if (node.dataset.i18nCnAttrs) {
-        try { for (const [name,zh] of Object.entries(JSON.parse(node.dataset.i18nCnAttrs))) saved[name] = {zh,en:node.getAttribute(name)}; } catch {}
+        try {
+          for (const [name, zh] of Object.entries(JSON.parse(node.dataset.i18nCnAttrs)))
+            saved[name] = { zh, en: node.getAttribute(name) };
+        } catch {}
       }
       attributes.set(node, saved);
     }
     for (const name of translatedAttributes) {
       const current = node.getAttribute(name);
       if (current === null) continue;
-      if (language === "zh") {
+      if (language === 'zh') {
         if (saved[name] && current === saved[name].en)
           node.setAttribute(name, saved[name].zh);
       } else if (chinese.test(current)) {
@@ -137,10 +147,7 @@
   }
   function walk(root) {
     if (root.nodeType === Node.TEXT_NODE) return text(root);
-    if (
-      root.nodeType !== Node.ELEMENT_NODE &&
-      root.nodeType !== Node.DOCUMENT_NODE
-    )
+    if (root.nodeType !== Node.ELEMENT_NODE && root.nodeType !== Node.DOCUMENT_NODE)
       return;
     if (root.nodeType === Node.ELEMENT_NODE) element(root);
     const walker = document.createTreeWalker(
@@ -156,66 +163,62 @@
   let button,
     dictionaryReady = false;
   function apply(next, persist = true) {
-    language = next === "en" ? "en" : "zh";
-    document.documentElement.lang = language === "en" ? "en" : "zh-CN";
+    language = next === 'en' ? 'en' : 'zh';
+    document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
     if (button) {
-      button.textContent = language === "en" ? "中文" : "English";
+      button.textContent = language === 'en' ? '中文' : 'English';
       button.setAttribute(
-        "aria-label",
-        language === "en" ? "切换为中文" : "Switch to English",
+        'aria-label',
+        language === 'en' ? '切换为中文' : 'Switch to English',
       );
     }
     if (persist)
       try {
         localStorage.setItem(storageKey, language);
       } catch {}
-    for (const link of document.querySelectorAll(
-      ".document-download[download]",
-    )) {
+    for (const link of document.querySelectorAll('.document-download[download]')) {
       if (!link.dataset.originalHref)
-        link.dataset.originalHref = (link.dataset.cnHref || link.getAttribute("href")).replace(/\.en\.md$/, ".md");
+        link.dataset.originalHref = (
+          link.dataset.cnHref || link.getAttribute('href')
+        ).replace(/\.en\.md$/, '.md');
       const original = link.dataset.originalHref;
       link.setAttribute(
-        "href",
-        language === "en" ? original.replace(/\.md$/, ".en.md") : original,
+        'href',
+        language === 'en' ? original.replace(/\.md$/, '.en.md') : original,
       );
     }
-    for (const link of document.querySelectorAll("a[href]:not([data-i18n-skip])")) {
-      const original = link.dataset.cnHref || link.getAttribute("href").replace(/\.en\.html(?=[?#]|$)/,".html");
-      const target = window.skyLocaleUrl?.(language,new URL(original,document.baseURI));
+    for (const link of document.querySelectorAll('a[href]:not([data-i18n-skip])')) {
+      const original =
+        link.dataset.cnHref ||
+        link.getAttribute('href').replace(/\.en\.html(?=[?#]|$)/, '.html');
+      const target = window.skyLocaleUrl?.(language, new URL(original, document.baseURI));
       if (target) {
         link.dataset.cnHref = original;
-        link.setAttribute("href",target.pathname+target.search+target.hash);
+        link.setAttribute('href', target.pathname + target.search + target.hash);
       }
     }
-    if ((language === "en") !== /\.en\.html$/.test(location.pathname)) {
+    if ((language === 'en') !== /\.en\.html$/.test(location.pathname)) {
       const target = window.skyLocaleUrl?.(language);
-      if (target) history.replaceState(history.state,"",target.href);
+      if (target) history.replaceState(history.state, '', target.href);
     }
     walk(document.documentElement);
     document.dispatchEvent(
-      new CustomEvent("skymotion:language", { detail: { language } }),
+      new CustomEvent('skymotion:language', { detail: { language } }),
     );
     // Redraw annotations without resetting the current experiment.
-    if (typeof schedule === "function") schedule();
+    if (typeof schedule === 'function') schedule();
   }
   const fontPromises = new Map();
   function prepareFonts(next) {
     if (window.skyPrepareFonts) return window.skyPrepareFonts(next);
-    const locale = next === "en" ? "en" : "zh";
+    const locale = next === 'en' ? 'en' : 'zh';
     if (!fontPromises.has(locale)) {
-      const family =
-        locale === "en" ? "SkyMotion Charter" : "SkyMotion Reading";
-      const sample =
-        locale === "en" ? "Sun Moon observation 12:00" : "太阳月球观测日期";
+      const family = locale === 'en' ? 'SkyMotion Charter' : 'SkyMotion Reading';
+      const sample = locale === 'en' ? 'Sun Moon observation 12:00' : '太阳月球观测日期';
       const styles =
-        locale === "en"
-          ? ["400", "700", "italic 400", "italic 700"]
-          : ["400", "700"];
+        locale === 'en' ? ['400', '700', 'italic 400', 'italic 700'] : ['400', '700'];
       const promise = Promise.all(
-        styles.map((style) =>
-          document.fonts.load(`${style} 16px "${family}"`, sample),
-        ),
+        styles.map((style) => document.fonts.load(`${style} 16px "${family}"`, sample)),
       );
       fontPromises.set(locale, promise);
       promise.catch(() => fontPromises.delete(locale));
@@ -228,9 +231,12 @@
     notice.className = 'font-load-notice language-load-notice';
     notice.dataset.i18nSkip = '';
     notice.setAttribute('role', 'status');
-    const english = language === 'en', label = next === 'en' ? 'English' : '中文';
+    const english = language === 'en',
+      label = next === 'en' ? 'English' : '中文';
     const message = document.createElement('span');
-    message.textContent = english ? `Could not switch to ${label}. Check your connection and retry.` : `未能切换到${label}，请检查网络后重试。`;
+    message.textContent = english
+      ? `Could not switch to ${label}. Check your connection and retry.`
+      : `未能切换到${label}，请检查网络后重试。`;
     const retry = document.createElement('button');
     retry.type = 'button';
     retry.textContent = english ? 'Retry language' : '重试切换';
@@ -239,7 +245,9 @@
       try {
         if (!dictionaryReady) await init();
         await change(next);
-      } catch { retry.disabled = false; }
+      } catch {
+        retry.disabled = false;
+      }
     };
     notice.append(message, retry);
     document.body.append(notice);
@@ -254,7 +262,9 @@
         apply(next, persist);
         delete document.documentElement.dataset.fontLoadError;
         document.documentElement.dataset.fontsReady = '';
-        document.querySelectorAll('.font-load-notice').forEach(notice => notice.remove());
+        document
+          .querySelectorAll('.font-load-notice')
+          .forEach((notice) => notice.remove());
         button?.removeAttribute('title');
       }
     } catch (error) {
@@ -267,16 +277,21 @@
   function reveal() {
     clearTimeout(window.skyLanguageBoot);
     delete document.documentElement.dataset.languagePending;
-    document.dispatchEvent(new CustomEvent("skymotion:ready"));
+    document.dispatchEvent(new CustomEvent('skymotion:ready'));
   }
   window.skySetLanguage = change;
   // Storage is optional; an embedded lesson must also work when it is blocked.
-  addEventListener('message', event => {
-    if (parent === window || event.source !== parent || event.origin !== location.origin ||
-        event.data?.type !== 'skymotion:language-sync') return;
+  addEventListener('message', (event) => {
+    if (
+      parent === window ||
+      event.source !== parent ||
+      event.origin !== location.origin ||
+      event.data?.type !== 'skymotion:language-sync'
+    )
+      return;
     change(event.data.language, false).catch(console.error);
   });
-  document.documentElement.lang = language === "en" ? "en" : "zh-CN";
+  document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
   let presentationObserved = false;
   function observePresentation() {
     if (presentationObserved) return;
@@ -284,8 +299,8 @@
     const observer = new MutationObserver((records) => {
       const roots = new Set();
       for (const record of records) {
-        if (record.type === "characterData") text(record.target);
-        else if (record.type === "attributes") element(record.target);
+        if (record.type === 'characterData') text(record.target);
+        else if (record.type === 'attributes') element(record.target);
         else for (const node of record.addedNodes) roots.add(node);
       }
       for (const root of roots) walk(root);
@@ -297,9 +312,8 @@
       attributes: true,
       attributeFilter: translatedAttributes,
     });
-    addEventListener("storage", (event) => {
-      if (event.key === storageKey)
-        change(event.newValue, false).catch(console.error);
+    addEventListener('storage', (event) => {
+      if (event.key === storageKey) change(event.newValue, false).catch(console.error);
     });
   }
   let initGeneration = 0;
@@ -307,28 +321,29 @@
   window.skyLanguageStartupFallback = () => {
     startupAborted = true;
     initGeneration++;
-    failure(
-      new Error("Initial language preparation timed out; retry is available."),
-    );
+    failure(new Error('Initial language preparation timed out; retry is available.'));
   };
   async function init() {
     const attempt = ++initGeneration;
     if (!button) {
-      button = document.createElement("button");
-      button.type = "button";
-      button.className = "language-toggle";
-      button.dataset.i18nSkip = "";
-      button.textContent = language === "en" ? "中文" : "English";
-      button.setAttribute("aria-label", "Switch language / 切换语言");
-      button.addEventListener("click", () => {
-        const next = language === "en" ? "zh" : "en";
+      button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'language-toggle';
+      button.dataset.i18nSkip = '';
+      button.textContent = language === 'en' ? '中文' : 'English';
+      button.setAttribute('aria-label', 'Switch language / 切换语言');
+      button.addEventListener('click', () => {
+        const next = language === 'en' ? 'zh' : 'en';
         if (dictionaryReady) change(next).catch(console.error);
-        else init().then(() => change(next)).catch(error => failure(error, next));
+        else
+          init()
+            .then(() => change(next))
+            .catch((error) => failure(error, next));
       });
-      const nav = document.querySelector(".page-nav");
+      const nav = document.querySelector('.page-nav');
       if (nav) {
-        const bar = document.createElement("div");
-        bar.className = "language-nav";
+        const bar = document.createElement('div');
+        bar.className = 'language-nav';
         nav.before(bar);
         bar.append(nav);
         const customize = document.querySelector('.layout-launch');
@@ -339,30 +354,39 @@
           actions.append(customize, button);
           bar.append(actions);
         } else bar.append(button);
+        const heading = document.querySelector('.ui-shell > .ui-heading');
+        if (heading) {
+          bar.classList.add('workbench-header');
+          bar.insertBefore(heading, bar.querySelector('.language-actions') || button);
+          const measureHeader = () =>
+            document.documentElement.style.setProperty(
+              '--ui-header-height',
+              Math.ceil(bar.getBoundingClientRect().height) + 'px',
+            );
+          new ResizeObserver(measureHeader).observe(bar);
+          measureHeader();
+        }
       } else {
-        (document.querySelector(".welcome-brand") || document.body).append(
-          button,
-        );
+        (document.querySelector('.welcome-brand') || document.body).append(button);
       }
     }
     button.disabled = false;
-    const maps = window.skyEnglishDictionary ? [window.skyEnglishDictionary] : await Promise.all(
-      ["i18n-lab.json", "i18n-space.json", "i18n-docs.json"].map(
-        async (file) => {
-          const response = await fetch(new URL(file, base));
-          if (!response.ok)
-            throw new Error(`Language resource unavailable: ${file}`);
-          return response.json();
-        },
-      ),
-    ).catch((error) => {
-      if (attempt !== initGeneration) return null;
-      throw error;
-    });
+    const maps = window.skyEnglishDictionary
+      ? [window.skyEnglishDictionary]
+      : await Promise.all(
+          ['i18n-lab.json', 'i18n-space.json', 'i18n-docs.json'].map(async (file) => {
+            const response = await fetch(new URL(file, base));
+            if (!response.ok) throw new Error(`Language resource unavailable: ${file}`);
+            return response.json();
+          }),
+        ).catch((error) => {
+          if (attempt !== initGeneration) return null;
+          throw error;
+        });
     if (!maps || attempt !== initGeneration) return;
     if (!fragments) installDictionary(maps);
     dictionaryReady = true;
-    button.removeAttribute("title");
+    button.removeAttribute('title');
     observePresentation();
     await prepareFonts(language);
     if (attempt !== initGeneration) return;
@@ -380,10 +404,13 @@
     apply(language, false);
     reveal();
     button.disabled = false;
-    if (!document.querySelector(".font-load-notice")) showLanguageFailure(target);
+    if (!document.querySelector('.font-load-notice')) showLanguageFailure(target);
   }
   // Deferred scripts run with readyState=interactive, before later experiment scripts.
   // Keep initialization after all ordered scripts have installed their globals.
-  if (document.readyState === "loading" || document.currentScript?.defer) document.addEventListener("DOMContentLoaded",() => init().catch(failure),{once:true});
+  if (document.readyState === 'loading' || document.currentScript?.defer)
+    document.addEventListener('DOMContentLoaded', () => init().catch(failure), {
+      once: true,
+    });
   else init().catch(failure);
 })();

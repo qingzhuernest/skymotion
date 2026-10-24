@@ -10,6 +10,8 @@
   rail.append(menu);
   const english = () => document.documentElement.lang === 'en';
   const tr = (zh, en) => (english() ? en : zh);
+  const linkedSettings = rail.querySelector('.ui-linked-settings');
+  if (linkedSettings) menu.append(linkedSettings);
   const tree = document.createElement('div');
   tree.className = 'workbench-view-tree';
   menu.append(tree);

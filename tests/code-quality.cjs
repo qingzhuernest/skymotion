@@ -93,6 +93,20 @@ assert.equal(value, 1);
         language === 'en' ? 'en' : 'zh-CN',
       );
     }
+    for (const id of ['sceneBuilder', 'solarStudy']) {
+      const intent = await browser.newPage({ viewport: { width: 1280, height: 1000 } });
+      await intent.goto(base + 'diagrams.html#' + id);
+      await intent.waitForFunction(
+        () =>
+          window.SkyCustomization && !document.querySelector('.layout-launch').disabled,
+      );
+      assert.equal(new URL(intent.url()).hash, '#' + id);
+      assert.equal(await intent.evaluate(() => SkyCustomization.active), false);
+      await intent.locator('.layout-launch').click();
+      await intent.waitForFunction((id) => uiWorkspace.selected === id, id);
+      assert.equal(new URL(intent.url()).hash, '#' + id);
+      await intent.close();
+    }
     await page.goto(base + 'lab.html?lang=zh');
     await page.waitForFunction(
       () =>

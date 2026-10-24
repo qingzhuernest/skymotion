@@ -51,6 +51,8 @@ The page contains a stable main menu, experiment heading, left control rail, rig
 
 > Mouse, slider and keyboard gestures can target different objects. Check the active pane and selected reference before acting; distinguish camera motion, baseline relocation and comparison-site movement.
 
+Lab combines the main menu, observation context, body selector, customization and language in one header, adapting to narrow screens. Find 3D comparison in Views & layout to observe the original scientific diagram alongside a scene sharing the same UTC.
+
 ## Set location, date and time
 
 City presets are shortcuts for coordinates. The lower shared timeline controls the current observation; annual sampling and Earthrise have separate controls described below.

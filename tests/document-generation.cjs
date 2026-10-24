@@ -37,6 +37,14 @@ with tempfile.TemporaryDirectory() as directory:
     try:validate(data,target)
     except ValueError as error:assert 'newFlag' in str(error)
     else:raise AssertionError('New undocumented state was accepted')
+from importlib.machinery import SourceFileLoader
+import re
+builder=SourceFileLoader('document_builder',str(root/'scripts/build-documents.py')).load_module()
+renderer=builder.DocumentRenderer(data,root)
+renderer.version='next-release-test'
+page=renderer.page(data['documents'][0])
+versions=re.findall(r'(?:src|href)="[^"]+\.(?:js|css)\?v=([^"]+)',page)
+assert versions and set(versions)=={'next-release-test'},versions
 assert {p['path'] for p in load_catalog(root)['pages']}==set(json.loads((root/'page-cache-manifest.json').read_text())['pages'])-set(p for p in json.loads((root/'page-cache-manifest.json').read_text())['pages'] if '.en.html' in p)
 for name,content in generated_sources(root).items():assert (root/name).read_text()==content,name
 print('PASS duplicate IDs, unknown blocks, escaping paths, table dimensions, missing anchors and state coverage are rejected; canonical state inventory ignores JS whitespace; runtime metadata is current')

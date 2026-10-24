@@ -1767,5 +1767,6 @@
   "读取统一目录，呈现分层视图与布局入口": "Present hierarchical view and layout entries from the canonical catalog",
   "对象类型、字段与纯数据校验，不绑定DOM": "Object types, fields and data normalization without DOM bindings",
   "版本化会话校验、存储回退与恢复事务协调": "Versioned session validation, storage fallback and restore transaction coordination",
-  "观测快照、历史适配与完整实验数据协调": "Observation snapshots, history adapter and full-experiment data coordination"
+  "观测快照、历史适配与完整实验数据协调": "Observation snapshots, history adapter and full-experiment data coordination",
+  "实验台顶部把主菜单、观测信息、天体切换、自定义和语言入口放在同一个顶栏中；窄屏按可用宽度排列。“三维对照”位于左侧“视图与布局”，可与原科学图共享UTC并排观察。": "Lab combines the main menu, observation context, body selector, customization and language in one header, adapting to narrow screens. Find 3D comparison in Views & layout to observe the original scientific diagram alongside a scene sharing the same UTC."
 }
