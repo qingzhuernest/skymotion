@@ -40,6 +40,8 @@ SkyMotion connects location, date and time with linked local-sky and spatial dia
 
 The original Lab, Diagrams and Analemma URLs still open their corresponding content. They are compatible entries into one workspace rather than three disconnected experiments.
 
+Switch Sun and Moon directly with the top segmented buttons, or focus them and use the left/right arrow keys. The compact playback panel groups the exact clock with its slider; the flanking buttons step by five minutes. Moon puts date controls first. Observation settings begin with mode, place and date; calculation and scale notes expand on demand.
+
 ## Interface and controls
 
 The page contains a stable main menu, experiment heading, left control rail, right plots and lower timeline. Desktop supports side-by-side operation; widths of 760 pixels or less use the parameter drawer.
@@ -51,7 +53,7 @@ The page contains a stable main menu, experiment heading, left control rail, rig
 
 > Mouse, slider and keyboard gestures can target different objects. Check the active pane and selected reference before acting; distinguish camera motion, baseline relocation and comparison-site movement.
 
-The app bar starts with observation identity, followed by the main menu and a single Sun/Moon selector. Customization and language stay on the right, with a compact reflow on narrow screens. Find 3D comparison in Views & layout to observe the original scientific diagram alongside a scene sharing the same UTC.
+The app bar starts with observation identity, followed by the main menu and direct Sun/Moon segmented buttons. Customization and language stay on the right, with a compact reflow on narrow screens. Find 3D comparison in Views & layout to observe the original scientific diagram alongside a scene sharing the same UTC.
 
 ## Set location, date and time
 

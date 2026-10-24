@@ -101,6 +101,8 @@ The daily change mainly reflects Earth’s rotation. The path is apparent motion
 
 Give one piece of evidence from each view and explain why the dashed path below the horizon is not a physical underground orbit.
 
+- [Practice this chapter in the laboratory](lab.en.html)
+
 ## Investigation 2: Seasonal changes at one place
 
 ### Inquiry question
@@ -129,6 +131,8 @@ Axial tilt produces changing solar declination through the orbit. Upper-culminat
 ### Check understanding
 
 Connect the subsolar latitude to the curve peak and name the conditions that must remain fixed.
+
+- [Practice this chapter in the laboratory](diagrams.en.html#chartPanel)
 
 ## Investigation 3: Latitude and the day–night pattern
 
@@ -159,6 +163,8 @@ Altitude depends on latitude, declination and hour angle. Latitude changes the l
 
 Describe ordinary crossings, continuous daylight, continuous darkness and tangency, using the curve rather than one image as evidence.
 
+- [Practice this chapter in the laboratory](diagrams.en.html#contextPanel)
+
 ## Investigation 4: The same clock reading versus the same instant
 
 ### Inquiry question
@@ -187,6 +193,8 @@ Longitude controls orientation relative to the solar meridian. Apparent solar ti
 ### Check understanding
 
 Make a two-column record explicitly labeled fixed UTC and fixed apparent solar time rather than simply same time.
+
+- [Practice this chapter in the laboratory](diagrams.en.html)
 
 ## Investigation 5: Rod height, shadow length and shadow-tip paths
 
@@ -217,6 +225,8 @@ For altitude h and vertical height H, horizontal shadow length is L=H/tan(h). Th
 
 State what rod height, camera zoom and display magnification each change, and explain why a clipped shadow cannot validate the formula.
 
+- [Practice this chapter in the laboratory](lab.en.html)
+
 ## Investigation 6: Why can a sundial tell time?
 
 ### Inquiry question
@@ -245,6 +255,8 @@ The apparatus geometry determines ray–plane intersections. Solar time, civil t
 ### Check understanding
 
 Give at least two reasons why a physical sundial may disagree with a phone clock.
+
+- [Practice this chapter in the laboratory](sundial.en.html)
 
 ## Investigation 7: Moon phases and lunar rising and setting
 
@@ -275,6 +287,8 @@ Bright-limb orientation also depends on local orientation and viewpoint. Teachin
 
 Use separate records to explain monthly phase variation and daily altitude change, naming the controls held fixed in each.
 
+- [Practice this chapter in the laboratory](lab.en.html)
+
 ## Investigation 8: Planet–Moon comparisons and angular separation
 
 ### Inquiry question
@@ -303,6 +317,8 @@ The local-sky display projects viewing directions, while the 3D Solar System is 
 ### Check understanding
 
 Explain why a search result does not guarantee naked-eye visibility and list additional observing conditions to check.
+
+- [Practice this chapter in the laboratory](diagrams.en.html#companionModule)
 
 ## Investigation 9: Why can the analemma look like a figure eight?
 
@@ -333,6 +349,8 @@ Axial tilt and a noncircular orbit affect the direction at a fixed civil clock t
 
 Record sampling basis, UTC offset, sample clock, location and model mode; omitting any of them makes reproduction difficult.
 
+- [Practice this chapter in the laboratory](analemma.en.html)
+
 ## Investigation 10: Why does Earth rise and set above the Moon?
 
 ### Inquiry question
@@ -362,6 +380,8 @@ The lesson omits lunar libration, terrain and precise mission trajectories. Anim
 
 Sketch the observer–limb–Earth sight line and distinguish turning the camera, moving in orbit and changing illumination geometry.
 
+- [Practice this chapter in the laboratory](lunar/index.en.html)
+
 ## Investigation 11: Explain apparent motion using a spatial model
 
 ### Inquiry question
@@ -390,6 +410,8 @@ Converting spatial positions to local sky directions requires the observer, Eart
 ### Check understanding
 
 Identify one deliberately exaggerated display quantity and one quantity computed from the ephemeris, explaining their different purposes.
+
+- [Practice this chapter in the laboratory](space/index.en.html)
 
 ## Reusable experiment record
 

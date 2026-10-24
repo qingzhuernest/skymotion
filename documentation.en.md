@@ -8,15 +8,29 @@ Choose by task: teaching and inquiry, project and feature use, or source and dev
 
 ## Choose your task
 
-| Document | Audience | Focus |
-| --- | --- | --- |
-| Learning guide | Teachers, students and independent learners | Learning objectives, controlled variables, investigations, records and assessment |
-| Project & feature manual | First-time users and anyone finding features or troubleshooting | Site structure, all modules, customization, comparisons, saving and shortcuts |
-| Developer reference | Developers, model reviewers and maintainers | File responsibilities, data flow, state fields, units, equations, interfaces, tests and deployment |
+### Learning guide
 
-- [Read the learning guide](guide.en.html)
-- [Read the project and feature manual](project-guide.en.html)
-- [Read the developer reference](development-guide.en.html)
+Teachers, students and independent learners
+
+Learning objectives, controlled variables, investigations, records and assessment
+
+[Read the learning guide](guide.en.html)
+
+### Project & feature manual
+
+First-time users and anyone finding features or troubleshooting
+
+Site structure, all modules, customization, comparisons, saving and shortcuts
+
+[Read the project and feature manual](project-guide.en.html)
+
+### Developer reference
+
+Developers, model reviewers and maintainers
+
+File responsibilities, data flow, state fields, units, equations, interfaces, tests and deployment
+
+[Read the developer reference](development-guide.en.html)
 
 ## Find an answer directly
 
