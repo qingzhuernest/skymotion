@@ -17,7 +17,7 @@ const {addTool}=require('./diagram-test-helpers.cjs');
  const city=await p.evaluate(()=>SkyDiagramTools.read('lab-sky')[0]);assert.equal(city.label,'Sydney');assert.equal(await p.evaluate(()=>SkyObserverComparison.sites()[0].utc),await p.evaluate(()=>instantUTC().getTime()));
  await addTool(p,'time');await p.keyboard.press('Enter');await field('time',600);
  await p.waitForFunction(()=>SkyObserverComparison.read().sky.times[0]?.time===600);
- for(const view of ['top','horizon','observer','orbit']){await p.locator('[data-view="'+view+'"]').click();await p.waitForFunction(v=>state.view===v,view);await p.waitForFunction(()=>SkyObserverComparison.read().sky.sites.length===1);assert.equal(await p.locator('#sky').isVisible(),true);}
+ for(const view of ['top','horizon','observer','orbit']){await require('./diagram-test-helpers.cjs').selectViewpoint(p, view);await p.waitForFunction(v=>state.view===v,view);await p.waitForFunction(()=>SkyObserverComparison.read().sky.sites.length===1);assert.equal(await p.locator('#sky').isVisible(),true);}
  assert.equal(await p.evaluate(()=>document.querySelector('.view-tabs').textContent),original.views);
  // Native observation controls stay usable and preserve the reference draft.
  await p.locator('[data-rail-section=conditions]').click();await p.locator('#place').selectOption('51.5,-0.1');await p.locator('[data-rail-section=references]').click();assert.equal(await p.evaluate(()=>SkyDiagramTools.read('lab-sky')[0].lat),-33.9);
@@ -35,7 +35,7 @@ const {addTool}=require('./diagram-test-helpers.cjs');
  await require('./diagram-test-helpers.cjs').selectDiagram(p, 'skyPanel');await p.waitForFunction(()=>window.SkyCustomization?.active===true&&window.SkyDiagramTools);await require('./diagram-test-helpers.cjs').openWorkbench(p);
  assert.equal(await p.evaluate(()=>SkyDiagramTools.read('lab-sky').length),2);
  await addTool(p,'build');await p.waitForFunction(()=>document.body.classList.contains('scene-builder-active'));assert(await p.locator('#builderGround').isVisible());assert.equal(await p.locator('.sb-add button').count(),8);
- await require('./diagram-test-helpers.cjs').selectDiagram(p, 'skyPanel');await p.locator('[data-view=horizon]').click();await p.waitForFunction(()=>!document.body.classList.contains('scene-builder-active'));assert(await p.locator('#sky').isVisible());
+ await require('./diagram-test-helpers.cjs').selectDiagram(p, 'skyPanel');await require('./diagram-test-helpers.cjs').selectViewpoint(p, 'horizon');await p.waitForFunction(()=>!document.body.classList.contains('scene-builder-active'));assert(await p.locator('#sky').isVisible());
  await require('./diagram-test-helpers.cjs').toggleCustomization(p);assert.equal(await p.evaluate(()=>SkyCustomization.active),false);assert.equal(await p.locator('.diagram-tool-launch:visible').count(),0);
  await require('./diagram-test-helpers.cjs').selectDiagram(p, 'contextPanel');await p.waitForFunction(()=>!!window.SkyCustomization);assert.equal(await p.evaluate(()=>SkyCustomization.active),false);
  await require('./diagram-test-helpers.cjs').toggleCustomization(p);await p.reload();await p.waitForFunction(()=>!!window.SkyCustomization);assert.equal(await p.evaluate(()=>SkyCustomization.active),false);

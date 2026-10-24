@@ -23,7 +23,7 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
     view: state.view,
     length: history.length,
   }));
-  await p.locator('[data-view="horizon"]').first().click();
+  await require('./diagram-test-helpers.cjs').selectViewpoint(p, 'horizon');
   await settle();
   await p.goBack();
   await settle();
@@ -54,7 +54,7 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
   if ((await p.evaluate(() => history.length)) !== count) throw Error('menu creates history');
   await p.locator('.motion-menu-edge').click();
   await settle();
-  await p.locator('[data-body="moon"]').first().click();
+  await p.locator('#observationBody').selectOption('moon');
   await settle();
   await p.goBack();
   await settle();
@@ -62,7 +62,7 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
   console.log('PASS lab view/body switches, grouped time adjustment, undo/redo, no menu history');
   await p.goto(testBase + 'diagrams.html');
   await settle();
-  await p.locator('[data-body="sun"]').first().click();
+  await p.locator('#observationBody').selectOption('sun');
   await settle();
   await require('./diagram-test-helpers.cjs').selectDiagram(p, 'riseSetPanel');
   await settle();

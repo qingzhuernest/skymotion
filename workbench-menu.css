@@ -20,59 +20,114 @@ body .ui-parameters[data-editor-view='views'] {
 .workbench-route-tabs {
   display: none !important;
 }
+/* Material navigation lists: same 48px rhythm as the observation accordion. */
 .workbench-content-group,
 .workbench-layout-section {
-  border-bottom: 1px solid var(--design-line);
+  margin-block: 8px;
+  border: 1px solid var(--design-line);
+  border-radius: var(--design-radius-control);
+  background: var(--design-surface);
+  overflow: clip;
 }
 .workbench-content-group > summary,
 .workbench-layout-section > summary {
-  padding: 12px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 10px 14px;
+  list-style: none;
   cursor: pointer;
   color: var(--design-ink);
-  font-weight: 600;
+  font: 500 14px/1.5 var(--design-font);
 }
-/* A shared label column keeps every content row aligned, including rows without actions. */
+.workbench-content-group > summary::-webkit-details-marker,
+.workbench-layout-section > summary::-webkit-details-marker {
+  display: none;
+}
+.workbench-content-group > summary::after,
+.workbench-layout-section > summary::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-inline: 8px 2px;
+}
+:is(.workbench-content-group, .workbench-layout-section)[open] > summary::after {
+  transform: rotate(225deg);
+}
+:is(.workbench-content-group, .workbench-layout-section)[open] > summary {
+  background: var(--design-selected);
+  color: var(--design-on-selected);
+}
 body .ui-parameters .workbench-content-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
   gap: 4px;
-  margin: 4px 0;
+  margin: 4px 8px;
 }
 body.workbench-editing .ui-parameters .workbench-content-row {
-  grid-template-columns: minmax(0, 1fr) 36px;
+  grid-template-columns: minmax(0, 1fr) 40px;
 }
 body .ui-parameters .workbench-content-row button {
   margin: 0;
-  min-height: 36px;
-  border: 1px solid transparent;
-  border-radius: var(--design-radius-control);
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
-  color: var(--design-primary);
-  font: inherit;
+  color: var(--design-ink);
+  font: 500 13px/1.5 var(--design-font);
   cursor: pointer;
 }
 body .ui-parameters .workbench-content-row > button:first-child {
   min-width: 0;
   text-align: left;
-  padding: 7px 10px;
-  line-height: 1.5;
+  padding: 10px 16px;
 }
 body .ui-parameters .workbench-content-row button:hover {
-  background: var(--design-surface);
+  background: var(--md-sys-state-hover);
 }
 body .ui-parameters .workbench-content-row button[aria-pressed='true'] {
   background: var(--design-selected);
-}
-body .ui-parameters .workbench-current-view > button:first-child {
-  border-color: var(--design-primary);
+  color: var(--design-on-selected);
 }
 body .ui-parameters .workbench-add-view {
-  width: 36px;
-  padding: 7px;
+  width: 40px;
+  padding: 10px;
   display: grid;
   place-items: center;
-  border-color: var(--design-line);
+}
+body .ui-parameters .workbench-viewpoints {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  position: static;
+  gap: 2px;
+  padding: 0 8px 8px 24px;
+  margin: 0;
+  background: transparent;
+  border: 0;
+}
+body .ui-parameters .workbench-viewpoints button {
+  margin: 0;
+  min-height: 44px;
+  padding: 10px 16px;
+  text-align: left;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: var(--design-ink);
+  font: 500 13px/1.5 var(--design-font);
+}
+body .ui-parameters .workbench-viewpoints button.active {
+  background: var(--design-selected);
+  color: var(--design-on-selected);
+}
+body:not(.workbench-editing)
+  .workbench-content-row:has([data-workbench-view='skyPanel']) {
+  display: none;
 }
 .workbench-add-view svg {
   width: 18px;
@@ -120,39 +175,6 @@ body[data-entry-view] .ui-diagram-surface > #stage {
   border-radius: 0;
   margin: 0;
 }
-/* Native viewpoints share the pane header rather than covering the scientific canvas. */
-body[data-entry-view] .ui-diagram-card:has(#stage) > .ui-diagram-card-head {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 8px;
-}
-body[data-entry-view] .ui-diagram-card-head > .view-tabs {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  min-width: 0;
-  margin: 0 0 0 auto;
-  padding: 2px;
-  border: 0;
-  border-radius: var(--design-radius-control);
-  background: var(--design-inset);
-}
-body[data-entry-view] .ui-diagram-card-head > .view-tabs button {
-  margin: 0;
-  min-height: 30px;
-  padding: 4px 8px;
-  border: 0;
-  border-radius: 7px;
-  color: var(--design-primary);
-  background: transparent;
-  font: 12px var(--design-font);
-  white-space: nowrap;
-}
-body[data-entry-view] .ui-diagram-card-head > .view-tabs button.active {
-  color: var(--design-on-action);
-  background: var(--design-primary);
-}
 body[data-entry-view] #stage .stage-top {
   top: 10px;
 }
@@ -197,16 +219,6 @@ body[data-entry-view] .dt-rail-navigation button {
   body .ui-parameters .workbench-add-view {
     width: 44px;
   }
-  body[data-entry-view] .ui-diagram-card-head > .view-tabs {
-    flex: 1 1 100%;
-    margin: 0;
-  }
-  body[data-entry-view] .ui-diagram-card-head > .view-tabs button {
-    flex: 1;
-    min-height: 44px;
-    padding-inline: 3px;
-    font-size: 11px;
-  }
 }
 
 .workbench-sampling-clock {
@@ -215,7 +227,10 @@ body[data-entry-view] .dt-rail-navigation button {
   font-size: 11px;
   white-space: nowrap;
 }
-body[data-entry-view]:not(.customization-active) .workspace-active .ui-diagram-card-head h2 {
+body[data-entry-view]:not(.customization-active)
+  .workspace-active
+  .ui-diagram-card-head
+  h2 {
   display: block;
 }
 
@@ -230,4 +245,12 @@ body[data-entry-view]:not(.customization-active) .workspace-active .ui-diagram-c
 body[data-entry-view] #stage:has(> .diagram-tool-launch:not([hidden])) > .view-reset {
   bottom: 58px;
   right: 12px;
+}
+
+/* A single sky pane needs no duplicate title strip; combinations retain pane names. */
+body[data-entry-view]
+  .ui-visual:not(.workspace-active)
+  .ui-diagram-card:has(#stage)
+  > .ui-diagram-card-head {
+  display: none;
 }

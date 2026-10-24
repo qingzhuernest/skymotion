@@ -58,7 +58,7 @@ body .dt-panel button {
   min-height: 40px;
   padding: 8px 10px;
   border: 1px solid var(--dt-line);
-  border-radius: var(--design-radius-control);
+  border-radius: var(--md-sys-shape-corner-full);
   background: var(--design-surface);
   color: var(--dt-ink);
   font: inherit;
@@ -103,8 +103,8 @@ body .dt-head button {
   flex: none;
   position: relative;
   width: 36px;
-  height: 36px;
-  min-height: 36px;
+  height: var(--md-sys-size-target);
+  min-height: var(--md-sys-size-target);
   padding: 0;
   font-size: 0;
   border: 0;
@@ -135,8 +135,8 @@ body .dt-head button {
 body .dt-panel .dt-history button {
   flex: none;
   width: 32px;
-  height: 36px;
-  min-height: 36px;
+  height: var(--md-sys-size-target);
+  min-height: var(--md-sys-size-target);
   min-width: 32px;
   padding: 8px;
   border: 0;
@@ -545,10 +545,10 @@ body .dt-host[tabindex]:focus-visible {
 }
 body .dt-rail-navigation button {
   flex: 1;
-  min-height: 40px;
+  min-height: var(--md-sys-size-target);
   padding: 6px;
   border: 1px solid var(--design-line);
-  border-radius: var(--design-radius-control);
+  border-radius: var(--md-sys-shape-corner-full);
   background: var(--design-surface);
   color: var(--design-primary);
   font: inherit;
@@ -556,8 +556,9 @@ body .dt-rail-navigation button {
   cursor: pointer;
 }
 body .dt-rail-navigation button[aria-selected='true'] {
-  border-color: var(--design-muted);
-  color: var(--design-ink);
+  border-color: var(--design-selected);
+  background: var(--design-selected);
+  color: var(--design-on-selected);
 }
 body .dt-rail-navigation button:focus-visible {
   outline: 2px solid var(--design-primary);
@@ -571,9 +572,9 @@ body :is(.ui-parameters, body[data-page='space'] .side).dt-rail-active {
     .ui-parameters,
     body[data-page='space'] .side
   ).dt-navigation-ready[data-editor-view='references']
-  > :not(.dt-rail-navigation):not(.motion-menu-header):not(.dt-panel):not(.dt-context-empty):not(
-    .sb-controls
-  ) {
+  > :not(.dt-rail-navigation):not(.motion-menu-header):not(.dt-panel):not(
+    .dt-context-empty
+  ):not(.sb-controls) {
   display: none !important;
 }
 :is(
@@ -625,7 +626,7 @@ body .dt-context-empty button {
   min-height: 44px;
   padding: 9px 12px;
   border: 1px solid var(--design-line);
-  border-radius: var(--design-radius-control);
+  border-radius: var(--md-sys-shape-corner-full);
   background: var(--design-surface);
   color: var(--design-ink);
   font: inherit;

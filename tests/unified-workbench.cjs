@@ -73,11 +73,11 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44125/').repl
     assert(Math.max(...rowWidths) - Math.min(...rowWidths) < 1, 'Menu labels share one column');
     const tabsOutsideCanvas = await page
       .locator('.view-tabs')
-      .evaluate((node) => !!node.closest('.ui-diagram-card-head') && !node.closest('#stage'));
+      .evaluate((node) => !!node.closest('#workbenchViews') && !node.closest('#stage'));
     assert(tabsOutsideCanvas, 'View controls do not overlay the canvas');
     const selectedView = await page.locator('.view-tabs').evaluate((node) => {
       const group = node.getBoundingClientRect();
-      const marker = node.querySelector('.motion-selection').getBoundingClientRect();
+      const marker = node.querySelector('button.active').getBoundingClientRect();
       return {
         left: marker.left - group.left,
         right: group.right - marker.right,
@@ -125,7 +125,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44125/').repl
     assert(await page.locator('.motion-menu-grip').isVisible());
     // Selecting a calculated event is different from rotating its display.
     for (const body of ['sun', 'moon']) {
-      await page.locator(`button[data-body=${body}]`).click();
+      await page.locator('#observationBody').selectOption(body);
       await selectDiagram(page, 'riseSetPanel');
       await page.waitForFunction(
         () =>

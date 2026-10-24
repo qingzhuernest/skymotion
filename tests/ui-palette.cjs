@@ -29,7 +29,9 @@ for (const file of shared) {
     file + ' defines a color instead of consuming ui-palette.css',
   );
 }
-for (const file of fs.readdirSync(root).filter((n) => n.endsWith('.css') && n !== 'ui-palette.css'))
+for (const file of fs
+  .readdirSync(root)
+  .filter((n) => n.endsWith('.css') && n !== 'ui-palette.css'))
   assert(
     !/#(?:315da8|244b8f|eaf0fc|dbe7fc|e1edff|dceaff)\b/i.test(
       fs.readFileSync(path.join(root, file), 'utf8'),
@@ -39,16 +41,29 @@ for (const file of fs.readdirSync(root).filter((n) => n.endsWith('.css') && n !=
 const sources = fs
   .readdirSync(root)
   .filter((n) => n.endsWith('.html'))
-  .concat(['space/index.html', 'space/index.en.html', 'lunar/index.html', 'lunar/index.en.html']);
+  .concat([
+    'space/index.html',
+    'space/index.en.html',
+    'lunar/index.html',
+    'lunar/index.en.html',
+  ]);
 for (const file of sources) {
   const html = fs.readFileSync(path.join(root, file), 'utf8'),
     first = html.match(/<link\b[^>]*rel="stylesheet"[^>]*>/)?.[0];
   if (!first) continue;
-  assert(first.includes('ui-palette.css'), file + ' must load shared colors before components');
+  assert(
+    first.includes('ui-palette.css'),
+    file + ' must load shared colors before components',
+  );
 }
-console.log('PASS shared UI and 3D styles consume one palette; no legacy blue control definitions');
+console.log(
+  'PASS shared UI and 3D styles consume one palette; no legacy blue control definitions',
+);
 const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
-const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8999/').replace(/\/?$/, '/');
+const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8999/').replace(
+  /\/?$/,
+  '/',
+);
 (async () => {
   const browser = await chromium.launch({
     executablePath: process.env.SKY_MOTION_CHROMIUM || '/usr/bin/chromium',
@@ -70,33 +85,45 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8999/').repla
       page.on('pageerror', (e) => errors.push(e.message));
       await page.goto(base + route);
       await page.waitForFunction(
-        () => window.SkyCustomization && !document.querySelector('.layout-launch').disabled,
+        () =>
+          window.SkyCustomization && !document.querySelector('.layout-launch').disabled,
       );
       await page.locator('.layout-launch').click();
       await require('./diagram-test-helpers.cjs').openWorkbench(page);
       await page.locator('.dt-panel').waitFor({ state: 'visible' });
-      const dimensions = await page
-        .locator('.dt-panel')
-        .evaluate((panel) => ({
-          header:
-            panel.querySelector('.dt-scroll').getBoundingClientRect().top -
-            panel.getBoundingClientRect().top,
-          width: panel.clientWidth,
-          scroll: panel.scrollWidth,
-        }));
+      const dimensions = await page.locator('.dt-panel').evaluate((panel) => ({
+        header:
+          panel.querySelector('.dt-scroll').getBoundingClientRect().top -
+          panel.getBoundingClientRect().top,
+        width: panel.clientWidth,
+        scroll: panel.scrollWidth,
+      }));
       assert(
         dimensions.header <= (touch ? 124 : 100),
         route + ' editor chrome consumes too much vertical space: ' + dimensions.header,
       );
-      assert(dimensions.scroll <= dimensions.width + 1, route + ' editor toolbar overflows');
+      assert(
+        dimensions.scroll <= dimensions.width + 1,
+        route + ' editor toolbar overflows',
+      );
       assert(await page.locator('.dt-head .dt-help-toggle').isVisible());
       assert.equal(await page.locator('.dt-history button').count(), 2);
       await page.locator('.dt-help-toggle').click();
-      assert.equal(await page.locator('.dt-help-toggle').getAttribute('aria-expanded'), 'true');
+      assert.equal(
+        await page.locator('.dt-help-toggle').getAttribute('aria-expanded'),
+        'true',
+      );
       assert(await page.locator('.dt-hint').isVisible());
       await page.locator('.dt-help-toggle').click();
+      await page.waitForFunction(
+        () =>
+          getComputedStyle(document.querySelector('.layout-launch')).backgroundColor ===
+          'rgb(36, 87, 107)',
+      );
       assert.equal(
-        await page.locator('.layout-launch').evaluate((n) => getComputedStyle(n).backgroundColor),
+        await page
+          .locator('.layout-launch')
+          .evaluate((n) => getComputedStyle(n).backgroundColor),
         'rgb(36, 87, 107)',
       );
       // A temporary probe proves callers use the role, rather than matching its current literal.
@@ -110,9 +137,13 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8999/').repla
       );
       if (route.startsWith('space/')) {
         await page.locator('#spaceImmersive').click();
-        await page.waitForFunction(() => document.querySelector('.head-actions .language-actions'));
+        await page.waitForFunction(() =>
+          document.querySelector('.head-actions .language-actions'),
+        );
         assert.equal(
-          await page.locator('.layout-launch').evaluate((n) => getComputedStyle(n).backgroundColor),
+          await page
+            .locator('.layout-launch')
+            .evaluate((n) => getComputedStyle(n).backgroundColor),
           'rgb(101, 61, 83)',
         );
       }

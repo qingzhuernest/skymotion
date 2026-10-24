@@ -23,6 +23,8 @@ For teachers and students: eleven investigations into the Sun, day and night, sh
 
 ## Starting points and prerequisites
 
+To begin, choose Sun or Moon in the top selector. Open Views & layout on the left, then expand Sky & shadows to choose spatial, plan, horizon or look-up views. Return to the sky diagram through the same catalog after choosing another diagram. Location, date and time are shared; customization enables editing tools while retaining the original observation controls.
+
 This guide supports classroom teaching and independent inquiry. Start with a testable question, use the feature manual to find controls, then fix conditions, vary a quantity, record evidence and explain the outcome.
 
 | Level | Suggested knowledge | Expected outcome |

@@ -190,7 +190,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await p.locator('.language-toggle').click();
     await p.waitForFunction(() => document.documentElement.lang === 'zh-CN');
     assert.match(await p.locator('.layout-launch').innerText(), /完成自定义/);
-    await p.locator('button[data-body="moon"]').click();
+    await p.locator('#observationBody').selectOption('moon');
     await p.waitForFunction(
       () => state.body === 'moon' && !!document.querySelector('.workspace-active'),
     );
@@ -507,8 +507,8 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await r.setViewportSize({ width: 320, height: 760 });
     await r.waitForTimeout(100);
     assert.equal(await r.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
-    const moonChoice = await r.locator('.ui-heading button[data-body="moon"]').boundingBox(),
-      heading = await r.locator('.ui-heading').boundingBox();
+    const moonChoice = await r.locator('#observationBody').boundingBox(),
+      heading = await r.locator('.workbench-header').boundingBox();
     assert(
       moonChoice.x + moonChoice.width <= heading.x + heading.width,
       'Narrow body choices stay inside the workbench heading',

@@ -44,7 +44,7 @@ const helpers = require('./diagram-test-helpers.cjs');
         're-entering does not duplicate state transitions',
       );
       if (route === 'lab.html') {
-        await page.locator('[data-view=observer]').click();
+        await require('./diagram-test-helpers.cjs').selectViewpoint(page, 'observer');
         await page.locator('.observer-explanation-button').click();
         await page.keyboard.press('Escape');
         await page.waitForFunction(() => !document.querySelector('#observerExplanation').open);

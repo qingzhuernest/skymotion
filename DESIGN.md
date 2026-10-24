@@ -68,7 +68,7 @@ typography:
     lineHeight: 1.5
     letterSpacing: '0'
   body:
-    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
+    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
     fontSize: 14px
     fontWeight: 400
     lineHeight: 1.65
@@ -78,12 +78,12 @@ typography:
     fontWeight: 400
     lineHeight: 1.9
   field:
-    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
+    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
     fontSize: 13px
     fontWeight: 400
     lineHeight: 1.5
   label:
-    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
+    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
     fontSize: 12px
     fontWeight: 500
     lineHeight: 1.5
@@ -94,12 +94,12 @@ typography:
     lineHeight: 1.5
     letterSpacing: 1px
   caption:
-    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
+    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
     fontSize: 11px
     fontWeight: 400
     lineHeight: 1.6
   compact-section:
-    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
+    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
     fontSize: 17px
     fontWeight: 600
     lineHeight: 1.6
@@ -109,7 +109,7 @@ typography:
     fontWeight: 600
     lineHeight: 1.6
   numeric-output:
-    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
+    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
     fontSize: 20px
     fontWeight: 500
   compact-lab-title:
@@ -127,9 +127,9 @@ typography:
     fontSize: 10px
     fontWeight: 400
 rounded:
-  control: 12px
+  control: 20px
   surface: 16px
-  navigation: 10px
+  navigation: 999px
   switch: 999px
   inner: 11px
 spacing:
@@ -537,3 +537,13 @@ Keep the native main navigation, observation controls and scientific plot. The o
 `ui-palette.css` is the only color-definition source for shared controls and 3D UI. `--design-accent` supplies the original green; primary and action roles reference it. Immersive observation remaps surfaces and foregrounds, retaining the action accent. Error and scientific colors remain separate semantic roles. Shared module styles contain no literal color values; `tests/ui-palette.cjs` enforces this and checks that real controls follow an updated accent.
 
 The object editor uses two compact rows: the current plot with Help, Collapse and Close; then Add object / Plans with Undo and Redo. History uses labelled SVG controls with tooltips, not another full row. Observation controls / Plot objects remains the stable rail navigation. Contextual help expands on request. Object rows retain their ellipsis menus.
+
+## Material Design 3 component contract
+
+All application controls use the Material Design 3 component language. Preserve the existing green accent and scientific visualization colors. The palette is defined only in ui-palette.css; design-system.css maps it to md-sys-color roles, shape, state and motion tokens. UI controls use the self-hosted sans interface font; reading and branded display text retain the existing reading face.
+
+- App bar: observation identity at the left, stable main navigation, one native outlined Sun/Moon selector, then customization and language. Narrow screens use a compact two-row layout.
+- Navigation: left-side expandable lists use one row height, trailing disclosure chevron, container selection, and shared padding. Sky viewpoints are children of Sky & shadows, never a second toolbar on the canvas.
+- Actions: primary filled actions, secondary outlined/tonal actions, text actions and icon buttons share shape and interaction-state tokens. Navigation selection uses the primary container; scientific series colors do not become control colors.
+- Forms: outlined fields, visible labels or accessible names, persistent focus indicators, shared checkbox/switch/range accent, and consistent disabled/error roles. Pointer targets expand for touch.
+- Sheets and menus share surface roles and elevation semantics; layout settings remain inline. Reduced motion bypasses decorative transitions.

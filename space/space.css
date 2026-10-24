@@ -34,7 +34,7 @@ body[data-page='space'] button {
   background: var(--design-surface);
   color: var(--space-primary);
   padding: 7px 12px;
-  min-height: 34px;
+  min-height: var(--md-sys-size-target);
 }
 body[data-page='space'] button:hover {
   background: var(--design-inset);
@@ -173,7 +173,7 @@ body[data-page='space'] .field {
 }
 body[data-page='space'] select {
   width: 100%;
-  min-height: 34px;
+  min-height: var(--md-sys-size-target);
   border: 1px solid var(--space-line);
   border-radius: var(--space-control-radius);
   background: var(--design-surface);
@@ -237,7 +237,11 @@ body[data-page='space'] .stage {
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  background: radial-gradient(ellipse at 45% 44%, var(--design-night-inset), var(--design-night) 78%);
+  background: radial-gradient(
+    ellipse at 45% 44%,
+    var(--design-night-inset),
+    var(--design-night) 78%
+  );
 }
 body[data-page='space'] canvas {
   position: absolute;
@@ -469,7 +473,7 @@ body[data-page='space'] #spaceDrawerBody {
   body[data-page='space'] .viewbar button {
     font-size: 11px;
     padding: 5px 8px;
-    min-height: 30px;
+    min-height: var(--md-sys-size-target);
   }
   body[data-page='space'] .time-head output {
     display: block;
@@ -585,7 +589,7 @@ body[data-page='space'] .compare-tabs {
   flex: none;
 }
 body[data-page='space'] .compare-tabs button {
-  min-height: 28px;
+  min-height: var(--md-sys-size-target);
   padding: 3px 9px;
   font-size: 11px;
   background: transparent;
@@ -812,14 +816,14 @@ body[data-page='space'] .compare-tabs button {
     padding: 4px 70px 4px 6px;
   }
   body[data-page='space'] .viewbar button {
-    min-height: 26px;
+    min-height: var(--md-sys-size-target);
     padding-block: 3px;
   }
   body[data-page='space'] .compare-tabs {
     padding: 2px 6px;
   }
   body[data-page='space'] .compare-tabs button {
-    min-height: 24px;
+    min-height: var(--md-sys-size-target);
     padding-block: 2px;
   }
 }

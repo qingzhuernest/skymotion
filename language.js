@@ -357,7 +357,11 @@
         const heading = document.querySelector('.ui-shell > .ui-heading');
         if (heading) {
           bar.classList.add('workbench-header');
-          bar.insertBefore(heading, bar.querySelector('.language-actions') || button);
+          bar.prepend(heading);
+          bar.insertBefore(
+            heading.querySelector('.ui-body-host'),
+            bar.querySelector('.language-actions') || button,
+          );
           const measureHeader = () =>
             document.documentElement.style.setProperty(
               '--ui-header-height',

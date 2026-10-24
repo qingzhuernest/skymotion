@@ -5,7 +5,10 @@ exports.selectDiagram = async (page, id) => {
     if (await page.evaluate(() => matchMedia('(max-width:760px)').matches))
       await exports.openDrawer(page);
     await viewTab.click();
-    const entry = page.locator(`[data-diagram="${id}"]`);
+    const entry =
+      id === 'skyPanel'
+        ? page.locator('.workbench-viewpoints button.active')
+        : page.locator(`[data-diagram="${id}"]`);
     await entry.evaluate((node) => {
       const group = node.closest('details');
       if (group) group.open = true;
@@ -189,4 +192,28 @@ exports.openDrawer = async (page) => {
       node.getAnimations().every((animation) => animation.playState !== 'running')
     );
   });
+};
+
+// Native viewpoints now live in the content tree. Follow that navigation and
+// return to the previous sidebar category so subsequent form interactions match
+// the user's original task.
+exports.selectViewpoint = async (page, view) => {
+  const viewpoints = page.locator('.workbench-viewpoints');
+  if (!(await viewpoints.count())) {
+    await page.locator(`[data-view="${view}"]`).click();
+    return;
+  }
+  const previous = await page
+    .locator('[data-rail-section][aria-selected=true]')
+    .getAttribute('data-rail-section');
+  if (await page.evaluate(() => matchMedia('(max-width:760px)').matches))
+    await exports.openDrawer(page);
+  await page.locator('[data-rail-section=views]').click();
+  await viewpoints.evaluate((node) => {
+    node.closest('details').open = true;
+  });
+  await viewpoints.locator(`[data-view="${view}"]`).click();
+  if (previous && previous !== 'views')
+    await page.locator(`[data-rail-section="${previous}"]`).click();
+  await exports.closeDrawer(page);
 };

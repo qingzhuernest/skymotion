@@ -363,7 +363,9 @@ interaction-history.js使用适配器读取科学状态、表单字段与路由�
 
 ## 设计变量、可访问性与多端
 
-ui-palette.css拥有语义色变量；其他UI样式消费design-primary、design-surface、design-line、design-ink等角色。科学图的太阳、轨道和天体数据颜色不等同于UI选中色，不能全局替换所有蓝色像素。
+ui-palette.css拥有语义色变量；design-system.css将其映射到Material Design 3的md-sys-color、形状、字体与状态角色，其他UI样式消费共享角色。科学图的太阳、轨道和天体数据颜色不等同于UI选中色，不能全局替换所有蓝色像素。
+
+md-sys-color-*定义主操作、选中容器、表面、文字和边界；md-sys-shape-corner-*定义共享圆角；md-sys-size-target定义桌面40px、触屏48px操作目标；md-sys-state-hover与pressed定义状态层；md-sys-motion-*定义短过渡与缓动。组件只消费这些角色，不再各自定义颜色或尺寸。
 
 - 字体、圆角、控件高度和焦点样式遵循DESIGN.md；新增入口复用现有菜单，不覆盖科学画布。
 - 760像素及以下使用原生dialog参数抽屉；同一套控件节点迁移，不复制第二套状态。

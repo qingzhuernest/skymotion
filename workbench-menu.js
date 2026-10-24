@@ -75,6 +75,20 @@
     group.dataset.zh = zh;
     group.dataset.en = en;
   }
+  // Relocate the original controls: one owner, one event path, no duplicate tabs.
+  const viewpoints = document.querySelector('.view-tabs');
+  const skyEntry = entries.find((entry) => entry.id === 'skyPanel');
+  if (viewpoints && skyEntry) {
+    skyEntry.row.after(viewpoints);
+    viewpoints.classList.add('workbench-viewpoints');
+    viewpoints.addEventListener(
+      'click',
+      (event) => {
+        if (event.target.closest('[data-view]')) select('skyPanel');
+      },
+      true,
+    );
+  }
   const layout = document.createElement('details');
   layout.className = 'workbench-layout-section';
   const summary = document.createElement('summary');

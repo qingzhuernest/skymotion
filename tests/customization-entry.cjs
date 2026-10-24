@@ -40,7 +40,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    await require('./diagram-test-helpers.cjs').openLibrary(p);await p.locator('[data-build-kind=rod]').click();
    await p.waitForFunction(()=>document.body.classList.contains('scene-builder-active'));
    assert.equal(await p.evaluate(()=>SkySceneBuilder.read().objects.length),0,'placing is pending, not an implicit object');
-   await require('./diagram-test-helpers.cjs').closeDrawer(p);await p.locator('button[data-body=moon]').click();await p.waitForFunction(()=>state.body==='moon'&&SkySceneBuilder.read()?.objects.length===0);
+   await require('./diagram-test-helpers.cjs').closeDrawer(p);await p.locator('#observationBody').selectOption('moon');await p.waitForFunction(()=>state.body==='moon'&&SkySceneBuilder.read()?.objects.length===0);
    assert.deepEqual(await p.locator('#builderGround').evaluate(n=>[...n.getContext('2d').getImageData(0,0,1,1).data]),[19,36,56,255]);
    if(mobile)await require('./diagram-test-helpers.cjs').openDrawer(p);
    await p.locator('.sb-add-toggle').click();await p.locator('.sb-add [data-object-kind=circle]').click();

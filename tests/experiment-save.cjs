@@ -123,7 +123,7 @@ const base = process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44126/';
       before,
     );
     assert.match(await page.locator('#workspaceSavedStatus').innerText(), /损坏/);
-    await page.locator('button[data-body=moon]').click();
+    await page.locator('#observationBody').selectOption('moon');
     await page.evaluate(() => SkySceneBuilder.open({ kind: 'rod' }));
     await page.locator('.sb-placement-actions button').first().click();
     await page.evaluate(() => {

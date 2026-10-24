@@ -1,4 +1,4 @@
-/* SkyMotion / Impeccable: one interface language, separate scientific drawing.
+/* SkyMotion / Material Design 3: shared interface roles, separate scientific drawing.
  * Loaded last on every route. Geometry for switches, history and motion is owned
  * by existing modules; this layer owns typography, surfaces and visual states.
  */
@@ -17,8 +17,39 @@
   font-display: block;
 }
 :root {
-  --design-font: 'SkyMotion Reading', 'Songti SC', 'SimSun', serif;
-  --design-radius-control: 12px;
+  --design-font:
+    'SkyMotion Interface', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --design-reading-font: 'SkyMotion Reading', 'Songti SC', 'SimSun', serif;
+  --md-sys-color-primary: var(--design-primary);
+  --md-sys-color-on-primary: var(--design-on-action);
+  --md-sys-color-primary-container: var(--design-selected);
+  --md-sys-color-on-primary-container: var(--design-on-selected);
+  --md-sys-color-surface: var(--design-surface);
+  --md-sys-color-surface-container: var(--design-inset);
+  --md-sys-color-on-surface: var(--design-ink);
+  --md-sys-color-on-surface-variant: var(--design-muted);
+  --md-sys-color-outline: var(--design-switch-line);
+  --md-sys-color-outline-variant: var(--design-line);
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 999px;
+  --md-sys-size-target: 40px;
+  --md-sys-state-hover: color-mix(
+    in srgb,
+    var(--design-primary) 8%,
+    var(--design-surface)
+  );
+  --md-sys-state-pressed: color-mix(
+    in srgb,
+    var(--design-primary) 12%,
+    var(--design-surface)
+  );
+  --md-sys-motion-duration-short: 150ms;
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --design-radius-control: 20px;
   --design-radius-surface: 16px;
   --design-space-tight: 8px;
   --design-space-group: 16px;
@@ -60,6 +91,73 @@ body {
 body :is(button, input, select, textarea) {
   font-family: var(--design-font);
 }
+/* Shared Material component contract. Route modules own placement, not new skins. */
+body :is(button, .page-action, .language-toggle, .layout-launch) {
+  min-height: 40px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-weight: 500;
+  line-height: 1.4;
+  transition:
+    background-color var(--md-sys-motion-duration-short)
+      var(--md-sys-motion-easing-standard),
+    color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+}
+body :is(button, .page-action):not(:disabled):hover {
+  background-color: var(--md-sys-state-hover);
+}
+body :is(button, .page-action):not(:disabled):active {
+  background-color: var(--md-sys-state-pressed);
+}
+body
+  :is(
+    input:not([type='range']):not([type='checkbox']):not([type='radio']):not(
+        [type='hidden']
+      ),
+    select,
+    textarea
+  ) {
+  min-height: 40px;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  color: var(--md-sys-color-on-surface);
+  background-color: var(--md-sys-color-surface);
+  padding: 8px 12px;
+}
+body :is(input, select, textarea)[aria-invalid='true'] {
+  border-color: var(--design-error-line);
+}
+body :is(button, input, select, textarea):disabled {
+  cursor: not-allowed;
+}
+body :is(dialog, [role='menu'], .dt-object-menu, .sb-row-menu) {
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  color: var(--md-sys-color-on-surface);
+  background-color: var(--md-sys-color-surface-container);
+}
+body :is([role='menuitem'], .page-nav a) {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+body input:is([type='checkbox'], [type='radio'], [type='range']) {
+  accent-color: var(--md-sys-color-primary);
+}
+.document-page {
+  font-family: var(--design-reading-font);
+}
+@media (pointer: coarse) {
+  :root {
+    --md-sys-size-target: 48px;
+  }
+  body :is(button, .page-nav a, .page-action, select) {
+    min-height: 48px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body :is(button, .page-action, .language-toggle, .layout-launch) {
+    transition: none;
+  }
+}
 body
   :is(
     output,
@@ -100,7 +198,7 @@ body
   padding-inline: 20px;
 }
 .page-nav a {
-  border-radius: 10px;
+  border-radius: var(--md-sys-shape-corner-full);
   min-height: 36px;
   padding-inline: 12px;
   color: var(--design-muted);
@@ -224,7 +322,7 @@ body
   ) {
   color: var(--design-ink);
   border-color: var(--design-line);
-  border-radius: var(--design-radius-control);
+  border-radius: var(--md-sys-shape-corner-extra-small);
   background: var(--design-surface);
   font-size: 13px;
   line-height: 1.5;
@@ -280,7 +378,7 @@ body
 body
   :is(
     .ui-viewbar,
-    .view-tabs,
+    .view-tabs:not(.workbench-viewpoints),
     .context-view-switch,
     .globe-drag-options,
     .body-switch,
@@ -297,7 +395,7 @@ body
 body
   :is(
     .ui-viewbar,
-    .view-tabs,
+    .view-tabs:not(.workbench-viewpoints),
     .context-view-switch,
     .globe-drag-options,
     .body-switch,
@@ -311,7 +409,7 @@ body
 body
   :is(
     .ui-viewbar,
-    .view-tabs,
+    .view-tabs:not(.workbench-viewpoints),
     .context-view-switch,
     .globe-drag-options,
     .body-switch,
@@ -324,7 +422,7 @@ body
 body
   :is(
     .ui-viewbar,
-    .view-tabs,
+    .view-tabs:not(.workbench-viewpoints),
     .context-view-switch,
     .globe-drag-options,
     .body-switch,
@@ -398,7 +496,7 @@ body
 body .ui-timeline-host :is(.play-button, .workbench-calendar button:last-child) {
   background: var(--design-action);
   color: var(--design-on-action);
-  border-radius: var(--design-radius-control);
+  border-radius: var(--md-sys-shape-corner-full);
   font-size: 12px;
 }
 body .ui-timeline-host .workbench-calendar input {
@@ -489,7 +587,7 @@ body[data-page='space'] .planet-picker {
 body[data-page='space'] .planet-picker button {
   background: var(--design-inset);
   color: var(--design-muted);
-  border-radius: 10px;
+  border-radius: var(--md-sys-shape-corner-full);
 }
 body[data-page='space'] .planet-picker button.active {
   background: var(--design-action);

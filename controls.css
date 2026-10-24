@@ -2,7 +2,7 @@
 :is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
   :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop) {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 44px;
+  grid-template-columns: minmax(0, 1fr) 52px;
   align-items: center;
   gap: 12px;
   box-sizing: border-box;
@@ -39,14 +39,14 @@
   grid-column: 2;
   grid-row: 1;
   flex-shrink: 0;
-  width: 44px;
-  min-width: 44px;
-  max-width: 44px;
-  height: 26px;
-  min-height: 26px;
+  width: 52px;
+  min-width: 52px;
+  max-width: 52px;
+  height: 32px;
+  min-height: 32px;
   margin: 0;
   padding: 0;
-  border: 1px solid var(--design-line);
+  border: 2px solid var(--design-switch-line);
   border-radius: 999px;
   background: var(--design-inset);
   cursor: pointer;
@@ -61,10 +61,10 @@
   content: '';
   display: block;
   position: absolute;
-  width: 18px;
-  height: 18px;
-  top: 3px;
-  left: 3px;
+  width: 16px;
+  height: 16px;
+  top: 6px;
+  left: 6px;
   border-radius: 50%;
   background: var(--design-muted);
   transform: translateX(0);
@@ -83,15 +83,18 @@
 :is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
   :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
   > input[type='checkbox']:checked::after {
-  left: 3px;
-  transform: translateX(18px);
+  width: 24px;
+  height: 24px;
+  top: 2px;
+  left: 2px;
+  transform: translateX(20px);
   background: var(--design-on-action);
 }
 
 :is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
   :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
   > input[type='checkbox']:focus-visible {
-  outline: 3px solid var(--design-inset);
+  outline: 2px solid var(--design-primary);
   outline-offset: 3px;
 }
 
@@ -165,10 +168,20 @@ body[data-page='space'] .scene-tools-panel .tools-field select {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
+  :is(
+      .ui-parameters,
+      .ui-timeline-host,
+      body[data-page='space'] .side,
+      .scene-tools-panel
+    )
     :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
     > input[type='checkbox'],
-  :is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
+  :is(
+      .ui-parameters,
+      .ui-timeline-host,
+      body[data-page='space'] .side,
+      .scene-tools-panel
+    )
     :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
     > input[type='checkbox']::after {
     transition: none;

@@ -53,9 +53,9 @@ body .scene-builder button {
   color: var(--design-ink);
   font: inherit;
   font-size: 13px;
-  min-height: 38px;
+  min-height: var(--md-sys-size-target);
   padding: 7px 11px;
-  border-radius: 9px;
+  border-radius: var(--md-sys-shape-corner-full);
   box-shadow: none;
 }
 body .scene-builder button:hover {
@@ -145,7 +145,7 @@ body .sb-add button {
 }
 body .sb-controls input:not([type='checkbox']),
 body .sb-controls select {
-  min-height: 38px;
+  min-height: var(--md-sys-size-target);
   width: 100%;
   min-width: 0;
   padding: 6px 9px;
@@ -385,7 +385,8 @@ body .sb-tool-grid button {
     width: 100%;
     visibility: hidden;
   }
-  .sb-surface[data-comparing='true'][data-reference-view='reference'] .sb-reference-canvas {
+  .sb-surface[data-comparing='true'][data-reference-view='reference']
+    .sb-reference-canvas {
     visibility: visible;
   }
   .sb-surface[data-comparing='true'][data-reference-view='reference'] .sb-canvas {

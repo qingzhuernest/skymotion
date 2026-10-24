@@ -12,7 +12,10 @@
           const start = parseFloat(from[key]),
             end = parseFloat(to[key]);
           const value = start + (end - start) * progress;
-          return [key, `${key === 'width' || key === 'height' ? Math.max(1, value) : value}px`];
+          return [
+            key,
+            `${key === 'width' || key === 'height' ? Math.max(1, value) : value}px`,
+          ];
         }),
       ]);
     return [frame(0, 0), frame(1.065, 0.68), frame(0.985, 0.86), frame(1, 1)];
@@ -126,7 +129,12 @@
       '.body-switch,.model-switch,.view-tabs,.context-view-switch,.globe-drag-options,.ui-viewbar,.ui-sundial-types,.sundial-view-controls,.ui-sundial-camera-tools [role="group"],.view-group';
     document.querySelectorAll(selector).forEach((group) => {
       const buttons = [...group.children].filter((node) => node.tagName === 'BUTTON');
-      if (buttons.length < 2 || group.dataset.motionReady) return;
+      if (
+        buttons.length < 2 ||
+        group.dataset.motionReady ||
+        group.classList.contains('workbench-viewpoints')
+      )
+        return;
       group.dataset.motionReady = 'true';
       group.classList.add('motion-segments');
       const marker = document.createElement('span');
@@ -136,7 +144,9 @@
       let previous = null,
         animation = null;
       function update(animate = true) {
-        const button = buttons.find((node) => selected(node) && node.getClientRects().length);
+        const button = buttons.find(
+          (node) => selected(node) && node.getClientRects().length,
+        );
         buttons.forEach((node) => {
           if (node.classList.contains('motion-selected') !== (node === button))
             node.classList.toggle('motion-selected', node === button);
@@ -198,19 +208,21 @@
         if (!nextVisible) reveals.get(group)?.cancel();
         visible = nextVisible;
       }).observe(group, { attributes: true, attributeFilter: ['hidden'] });
-      document.querySelector('.body-switch')?.addEventListener(
-        'click',
-        (event) => {
-          const button = event.target.closest('button');
-          if (button && !selected(button)) requestAnimationFrame(() => revealOptions(group));
-        },
-        true,
-      );
+      document.querySelector('.body-switch')?.addEventListener('change', () => {
+        requestAnimationFrame(() => revealOptions(group));
+      });
     });
   }
 
   /** Default expanded on tablets/desktops; collapse is an explicit session preference. */
-  function installRail({ shell, rail, button, mobile, openDrawer, overlay = () => false }) {
+  function installRail({
+    shell,
+    rail,
+    button,
+    mobile,
+    openDrawer,
+    overlay = () => false,
+  }) {
     if (!shell || !rail || !button || document.body.dataset.embedded === 'true') return;
     let collapsed = false;
     try {
@@ -249,7 +261,11 @@
       button.hidden = !modal;
       button.setAttribute(
         'aria-controls',
-        modal ? (button.id === 'spaceParameters' ? 'spaceDrawer' : 'uiParameterDrawer') : rail.id,
+        modal
+          ? button.id === 'spaceParameters'
+            ? 'spaceDrawer'
+            : 'uiParameterDrawer'
+          : rail.id,
       );
       if (modal) button.setAttribute('aria-haspopup', 'dialog');
       else {
@@ -280,7 +296,9 @@
       finishRailMotion?.();
       const modal = mobile.matches || overlay();
       const host = rail.closest('.space-sidebar-host') || rail;
-      const content = [...shell.querySelectorAll('.ui-visual,.ui-timeline-host,.visual,.timeline')];
+      const content = [
+        ...shell.querySelectorAll('.ui-visual,.ui-timeline-host,.visual,.timeline'),
+      ];
       const before = host.getBoundingClientRect();
       const starts = content.map((node) => node.getBoundingClientRect().left);
       const hostStyle = getComputedStyle(host);
@@ -316,8 +334,14 @@
         springPanel(
           host,
           value
-            ? [{ transform: 'translateX(0)' }, { transform: `translateX(${-before.width - 16}px)` }]
-            : [{ transform: `translateX(${-end.width - 16}px)` }, { transform: 'translateX(0)' }],
+            ? [
+                { transform: 'translateX(0)' },
+                { transform: `translateX(${-before.width - 16}px)` },
+              ]
+            : [
+                { transform: `translateX(${-end.width - 16}px)` },
+                { transform: 'translateX(0)' },
+              ],
         ),
       ];
       content.forEach((node, index) => {
@@ -339,11 +363,14 @@
         if (finishRailMotion === cleanup) finishRailMotion = null;
       };
       finishRailMotion = cleanup;
-      Promise.all(railMotion.map((animation) => animation.finished.catch(() => {}))).then(() => {
-        if (finishRailMotion === cleanup) cleanup();
-      });
+      Promise.all(railMotion.map((animation) => animation.finished.catch(() => {}))).then(
+        () => {
+          if (finishRailMotion === cleanup) cleanup();
+        },
+      );
     }
-    button.onclick = () => (mobile.matches || overlay() ? openDrawer() : setCollapsed(!collapsed));
+    button.onclick = () =>
+      mobile.matches || overlay() ? openDrawer() : setCollapsed(!collapsed);
     grip.onclick = () => {
       setCollapsed(true);
       handle.focus({ preventScroll: true });
@@ -377,7 +404,11 @@
           dy = event.clientY - start.y;
         start = null;
         surface.style.transform = '';
-        if (event.type === 'pointerup' && Math.abs(dy) < 40 && (opening ? dx > 40 : dx < -40)) {
+        if (
+          event.type === 'pointerup' &&
+          Math.abs(dy) < 40 &&
+          (opening ? dx > 40 : dx < -40)
+        ) {
           setCollapsed(!opening);
           (opening ? grip : handle).focus({ preventScroll: true });
         }

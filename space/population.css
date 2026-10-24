@@ -14,8 +14,8 @@ body[data-page='space'] .population-tools button {
   background: var(--design-night-inset);
   color: var(--design-night-ink);
   border-color: var(--design-night-line);
-  border-radius: 14px;
-  min-height: 34px;
+  border-radius: var(--md-sys-shape-corner-full);
+  min-height: var(--md-sys-size-target);
   font-size: 11px;
 }
 body[data-page='space'] .nebula-hint {

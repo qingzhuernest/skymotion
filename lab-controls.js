@@ -404,19 +404,17 @@ $('fullBtn').onclick = async () => {
     $('fullBtn').textContent = '浏览器未支持全屏';
   }
 };
-document.querySelectorAll('button[data-body]').forEach(
-  (b) =>
-    (b.onclick = () => {
-      if (state.body === b.dataset.body) return;
-      stop();
-      state = modeStates[b.dataset.body];
-      state.playing = false;
-      lunarAccumulator = 0;
-      solarLast = lunarLast = 0;
-      syncControls();
-      schedule();
-    }),
-);
+$('observationBody').onchange = (event) => {
+  const body = event.target.value;
+  if (!Object.hasOwn(modeStates, body) || state.body === body) return;
+  stop();
+  state = modeStates[body];
+  state.playing = false;
+  lunarAccumulator = 0;
+  solarLast = lunarLast = 0;
+  syncControls();
+  schedule();
+};
 ['lat', 'lon'].forEach((k) =>
   $(k + 'Input').addEventListener('change', (e) => {
     stop();

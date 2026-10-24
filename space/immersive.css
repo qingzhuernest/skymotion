@@ -57,7 +57,7 @@ body[data-page='space'].space-immersive
   background: var(--design-night-inset);
   color: var(--design-night-ink);
   font-size: 12px;
-  min-height: 34px;
+  min-height: var(--md-sys-size-target);
 }
 body[data-page='space'].space-immersive :is(.viewbar button.active, .time-head button) {
   background: var(--design-action);

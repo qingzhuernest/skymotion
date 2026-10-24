@@ -1305,9 +1305,9 @@ function updateUI() {
   $('shadowControl').hidden = moon;
   $('heightControl').hidden = moon;
   $('restoreDate').hidden = !state.manual;
-  document.querySelector('[data-view="top"]').textContent = moon
-    ? '俯视方位'
-    : '俯视日影';
+  const topViewLabel = moon ? '俯视方位' : '俯视日影';
+  document.querySelector('[data-view="top"]').textContent =
+    window.skyTranslate?.(topViewLabel) || topViewLabel;
   $('sky').setAttribute('aria-label', body + '当天轨迹交互图');
   $('chart').setAttribute('aria-label', body + '全天高度角曲线');
   $('altMetric').textContent = s.alt.toFixed(1) + '°';
@@ -1467,11 +1467,7 @@ function updateUI() {
     insight = `当前太阳直射<strong>${side === '赤道' ? '赤道' : side + '半球'}</strong>，当地昼长约 <strong>${Math.floor(length / 60)} 小时 ${length % 60} 分</strong>。${s.alt > 0 ? '太阳越高，影子越短；切到俯视日影观察方向。' : '太阳已经落到地平线下；拖动时间回到白昼观察日影。'}`;
   }
   $('insight').innerHTML = insight;
-  document.querySelectorAll('button[data-body]').forEach((b) => {
-    const on = b.dataset.body === state.body;
-    b.classList.toggle('active', on);
-    b.setAttribute('aria-pressed', String(on));
-  });
+  $('observationBody').value = state.body;
   document.querySelectorAll('[data-view]').forEach((b) => {
     const on = b.dataset.view === state.view;
     b.classList.toggle('active', on);

@@ -262,7 +262,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     });
     await delayed.goto(base + 'diagrams.html');
     await delayed.waitForSelector('.language-toggle:not(:disabled)');
-    await delayed.locator('[data-body="moon"]').click();
+    await delayed.locator('#observationBody').selectOption('moon');
     await delayed.waitForSelector('#lunarOrbitPanel iframe[src]', { state: 'attached' });
     await require('./diagram-test-helpers.cjs').selectDiagram(delayed, 'lunarOrbit');
     await delayed.waitForFunction(() => uiWorkspace.pendingLunar);

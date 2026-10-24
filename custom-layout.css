@@ -9,7 +9,7 @@
   color: var(--design-primary);
   background: var(--design-surface);
   border: 1px solid var(--design-line);
-  border-radius: 9px;
+  border-radius: var(--md-sys-shape-corner-full);
   box-sizing: border-box;
 }
 .layout-launch,
@@ -63,7 +63,7 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-height: 34px;
+  min-height: var(--md-sys-size-target);
   padding: 5px 8px;
   font-size: 12px;
   white-space: nowrap;
@@ -235,7 +235,7 @@
 .workspace-pane-tools button {
   padding: 4px;
   border-color: transparent;
-  min-height: 30px;
+  min-height: var(--md-sys-size-target);
   flex-shrink: 0;
 }
 .workspace-pane-tools select {
@@ -245,8 +245,8 @@
   width: 100%;
   border-color: transparent;
   padding: 0 19px 0 4px;
-  height: 32px;
-  min-height: 32px;
+  height: var(--md-sys-size-target);
+  min-height: var(--md-sys-size-target);
   line-height: 1.4;
   text-overflow: ellipsis;
 }
@@ -387,7 +387,7 @@
 }
 .workspace-options-head button {
   padding: 6px;
-  min-height: 34px;
+  min-height: var(--md-sys-size-target);
   border-color: transparent;
 }
 .workspace-options > section + section {
@@ -404,7 +404,7 @@
 .workspace-options button {
   padding: 6px 9px;
   font-size: 12px;
-  min-height: 34px;
+  min-height: var(--md-sys-size-target);
 }
 .workspace-choice-group {
   display: flex;
@@ -538,7 +538,7 @@
     gap: 5px;
   }
   .workspace-toolbar button {
-    min-height: 34px;
+    min-height: var(--md-sys-size-target);
     padding: 4px 7px;
     font-size: 11px;
   }
@@ -591,7 +591,7 @@
     padding: 14px;
   }
   .workspace-options button {
-    min-height: 38px;
+    min-height: var(--md-sys-size-target);
   }
 }
 @media (prefers-reduced-motion: no-preference) {
