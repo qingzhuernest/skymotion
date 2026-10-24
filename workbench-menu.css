@@ -62,17 +62,19 @@ body .ui-parameters[data-editor-view='views'] {
   background: var(--design-selected);
   color: var(--design-on-selected);
 }
-body .ui-parameters .workbench-content-row {
+body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
   gap: 4px;
   margin: 4px 8px;
+  padding: 0;
+  border: 0;
 }
 body.workbench-editing .ui-parameters .workbench-content-row {
   grid-template-columns: minmax(0, 1fr) 40px;
 }
-body .ui-parameters .workbench-content-row button {
+body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) button {
   margin: 0;
   min-height: var(--md-sys-size-target);
   border: 0;
@@ -82,15 +84,21 @@ body .ui-parameters .workbench-content-row button {
   font: 500 13px/1.5 var(--design-font);
   cursor: pointer;
 }
-body .ui-parameters .workbench-content-row > button:first-child {
+body
+  .ui-parameters
+  :is(.workbench-content-row, .workbench-setting-row)
+  > button:first-child {
   min-width: 0;
   text-align: left;
   padding: 10px 16px;
 }
-body .ui-parameters .workbench-content-row button:hover {
+body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) button:hover {
   background: var(--md-sys-state-hover);
 }
-body .ui-parameters .workbench-content-row button[aria-pressed='true'] {
+body
+  .ui-parameters
+  :is(.workbench-content-row, .workbench-setting-row)
+  button[aria-pressed='true'] {
   background: var(--design-selected);
   color: var(--design-on-selected);
 }
@@ -213,7 +221,7 @@ body[data-entry-view] .dt-rail-navigation button {
   body.workbench-editing .ui-parameters .workbench-content-row {
     grid-template-columns: minmax(0, 1fr) 44px;
   }
-  body .ui-parameters .workbench-content-row button {
+  body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) button {
     min-height: var(--md-sys-size-target);
   }
   body .ui-parameters .workbench-add-view {

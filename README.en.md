@@ -8,7 +8,7 @@ A browser laboratory for geography teaching and independent observation. Control
 
 [Open the production site](https://skymotion-5md.pages.dev/index.en.html) · [GitHub Pages mirror](https://qingzhuernest.github.io/skymotion/index.en.html)
 
-Lab, related diagrams and analemma share one workspace. Existing URLs still select their corresponding views, and the top navigation stays stable. In the left sidebar choose Views & layout, expand Sky & shadows, Related diagrams or Annual changes, and select a named view. Observation controls retains location, date, time and the original experiment settings.
+Lab, related diagrams and analemma share one workspace. Existing URLs still select their corresponding views, and the top navigation stays stable. In the left sidebar choose Views & layout, expand Sky & shadows, Related diagrams or Compare & build, and select a named view. Observation controls retains location, date, time and the original experiment settings.
 
 To show sky, Earth, altitude and analemma together, start with Space view, enter customization beside language, then use the add controls beside the view names in Views & layout. An included view offers removal; selecting its name still displays it or replaces the selected pane. Additional views extend below the fold after four panes.
 

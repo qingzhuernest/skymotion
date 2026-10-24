@@ -5,7 +5,7 @@
   // BEGIN GENERATED CATALOG
   // prettier-ignore
   const catalog = {
-    "resourceVersion": "20261024-material102",
+    "resourceVersion": "20261024-material103",
     "pages": [
       {
         "path": "index.html",
@@ -80,10 +80,6 @@
       [
         "关联图解",
         "Related diagrams"
-      ],
-      [
-        "全年变化",
-        "Annual changes"
       ],
       [
         "对照与搭建",
@@ -182,7 +178,7 @@
       },
       {
         "id": "analemmaPanel",
-        "group": 2,
+        "group": 1,
         "labels": {
           "sun": [
             "日行迹",
@@ -192,7 +188,7 @@
       },
       {
         "id": "solarCompare",
-        "group": 3,
+        "group": 2,
         "labels": {
           "sun": [
             "组合视图",
@@ -206,7 +202,7 @@
       },
       {
         "id": "solarStudy",
-        "group": 3,
+        "group": 2,
         "labels": {
           "sun": [
             "地点与时间对照",
@@ -218,7 +214,7 @@
       },
       {
         "id": "sceneBuilder",
-        "group": 3,
+        "group": 2,
         "labels": {
           "sun": [
             "搭建实验",
@@ -262,6 +258,11 @@
           "3D Sky"
         ]
       ]
+    ],
+    "groupIds": [
+      "sky",
+      "related",
+      "compare"
     ]
   };
   // END GENERATED CATALOG

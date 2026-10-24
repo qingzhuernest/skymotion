@@ -24,6 +24,11 @@ def load_catalog(root=ROOT):
     ids = [view["id"] for view in catalog["views"]]
     if len(ids) != len(set(ids)):
         raise ValueError("Duplicate view ID")
+    group_ids = catalog["groupIds"]
+    if len(group_ids) != len(catalog["groups"]) or len(group_ids) != len(set(group_ids)) or any(
+        not re.fullmatch(r"[a-z][a-z-]*", identifier) for identifier in group_ids
+    ):
+        raise ValueError("Invalid or duplicate view group ID")
     for view in catalog["views"]:
         if view.get("sidebar") not in (None, "conditions", "references"):
             raise ValueError("Invalid view sidebar: " + view["id"])

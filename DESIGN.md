@@ -556,3 +556,5 @@ Sun and Moon use directly selectable connected buttons in the Material 3 Express
 Readout cards share a compact two-column grid. Detailed notes remain in the existing expandable calculation section; labels follow Sun/Moon state without duplicating observation state.
 
 The reusable `.md-connected-choice` component owns connected-toggle visuals in `design-system.css`; `language.css` owns only the header placement of the Sun/Moon instance. Colors, shape sizes, typography and target sizes come from the shared roles.
+
+View groups have stable IDs in the shared catalog. Analemma is a related diagram; the existing 3D-comparison control is mounted inside Compare & build, with one event owner. The redundant Annual changes group is removed.

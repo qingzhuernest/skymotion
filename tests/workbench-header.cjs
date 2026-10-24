@@ -132,7 +132,27 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
         });
         if (width <= 760) await require('./diagram-test-helpers.cjs').openDrawer(page);
         await page.locator('[data-rail-section=views]').click();
+        assert.equal(await page.locator('.workbench-content-group').count(), 3);
+        assert.equal(
+          await page
+            .locator('[data-group=related] [data-workbench-view=analemmaPanel]')
+            .count(),
+          1,
+          'Analemma belongs to Related diagrams',
+        );
         const compare = page.locator('#workbenchViews .ui-linked-toggle');
+        assert.equal(
+          await compare.evaluate(
+            (button) => button.closest('.workbench-content-group').dataset.group,
+          ),
+          'compare',
+          '3D comparison belongs to Compare & build',
+        );
+        assert.equal(
+          await page.locator('#workbenchViews > .ui-linked-settings').count(),
+          0,
+          'No detached comparison setting above the catalog',
+        );
         assert(await compare.isVisible());
         assert.equal(
           await compare.textContent(),

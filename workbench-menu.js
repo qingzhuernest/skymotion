@@ -11,7 +11,6 @@
   const english = () => document.documentElement.lang === 'en';
   const tr = (zh, en) => (english() ? en : zh);
   const linkedSettings = rail.querySelector('.ui-linked-settings');
-  if (linkedSettings) menu.append(linkedSettings);
   const tree = document.createElement('div');
   tree.className = 'workbench-view-tree';
   menu.append(tree);
@@ -23,6 +22,7 @@
     catalog.views
       .filter((view) => view.group === group)
       .map((view) => [view.id, ...(view.labels.sun || view.labels.moon)]),
+    catalog.groupIds[group],
   ]);
   function select(id) {
     if (id === 'solarCompare') {
@@ -39,13 +39,18 @@
     }
     schedule();
   }
-  for (const [zh, en, items] of groups) {
+  for (const [zh, en, items, key] of groups) {
     const group = document.createElement('details');
     group.open = true;
     group.className = 'workbench-content-group';
+    group.dataset.group = key;
     const summary = document.createElement('summary');
     group.append(summary);
     tree.append(group);
+    if (key === 'compare' && linkedSettings) {
+      linkedSettings.classList.add('workbench-setting-row');
+      group.append(linkedSettings);
+    }
     for (const [id, name, translation] of items) {
       const row = document.createElement('div');
       row.className = 'workbench-content-row';
@@ -173,11 +178,16 @@
       uiViewAttribute(entry.add, 'aria-pressed', String(!!included));
       entry.add.disabled = !!included && api.views.length === 1;
     }
-    for (const group of tree.children)
+    for (const group of tree.children) {
+      const setting = group.querySelector('.workbench-setting-row');
       uiViewHidden(
         group,
-        ![...group.querySelectorAll('.workbench-content-row')].some((row) => !row.hidden),
+        ![...group.querySelectorAll('.workbench-content-row')].some(
+          (row) => !row.hidden,
+        ) &&
+          (!setting || setting.hidden),
       );
+    }
     uiViewText(summary, tr('排列与收藏', 'Arrangement & saved layouts'));
     uiViewHidden(layout, !editing);
     follow.checked = uiWorkspace.analemmaClockLinked;

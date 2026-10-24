@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261024-material102",
+  "resourceVersion": "20261024-material103",
   "readingFontVersion": "20261016-font41",
   "pages": [
     "404.en.html",
@@ -184,13 +184,13 @@
     "lab.html": 73643,
     "lunar/index.en.html": 14626,
     "lunar/index.html": 8477,
-    "project-guide.en.html": 90298,
-    "project-guide.html": 31148,
+    "project-guide.en.html": 90553,
+    "project-guide.html": 31219,
     "space/index.en.html": 31839,
     "space/index.html": 20985,
     "sundial.en.html": 119730,
     "sundial.html": 71979
   },
-  "totalBytes": 1377297,
-  "assetBytes": 8025294
+  "totalBytes": 1377623,
+  "assetBytes": 8029581
 }
