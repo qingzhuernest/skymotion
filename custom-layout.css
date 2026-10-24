@@ -70,7 +70,8 @@
   gap: 8px;
   width: 100%;
 }
-.workspace-toolbar button {
+.workspace-toolbar button,
+.workspace-back-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -86,7 +87,8 @@
   background: var(--design-inset);
   border-color: var(--design-primary);
 }
-:is(.workspace-toolbar, .workspace-pane-tools, .workspace-options) svg {
+:is(.workspace-toolbar, .workspace-pane-tools, .workspace-options, .workspace-back-button)
+  svg {
   display: block;
   width: 19px;
   height: 19px;
@@ -231,6 +233,7 @@
   border-bottom: 1px solid var(--design-line);
 }
 .workspace-active .ui-diagram-card-head > h2 {
+  flex: 1;
   min-width: 0;
   overflow: hidden;
   font-size: 14px;
@@ -292,6 +295,9 @@
   background: var(--design-surface);
   color: var(--design-primary);
   border: 1px solid var(--design-line);
+}
+.workspace-active .ui-diagram-card-head > .workspace-back-button {
+  margin: 0;
 }
 .workspace-active .workspace-divider:not([hidden]) {
   display: block !important;

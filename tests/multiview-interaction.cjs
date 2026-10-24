@@ -58,6 +58,33 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
           'Ordinary mode exposes a return action in the focused header',
         );
         assert.match(await back.innerText(), /Esc/);
+        const geometry = await back.evaluate((button) => {
+          const icon = button.querySelector('svg').getBoundingClientRect();
+          const header = button.parentElement.getBoundingClientRect();
+          const target = parseFloat(
+            getComputedStyle(document.documentElement).getPropertyValue(
+              '--md-sys-size-target',
+            ),
+          );
+          return {
+            iconWidth: icon.width,
+            iconHeight: icon.height,
+            headerHeight: header.height,
+            target,
+          };
+        });
+        assert(
+          geometry.iconWidth <= 24 && geometry.iconHeight <= 24,
+          'The return icon retains shared toolbar sizing: ' + JSON.stringify(geometry),
+        );
+        assert(
+          geometry.headerHeight <= geometry.target + 16,
+          'The focused header stays compact: ' + JSON.stringify(geometry),
+        );
+        if (exit === 'button')
+          await page.screenshot({
+            path: `tests/artifacts/multiview-focused-${width}-${language}.png`,
+          });
         if (exit === 'button') await back.click();
         else if (exit === 'escape') await page.keyboard.press('Escape');
         else await first.locator('h2').dblclick();
