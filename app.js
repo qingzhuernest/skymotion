@@ -5,69 +5,73 @@
 const $ = (id) => document.getElementById(id),
   rad = Math.PI / 180,
   deg = 180 / Math.PI;
+// BEGIN GENERATED STATE DEFAULTS
+// prettier-ignore
 const initialSun = {
-  body: 'sun',
-  lat: 39.9,
-  lon: 116.4,
-  dec: 23.44,
-  time: 720,
-  date: '2026-06-21',
-  manual: false,
-  view: 'orbit',
-  observerAz: 180,
-  yaw: -0.55,
-  pitch: 0.38,
-  zoom: 1,
-  playing: false,
-  track: true,
-  shadow: true,
-  shadowZoom: 4,
-  shadowTrace: false,
-  sundialOffset: 8,
-  solarDateMode: false,
-  solarDateRate: 3,
-  solarDateLoop: true,
-  solarDateTrail: true,
-  solarDateLink: true,
-  solarDateLinkBackup: null,
-  compare: false,
-  angles: true,
-  height: 1,
-  speed: 60,
-  loop: true,
-  daysRate: 1,
-  monthLoop: true,
-  place: '39.9,116.4',
-  earthView: 'globe',
-  globeDragMode: 'view',
-  observerTimeBasis: 'solar',
-  observerConstraint: 'free',
-  globeCameraLat: 39.9,
-  globeCameraLon: 116.4,
-  globeCameraReady: false,
-  moonOverlay: false,
-  analemma: false,
-  analemmaClock: 720,
-  analemmaBasis: 'clock',
-  analemmaOffset: 8,
-  analemmaView: 'dome',
-  analemmaCompare: false,
-  analemmaYaw: -0.55,
-  analemmaPitch: 0.38,
-  analemmaZoom: 1,
-  analemmaIdeal: false,
-  analemmaTilt: 23.44,
-  analemmaEccentricity: 0.0167,
+  "body": "sun",
+  "lat": 39.9,
+  "lon": 116.4,
+  "dec": 23.44,
+  "time": 720,
+  "date": "2026-06-21",
+  "manual": false,
+  "view": "orbit",
+  "observerAz": 180,
+  "yaw": -0.55,
+  "pitch": 0.38,
+  "zoom": 1,
+  "playing": false,
+  "track": true,
+  "shadow": true,
+  "shadowZoom": 4,
+  "shadowTrace": false,
+  "sundialOffset": 8,
+  "solarDateMode": false,
+  "solarDateRate": 3,
+  "solarDateLoop": true,
+  "solarDateTrail": true,
+  "solarDateLink": true,
+  "solarDateLinkBackup": null,
+  "compare": false,
+  "angles": true,
+  "height": 1,
+  "speed": 60,
+  "loop": true,
+  "daysRate": 1,
+  "monthLoop": true,
+  "place": "39.9,116.4",
+  "earthView": "globe",
+  "globeDragMode": "view",
+  "observerTimeBasis": "solar",
+  "observerConstraint": "free",
+  "globeCameraLat": 39.9,
+  "globeCameraLon": 116.4,
+  "globeCameraReady": false,
+  "moonOverlay": false,
+  "analemma": false,
+  "analemmaClock": 720,
+  "analemmaBasis": "clock",
+  "analemmaOffset": 8,
+  "analemmaView": "dome",
+  "analemmaCompare": false,
+  "analemmaYaw": -0.55,
+  "analemmaPitch": 0.38,
+  "analemmaZoom": 1,
+  "analemmaIdeal": false,
+  "analemmaTilt": 23.44,
+  "analemmaEccentricity": 0.0167
 };
+// prettier-ignore
 const initialMoon = {
   ...initialSun,
-  body: 'moon',
-  time: 1200,
-  moonDayPlayback: false,
-  companion: false,
-  planet: 'Venus',
-  companionSearchResult: null,
+  "body": "moon",
+  "time": 1200,
+  "moonDayPlayback": false,
+  "companion": false,
+  "planet": "Venus",
+  "companionSearchResult": null
 };
+// END GENERATED STATE DEFAULTS
 const modeStates = { sun: { ...initialSun }, moon: { ...initialMoon } };
 let state = modeStates.sun;
 const seasons = {
@@ -85,7 +89,13 @@ function solar(lat, dec, time) {
     y = Math.sin(p) * Math.sin(d) + Math.cos(p) * Math.cos(d) * Math.cos(h),
     z = Math.cos(p) * Math.sin(d) - Math.sin(p) * Math.cos(d) * Math.cos(h);
   const yy = Math.abs(y) < 1e-12 ? 0 : clamp(y, -1, 1);
-  return { x, y: yy, z, alt: Math.asin(yy) * deg, az: (Math.atan2(x, z) * deg + 360) % 360 };
+  return {
+    x,
+    y: yy,
+    z,
+    alt: Math.asin(yy) * deg,
+    az: (Math.atan2(x, z) * deg + 360) % 360,
+  };
 }
 function daylight(lat, dec) {
   const p = lat * rad,
@@ -122,13 +132,15 @@ function coord(v, axis) {
 function heading(a) {
   return ['北', '东北', '东', '东南', '南', '西南', '西', '西北'][Math.round(a / 45) % 8];
 }
-function dateDec(date) {
-  return sunEquatorial(new Date(solarNoonUTC(date, state.lon))).dec;
+function dateDec(date, lon = state.lon) {
+  return sunEquatorial(new Date(solarNoonUTC(date, lon))).dec;
 }
 function selectedPlaceName() {
   const place = $('place'),
     option = place?.options[place.selectedIndex];
-  return !option || option.value === 'custom' ? '自定义地点' : option.text.split(' · ')[0];
+  return !option || option.value === 'custom'
+    ? '自定义地点'
+    : option.text.split(' · ')[0];
 }
 function resize(canvas) {
   const box = canvas.getBoundingClientRect(),
@@ -198,7 +210,11 @@ function skyTrackSegments(positionAt, project, panorama = false, left = 40, righ
     }
     const previous = groups.at(-1),
       last = previous?.points.at(-1);
-    if (previous && previous.above === above && Math.hypot(last.x - pa.x, last.y - pa.y) < 1e-6) {
+    if (
+      previous &&
+      previous.above === above &&
+      Math.hypot(last.x - pa.x, last.y - pa.y) < 1e-6
+    ) {
       previous.points.push(pb);
       previous.end = tb;
     } else groups.push({ above, points: [pa, pb], start: ta, end: tb });
@@ -286,7 +302,11 @@ function drawSkyScene(kind) {
     project = (p) => {
       const az = (Math.atan2(p.x, p.z) * deg + 360) % 360,
         alt = Math.asin(clamp(p.y, -1, 1)) * deg;
-      return { x: 40 + (az / 360) * (w - 80), y: h * 0.69 - (alt / 90) * (h * 0.49), wrap: az };
+      return {
+        x: 40 + (az / 360) * (w - 80),
+        y: h * 0.69 - (alt / 90) * (h * 0.49),
+        wrap: az,
+      };
     };
   } else {
     project = (p) => {
@@ -429,9 +449,16 @@ function drawSkyScene(kind) {
       cacheable = !motionTransition;
     let segments = cacheable ? skyTrackCache.get(key) : null;
     if (!segments) {
-      segments = skyTrackSegments(positionAt, project, state.view === 'horizon', 40, w - 40);
+      segments = skyTrackSegments(
+        positionAt,
+        project,
+        state.view === 'horizon',
+        40,
+        w - 40,
+      );
       if (cacheable) {
-        if (skyTrackCache.size >= 12) skyTrackCache.delete(skyTrackCache.keys().next().value);
+        if (skyTrackCache.size >= 12)
+          skyTrackCache.delete(skyTrackCache.keys().next().value);
         skyTrackCache.set(key, segments);
       }
     }
@@ -455,18 +482,24 @@ function drawSkyScene(kind) {
     drawTrack(0, '#79d4bf', 1.5);
     drawTrack(-23.44, '#80b9f3', 1.5);
   }
-  if (state.track) drawTrack(state.dec, kind === 'moon' ? '#b4cff5' : '#ffc35a', 2.7, true);
+  if (state.track)
+    drawTrack(state.dec, kind === 'moon' ? '#b4cff5' : '#ffc35a', 2.7, true);
   if (kind === 'sun' && isMoonOverlayActive() && state.track)
     drawTrack(0, '#b4cff5', 2, true, moonOverlayPosition);
   if (state.track && (kind === 'moon' || isMoonOverlayActive()))
     drawMoonDayEndpoints(c, project, w, h, (t) =>
-      visualTrackPosition(t, kind === 'moon' ? bodyPosition(t) : moonOverlayPosition(t), 'Moon'),
+      visualTrackPosition(
+        t,
+        kind === 'moon' ? bodyPosition(t) : moonOverlayPosition(t),
+        'Moon',
+      ),
     );
   const s = visualPosition(kind === 'moon' ? 'Moon' : 'Sun', bodyPosition()),
     sun = project(s),
     origin = project({ x: 0, y: 0, z: 0 });
   if (state.view !== 'horizon') {
-    const groundRadius = kind === 'sun' ? shadowGroundRadius() : 6.25 * Math.max(1, state.height);
+    const groundRadius =
+      kind === 'sun' ? shadowGroundRadius() : 6.25 * Math.max(1, state.height);
     if (kind === 'sun' && state.solarDateMode && state.solarDateTrail)
       drawAnnualShadowTrail(c, project, groundRadius);
     if (kind === 'sun') drawShadowTrace(c, project, groundRadius);
@@ -491,7 +524,14 @@ function drawSkyScene(kind) {
       const tip = project({ x: 0, y: Math.min(state.height / groundRadius, 0.85), z: 0 });
       poly(c, [origin, tip], '#c8e6ff', 3);
     }
-    text(c, kind === 'sun' ? '杆底 · 观察者' : '观察者', origin.x, origin.y + 21, '#9aafc2', 11);
+    text(
+      c,
+      kind === 'sun' ? '杆底 · 观察者' : '观察者',
+      origin.x,
+      origin.y + 21,
+      '#9aafc2',
+      11,
+    );
   }
   if (s.alt < 0) {
     c.globalAlpha = 0.3;
@@ -524,7 +564,14 @@ function drawSkyScene(kind) {
     text(c, (shadowGroundRadius() / 2).toFixed(2) + ' m', p.x, p.y + 16, '#92aebd', 10);
   }
   if (state.view === 'top' && kind === 'moon')
-    text(c, (kind === 'moon' ? '月球' : '太阳') + '在地平面上的投影', w * 0.5, 65, '#91a5b9', 12);
+    text(
+      c,
+      (kind === 'moon' ? '月球' : '太阳') + '在地平面上的投影',
+      w * 0.5,
+      65,
+      '#91a5b9',
+      12,
+    );
   paintLabReferences(c, w, h, project, kind);
 }
 function drawSunAltitudeChart() {
@@ -669,7 +716,9 @@ function drawSunAltitudeChart() {
           ).alt,
       );
     },
-    pick: (x) => ({ time: Math.max(0, Math.min(1440, ((x - left) / (right - left)) * 1440)) }),
+    pick: (x) => ({
+      time: Math.max(0, Math.min(1440, ((x - left) / (right - left)) * 1440)),
+    }),
   });
 }
 // Render the orthographic Earth at display resolution on the GPU.
@@ -880,7 +929,8 @@ function renderGlobeOptions() {
     : linked
       ? '拖动地球会改变观测地点，各张太阳图解同时更新。'
       : '拖动观察点可联动各张太阳图解；拖动球面其他位置只旋转视角。';
-  if (state.manual && state.observerTimeBasis === 'utc') state.observerTimeBasis = 'solar';
+  if (state.manual && state.observerTimeBasis === 'utc')
+    state.observerTimeBasis = 'solar';
   $('observerTimeBasis').value = state.observerTimeBasis || 'solar';
   $('observerTimeBasis').querySelector('[value=utc]').disabled = state.manual;
   $('observerConstraint').value = state.observerConstraint || 'free';
@@ -989,7 +1039,10 @@ const earthFallbackSize = 320;
 const earthRasterCanvas = document.createElement('canvas');
 earthRasterCanvas.width = earthRasterCanvas.height = earthFallbackSize;
 const earthRasterContext = earthRasterCanvas.getContext('2d'),
-  earthRasterImage = earthRasterContext.createImageData(earthFallbackSize, earthFallbackSize);
+  earthRasterImage = earthRasterContext.createImageData(
+    earthFallbackSize,
+    earthFallbackSize,
+  );
 let earthSurfaceCache = null;
 // Allocate the CPU fallback buffers only if GPU rendering is unavailable.
 let earthRays = null,
@@ -1005,7 +1058,8 @@ function initEarthFallback() {
       const ex = (x + 0.5 - earthFallbackSize / 2) / (earthFallbackSize / 2),
         ey = -(y + 0.5 - earthFallbackSize / 2) / (earthFallbackSize / 2),
         rho = ex * ex + ey * ey;
-      if (rho <= 1) earthRays.push((y * earthFallbackSize + x) * 4, ex, ey, Math.sqrt(1 - rho));
+      if (rho <= 1)
+        earthRays.push((y * earthFallbackSize + x) * 4, ex, ey, Math.sqrt(1 - rho));
     }
   earthIndices = new Uint32Array(earthRays.length / 4);
   earthVectors = new Float64Array((earthRays.length / 4) * 3);
@@ -1034,7 +1088,11 @@ function earthSurface(p, l) {
     earthVectors[k + 1] = Y;
     earthVectors[k + 2] = Z;
     if (earthPixels) {
-      const tx = clamp(Math.floor((Math.atan2(Z, X) / Math.PI / 2 + 0.5) * earthW), 0, earthW - 1),
+      const tx = clamp(
+          Math.floor((Math.atan2(Z, X) / Math.PI / 2 + 0.5) * earthW),
+          0,
+          earthW - 1,
+        ),
         ty = clamp(
           Math.floor((0.5 - Math.asin(clamp(Y, -1, 1)) / Math.PI) * earthH),
           0,
@@ -1050,7 +1108,12 @@ function earthSurface(p, l) {
       earthColors[k + 2] = 156;
     }
   }
-  earthSurfaceCache = { key, indices: earthIndices, vectors: earthVectors, colors: earthColors };
+  earthSurfaceCache = {
+    key,
+    indices: earthIndices,
+    vectors: earthVectors,
+    colors: earthColors,
+  };
   return earthSurfaceCache;
 }
 
@@ -1178,7 +1241,8 @@ function drawGlobe() {
         D = 1 - X * X - Y * Y;
       if (D < 0) return null;
       const Z = Math.sqrt(D),
-        lat = Math.asin(Math.max(-1, Math.min(1, Y * Math.cos(p) + Z * Math.sin(p)))) * deg,
+        lat =
+          Math.asin(Math.max(-1, Math.min(1, Y * Math.cos(p) + Z * Math.sin(p)))) * deg,
         lon = g.lon + Math.atan2(X, Z * Math.cos(p) - Y * Math.sin(p)) * deg;
       return { lat, lon: ((lon + 540) % 360) - 180 };
     },
@@ -1191,7 +1255,6 @@ const solarSeasonButtons = document.querySelectorAll(
 function updateUI() {
   document.body.dataset.body = state.body;
   document.body.dataset.skyView = state.view;
-  if (state.body === 'sun' && !state.manual) state.dec = sunContext().dec;
   const moon = state.body === 'moon',
     body = moon ? '月球' : '太阳',
     s = bodyPosition(),
@@ -1204,10 +1267,13 @@ function updateUI() {
         : bodyDay(),
     pole = Math.abs(state.lat) > 89.99999999,
     zenith = Math.abs(s.alt) > 89.99;
-  $('latText').textContent = Math.abs(state.lat) < 0.05 ? '°' : state.lat > 0 ? '°N' : '°S';
-  $('lonText').textContent = Math.abs(state.lon) < 0.05 ? '°' : state.lon > 0 ? '°E' : '°W';
+  $('latText').textContent =
+    Math.abs(state.lat) < 0.05 ? '°' : state.lat > 0 ? '°N' : '°S';
+  $('lonText').textContent =
+    Math.abs(state.lon) < 0.05 ? '°' : state.lon > 0 ? '°E' : '°W';
   for (const k of ['lat', 'lon']) {
-    if (document.activeElement !== $(k + 'Input')) $(k + 'Input').value = state[k].toFixed(1);
+    if (document.activeElement !== $(k + 'Input'))
+      $(k + 'Input').value = state[k].toFixed(1);
     $(k).value = state[k];
   }
   $('decText').textContent = coord(state.dec, 'lat');
@@ -1239,7 +1305,9 @@ function updateUI() {
   $('shadowControl').hidden = moon;
   $('heightControl').hidden = moon;
   $('restoreDate').hidden = !state.manual;
-  document.querySelector('[data-view="top"]').textContent = moon ? '俯视方位' : '俯视日影';
+  document.querySelector('[data-view="top"]').textContent = moon
+    ? '俯视方位'
+    : '俯视日影';
   $('sky').setAttribute('aria-label', body + '当天轨迹交互图');
   $('chart').setAttribute('aria-label', body + '全天高度角曲线');
   $('altMetric').textContent = s.alt.toFixed(1) + '°';
@@ -1264,7 +1332,8 @@ function updateUI() {
   if (moon) {
     const phase = lunarPhase();
     $('phaseName').textContent = phase.name;
-    $('phaseFraction').textContent = '可见圆盘亮面 ' + (phase.fraction * 100).toFixed(1) + '%';
+    $('phaseFraction').textContent =
+      '可见圆盘亮面 ' + (phase.fraction * 100).toFixed(1) + '%';
     $('shadowMetric').textContent = (phase.fraction * 100).toFixed(1) + '%';
     $('shadowNote').textContent =
       phase.name + ' · ' + (phase.angle < 180 ? '逐渐盈满' : '逐渐亏缺');
@@ -1288,14 +1357,17 @@ function updateUI() {
   if (day) {
     $('riseLabel').textContent = moon ? '月出' : '日出';
     $('setLabel').textContent = moon ? '月落' : '日落';
-    $('peakLabel').textContent = state.body === 'sun' && state.manual ? '正午' : '日内最高';
+    $('peakLabel').textContent =
+      state.body === 'sun' && state.manual ? '正午' : '日内最高';
     $('peakInline').textContent = hhmm(day.peak, true);
     $('riseInline').textContent = day.rise === null ? '当日无' : hhmm(day.rise);
     $('setInline').textContent = day.set === null ? '当日无' : hhmm(day.set);
     $('goRise').disabled = day.rise === null;
     $('goSet').disabled = day.set === null;
-    $('goRise').title = day.rise === null ? '当日没有穿越地平线的上升时刻' : '跳到当天升起时刻';
-    $('goSet').title = day.set === null ? '当日没有穿越地平线的下降时刻' : '跳到当天落下时刻';
+    $('goRise').title =
+      day.rise === null ? '当日没有穿越地平线的上升时刻' : '跳到当天升起时刻';
+    $('goSet').title =
+      day.set === null ? '当日没有穿越地平线的下降时刻' : '跳到当天落下时刻';
   }
   $('dayBadge').textContent =
     Math.abs(s.alt) < 1e-6
@@ -1330,12 +1402,15 @@ function updateUI() {
   solarSeasonButtons.forEach((b) =>
     b.classList.toggle(
       'selected',
-      !state.manual && seasonDate(Number(b.dataset.angle), Number(b.dataset.month)) === state.date,
+      !state.manual &&
+        seasonDate(Number(b.dataset.angle), Number(b.dataset.month)) === state.date,
     ),
   );
   const context = sunContext();
-  $('subsolar').textContent = coord(context.dec, 'lat') + ' / ' + coord(context.lon, 'lon');
-  $('observerPos').textContent = coord(state.lat, 'lat') + ' / ' + coord(state.lon, 'lon');
+  $('subsolar').textContent =
+    coord(context.dec, 'lat') + ' / ' + coord(context.lon, 'lon');
+  $('observerPos').textContent =
+    coord(state.lat, 'lat') + ' / ' + coord(state.lon, 'lon');
   $('utcLabel').textContent = context.utc
     ? 'UTC ' +
       context.utc.toISOString().slice(0, 10) +
@@ -1348,7 +1423,8 @@ function updateUI() {
       ? '理想实验：赤纬固定，上中天设为 12:00。'
       : '日期观测：使用天文星历，时间为当地真太阳时。';
   if (!moon)
-    $('modelNote').textContent += ' 分至日按钮和季节对比线沿用北半球名称，南半球季节相反。';
+    $('modelNote').textContent +=
+      ' 分至日按钮和季节对比线沿用北半球名称，南半球季节相反。';
   if (pole) $('modelNote').textContent += ' 极点方位不唯一，图中轴线按所选经线作参考。';
   $('plotNote').textContent =
     '中心穿越几何地平线为升落标准（未计折射）；虚线在地平线下。天体大小非实际比例。' +
@@ -1372,12 +1448,14 @@ function updateUI() {
     const phase = lunarPhase();
     insight = `当前为<strong>${phase.name}</strong>，可见月面照明比例 <strong>${(phase.fraction * 100).toFixed(1)}%</strong>。${s.alt >= 0 ? '月球在地平线上方，白天也可能出现；是否容易看见还取决于天空亮度和月相。' : '月球在地平线下方，可以展开观测时刻，选择月出或日内最高点；逐日播放始终保持所选时刻。'}${day && day.kind !== '普通升落' ? ' 当日' + day.kind + '。' : ''}`;
   } else if (!day)
-    insight = '球面展示当前太阳直射点与昼夜分布；日出、日落和白昼时长请切换到日出日落图解查看。';
+    insight =
+      '球面展示当前太阳直射点与昼夜分布；日出、日落和白昼时长请切换到日出日落图解查看。';
   else if (day.kind === '极昼')
     insight =
       '这里出现<strong>极昼</strong>：太阳全天保持在地平线上方。改变季节，观察全天轨迹怎样下移。';
   else if (day.kind === '极夜')
-    insight = '这里出现<strong>极夜</strong>：太阳全天位于地平线下方，因此没有直射阳光形成的日影。';
+    insight =
+      '这里出现<strong>极夜</strong>：太阳全天位于地平线下方，因此没有直射阳光形成的日影。';
   else if (day.kind === '地平线相切')
     insight =
       '太阳轨迹与<strong>地平线相切</strong>，没有通常意义上穿越地平线的日出、日落。这个理想化临界情形不计大气折射。';
@@ -1417,9 +1495,26 @@ function renderLunarPipeline() {
   renderLunarCoverage();
 }
 let framePending = false;
-function render() {
-  window.SkyWorkbenchMenu?.prepare();
+function prepareObservationState() {
+  const workspace = typeof uiWorkspace === 'undefined' ? null : uiWorkspace;
+  if (document.body.hasAttribute('data-entry-view') && workspace) {
+    const presentation = window.skyWorkspacePresentation;
+    const visible = presentation?.active
+      ? presentation.visibleIds
+      : new Set([workspace.selected]);
+    state.analemma = state.body === 'sun' && visible.has('analemmaPanel');
+    if (state.analemma && workspace.analemmaClockLinked) {
+      state.analemmaBasis = 'apparent';
+      state.analemmaClock = Math.min(1439, state.time);
+    }
+    if (state.body === 'moon' && workspace.selected === 'solarCompare')
+      state.companion = true;
+  }
   prepareSolarDateMode();
+  if (state.body === 'sun' && !state.manual) state.dec = sunContext().dec;
+}
+function render() {
+  prepareObservationState();
   syncMotionTarget();
   updateWorkspaceLayout();
   if (state.body === 'moon') renderLunarPipeline();
@@ -1440,521 +1535,6 @@ function render() {
 function schedule() {
   framePending = true;
   requestMotionFrame();
-}
-function setDate(v) {
-  if (
-    !/^\d{4}-\d{2}-\d{2}$/.test(v) ||
-    isNaN(new Date(v + 'T12:00:00Z')) ||
-    new Date(v + 'T12:00:00Z').toISOString().slice(0, 10) !== v ||
-    v < '1900-01-01' ||
-    v > '2100-12-31'
-  ) {
-    $('date').value = state.date;
-    return;
-  }
-  stop();
-  state.date = v;
-  state.manual = false;
-  if (state.body === 'sun') state.dec = dateDec(v);
-  $('date').value = v;
-  schedule();
-}
-function stop() {
-  analemmaPlaying = false;
-  analemmaAccumulator = 0;
-  settleMotion();
-  state.playing = false;
-  lunarAccumulator = 0;
-  solarDateAccumulator = 0;
-  $('play').textContent = '▶ 播放';
-  $('moonPlay').textContent = '▶ 逐日播放';
-}
-['lat', 'lon'].forEach((k) =>
-  $(k).addEventListener('input', (e) => {
-    stop();
-    chooseMapObserver(
-      { lat: state.lat, lon: state.lon, [k]: +e.target.value },
-      { constraint: false },
-    );
-  }),
-);
-$('place').addEventListener('change', (e) => {
-  stop();
-  const select = e.target,
-    option = select.options[select.selectedIndex],
-    values = option?.value.split(',').map(Number);
-  if (
-    !option ||
-    option.value === 'custom' ||
-    values.length !== 2 ||
-    !values.every(Number.isFinite) ||
-    Math.abs(values[0]) > 90 ||
-    Math.abs(values[1]) > 180
-  ) {
-    state.place = 'custom';
-    select.value = 'custom';
-    schedule();
-    return;
-  }
-  const selectedPlace = option.value;
-  if (chooseMapObserver({ lat: values[0], lon: values[1] }, { constraint: false }) === false)
-    return;
-  state.place = selectedPlace;
-  select.value = selectedPlace;
-  $('lat').value = state.lat;
-  $('lon').value = state.lon;
-  schedule();
-});
-$('date').addEventListener('change', (e) => {
-  if (e.target.value) setDate(e.target.value);
-});
-solarSeasonButtons.forEach(
-  (b) => (b.onclick = () => setDate(seasonDate(Number(b.dataset.angle), Number(b.dataset.month)))),
-);
-$('dec').addEventListener('input', (e) => {
-  stop();
-  state.dec = +e.target.value;
-  state.manual = true;
-  schedule();
-});
-$('time').addEventListener('input', (e) => {
-  state.time = +e.target.value;
-  stop();
-  schedule();
-});
-['track', 'shadow', 'compare', 'angles'].forEach(
-  (k) =>
-    ($(k).onchange = (e) => {
-      state[k] = e.target.checked;
-      schedule();
-    }),
-);
-$('height').onchange = (e) => {
-  stop();
-  state.height = clamp(Number(e.target.value) || 1, 0.1, 10);
-  e.target.value = state.height;
-  schedule();
-};
-document.querySelectorAll('[data-view]').forEach(
-  (b) =>
-    (b.onclick = () => {
-      state.view = b.dataset.view;
-      document
-        .querySelectorAll('[data-view]')
-        .forEach((x) => x.classList.toggle('active', x === b));
-      schedule();
-    }),
-);
-$('viewReset').onclick = () => {
-  state.observerAz = 180;
-  state.yaw = -0.55;
-  state.pitch = 0.38;
-  state.zoom = 1;
-  schedule();
-};
-$('reset').onclick = () => {
-  stop();
-  Object.assign(state, state.body === 'moon' ? initialMoon : initialSun);
-  if (state.body === 'sun') {
-    sundialLength = 0.18;
-    sundialView = 'device';
-  }
-  syncControls();
-  schedule();
-};
-$('goRise').onclick = () => {
-  state.time = bodyDay().rise;
-  stop();
-  schedule();
-};
-$('goSet').onclick = () => {
-  state.time = bodyDay().set;
-  stop();
-  schedule();
-};
-$('goNoon').onclick = () => {
-  state.time = clamp(bodyDay().peak, 0, 1440);
-  stop();
-  schedule();
-};
-let solarLast = 0,
-  lunarLast = 0,
-  lunarAccumulator = 0;
-$('play').onclick = () => {
-  analemmaPlaying = false;
-  analemmaAccumulator = 0;
-  if (!state.playing && state.time >= 1440) state.time = 0;
-  state.playing = !state.playing;
-  if (!state.playing) settleMotion();
-  motionLast = 0;
-  solarLast = 0;
-  $('play').textContent = state.playing ? 'Ⅱ 暂停' : '▶ 播放';
-  schedule();
-};
-$('speed').onchange = (e) => (state.speed = +e.target.value);
-$('loop').onchange = (e) => (state.loop = e.target.checked);
-document.addEventListener('visibilitychange', () => {
-  solarLast = 0;
-  lunarLast = 0;
-});
-let drag = null;
-$('sky').addEventListener('pointerdown', (e) => {
-  if (drag || e.button !== 0 || !['orbit', 'observer'].includes(state.view)) return;
-  drag = { x: e.clientX, y: e.clientY, id: e.pointerId };
-  $('sky').setPointerCapture(e.pointerId);
-});
-$('sky').addEventListener('pointermove', (e) => {
-  if (!drag || drag.id !== e.pointerId) return;
-  if (state.view === 'observer') {
-    state.observerAz = ((state.observerAz ?? 180) - (e.clientX - drag.x) * 0.35 + 360) % 360;
-    drag = { x: e.clientX, y: e.clientY, id: e.pointerId };
-    schedule();
-    return;
-  }
-  state.yaw += (e.clientX - drag.x) * 0.008;
-  state.pitch = clamp(state.pitch + (e.clientY - drag.y) * 0.006, 0.05, 1.45);
-  drag = { x: e.clientX, y: e.clientY, id: e.pointerId };
-  schedule();
-});
-['pointerup', 'pointercancel', 'lostpointercapture'].forEach((event) =>
-  $('sky').addEventListener(event, (e) => {
-    if (drag?.id === e.pointerId) drag = null;
-  }),
-);
-window.addEventListener('blur', () => {
-  drag = null;
-});
-$('sky').addEventListener(
-  'wheel',
-  (e) => {
-    if (['horizon', 'observer'].includes(state.view)) return;
-    e.preventDefault();
-    state.zoom = clamp(state.zoom - e.deltaY * 0.0008, 0.65, 1.35);
-    schedule();
-  },
-  { passive: false },
-);
-$('sky').onkeydown = (e) => {
-  if (state.view === 'observer' && ['ArrowLeft', 'ArrowRight', 'Home'].includes(e.key)) {
-    e.preventDefault();
-    state.observerAz =
-      e.key === 'Home'
-        ? 180
-        : ((state.observerAz ?? 180) + (e.key === 'ArrowRight' ? 5 : -5) + 360) % 360;
-    schedule();
-    return;
-  }
-  if (state.view !== 'orbit') return;
-  if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
-  e.preventDefault();
-  if (e.key === 'ArrowLeft') state.yaw -= 0.1;
-  if (e.key === 'ArrowRight') state.yaw += 0.1;
-  if (e.key === 'ArrowUp') state.pitch = clamp(state.pitch - 0.1, 0.05, 1.45);
-  if (e.key === 'ArrowDown') state.pitch = clamp(state.pitch + 0.1, 0.05, 1.45);
-  schedule();
-};
-initGlobeOptions();
-const globe = $('globe');
-let globeDrag = null,
-  globeMoved = false;
-globe.removeAttribute('title');
-globe.style.cursor = 'grab';
-globe.style.touchAction = 'none';
-globe.setAttribute('aria-label', '地球昼夜图；拖动旋转并同步改变观察地点，点击选择地点');
-function globeLocationAt(x, y, g) {
-  let X = (x - g.cx) / g.r,
-    Y = -(y - g.cy) / g.r;
-  const distance = Math.hypot(X, Y);
-  if (distance > 1) {
-    X /= distance;
-    Y /= distance;
-  }
-  const Z = Math.sqrt(Math.max(0, 1 - X * X - Y * Y)),
-    lat = Math.asin(clamp(Y * Math.cos(g.p) + Z * Math.sin(g.p), -1, 1)) * deg,
-    lon = g.lon + Math.atan2(X, Z * Math.cos(g.p) - Y * Math.sin(g.p)) * deg;
-  return { lat, lon: ((lon + 540) % 360) - 180 };
-}
-function globeObserverPoint(g) {
-  const p = state.lat * rad,
-    d = (state.lon - g.lon) * rad;
-  return {
-    x: g.cx + g.r * Math.cos(p) * Math.sin(d),
-    y: g.cy - g.r * (Math.sin(p) * Math.cos(g.p) - Math.cos(p) * Math.sin(g.p) * Math.cos(d)),
-    visible: Math.sin(p) * Math.sin(g.p) + Math.cos(p) * Math.cos(g.p) * Math.cos(d) >= 0,
-  };
-}
-globe.tabIndex = 0;
-globe.addEventListener('pointerdown', (e) => {
-  if (state.body === 'moon' || !e.isPrimary || e.button !== 0) return;
-  const box = globe.getBoundingClientRect(),
-    g = globeGeometry(box.width, box.height),
-    x = (e.clientX - box.left - g.cx) / g.r,
-    y = (e.clientY - box.top - g.cy) / g.r;
-  if (x * x + y * y > 1) return;
-  globeMoved = false;
-  const observer = globeObserverPoint(g),
-    direct =
-      state.globeDragMode === 'view' &&
-      observer.visible &&
-      Math.hypot(e.clientX - box.left - observer.x, e.clientY - box.top - observer.y) <= 18;
-  const before = Object.fromEntries(
-    [
-      'lat',
-      'lon',
-      'date',
-      'time',
-      'place',
-      'dec',
-      'globeCameraLat',
-      'globeCameraLon',
-      'globeCameraReady',
-    ].map((k) => [k, state[k]]),
-  );
-  if (direct) {
-    state.globeCameraLat = g.p * deg;
-    state.globeCameraLon = g.lon;
-    state.globeCameraReady = true;
-  }
-  globeDrag = {
-    id: e.pointerId,
-    x: e.clientX,
-    y: e.clientY,
-    lat: g.p * deg,
-    lon: g.l * deg,
-    mode: direct ? 'observer' : state.globeDragMode,
-    before,
-    g,
-    instant: instantUTC().getTime(),
-    scale: 90 / g.r,
-  };
-  stop();
-  globe.setPointerCapture(e.pointerId);
-  globe.style.cursor = 'grabbing';
-});
-globe.addEventListener('pointermove', (e) => {
-  if (!globeDrag || e.pointerId !== globeDrag.id) return;
-  const dx = e.clientX - globeDrag.x,
-    dy = e.clientY - globeDrag.y;
-  if (!globeMoved && Math.hypot(dx, dy) < 3) return;
-  globeMoved = true;
-  if (globeDrag.mode === 'observer') {
-    const box = globe.getBoundingClientRect();
-    chooseMapObserver(globeLocationAt(e.clientX - box.left, e.clientY - box.top, globeDrag.g), {
-      instant: globeDrag.instant,
-      origin: globeDrag.before,
-    });
-    return;
-  }
-  const lat = clamp(globeDrag.lat + dy * globeDrag.scale, -90, 90),
-    lon = ((((globeDrag.lon - dx * globeDrag.scale + 180) % 360) + 360) % 360) - 180;
-  if (globeDrag.mode === 'location') {
-    chooseMapObserver({ lat, lon }, { instant: globeDrag.instant, origin: globeDrag.before });
-  } else {
-    state.globeCameraLat = lat;
-    state.globeCameraLon = lon;
-    state.globeCameraReady = true;
-  }
-  schedule();
-});
-const endGlobeDrag = (e) => {
-  if (!globeDrag || e.pointerId !== globeDrag.id) return;
-  if (e.type === 'pointercancel' && globeDrag.mode === 'observer') {
-    Object.assign(state, globeDrag.before);
-    schedule();
-  }
-  globeDrag = null;
-  globe.style.cursor = 'grab';
-  if (globe.hasPointerCapture(e.pointerId)) globe.releasePointerCapture(e.pointerId);
-};
-for (const type of ['pointerup', 'pointercancel', 'lostpointercapture'])
-  globe.addEventListener(type, endGlobeDrag);
-globe.onclick = (e) => {
-  if (state.body === 'moon' || globeMoved) return;
-  const b = $('globe').getBoundingClientRect(),
-    g = globeGeometry(b.width, b.height),
-    x = (e.clientX - b.left - g.cx) / g.r,
-    y = -(e.clientY - b.top - g.cy) / g.r;
-  if (x * x + y * y > 1) return;
-  chooseMapObserver(globeLocationAt(e.clientX - b.left, e.clientY - b.top, g));
-};
-globe.addEventListener('keydown', (e) => {
-  if (state.body !== 'sun') return;
-  if (e.key === 'Escape' && globeDrag?.mode === 'observer') {
-    e.preventDefault();
-    endGlobeDrag({ pointerId: globeDrag.id, type: 'pointercancel' });
-    return;
-  }
-  if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
-  e.preventDefault();
-  const step = e.shiftKey ? 5 : 1;
-  chooseMapObserver({
-    lat: clamp(
-      state.lat + (e.key === 'ArrowUp' ? step : e.key === 'ArrowDown' ? -step : 0),
-      -90,
-      90,
-    ),
-    lon:
-      ((state.lon + (e.key === 'ArrowRight' ? step : e.key === 'ArrowLeft' ? -step : 0) + 540) %
-        360) -
-      180,
-  });
-});
-for (const type of ['blur', 'resize'])
-  window.addEventListener(type, () => {
-    if (globeDrag?.mode === 'observer')
-      endGlobeDrag({ pointerId: globeDrag.id, type: 'pointercancel' });
-  });
-$('helpBtn').onclick = () => {
-  stop();
-  $('help').showModal();
-};
-$('closeHelp').onclick = $('startExplore').onclick = () => $('help').close();
-$('help').onclick = (e) => {
-  if (e.target === $('help')) {
-    const r = $('help').getBoundingClientRect();
-    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)
-      $('help').close();
-  }
-};
-$('fullBtn').onclick = async () => {
-  try {
-    if (document.fullscreenElement) await document.exitFullscreen();
-    else await document.documentElement.requestFullscreen();
-  } catch {
-    $('fullBtn').textContent = '浏览器未支持全屏';
-  }
-};
-document.querySelectorAll('button[data-body]').forEach(
-  (b) =>
-    (b.onclick = () => {
-      if (state.body === b.dataset.body) return;
-      stop();
-      state = modeStates[b.dataset.body];
-      state.playing = false;
-      lunarAccumulator = 0;
-      solarLast = lunarLast = 0;
-      syncControls();
-      schedule();
-    }),
-);
-['lat', 'lon'].forEach((k) =>
-  $(k + 'Input').addEventListener('change', (e) => {
-    stop();
-    const limit = k === 'lat' ? 90 : 180,
-      value = e.target.value.trim() === '' ? state[k] : Number(e.target.value);
-    state[k] = clamp(Number.isFinite(value) ? value : state[k], -limit, limit);
-    e.target.value = state[k].toFixed(1);
-    $(k).value = state[k];
-    state.place = 'custom';
-    $('place').value = 'custom';
-    schedule();
-  }),
-);
-$('restoreDate').onclick = () => setDate(state.date);
-document.querySelectorAll('[data-model]').forEach(
-  (b) =>
-    (b.onclick = () => {
-      stop();
-      state.manual = b.dataset.model === 'ideal';
-      if (!state.manual) state.dec = dateDec(state.date);
-      schedule();
-    }),
-);
-for (const [id, delta] of [
-  ['prevDay', -1],
-  ['nextDay', 1],
-])
-  $(id).onclick = () => {
-    const d = new Date(state.date + 'T12:00:00Z');
-    d.setUTCDate(d.getUTCDate() + delta);
-    const date = d.toISOString().slice(0, 10);
-    if (date >= '1900-01-01' && date <= '2100-12-31') setDate(date);
-  };
-function selectChartDateOrTime(e) {
-  const r = $('chart').getBoundingClientRect(),
-    f = clamp((e.clientX - r.left - 35) / (r.width - 47), 0, 1);
-  stop();
-  if (state.body === 'moon') {
-    state.date =
-      state.date.slice(0, 7) +
-      '-' +
-      String(1 + Math.round(f * (monthDays(state.date) - 1))).padStart(2, '0');
-    $('date').value = state.date;
-  } else state.time = f * 1440;
-  schedule();
-}
-$('chart').addEventListener('pointerdown', (e) => {
-  selectChartDateOrTime(e);
-  $('chart').setPointerCapture(e.pointerId);
-});
-$('chart').addEventListener('pointermove', (e) => {
-  if ($('chart').hasPointerCapture(e.pointerId)) selectChartDateOrTime(e);
-});
-function monthDays(date) {
-  const [y, m] = date.split('-').map(Number);
-  return new Date(Date.UTC(y, m, 0)).getUTCDate();
-}
-function syncControls() {
-  for (const k of ['lat', 'lon', 'height', 'date', 'speed']) $(k).value = state[k];
-  $('place').value = state.place;
-  if ($('place').selectedIndex < 0) {
-    state.place = 'custom';
-    $('place').value = 'custom';
-  }
-  for (const k of ['track', 'shadow', 'compare', 'angles', 'loop']) $(k).checked = state[k];
-  $('moonSpeed').value = state.daysRate;
-  $('moonLoop').checked = state.monthLoop;
-}
-function updateSolarControls() {
-  $('sunTimeline').hidden = false;
-  $('moonTimeline').hidden = true;
-  $('seasonButtons').hidden = false;
-  $('chartEyebrow').textContent = '全天变化';
-  $('chartLegend').textContent = '当前日期';
-  $('chartHint').textContent = '点击或拖动曲线切换时间，虚线表示地平线。';
-}
-function updateLunarControls() {
-  $('sunTimeline').hidden = true;
-  $('moonTimeline').hidden = false;
-  $('seasonButtons').hidden = true;
-  $('date').value = state.date;
-  $('moonMonth').value = state.date.slice(0, 7);
-  $('moonDay').max = monthDays(state.date);
-  $('moonDay').value = Number(state.date.slice(8));
-  $('moonDateText').textContent = state.date;
-  $('moonClock').value = state.time;
-  $('moonClockText').textContent = hhmm(state.time, true);
-  $('moonFixedClock').textContent = '固定 ' + hhmm(state.time, true) + ' · 当地真太阳时';
-  $('moonDayLabels').innerHTML = [1, 8, 15, 22, monthDays(state.date)]
-    .map((d) => '<span>' + d + ' 日</span>')
-    .join('');
-  $('bodyTitle').textContent = '月相实验室';
-  $('sceneSubtitle').textContent += ' · ' + hhmm(state.time, true) + ' 固定观测';
-  $('chartTitle').textContent = '可见月面照明比例';
-  $('chartEyebrow').textContent = '本月变化';
-  $('chartLegend').textContent = '固定观测时刻';
-  $('chartHint').textContent = '点击或拖动曲线选择日期。月相周期约 29.53 天，不等于一个公历月。';
-  $('chart').setAttribute('aria-label', '本月每天固定观测时刻的可见月面照明比例');
-  $('plotNote').textContent =
-    '月球轨迹覆盖所选日期的 00:00—24:00；月球沿轨道运动，一天后天空位置不同，两端通常不闭合，空隙不是漏画。月球相邻两次上中天的间隔平均约 24 小时 50 分钟，并非固定值。逐日播放比较相同时刻的位置；虚线在地平线下，升落按中心穿越几何地平线计算（未计折射）。';
-  $('moonDateNote').textContent =
-    '按天改变日期，保持观测时刻；可展开下方设置单独观察一天内的运动。';
-  if ($('moonObservation').open) {
-    const d = bodyDay();
-    for (const [id, t] of [
-      ['moonRise', d.rise],
-      ['moonPeak', d.peak],
-      ['moonSet', d.set],
-    ]) {
-      $(id).disabled = t === null;
-      $(id + 'Time').textContent = t === null ? '当日无' : hhmm(t, true);
-    }
-  }
-  $('moonPrevDay').disabled = state.date === '1900-01-01';
-  $('moonNextDay').disabled = state.date === '2100-12-31';
-  $('moonPrevMonth').disabled = state.date.slice(0, 7) === '1900-01';
-  $('moonNextMonth').disabled = state.date.slice(0, 7) === '2100-12';
-  $('moonPlay').textContent = state.playing ? 'Ⅱ 暂停' : '▶ 逐日播放';
 }
 const monthPhaseCache = new Map();
 function monthPhaseSamples() {
@@ -1994,7 +1574,8 @@ function drawLunarMonthChart() {
     );
     text(c, v + '%', left - 7, yy(v), '#8fa2b6', 10, 'right');
   }
-  for (const d of [1, 8, 15, 22, values.length]) text(c, d + '日', xx(d), h - 8, '#8fa2b6', 10);
+  for (const d of [1, 8, 15, 22, values.length])
+    text(c, d + '日', xx(d), h - 8, '#8fa2b6', 10);
   poly(
     c,
     values.map((v, i) => ({ x: xx(i + 1), y: yy(v) })),
@@ -2004,7 +1585,8 @@ function drawLunarMonthChart() {
   const day = visualChartDay(),
     index = Math.floor(day - 1),
     fraction = day - 1 - index,
-    value = values[index] + ((values[index + 1] ?? values[index]) - values[index]) * fraction,
+    value =
+      values[index] + ((values[index + 1] ?? values[index]) - values[index]) * fraction,
     x = xx(day);
   poly(
     c,
@@ -2035,7 +1617,8 @@ function drawLunarMonthChart() {
     clip: [left, top, right - left, bottom - top],
     project: (day, value) => ({ x: xx(day), y: yy(value) }),
     value: (date) =>
-      Astronomy.Illumination('Moon', instantUTC(state.time, date, state.lon)).phase_fraction * 100,
+      Astronomy.Illumination('Moon', instantUTC(state.time, date, state.lon))
+        .phase_fraction * 100,
   });
 }
 function shiftDay(delta) {
@@ -2053,85 +1636,13 @@ function advanceLunarPlayback() {
   else if (!shiftDay(1)) stop();
   $('date').value = state.date;
 }
-function selectMonth(v) {
-  if (
-    !/^\d{4}-\d{2}$/.test(v) ||
-    v < '1900-01' ||
-    v > '2100-12' ||
-    Number(v.slice(5)) < 1 ||
-    Number(v.slice(5)) > 12
-  )
-    return;
-  setDate(v + '-' + String(Math.min(Number(state.date.slice(8)), monthDays(v))).padStart(2, '0'));
-}
-$('moonMonth').onchange = (e) => {
-  selectMonth(e.target.value);
-  e.target.value = state.date.slice(0, 7);
-};
-for (const [id, delta] of [
-  ['moonPrevMonth', -1],
-  ['moonNextMonth', 1],
-])
-  $(id).onclick = () => {
-    const d = new Date(state.date.slice(0, 7) + '-01T12:00:00Z');
-    d.setUTCMonth(d.getUTCMonth() + delta);
-    selectMonth(d.toISOString().slice(0, 7));
-  };
-for (const [id, delta] of [
-  ['moonPrevDay', -1],
-  ['moonNextDay', 1],
-])
-  $(id).onclick = () => {
-    stop();
-    shiftDay(delta);
-    schedule();
-  };
-$('moonDay').oninput = (e) =>
-  setDate(state.date.slice(0, 7) + '-' + String(e.target.value).padStart(2, '0'));
-$('moonClock').oninput = (e) => {
-  stop();
-  state.time = +e.target.value;
-  schedule();
-};
-for (const [id, key] of [
-  ['moonRise', 'rise'],
-  ['moonPeak', 'peak'],
-  ['moonSet', 'set'],
-])
-  $(id).onclick = () => {
-    stop();
-    state.time = bodyDay()[key];
-    schedule();
-  };
-$('moonSpeed').onchange = (e) => (state.daysRate = +e.target.value);
-$('moonLoop').onchange = (e) => (state.monthLoop = e.target.checked);
-$('moonPlay').onclick = () => {
-  state.playing = !state.playing;
-  if (!state.playing) settleMotion();
-  motionLast = 0;
-  lunarAccumulator = 0;
-  lunarLast = 0;
-  schedule();
-};
-initCoverage();
-initMenu();
-initWorkspace();
-initCompanion();
-initAnalemma();
-initShadow();
-initObserver();
-initSundials();
-initSolarDate();
-initTimeWorkbench();
-initMotion();
-initPhaseInteraction();
-syncControls();
-new ResizeObserver(schedule).observe($('stage'));
-window.addEventListener('resize', schedule);
-render();
 
 function paintLabReferences(c, w, h, project, kind) {
-  if (document.body.dataset.page !== 'lab' && !document.body.hasAttribute('data-entry-view')) return;
+  if (
+    document.body.dataset.page !== 'lab' &&
+    !document.body.hasAttribute('data-entry-view')
+  )
+    return;
   const position = (time, date = state.date) =>
     kind === 'sun' && state.manual
       ? solar(state.lat, state.dec, time)
@@ -2147,7 +1658,11 @@ function paintLabReferences(c, w, h, project, kind) {
         state.manual,
         state.manual ? state.dec : 0,
       ]),
-      () => Array.from({ length: 289 }, (_, i) => ({ time: i * 5, position: position(i * 5) })),
+      () =>
+        Array.from({ length: 289 }, (_, i) => ({
+          time: i * 5,
+          position: position(i * 5),
+        })),
     );
     let best = null;
     for (const sample of samples) {

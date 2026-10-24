@@ -11,7 +11,14 @@
   const choice = (name, title, value, options) => ({ name, title, value, options });
   const date = () => field('date', '日期 YYYY-MM-DD|Date YYYY-MM-DD', 'date');
   const time = () =>
-    field('time', '当地真太阳时 HH:MM|Local apparent solar time HH:MM', 'time', 0, 1440, 1);
+    field(
+      'time',
+      '当地真太阳时 HH:MM|Local apparent solar time HH:MM',
+      'time',
+      0,
+      1440,
+      1,
+    );
   const lat = () => field('lat', '纬度 / °|Latitude / °', 'lat', -90, 90, 0.1);
   const lon = () => field('lon', '经度 / °|Longitude / °', 'lon', -180, 180, 0.1);
   const type = (id, title, fields) => ({ id, title, fields });
@@ -62,7 +69,9 @@
       ]),
     ],
     azimuth: [
-      type('direction', '方向线|Direction', [field('az', '方位角 / °|Azimuth / °', 90, 0, 360)]),
+      type('direction', '方向线|Direction', [
+        field('az', '方位角 / °|Azimuth / °', 90, 0, 360),
+      ]),
       type('ring', '方位参考圈|Bearing circle', [
         field('radius', '相对半径 / %|Relative radius / %', 70, 10, 120),
       ]),
@@ -135,7 +144,10 @@
       type('snapshot', '记录指定日期月相|Dated phase snapshot', [
         date(),
         time(),
-        choice('sight', '显示视线|Show sightline', 'yes', ['yes:显示|Show', 'no:隐藏|Hide']),
+        choice('sight', '显示视线|Show sightline', 'yes', [
+          'yes:显示|Show',
+          'no:隐藏|Hide',
+        ]),
       ]),
       type('phase', '指定相位标记|Phase position marker', [
         field('angle', '相位角 / °|Phase angle / °', 90, 0, 360),
@@ -149,7 +161,10 @@
       ]),
     ],
     companion: [
-      type('snapshot', '日期位置与角距离|Dated positions and separation', [date(), time()]),
+      type('snapshot', '日期位置与角距离|Dated positions and separation', [
+        date(),
+        time(),
+      ]),
       type('trail', '连续位置轨迹|Position trail', [
         date(),
         time(),
@@ -245,5 +260,99 @@
     space: '三维太阳系|3D Solar system',
     sky: '天空与时间对照|Sky and time comparisons',
   };
-  window.SkyDiagramDefinitions = Object.freeze({ definitions, common, titles });
+  function forModel(m) {
+    let d = definitions[m.type] || [];
+    if (m.type === 'sky' && m.body === 'moon')
+      d = d.filter((x) => ['curve', 'time', 'build'].includes(x.id));
+    if (m.type === 'altitude' && m.body === 'moon')
+      d = d.filter((x) => ['curve', 'time'].includes(x.id));
+    return [...d, ...common];
+  }
+  function normalize(objects, m, { validDate, nextId }) {
+    // A legacy or hand-edited save may exceed the current limit. Keep its
+    // oldest supported objects so one bad record cannot erase the whole plot.
+    const out = [];
+    const ids = new Set();
+    for (const raw of objects) {
+      if (out.length === 40) break;
+      if (!raw || typeof raw !== 'object') continue;
+      const def = forModel(m).find((d) => d.id === raw.type);
+      if (!def || typeof raw.id !== 'string') continue;
+      let id = raw.id.slice(0, 80);
+      if (!id || ids.has(id)) {
+        do id = nextId();
+        while (ids.has(id));
+      }
+      ids.add(id);
+      const o = {
+        id,
+        type: def.id,
+        label: typeof raw.label === 'string' ? raw.label.slice(0, 60) : def.title,
+        customLabel: raw.customLabel === true,
+        visible: raw.visible !== false,
+        locked: raw.locked === true,
+      };
+      if (!o.customLabel) {
+        const n = Number.isInteger(raw.copyNumber)
+          ? raw.copyNumber
+          : Number(o.label.match(/ (\d+)$/)?.[1]);
+        if (n >= 2 && n <= 999) o.copyNumber = n;
+        o.label = def.title
+          .split('|')
+          .map((x) => x + (o.copyNumber ? ' ' + o.copyNumber : ''))
+          .join('|');
+      }
+      if (
+        !o.customLabel &&
+        typeof raw.autoLabel === 'string' &&
+        raw.autoLabel.length <= 160
+      ) {
+        o.autoLabel = raw.autoLabel;
+        o.label = raw.autoLabel;
+      }
+      for (const f of def.fields) {
+        const v = raw[f.name];
+        if (f.options)
+          o[f.name] = f.options.some((x) => x.split(':')[0] === v) ? v : f.value;
+        else if (f.min !== undefined)
+          o[f.name] = Number.isFinite(v)
+            ? Math.max(f.min, Math.min(f.max, v))
+            : Number.isFinite(f.value)
+              ? f.value
+              : 0;
+        else if (f.value === 'date')
+          o[f.name] = validDate(v) ? v : validDate(m.date) ? m.date : '1900-01-01';
+        else o[f.name] = typeof v === 'string' ? v.slice(0, 100) : f.value;
+      }
+      if (
+        def.id === 'camera' &&
+        raw.camera &&
+        ['azimuth', 'elevation', 'distance'].every((k) => Number.isFinite(raw.camera[k]))
+      )
+        o.camera = {
+          azimuth: raw.camera.azimuth,
+          elevation: Math.max(-1.5, Math.min(1.5, raw.camera.elevation)),
+          distance: Math.max(0.5, Math.min(10000, raw.camera.distance)),
+          selected:
+            Number.isInteger(raw.camera.selected) &&
+            raw.camera.selected >= 0 &&
+            raw.camera.selected < 8
+              ? raw.camera.selected
+              : 2,
+          view: ['overview', 'earthmoon', 'focus'].includes(raw.camera.view)
+            ? raw.camera.view
+            : 'overview',
+          inspectingMoon: raw.camera.inspectingMoon === true,
+        };
+      out.push(o);
+    }
+    return out;
+  }
+  window.SkyDiagramDefinitions = Object.freeze({
+    definitions,
+    common,
+    titles,
+    forModel,
+    normalize,
+  });
 })();

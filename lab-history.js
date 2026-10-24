@@ -4,18 +4,7 @@
     const scientificState = (source) =>
       Object.fromEntries(
         Object.entries(source).filter(
-          ([key]) =>
-            ![
-              'yaw',
-              'pitch',
-              'zoom',
-              'globeCameraLat',
-              'globeCameraLon',
-              'globeCameraReady',
-              'analemmaYaw',
-              'analemmaPitch',
-              'analemmaZoom',
-            ].includes(key),
+          ([key]) => !SkyMotionSession.cameraFields.includes(key),
         ),
       );
     const adapter = {
@@ -48,13 +37,18 @@
           const backup = source?.solarDateLinkBackup;
           if (backup && typeof backup === 'object' && !Array.isArray(backup)) {
             const checked = SkyMotionSession.sanitizeMode(backup, defaults);
-            const fields = ['analemma', 'analemmaBasis', 'analemmaClock', 'analemmaIdeal'];
+            const fields = [
+              'analemma',
+              'analemmaBasis',
+              'analemmaClock',
+              'analemmaIdeal',
+            ];
             if (fields.every((key) => backup[key] === checked[key]))
               value.solarDateLinkBackup = Object.fromEntries(
                 fields.map((key) => [key, checked[key]]),
               );
           }
-          if (!value.manual) value.dec = dateDec(value.date);
+          if (!value.manual) value.dec = dateDec(value.date, value.lon);
           return value;
         };
         Object.assign(modeStates.sun, clean(snapshot.sun, modeStates.sun));
@@ -67,12 +61,15 @@
         }
         if (SkyMotionSession.inRange(snapshot.sundialLength, 0.06, 0.3))
           sundialLength = snapshot.sundialLength;
-        if (['plate', 'device'].includes(snapshot.sundialView)) sundialView = snapshot.sundialView;
+        if (['plate', 'device'].includes(snapshot.sundialView))
+          sundialView = snapshot.sundialView;
         if (['orbit', 'time'].includes(snapshot.sundialDragMode))
           sundialDragMode = snapshot.sundialDragMode;
         if (uiWorkspace) {
-          if (typeof snapshot.selected === 'string') uiWorkspace.selected = snapshot.selected;
-          if (typeof snapshot.moonPhase === 'boolean') uiWorkspace.moonPhase = snapshot.moonPhase;
+          if (typeof snapshot.selected === 'string')
+            uiWorkspace.selected = snapshot.selected;
+          if (typeof snapshot.moonPhase === 'boolean')
+            uiWorkspace.moonPhase = snapshot.moonPhase;
           uiWorkspace.pendingLunar = false;
           uiWorkspace.lunarSnapshot = snapshot.lunar || null;
           const lesson = uiWorkspace.lunarLesson;
@@ -81,10 +78,55 @@
         syncControls();
         settleMotion();
         render();
-        window.SolarSpaceLabCompare?.restore?.(snapshot.linked === true, snapshot.linkedSelection);
+        window.SolarSpaceLabCompare?.restore?.(
+          snapshot.linked === true,
+          snapshot.linkedSelection,
+        );
       },
     };
-    window.SkyLabExperiment = { snapshot: adapter.read, restore: adapter.restore };
+    window.SkyLabExperiment = {
+      snapshot: adapter.read,
+      restore: adapter.restore,
+      checkpoint() {
+        const before = JSON.parse(JSON.stringify(adapter.read()));
+        return () => adapter.restore(before);
+      },
+      captureComplete(body) {
+        if (body !== state.body) return null;
+        const references = window.SkyDiagramTools?.snapshotExperiment();
+        const conditions = JSON.parse(JSON.stringify(adapter.read()));
+        const ground = window.SkySceneBuilder?.snapshotExperiment();
+        return references && ground
+          ? { version: 1, body, conditions, references, ground }
+          : null;
+      },
+      prepareComplete(raw, body) {
+        const S = window.SkyMotionSession;
+        if (
+          !raw ||
+          raw.version !== 1 ||
+          raw.body !== body ||
+          body !== state.body ||
+          JSON.stringify(raw).length > 600000 ||
+          raw.conditions?.body !== body
+        )
+          return null;
+        for (const field of ['active', 'sun', 'moon']) {
+          const mode = raw.conditions[field];
+          if (
+            !mode ||
+            !S.validDate(mode.date) ||
+            !S.inRange(mode.lat, -90, 90) ||
+            !S.inRange(mode.lon, -180, 180) ||
+            !S.inRange(mode.time, 0, 1440)
+          )
+            return null;
+        }
+        const references = window.SkyDiagramTools?.prepareExperiment(raw.references);
+        const ground = window.SkySceneBuilder?.prepareExperiment(raw.ground);
+        return references && ground ? { ...raw, references, ground } : null;
+      },
+    };
     SkyMotionHistory.register(adapter);
   });
 })();

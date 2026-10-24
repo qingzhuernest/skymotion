@@ -63,7 +63,8 @@ const documents = ['docs', 'guide', 'project-guide', 'development-guide'];
       assert.equal(await page.locator('.page-nav a').filter({hasText:'学习指南'}).count(),0,route);
     }
     const source = JSON.parse(fs.readFileSync('docs/document-content.json','utf8'));
-    assert.equal(Object.keys(source.state_dictionary).length,56);
+    const defaults = JSON.parse(fs.readFileSync('lab-state.json','utf8')).defaults;
+    assert.deepEqual(Object.keys(source.state_dictionary).sort(),Object.keys({...defaults.sun,...defaults.moon}).sort());
     assert(source.documents.find(d=>d.page==='guide').sections.length>=18);
     assert(source.documents.find(d=>d.page==='project-guide').sections.length>=20);
     assert(source.documents.find(d=>d.page==='development-guide').sections.length>=20);

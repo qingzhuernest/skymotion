@@ -36,7 +36,10 @@ python3 -m http.server 8000
 
 文档中心与三份手册的双语原稿统一保存在 `docs/document-content.json`。先生成 HTML 和 Markdown，再生成英文页面与共享字典：
 
+页面和视图目录统一在 `site-catalog.json`，观测初值与校验规则统一在 `lab-state.json`。修改这些数据后先运行 `python3 scripts/site_sources.py`；生成区段由检查核对，不再手工维护多份目录或枚举。
+
 ```sh
+python3 scripts/site_sources.py
 python3 scripts/build-documents.py
 python3 scripts/prerender-pages.py --dist .
 python3 scripts/prerender-pages.py --check

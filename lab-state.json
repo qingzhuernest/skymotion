@@ -1,0 +1,218 @@
+{
+  "defaults": {
+    "sun": {
+      "body": "sun",
+      "lat": 39.9,
+      "lon": 116.4,
+      "dec": 23.44,
+      "time": 720,
+      "date": "2026-06-21",
+      "manual": false,
+      "view": "orbit",
+      "observerAz": 180,
+      "yaw": -0.55,
+      "pitch": 0.38,
+      "zoom": 1,
+      "playing": false,
+      "track": true,
+      "shadow": true,
+      "shadowZoom": 4,
+      "shadowTrace": false,
+      "sundialOffset": 8,
+      "solarDateMode": false,
+      "solarDateRate": 3,
+      "solarDateLoop": true,
+      "solarDateTrail": true,
+      "solarDateLink": true,
+      "solarDateLinkBackup": null,
+      "compare": false,
+      "angles": true,
+      "height": 1,
+      "speed": 60,
+      "loop": true,
+      "daysRate": 1,
+      "monthLoop": true,
+      "place": "39.9,116.4",
+      "earthView": "globe",
+      "globeDragMode": "view",
+      "observerTimeBasis": "solar",
+      "observerConstraint": "free",
+      "globeCameraLat": 39.9,
+      "globeCameraLon": 116.4,
+      "globeCameraReady": false,
+      "moonOverlay": false,
+      "analemma": false,
+      "analemmaClock": 720,
+      "analemmaBasis": "clock",
+      "analemmaOffset": 8,
+      "analemmaView": "dome",
+      "analemmaCompare": false,
+      "analemmaYaw": -0.55,
+      "analemmaPitch": 0.38,
+      "analemmaZoom": 1,
+      "analemmaIdeal": false,
+      "analemmaTilt": 23.44,
+      "analemmaEccentricity": 0.0167
+    },
+    "moon": {
+      "body": "moon",
+      "time": 1200,
+      "moonDayPlayback": false,
+      "companion": false,
+      "planet": "Venus",
+      "companionSearchResult": null
+    }
+  },
+  "ranges": {
+    "lat": [
+      -90,
+      90
+    ],
+    "lon": [
+      -180,
+      180
+    ],
+    "dec": [
+      -23.44,
+      23.44
+    ],
+    "time": [
+      0,
+      1440
+    ],
+    "observerAz": [
+      0,
+      360
+    ],
+    "yaw": [
+      -1000000,
+      1000000
+    ],
+    "pitch": [
+      0.05,
+      1.45
+    ],
+    "zoom": [
+      0.65,
+      1.35
+    ],
+    "height": [
+      0.1,
+      10
+    ],
+    "sundialOffset": [
+      -12,
+      14
+    ],
+    "globeCameraLat": [
+      -90,
+      90
+    ],
+    "globeCameraLon": [
+      -180,
+      180
+    ],
+    "analemmaClock": [
+      0,
+      1440
+    ],
+    "analemmaOffset": [
+      -12,
+      14
+    ],
+    "analemmaYaw": [
+      -1000000,
+      1000000
+    ],
+    "analemmaPitch": [
+      0.08,
+      1.45
+    ],
+    "analemmaZoom": [
+      0.65,
+      1.15
+    ],
+    "analemmaTilt": [
+      0,
+      45
+    ],
+    "analemmaEccentricity": [
+      0,
+      0.1
+    ]
+  },
+  "choices": {
+    "view": [
+      "orbit",
+      "top",
+      "horizon",
+      "observer"
+    ],
+    "earthView": [
+      "globe",
+      "map"
+    ],
+    "globeDragMode": [
+      "view",
+      "location"
+    ],
+    "observerTimeBasis": [
+      "solar",
+      "utc"
+    ],
+    "observerConstraint": [
+      "free",
+      "latitude",
+      "longitude"
+    ],
+    "analemmaBasis": [
+      "clock",
+      "apparent"
+    ],
+    "analemmaView": [
+      "dome",
+      "sky",
+      "equatorial"
+    ],
+    "planet": [
+      "Mercury",
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Saturn"
+    ],
+    "shadowZoom": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "speed": [
+      20,
+      60,
+      180
+    ],
+    "daysRate": [
+      0.5,
+      1,
+      3
+    ],
+    "solarDateRate": [
+      1,
+      3,
+      10
+    ]
+  },
+  "cameraFields": [
+    "yaw",
+    "pitch",
+    "zoom",
+    "globeCameraLat",
+    "globeCameraLon",
+    "globeCameraReady",
+    "analemmaYaw",
+    "analemmaPitch",
+    "analemmaZoom"
+  ]
+}

@@ -36,6 +36,8 @@
 
 下方变量表覆盖全部共享初始状态字段和各子系统的核心数据结构；公式解释计算局部变量的含义。源码索引列出文件职责和声明函数，供继续追到具体作用域。它不是把每个循环计数器都当成公共接口。
 
+页面路径、主导航、视图名称、分组和可用条件统一定义在site-catalog.json；lab-state.json统一定义状态初值、范围、枚举和相机字段。scripts/site_sources.py校验这些数据并生成启动脚本和状态模块的标记区段，禁止直接修改生成区段。
+
 ## 从输入到图形的数据流
 
 1. 原生输入或滑条先验证数值、提交到state，停止不适用的播放；自定义对象则写入对应source与body的对象存储。
@@ -51,22 +53,24 @@
 | 参考对象 | 对象身份、所属源、参数、显隐与锁定 | 未经明确操作就移动基准地点 |
 | 持久化 | 版本化序列化、验证与失败回退 | 把无效缓存直接赋给全部state |
 
+prepareObservationState负责每帧呈现前的模型联动和派生值更新。workbench-menu.js只组织与显示菜单；lab-controls.js集中处理输入和表单展示。对象字段的整理与校验由diagram-tool-definitions.js提供，编辑器调用该接口，避免保存与显示各自解释对象。
+
 ## 共享科学状态的完整变量表
 
 initialSun是太阳默认状态；initialMoon继承它并覆盖月球字段。modeStates.sun与modeStates.moon分别保留模式状态，state指向当前活动对象。切换天体应切换该引用，而不是把两种天体的播放设置混写。
 
-> 表中的默认日期是科学场景示例，不是发布说明。初值从app.js自动提取；添加新共享字段而未补充释义，会使文档生成检查失败。
+> 表中的默认日期是科学场景示例，不是发布说明。初值读取lab-state.json的统一状态定义；添加新共享字段而未补充释义，会使文档生成检查失败。
 
 | 变量 | 含义与作用 | 单位或取值 | 源码初值 |
 | --- | --- | --- | --- |
-| body | 当前天体模式，决定采用太阳还是月球状态与控件 | sun 或 moon | Sun: 'sun'; Moon: 'moon' |
+| body | 当前天体模式，决定采用太阳还是月球状态与控件 | sun 或 moon | Sun: "sun"; Moon: "moon" |
 | lat | 基准观察者纬度，北正南负 | 角度，−90至90 | Sun: 39.9 |
 | lon | 基准观察者经度，东正西负 | 角度，−180至180 | Sun: 116.4 |
 | dec | 太阳赤纬；真实日期模式重算，理想模式直接控制 | 角度，通常−23.44至23.44 | Sun: 23.44 |
 | time | 当前当地真太阳时，按午夜后分钟计 | 分钟，0至1440 | Sun: 720; Moon: 1200 |
-| date | 当前科学观测日期，不是发布日期 | 有效YYYY-MM-DD，1900—2100年 | Sun: '2026-06-21' |
+| date | 当前科学观测日期，不是发布日期 | 有效YYYY-MM-DD，1900—2100年 | Sun: "2026-06-21" |
 | manual | 是否直接使用理想太阳赤纬 | 布尔值 | Sun: false |
-| view | 天空画布的观察投影 | orbit、top、horizon、observer | Sun: 'orbit' |
+| view | 天空画布的观察投影 | orbit、top、horizon、observer | Sun: "orbit" |
 | observerAz | 仰望观察者面朝的方位 | 角度，北起顺时针 | Sun: 180 |
 | yaw | 天空相机水平转角，不是地理经度 | 弧度 | Sun: -0.55 |
 | pitch | 天空相机俯仰，不是地理纬度 | 弧度 | Sun: 0.38 |
@@ -90,20 +94,20 @@ initialSun是太阳默认状态；initialMoon继承它并覆盖月球字段。mo
 | loop | 日内播放是否循环 | 布尔值 | Sun: true |
 | daysRate | 月球按日期播放的速度 | 模拟日/真实秒 | Sun: 1 |
 | monthLoop | 月球日期播放是否在其月范围内循环 | 布尔值 | Sun: true |
-| place | 城市预设的坐标值或custom | 字符串，必须与经纬度一致 | Sun: '39.9,116.4' |
-| earthView | 地球采用球面还是平面地图 | globe 或 map | Sun: 'globe' |
-| globeDragMode | 拖动地球只转视角还是移动地点 | view 或 location | Sun: 'view' |
-| observerTimeBasis | 异地对照固定真太阳时还是同一UTC瞬间 | solar 或 utc | Sun: 'solar' |
-| observerConstraint | 移动观察地点的坐标约束 | free、latitude、longitude | Sun: 'free' |
+| place | 城市预设的坐标值或custom | 字符串，必须与经纬度一致 | Sun: "39.9,116.4" |
+| earthView | 地球采用球面还是平面地图 | globe 或 map | Sun: "globe" |
+| globeDragMode | 拖动地球只转视角还是移动地点 | view 或 location | Sun: "view" |
+| observerTimeBasis | 异地对照固定真太阳时还是同一UTC瞬间 | solar 或 utc | Sun: "solar" |
+| observerConstraint | 移动观察地点的坐标约束 | free、latitude、longitude | Sun: "free" |
 | globeCameraLat | 地球相机对准位置的纬度 | 角度；相机量 | Sun: 39.9 |
 | globeCameraLon | 地球相机对准位置的经度 | 角度；相机量 | Sun: 116.4 |
 | globeCameraReady | 地球相机是否已初始化 | 布尔值 | Sun: false |
 | moonOverlay | 太阳视图是否叠加月球轨迹 | 布尔值 | Sun: false |
 | analemma | 当前渲染是否需要日行迹年度样本 | 布尔值 | Sun: false |
 | analemmaClock | 全年每一天的固定采样时刻，独立于time | 午夜后分钟 | Sun: 720 |
-| analemmaBasis | 年度采样采用固定钟表时或真太阳时 | clock 或 apparent | Sun: 'clock' |
+| analemmaBasis | 年度采样采用固定钟表时或真太阳时 | clock 或 apparent | Sun: "clock" |
 | analemmaOffset | 年度钟表时采样使用的固定UTC偏移 | 小时，−12至14 | Sun: 8 |
-| analemmaView | 日行迹的投影类型 | dome、sky、equatorial | Sun: 'dome' |
+| analemmaView | 日行迹的投影类型 | dome、sky、equatorial | Sun: "dome" |
 | analemmaCompare | 是否叠加多个固定采样时刻 | 布尔值 | Sun: false |
 | analemmaYaw | 日行迹三维相机水平转角 | 弧度 | Sun: -0.55 |
 | analemmaPitch | 日行迹三维相机俯仰 | 弧度 | Sun: 0.38 |
@@ -113,7 +117,7 @@ initialSun是太阳默认状态；initialMoon继承它并覆盖月球字段。mo
 | analemmaEccentricity | 理想成因模型的轨道偏心率 | 无量纲，0至0.1 | Sun: 0.0167 |
 | moonDayPlayback | 月球是否在当前日期内播放时刻 | 布尔值 | Moon: false |
 | companion | 是否计算或显示行星伴月 | 布尔值 | Moon: false |
-| planet | 伴月对照的行星标识 | Mercury、Venus、Mars、Jupiter、Saturn | Moon: 'Venus' |
+| planet | 伴月对照的行星标识 | Mercury、Venus、Mars、Jupiter、Saturn | Moon: "Venus" |
 | companionSearchResult | 伴月搜索结果及其条件范围 | 对象或null；含日期、地点、时刻、角距离 | Moon: null |
 
 ## 单位、角度与空值约定
@@ -340,6 +344,8 @@ sanitize验证物体类型、有限数值、约束和测量引用。参考场景
 4. 完整实验恢复暂停播放；独立对象存档和独立场景存档不被收藏恢复当作永久覆盖目标。
 5. 存储拒绝、配额不足或旧版本异常时报告真实保存范围，内存回退不得伪称跨刷新持久化。
 
+完整实验先由SkyLabExperiment.prepareComplete校验，再交给SkyMotionSession.transaction协调。每个参与模块先创建私有检查点，随后逐项提交；异常或明确拒绝会按相反顺序回滚，并保留原对象的撤销记录。布局、观测、参考对象和地面场景各自负责还原自己的状态，历史收尾位于finally中。
+
 ## 历史、手势与异步任务
 
 interaction-history.js使用适配器读取科学状态、表单字段与路由。指针、原生滑条和输入提交采用分组；相机和菜单动作被排除或由各自编辑器管理。restoreGeneration避免旧异步恢复覆盖新动作，restoring锁必须在finally路径释放。
@@ -367,7 +373,7 @@ ui-palette.css拥有语义色变量；其他UI样式消费design-primary、desig
 
 ## 文档与语言生成管线
 
-docs/document-content.json是四个文档页面的双语内容源；scripts/build-documents.py输出中文HTML、中英文Markdown及对应翻译条目。共享状态初值从app.js提取，与state_dictionary逐项核对。此生成过程只用于维护，线上不依赖Python。
+docs/document-content.json是四个文档页面的双语内容源；scripts/build-documents.py输出中文HTML、中英文Markdown及对应翻译条目。共享状态初值读取lab-state.json，与state_dictionary逐项核对。此生成过程只用于维护，线上不依赖Python。
 
 scripts/prerender-pages.py再输出英文兄弟HTML、language-data.js与page-cache-manifest.json。它比较结构、ID、表单值与脚本顺序，文字翻译不允许改变科学值。新增文档时同时维护主菜单、缓存清单和双语配对检查。
 
@@ -379,6 +385,8 @@ python3 scripts/prerender-pages.py --check
 ```
 
 正文不记录零散发布日记；功能使用、教学任务和变量说明各归其位。Markdown与网页由同一内容源生成，避免网页改了、下载文件仍旧的分叉。
+
+文档输入由scripts/document_model.py先验证路径、章节与别名唯一性、双语文本、内容类型、表格列数、链接目标和状态说明覆盖率。scripts/build-documents.py只负责渲染与输出，页面外壳在scripts/document-page.html；变量表读取lab-state.json，不再靠正则猜测JavaScript源码的缩进。
 
 ## 本地开发、验证与提交
 
@@ -432,18 +440,18 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 
 | 源码文件 | 职责 | 声明的函数 |
 | --- | --- | --- |
-| [app.js](https://github.com/qingzhuernest/skymotion/blob/main/app.js) | 共享状态、理想太阳几何、基础Canvas绘图与事件 | solar, daylight, hhmm, coord, heading, dateDec, selectedPlaceName, resize, poly, text, glow, skyTrackSegments, between, add, drawMoonDayEndpoints, drawSkyScene, drawTrack, drawSunAltitudeChart, line, createEarthGPU, shader, drawEarthGPU, globeCenter, globeGeometry, renderGlobeOptions, initGlobeOptions, labels, initEarthFallback, earthSurface, drawGlobe, proj, updateUI, drawSolarSky, drawLunarSky, renderSolarPipeline, renderLunarPipeline, render, schedule, setDate, stop, globeLocationAt, globeObserverPoint, selectChartDateOrTime, monthDays, syncControls, updateSolarControls, updateLunarControls, monthPhaseSamples, drawLunarMonthChart, shiftDay, advanceLunarPlayback, selectMonth, paintLabReferences |
+| [app.js](https://github.com/qingzhuernest/skymotion/blob/main/app.js) | 共享状态、太阳几何、Canvas绘图与呈现前状态准备 | solar, daylight, hhmm, coord, heading, dateDec, selectedPlaceName, resize, poly, text, glow, skyTrackSegments, between, add, drawMoonDayEndpoints, drawSkyScene, drawTrack, drawSunAltitudeChart, line, createEarthGPU, shader, drawEarthGPU, globeCenter, globeGeometry, renderGlobeOptions, initGlobeOptions, labels, initEarthFallback, earthSurface, drawGlobe, proj, updateUI, drawSolarSky, drawLunarSky, renderSolarPipeline, renderLunarPipeline, prepareObservationState, render, schedule, monthPhaseSamples, drawLunarMonthChart, shiftDay, advanceLunarPlayback, paintLabReferences |
 | [moon.js](https://github.com/qingzhuernest/skymotion/blob/main/moon.js) | 真实日期星历、真太阳时与UTC换算、升落采样 | sunEquatorial, sunHourAngle, solarNoonUTC, instantUTC, skyRaw, moonRaw, refineExtremum, ephemerisDay, lunarDay, bodyPosition, bodyDay, sunContext, lunarPhase, seasonDate, lunarFaceTexture, drawMoon, drawPhasePanel, halfLit, initPhaseInteraction, pointerAngle, applyDrag, finish |
 | [astronomy.js](https://github.com/qingzhuernest/skymotion/blob/main/astronomy.js) | 随站分发的Astronomy Engine第三方计算库 | mb |
 | [coverage.js](https://github.com/qingzhuernest/skymotion/blob/main/coverage.js) | 地球昼夜、地图、升落方位和地轴图 | yearLength, yearDay, dateAtYearDay, updateYearSlider, illuminationAt, mapGeometry, mapLocation, worldNightLatitude, worldNightPath, drawWorldMap, updateEarthView, eventPosition, eventModel, updateEvents, drawEventCompass, eventBearingCandidates, eventBearingDate, initEventCompassInteraction, restore, adjust, finish, cancel, geometryModel, resetGeometryCamera, initGeometryCamera, redraw, drawEarthGeometry, ring, renderSolarCoverage, renderLunarCoverage, useReferenceObserver, observerClockAt, chooseMapObserver, initCoverage |
 | [workspace.js](https://github.com/qingzhuernest/skymotion/blob/main/workspace.js) | 太阳/月球视图与原始模块的显隐协调 | isMoonOverlayActive, moonOverlayPosition, initWorkspace, updateWorkspaceLayout, updateWorkspaceUI |
 | [page-navigation.js](https://github.com/qingzhuernest/skymotion/blob/main/page-navigation.js) | 统一页面骨架、路由、画布挂载与参数抽屉 | uiViewHidden, uiViewText, uiViewAttribute, renderUIWorkspace, save, link, addPlace, selectDial, sundialGroup, animateDrawer, finishDrawerClose, closeParameters, openParameters, endDrawerSwipe, updateParameterPresentation |
-| [workbench-menu.js](https://github.com/qingzhuernest/skymotion/blob/main/workbench-menu.js) | 分层视图目录、布局入口与年度采样联动 | select, sync |
-| [custom-layout.js](https://github.com/qingzhuernest/skymotion/blob/main/custom-layout.js) | 多图排列、拖放、比例、收藏和完整实验协调 | sanitize, load, loadProfiles, button, travel, section, captureExperiment, prepareExperiment, applyProfile, persistProfiles, mutateProfiles, undoProfiles, markActive, activate, save, announce, change, move, labelButtons, labels, renderOrder, focusProfile, finishEditing, renderProfiles, apply, closeOptions, toggleOptions, start, cancel, targetAt, ratioAt |
+| [workbench-menu.js](https://github.com/qingzhuernest/skymotion/blob/main/workbench-menu.js) | 读取统一目录，呈现分层视图与布局入口 | select, sync |
+| [custom-layout.js](https://github.com/qingzhuernest/skymotion/blob/main/custom-layout.js) | 多图排列、拖放、比例、收藏和完整实验协调 | sanitize, load, loadProfiles, button, travel, section, captureExperiment, applyProfile, persistProfiles, mutateProfiles, undoProfiles, markActive, activate, save, announce, change, move, labelButtons, labels, renderOrder, focusProfile, finishEditing, renderProfiles, apply, closeOptions, toggleOptions, start, cancel, targetAt, ratioAt |
 | [customization-mode.js](https://github.com/qingzhuernest/skymotion/blob/main/customization-mode.js) | 顶部自定义开关的共用生命周期 | refresh, change |
 | [customization-session.js](https://github.com/qingzhuernest/skymotion/blob/main/customization-session.js) | 一次性编辑意图与跨入口会话延续 | 模块内部方法，参见源码 |
-| [diagram-tools.js](https://github.com/qingzhuernest/skymotion/blob/main/diagram-tools.js) | 对象存储、属性、放置、选择、导入与验证 | updateFold, updateMode, setEditing, selectedOwner, selectedKey, entries, switchView, revealField, revealWithin, placementUI, contextualHelp, arm, placeAt, menuOpen, closeObjectMenu, reorder, updateFiles, readImport, cityLabel, makeObject, startExperiment, persist, stateFor, clean, defs, repaint, draftStatus, record, restoreBasis, updateLocation, actionState, validInputs, fieldError, clearFieldError, updateSmall, mutate, travel, commitActive, save, create, showInspector, rememberContext, hide, open, parameterRail, persistentRailMode, visibleModels, chooseRail, ensureRailNavigation, syncRailNavigation, syncRailShell, unmountPanel, placePanel, renderToolLibrary, renderObjectList, referenceNameAtLocation, attachReferenceControl, commitReferenceField, renderInspector, update, selectedRow, focusSelectedRow, selectReference, textLayout, helper, drawObject, anchor, movementOrigin, hitAnchor, pointAt, beginDrag, moveDrag, finishDrag, cancelDrag, wireCanvas, paint, customizationOn, syncLaunchers, checkCurrentVisibility, syncVisibility, comparisonModel, comparisonList, comparisonChange, comparisonValid, syncInputs, finishNudge, nudge |
-| [diagram-tool-definitions.js](https://github.com/qingzhuernest/skymotion/blob/main/diagram-tool-definitions.js) | 各图工具类型、字段和双语名称 | 模块内部方法，参见源码 |
+| [diagram-tools.js](https://github.com/qingzhuernest/skymotion/blob/main/diagram-tools.js) | 对象存储、属性、放置、选择、导入与验证 | updateFold, updateMode, setEditing, selectedOwner, selectedKey, entries, switchView, revealField, revealWithin, placementUI, contextualHelp, arm, placeAt, menuOpen, closeObjectMenu, reorder, updateFiles, readImport, cityLabel, makeObject, startExperiment, persist, stateFor, defs, clean, repaint, draftStatus, record, restoreBasis, updateLocation, actionState, validInputs, fieldError, clearFieldError, updateSmall, mutate, travel, commitActive, save, create, showInspector, rememberContext, hide, open, parameterRail, persistentRailMode, visibleModels, chooseRail, ensureRailNavigation, syncRailNavigation, syncRailShell, unmountPanel, placePanel, renderToolLibrary, renderObjectList, referenceNameAtLocation, attachReferenceControl, commitReferenceField, renderInspector, update, selectedRow, focusSelectedRow, selectReference, textLayout, helper, drawObject, anchor, movementOrigin, hitAnchor, pointAt, beginDrag, moveDrag, finishDrag, cancelDrag, wireCanvas, paint, customizationOn, syncLaunchers, checkCurrentVisibility, syncVisibility, comparisonModel, comparisonList, comparisonChange, comparisonValid, syncInputs, finishNudge, nudge |
+| [diagram-tool-definitions.js](https://github.com/qingzhuernest/skymotion/blob/main/diagram-tool-definitions.js) | 对象类型、字段与纯数据校验，不绑定DOM | forModel, normalize |
 | [diagram-sampling.js](https://github.com/qingzhuernest/skymotion/blob/main/diagram-sampling.js) | 有界缓存、几何过零和年度参考采样 | crossings |
 | [observer-comparison.js](https://github.com/qingzhuernest/skymotion/blob/main/observer-comparison.js) | 同源城市/时刻的跨图投影和选中突出 | memo, at, basis, sample, color, name, enabled, sites, times, points, events, stroke, dot, label, geometryRay, paint |
 | [parameter-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/parameter-controls.js) | 坐标、时间与日期的滑条和精确输入 | attach, sync, start, flush, finish, cancel |
@@ -459,15 +467,15 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [motion.js](https://github.com/qingzhuernest/skymotion/blob/main/motion.js) | 按需帧调度、播放累计与相机平滑 | elementVisible, canPaint, requestMotionFrame, snapshotMotion, syncMotionTarget, motionProgress, mixDirection, visualPosition, visualPhase, visualTrackPosition, visualChartDay, motionCamera, easeCompanionView, settleMotion, revealMotion, drawMotionCanvases, motionFrame, initMotion, focusAfterReveal |
 | [menu.js](https://github.com/qingzhuernest/skymotion/blob/main/menu.js) | 原参数菜单分组与折叠行为 | updateMenu, closeMenu, initMenu |
 | [time-workbench.js](https://github.com/qingzhuernest/skymotion/blob/main/time-workbench.js) | 公共时间条、日期条与播放控制 | workbenchBasis, workbenchTimeMax, workbenchSetTime, workbenchShiftDate, workbenchSetBasis, workbenchPlay, workbenchIsPlaying, renderTimeWorkbench, initTimeWorkbench |
-| [experiment-storage.js](https://github.com/qingzhuernest/skymotion/blob/main/experiment-storage.js) | 会话字段验证、版本与内存回退 | validDate, searchResult, sanitizeMode, read, write |
+| [experiment-storage.js](https://github.com/qingzhuernest/skymotion/blob/main/experiment-storage.js) | 版本化会话校验、存储回退与恢复事务协调 | validDate, searchResult, sanitizeMode, read, write, transaction |
 | [interaction-history.js](https://github.com/qingzhuernest/skymotion/blob/main/interaction-history.js) | 浏览器参数历史、手势分组与恢复锁 | read, stateFor, replace, commit, begin, queue, restore |
-| [lab-history.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-history.js) | 实验状态快照、恢复和完整实验状态接口 | 模块内部方法，参见源码 |
+| [lab-history.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-history.js) | 观测快照、历史适配与完整实验数据协调 | 模块内部方法，参见源码 |
 | [lab-customization.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-customization.js) | 兼容的实验台自定义接入 | 模块内部方法，参见源码 |
 | [lab-comparison-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-comparison-controls.js) | 原实验台对照控制适配 | 模块内部方法，参见源码 |
 | [interface-motion.js](https://github.com/qingzhuernest/skymotion/blob/main/interface-motion.js) | 折叠与选中反馈，尊重减少动态设置 | springFrames, springPanel, installDisclosures, revealOptions, installSegments, update, installRail, sync, setCollapsed, gesture, end |
 | [language.js](https://github.com/qingzhuernest/skymotion/blob/main/language.js) | 语言切换、字体加载、静态兄弟页与失败重试 | installDictionary, translate, text, element, walk, apply, prepareFonts, showLanguageFailure, change, reveal, observePresentation, init, failure |
 | [language-data.js](https://github.com/qingzhuernest/skymotion/blob/main/language-data.js) | 由生成器输出的双语词典 | 模块内部方法，参见源码 |
-| [page-boot.js](https://github.com/qingzhuernest/skymotion/blob/main/page-boot.js) | 可见绘制前的语言与入口初始化 | readingKey, saveReadingWindow, mergeReadingFallback, localeUrl, showFontFailure |
+| [page-boot.js](https://github.com/qingzhuernest/skymotion/blob/main/page-boot.js) | 可见绘制前的语言与入口初始化 | freezeCatalog, readingKey, saveReadingWindow, mergeReadingFallback, localeUrl, showFontFailure |
 | [page-cache.js](https://github.com/qingzhuernest/skymotion/blob/main/page-cache.js) | 按资源清单预热同站资源 | worker |
 | [date-picker.js](https://github.com/qingzhuernest/skymotion/blob/main/date-picker.js) | 原生风格日期弹层与确认取消 | dateValue, allowed, updateDraft, focusKey, close, render, open, install |
 | [observer-explanation.js](https://github.com/qingzhuernest/skymotion/blob/main/observer-explanation.js) | 按当前图提供科学解释与说明 | close, sync |
@@ -491,3 +499,4 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [space/population.js](https://github.com/qingzhuernest/skymotion/blob/main/space/population.js) | 卫星和小天体数据与近似轨道 | solveKepler, epochDays, prepare, convert, position, displaySatellite, satelliteDistance, create, load, setPositions |
 | [space/stars.js](https://github.com/qingzhuernest/skymotion/blob/main/space/stars.js) | 恒星目录、选取与标注 | temperature, color, direction, create |
 | [space/nebulae.js](https://github.com/qingzhuernest/skymotion/blob/main/space/nebulae.js) | 星云目录、影像显示与资源管理 | create, choose, load |
+| [lab-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-controls.js) | 观测输入事件、地点日期与表单展示 | setDate, stop, globeLocationAt, globeObserverPoint, selectChartDateOrTime, monthDays, syncControls, updateSolarControls, updateLunarControls, selectMonth |

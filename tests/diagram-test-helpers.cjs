@@ -12,7 +12,10 @@ exports.selectDiagram = async (page, id) => {
     });
     await entry.click();
     await page.evaluate(
-      () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+      () =>
+        new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve)),
+        ),
     );
     if (await page.locator('#uiParameterDrawer').evaluate((node) => node.open))
       await page.locator('#uiDrawerClose').click();
@@ -23,7 +26,10 @@ exports.openWorkbench = async (page) => {
   if (await page.evaluate(() => window.SkyCustomization?.active === false))
     await page.locator('.layout-launch').click();
   await page.evaluate(
-    () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+    () =>
+      new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve)),
+      ),
   );
   const references = page.locator('[data-rail-section="references"]');
   if (await page.locator('#workbenchViews').count()) {
@@ -43,7 +49,9 @@ exports.addTool = async (page, type) => {
   await exports.openWorkbench(page);
   const fold = page.locator('.dt-collapse');
   if ((await fold.getAttribute('aria-expanded')) === 'false') await fold.click();
-  if ((await page.locator('[data-dt-view=library]').getAttribute('aria-current')) !== 'page')
+  if (
+    (await page.locator('[data-dt-view=library]').getAttribute('aria-current')) !== 'page'
+  )
     await page.locator('[data-dt-view=library]').click();
   await page.locator('.dt-advanced').evaluate((node) => (node.open = true));
   if (type === 'build') await page.locator('[data-build-kind=rod]').click();
@@ -90,7 +98,8 @@ exports.objectAction = async (page, name) => {
   }
   await page
     .getByRole('menuitem', {
-      name: name === '保存' ? '保存本图对象' : name === 'Save' ? 'Save plot objects' : name,
+      name:
+        name === '保存' ? '保存本图对象' : name === 'Save' ? 'Save plot objects' : name,
       exact: true,
     })
     .click();
@@ -113,7 +122,9 @@ exports.builderAction = async (page, kind) => {
 
 /* Secondary layout actions live in the existing Layout & saved views panel. */
 exports.layoutAction = async (page, word) => {
-  const drawerWasOpen = await page.locator('#uiParameterDrawer').evaluate((node) => node.open);
+  const drawerWasOpen = await page
+    .locator('#uiParameterDrawer')
+    .evaluate((node) => node.open);
   const trigger = page.locator('[data-word="options"]');
   const wasOpen = (await trigger.getAttribute('aria-expanded')) === 'true';
   if (!wasOpen) await trigger.click();
@@ -123,7 +134,10 @@ exports.layoutAction = async (page, word) => {
       : page.locator(`#workspaceOptions [data-word="${word}"]`);
   await target.click();
   if (!wasOpen) await page.keyboard.press('Escape');
-  if (!drawerWasOpen && (await page.locator('#uiParameterDrawer').evaluate((node) => node.open))) {
+  if (
+    !drawerWasOpen &&
+    (await page.locator('#uiParameterDrawer').evaluate((node) => node.open))
+  ) {
     await page.locator('#uiDrawerClose').click();
     await page.waitForFunction(() => !document.getElementById('uiParameterDrawer').open);
   }
@@ -132,9 +146,12 @@ exports.layoutAction = async (page, word) => {
 exports.openLibrary = async (page) => {
   if (!(await page.locator('[data-dt-view=library]').isVisible()))
     await exports.openWorkbench(page);
-  await page.locator('[data-dt-view=library]').click();
+  const library = page.locator('[data-dt-view=library]');
+  if ((await library.getAttribute('aria-current')) !== 'page') await library.click();
+  await page.locator('.dt-library').waitFor({ state: 'visible' });
   const tools = page.locator('.dt-advanced');
-  if (!(await tools.evaluate((node) => node.open))) await tools.locator('summary').click();
+  if (!(await tools.evaluate((node) => node.open)))
+    await tools.locator('summary').click();
   // The native disclosure can animate before its children become visible.
   // Wait for the tools a user can actually see, rather than only its open attribute.
   await tools.locator('[data-tool-type]').first().waitFor({ state: 'visible' });
@@ -156,7 +173,9 @@ exports.toggleCustomization = async (page) => {
 
 exports.openDrawer = async (page) => {
   await page.locator('#uiParameterDrawer').evaluate(async (node) => {
-    await Promise.all(node.getAnimations().map((animation) => animation.finished.catch(() => {})));
+    await Promise.all(
+      node.getAnimations().map((animation) => animation.finished.catch(() => {})),
+    );
   });
   if (!(await page.locator('#uiParameterDrawer').evaluate((node) => node.open)))
     await page.locator('#uiParametersButton').click();

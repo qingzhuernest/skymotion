@@ -15,7 +15,10 @@ function uiViewAttribute(node, name, value) {
 }
 function renderUIWorkspace() {
   if ($('uiPlaceText'))
-    uiViewText($('uiPlaceText'), coord(state.lat, 'lat') + ' · ' + coord(state.lon, 'lon'));
+    uiViewText(
+      $('uiPlaceText'),
+      coord(state.lat, 'lat') + ' · ' + coord(state.lon, 'lon'),
+    );
   if (!uiWorkspace) return;
   const u = uiWorkspace,
     moon = state.body === 'moon',
@@ -25,35 +28,10 @@ function renderUIWorkspace() {
       u.pendingLunar = false;
       u.lunarRequested = false;
     }
-    const allowed = moon
-      ? [
-          'skyPanel',
-          'contextPanel',
-          'chartPanel',
-          'riseSetPanel',
-          'companionModule',
-          'lunarOrbit',
-          'solarCompare',
-          'sceneBuilder',
-        ]
-      : [
-          'skyPanel',
-          'contextPanel',
-          'chartPanel',
-          'riseSetPanel',
-          'solarGeometryPanel',
-          'solarStudy',
-          'analemmaPanel',
-          'solarCompare',
-          'sceneBuilder',
-        ];
-    if (window.SkyCustomization?.active === false) {
-      if (['sceneBuilder', 'solarStudy'].includes(u.selected)) u.selected = 'contextPanel';
-      for (const id of ['sceneBuilder', 'solarStudy']) {
-        const i = allowed.indexOf(id);
-        if (i >= 0) allowed.splice(i, 1);
-      }
-    }
+    const allowed = window.SkySiteCatalog.availableViews(
+      state.body,
+      window.SkyCustomization?.active !== false,
+    ).map((view) => view.id);
     if (!allowed.includes(u.selected)) {
       u.selected = 'contextPanel';
       if (window.SkyMotionHistory && !SkyMotionHistory.restoring)
@@ -63,36 +41,29 @@ function renderUIWorkspace() {
     // Keep the current diagram and its rail until the prepared lesson can replace both.
     if (u.selected === 'lunarOrbit' && !u.lunarReady) {
       u.pendingLunar = !u.lunarError;
-      u.selected = allowed.includes(u.lastVisibleDiagram) ? u.lastVisibleDiagram : 'contextPanel';
+      u.selected = allowed.includes(u.lastVisibleDiagram)
+        ? u.lastVisibleDiagram
+        : 'contextPanel';
     }
     u.lastVisibleDiagram = u.selected;
     u.tabs.querySelectorAll('button').forEach((b) => {
-      uiViewText(
-        b,
-        {
-          skyPanel: moon ? '月球天空' : '天空与日影',
-          analemmaPanel: '日行迹',
-          contextPanel: moon ? '月相与关系' : '直射点与昼夜',
-          chartPanel: moon ? '逐日照明比例' : '全天高度曲线',
-          riseSetPanel: moon ? '月出月落' : '日出日落',
-          solarGeometryPanel: '地轴与地平面',
-          companionModule: '行星伴月',
-          lunarOrbit: '地升地落',
-          solarCompare: '四图对照',
-          solarStudy: '地点与时间',
-          sceneBuilder: '搭建实验',
-        }[b.dataset.routeDiagram],
-      );
+      const labels = window.SkySiteCatalog.label(b.dataset.routeDiagram, state.body);
+      uiViewText(b, labels?.[document.documentElement.lang === 'en' ? 1 : 0] || '');
       uiViewHidden(b, !allowed.includes(b.dataset.routeDiagram));
       uiViewAttribute(b, 'aria-selected', String(b.dataset.routeDiagram === u.selected));
-      uiViewAttribute(b, 'tabindex', String(b.dataset.routeDiagram === u.selected ? 0 : -1));
+      uiViewAttribute(
+        b,
+        'tabindex',
+        String(b.dataset.routeDiagram === u.selected ? 0 : -1),
+      );
       if (b.dataset.routeDiagram === 'lunarOrbit')
         uiViewAttribute(b, 'aria-busy', String(!!u.pendingLunar));
     });
     if (u.lastRevealedTab !== u.selected) {
       const activeTab = u.tabs.querySelector('[aria-selected="true"]');
       if (activeTab)
-        u.tabs.scrollLeft = activeTab.offsetLeft - (u.tabs.clientWidth - activeTab.offsetWidth) / 2;
+        u.tabs.scrollLeft =
+          activeTab.offsetLeft - (u.tabs.clientWidth - activeTab.offsetWidth) / 2;
       u.lastRevealedTab = u.selected;
     }
     if (window.skyWorkspacePresentation) window.skyWorkspacePresentation.sync();
@@ -130,24 +101,23 @@ function renderUIWorkspace() {
       ['contextPanel', $('phaseContent')],
       ['solarGeometryPanel', $('companionSky')],
     ]) {
-      const target = moon && comparing ? u.cards[id].querySelector('.ui-diagram-surface') : u.plot;
+      const target =
+        moon && comparing ? u.cards[id].querySelector('.ui-diagram-surface') : u.plot;
       if (node.parentElement !== target) target.append(node);
     }
-    if (moon && comparing) state.companion = true;
-    const comparisonInfo = document.querySelector('.ui-diagram-details[data-for="solarCompare"]');
+    const comparisonInfo = document.querySelector(
+      '.ui-diagram-details[data-for="solarCompare"]',
+    );
     if (comparisonInfo)
       for (const child of comparisonInfo.children)
-        if (!child.classList.contains('workspace-note') && child.id !== 'uiCompareSettings')
+        if (
+          !child.classList.contains('workspace-note') &&
+          child.id !== 'uiCompareSettings'
+        )
           uiViewHidden(child, moon);
     for (const [id, card] of Object.entries(u.cards)) {
-      const text = {
-        skyPanel: moon ? '月球天空' : '天空与日影',
-        analemmaPanel: '日行迹',
-        contextPanel: moon ? '月相与关系' : '直射点与昼夜',
-        chartPanel: moon ? '逐日照明比例' : '全天太阳高度',
-        riseSetPanel: moon ? '月出月落方位' : '日出日落方位',
-        solarGeometryPanel: moon ? '行星伴月' : '地轴与地平面',
-      }[id];
+      const labels = window.SkySiteCatalog.label(id, state.body);
+      const text = labels?.[document.documentElement.lang === 'en' ? 1 : 0] || '';
       uiViewText(card.querySelector('h2'), text);
     }
     for (const [id, card] of Object.entries(u.cards)) {
@@ -155,7 +125,8 @@ function renderUIWorkspace() {
         (comparing &&
           (!window.skyWorkspacePresentation?.active ||
             window.skyWorkspacePresentation.visibleIds.has(id))) ||
-        (id === u.selected && (!moon || ['skyPanel', 'chartPanel', 'riseSetPanel'].includes(id)));
+        (id === u.selected &&
+          (!moon || ['skyPanel', 'chartPanel', 'riseSetPanel'].includes(id)));
       uiViewHidden(card, !visible);
       if (visible)
         visibleNodes.add(
@@ -218,15 +189,20 @@ function renderUIWorkspace() {
       .pop()
       .replace(/(?:\.en)?\.html$/, '')
       .replace(/\.en$/, '');
-    if (target === (page === 'diagrams' ? 'lab' : page)) a.setAttribute('aria-current', 'page');
+    if (target === (page === 'diagrams' ? 'lab' : page))
+      a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
   }
   document.body.insertBefore(document.querySelector('.page-nav'), $('labShell'));
   const saved = SkyMotionSession.read();
   if (saved) {
     for (const body of ['sun', 'moon']) {
-      Object.assign(modeStates[body], SkyMotionSession.sanitizeMode(saved[body], modeStates[body]));
-      if (!modeStates[body].manual) modeStates[body].dec = dateDec(modeStates[body].date);
+      Object.assign(
+        modeStates[body],
+        SkyMotionSession.sanitizeMode(saved[body], modeStates[body]),
+      );
+      if (!modeStates[body].manual)
+        modeStates[body].dec = dateDec(modeStates[body].date, modeStates[body].lon);
     }
     state = modeStates[saved.body === 'moon' ? 'moon' : 'sun'];
     if (SkyMotionSession.inRange(saved.sundialLength, 0.06, 0.3))
@@ -246,7 +222,7 @@ function renderUIWorkspace() {
           : Object.keys(initialSun).filter((k) => k.startsWith('analemma'))),
       ])
         modeStates.sun[k] = state[k];
-      modeStates.sun.dec = dateDec(modeStates.sun.date);
+      modeStates.sun.dec = dateDec(modeStates.sun.date, modeStates.sun.lon);
     }
     SkyMotionSession.write({
       body: ['analemma', 'sundial'].includes(page) ? returnBody : state.body,
@@ -328,7 +304,8 @@ function renderUIWorkspace() {
   $('workbenchMore').querySelector('summary').textContent = '播放与快捷时刻';
   const bodySwitch = document.querySelector('.body-switch');
   shell.querySelector('.ui-body-host').append(bodySwitch);
-  if (['analemma', 'sundial'].includes(page)) shell.querySelector('.ui-body-host').hidden = true;
+  if (['analemma', 'sundial'].includes(page))
+    shell.querySelector('.ui-body-host').hidden = true;
   rail.tabIndex = -1;
   function addPlace() {
     const label = document.createElement('label');
@@ -361,7 +338,9 @@ function renderUIWorkspace() {
     const presets = document.querySelector('.sundial-toolbar > div');
     presets.classList.add('ui-sundial-presets');
     for (const button of presets.querySelectorAll('button'))
-      button.textContent = { 540: '09:00', 720: '正午', 900: '15:00' }[button.dataset.dialTime];
+      button.textContent = { 540: '09:00', 720: '正午', 900: '15:00' }[
+        button.dataset.dialTime
+      ];
     $('workbenchMore').querySelector('.workbench-extra').append(presets);
     plot.before(readout);
     const views = document.querySelector('.sundial-view-controls');
@@ -439,7 +418,9 @@ function renderUIWorkspace() {
     distinction.textContent =
       '水平日晷：盘面水平，晷针指向天极，仰角等于当地纬度的绝对值。赤道日晷：盘面平行赤道面，晷针垂直盘面。立体视角中的视觉倾斜不代表盘面的安装倾角；点击上方“盘面与安装”查看侧视。';
     construction.append(distinction);
-    for (const n of document.querySelectorAll('.sundial-make,.sundial-question,.sundial-key')) {
+    for (const n of document.querySelectorAll(
+      '.sundial-make,.sundial-question,.sundial-key',
+    )) {
       if (n.classList.contains('sundial-make'))
         n.querySelector('summary').textContent =
           n.closest('.sundial-card').querySelector('h3').textContent + '的制作与安装';
@@ -453,18 +434,23 @@ function renderUIWorkspace() {
     document
       .querySelector('#solarDateModeMenu .menu-content')
       .append(document.querySelector('.solar-date-options'));
-    document.querySelector('label[for=solarDateLink] span').textContent = '日行迹采用当前真太阳时';
+    document.querySelector('label[for=solarDateLink] span').textContent =
+      '日行迹采用当前真太阳时';
     document.querySelector('#displayMenu .menu-content').append($('solarOverlayBar'));
     // Keep the flat switches together; expandable settings follow at the bottom.
     document.querySelector('#displayMenu .menu-content').append($('shadowMenu'));
     const modelContent = document.querySelector('#modelMenu > .menu-content');
-    modelContent.append(modelContent.querySelector('.menu-divider'), $('solarDateModeMenu'));
+    modelContent.append(
+      modelContent.querySelector('.menu-divider'),
+      $('solarDateModeMenu'),
+    );
     uiWorkspace = {
       title,
       plot,
       rail,
       details: [],
-      selected: location.hash.slice(1) || document.body.dataset.entryView || 'contextPanel',
+      selected:
+        location.hash.slice(1) || document.body.dataset.entryView || 'contextPanel',
       moonPhase: true,
       nodes: [],
       cards: {},
@@ -599,7 +585,8 @@ function renderUIWorkspace() {
         .querySelectorAll('.lunar-controls-host,.lunar-timeline-host')
         .forEach((node) => node.remove());
       lunarPanel.dataset.preparing = '';
-      const lang = document.documentElement.lang === 'en' ? 'index.en.html' : 'index.html';
+      const lang =
+        document.documentElement.lang === 'en' ? 'index.en.html' : 'index.html';
       lunarFrame.src = 'lunar/' + lang + '?embedded=1&attempt=' + generation;
       loadTimer = setTimeout(() => failLunar(generation), 15000);
       uiWorkspace.updateLunarNotice();
@@ -611,8 +598,13 @@ function renderUIWorkspace() {
     };
     lunarFrame.addEventListener('load', () => {
       try {
-        const attempt = new URL(lunarFrame.contentWindow.location.href).searchParams.get('attempt');
-        if (attempt === String(loadGeneration) && !lunarFrame.contentWindow.LunarOrbitLesson)
+        const attempt = new URL(lunarFrame.contentWindow.location.href).searchParams.get(
+          'attempt',
+        );
+        if (
+          attempt === String(loadGeneration) &&
+          !lunarFrame.contentWindow.LunarOrbitLesson
+        )
           failLunar(loadGeneration);
       } catch {
         failLunar(loadGeneration);
@@ -646,8 +638,12 @@ function renderUIWorkspace() {
       uiWorkspace.lunarReady = true;
       uiWorkspace.lunarError = false;
       delete lunarPanel.dataset.preparing;
-      if (uiWorkspace.lunarSnapshot) uiWorkspace.lunarLesson.restore(uiWorkspace.lunarSnapshot);
-      if ((uiWorkspace.pendingLunar || uiWorkspace.lunarRequested) && state.body === 'moon')
+      if (uiWorkspace.lunarSnapshot)
+        uiWorkspace.lunarLesson.restore(uiWorkspace.lunarSnapshot);
+      if (
+        (uiWorkspace.pendingLunar || uiWorkspace.lunarRequested) &&
+        state.body === 'moon'
+      )
         uiWorkspace.selected = 'lunarOrbit';
       uiWorkspace.pendingLunar = false;
       syncLanguage();
@@ -727,7 +723,11 @@ function renderUIWorkspace() {
     const annualSettings = document.createElement('div');
     annualSettings.className = 'ui-diagram-details';
     annualSettings.dataset.for = 'analemmaPanel';
-    for (const selector of ['.analemma-controls', '.analemma-comparison', '.analemma-advanced']) {
+    for (const selector of [
+      '.analemma-controls',
+      '.analemma-comparison',
+      '.analemma-advanced',
+    ]) {
       const node = document.querySelector(selector);
       if (node) annualSettings.append(node);
     }
@@ -776,7 +776,9 @@ function renderUIWorkspace() {
   const lowMotion = matchMedia('(prefers-reduced-motion:reduce)');
   function animateDrawer(frames, duration) {
     drawerAnimation?.cancel();
-    drawerAnimation = lowMotion.matches ? null : SkyMotionUI.springPanel(drawer, frames, duration);
+    drawerAnimation = lowMotion.matches
+      ? null
+      : SkyMotionUI.springPanel(drawer, frames, duration);
     return drawerAnimation?.finished.catch(() => {}) || Promise.resolve();
   }
   function finishDrawerClose(restoreFocus = true) {
@@ -822,7 +824,10 @@ function renderUIWorkspace() {
     $('uiDrawerTitle').textContent = title.textContent;
     drawer.showModal();
     parameterButton.setAttribute('aria-expanded', 'true');
-    animateDrawer([{ transform: 'translateX(-100%)' }, { transform: 'translateX(0)' }], 220);
+    animateDrawer(
+      [{ transform: 'translateX(-100%)' }, { transform: 'translateX(0)' }],
+      220,
+    );
     $('uiDrawerClose').focus({ preventScroll: true });
   }
   parameterButton.onclick = openParameters;
@@ -865,7 +870,8 @@ function renderUIWorkspace() {
   });
   function endDrawerSwipe(event) {
     if (!swipe || event.pointerId !== swipe.id) return;
-    const shouldClose = event.type === 'pointerup' && swipe.dx < -65 && Math.abs(swipe.dy) < 40;
+    const shouldClose =
+      event.type === 'pointerup' && swipe.dx < -65 && Math.abs(swipe.dy) < 40;
     swipe = null;
     if (shouldClose) closeParameters();
     else {
@@ -898,7 +904,11 @@ function renderUIWorkspace() {
           ? parameterButton
           : document.querySelector('.motion-menu-edge:not([hidden])') ||
             document.querySelector('.motion-menu-grip:not([hidden])');
-        if (target?.isConnected && !target.closest('[inert]') && target.getClientRects().length)
+        if (
+          target?.isConnected &&
+          !target.closest('[inert]') &&
+          target.getClientRects().length
+        )
           target.focus({ preventScroll: true });
       });
     }

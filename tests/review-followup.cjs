@@ -97,7 +97,7 @@ try{
  const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'skymotion-freshness-'));
  try{
   const manifest=JSON.parse(fs.readFileSync('page-cache-manifest.json','utf8'));
-  for(const name of [...manifest.pages,...manifest.assets,'page-cache-manifest.json','scripts/prerender-pages.py']){const target=path.join(temporary,name);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(name,target)}
+  for(const name of [...manifest.pages,...manifest.assets,'page-cache-manifest.json','scripts/prerender-pages.py','scripts/site_sources.py']){const target=path.join(temporary,name);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(name,target)}
   const check=()=>spawnSync('python3',['scripts/prerender-pages.py','--dist',temporary,'--check'],{encoding:'utf8'});
   assert.equal(check().status,0,'Unmodified generated fixture must pass');
   const dictionary=path.join(temporary,'i18n-docs.json'),map=JSON.parse(fs.readFileSync(dictionary,'utf8'));map['欢迎页']='Welcome — updated';fs.writeFileSync(dictionary,JSON.stringify(map));

@@ -3228,6 +3228,13 @@
                 "下方变量表覆盖全部共享初始状态字段和各子系统的核心数据结构；公式解释计算局部变量的含义。源码索引列出文件职责和声明函数，供继续追到具体作用域。它不是把每个循环计数器都当成公共接口。",
                 "The dictionaries cover every shared initial-state field and core subsystem structures. Equations explain calculation-local quantities. The source index lists file responsibilities and declared functions for following specific scopes; loop counters are not public interfaces."
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "页面路径、主导航、视图名称、分组和可用条件统一定义在site-catalog.json；lab-state.json统一定义状态初值、范围、枚举和相机字段。scripts/site_sources.py校验这些数据并生成启动脚本和状态模块的标记区段，禁止直接修改生成区段。",
+                "site-catalog.json defines page paths, main navigation, view names, groups and availability. lab-state.json defines defaults, ranges, choices and camera fields. scripts/site_sources.py validates these sources and generates marked sections in boot and state modules; edit the canonical data rather than generated regions."
+              ]
             }
           ],
           "aliases": [
@@ -3341,6 +3348,13 @@
                   ]
                 ]
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "prepareObservationState负责每帧呈现前的模型联动和派生值更新。workbench-menu.js只组织与显示菜单；lab-controls.js集中处理输入和表单展示。对象字段的整理与校验由diagram-tool-definitions.js提供，编辑器调用该接口，避免保存与显示各自解释对象。",
+                "prepareObservationState reconciles model bindings and derived values before presentation. workbench-menu.js presents the catalog, while lab-controls.js handles inputs and form presentation. diagram-tool-definitions.js owns reference normalization and validation, so storage and the editor share one interpretation of each object."
+              ]
             }
           ],
           "aliases": [
@@ -3364,7 +3378,7 @@
             {
               "kind": "note",
               "text": [
-                "表中的默认日期是科学场景示例，不是发布说明。初值从app.js自动提取；添加新共享字段而未补充释义，会使文档生成检查失败。",
+                "表中的默认日期是科学场景示例，不是发布说明。初值读取lab-state.json的统一状态定义；添加新共享字段而未补充释义，会使文档生成检查失败。",
                 "The initial date is an example scientific scene, not release metadata. Defaults are extracted from app.js; an added shared field without a definition fails documentation validation."
               ]
             },
@@ -4885,6 +4899,13 @@
                   "Report storage denial, quota and old-version failures honestly; memory fallback must not claim persistence across reloads."
                 ]
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "完整实验先由SkyLabExperiment.prepareComplete校验，再交给SkyMotionSession.transaction协调。每个参与模块先创建私有检查点，随后逐项提交；异常或明确拒绝会按相反顺序回滚，并保留原对象的撤销记录。布局、观测、参考对象和地面场景各自负责还原自己的状态，历史收尾位于finally中。",
+                "Full experiments are validated by SkyLabExperiment.prepareComplete and coordinated by SkyMotionSession.transaction. Each participant captures an owner-local checkpoint before any commit. Exceptions or explicit rejection roll back in reverse order, preserving object undo history. Layout, conditions, references and ground restore their own state; history completion runs in finally."
+              ]
             }
           ]
         },
@@ -5045,8 +5066,8 @@
             {
               "kind": "paragraph",
               "text": [
-                "docs/document-content.json是四个文档页面的双语内容源；scripts/build-documents.py输出中文HTML、中英文Markdown及对应翻译条目。共享状态初值从app.js提取，与state_dictionary逐项核对。此生成过程只用于维护，线上不依赖Python。",
-                "docs/document-content.json is the bilingual source for four documentation pages. scripts/build-documents.py generates Chinese HTML, both Markdown locales and translation entries. Shared defaults are extracted from app.js and checked against state_dictionary. This is a maintenance step; production does not require Python."
+                "docs/document-content.json是四个文档页面的双语内容源；scripts/build-documents.py输出中文HTML、中英文Markdown及对应翻译条目。共享状态初值读取lab-state.json，与state_dictionary逐项核对。此生成过程只用于维护，线上不依赖Python。",
+                "docs/document-content.json is the bilingual source for four documentation pages. scripts/build-documents.py generates Chinese HTML, both Markdown locales and translation entries. Shared defaults are read from lab-state.json and checked against state_dictionary. This is a maintenance step; production does not require Python."
               ]
             },
             {
@@ -5066,6 +5087,13 @@
               "text": [
                 "正文不记录零散发布日记；功能使用、教学任务和变量说明各归其位。Markdown与网页由同一内容源生成，避免网页改了、下载文件仍旧的分叉。",
                 "Keep release diaries out of the manuals. Feature usage, teaching tasks and variable meanings have separate homes. One content source generates pages and Markdown to prevent stale downloads."
+              ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "文档输入由scripts/document_model.py先验证路径、章节与别名唯一性、双语文本、内容类型、表格列数、链接目标和状态说明覆盖率。scripts/build-documents.py只负责渲染与输出，页面外壳在scripts/document-page.html；变量表读取lab-state.json，不再靠正则猜测JavaScript源码的缩进。",
+                "scripts/document_model.py validates paths, unique section IDs and aliases, bilingual text, block types, table dimensions, link targets and state documentation coverage before output. scripts/build-documents.py handles rendering and writing, using scripts/document-page.html for the shell. State tables read lab-state.json rather than inferring JavaScript declarations from indentation."
               ]
             }
           ],
@@ -5833,8 +5861,8 @@
   },
   "source_files": {
     "app.js": [
-      "共享状态、理想太阳几何、基础Canvas绘图与事件",
-      "Shared state, ideal solar geometry, base Canvas drawing and events"
+      "共享状态、太阳几何、Canvas绘图与呈现前状态准备",
+      "Shared state, solar geometry, Canvas rendering and observation preparation"
     ],
     "moon.js": [
       "真实日期星历、真太阳时与UTC换算、升落采样",
@@ -5857,8 +5885,8 @@
       "Unified shell, routing, canvas mounting and parameter drawer"
     ],
     "workbench-menu.js": [
-      "分层视图目录、布局入口与年度采样联动",
-      "Hierarchical catalog, layout entry and annual-clock linking"
+      "读取统一目录，呈现分层视图与布局入口",
+      "Present hierarchical view and layout entries from the canonical catalog"
     ],
     "custom-layout.js": [
       "多图排列、拖放、比例、收藏和完整实验协调",
@@ -5877,8 +5905,8 @@
       "Reference stores, properties, placement, selection, imports and validation"
     ],
     "diagram-tool-definitions.js": [
-      "各图工具类型、字段和双语名称",
-      "Per-plot tool types, fields and bilingual names"
+      "对象类型、字段与纯数据校验，不绑定DOM",
+      "Object types, fields and data normalization without DOM bindings"
     ],
     "diagram-sampling.js": [
       "有界缓存、几何过零和年度参考采样",
@@ -5941,16 +5969,16 @@
       "Shared clock/date timeline and playback controls"
     ],
     "experiment-storage.js": [
-      "会话字段验证、版本与内存回退",
-      "Session validation, versions and memory fallback"
+      "版本化会话校验、存储回退与恢复事务协调",
+      "Versioned session validation, storage fallback and restore transaction coordination"
     ],
     "interaction-history.js": [
       "浏览器参数历史、手势分组与恢复锁",
       "Parameter history, gesture grouping and restoration lock"
     ],
     "lab-history.js": [
-      "实验状态快照、恢复和完整实验状态接口",
-      "Lab snapshots, restoration and full-experiment state interface"
+      "观测快照、历史适配与完整实验数据协调",
+      "Observation snapshots, history adapter and full-experiment data coordination"
     ],
     "lab-customization.js": [
       "兼容的实验台自定义接入",
@@ -6067,6 +6095,10 @@
     "space/nebulae.js": [
       "星云目录、影像显示与资源管理",
       "Nebula catalog, image display and resource management"
+    ],
+    "lab-controls.js": [
+      "观测输入事件、地点日期与表单展示",
+      "Observation input events, location/date controls and form presentation"
     ]
   }
 }

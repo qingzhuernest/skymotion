@@ -8,6 +8,7 @@ Scientific state, script sources, form values, and identifiers are never transla
 from __future__ import annotations
 
 import argparse
+from site_sources import generated_sources, load_catalog
 import html
 import json
 import posixpath
@@ -297,6 +298,12 @@ def main() -> None:
                 stale.append(path.relative_to(dist).as_posix())
         else:
             path.write_text(value, encoding='utf-8')
+    catalog = load_catalog(dist)
+    expected = {page['path'] for page in catalog['pages']}
+    if paths != expected:
+        raise SystemExit(f'Page catalog mismatch: missing={sorted(expected-paths)}, uncatalogued={sorted(paths-expected)}')
+    for name, value in generated_sources(dist).items():
+        output(dist / name, value)
     dictionary = load_dictionary(dist)
     # External script: escape HTML-significant characters for safe reuse in other hosts too.
     bundle = json.dumps(dictionary, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
@@ -326,7 +333,7 @@ def main() -> None:
                     if p.is_file() and is_site_file(p, dist) and p.suffix in asset_suffixes
                     and p.name != 'page-cache-manifest.json'
                     and p.relative_to(dist).as_posix() not in legacy_fonts)
-    manifest = {'version': 2, 'resourceVersion': '20261023-docs91', 'readingFontVersion': '20261016-font41', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
+    manifest = {'version': 2, 'resourceVersion': catalog['resourceVersion'], 'readingFontVersion': '20261016-font41', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}
     output(dist / 'page-cache-manifest.json', json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
     if stale:
         raise SystemExit('Stale generated files; run scripts/prerender-pages.py: ' + ', '.join(stale))

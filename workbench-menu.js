@@ -14,31 +14,14 @@
   tree.className = 'workbench-view-tree';
   menu.append(tree);
   const entries = [];
-  const groups = [
-    ['天空与日影', 'Sky & shadows', [['skyPanel', '天空与日影', 'Sky & shadows']]],
-    [
-      '关联图解',
-      'Related diagrams',
-      [
-        ['contextPanel', '地球与昼夜', 'Earth & daylight'],
-        ['chartPanel', '全天高度曲线', 'Daily altitude'],
-        ['riseSetPanel', '日出日落方位', 'Rise/set bearings'],
-        ['solarGeometryPanel', '地轴与地平面', 'Axis & horizon'],
-        ['companionModule', '行星伴月', 'Moon & planets'],
-        ['lunarOrbit', '地升地落', 'Earthrise'],
-      ],
-    ],
-    ['全年变化', 'Annual changes', [['analemmaPanel', '日行迹', 'Analemma']]],
-    [
-      '对照与搭建',
-      'Compare & build',
-      [
-        ['solarCompare', '组合视图', 'Combined views'],
-        ['solarStudy', '地点与时间对照', 'Place & time comparison'],
-        ['sceneBuilder', '搭建实验', 'Build experiment'],
-      ],
-    ],
-  ];
+  const catalog = window.SkySiteCatalog;
+  const groups = catalog.groups.map(([zh, en], group) => [
+    zh,
+    en,
+    catalog.views
+      .filter((view) => view.group === group)
+      .map((view) => [view.id, ...(view.labels.sun || view.labels.moon)]),
+  ]);
   function select(id) {
     if (id === 'solarCompare') {
       window.skyWorkspacePresentation.openOverview();
@@ -46,7 +29,7 @@
       schedule();
       return;
     }
-    const layoutId = state.body === 'moon' && id === 'companionModule' ? 'solarGeometryPanel' : id;
+    const layoutId = catalog.layoutId(id, state.body);
     if (!window.skyWorkspacePresentation?.selectView(layoutId)) {
       const tab = uiWorkspace.tabs.querySelector(`[data-route-diagram="${id}"]`);
       if (!tab || tab.hidden) return;
@@ -77,8 +60,7 @@
         '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
       add.onclick = () => {
         const api = window.skyWorkspacePresentation;
-        const layoutId =
-          state.body === 'moon' && id === 'companionModule' ? 'solarGeometryPanel' : id;
+        const layoutId = catalog.layoutId(id, state.body);
         if (api.views.includes(layoutId) && uiWorkspace.selected === 'solarCompare')
           api.removeView(layoutId);
         else api.addView(layoutId);
@@ -113,7 +95,9 @@
   const followText = document.createElement('span');
   const samplingClock = document.createElement('span');
   samplingClock.className = 'workbench-sampling-clock';
-  uiWorkspace.cards.analemmaPanel.querySelector('.ui-diagram-card-head').append(samplingClock);
+  uiWorkspace.cards.analemmaPanel
+    .querySelector('.ui-diagram-card-head')
+    .append(samplingClock);
   clockLink.append(follow, followText);
   annual?.prepend(clockLink);
   for (const id of ['analemmaClock', 'analemmaBasis']) {
@@ -123,7 +107,6 @@
     });
   }
   function sync() {
-    const moon = state.body === 'moon';
     const api = window.skyWorkspacePresentation;
     const editing = window.SkyCustomization?.active === true;
     const visible = api?.active ? api.visibleIds : new Set([uiWorkspace.selected]);
@@ -132,24 +115,20 @@
       uiViewText(title, tr(group.dataset.zh, group.dataset.en));
     }
     for (const entry of entries) {
-      const available = uiWorkspace.tabs.querySelector(`[data-route-diagram="${entry.id}"]`);
+      const available = uiWorkspace.tabs.querySelector(
+        `[data-route-diagram="${entry.id}"]`,
+      );
       uiViewHidden(entry.row, !available || available.hidden);
-      const labels = moon
-        ? {
-            skyPanel: ['月球天空', 'Lunar sky'],
-            contextPanel: ['月相关系', 'Phase relationships'],
-            chartPanel: ['逐日照明比例', 'Daily illumination'],
-            riseSetPanel: ['月出月落方位', 'Moonrise & moonset'],
-          }
-        : {};
-      const label = labels[entry.id];
-      const name = label ? tr(...label) : tr(entry.name, entry.translation);
-      const layoutId = moon && entry.id === 'companionModule' ? 'solarGeometryPanel' : entry.id;
+      const label = catalog.label(entry.id, state.body);
+      const name = tr(...(label || [entry.name, entry.translation]));
+      const layoutId = catalog.layoutId(entry.id, state.body);
       uiViewText(entry.button, name);
       uiViewAttribute(
         entry.button,
         'title',
-        api?.active && Object.hasOwn(uiWorkspace.cards, layoutId) && !visible.has(layoutId)
+        api?.active &&
+          Object.hasOwn(uiWorkspace.cards, layoutId) &&
+          !visible.has(layoutId)
           ? tr('在当前图位显示：', 'Show in the current pane: ') + name
           : tr('查看：', 'View: ') + name,
       );
@@ -157,7 +136,8 @@
         'workbench-current-view',
         api?.active ? api.activeView === layoutId : uiWorkspace.selected === entry.id,
       );
-      const selected = entry.id === 'solarCompare' ? !!api?.active : visible?.has(layoutId);
+      const selected =
+        entry.id === 'solarCompare' ? !!api?.active : visible?.has(layoutId);
       uiViewAttribute(entry.button, 'aria-pressed', String(!!selected));
       uiViewAttribute(
         entry.button,
@@ -169,7 +149,10 @@
       uiViewAttribute(
         entry.add,
         'aria-label',
-        tr(included ? '移除：' : '加入组合：', included ? 'Remove: ' : 'Add to layout: ') + name,
+        tr(
+          included ? '移除：' : '加入组合：',
+          included ? 'Remove: ' : 'Add to layout: ',
+        ) + name,
       );
       uiViewAttribute(entry.add, 'aria-pressed', String(!!included));
       entry.add.disabled = !!included && api.views.length === 1;
@@ -195,7 +178,9 @@
         ' · ' +
         tr(
           state.analemmaBasis === 'clock' ? '固定钟表时' : '固定真太阳时',
-          state.analemmaBasis === 'clock' ? 'Fixed civil clock' : 'Fixed apparent solar time',
+          state.analemmaBasis === 'clock'
+            ? 'Fixed civil clock'
+            : 'Fixed apparent solar time',
         ),
     );
     document.body.classList.toggle('workbench-editing', editing);
@@ -204,16 +189,6 @@
   window.SkyWorkbenchMenu = {
     sync,
     select,
-    prepare() {
-      const visible = window.skyWorkspacePresentation?.active
-        ? window.skyWorkspacePresentation.visibleIds
-        : new Set([uiWorkspace.selected]);
-      state.analemma = state.body === 'sun' && visible.has('analemmaPanel');
-      if (state.analemma && uiWorkspace.analemmaClockLinked) {
-        state.analemmaBasis = 'apparent';
-        state.analemmaClock = Math.min(1439, state.time);
-      }
-    },
     openLayout() {
       if (window.SkyDiagramTools?.selectSidebar('views') === false) return;
       layout.open = true;

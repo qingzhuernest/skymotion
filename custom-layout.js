@@ -23,6 +23,14 @@
     ],
     saveExperiment: ['保存实验', 'Save experiment'],
     updateExperiment: ['更新完整实验', 'Update full experiment'],
+    restoreFailed: [
+      '恢复失败，已保留原实验。',
+      'Restore failed; the previous experiment was retained.',
+    ],
+    recoveryFailed: [
+      '恢复失败，部分内容无法还原，请重新加载已保存的实验。',
+      'Restore failed and recovery was incomplete. Reload a saved experiment.',
+    ],
     invalidExperiment: [
       '实验内容不完整或已损坏，当前实验未改变。',
       'The saved experiment is incomplete or damaged. The current experiment is unchanged.',
@@ -56,12 +64,6 @@
       '点击标签切换图解。在“布局与收藏”中调整顺序，保存常用组合。',
       'Switch diagrams with the tabs. Reorder and save combinations in Layout & saved views.',
     ],
-    skyPanel: ['天空与日影', 'Sky & shadows'],
-    analemmaPanel: ['日行迹', 'Analemma'],
-    contextPanel: ['直射点与昼夜', 'Subsolar point'],
-    chartPanel: ['全天太阳高度', 'Daily altitude'],
-    riseSetPanel: ['日出日落方位', 'Sunrise and sunset'],
-    solarGeometryPanel: ['地轴与地平面', 'Axis and horizon'],
     count: ['图解数量', 'View count'],
     arrange: ['排列方式', 'Arrangement'],
     columns: ['左右并排', 'Side by side'],
@@ -120,11 +122,6 @@
     removed: ['图解已移除，可撤销。', 'View removed. You can undo this change.'],
   };
   const moonWords = {
-    skyPanel: ['月球天空', 'Lunar sky'],
-    contextPanel: ['月相与关系', 'Moon phase and relationships'],
-    chartPanel: ['逐日照明比例', 'Daily illumination'],
-    riseSetPanel: ['月出月落方位', 'Moonrise and moonset'],
-    solarGeometryPanel: ['行星伴月', 'Moon–planet comparison'],
     daylight: ['月相与照明', 'Phase and illumination'],
     bearings: ['升落与伴月', 'Rise/set and planets'],
   };
@@ -132,7 +129,8 @@
     customizing = false,
     normalSelection = null;
   const t = (k) =>
-      (workspaceBody === 'moon' && moonWords[k] ? moonWords[k] : words[k])[
+      (window.SkySiteCatalog.label(k, workspaceBody) ||
+        (workspaceBody === 'moon' && moonWords[k] ? moonWords[k] : words[k]))[
         document.documentElement.lang === 'en' ? 1 : 0
       ],
     copy = (x) => JSON.parse(JSON.stringify(x));
@@ -196,7 +194,8 @@
       return fresh();
     }
   }
-  const profileKey = () => 'skymotion-saved-layouts-v1' + (workspaceBody === 'moon' ? '-moon' : '');
+  const profileKey = () =>
+    'skymotion-saved-layouts-v1' + (workspaceBody === 'moon' ? '-moon' : '');
   function loadProfiles() {
     try {
       const saved = JSON.parse(localStorage.getItem(profileKey()));
@@ -237,7 +236,8 @@
     gesture = null,
     optionOpen = false,
     statusKey = '';
-  const icon = (path) => `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
+  const icon = (path) =>
+    `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
   function button(parent, word, fn, path, withLabel = false) {
     const b = document.createElement('button');
     b.type = 'button';
@@ -285,10 +285,10 @@
       word,
       () =>
         change(() => {
-          data.views = [...data.views, ...ids.filter((id) => !data.views.includes(id))].slice(
-            0,
-            count,
-          );
+          data.views = [
+            ...data.views,
+            ...ids.filter((id) => !data.views.includes(id)),
+          ].slice(0, count);
           data.active = Math.min(data.active, count - 1);
         }),
       path,
@@ -521,60 +521,68 @@
     nameInput.value = '';
   };
   function captureExperiment() {
-    const references = window.SkyDiagramTools?.snapshotExperiment();
-    const conditions = window.SkyLabExperiment?.snapshot();
-    const ground = window.SkySceneBuilder?.snapshotExperiment();
-    if (!references || !conditions || !ground) return null;
-    return { version: 1, body: workspaceBody, conditions, references, ground };
-  }
-  function prepareExperiment(raw) {
-    const S = window.SkyMotionSession;
-    if (
-      !raw ||
-      raw.version !== 1 ||
-      raw.body !== workspaceBody ||
-      JSON.stringify(raw).length > 600000 ||
-      !raw.conditions ||
-      raw.conditions.body !== workspaceBody
-    )
-      return null;
-    for (const field of ['active', 'sun', 'moon']) {
-      const mode = raw.conditions[field];
-      if (
-        !mode ||
-        !S.validDate(mode.date) ||
-        !S.inRange(mode.lat, -90, 90) ||
-        !S.inRange(mode.lon, -180, 180) ||
-        !S.inRange(mode.time, 0, 1440)
-      )
-        return null;
-    }
-    const references = window.SkyDiagramTools?.prepareExperiment(raw.references);
-    const ground = window.SkySceneBuilder?.prepareExperiment(raw.ground);
-    if (!references || !ground) return null;
-    return { ...raw, references, ground };
+    return window.SkyLabExperiment?.captureComplete(workspaceBody) || null;
   }
   function applyProfile(profile) {
-    const experiment = profile.experiment ? prepareExperiment(profile.experiment) : null;
+    const experiment = profile.experiment
+      ? window.SkyLabExperiment.prepareComplete(profile.experiment, workspaceBody)
+      : null;
     if (profile.experiment && !experiment) {
       announce('invalidExperiment');
       return;
     }
     if (window.SkyDiagramTools?.leave() === false) return;
     window.SkyMotionHistory?.beginExternal();
-    change(() => {
-      data = { ...copy(profile.layout), enabled: true };
+    let result;
+    try {
+      const steps = [
+        {
+          checkpoint() {
+            const previous = copy({ data, undo, redo, focused });
+            return () => {
+              ({ data, undo, redo, focused } = previous);
+              save();
+              apply();
+            };
+          },
+          apply: () => {
+            const next = { ...copy(profile.layout), enabled: true };
+            if (JSON.stringify(data) !== JSON.stringify(next)) {
+              undo.push(copy(data));
+              if (undo.length > 20) undo.shift();
+              redo = [];
+            }
+            data = next;
+            focused = null;
+          },
+        },
+      ];
       if (experiment) {
-        window.SkyLabExperiment.restore(experiment.conditions);
-        window.SkyDiagramTools.restoreExperiment(experiment.references);
-        window.SkySceneBuilder.restoreExperiment(experiment.ground);
-      } else uiWorkspace.selected = 'solarCompare';
-    }, 'applied');
-    // The layout may be identical while the scientific state has changed.
-    save();
-    apply();
-    announce('applied');
-    window.SkyMotionHistory?.endExternal();
+        for (const [owner, value, method] of [
+          [window.SkyLabExperiment, experiment.conditions, 'restore'],
+          [window.SkyDiagramTools, experiment.references, 'restoreExperiment'],
+          [window.SkySceneBuilder, experiment.ground, 'restoreExperiment'],
+        ])
+          steps.push({
+            checkpoint: () => owner.checkpoint(),
+            apply: () => owner[method](value),
+          });
+      } else
+        steps.push({
+          checkpoint: () => window.SkyLabExperiment.checkpoint(),
+          apply: () => {
+            uiWorkspace.selected = 'solarCompare';
+          },
+        });
+      steps.push({ checkpoint: () => () => {}, apply });
+      result = window.SkyMotionSession.transaction(steps);
+      if (result.ok) {
+        save();
+        announce('applied');
+      } else announce(result.rollbackErrors.length ? 'recoveryFailed' : 'restoreFailed');
+    } finally {
+      window.SkyMotionHistory?.endExternal();
+    }
   }
   function persistProfiles(word) {
     const active = document.activeElement,
@@ -614,7 +622,8 @@
     persistProfiles('restored');
     (profileUndo.length ? undoSavedButton : nameInput).focus();
   }
-  const presentation = (layout) => JSON.stringify({ ...layout, enabled: false, active: 0 });
+  const presentation = (layout) =>
+    JSON.stringify({ ...layout, enabled: false, active: 0 });
 
   const controls = new Map();
   for (const id of ids) {
@@ -622,7 +631,12 @@
       tools = document.createElement('div');
     tools.className = 'workspace-pane-tools';
     tools.dataset.i18nSkip = '';
-    const handle = button(tools, 'move', () => {}, 'M8 5h1m6 0h1M8 12h1m6 0h1M8 19h1m6 0h1');
+    const handle = button(
+      tools,
+      'move',
+      () => {},
+      'M8 5h1m6 0h1M8 12h1m6 0h1M8 19h1m6 0h1',
+    );
     handle.className = 'workspace-grip';
     const select = document.createElement('select');
     for (const choice of ids) {
@@ -682,14 +696,21 @@
     handle.addEventListener('pointerdown', (e) => start(e, id));
     handle.addEventListener('lostpointercapture', cancel);
     handle.addEventListener('keydown', (e) => {
-      if (!api.active || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key))
+      if (
+        !api.active ||
+        !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)
+      )
         return;
       e.preventDefault();
       move(id, ['ArrowLeft', 'ArrowUp'].includes(e.key) ? -1 : 1);
       handle.focus();
     });
     head.addEventListener('dblclick', (e) => {
-      if (!mobile.matches && data.views.length > 1 && !e.target.closest('button,select')) {
+      if (
+        !mobile.matches &&
+        data.views.length > 1 &&
+        !e.target.closest('button,select')
+      ) {
         focused = id;
         apply();
         backButton.focus();
@@ -710,7 +731,8 @@
     splitters[axis] = split;
     split.addEventListener('pointerdown', (e) => start(e, null, axis));
     split.addEventListener('lostpointercapture', cancel);
-    split.ondblclick = () => change(() => (data[axis === 'x' ? 'ratio' : 'rowRatio'] = 50));
+    split.ondblclick = () =>
+      change(() => (data[axis === 'x' ? 'ratio' : 'rowRatio'] = 50));
     split.onkeydown = (e) => {
       const keys = axis === 'x' ? ['ArrowLeft', 'ArrowRight'] : ['ArrowUp', 'ArrowDown'];
       if (!keys.includes(e.key)) return;
@@ -766,10 +788,15 @@
       return customizing;
     },
     addView(id) {
-      if (!customizing || !ids.includes(id) || (workspaceBody === 'moon' && id === 'analemmaPanel'))
+      if (
+        !customizing ||
+        !ids.includes(id) ||
+        (workspaceBody === 'moon' && id === 'analemmaPanel')
+      )
         return false;
       const previous = uiWorkspace.selected;
-      if (!api.active) data.views = [Object.hasOwn(cards, previous) ? previous : 'contextPanel'];
+      if (!api.active)
+        data.views = [Object.hasOwn(cards, previous) ? previous : 'contextPanel'];
       uiWorkspace.selected = 'solarCompare';
       data.enabled = true;
       change(() => {
@@ -808,7 +835,8 @@
         profileList.dataset.signature = '';
         queueMicrotask(apply);
       }
-      if (workspaceBody === 'moon') data.views = data.views.filter((id) => id !== 'analemmaPanel');
+      if (workspaceBody === 'moon')
+        data.views = data.views.filter((id) => id !== 'analemmaPanel');
       data.active = Math.min(data.active, data.views.length - 1);
       if (uiWorkspace.selected === 'solarCompare') data.enabled = true;
       const active = data.enabled && uiWorkspace.selected === 'solarCompare',
@@ -834,7 +862,11 @@
   });
   function markActive() {
     for (const [id, card] of Object.entries(cards))
-      uiViewAttribute(card, 'data-workspace-current', String(api.active && id === api.activeView));
+      uiViewAttribute(
+        card,
+        'data-workspace-current',
+        String(api.active && id === api.activeView),
+      );
   }
   function activate(id) {
     const index = data.views.indexOf(id);
@@ -902,7 +934,10 @@
     presets.setAttribute('aria-label', t('count'));
     panelTitle.textContent = t('options');
     panel.setAttribute('aria-label', t('options'));
-    nameInput.setAttribute('aria-label', t(includeExperiment.checked ? 'experimentName' : 'name'));
+    nameInput.setAttribute(
+      'aria-label',
+      t(includeExperiment.checked ? 'experimentName' : 'name'),
+    );
     nameInput.placeholder = t(includeExperiment.checked ? 'experimentName' : 'name');
     experimentLabel.textContent = t('fullExperiment');
     saveButton.dataset.word = includeExperiment.checked ? 'saveExperiment' : 'save';
@@ -911,7 +946,9 @@
       panelStatus.textContent = t(statusKey);
     }
     saveHint.textContent =
-      profiles.length >= 5 ? t('limit') : t(includeExperiment.checked ? 'fullHint' : 'saveHint');
+      profiles.length >= 5
+        ? t('limit')
+        : t(includeExperiment.checked ? 'fullHint' : 'saveHint');
     labelButtons(bar);
     labelButtons(panel);
     for (const h of panel.querySelectorAll('[data-word-heading]'))
@@ -989,11 +1026,14 @@
   }
   function renderProfiles() {
     undoSavedButton.hidden = !profileUndo.length;
-    const signature = document.documentElement.lang + JSON.stringify(profiles) + editingProfile;
+    const signature =
+      document.documentElement.lang + JSON.stringify(profiles) + editingProfile;
     for (const row of profileList.querySelectorAll('[data-saved-name]')) {
       const profile = profiles.find((p) => p.name === row.dataset.savedName);
       const same =
-        profile && !profile.experiment && presentation(profile.layout) === presentation(data);
+        profile &&
+        !profile.experiment &&
+        presentation(profile.layout) === presentation(data);
       row.dataset.current = String(Boolean(same));
       const marker = row.querySelector('.workspace-current-marker');
       if (marker) {
@@ -1034,7 +1074,12 @@
         };
         form.append(input);
         button(form, 'saveName', () => {}).type = 'submit';
-        button(form, 'cancelEdit', () => finishEditing(profile.name), 'm7 7 10 10M17 7 7 17');
+        button(
+          form,
+          'cancelEdit',
+          () => finishEditing(profile.name),
+          'm7 7 10 10M17 7 7 17',
+        );
         form.onsubmit = (e) => {
           e.preventDefault();
           const name = input.value.trim();
@@ -1063,7 +1108,8 @@
       title.textContent = profile.name;
       marker.className = 'workspace-current-marker';
       marker.textContent = t(profile.experiment ? 'fullMarker' : 'current');
-      marker.hidden = !profile.experiment && presentation(profile.layout) !== presentation(data);
+      marker.hidden =
+        !profile.experiment && presentation(profile.layout) !== presentation(data);
       apply.append(title, marker);
       apply.onclick = () => applyProfile(profile);
       row.append(apply);
@@ -1081,7 +1127,8 @@
         'M4 4h14l2 2v14H4zM8 4v6h8V4M8 20v-6h8v6',
       );
       update.dataset.profileName = profile.name;
-      update.disabled = !profile.experiment && presentation(profile.layout) === presentation(data);
+      update.disabled =
+        !profile.experiment && presentation(profile.layout) === presentation(data);
       const rename = button(
         row,
         'rename',
@@ -1112,7 +1159,9 @@
     }
     labelButtons(profileList);
     saveHint.textContent =
-      profiles.length >= 5 ? t('limit') : t(includeExperiment.checked ? 'fullHint' : 'saveHint');
+      profiles.length >= 5
+        ? t('limit')
+        : t(includeExperiment.checked ? 'fullHint' : 'saveHint');
   }
   function apply() {
     const previousFocus = document.activeElement;
@@ -1149,10 +1198,14 @@
     );
     for (const [id, card] of Object.entries(cards))
       card.dataset.workspacePosition = String(data.views.indexOf(id));
-    for (const id of api.active ? data.views : ids) plot.insertBefore(cards[id], splitters.x);
+    for (const id of api.active ? data.views : ids)
+      plot.insertBefore(cards[id], splitters.x);
     for (const axis of ['x', 'y']) {
       const split = splitters[axis];
-      split.setAttribute('aria-valuenow', String(data[axis === 'x' ? 'ratio' : 'rowRatio']));
+      split.setAttribute(
+        'aria-valuenow',
+        String(data[axis === 'x' ? 'ratio' : 'rowRatio']),
+      );
       split.hidden =
         !api.active ||
         mobile.matches ||
@@ -1170,7 +1223,10 @@
           apply();
         });
         b.setAttribute('role', 'tab');
-        b.setAttribute('aria-controls', cards[id].id || (cards[id].id = 'workspace-' + id));
+        b.setAttribute(
+          'aria-controls',
+          cards[id].id || (cards[id].id = 'workspace-' + id),
+        );
       });
     }
     for (const [b, i] of [...tabs.children].map((b, i) => [b, i])) {
@@ -1267,7 +1323,9 @@
       for (const frame of document.querySelectorAll('iframe')) {
         try {
           frame.contentDocument?.dispatchEvent(
-            new CustomEvent('skymotion:customization', { detail: { active: customizing } }),
+            new CustomEvent('skymotion:customization', {
+              detail: { active: customizing },
+            }),
           );
         } catch {}
       }
@@ -1320,7 +1378,8 @@
     for (const card of Object.values(cards)) card.classList.remove('workspace-drop');
     window.skyWorkspaceInteracting = false;
     try {
-      if (g.source.hasPointerCapture(g.pointer)) g.source.releasePointerCapture(g.pointer);
+      if (g.source.hasPointerCapture(g.pointer))
+        g.source.releasePointerCapture(g.pointer);
     } catch {}
     schedule();
   }
@@ -1340,8 +1399,9 @@
       Math.min(
         70,
         Math.round(
-          (g.axis === 'x' ? (x - g.rect.left) / g.rect.width : (y - g.rect.top) / g.rect.height) *
-            100,
+          (g.axis === 'x'
+            ? (x - g.rect.left) / g.rect.width
+            : (y - g.rect.top) / g.rect.height) * 100,
         ),
       ),
     );
@@ -1460,7 +1520,11 @@
     // Resizing switches the layout profile, never the diagram being edited.
     apply();
   });
-  if (customizing && data.enabled && (!location.hash || location.hash === '#solarCompare'))
+  if (
+    customizing &&
+    data.enabled &&
+    (!location.hash || location.hash === '#solarCompare')
+  )
     uiWorkspace.selected = 'solarCompare';
   if (state.body === 'moon') state.companion = true;
   apply();

@@ -36,7 +36,10 @@ Open `http://localhost:8000/`. English has separate pages, such as `lab.en.html`
 
 The bilingual source for the documentation center and three manuals is `docs/document-content.json`. Generate HTML and Markdown first, then English pages and the shared dictionary:
 
+Pages and views share `site-catalog.json`; observation defaults and validation rules share `lab-state.json`. After editing these sources, run `python3 scripts/site_sources.py`. Generated regions are checked, so routes and enums are no longer maintained by hand in multiple modules.
+
 ```sh
+python3 scripts/site_sources.py
 python3 scripts/build-documents.py
 python3 scripts/prerender-pages.py --dist .
 python3 scripts/prerender-pages.py --check

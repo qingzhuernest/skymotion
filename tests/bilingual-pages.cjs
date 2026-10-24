@@ -2,6 +2,8 @@
 const {execFileSync}=require('node:child_process');
 execFileSync('python3',['-c',`
 from pathlib import Path
+import sys
+sys.path.insert(0, "scripts")
 from importlib.machinery import SourceFileLoader
 m=SourceFileLoader('prerender','scripts/prerender-pages.py').load_module()
 count=0
@@ -27,10 +29,13 @@ for english in Path('.').resolve().rglob('*.en.html'):
         for child in node.children: check_english_text(child,skip)
     check_english_text(m.parse(english.read_text()))
     count+=1
-assert count==14,f'Expected 14 bilingual pairs, got {count}'
-print('PASS all 14 bilingual DOM, attribute, form-value and script pairs, with complete English text')
+expected=len(__import__('json').loads(Path('site-catalog.json').read_text())['pages'])
+assert count==expected,f'Expected {expected} bilingual pairs, got {count}'
+print(f'PASS all {count} bilingual DOM, attribute, form-value and script pairs, with complete English text')
 `],{stdio:'inherit'});
 
 execFileSync('python3',['scripts/prerender-pages.py','--check'],{stdio:'inherit'});
 
 execFileSync('python3',['scripts/build-documents.py','--check'],{stdio:'inherit'});
+
+execFileSync('python3',['scripts/site_sources.py','--check'],{stdio:'inherit'});

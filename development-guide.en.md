@@ -36,6 +36,8 @@ The project is a static site without a runtime build. HTML owns controls and sem
 
 The dictionaries cover every shared initial-state field and core subsystem structures. Equations explain calculation-local quantities. The source index lists file responsibilities and declared functions for following specific scopes; loop counters are not public interfaces.
 
+site-catalog.json defines page paths, main navigation, view names, groups and availability. lab-state.json defines defaults, ranges, choices and camera fields. scripts/site_sources.py validates these sources and generates marked sections in boot and state modules; edit the canonical data rather than generated regions.
+
 ## Data flow from input to drawing
 
 1. A native input or slider validates and commits to state, stopping incompatible playback. Reference edits instead update the store identified by source and body.
@@ -51,6 +53,8 @@ The dictionaries cover every shared initial-state field and core subsystem struc
 | References | Identity, source, parameters, visibility and locks | Moving the baseline without an explicit action |
 | Persistence | Versioned serialization, validation and fallback | Assigning invalid cached data wholesale to state |
 
+prepareObservationState reconciles model bindings and derived values before presentation. workbench-menu.js presents the catalog, while lab-controls.js handles inputs and form presentation. diagram-tool-definitions.js owns reference normalization and validation, so storage and the editor share one interpretation of each object.
+
 ## Complete shared-state dictionary
 
 initialSun defines solar defaults. initialMoon inherits them and overrides lunar fields. modeStates.sun and modeStates.moon retain separate mode state, and state points to the active object. Switching bodies should switch the reference rather than mixing playback settings.
@@ -59,14 +63,14 @@ initialSun defines solar defaults. initialMoon inherits them and overrides lunar
 
 | Variable | Meaning and role | Unit or values | Source initial value |
 | --- | --- | --- | --- |
-| body | Active body; selects solar or lunar state and controls | sun or moon | Sun: 'sun'; Moon: 'moon' |
+| body | Active body; selects solar or lunar state and controls | sun or moon | Sun: "sun"; Moon: "moon" |
 | lat | Baseline observer latitude, positive north | Degrees, −90 to 90 | Sun: 39.9 |
 | lon | Baseline observer longitude, positive east | Degrees, −180 to 180 | Sun: 116.4 |
 | dec | Solar declination, recomputed for real dates and directly controlled in ideal mode | Degrees, normally −23.44 to 23.44 | Sun: 23.44 |
 | time | Current apparent solar time in minutes after midnight | Minutes, 0 to 1440 | Sun: 720; Moon: 1200 |
-| date | Scientific observation date, not a publication date | Valid YYYY-MM-DD, 1900–2100 | Sun: '2026-06-21' |
+| date | Scientific observation date, not a publication date | Valid YYYY-MM-DD, 1900–2100 | Sun: "2026-06-21" |
 | manual | Whether ideal solar declination is directly controlled | Boolean | Sun: false |
-| view | Sky-canvas viewpoint/projection | orbit, top, horizon, observer | Sun: 'orbit' |
+| view | Sky-canvas viewpoint/projection | orbit, top, horizon, observer | Sun: "orbit" |
 | observerAz | Observer-facing azimuth in the looking-up view | Degrees clockwise from north | Sun: 180 |
 | yaw | Sky camera yaw, not geographic longitude | Radians | Sun: -0.55 |
 | pitch | Sky camera pitch, not geographic latitude | Radians | Sun: 0.38 |
@@ -90,20 +94,20 @@ initialSun defines solar defaults. initialMoon inherits them and overrides lunar
 | loop | Whether daily playback loops | Boolean | Sun: true |
 | daysRate | Lunar date-playback rate | Simulated days per real second | Sun: 1 |
 | monthLoop | Whether lunar date playback loops in its monthly range | Boolean | Sun: true |
-| place | City preset coordinate value or custom | String, must agree with latitude/longitude | Sun: '39.9,116.4' |
-| earthView | Globe versus world-map presentation | globe or map | Sun: 'globe' |
-| globeDragMode | Whether globe dragging changes view or observer location | view or location | Sun: 'view' |
-| observerTimeBasis | Whether site comparisons use apparent solar time or shared UTC | solar or utc | Sun: 'solar' |
-| observerConstraint | Constraint when moving the observer | free, latitude, longitude | Sun: 'free' |
+| place | City preset coordinate value or custom | String, must agree with latitude/longitude | Sun: "39.9,116.4" |
+| earthView | Globe versus world-map presentation | globe or map | Sun: "globe" |
+| globeDragMode | Whether globe dragging changes view or observer location | view or location | Sun: "view" |
+| observerTimeBasis | Whether site comparisons use apparent solar time or shared UTC | solar or utc | Sun: "solar" |
+| observerConstraint | Constraint when moving the observer | free, latitude, longitude | Sun: "free" |
 | globeCameraLat | Latitude of the globe camera’s target | Degrees; camera state | Sun: 39.9 |
 | globeCameraLon | Longitude of the globe camera’s target | Degrees; camera state | Sun: 116.4 |
 | globeCameraReady | Whether the globe camera has been initialized | Boolean | Sun: false |
 | moonOverlay | Whether the solar view overlays lunar motion | Boolean | Sun: false |
 | analemma | Whether annual analemma samples are currently needed | Boolean | Sun: false |
 | analemmaClock | Fixed daily annual sample clock, independent of time | Minutes after midnight | Sun: 720 |
-| analemmaBasis | Civil or apparent-solar basis for annual sampling | clock or apparent | Sun: 'clock' |
+| analemmaBasis | Civil or apparent-solar basis for annual sampling | clock or apparent | Sun: "clock" |
 | analemmaOffset | Fixed UTC offset for civil-clock annual sampling | Hours, −12 to 14 | Sun: 8 |
-| analemmaView | Analemma projection | dome, sky, equatorial | Sun: 'dome' |
+| analemmaView | Analemma projection | dome, sky, equatorial | Sun: "dome" |
 | analemmaCompare | Whether multiple fixed sample clocks are compared | Boolean | Sun: false |
 | analemmaYaw | Analemma 3D camera yaw | Radians | Sun: -0.55 |
 | analemmaPitch | Analemma 3D camera pitch | Radians | Sun: 0.38 |
@@ -113,7 +117,7 @@ initialSun defines solar defaults. initialMoon inherits them and overrides lunar
 | analemmaEccentricity | Orbital eccentricity in the ideal cause model | Dimensionless, 0 to 0.1 | Sun: 0.0167 |
 | moonDayPlayback | Whether Moon playback advances the clock within one date | Boolean | Moon: false |
 | companion | Whether Moon–planet comparisons are active | Boolean | Moon: false |
-| planet | Planet identifier for lunar comparison | Mercury, Venus, Mars, Jupiter, Saturn | Moon: 'Venus' |
+| planet | Planet identifier for lunar comparison | Mercury, Venus, Mars, Jupiter, Saturn | Moon: "Venus" |
 | companionSearchResult | Lunar close-approach search result and its conditions | Object or null; includes dates, site, clock and angular separation | Moon: null |
 
 ## Units, angles and missing values
@@ -340,6 +344,8 @@ sanitize validates kinds, finite numbers, constraints and measurement IDs. A ref
 4. Restore full experiments paused; independent reference and scene saves are not permanently overwritten by applying a collection item.
 5. Report storage denial, quota and old-version failures honestly; memory fallback must not claim persistence across reloads.
 
+Full experiments are validated by SkyLabExperiment.prepareComplete and coordinated by SkyMotionSession.transaction. Each participant captures an owner-local checkpoint before any commit. Exceptions or explicit rejection roll back in reverse order, preserving object undo history. Layout, conditions, references and ground restore their own state; history completion runs in finally.
+
 ## History, gestures and asynchronous work
 
 interaction-history.js uses adapters for scientific state, form values and routes. Pointer, slider and input commits are grouped; camera/menu actions are excluded or locally managed. restoreGeneration rejects superseded async work, and the restoring lock must be released on every exit.
@@ -367,7 +373,7 @@ ui-palette.css owns semantic color tokens such as design-primary, surface, line 
 
 ## Documentation and localization generation
 
-docs/document-content.json is the bilingual source for four documentation pages. scripts/build-documents.py generates Chinese HTML, both Markdown locales and translation entries. Shared defaults are extracted from app.js and checked against state_dictionary. This is a maintenance step; production does not require Python.
+docs/document-content.json is the bilingual source for four documentation pages. scripts/build-documents.py generates Chinese HTML, both Markdown locales and translation entries. Shared defaults are read from lab-state.json and checked against state_dictionary. This is a maintenance step; production does not require Python.
 
 scripts/prerender-pages.py then generates English siblings, language-data.js and page-cache-manifest.json. It compares structure, IDs, form values and script order so localization cannot change science. New documents require navigation, cache and bilingual-pair coverage.
 
@@ -379,6 +385,8 @@ python3 scripts/prerender-pages.py --check
 ```
 
 Keep release diaries out of the manuals. Feature usage, teaching tasks and variable meanings have separate homes. One content source generates pages and Markdown to prevent stale downloads.
+
+scripts/document_model.py validates paths, unique section IDs and aliases, bilingual text, block types, table dimensions, link targets and state documentation coverage before output. scripts/build-documents.py handles rendering and writing, using scripts/document-page.html for the shell. State tables read lab-state.json rather than inferring JavaScript declarations from indentation.
 
 ## Local development, verification and commits
 
@@ -430,20 +438,20 @@ Nebula images can be scientifically processed. Lunar/Earth textures and catalog 
 
 This index scans actual files. The right column lists explicit function declarations; follow each file for IIFEs, object methods and closures. Variable meaning is defined in the state and structure tables above.
 
-| File | Responsibility | Declared functions |
+| Source file | Responsibility | Declared functions |
 | --- | --- | --- |
-| [app.js](https://github.com/qingzhuernest/skymotion/blob/main/app.js) | Shared state, ideal solar geometry, base Canvas drawing and events | solar, daylight, hhmm, coord, heading, dateDec, selectedPlaceName, resize, poly, text, glow, skyTrackSegments, between, add, drawMoonDayEndpoints, drawSkyScene, drawTrack, drawSunAltitudeChart, line, createEarthGPU, shader, drawEarthGPU, globeCenter, globeGeometry, renderGlobeOptions, initGlobeOptions, labels, initEarthFallback, earthSurface, drawGlobe, proj, updateUI, drawSolarSky, drawLunarSky, renderSolarPipeline, renderLunarPipeline, render, schedule, setDate, stop, globeLocationAt, globeObserverPoint, selectChartDateOrTime, monthDays, syncControls, updateSolarControls, updateLunarControls, monthPhaseSamples, drawLunarMonthChart, shiftDay, advanceLunarPlayback, selectMonth, paintLabReferences |
+| [app.js](https://github.com/qingzhuernest/skymotion/blob/main/app.js) | Shared state, solar geometry, Canvas rendering and observation preparation | solar, daylight, hhmm, coord, heading, dateDec, selectedPlaceName, resize, poly, text, glow, skyTrackSegments, between, add, drawMoonDayEndpoints, drawSkyScene, drawTrack, drawSunAltitudeChart, line, createEarthGPU, shader, drawEarthGPU, globeCenter, globeGeometry, renderGlobeOptions, initGlobeOptions, labels, initEarthFallback, earthSurface, drawGlobe, proj, updateUI, drawSolarSky, drawLunarSky, renderSolarPipeline, renderLunarPipeline, prepareObservationState, render, schedule, monthPhaseSamples, drawLunarMonthChart, shiftDay, advanceLunarPlayback, paintLabReferences |
 | [moon.js](https://github.com/qingzhuernest/skymotion/blob/main/moon.js) | Real-date ephemerides, solar-time/UTC conversion and event sampling | sunEquatorial, sunHourAngle, solarNoonUTC, instantUTC, skyRaw, moonRaw, refineExtremum, ephemerisDay, lunarDay, bodyPosition, bodyDay, sunContext, lunarPhase, seasonDate, lunarFaceTexture, drawMoon, drawPhasePanel, halfLit, initPhaseInteraction, pointerAngle, applyDrag, finish |
 | [astronomy.js](https://github.com/qingzhuernest/skymotion/blob/main/astronomy.js) | Bundled third-party Astronomy Engine library | mb |
 | [coverage.js](https://github.com/qingzhuernest/skymotion/blob/main/coverage.js) | Globe/daylight, map, rise/set bearings and axis geometry | yearLength, yearDay, dateAtYearDay, updateYearSlider, illuminationAt, mapGeometry, mapLocation, worldNightLatitude, worldNightPath, drawWorldMap, updateEarthView, eventPosition, eventModel, updateEvents, drawEventCompass, eventBearingCandidates, eventBearingDate, initEventCompassInteraction, restore, adjust, finish, cancel, geometryModel, resetGeometryCamera, initGeometryCamera, redraw, drawEarthGeometry, ring, renderSolarCoverage, renderLunarCoverage, useReferenceObserver, observerClockAt, chooseMapObserver, initCoverage |
 | [workspace.js](https://github.com/qingzhuernest/skymotion/blob/main/workspace.js) | Visibility coordination for solar/lunar views and original modules | isMoonOverlayActive, moonOverlayPosition, initWorkspace, updateWorkspaceLayout, updateWorkspaceUI |
 | [page-navigation.js](https://github.com/qingzhuernest/skymotion/blob/main/page-navigation.js) | Unified shell, routing, canvas mounting and parameter drawer | uiViewHidden, uiViewText, uiViewAttribute, renderUIWorkspace, save, link, addPlace, selectDial, sundialGroup, animateDrawer, finishDrawerClose, closeParameters, openParameters, endDrawerSwipe, updateParameterPresentation |
-| [workbench-menu.js](https://github.com/qingzhuernest/skymotion/blob/main/workbench-menu.js) | Hierarchical catalog, layout entry and annual-clock linking | select, sync |
-| [custom-layout.js](https://github.com/qingzhuernest/skymotion/blob/main/custom-layout.js) | Composition, dragging, proportions, saves and full-experiment orchestration | sanitize, load, loadProfiles, button, travel, section, captureExperiment, prepareExperiment, applyProfile, persistProfiles, mutateProfiles, undoProfiles, markActive, activate, save, announce, change, move, labelButtons, labels, renderOrder, focusProfile, finishEditing, renderProfiles, apply, closeOptions, toggleOptions, start, cancel, targetAt, ratioAt |
+| [workbench-menu.js](https://github.com/qingzhuernest/skymotion/blob/main/workbench-menu.js) | Present hierarchical view and layout entries from the canonical catalog | select, sync |
+| [custom-layout.js](https://github.com/qingzhuernest/skymotion/blob/main/custom-layout.js) | Composition, dragging, proportions, saves and full-experiment orchestration | sanitize, load, loadProfiles, button, travel, section, captureExperiment, applyProfile, persistProfiles, mutateProfiles, undoProfiles, markActive, activate, save, announce, change, move, labelButtons, labels, renderOrder, focusProfile, finishEditing, renderProfiles, apply, closeOptions, toggleOptions, start, cancel, targetAt, ratioAt |
 | [customization-mode.js](https://github.com/qingzhuernest/skymotion/blob/main/customization-mode.js) | Shared lifecycle of the top customization switch | refresh, change |
 | [customization-session.js](https://github.com/qingzhuernest/skymotion/blob/main/customization-session.js) | One-use edit intent and session continuity across entries | Module methods; see source |
-| [diagram-tools.js](https://github.com/qingzhuernest/skymotion/blob/main/diagram-tools.js) | Reference stores, properties, placement, selection, imports and validation | updateFold, updateMode, setEditing, selectedOwner, selectedKey, entries, switchView, revealField, revealWithin, placementUI, contextualHelp, arm, placeAt, menuOpen, closeObjectMenu, reorder, updateFiles, readImport, cityLabel, makeObject, startExperiment, persist, stateFor, clean, defs, repaint, draftStatus, record, restoreBasis, updateLocation, actionState, validInputs, fieldError, clearFieldError, updateSmall, mutate, travel, commitActive, save, create, showInspector, rememberContext, hide, open, parameterRail, persistentRailMode, visibleModels, chooseRail, ensureRailNavigation, syncRailNavigation, syncRailShell, unmountPanel, placePanel, renderToolLibrary, renderObjectList, referenceNameAtLocation, attachReferenceControl, commitReferenceField, renderInspector, update, selectedRow, focusSelectedRow, selectReference, textLayout, helper, drawObject, anchor, movementOrigin, hitAnchor, pointAt, beginDrag, moveDrag, finishDrag, cancelDrag, wireCanvas, paint, customizationOn, syncLaunchers, checkCurrentVisibility, syncVisibility, comparisonModel, comparisonList, comparisonChange, comparisonValid, syncInputs, finishNudge, nudge |
-| [diagram-tool-definitions.js](https://github.com/qingzhuernest/skymotion/blob/main/diagram-tool-definitions.js) | Per-plot tool types, fields and bilingual names | Module methods; see source |
+| [diagram-tools.js](https://github.com/qingzhuernest/skymotion/blob/main/diagram-tools.js) | Reference stores, properties, placement, selection, imports and validation | updateFold, updateMode, setEditing, selectedOwner, selectedKey, entries, switchView, revealField, revealWithin, placementUI, contextualHelp, arm, placeAt, menuOpen, closeObjectMenu, reorder, updateFiles, readImport, cityLabel, makeObject, startExperiment, persist, stateFor, defs, clean, repaint, draftStatus, record, restoreBasis, updateLocation, actionState, validInputs, fieldError, clearFieldError, updateSmall, mutate, travel, commitActive, save, create, showInspector, rememberContext, hide, open, parameterRail, persistentRailMode, visibleModels, chooseRail, ensureRailNavigation, syncRailNavigation, syncRailShell, unmountPanel, placePanel, renderToolLibrary, renderObjectList, referenceNameAtLocation, attachReferenceControl, commitReferenceField, renderInspector, update, selectedRow, focusSelectedRow, selectReference, textLayout, helper, drawObject, anchor, movementOrigin, hitAnchor, pointAt, beginDrag, moveDrag, finishDrag, cancelDrag, wireCanvas, paint, customizationOn, syncLaunchers, checkCurrentVisibility, syncVisibility, comparisonModel, comparisonList, comparisonChange, comparisonValid, syncInputs, finishNudge, nudge |
+| [diagram-tool-definitions.js](https://github.com/qingzhuernest/skymotion/blob/main/diagram-tool-definitions.js) | Object types, fields and data normalization without DOM bindings | forModel, normalize |
 | [diagram-sampling.js](https://github.com/qingzhuernest/skymotion/blob/main/diagram-sampling.js) | Bounded caches, geometric crossings and annual reference sampling | crossings |
 | [observer-comparison.js](https://github.com/qingzhuernest/skymotion/blob/main/observer-comparison.js) | Linked city/time projections and source-aware selection emphasis | memo, at, basis, sample, color, name, enabled, sites, times, points, events, stroke, dot, label, geometryRay, paint |
 | [parameter-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/parameter-controls.js) | Coordinate, clock and date scrubbing and precise inputs | attach, sync, start, flush, finish, cancel |
@@ -459,15 +467,15 @@ This index scans actual files. The right column lists explicit function declarat
 | [motion.js](https://github.com/qingzhuernest/skymotion/blob/main/motion.js) | On-demand frames, playback accumulation and camera smoothing | elementVisible, canPaint, requestMotionFrame, snapshotMotion, syncMotionTarget, motionProgress, mixDirection, visualPosition, visualPhase, visualTrackPosition, visualChartDay, motionCamera, easeCompanionView, settleMotion, revealMotion, drawMotionCanvases, motionFrame, initMotion, focusAfterReveal |
 | [menu.js](https://github.com/qingzhuernest/skymotion/blob/main/menu.js) | Original parameter grouping and disclosure behavior | updateMenu, closeMenu, initMenu |
 | [time-workbench.js](https://github.com/qingzhuernest/skymotion/blob/main/time-workbench.js) | Shared clock/date timeline and playback controls | workbenchBasis, workbenchTimeMax, workbenchSetTime, workbenchShiftDate, workbenchSetBasis, workbenchPlay, workbenchIsPlaying, renderTimeWorkbench, initTimeWorkbench |
-| [experiment-storage.js](https://github.com/qingzhuernest/skymotion/blob/main/experiment-storage.js) | Session validation, versions and memory fallback | validDate, searchResult, sanitizeMode, read, write |
+| [experiment-storage.js](https://github.com/qingzhuernest/skymotion/blob/main/experiment-storage.js) | Versioned session validation, storage fallback and restore transaction coordination | validDate, searchResult, sanitizeMode, read, write, transaction |
 | [interaction-history.js](https://github.com/qingzhuernest/skymotion/blob/main/interaction-history.js) | Parameter history, gesture grouping and restoration lock | read, stateFor, replace, commit, begin, queue, restore |
-| [lab-history.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-history.js) | Lab snapshots, restoration and full-experiment state interface | Module methods; see source |
+| [lab-history.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-history.js) | Observation snapshots, history adapter and full-experiment data coordination | Module methods; see source |
 | [lab-customization.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-customization.js) | Compatible Lab customization integration | Module methods; see source |
 | [lab-comparison-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-comparison-controls.js) | Original Lab comparison control adapter | Module methods; see source |
 | [interface-motion.js](https://github.com/qingzhuernest/skymotion/blob/main/interface-motion.js) | Disclosure/selection feedback respecting reduced motion | springFrames, springPanel, installDisclosures, revealOptions, installSegments, update, installRail, sync, setCollapsed, gesture, end |
 | [language.js](https://github.com/qingzhuernest/skymotion/blob/main/language.js) | Locale switching, fonts, static siblings and retry | installDictionary, translate, text, element, walk, apply, prepareFonts, showLanguageFailure, change, reveal, observePresentation, init, failure |
 | [language-data.js](https://github.com/qingzhuernest/skymotion/blob/main/language-data.js) | Generated bilingual dictionary | Module methods; see source |
-| [page-boot.js](https://github.com/qingzhuernest/skymotion/blob/main/page-boot.js) | Locale and entrance initialization before visible paint | readingKey, saveReadingWindow, mergeReadingFallback, localeUrl, showFontFailure |
+| [page-boot.js](https://github.com/qingzhuernest/skymotion/blob/main/page-boot.js) | Locale and entrance initialization before visible paint | freezeCatalog, readingKey, saveReadingWindow, mergeReadingFallback, localeUrl, showFontFailure |
 | [page-cache.js](https://github.com/qingzhuernest/skymotion/blob/main/page-cache.js) | Same-origin resource warming from the manifest | worker |
 | [date-picker.js](https://github.com/qingzhuernest/skymotion/blob/main/date-picker.js) | Calendar selection with confirm/cancel semantics | dateValue, allowed, updateDraft, focusKey, close, render, open, install |
 | [observer-explanation.js](https://github.com/qingzhuernest/skymotion/blob/main/observer-explanation.js) | Scientific context and explanations for the current view | close, sync |
@@ -491,3 +499,4 @@ This index scans actual files. The right column lists explicit function declarat
 | [space/population.js](https://github.com/qingzhuernest/skymotion/blob/main/space/population.js) | Satellite/small-body data and approximate orbits | solveKepler, epochDays, prepare, convert, position, displaySatellite, satelliteDistance, create, load, setPositions |
 | [space/stars.js](https://github.com/qingzhuernest/skymotion/blob/main/space/stars.js) | Star catalog, picking and labels | temperature, color, direction, create |
 | [space/nebulae.js](https://github.com/qingzhuernest/skymotion/blob/main/space/nebulae.js) | Nebula catalog, image display and resource management | create, choose, load |
+| [lab-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-controls.js) | Observation input events, location/date controls and form presentation | setDate, stop, globeLocationAt, globeObserverPoint, selectChartDateOrTime, monthDays, syncControls, updateSolarControls, updateLunarControls, selectMonth |

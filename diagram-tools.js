@@ -96,7 +96,10 @@
   function entries() {
     if (!current) return [];
     const local = stateFor(current).objects.map((o) => ({ o, source: current.id }));
-    if (current.body === 'sun' && ['lab', 'diagrams'].includes(document.body.dataset.page)) {
+    if (
+      current.body === 'sun' &&
+      ['lab', 'diagrams'].includes(document.body.dataset.page)
+    ) {
       for (const o of comparisonList())
         if (o.source !== current.id) local.push({ o, source: o.source });
     }
@@ -121,7 +124,8 @@
     const b = E('button', '', tabs);
     b.type = 'button';
     b.dataset.dtView = key;
-    b.onclick = () => switchView(activeView === key && key !== 'objects' ? 'objects' : key);
+    b.onclick = () =>
+      switchView(activeView === key && key !== 'objects' ? 'objects' : key);
   }
   function switchView(key, force = false) {
     if (!force) {
@@ -159,7 +163,8 @@
     const container = desktopSplit() && inspector.contains(input) ? inspector : scroll;
     revealWithin(input, container);
   }
-  const desktopSplit = () => matchMedia('(min-width:1000px) and (min-height:650px)').matches;
+  const desktopSplit = () =>
+    matchMedia('(min-width:1000px) and (min-height:650px)').matches;
   function revealWithin(element, container) {
     const r = element.getBoundingClientRect(),
       bounds = container.getBoundingClientRect();
@@ -199,7 +204,10 @@
   };
   goal.onchange = () => {
     recipe.hidden = !goal.value;
-    if (goal.value === 'places' && citySelect.value === [current.lat, current.lon].join(','))
+    if (
+      goal.value === 'places' &&
+      citySelect.value === [current.lat, current.lon].join(',')
+    )
       citySelect.value = current.lat === -33.9 ? '51.5,-0.1' : '-33.9,151.2';
     goalHelp.textContent = tr(
       goalHints[goal.value] ||
@@ -467,7 +475,8 @@
       mutate((s) => {
         const index = s.objects.findIndex((o) => o.id === selected);
         s.objects = s.objects.filter((o) => o.id !== selected);
-        selected = s.objects[Math.max(0, Math.min(index, s.objects.length - 1))]?.id || null;
+        selected =
+          s.objects[Math.max(0, Math.min(index, s.objects.length - 1))]?.id || null;
       });
   });
   objectActions.append(duplicate, remove);
@@ -544,7 +553,10 @@
     objectMenu.style.left =
       Math.max(
         8,
-        Math.min(innerWidth - objectMenu.offsetWidth - 8, r.right - objectMenu.offsetWidth),
+        Math.min(
+          innerWidth - objectMenu.offsetWidth - 8,
+          r.right - objectMenu.offsetWidth,
+        ),
       ) + 'px';
     objectMenu.style.top = Math.max(8, r.top - objectMenu.offsetHeight - 6) + 'px';
     objectMenu.querySelector('button:not(:disabled)')?.focus();
@@ -671,14 +683,18 @@
           if (!validInputs()) return;
           const imported = pendingImport;
           if (!imported) return;
-          if (mode === 'merge' && stateFor(selectedOwner()).objects.length + imported.length > 40) {
+          if (
+            mode === 'merge' &&
+            stateFor(selectedOwner()).objects.length + imported.length > 40
+          ) {
             status.textContent = tr(
               '合并后超过 40 个对象；请改用替换或减少现有对象。|Merging exceeds 40 references; replace or remove some existing references.',
             );
             return;
           }
           mutate((s) => {
-            s.objects = mode === 'replace' ? copy(imported) : [...s.objects, ...copy(imported)];
+            s.objects =
+              mode === 'replace' ? copy(imported) : [...s.objects, ...copy(imported)];
             selected = imported.at(-1)?.id || null;
           });
           pendingImport = null;
@@ -686,7 +702,9 @@
           switchView('objects', true);
         };
       }
-      status.textContent = tr('文件已读取，选择合并或替换。|File ready; choose merge or replace.');
+      status.textContent = tr(
+        '文件已读取，选择合并或替换。|File ready; choose merge or replace.',
+      );
     } catch {
       if (!stillCurrent()) return;
       pendingImport = null;
@@ -697,7 +715,8 @@
     }
   }
   function cityLabel() {
-    const text = citySelect.selectedOptions[0]?.textContent || tr('观察点 / 城市|Observer / city'),
+    const text =
+        citySelect.selectedOptions[0]?.textContent || tr('观察点 / 城市|Observer / city'),
       dict = window.skyEnglishDictionary || {},
       zh = en() ? Object.keys(dict).find((k) => dict[k] === text) || text : text;
     return zh + '|' + (dict[zh] || text);
@@ -739,7 +758,9 @@
       const base = o.autoLabel;
       let n = 1,
         candidate = base;
-      while (stateFor(current).objects.some((q) => (q.autoLabel || q.label) === candidate)) {
+      while (
+        stateFor(current).objects.some((q) => (q.autoLabel || q.label) === candidate)
+      ) {
         n++;
         candidate = base
           .split('|')
@@ -775,7 +796,8 @@
       const def = defs(current).find(
         (d) => d.id === 'observer' && d.fields.some((f) => f.name === 'lat'),
       );
-      if (def && ['lab-sky', 'earth', 'world-map'].includes(current.id)) create(def, values);
+      if (def && ['lab-sky', 'earth', 'world-map'].includes(current.id))
+        create(def, values);
       else {
         const id = comparisons.add('observer', values);
         if (id) {
@@ -806,7 +828,12 @@
             : kind === 'track'
               ? current.view === 'equatorial'
                 ? { clock: ((current.clock ?? current.time ?? 720) + 180) % 1440 }
-                : { lat: current.lat > 0 ? -Math.abs(current.lat) : Math.abs(current.lat) || 40 }
+                : {
+                    lat:
+                      current.lat > 0
+                        ? -Math.abs(current.lat)
+                        : Math.abs(current.lat) || 40,
+                  }
               : {
                   date:
                     current.date.slice(0, 4) +
@@ -827,7 +854,10 @@
   const draftKey = (m) => 'sky-diagram-draft-v2:' + m.id + ':' + (m.body || 'shared');
   function persist(m, s) {
     try {
-      sessionStorage.setItem(draftKey(m), JSON.stringify({ version: 1, objects: s.objects }));
+      sessionStorage.setItem(
+        draftKey(m),
+        JSON.stringify({ version: 1, objects: s.objects }),
+      );
     } catch {}
   }
   function stateFor(m) {
@@ -862,88 +892,14 @@
     entry.model = { id: m.id, type: m.type, body: m.body || 'shared' };
     return entry;
   }
-  function clean(objects, m) {
-    // A legacy or hand-edited save may exceed the current limit. Keep its
-    // oldest supported objects so one bad record cannot erase the whole plot.
-    const out = [];
-    const ids = new Set();
-    for (const raw of objects) {
-      if (out.length === 40) break;
-      if (!raw || typeof raw !== 'object') continue;
-      const def = defs(m).find((d) => d.id === raw.type);
-      if (!def || typeof raw.id !== 'string') continue;
-      let id = raw.id.slice(0, 80);
-      if (!id || ids.has(id)) {
-        do id = 'd' + Date.now() + ++serial;
-        while (ids.has(id));
-      }
-      ids.add(id);
-      const o = {
-        id,
-        type: def.id,
-        label: typeof raw.label === 'string' ? raw.label.slice(0, 60) : def.title,
-        customLabel: raw.customLabel === true,
-        visible: raw.visible !== false,
-        locked: raw.locked === true,
-      };
-      if (!o.customLabel) {
-        const n = Number.isInteger(raw.copyNumber)
-          ? raw.copyNumber
-          : Number(o.label.match(/ (\d+)$/)?.[1]);
-        if (n >= 2 && n <= 999) o.copyNumber = n;
-        o.label = def.title
-          .split('|')
-          .map((x) => x + (o.copyNumber ? ' ' + o.copyNumber : ''))
-          .join('|');
-      }
-      if (!o.customLabel && typeof raw.autoLabel === 'string' && raw.autoLabel.length <= 160) {
-        o.autoLabel = raw.autoLabel;
-        o.label = raw.autoLabel;
-      }
-      for (const f of def.fields) {
-        const v = raw[f.name];
-        if (f.options) o[f.name] = f.options.some((x) => x.split(':')[0] === v) ? v : f.value;
-        else if (f.min !== undefined)
-          o[f.name] = Number.isFinite(v)
-            ? Math.max(f.min, Math.min(f.max, v))
-            : Number.isFinite(f.value)
-              ? f.value
-              : 0;
-        else if (f.value === 'date')
-          o[f.name] = validDate(v) ? v : validDate(m.date) ? m.date : '1900-01-01';
-        else o[f.name] = typeof v === 'string' ? v.slice(0, 100) : f.value;
-      }
-      if (
-        def.id === 'camera' &&
-        raw.camera &&
-        ['azimuth', 'elevation', 'distance'].every((k) => Number.isFinite(raw.camera[k]))
-      )
-        o.camera = {
-          azimuth: raw.camera.azimuth,
-          elevation: Math.max(-1.5, Math.min(1.5, raw.camera.elevation)),
-          distance: Math.max(0.5, Math.min(10000, raw.camera.distance)),
-          selected:
-            Number.isInteger(raw.camera.selected) &&
-            raw.camera.selected >= 0 &&
-            raw.camera.selected < 8
-              ? raw.camera.selected
-              : 2,
-          view: ['overview', 'earthmoon', 'focus'].includes(raw.camera.view)
-            ? raw.camera.view
-            : 'overview',
-          inspectingMoon: raw.camera.inspectingMoon === true,
-        };
-      out.push(o);
-    }
-    return out;
+  function defs(model) {
+    return window.SkyDiagramDefinitions.forModel(model);
   }
-  function defs(m) {
-    let d = definitions[m.type] || [];
-    if (m.type === 'sky' && m.body === 'moon')
-      d = d.filter((x) => ['curve', 'time', 'build'].includes(x.id));
-    if (m.type === 'altitude' && m.body === 'moon')
-      d = d.filter((x) => ['curve', 'time'].includes(x.id));
-    return [...d, ...common];
+  function clean(objects, model) {
+    return window.SkyDiagramDefinitions.normalize(objects, model, {
+      validDate,
+      nextId: () => 'd' + Date.now() + ++serial,
+    });
   }
   function repaint() {
     if (!current) return;
@@ -1001,7 +957,8 @@
       restoreBasis();
       return;
     }
-    const linked = m.body === 'sun' && ['lab', 'diagrams'].includes(document.body.dataset.page);
+    const linked =
+      m.body === 'sun' && ['lab', 'diagrams'].includes(document.body.dataset.page);
     if (linked) {
       basisNode = document.querySelector('.observer-link-settings');
       if (basisNode) {
@@ -1026,7 +983,9 @@
     if (locationInfo.textContent !== text) locationInfo.textContent = text;
     locationApply.disabled = same;
     locationApply.textContent = tr(
-      same ? '当前基准地点|Current baseline location' : '设为基准地点|Use as baseline location',
+      same
+        ? '当前基准地点|Current baseline location'
+        : '设为基准地点|Use as baseline location',
     );
   }
   locationApply.onclick = () => {
@@ -1136,10 +1095,12 @@
               .split(',')
               .map(Number)
               .every(
-                (value, index) => Math.abs(value - selectedObject[index ? 'lon' : 'lat']) < 1e-6,
+                (value, index) =>
+                  Math.abs(value - selectedObject[index ? 'lon' : 'lat']) < 1e-6,
               ),
         )?.value || '';
-    for (const input of form.querySelectorAll('[data-field]')) SkyParameterControls.sync(input);
+    for (const input of form.querySelectorAll('[data-field]'))
+      SkyParameterControls.sync(input);
     actionState();
   }
   function mutate(fn, keepFields = false) {
@@ -1166,7 +1127,9 @@
     const snapshot = s[from].pop();
     s.objects = snapshot.objects;
     persist(selectedOwner(), s);
-    selected = s.objects.some((o) => o.id === snapshot.selected) ? snapshot.selected : null;
+    selected = s.objects.some((o) => o.id === snapshot.selected)
+      ? snapshot.selected
+      : null;
     draftStatus();
     update();
     repaint();
@@ -1357,14 +1320,17 @@
   function parameterRail() {
     return (
       document.querySelector('.ui-parameters') ||
-      document.querySelector('body[data-page=space]:not(.space-immersive) #spaceSidebarHost .side')
+      document.querySelector(
+        'body[data-page=space]:not(.space-immersive) #spaceSidebarHost .side',
+      )
     );
   }
   function persistentRailMode() {
     return (
       !!parameterRail() &&
       (document.body.hasAttribute('data-entry-view') ||
-        (window.SkyCustomization?.active === true && !matchMedia('(max-width:760px)').matches))
+        (window.SkyCustomization?.active === true &&
+          !matchMedia('(max-width:760px)').matches))
     );
   }
   function visibleModels() {
@@ -1390,7 +1356,11 @@
         current && visibleModels().some((m) => m.id === current.id)
           ? models.get(current.id)
           : visibleModels()[0];
-      if (panel.hidden && target && !document.body.classList.contains('scene-builder-active'))
+      if (
+        panel.hidden &&
+        target &&
+        !document.body.classList.contains('scene-builder-active')
+      )
         open(target, true);
       setEditing(referenceMode);
     }
@@ -1431,7 +1401,8 @@
           ? 0
           : e.key === 'End'
             ? buttons.length - 1
-            : (currentIndex + (e.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
+            : (currentIndex + (e.key === 'ArrowRight' ? 1 : -1) + buttons.length) %
+              buttons.length;
       const button = buttons[index];
       if (chooseRail(button.dataset.railSection)) button.focus({ preventScroll: true });
     });
@@ -1517,8 +1488,15 @@
     const docked =
       !!rail &&
       (document.body.hasAttribute('data-entry-view') ||
-        (!mobile && !!r && r.width > 180 && r.width < 450 && r.left >= 0 && r.height > 180));
-    const focused = panel.contains(document.activeElement) ? document.activeElement : null;
+        (!mobile &&
+          !!r &&
+          r.width > 180 &&
+          r.width < 450 &&
+          r.left >= 0 &&
+          r.height > 180));
+    const focused = panel.contains(document.activeElement)
+      ? document.activeElement
+      : null;
     if (mountedRail && (!docked || mountedRail !== rail)) unmountPanel();
     panel.classList.toggle('dt-docked', docked);
     if (docked && !mountedRail) {
@@ -1536,7 +1514,8 @@
     panel.style.width = '';
     document.body.classList.toggle('diagram-workbench-active', docked);
     syncRailShell();
-    if (focused && document.activeElement !== focused) focused.focus({ preventScroll: true });
+    if (focused && document.activeElement !== focused)
+      focused.focus({ preventScroll: true });
   }
   // Tool creation, object navigation and properties render independently.
   function renderToolLibrary() {
@@ -1544,7 +1523,10 @@
       previous = goal.value;
     goal.replaceChildren();
     const choices = [['', '选择实验目的|Choose an experiment']];
-    if (current.body === 'sun' && ['lab', 'diagrams'].includes(document.body.dataset.page))
+    if (
+      current.body === 'sun' &&
+      ['lab', 'diagrams'].includes(document.body.dataset.page)
+    )
       choices.push(['places', '同一时间 · 不同地点|Same instant · different places']);
     if (available.some((d) => d.id === 'time'))
       choices.push(['times', '同一地点 · 不同时刻|Same place · different times']);
@@ -1557,7 +1539,10 @@
           ? '比较不同时刻的日行迹|Compare analemmas at different times'
           : '比较不同纬度的日行迹|Compare analemmas at different latitudes',
       ]);
-    if (window.SkySceneBuilder && ['lab', 'diagrams'].includes(document.body.dataset.page))
+    if (
+      window.SkySceneBuilder &&
+      ['lab', 'diagrams'].includes(document.body.dataset.page)
+    )
       choices.push(['shadow', '摆放竖杆 · 观察影子|Place a rod · observe its shadow']);
     for (const [value, title] of choices) {
       const option = E('option', '', goal);
@@ -1622,7 +1607,10 @@
         }
       };
     }
-    if (window.SkySceneBuilder && ['lab', 'diagrams'].includes(document.body.dataset.page)) {
+    if (
+      window.SkySceneBuilder &&
+      ['lab', 'diagrams'].includes(document.body.dataset.page)
+    ) {
       const heading = E('h4', 'dt-add-group', add);
       heading.textContent = tr(
         '实验物体 · 在实验地面中摆放|Experiment objects · place on the experiment ground',
@@ -1664,17 +1652,26 @@
         b = E('button', '', row);
       b.type = 'button';
       b.textContent = o.customLabel ? o.label : tr(o.label);
-      b.setAttribute('aria-pressed', String(o.id === selected && source === selectedOwner().id));
+      b.setAttribute(
+        'aria-pressed',
+        String(o.id === selected && source === selectedOwner().id),
+      );
       b.dataset.referenceId = token;
       b.dataset.referenceSource = source;
       if (current.type === 'analemma' && o.type === 'track') {
         b.classList.add('dt-track-label');
         b.style.setProperty(
           '--reference-color',
-          trackColors[s.objects.filter((q) => q.type === 'track').indexOf(o) % trackColors.length],
+          trackColors[
+            s.objects.filter((q) => q.type === 'track').indexOf(o) % trackColors.length
+          ],
         );
       }
-      if (o.type === 'observer' && current.body === 'sun' && window.SkyObserverComparison) {
+      if (
+        o.type === 'observer' &&
+        current.body === 'sun' &&
+        window.SkyObserverComparison
+      ) {
         const swatch = E('span', 'dt-reference-swatch');
         swatch.setAttribute('aria-hidden', 'true');
         swatch.style.setProperty('--reference-color', SkyObserverComparison.color(o.id));
@@ -1712,7 +1709,10 @@
         const rowMore = E('button', 'dt-row-more', row);
         rowMore.type = 'button';
         rowMore.innerHTML = more.innerHTML;
-        rowMore.setAttribute('aria-label', tr('更多操作|More actions') + ' · ' + b.textContent);
+        rowMore.setAttribute(
+          'aria-label',
+          tr('更多操作|More actions') + ' · ' + b.textContent,
+        );
         rowMore.setAttribute('aria-haspopup', 'menu');
         rowMore.onclick = () => {
           selectReference(token);
@@ -1720,7 +1720,10 @@
         };
       }
     }
-    if (window.SkySceneBuilder && ['lab', 'diagrams'].includes(document.body.dataset.page)) {
+    if (
+      window.SkySceneBuilder &&
+      ['lab', 'diagrams'].includes(document.body.dataset.page)
+    ) {
       const physical = SkySceneBuilder.listObjects();
       objectTitle.textContent =
         tr('图中对象|Plot objects') + ' · ' + (allEntries.length + physical.length);
@@ -1754,11 +1757,16 @@
     if (option) {
       const text = option.textContent,
         dict = window.skyEnglishDictionary || {};
-      const zh = en() ? Object.keys(dict).find((key) => dict[key] === text) || text : text;
+      const zh = en()
+        ? Object.keys(dict).find((key) => dict[key] === text) || text
+        : text;
       o.label = o.autoLabel = zh + '|' + (dict[zh] || text);
     } else
       o.label = o.autoLabel =
-        '自定义地点 ' + coordinates(o.lat, o.lon) + '|Custom location ' + coordinates(o.lat, o.lon);
+        '自定义地点 ' +
+        coordinates(o.lat, o.lon) +
+        '|Custom location ' +
+        coordinates(o.lat, o.lon);
   }
   function attachReferenceControl(input, field, object) {
     if (field.options || (field.min === undefined && field.value !== 'date')) return;
@@ -1801,7 +1809,8 @@
         updateSmall();
       },
       cancel(before) {
-        for (const key of Object.keys(object)) if (!(key in before.object)) delete object[key];
+        for (const key of Object.keys(object))
+          if (!(key in before.object)) delete object[key];
         Object.assign(object, before.object);
         input.value = displayValue(field.name, object[field.name]);
         input.dataset.committedValue = input.value;
@@ -1820,7 +1829,9 @@
       if (f.name === 'time' && String(v).includes(':')) {
         const parts = /^(\d{1,2}):(\d{2})$/.exec(v);
         v =
-          parts && +parts[2] < 60 && (+parts[1] < 24 || (+parts[1] === 24 && +parts[2] === 0))
+          parts &&
+          +parts[2] < 60 &&
+          (+parts[1] < 24 || (+parts[1] === 24 && +parts[2] === 0))
             ? +parts[1] * 60 + +parts[2]
             : NaN;
       }
@@ -1904,9 +1915,12 @@
       );
     }
     inspectorTitle.textContent = tr(
-      o ? '调整所选对象|Selected reference' : '选择一个对象以调整|Select a reference to adjust',
+      o
+        ? '调整所选对象|Selected reference'
+        : '选择一个对象以调整|Select a reference to adjust',
     );
-    const resultKey = (selectedOwner()?.id || '') + ':' + (current.body || '') + ':' + selected;
+    const resultKey =
+      (selectedOwner()?.id || '') + ':' + (current.body || '') + ':' + selected;
     if (result.dataset.reference !== resultKey) {
       result.textContent = '';
       result.dataset.reference = resultKey;
@@ -1937,7 +1951,9 @@
       ) {
         const label = E('label', 'dt-city-edit', form);
         label.append(
-          document.createTextNode(tr('选择城市，再拖动微调|Choose a city, then drag to adjust')),
+          document.createTextNode(
+            tr('选择城市，再拖动微调|Choose a city, then drag to adjust'),
+          ),
         );
         const cities = E('select', '', label);
         cities.dataset.cityEdit = '';
@@ -2007,7 +2023,8 @@
             (f.name === 'offset' && o.basis === 'apparent'))
         )
           n.disabled = true;
-        if (o.locked && ['x', 'y', 'lat', 'lon', 'time'].includes(f.name)) n.disabled = true;
+        if (o.locked && ['x', 'y', 'lat', 'lon', 'time'].includes(f.name))
+          n.disabled = true;
         n.onchange = () => commitReferenceField(n, f, o);
         attachReferenceControl(n, f, o);
       }
@@ -2027,7 +2044,8 @@
           mutate(() => (o.locked = lock.checked), true);
           for (const field of form.querySelectorAll('[data-field]')) {
             field.disabled =
-              !!o.locked && ['x', 'y', 'lat', 'lon', 'time'].includes(field.dataset.field);
+              !!o.locked &&
+              ['x', 'y', 'lat', 'lon', 'time'].includes(field.dataset.field);
             SkyParameterControls.sync(field);
           }
         };
@@ -2093,7 +2111,11 @@
     scroll.scrollTop = scrollBefore;
     list.scrollTop = listBefore;
     inspector.scrollTop = inspectorBefore;
-    if (desktopSplit() && activeView === 'objects' && panel.dataset.collapsed !== 'true') {
+    if (
+      desktopSplit() &&
+      activeView === 'objects' &&
+      panel.dataset.collapsed !== 'true'
+    ) {
       const row = selectedRow();
       if (row) revealWithin(row, list);
     }
@@ -2122,7 +2144,9 @@
     row?.focus({ preventScroll: true });
     if (desktopSplit() && row) revealWithin(row, list);
     if (edit) {
-      const input = form.querySelector('input:not(:disabled),select:not(:disabled),button');
+      const input = form.querySelector(
+        'input:not(:disabled),select:not(:disabled),button',
+      );
       input?.focus({ preventScroll: true });
       if (input) revealField(input);
     }
@@ -2147,7 +2171,10 @@
           ? 0
           : e.key === 'End'
             ? rows.length - 1
-            : Math.max(0, Math.min(rows.length - 1, index + (e.key === 'ArrowDown' ? 1 : -1)));
+            : Math.max(
+                0,
+                Math.min(rows.length - 1, index + (e.key === 'ArrowDown' ? 1 : -1)),
+              );
       selectReference(rows[next].dataset.referenceId);
     } else if (e.key === 'Enter') {
       e.preventDefault();
@@ -2303,11 +2330,15 @@
               Math.asin(
                 Math.max(
                   -1,
-                  Math.min(1, Math.sin(a) * Math.sin(d) + Math.cos(a) * Math.cos(d) * Math.cos(l)),
+                  Math.min(
+                    1,
+                    Math.sin(a) * Math.sin(d) + Math.cos(a) * Math.cos(d) * Math.cos(l),
+                  ),
                 ),
               ) / R;
           metric = `${label} · ${alt.toFixed(1)}° · ${tr(alt >= 0 ? '白昼|Daylight' : '夜晚|Night')}`;
-          if (o.type === 'ray' && p && !p.hidden) H.line(p, m.rayAt?.(o.lat, o.lon), alt < 0);
+          if (o.type === 'ray' && p && !p.hidden)
+            H.line(p, m.rayAt?.(o.lat, o.lon), alt < 0);
         }
       }
       if (o.type === 'observer') {
@@ -2362,7 +2393,11 @@
       };
       if (o.type === 'curve') {
         const base = o.date.slice(0, 8),
-          count = new Date(Number(o.date.slice(0, 4)), Number(o.date.slice(5, 7)), 0).getDate();
+          count = new Date(
+            Number(o.date.slice(0, 4)),
+            Number(o.date.slice(5, 7)),
+            0,
+          ).getDate();
         const points = Array.from({ length: Math.min(count, m.days) }, (_, i) =>
           m.project(i + 1, value(base + String(i + 1).padStart(2, '0'))),
         );
@@ -2370,11 +2405,13 @@
         H.text(o.date.slice(0, 7) + ' · ' + label, points[Math.floor(points.length / 2)]);
         metric = o.date.slice(0, 7);
       }
-      if (o.type === 'level') H.line(m.project(1, o.value), m.project(m.days, o.value), true);
+      if (o.type === 'level')
+        H.line(m.project(1, o.value), m.project(m.days, o.value), true);
       if (o.type === 'date') {
         const v = value(o.date);
         dateDot(o.date, v, label + ' · ' + o.date);
-        metric = o.date + ' · ' + v.toFixed(2) + '%' + (inMonth(o.date) ? '' : ' · ' + outside);
+        metric =
+          o.date + ' · ' + v.toFixed(2) + '%' + (inMonth(o.date) ? '' : ' · ' + outside);
       }
       if (o.type === 'measure') {
         const a = value(o.a),
@@ -2420,19 +2457,33 @@
       if (o.type === 'ring') {
         const center = o.plane === 'horizon' ? m.q : [0, 0, 0],
           u = o.plane === 'horizon' ? m.north : [1, 0, 0],
-          v = o.plane === 'horizon' ? m.east : o.plane === 'equator' ? [0, 0, 1] : [0, 1, 0];
+          v =
+            o.plane === 'horizon'
+              ? m.east
+              : o.plane === 'equator'
+                ? [0, 0, 1]
+                : [0, 1, 0];
         H.path(
           Array.from({ length: 121 }, (_, i) => {
             const a = (i * Math.PI) / 60;
             return at(
-              add(center, add(scale(u, o.radius * Math.cos(a)), scale(v, o.radius * Math.sin(a)))),
+              add(
+                center,
+                add(scale(u, o.radius * Math.cos(a)), scale(v, o.radius * Math.sin(a))),
+              ),
             );
           }),
         );
       }
       if (o.type === 'angle') {
         const dir = (key) =>
-            key === 'axis' ? [0, 1, 0] : key === 'sun' ? m.sun : key === 'north' ? m.north : m.q,
+            key === 'axis'
+              ? [0, 1, 0]
+              : key === 'sun'
+                ? m.sun
+                : key === 'north'
+                  ? m.north
+                  : m.q,
           a = dir(o.a),
           b = dir(o.b),
           angle =
@@ -2441,7 +2492,8 @@
                 -1,
                 Math.min(
                   1,
-                  a.reduce((n, x, i) => n + x * b[i], 0) / (Math.hypot(...a) * Math.hypot(...b)),
+                  a.reduce((n, x, i) => n + x * b[i], 0) /
+                    (Math.hypot(...a) * Math.hypot(...b)),
                 ),
               ),
             ) / R;
@@ -2467,7 +2519,11 @@
       if (o.type === 'rays') {
         for (let i = 0; i < o.count; i++) {
           const y = m.center.y + (i - (o.count - 1) / 2) * m.radius * o.spread;
-          H.line({ x: m.sunX - 15, y }, { x: Math.max(8, m.center.x - m.radius), y }, true);
+          H.line(
+            { x: m.sunX - 15, y },
+            { x: Math.max(8, m.center.x - m.radius), y },
+            true,
+          );
         }
         return o.count + ' ' + tr('条平行光线|parallel rays');
       }
@@ -2513,13 +2569,23 @@
               q.basis || 'clock',
               (q.basis || 'clock') === 'clock' ? (q.offset ?? m.offset) : 0,
             ]),
-          primary = { lat: m.lat, lon: m.lon, clock: m.clock, basis: m.basis, offset: m.offset },
+          primary = {
+            lat: m.lat,
+            lon: m.lon,
+            clock: m.clock,
+            basis: m.basis,
+            offset: m.offset,
+          },
           duplicate = stateFor(m).objects.some(
             (q) =>
-              q.id !== o.id && q.type === 'track' && q.visible && signature(q) === signature(o),
+              q.id !== o.id &&
+              q.type === 'track' &&
+              q.visible &&
+              signature(q) === signature(o),
           );
         metric = `${Math.abs(o.lat).toFixed(2)}°${o.lat < 0 ? 'S' : 'N'} · ${Math.abs(o.lon).toFixed(2)}°${o.lon < 0 ? 'W' : 'E'} · ${SkyDiagramSampling.clock(o.clock)} · ${tr(o.basis === 'apparent' ? '真太阳时|Apparent solar time' : '钟表时|Clock time')}`;
-        if (o.basis !== 'apparent') metric += ' · UTC' + (o.offset >= 0 ? '+' : '') + o.offset;
+        if (o.basis !== 'apparent')
+          metric += ' · UTC' + (o.offset >= 0 ? '+' : '') + o.offset;
         if (signature(primary) === signature(o) || duplicate)
           metric +=
             ' · ' +
@@ -2555,7 +2621,9 @@
           const a = (i * Math.PI) / 50,
             x = o.radius * Math.cos(a),
             y = o.radius * Math.sin(a);
-          return at(o.plane === 'xz' ? [x, 0, y] : o.plane === 'xy' ? [x, y, 0] : [0, x, y]);
+          return at(
+            o.plane === 'xz' ? [x, 0, y] : o.plane === 'xy' ? [x, y, 0] : [0, x, y],
+          );
         });
         H.path(points, true);
       }
@@ -2567,7 +2635,9 @@
           H.dot(at(b.display), o.b);
           if (o.type === 'distance') {
             H.line(at(a.display), at(b.display));
-            metric = Math.hypot(...a.physical.map((v, i) => v - b.physical[i])).toFixed(5) + ' AU';
+            metric =
+              Math.hypot(...a.physical.map((v, i) => v - b.physical[i])).toFixed(5) +
+              ' AU';
           } else {
             H.line(at(a.display), at([0, 0, 0]));
             H.line(at([0, 0, 0]), at(b.display));
@@ -2588,7 +2658,9 @@
         }
       }
       if (o.type === 'camera')
-        metric = tr('已保存此视角，可在属性中返回|Saved viewpoint; restore from its properties');
+        metric = tr(
+          '已保存此视角，可在属性中返回|Saved viewpoint; restore from its properties',
+        );
     }
     return metric;
   }
@@ -2632,7 +2704,10 @@
   }
   function pointAt(m, e) {
     const r = m.canvas.getBoundingClientRect();
-    return { x: ((e.clientX - r.left) / r.width) * m.w, y: ((e.clientY - r.top) / r.height) * m.h };
+    return {
+      x: ((e.clientX - r.left) / r.width) * m.w,
+      y: ((e.clientY - r.top) / r.height) * m.h,
+    };
   }
   function beginDrag(id, e) {
     if (!customizationOn() || armed) return false;
@@ -2660,7 +2735,8 @@
     if (!o) return false;
     if (panel.hidden || current?.id !== id || railView !== 'references') {
       const keepCanvas =
-        document.body.hasAttribute('data-entry-view') && matchMedia('(max-width:760px)').matches;
+        document.body.hasAttribute('data-entry-view') &&
+        matchMedia('(max-width:760px)').matches;
       open(m, keepCanvas);
     }
     editing = true;
@@ -2714,8 +2790,12 @@
     if (!g.moved && Math.hypot(dx, dy) < 3) return true;
     g.moved = true;
     if (['note', 'emphasis'].includes(o.type)) {
-      o.x = Number(Math.max(0, Math.min(100, g.origin.x + (dx / g.m.w) * 100)).toFixed(2));
-      o.y = Number(Math.max(0, Math.min(100, g.origin.y + (dy / g.m.h) * 100)).toFixed(2));
+      o.x = Number(
+        Math.max(0, Math.min(100, g.origin.x + (dx / g.m.w) * 100)).toFixed(2),
+      );
+      o.y = Number(
+        Math.max(0, Math.min(100, g.origin.y + (dy / g.m.h) * 100)).toFixed(2),
+      );
     } else {
       const picked = g.m.pick?.(p.x, p.y);
       if (picked)
@@ -2837,7 +2917,11 @@
     models.set(id, m);
     syncRailShell();
     if (!portals.has(id)) {
-      const b = E('button', 'diagram-tool-launch diagram-tools', m.host || m.canvas.parentElement);
+      const b = E(
+        'button',
+        'diagram-tool-launch diagram-tools',
+        m.host || m.canvas.parentElement,
+      );
       b.type = 'button';
       b.dataset.i18nSkip = '';
       b.onclick = () => open(models.get(id));
@@ -2894,10 +2978,12 @@
               ? window.SkyObserverComparison?.color(o.id)
               : m.type === 'analemma' && o.type === 'track'
                 ? trackColors[
-                    s.objects.filter((q) => q.type === 'track').indexOf(o) % trackColors.length
+                    s.objects.filter((q) => q.type === 'track').indexOf(o) %
+                      trackColors.length
                   ]
                 : null;
-          H.width = m.type === 'analemma' && o.type === 'track' && o.id === selected ? 2.5 : 1.5;
+          H.width =
+            m.type === 'analemma' && o.type === 'track' && o.id === selected ? 2.5 : 1.5;
           const focus = window.SkyDiagramTools.selectedReference;
           if (focus && ['observer', 'time'].includes(o.type)) {
             const on = focus.id === o.id && focus.source === m.id;
@@ -2947,7 +3033,8 @@
   function syncLaunchers() {
     for (const [key, button] of portals) {
       const source = models.get(key)?.canvas,
-        active = !panel.hidden && current?.id === key && panel.getClientRects().length > 0;
+        active =
+          !panel.hidden && current?.id === key && panel.getClientRects().length > 0;
       button.hidden =
         !customizationOn() ||
         active ||
@@ -2971,7 +3058,11 @@
     const canvas = current.canvas;
     visibilityTimer = setTimeout(() => {
       visibilityTimer = 0;
-      if (current?.canvas === canvas && !panel.hidden && !canvas.getBoundingClientRect().width) {
+      if (
+        current?.canvas === canvas &&
+        !panel.hidden &&
+        !canvas.getBoundingClientRect().width
+      ) {
         const next = visibleModels()[0];
         if (next) open(next, true);
         else hide();
@@ -3063,7 +3154,9 @@
             visible: true,
             locked: false,
             customLabel: false,
-            ...(kind === 'observer' ? { lat: state.lat, lon: state.lon } : { time: state.time }),
+            ...(kind === 'observer'
+              ? { lat: state.lat, lon: state.lon }
+              : { time: state.time }),
             ...values,
           };
         if (values.label !== undefined) o.customLabel = values.customLabel !== false;
@@ -3084,7 +3177,8 @@
     patch(source, id, patch) {
       return comparisonChange(source, (s) => {
         const o = s.objects.find((o) => o.id === id);
-        if (!o || (o.locked && ['lat', 'lon', 'time'].some((k) => k in patch))) return false;
+        if (!o || (o.locked && ['lat', 'lon', 'time'].some((k) => k in patch)))
+          return false;
         const allowed = [
             'label',
             'visible',
@@ -3122,7 +3216,9 @@
               1,
               ...s.objects.filter((x) => x.type === o.type).map((x) => x.copyNumber || 1),
             ) + 1;
-          const title = definitions[comparisonSources[source]].find((d) => d.id === o.type).title;
+          const title = definitions[comparisonSources[source]].find(
+            (d) => d.id === o.type,
+          ).title;
           q.label = title
             .split('|')
             .map((x) => x + ' ' + q.copyNumber)
@@ -3180,6 +3276,27 @@
     },
   };
   window.SkyDiagramTools = {
+    checkpoint() {
+      const previous = copy([...states]);
+      const selection = { selected, selectedSource, serial };
+      return () => {
+        const keys = new Set(previous.map(([key]) => key));
+        for (const [key, saved] of states)
+          if (!keys.has(key)) {
+            try {
+              sessionStorage.removeItem(draftKey(saved.model));
+            } catch {}
+          }
+        states.clear();
+        for (const [key, saved] of previous) {
+          states.set(key, saved);
+          persist(saved.model, saved);
+        }
+        ({ selected, selectedSource, serial } = selection);
+        update();
+        repaint();
+      };
+    },
     get selectedReference() {
       if (!current || !customizationOn()) return null;
       const owner = selectedOwner();
@@ -3255,13 +3372,17 @@
         const source = options.source || target.id;
         if (source !== target.id && (!comparisonSources[source] || target.body !== 'sun'))
           return false;
-        selectReference(source === target.id ? options.id : source + ':' + options.id, true);
+        selectReference(
+          source === target.id ? options.id : source + ':' + options.id,
+          true,
+        );
       }
       return true;
     },
     comparisons,
     observers() {
-      if (!customizationOn() || typeof state === 'undefined' || state.body !== 'sun') return [];
+      if (!customizationOn() || typeof state === 'undefined' || state.body !== 'sun')
+        return [];
       return ['earth', 'world-map', 'lab-sky'].flatMap((id) =>
         stateFor({
           id,
@@ -3276,7 +3397,8 @@
       );
     },
     times() {
-      if (!customizationOn() || typeof state === 'undefined' || state.body !== 'sun') return [];
+      if (!customizationOn() || typeof state === 'undefined' || state.body !== 'sun')
+        return [];
       return ['chart', 'lab-sky'].flatMap((id) =>
         stateFor({
           id,
@@ -3304,7 +3426,9 @@
       if (!customizationOn()) return true;
       const m = models.get(id);
       if (!m) return true;
-      const refs = stateFor(m).objects.filter((o) => o.type === 'visibility' && o.visible);
+      const refs = stateFor(m).objects.filter(
+        (o) => o.type === 'visibility' && o.visible,
+      );
       return !refs.length || refs.at(-1)[key] !== 'no';
     },
     read: (id) => {
@@ -3312,7 +3436,8 @@
       return m ? copy(stateFor(m).objects) : null;
     },
     overlay(id, base) {
-      const host = base.canvas.tagName === 'CANVAS' ? base.canvas.parentElement : base.canvas;
+      const host =
+        base.canvas.tagName === 'CANVAS' ? base.canvas.parentElement : base.canvas;
       let layer = host.querySelector('.dt-overlay');
       if (!layer) {
         layer = E('canvas', 'dt-overlay', host);
@@ -3417,8 +3542,10 @@
     } else if (current.type === 'globe') {
       if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
         o.lon = Number((((o.lon + sign * 0.1 * fast + 540) % 360) - 180).toFixed(2));
-      } else o.lat = Number(Math.max(-90, Math.min(90, o.lat + sign * 0.1 * fast)).toFixed(2));
-    } else if (o.type === 'time') o.time = Math.max(0, Math.min(1440, o.time + sign * fast));
+      } else
+        o.lat = Number(Math.max(-90, Math.min(90, o.lat + sign * 0.1 * fast)).toFixed(2));
+    } else if (o.type === 'time')
+      o.time = Math.max(0, Math.min(1440, o.time + sign * fast));
     syncInputs(o);
     repaint();
     return true;
@@ -3426,7 +3553,12 @@
   document.addEventListener(
     'keydown',
     (e) => {
-      if (panel.hidden || e.isComposing || e.keyCode === 229 || objectMenu.contains(e.target))
+      if (
+        panel.hidden ||
+        e.isComposing ||
+        e.keyCode === 229 ||
+        objectMenu.contains(e.target)
+      )
         return;
       if (e.target.matches('.parameter-scrub')) return;
       const modal = e.target.closest?.('dialog[open],:popover-open');
@@ -3516,7 +3648,9 @@
       if (
         !armed &&
         ((editing && e.target === current.canvas) ||
-          (desktopSplit() && list.contains(e.target) && e.target.matches('[data-reference-id]'))) &&
+          (desktopSplit() &&
+            list.contains(e.target) &&
+            e.target.matches('[data-reference-id]'))) &&
         ['Delete', 'Backspace'].includes(e.key) &&
         stateFor(selectedOwner()).objects.some((o) => o.id === selected)
       ) {
@@ -3527,7 +3661,11 @@
         if (fromList) focusSelectedRow();
         return;
       }
-      if (armed && e.key === 'Enter' && (e.target === current.canvas || e.target === placement)) {
+      if (
+        armed &&
+        e.key === 'Enter' &&
+        (e.target === current.canvas || e.target === placement)
+      ) {
         e.preventDefault();
         e.stopImmediatePropagation();
         placeAt(current.w / 2, current.h / 2);
@@ -3542,7 +3680,10 @@
   document.addEventListener(
     'keyup',
     (e) => {
-      if (nudging && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+      if (
+        nudging &&
+        ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)
+      ) {
         e.preventDefault();
         e.stopImmediatePropagation();
         finishNudge();

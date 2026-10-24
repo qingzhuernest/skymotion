@@ -32,8 +32,14 @@
     save: ['保存地面方案', 'Save ground scene'],
     reset: ['清空地面', 'Clear ground'],
     saved: ['已保存到此设备', 'Saved to this device'],
-    preview: ['预览中 · 松手应用，Esc 取消', 'Preview · release to apply, Escape to cancel'],
-    dirty: ['本次访问的草稿 · 方案有未保存的修改', 'Session draft · Scene has unsaved changes'],
+    preview: [
+      '预览中 · 松手应用，Esc 取消',
+      'Preview · release to apply, Escape to cancel',
+    ],
+    dirty: [
+      '本次访问的草稿 · 方案有未保存的修改',
+      'Session draft · Scene has unsaved changes',
+    ],
     memory: [
       '浏览器无法保存，仅本次访问有效。',
       'Browser storage is unavailable; this scene lasts for this visit.',
@@ -255,7 +261,9 @@
     const target = document.getElementById('controls');
     if (target)
       uiWorkspace.rail.scrollTop +=
-        target.getBoundingClientRect().top - uiWorkspace.rail.getBoundingClientRect().top - 8;
+        target.getBoundingClientRect().top -
+        uiWorkspace.rail.getBoundingClientRect().top -
+        8;
   };
   const heading = node('h2', '', rail);
   heading.dataset.sbText = 'title';
@@ -305,7 +313,8 @@
       if (drawer?.open) drawer.close();
       canvas.focus({ preventScroll: true });
     });
-  for (const [kind, button] of Object.entries(addButtons)) button.dataset.objectKind = kind;
+  for (const [kind, button] of Object.entries(addButtons))
+    button.dataset.objectKind = kind;
   const countWrap = node('label', 'sb-inline', rail);
   const countLabel = node('span', '', countWrap);
   countLabel.dataset.sbText = 'count';
@@ -394,7 +403,9 @@
         heading: [0, 360],
       };
       [input.min, input.max] = ranges[key];
-      input.step = ['x', 'z', 'elevation', 'height', 'radius', 'width', 'depth'].includes(key)
+      input.step = ['x', 'z', 'elevation', 'height', 'radius', 'width', 'depth'].includes(
+        key,
+      )
         ? 0.25
         : 0.1;
     }
@@ -553,7 +564,9 @@
     resize();
   });
   comparisonMobile.className = 'sb-mobile-compare';
-  const motionInput = check('motion', false, (v) => change(() => (data.recordMotion = v)));
+  const motionInput = check('motion', false, (v) =>
+    change(() => (data.recordMotion = v)),
+  );
   const recordList = node('div', 'sb-records', measureGroup);
   button(measuring, 'clearRecords', () =>
     change(() => {
@@ -646,11 +659,19 @@
     const rods =
       which === 'ring'
         ? Array.from({ length: 4 }, (_, i) =>
-            make('rod', 2.5 * Math.cos((i * Math.PI) / 2), 2.5 * Math.sin((i * Math.PI) / 2)),
+            make(
+              'rod',
+              2.5 * Math.cos((i * Math.PI) / 2),
+              2.5 * Math.sin((i * Math.PI) / 2),
+            ),
           )
         : [make('rod', -1.8, 0), make('rod', 1.3, 0.8)];
     if (which !== 'ring') rods[1].height = 2.5;
-    return { version: 1, labels: true, objects: [circle, ...rods, make('marker', 0, -2.5)] };
+    return {
+      version: 1,
+      labels: true,
+      objects: [circle, ...rods, make('marker', 0, -2.5)],
+    };
   }
   function measurementObjects(measurement, objects) {
     const count = { distance: 2, bearingMeasure: 2, angleMeasure: 3, shadowMeasure: 1 }[
@@ -669,16 +690,28 @@
     return selected;
   }
   function sanitize(raw) {
-    if (!raw || raw.version !== 1 || !Array.isArray(raw.objects) || raw.objects.length > 32)
+    if (
+      !raw ||
+      raw.version !== 1 ||
+      !Array.isArray(raw.objects) ||
+      raw.objects.length > 32
+    )
       return null;
     const result = { version: 1, labels: raw.labels !== false, objects: [] };
     const ids = new Set();
     for (const o of raw.objects) {
       if (
         !o ||
-        !['rod', 'sphere', 'circle', 'planeObject', 'dial', 'observer', 'marker', 'note'].includes(
-          o.kind,
-        ) ||
+        ![
+          'rod',
+          'sphere',
+          'circle',
+          'planeObject',
+          'dial',
+          'observer',
+          'marker',
+          'note',
+        ].includes(o.kind) ||
         typeof o.id !== 'string' ||
         ids.has(o.id)
       )
@@ -686,7 +719,9 @@
       ids.add(o.id);
       const v = make(o.kind, 0, 0);
       v.id = o.id;
-      v.number = Number.isInteger(o.number) ? Math.max(1, Math.min(999, o.number)) : v.number;
+      v.number = Number.isInteger(o.number)
+        ? Math.max(1, Math.min(999, o.number))
+        : v.number;
       for (const [k, min, max] of [
         ['x', -5, 5],
         ['z', -5, 5],
@@ -731,7 +766,9 @@
               x &&
               Array.isArray(x.points) &&
               x.points.length <= 300 &&
-              x.points.every((p) => p === null || (Number.isFinite(p.x) && Number.isFinite(p.z))),
+              x.points.every(
+                (p) => p === null || (Number.isFinite(p.x) && Number.isFinite(p.z)),
+              ),
           )
           .slice(0, 20)
       : [];
@@ -933,7 +970,8 @@
       ? solar(c.lat, c.dec, c.time)
       : skyRaw(c.body === 'moon' ? 'Moon' : 'Sun', c.time, c.date, c.lat, c.lon);
   function ringPosition(o, a) {
-    const tilt = o.plane === 'vertical' ? Math.PI / 2 : o.plane === 'inclined' ? o.tilt * rad : 0,
+    const tilt =
+        o.plane === 'vertical' ? Math.PI / 2 : o.plane === 'inclined' ? o.tilt * rad : 0,
       az = o.azimuth * rad,
       x = o.radius * Math.cos(a),
       z = o.radius * Math.sin(a) * Math.cos(tilt);
@@ -944,7 +982,9 @@
     };
   }
   function group() {
-    const selectedObjects = data.objects.filter((o) => selectedMany.has(o.id) && !o.locked);
+    const selectedObjects = data.objects.filter(
+      (o) => selectedMany.has(o.id) && !o.locked,
+    );
     return selectedObjects.length > 1
       ? selectedObjects
       : data.objects.filter((o) => o.kind === 'rod' && !o.locked);
@@ -956,7 +996,9 @@
       return;
     }
     change(() => {
-      const circle = data.objects.find((o) => o.kind === 'circle' && o.plane === 'ground'),
+      const circle = data.objects.find(
+          (o) => o.kind === 'circle' && o.plane === 'ground',
+        ),
         cx = circle?.x || 0,
         cz = circle?.z || 0,
         r = Math.min(circle?.radius || 2.5, 5 - Math.abs(cx), 5 - Math.abs(cz));
@@ -1066,7 +1108,9 @@
         v = [c.x - a.x, c.z - a.z, c.elevation - a.elevation],
         den = Math.hypot(...u) * Math.hypot(...v),
         value = den
-          ? Math.acos(Math.max(-1, Math.min(1, u.reduce((n, x, i) => n + x * v[i], 0) / den))) / rad
+          ? Math.acos(
+              Math.max(-1, Math.min(1, u.reduce((n, x, i) => n + x * v[i], 0) / den)),
+            ) / rad
           : null;
       return {
         text: t('angleMeasure') + ' ' + (value === null ? '—' : value.toFixed(2) + '°'),
@@ -1172,7 +1216,10 @@
       more.type = 'button';
       more.setAttribute('aria-haspopup', 'menu');
       more.setAttribute('aria-controls', objectMenu.id);
-      more.setAttribute('aria-label', (en() ? 'More actions' : '更多操作') + ' · ' + name(o));
+      more.setAttribute(
+        'aria-label',
+        (en() ? 'More actions' : '更多操作') + ' · ' + name(o),
+      );
       more.innerHTML =
         '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>';
       more.onclick = () => {
@@ -1184,7 +1231,10 @@
         objectMenu.style.left =
           Math.max(
             8,
-            Math.min(innerWidth - objectMenu.offsetWidth - 8, r.right - objectMenu.offsetWidth),
+            Math.min(
+              innerWidth - objectMenu.offsetWidth - 8,
+              r.right - objectMenu.offsetWidth,
+            ),
           ) + 'px';
         objectMenu.style.top = Math.max(8, r.top - objectMenu.offsetHeight - 6) + 'px';
         objectMenu.querySelector('button')?.focus();
@@ -1209,7 +1259,8 @@
           (k === 'radius' && !['circle', 'sphere', 'dial'].includes(o.kind)) ||
           (k === 'plane' && !['circle', 'planeObject'].includes(o.kind)) ||
           (['width', 'depth'].includes(k) && o.kind !== 'planeObject') ||
-          (['tilt', 'azimuth'].includes(k) && !['rod', 'circle', 'planeObject'].includes(o.kind)) ||
+          (['tilt', 'azimuth'].includes(k) &&
+            !['rod', 'circle', 'planeObject'].includes(o.kind)) ||
           (['lat', 'lon', 'heading'].includes(k) && o.kind !== 'observer');
         if (document.activeElement !== input) input.value = k === 'name' ? name(o) : o[k];
         input.disabled =
@@ -1244,7 +1295,8 @@
   }
   function translate() {
     for (const root of [panel, rail])
-      for (const n of root.querySelectorAll('[data-sb-text]')) n.textContent = t(n.dataset.sbText);
+      for (const n of root.querySelectorAll('[data-sb-text]'))
+        n.textContent = t(n.dataset.sbText);
   }
   const colors = {
     background: getComputedStyle(uiWorkspace.plot).backgroundColor,
@@ -1258,12 +1310,17 @@
   const project = (x, z, h = 0) => ({
     x: view.cx + (x * Math.cos(yaw) - z * Math.sin(yaw)) * view.scale,
     y:
-      view.cy + (x * Math.sin(yaw) + z * Math.cos(yaw)) * view.scale * 0.48 - h * view.scale * 0.85,
+      view.cy +
+      (x * Math.sin(yaw) + z * Math.cos(yaw)) * view.scale * 0.48 -
+      h * view.scale * 0.85,
   });
   function ground(p) {
     const u = (p.x - view.cx) / view.scale,
       v = (p.y - view.cy) / (view.scale * 0.48);
-    return { x: u * Math.cos(yaw) + v * Math.sin(yaw), z: -u * Math.sin(yaw) + v * Math.cos(yaw) };
+    return {
+      x: u * Math.cos(yaw) + v * Math.sin(yaw),
+      z: -u * Math.sin(yaw) + v * Math.cos(yaw),
+    };
   }
   function local(e) {
     const r = canvas.getBoundingClientRect();
@@ -1290,9 +1347,15 @@
           vy = tip.y - base.y,
           k = Math.max(
             0,
-            Math.min(1, ((p.x - base.x) * vx + (p.y - base.y) * vy) / (vx * vx + vy * vy || 1)),
+            Math.min(
+              1,
+              ((p.x - base.x) * vx + (p.y - base.y) * vy) / (vx * vx + vy * vy || 1),
+            ),
           );
-        distance = Math.min(distance, Math.hypot(p.x - base.x - k * vx, p.y - base.y - k * vy));
+        distance = Math.min(
+          distance,
+          Math.hypot(p.x - base.x - k * vx, p.y - base.y - k * vy),
+        );
       }
       if (o.kind === 'circle') {
         let prev = null;
@@ -1306,9 +1369,15 @@
               vy = q.y - prev.y,
               k = Math.max(
                 0,
-                Math.min(1, ((p.x - prev.x) * vx + (p.y - prev.y) * vy) / (vx * vx + vy * vy || 1)),
+                Math.min(
+                  1,
+                  ((p.x - prev.x) * vx + (p.y - prev.y) * vy) / (vx * vx + vy * vy || 1),
+                ),
               );
-            distance = Math.min(distance, Math.hypot(p.x - prev.x - k * vx, p.y - prev.y - k * vy));
+            distance = Math.min(
+              distance,
+              Math.hypot(p.x - prev.x - k * vx, p.y - prev.y - k * vy),
+            );
           }
           prev = q;
         }
@@ -1455,13 +1524,20 @@
         c.stroke();
         c.restore();
       };
-      for (const o of data.objects.filter((o) => ['circle', 'dial'].includes(o.kind))) circle(o);
+      for (const o of data.objects.filter((o) => ['circle', 'dial'].includes(o.kind)))
+        circle(o);
       const annotations = [];
-      for (const o of [...data.objects].sort((a, b) => project(a.x, a.z).y - project(b.x, b.z).y)) {
+      for (const o of [...data.objects].sort(
+        (a, b) => project(a.x, a.z).y - project(b.x, b.z).y,
+      )) {
         const tip =
             o.kind === 'rod'
               ? topOf(o)
-              : { x: o.x, z: o.z, h: o.elevation + (o.kind === 'sphere' ? 2 * o.radius : 0) },
+              : {
+                  x: o.x,
+                  z: o.z,
+                  h: o.elevation + (o.kind === 'sphere' ? 2 * o.radius : 0),
+                },
           p = project(o.x, o.z, o.elevation),
           top = project(tip.x, tip.z, tip.h),
           chosen = o.id === selected;
@@ -1500,13 +1576,19 @@
               [-0.5, 0.5],
             ].map(([x, z]) => {
               const tilt =
-                  o.plane === 'vertical' ? Math.PI / 2 : o.plane === 'inclined' ? o.tilt * rad : 0,
+                  o.plane === 'vertical'
+                    ? Math.PI / 2
+                    : o.plane === 'inclined'
+                      ? o.tilt * rad
+                      : 0,
                 dx = x * o.width,
                 dz = z * o.depth * Math.cos(tilt);
               return project(
                 o.x + dx * Math.cos(az) - dz * Math.sin(az),
                 o.z + dx * Math.sin(az) + dz * Math.cos(az),
-                o.elevation + o.depth * 0.5 * Math.sin(tilt) + z * o.depth * Math.sin(tilt),
+                o.elevation +
+                  o.depth * 0.5 * Math.sin(tilt) +
+                  z * o.depth * Math.sin(tilt),
               );
             });
           c.beginPath();
@@ -1622,7 +1704,12 @@
         const p = project(ghost.x, ghost.z);
         c.save();
         c.setLineDash([4, 4]);
-        line(p, project(ghost.x, ghost.z, pending === 'rod' ? 1.5 : 0), colors.selected, 2);
+        line(
+          p,
+          project(ghost.x, ghost.z, pending === 'rod' ? 1.5 : 0),
+          colors.selected,
+          2,
+        );
         c.strokeStyle = colors.selected;
         c.beginPath();
         c.ellipse(p.x, p.y, 12, 6, 0, 0, 7);
@@ -1642,7 +1729,13 @@
       if (!paintingReference && o?.kind === 'observer') {
         const utc = instantUTC(),
           observer = new Astronomy.Observer(o.lat, o.lon, 0),
-          eq = Astronomy.Equator(state.body === 'moon' ? 'Moon' : 'Sun', utc, observer, true, true),
+          eq = Astronomy.Equator(
+            state.body === 'moon' ? 'Moon' : 'Sun',
+            utc,
+            observer,
+            true,
+            true,
+          ),
           ideal =
             state.manual && state.body === 'sun'
               ? solar(o.lat, state.dec, state.time + (o.lon - state.lon) * 4)
@@ -1698,7 +1791,11 @@
     if (!active) return;
     const r = canvas.getBoundingClientRect();
     if (r.width < 1 || r.height < 1) return;
-    if (gesture && view && (Math.abs(r.width - view.w) > 1 || Math.abs(r.height - view.h) > 1))
+    if (
+      gesture &&
+      view &&
+      (Math.abs(r.width - view.w) > 1 || Math.abs(r.height - view.h) > 1)
+    )
       cancelGesture();
     const dpr = Math.min(devicePixelRatio || 1, 2);
     if (reference && matchMedia('(max-width:760px)').matches)
@@ -1795,7 +1892,8 @@
       o.x = Math.round(o.x * 4) / 4;
       o.z = Math.round(o.z * 4) / 4;
     }
-    if (data.recordMotion && gesture.trace.length < 250) gesture.trace.push({ x: o.x, z: o.z });
+    if (data.recordMotion && gesture.trace.length < 250)
+      gesture.trace.push({ x: o.x, z: o.z });
     draw();
   });
   canvas.addEventListener('pointerup', (e) => {
@@ -1886,9 +1984,35 @@
   );
   new ResizeObserver(resize).observe(canvas);
   window.SkySceneBuilder = {
+    checkpoint() {
+      if (body !== state.body) selectBody();
+      const previous = clone({
+        data,
+        undo,
+        redo,
+        saved,
+        selected,
+        statusKey,
+        seq,
+        pending,
+      });
+      const selection = [...selectedMany];
+      return () => {
+        ({ data, undo, redo, saved, selected, statusKey, seq, pending } = previous);
+        selectedMany = new Set(selection);
+        update();
+        schedule();
+      };
+    },
     snapshotExperiment() {
       if (body !== state.body) selectBody();
-      return { recordMotion: false, measurements: [], notes: [], trails: [], ...clone(data) };
+      return {
+        recordMotion: false,
+        measurements: [],
+        notes: [],
+        trails: [],
+        ...clone(data),
+      };
     },
     prepareExperiment(raw) {
       const previous = seq;
@@ -1938,7 +2062,8 @@
     },
     sync() {
       const next =
-        uiWorkspace.selected === 'sceneBuilder' && window.SkyCustomization?.active !== false;
+        uiWorkspace.selected === 'sceneBuilder' &&
+        window.SkyCustomization?.active !== false;
       if (active && !next) {
         cancelGesture();
       }
