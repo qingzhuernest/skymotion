@@ -13,7 +13,7 @@ try {
  await page.locator('.welcome-corner-links a[href*="guide."]:not([href*="project-guide"]):not([href*="development-guide"])').click();await ready(page);
  assert.equal(await page.locator('.document-entrance').getAttribute('data-theme'),'night');
  assert.equal(await page.locator('.entrance-sentence').count(),6);
- assert.match(await page.locator('.entrance-dialogue').innerText(),/Why study a sky/);
+ assert.match(await page.locator('.entrance-dialogue').innerText(),/Why do we study geography/);
  assert.equal(await page.locator('.document-page').evaluate(n=>n.inert),true);
  await page.waitForTimeout(1700);
  assert(Number(await page.locator('.entrance-sentence').first().evaluate(n=>getComputedStyle(n).opacity))>.9);
@@ -27,7 +27,7 @@ try {
  await page.reload();assert.equal(await page.locator('.document-entrance').count(),0);
  await page.locator('.document-links a[href*="project-guide"]').click();await ready(page);
  assert.equal(await page.locator('.document-entrance').getAttribute('data-theme'),'paper');
- assert.match(await page.locator('.entrance-dialogue').innerText(),/What stands between a model and reality/);
+ assert.match(await page.locator('.entrance-dialogue').innerText(),/What is a model for/);
  await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.document-entrance'));
  await page.locator('.document-links a[href*="guide."]:not([href*="project-guide"]):not([href*="development-guide"])').click();await page.waitForLoadState();
  assert.equal(await page.locator('.document-entrance').count(),0);
@@ -47,12 +47,12 @@ try {
  await popup.goto(base+'guide.en.html?lang=en',{referer:base+'lab.en.html'});await ready(popup);assert.equal(await popup.evaluate(()=>document.documentElement.lang),'en');await leave(popup);await popup.reload();assert.equal(await popup.locator('.document-entrance').count(),0);await popup.close();
  const clean=await context.newPage();
  await clean.route('**/guide.en',route=>route.fulfill({path:require('node:path').resolve('guide.en.html'),contentType:'text/html'}));
- await clean.goto(base+'guide.en',{referer:base+'lab.en.html'});await ready(clean);assert.match(await clean.locator('.entrance-dialogue').innerText(),/Why study a sky/);await leave(clean);await clean.close();
+ await clean.goto(base+'guide.en',{referer:base+'lab.en.html'});await ready(clean);assert.match(await clean.locator('.entrance-dialogue').innerText(),/Why do we study geography/);await leave(clean);await clean.close();
  const cover=await context.newPage();await cover.addInitScript(()=>{Object.defineProperty(history,'length',{configurable:true,get:()=>4});sessionStorage.setItem('skymotion-ad-astra','1');window.name=''});
  await cover.goto(base+'index.en.html?lang=en',{referer:base+'lab.en.html'});assert.equal(await cover.evaluate(()=>document.documentElement.classList.contains('welcome-opening')),true);await cover.close();
  console.log('PASS inherited popup storage, Safari-style history and clean English routes');
 
- const redirected=await context.newPage();await redirected.addInitScript(()=>localStorage.setItem('skymotion-language','en'));await redirected.goto(base+'guide.html');await ready(redirected);assert.equal(await redirected.evaluate(()=>document.documentElement.lang),'en');assert.match(await redirected.locator('.entrance-dialogue').innerText(),/Why study a sky/);await leave(redirected);await redirected.close();
+ const redirected=await context.newPage();await redirected.addInitScript(()=>localStorage.setItem('skymotion-language','en'));await redirected.goto(base+'guide.html');await ready(redirected);assert.equal(await redirected.evaluate(()=>document.documentElement.lang),'en');assert.match(await redirected.locator('.entrance-dialogue').innerText(),/Why do we study geography/);await leave(redirected);await redirected.close();
  console.log('PASS stored-language redirect prepares the correct first conversation');
  const blockedContext=await browser.newContext(),blocked=await blockedContext.newPage();
  await blocked.addInitScript(()=>{for(const key of ['getItem','setItem','removeItem'])Storage.prototype[key]=function(){throw new DOMException('Denied','SecurityError')}});
@@ -65,7 +65,7 @@ try {
  assert(!blocked.url().includes('sky-reading'));await blockedContext.close();console.log('PASS denied storage preserves visit scope and clean URLs');
  const reducedContext=await browser.newContext({reducedMotion:'reduce'}),reduced=await reducedContext.newPage();
  await reduced.goto(base+'development-guide.html?lang=zh');await ready(reduced);
- assert.match(await reduced.locator('.entrance-dialogue').innerText(),/规则却未必忠于现实/);
+ assert.match(await reduced.locator('.entrance-dialogue').innerText(),/模型失效/);
  for(const line of await reduced.locator('.entrance-sentence').all())assert.equal(await line.evaluate(n=>getComputedStyle(n).opacity),'1');
  await leave(reduced);await reducedContext.close();console.log('PASS complete Chinese conversation without spatial motion');
  const failedContext=await browser.newContext(),failed=await failedContext.newPage();await failed.route('**/document-entrance.js?*',route=>route.abort());
@@ -80,7 +80,7 @@ try {
  await early.goto(base+'guide.en.html?lang=en',{waitUntil:'commit'});await ready(early);
  await early.waitForFunction(()=>Number(getComputedStyle(document.querySelector('.entrance-sentence')).opacity)>.9);
  assert.equal(await early.evaluate(()=>window.skyEnglishDictionary),undefined);
- assert.match(await early.locator('.entrance-sentence').first().innerText(),/Why study a sky/);
+ assert.match(await early.locator('.entrance-sentence').first().innerText(),/Why do we study geography/);
  releaseDictionary();await early.waitForLoadState('domcontentloaded');await earlyContext.close();
  console.log('PASS English conversation starts independently of the shared dictionary');
  await context.close();
