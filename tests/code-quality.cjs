@@ -112,7 +112,28 @@ assert.equal(value, 1);
       () =>
         !!window.SkyLabExperiment && !document.querySelector('.layout-launch').disabled,
     );
-    await helpers.toggleCustomization(page);
+    await page.evaluate(() => {
+      // Let the first frame arrive after a user has opened the library. This
+      // reproduces the initialization race without relying on runner speed.
+      const requestFrame = window.requestAnimationFrame;
+      const pending = [];
+      window.requestAnimationFrame = (callback) => {
+        pending.push(callback);
+        return 0;
+      };
+      try {
+        document.querySelector('.layout-launch').click();
+        SkyDiagramTools.openObjects({ add: true });
+      } finally {
+        window.requestAnimationFrame = requestFrame;
+      }
+      pending.forEach((callback) => callback(performance.now()));
+    });
+    assert.equal(
+      await page.locator('[data-dt-view=library]').getAttribute('aria-current'),
+      'page',
+      'Deferred customization initialization preserves a tool opened in the meantime',
+    );
     await helpers.openLibrary(page);
     await helpers.openLibrary(page);
     assert.equal(

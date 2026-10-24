@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261024-workbench94",
+  "resourceVersion": "20261024-workbench95",
   "readingFontVersion": "20261016-font41",
   "pages": [
     "404.en.html",
@@ -190,5 +190,5 @@
     "sundial.html": 71846
   },
   "totalBytes": 1319600,
-  "assetBytes": 7987527
+  "assetBytes": 7987775
 }

@@ -3469,6 +3469,9 @@
       railView = 'references';
       editing = true;
       requestAnimationFrame(() => {
+        // A person may already have opened a tool or changed sidebar sections
+        // before the first frame. Initialization must preserve that newer intent.
+        if (!customizationOn() || railView !== 'references' || !panel.hidden) return;
         const target = visibleModels()[0];
         if (target && !document.body.classList.contains('scene-builder-active')) {
           open(target, true);
