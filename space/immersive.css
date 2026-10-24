@@ -111,7 +111,7 @@ body[data-page='space'].space-immersive .date-actions input {
   background: var(--design-night-inset);
   color: var(--design-night-ink);
   border-color: var(--design-night-line);
-  min-height: 34px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 body[data-page='space'].space-immersive :is(a, button, input, select):focus-visible {
   outline-color: var(--design-inset);

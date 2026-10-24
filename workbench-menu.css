@@ -72,7 +72,7 @@ body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) {
   border: 0;
 }
 body.workbench-editing .ui-parameters .workbench-content-row {
-  grid-template-columns: minmax(0, 1fr) 40px;
+  grid-template-columns: minmax(0, 1fr) var(--md-sys-size-target);
 }
 body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) button {
   margin: 0;
@@ -92,9 +92,6 @@ body
   text-align: left;
   padding: 10px 16px;
 }
-body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) button:hover {
-  background: var(--md-sys-state-hover);
-}
 body
   .ui-parameters
   :is(.workbench-content-row, .workbench-setting-row)
@@ -103,7 +100,7 @@ body
   color: var(--design-on-selected);
 }
 body .ui-parameters .workbench-add-view {
-  width: 40px;
+  width: var(--md-sys-size-target);
   padding: 10px;
   display: grid;
   place-items: center;
@@ -148,7 +145,7 @@ body:not(.workbench-editing)
   transform: rotate(45deg);
 }
 .workbench-content-row button:focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 1px;
 }
 .workbench-clock-link {
@@ -186,7 +183,7 @@ body[data-entry-view] .ui-diagram-surface > #stage {
 body[data-entry-view] #stage .stage-top {
   top: 10px;
 }
-body.workbench-editing .ui-diagram-card[data-workspace-current='true'] {
+.workspace-active .ui-diagram-card[data-workspace-current='true'] {
   outline: 1px solid var(--design-primary);
   outline-offset: -1px;
 }
@@ -219,13 +216,13 @@ body[data-entry-view] .dt-rail-navigation button {
 }
 @media (max-width: 760px) {
   body.workbench-editing .ui-parameters .workbench-content-row {
-    grid-template-columns: minmax(0, 1fr) 44px;
+    grid-template-columns: minmax(0, 1fr) var(--md-sys-size-target);
   }
   body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) button {
     min-height: var(--md-sys-size-target);
   }
   body .ui-parameters .workbench-add-view {
-    width: 44px;
+    width: var(--md-sys-size-target);
   }
 }
 

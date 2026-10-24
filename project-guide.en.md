@@ -218,7 +218,8 @@ The multi-view workspace reuses scientific canvases and one shared clock. Up to 
 1. Enter customization and add views from the catalog; use count presets or quick combinations in Arrangement & saved layouts.
 2. Two views can be side by side or stacked, and three can be balanced or featured. Reorder by handles or order controls.
 3. Drag dividers to preview proportions and release to resize the canvases, or commit an exact proportion from 30% to 70%.
-4. Focus a pane temporarily and press Escape to return. Layout undo/redo is separate from scientific-condition history.
+4. Double-click a pane title, or choose “Focus this view” while customizing, to enlarge it temporarily. “Back to all views · Esc” remains beside the title. Click it, press Escape or double-click the title again to return.
+5. Click the pane you want to replace; its outline identifies the active target. Choose another view from the sidebar, or use its title selector while customizing. Layout undo/redo is separate from scientific-condition history.
 
 > The catalog is the single add-view entry; saved-layout settings do not repeat those buttons. Finishing retains the composition while hiding editing handles and dividers.
 

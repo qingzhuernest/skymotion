@@ -47,7 +47,7 @@
   align-items: center;
   justify-content: center;
   padding: 6px 10px;
-  min-height: 32px;
+  min-height: var(--md-sys-size-target, 40px);
   border-radius: 999px;
   background: var(--design-inset);
   color: var(--design-primary);
@@ -60,9 +60,17 @@
   font-weight: 600;
 }
 .document-download {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--md-sys-size-target);
   margin-top: 14px;
-  font-size: 13px;
+  padding: 8px 16px;
+  border: 1px solid var(--design-line);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--design-surface);
+  font: 500 14px/1.5 var(--design-font);
+  text-decoration: none;
 }
 .document-page a {
   color: var(--design-primary);
@@ -70,7 +78,7 @@
 }
 .document-page a:focus-visible,
 .document-page summary:focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 .document-toc {

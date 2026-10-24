@@ -30,14 +30,10 @@
 }
 .motion-segments > button.motion-selected {
   background: transparent !important;
-  box-shadow: none !important;
   color: var(--design-on-action) !important;
 }
 .motion-segments > button:not(.motion-selected) {
   background: transparent !important;
-}
-.motion-segments > button:active {
-  box-shadow: inset 0 0 0 2px var(--design-primary) !important;
 }
 .ui-shell,
 .space-shell {
@@ -66,7 +62,7 @@
   color: var(--design-primary);
   border: 1px solid var(--design-line);
   background: var(--design-on-action);
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   border-radius: 12px;
   cursor: ew-resize;
   transition: transform 180ms ease;
@@ -75,8 +71,8 @@
   position: absolute;
   left: 2px;
   top: 48%;
-  width: 24px;
-  min-width: 24px !important;
+  width: var(--md-sys-size-target, 40px);
+  min-width: var(--md-sys-size-target, 40px);
   height: 64px;
   padding: 0 !important;
   border: 1px solid var(--design-line);
@@ -217,7 +213,7 @@
 .ui-parameters .motion-menu-header > button.motion-menu-grip,
 body[data-page='space'] .side .motion-menu-header > .motion-menu-grip {
   height: 36px;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 6px 12px;
   border: 1px solid var(--design-line);
   border-radius: 12px;

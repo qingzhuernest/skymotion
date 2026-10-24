@@ -49,7 +49,7 @@
     move: ['拖动交换位置；方向键调整顺序', 'Drag to swap; arrow keys to reorder'],
     close: ['移除此图', 'Remove view'],
     focus: ['专注此图', 'Focus this view'],
-    back: ['返回组合', 'Back to all views'],
+    back: ['返回多图 · Esc', 'Back to all views · Esc'],
     divider: ['调整左右比例', 'Resize columns'],
     rowDivider: ['调整上下比例', 'Resize rows'],
     shared: [
@@ -298,13 +298,11 @@
   const backButton = button(
     bar,
     'back',
-    () => {
-      focused = null;
-      apply();
-    },
+    () => leaveFocusedView(),
     'm9 5-7 7 7 7M3 12h18',
     true,
   );
+  backButton.className = 'workspace-back-button';
   const layoutHistory = document.createElement('div');
   layoutHistory.className = 'workspace-layout-history';
   function travel(from, to) {
@@ -633,10 +631,38 @@
     JSON.stringify({ ...layout, enabled: false, active: 0 });
 
   const controls = new Map();
+  function leaveFocusedView() {
+    const id = focused;
+    focused = null;
+    apply();
+    const destination = customizing
+      ? controls.get(id)?.focus
+      : cards[id]?.querySelector('.ui-diagram-card-head');
+    destination?.focus({ preventScroll: true });
+  }
+  function focusView(id) {
+    const index = data.views.indexOf(id);
+    if (!api.active || mobile.matches || data.views.length < 2 || index < 0) return;
+    if (focused === id) {
+      leaveFocusedView();
+      return;
+    }
+    data.active = index;
+    focused = id;
+    save();
+    apply();
+    backButton.focus({ preventScroll: true });
+  }
   for (const id of ids) {
     const head = cards[id].querySelector('.ui-diagram-card-head'),
       tools = document.createElement('div');
     tools.className = 'workspace-pane-tools';
+    head.tabIndex = -1;
+    const heading = head.querySelector('h2');
+    heading.id ||= `workspace-title-${id}`;
+    head.setAttribute('role', 'group');
+    head.setAttribute('aria-labelledby', heading.id);
+    cards[id].setAttribute('aria-labelledby', heading.id);
     tools.dataset.i18nSkip = '';
     const handle = button(
       tools,
@@ -665,18 +691,13 @@
         },
         undefined,
         focusAfter,
+        controls.get(chosen).select,
       );
-      if (focusAfter) controls.get(chosen).select.focus();
     };
     const focus = button(
       tools,
       'focus',
-      () => {
-        focused = id;
-        data.active = data.views.indexOf(id);
-        apply();
-        backButton.focus();
-      },
+      () => focusView(id),
       'M9 4H4v5M15 4h5v5M4 15v5h5M20 15v5h-5',
     );
     focus.className = 'workspace-focus-button';
@@ -699,7 +720,7 @@
     head.prepend(tools);
     controls.set(id, { handle, select, focus, close });
     for (const event of ['pointerdown', 'focusin'])
-      cards[id].addEventListener(event, () => activate(id));
+      cards[id].addEventListener(event, () => activate(id), { capture: true });
     handle.addEventListener('pointerdown', (e) => start(e, id));
     handle.addEventListener('lostpointercapture', cancel);
     handle.addEventListener('keydown', (e) => {
@@ -718,9 +739,7 @@
         data.views.length > 1 &&
         !e.target.closest('button,select')
       ) {
-        focused = id;
-        apply();
-        backButton.focus();
+        focusView(id);
       }
     });
   }
@@ -752,6 +771,14 @@
         );
       });
     };
+  }
+  function placeCards(order) {
+    let next = splitters.x;
+    for (let index = order.length - 1; index >= 0; index--) {
+      const card = cards[order[index]];
+      if (card.nextSibling !== next) plot.insertBefore(card, next);
+      next = card;
+    }
   }
   const note = document.createElement('div');
   note.className = 'workspace-note';
@@ -856,24 +883,27 @@
         cancel();
         closeOptions();
         focused = null;
-        for (const id of ids) plot.insertBefore(cards[id], splitters.x);
+        placeCards(ids);
       }
       api.visibleIds = new Set(
         mobile.matches ? [data.views[data.active]] : focused ? [focused] : data.views,
       );
       shell.classList.toggle('workspace-active', active);
       markActive();
-      uiViewHidden(bar, !active || !customizing);
+      const returnHost =
+        active && focused ? cards[focused].querySelector('.ui-diagram-card-head') : bar;
+      if (backButton.parentElement !== returnHost) returnHost.prepend(backButton);
+      uiViewHidden(backButton, !active || !focused);
+      uiViewHidden(bar, !active || !customizing || Boolean(focused));
       uiViewHidden(launch, false);
     },
   });
   function markActive() {
-    for (const [id, card] of Object.entries(cards))
-      uiViewAttribute(
-        card,
-        'data-workspace-current',
-        String(api.active && id === api.activeView),
-      );
+    for (const [id, card] of Object.entries(cards)) {
+      const current = api.active && id === api.activeView;
+      uiViewAttribute(card, 'data-workspace-current', String(current));
+      uiViewAttribute(card, 'aria-current', String(current));
+    }
   }
   function activate(id) {
     const index = data.views.indexOf(id);
@@ -897,7 +927,7 @@
     live.textContent = t(word);
     panelStatus.textContent = t(word);
   }
-  function change(fn, status, focusAfter = null) {
+  function change(fn, status, focusAfter = null, focusTarget = null) {
     cancel();
     const before = copy(data);
     fn();
@@ -910,7 +940,7 @@
     redo = [];
     focused = focusAfter;
     save();
-    apply();
+    apply(focusTarget);
     if (status) announce(status);
   }
   function move(id, delta) {
@@ -963,10 +993,12 @@
         ? t('limit')
         : t(includeExperiment.checked ? 'fullHint' : 'saveHint');
     labelButtons(bar);
+    if (focused) labelButtons(cards[focused].querySelector('.ui-diagram-card-head'));
     labelButtons(panel);
     for (const h of panel.querySelectorAll('[data-word-heading]'))
       h.textContent = t(h.dataset.wordHeading);
     for (const [id, c] of controls) {
+      uiViewText(cards[id].querySelector('.ui-diagram-card-head h2'), t(id));
       labelButtons(c.handle.parentElement);
       c.select.setAttribute('aria-label', t(id));
       for (const o of c.select.options) {
@@ -977,6 +1009,7 @@
       c.select.value = id;
       c.close.disabled = data.views.length === 1;
       c.focus.disabled = data.views.length === 1;
+      c.focus.hidden = Boolean(focused);
     }
     splitters.x.setAttribute('aria-label', t('divider'));
     splitters.y.setAttribute('aria-label', t('rowDivider'));
@@ -1176,8 +1209,9 @@
         ? t('limit')
         : t(includeExperiment.checked ? 'fullHint' : 'saveHint');
   }
-  function apply() {
-    const previousFocus = document.activeElement;
+  function apply(focusTarget = null) {
+    const previousFocus =
+      focusTarget instanceof HTMLElement ? focusTarget : document.activeElement;
     api.sync();
     plot.style.setProperty('--workspace-ratio', data.ratio + '%');
     plot.style.setProperty('--workspace-row-ratio', data.rowRatio + '%');
@@ -1189,7 +1223,6 @@
     undoButton.disabled = !undo.length;
     redoButton.disabled = !redo.length;
     quickLayout.hidden = Boolean(focused);
-    backButton.hidden = !focused;
     arrange.hidden = mobile.matches || data.views.length === 1;
     axisGroup.hidden = data.views.length === 4;
     equalizeButton.disabled = data.ratio === 50 && data.rowRatio === 50;
@@ -1211,8 +1244,7 @@
     );
     for (const [id, card] of Object.entries(cards))
       card.dataset.workspacePosition = String(data.views.indexOf(id));
-    for (const id of api.active ? data.views : ids)
-      plot.insertBefore(cards[id], splitters.x);
+    placeCards(api.active ? data.views : ids);
     for (const axis of ['x', 'y']) {
       const split = splitters[axis];
       split.setAttribute(
@@ -1256,7 +1288,10 @@
       previousFocus?.isConnected &&
       previousFocus !== document.activeElement &&
       !previousFocus.disabled &&
-      previousFocus.closest('.workspace-toolbar,.workspace-pane-tools,.workspace-options')
+      previousFocus.getClientRects().length &&
+      previousFocus.closest(
+        '.workspace-toolbar,.workspace-pane-tools,.workspace-options,.ui-diagram-card-head',
+      )
     )
       previousFocus.focus({ preventScroll: true });
     schedule();
@@ -1484,10 +1519,7 @@
         } else if (focused) {
           e.preventDefault();
           e.stopImmediatePropagation();
-          const id = focused;
-          focused = null;
-          apply();
-          controls.get(id).focus.focus();
+          leaveFocusedView();
         }
       } else if (
         (e.metaKey || e.ctrlKey) &&

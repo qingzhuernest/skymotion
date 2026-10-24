@@ -103,9 +103,10 @@
   menu.append(layout);
   const annual = rail.querySelector('[data-for="analemmaPanel"]');
   const clockLink = document.createElement('label');
-  clockLink.className = 'workbench-clock-link';
+  clockLink.className = 'workbench-clock-link toggle-row';
   const follow = document.createElement('input');
   follow.type = 'checkbox';
+  follow.setAttribute('role', 'switch');
   follow.id = 'analemmaFollowClock';
   follow.checked = uiWorkspace.analemmaClockLinked;
   follow.onchange = () => {
@@ -119,7 +120,7 @@
   uiWorkspace.cards.analemmaPanel
     .querySelector('.ui-diagram-card-head')
     .append(samplingClock);
-  clockLink.append(follow, followText);
+  clockLink.append(followText, follow);
   annual?.prepend(clockLink);
   for (const id of ['analemmaClock', 'analemmaBasis']) {
     document.getElementById(id).addEventListener('change', () => {

@@ -21,7 +21,7 @@ body[data-page='space'] :is(button, input, select) {
   font: inherit;
 }
 body[data-page='space'] :is(button, a, input, select):focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 body[data-page='space'] :is(button, a) {
@@ -375,7 +375,7 @@ body[data-page='space'] .date-actions input {
   color: var(--design-ink);
   padding: 4px 6px;
   font-size: 11px;
-  min-height: 30px;
+  min-height: var(--md-sys-size-target, 40px);
   max-width: 150px;
 }
 body[data-page='space'] .error {
@@ -543,7 +543,7 @@ body[data-page='space'] #spaceDrawerBody {
     display: none;
   }
   body[data-page='space'] .date-actions input {
-    min-height: 26px;
+    min-height: var(--md-sys-size-target, 40px);
     padding: 2px 5px;
     font-size: 10px;
   }
@@ -611,8 +611,9 @@ body[data-page='space'] .stage-reset {
   right: 10px;
   top: 9px;
   z-index: 4;
-  width: 32px;
-  min-height: 32px;
+  width: var(--md-sys-size-target, 40px);
+  min-width: var(--md-sys-size-target, 40px);
+  min-height: var(--md-sys-size-target, 40px);
   padding: 0;
   color: var(--design-night-ink);
   border-color: var(--design-night-line);
@@ -638,7 +639,7 @@ body[data-page='space'] .observer-fields label {
 }
 body[data-page='space'] .observer-fields input {
   width: calc(100% - 12px);
-  min-height: 34px;
+  min-height: var(--md-sys-size-target, 40px);
   border: 1px solid var(--space-line);
   border-radius: var(--space-control-radius);
   background: var(--design-surface);

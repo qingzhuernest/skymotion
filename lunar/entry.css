@@ -8,7 +8,7 @@ body.lunar-orbit-active .lunar-controls-host,
   display: block;
 }
 body.lunar-orbit-active
-  .ui-parameters:not([data-editor-view='views']):not([data-editor-view='references'])
+  .ui-parameters:not([data-editor-view="views"]):not([data-editor-view="references"])
   > :not(.lunar-controls-host):not(.motion-menu-header),
 .ui-lunar-orbit .ui-timeline-host > :not(.lunar-timeline-host),
 .ui-lunar-orbit .ui-linked-toggle {
@@ -105,19 +105,19 @@ body.lunar-orbit-active
 }
 /* Keep diagram navigation compact when the extra Moon lesson is available. */
 @media (max-width: 760px) {
-  body[data-page='diagrams'] .ui-viewbar.ui-tabs {
+  body[data-page="diagrams"] .ui-viewbar.ui-tabs {
     flex-wrap: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
   }
-  body[data-page='diagrams'] .ui-viewbar.ui-tabs > button {
+  body[data-page="diagrams"] .ui-viewbar.ui-tabs > button {
     flex-shrink: 0;
     white-space: nowrap;
   }
 }
 
 /* Failure feedback belongs to the light control surface, never replaces the plot. */
-body[data-page='diagrams'] .ui-plot {
+body[data-page="diagrams"] .ui-plot {
   position: relative;
 }
 .lunar-load-notice {
@@ -150,6 +150,6 @@ body[data-page='diagrams'] .ui-plot {
   background: var(--design-inset);
 }
 .lunar-load-notice button:focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }

@@ -5,7 +5,7 @@
   --ui-border: var(--design-line);
   --ui-nav-height: 48px;
   --ui-control-radius: 12px;
-  --ui-control-height: 40px;
+  --ui-control-height: var(--md-sys-size-target, 40px);
 }
 .page-nav {
   height: var(--ui-nav-height);
@@ -35,7 +35,7 @@
   background: var(--design-inset);
 }
 a:focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 2px;
 }
 .reading-page {
@@ -266,7 +266,7 @@ body:is(
   padding: 0;
 }
 .ui-viewbar button {
-  min-height: 32px;
+  min-height: var(--md-sys-size-target, 40px);
   border: 0;
   background: var(--design-surface);
   color: var(--design-primary);
@@ -448,7 +448,7 @@ body:is(
 .ui-field select {
   width: 100%;
   padding: 8px;
-  min-height: 40px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 .ui-parameters .analemma-controls {
   position: static;
@@ -466,7 +466,7 @@ body:is(
 }
 .ui-parameters .analemma-controls select,
 .ui-parameters .analemma-controls input {
-  min-height: 40px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 .ui-parameters .analemma-comparison {
   gap: 8px;
@@ -499,7 +499,7 @@ body:is(
   gap: 6px;
 }
 .ui-parameters .sundial-toolbar button {
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   font-size: 12px;
   padding: 7px 12px;
 }
@@ -668,7 +668,7 @@ body[data-page='analemma'] .workbench-events {
   .ui-viewbar button {
     font-size: 11px;
     padding: 4px 9px;
-    min-height: 26px;
+    min-height: var(--md-sys-size-target, 40px);
   }
   .ui-viewbar .view-tabs button {
     font-size: 11px;
@@ -732,7 +732,7 @@ body[data-page='analemma'] .workbench-events {
     padding: 4px;
   }
   .ui-viewbar button {
-    min-height: 24px;
+    min-height: var(--md-sys-size-target, 40px);
     padding: 3px 9px;
     font-size: 11px;
   }
@@ -1043,7 +1043,7 @@ body[data-page='analemma'] .workbench-events {
     .ui-model-details
   )
   > summary:focus-visible {
-  outline: 3px solid var(--md-primary);
+  outline: 3px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 2px;
 }
 .ui-parameters .menu-summary {
@@ -1126,7 +1126,7 @@ body[data-page='analemma'] .workbench-events {
   padding: 10px;
 }
 .ui-parameters .menu-subsection > summary:focus-visible {
-  outline: 2px solid var(--md-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 2px;
 }
 .ui-parameters .analemma-advanced > :not(summary),
@@ -1220,7 +1220,7 @@ body[data-page='analemma'] .workbench-events {
   color: var(--design-primary);
 }
 .metric-definition > summary:focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 2px;
 }
 .metric-definition > p {
@@ -1522,7 +1522,7 @@ body[data-page='analemma'] .ui-parameters .analemma-comparison .overlay-toggle {
   line-height: 1.6;
 }
 body[data-page='analemma'] .ui-parameters .analemma-comparison button {
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   align-self: flex-start;
   font-size: 12px;
   padding: 7px 12px;
@@ -1568,13 +1568,13 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
 .ui-geometry-card .ui-diagram-card-head h2 {
   display: none;
 }
-.ui-diagram-card-head span {
+.ui-diagram-card-head > span {
   font-size: 11px;
 }
 .ui-diagram-card-head button {
   margin-left: auto;
   padding: 4px 8px;
-  min-height: 28px;
+  min-height: var(--md-sys-size-target, 40px);
   border: 1px solid var(--design-night-line);
   border-radius: 10px;
   background: transparent;
@@ -1612,29 +1612,33 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   grid-template-rows: repeat(2, minmax(0, 1fr));
   gap: 1px;
 }
-.ui-plot[data-kind='solarCompare'] .ui-diagram-card-head {
+.ui-plot[data-kind='solarCompare']:not([data-workspace-count]) .ui-diagram-card-head {
   display: flex;
 }
-.ui-plot[data-kind='solarCompare'] .ui-diagram-card-head h2 {
+.ui-plot[data-kind='solarCompare']:not([data-workspace-count]) .ui-diagram-card-head h2 {
   display: block;
 }
-.ui-plot[data-kind='solarCompare']
+.ui-plot[data-kind='solarCompare']:not([data-workspace-count])
   .ui-diagram-card-head
   span:not(.workbench-sampling-clock):not(.motion-selection) {
   display: none;
 }
 @media (max-width: 760px), (max-height: 540px) {
-  .ui-plot[data-kind='solarCompare'] .ui-diagram-card-head {
+  .ui-plot[data-kind='solarCompare']:not([data-workspace-count]) .ui-diagram-card-head {
     min-height: 25px;
     padding: 2px 6px;
     gap: 3px;
   }
-  .ui-plot[data-kind='solarCompare'] .ui-diagram-card-head h2,
-  .ui-plot[data-kind='solarCompare'] .ui-diagram-card-head button {
+  .ui-plot[data-kind='solarCompare']:not([data-workspace-count]) .ui-diagram-card-head h2,
+  .ui-plot[data-kind='solarCompare']:not([data-workspace-count])
+    .ui-diagram-card-head
+    button {
     font-size: 10px;
   }
-  .ui-plot[data-kind='solarCompare'] .ui-diagram-card-head button {
-    min-height: 24px;
+  .ui-plot[data-kind='solarCompare']:not([data-workspace-count])
+    .ui-diagram-card-head
+    button {
+    min-height: var(--md-sys-size-target, 40px);
     padding: 2px 5px;
   }
 }
@@ -1653,7 +1657,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
 .ui-plot[data-kind='solarCompare'] {
   background: var(--design-night-line);
 }
-.ui-plot[data-kind='solarCompare']
+.ui-plot[data-kind='solarCompare']:not([data-workspace-count])
   :is(
     .ui-diagram-card,
     .ui-diagram-card-head,
@@ -1682,7 +1686,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   flex-wrap: nowrap;
 }
 .ui-sundial .ui-viewbar .sundial-view-controls button {
-  min-height: 30px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 6px 12px;
   font-size: 12px;
 }
@@ -1721,7 +1725,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   border: 0;
   border-radius: 999px;
   padding: 5px 10px;
-  min-height: 30px;
+  min-height: var(--md-sys-size-target, 40px);
   font-size: 12px;
   background: var(--design-surface);
   color: var(--md-primary);
@@ -1800,7 +1804,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   }
   .ui-sundial .ui-viewbar .sundial-view-controls button {
     font-size: 11px;
-    min-height: 26px;
+    min-height: var(--md-sys-size-target, 40px);
     padding: 4px 8px;
   }
   .ui-sundial-readout {
@@ -1825,7 +1829,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   .ui-sundial-camera-tools button {
     font-size: 10px;
     padding: 3px 8px;
-    min-height: 26px;
+    min-height: var(--md-sys-size-target, 40px);
   }
   .ui-sundial-hint {
     padding: 4px 8px;
@@ -2048,8 +2052,8 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  width: 44px;
-  height: 44px;
+  width: var(--md-sys-size-target);
+  height: var(--md-sys-size-target);
   padding: 10px;
   border: 0;
   border-radius: 999px;
@@ -2081,7 +2085,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   display: none;
 }
 .ui-parameter-drawer button:focus-visible {
-  outline: 2px solid var(--md-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 2px;
 }
 @media (max-width: 760px) {
@@ -2115,7 +2119,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
     align-items: center;
     justify-content: center;
     gap: 5px;
-    min-height: 44px;
+    min-height: var(--md-sys-size-target, 40px);
     padding: 8px 10px;
     border: 0;
     border-radius: 999px;
@@ -2303,7 +2307,7 @@ body[data-page='welcome']
   align-items: center;
   justify-content: center;
   width: var(--welcome-action-width);
-  min-height: 40px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 8px;
   border-radius: var(--welcome-radius);
   border: 1px solid #b8c5d329;
@@ -2373,7 +2377,7 @@ body[data-page='welcome'] .welcome-quote {
       .welcome-corner-links > a,
       .welcome-corner-links > a:visited
     ) {
-    min-height: 36px;
+    min-height: var(--md-sys-size-target, 40px);
     font-size: 11px !important;
     padding: 3px 8px;
   }
@@ -2541,7 +2545,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
 .ui-viewbar > .observer-explanation-button {
   margin-left: auto;
   flex-shrink: 0;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 6px 10px;
   color: var(--design-primary);
   background: var(--design-surface);

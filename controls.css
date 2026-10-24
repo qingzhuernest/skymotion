@@ -94,7 +94,7 @@
 :is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
   :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
   > input[type='checkbox']:focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 
@@ -142,7 +142,7 @@ body[data-page='space'] .side .toggles {
 .ui-parameters :is(.menu-content, .analemma-comparison, .solar-date-options) > button {
   width: 100%;
   box-sizing: border-box;
-  min-height: 40px;
+  min-height: var(--md-sys-size-target, 40px);
   border-radius: var(--ui-control-radius, 12px);
   white-space: normal;
   line-height: 1.5;
@@ -163,7 +163,7 @@ body[data-page='space'] .scene-tools-panel .tools-field {
 body[data-page='space'] .scene-tools-panel .tools-field select {
   width: 100%;
   min-width: 0;
-  min-height: 40px;
+  min-height: var(--md-sys-size-target, 40px);
   border-radius: 12px;
 }
 

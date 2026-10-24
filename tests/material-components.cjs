@@ -1,5 +1,6 @@
 /** Verify the shared Material contract across application, reading and embedded routes. */
 const assert = require('node:assert/strict');
+const { controlContrast } = require('./material-test-helpers.cjs');
 const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
 const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').replace(
   /\/?$/,
@@ -20,6 +21,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
       ['space/index.html', 1280],
       ['space/index.en.html', 390],
       ['lunar/index.html', 960],
+      ['lunar/index.en.html', 390],
       ['docs.html', 1280],
       ['guide.en.html', 390],
       ['development-guide.html', 1280],
@@ -57,8 +59,58 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
         route + ' keeps the original palette through Material roles',
       );
       assert.equal(result.shape, '999px');
-      assert.match(result.font, route.includes('.en.') ? /SkyMotion Charter/ : /SkyMotion Reading/);
+      assert.match(
+        result.font,
+        route.includes('.en.') ? /SkyMotion Charter/ : /SkyMotion Reading/,
+      );
       assert.equal(result.overflow, false, route + ' horizontal overflow');
+      if (route.startsWith('lunar/')) {
+        const mode = page.locator('.lunar-mode [data-mode=surface]');
+        await mode.click();
+        await page.waitForFunction(
+          () =>
+            document
+              .querySelector('.lunar-mode [data-mode=surface]')
+              .getAttribute('aria-pressed') === 'true',
+        );
+        assert.equal(await mode.getAttribute('aria-pressed'), 'true');
+        await page.locator('.lunar-mode [data-mode=orbit]').click();
+        if (width < 760) {
+          await page.locator('[data-lunar-view=orbit]').click();
+          await page.locator('[data-lunar-view=sky]').click();
+        }
+        for (const id of ['orbitAngle', 'phaseAngle']) {
+          assert(
+            await page.locator('#' + id).evaluate((node) => node.labels.length > 0),
+            id + ' keeps a label independent of the adjacent output element',
+          );
+        }
+        for (const id of ['resetLook', 'followEarth']) {
+          const control = page.locator('#' + id);
+          await page.keyboard.press('Tab');
+          await control.focus();
+          assert(
+            (await control.evaluate(controlContrast, 'focus')) >= 3,
+            id + ' has a contrasting keyboard focus outline on its dark surface',
+          );
+          for (const state of ['normal', 'hover', 'pressed']) {
+            if (state === 'hover') await control.hover();
+            if (state === 'pressed') await page.mouse.down();
+            try {
+              assert(
+                (await control.evaluate(controlContrast)) >= 4.5,
+                id + ' remains readable in ' + state + ' state on its dark surface',
+              );
+            } finally {
+              if (state === 'pressed') await page.mouse.up();
+            }
+          }
+        }
+      }
+      if (route.startsWith('space/') && width < 760) {
+        const target = await page.locator('#reset').boundingBox();
+        assert(target.width >= 48 && target.height >= 48, 'Touch reset target');
+      }
       if (route.startsWith('lab.')) {
         await page.locator('button[data-body=moon]').click();
         await page.waitForFunction(() => state.body === 'moon');
@@ -85,6 +137,33 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
         await page.waitForFunction(
           () => state.view === 'horizon' && uiWorkspace.selected === 'skyPanel',
         );
+        if (width < 760) {
+          await require('./diagram-test-helpers.cjs').closeDrawer(page);
+          await page.setViewportSize({ width: 320, height: 960 });
+          await page.locator('#workbenchDate').click();
+          await page.locator('.site-calendar').evaluate(async (dialog) => {
+            await Promise.all(
+              dialog
+                .getAnimations()
+                .map((animation) => animation.finished.catch(() => {})),
+            );
+          });
+          const dates = await page
+            .locator('.site-calendar [data-date]')
+            .evaluateAll((nodes) =>
+              nodes.map((node) => {
+                const bounds = node.getBoundingClientRect();
+                return { width: bounds.width, height: bounds.height };
+              }),
+            );
+          assert(dates.length > 0);
+          assert(dates.every((date) => date.width >= 40 && date.height >= 40));
+          const shift = await page
+            .locator('.site-calendar [data-shift="-1"]')
+            .boundingBox();
+          assert(shift.width >= 48 && shift.height >= 48);
+          await page.keyboard.press('Escape');
+        }
       }
       await page.screenshot({
         path:
@@ -116,7 +195,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
     );
     await immediate.close();
     console.log(
-      'PASS Material roles, preserved accent, typography, nested viewpoints, direct body switching and responsive layouts across 13 application/document/embedded route variants',
+      'PASS Material roles, preserved accent, typography, nested viewpoints, direct body switching, lunar header hit targets and dark control contrast across 14 application/document/embedded route variants',
     );
   } finally {
     await browser.close();

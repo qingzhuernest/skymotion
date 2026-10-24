@@ -1203,7 +1203,8 @@
         pending = null;
         update();
       };
-      const pick = node('input', 'sb-select-box', row);
+      const pickTarget = node('label', 'md-checkbox-target', row);
+      const pick = node('input', 'sb-select-box', pickTarget);
       pick.type = 'checkbox';
       pick.checked = selectedMany.has(o.id);
       pick.setAttribute('aria-label', t('selectMany') + ' ' + name(o));

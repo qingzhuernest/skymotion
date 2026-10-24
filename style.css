@@ -840,7 +840,7 @@ button:focus-visible,
 select:focus-visible,
 input:focus-visible,
 canvas:focus-visible {
-  outline-color: var(--design-primary);
+  outline-color: var(--md-sys-color-focus, var(--design-primary));
 }
 .scene-badge {
   color: #ffe1a5;
@@ -973,7 +973,7 @@ canvas:focus-visible {
   display: none !important;
 }
 .time-shortcuts button {
-  min-height: 34px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 .time-shortcuts #riseLabel,
 .time-shortcuts #setLabel,
@@ -1800,7 +1800,7 @@ body[data-body='moon'] #sky {
 }
 .menu-section summary:focus-visible,
 .menu-subsection summary:focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -1838,7 +1838,7 @@ body[data-body='moon'] #sky {
     min-height: 48px;
   }
   .settings-dialog .study-navigation button {
-    min-height: 44px;
+    min-height: var(--md-sys-size-target, 40px);
   }
 }
 /* Keep the sky and playback together without intrinsic canvas height growth. */
@@ -1968,7 +1968,7 @@ body[data-body='moon'] #sky {
   content: '−';
 }
 .lunar-sky-details > summary:focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 5px;
   border-radius: 5px;
 }
@@ -2157,7 +2157,7 @@ body[data-body='moon'] .chart-panel {
 .companion-toolbar :is(select, button) {
   width: 100%;
   min-width: 0;
-  min-height: 42px;
+  min-height: var(--md-sys-size-target, 40px);
   box-sizing: border-box;
   padding: 9px 12px;
   margin: 0;
@@ -2827,7 +2827,7 @@ canvas,
   border-radius: 22px;
   background: var(--design-surface);
   color: var(--design-primary);
-  min-height: 44px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 9px 16px;
 }
 .analemma-legend {
@@ -2879,7 +2879,7 @@ canvas,
   cursor: grabbing;
 }
 #analemmaCanvas:focus-visible {
-  outline: 3px solid var(--design-action);
+  outline: 3px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 4px;
 }
 @media (max-width: 760px) {
@@ -2904,7 +2904,7 @@ canvas,
   border-radius: 22px;
   background: var(--design-inset);
   color: var(--design-primary);
-  min-height: 44px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 .shadow-tip-dot {
   background: var(--design-inset) !important;
@@ -2957,7 +2957,7 @@ canvas,
   border-radius: 22px;
   background: var(--design-surface);
   color: var(--design-primary);
-  min-height: 44px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 .sundial-toolbar label {
   display: flex;
@@ -3266,7 +3266,7 @@ canvas,
   border-radius: 22px;
   background: var(--design-surface);
   color: var(--design-primary);
-  min-height: 44px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 8px 14px;
 }
 .observer-bodies button {
@@ -3274,7 +3274,7 @@ canvas,
   border-radius: 22px;
   background: var(--design-surface);
   color: var(--design-primary);
-  min-height: 44px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 .sundial-view-controls button.active {
   background: var(--design-primary);
@@ -3298,7 +3298,7 @@ canvas,
   padding: 9px;
   border: 1px solid var(--design-line);
   border-radius: 10px;
-  min-height: 44px;
+  min-height: var(--md-sys-size-target, 40px);
   background: var(--design-surface);
 }
 .sundial-time-label {
@@ -3551,7 +3551,7 @@ body[data-sky-view='observer'] .stage-key {
   border-radius: 24px;
   background: var(--design-surface);
   color: var(--design-primary);
-  min-height: 44px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 9px 16px;
   font-size: 14px;
 }
@@ -3729,7 +3729,7 @@ body[data-sky-view='observer'] .stage-key {
   gap: 6px;
 }
 .observer-controls .observer-directions button {
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 6px 13px;
   font-size: 12px;
 }
@@ -3770,7 +3770,7 @@ body[data-sky-view='observer'] .stage-key {
 }
 .observer-time-host .play-button {
   padding: 6px 11px;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   font-size: 12px;
 }
 .observer-time-host .loop-control {
@@ -3784,7 +3784,7 @@ body[data-sky-view='observer'] .stage-key {
 .observer-time-host .time-shortcuts button {
   padding: 5px 8px;
   font-size: 11px;
-  min-height: 32px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 .observer-time-host .time-labels,
 .observer-clock-panel .time-labels {
@@ -3813,7 +3813,7 @@ body[data-sky-view='observer'] .stage-key {
   .observer-controls .observer-directions button {
     padding: 4px 9px;
     min-width: 30px;
-    min-height: 32px;
+    min-height: var(--md-sys-size-target, 40px);
   }
   .observer-time-host .time-top {
     display: flex;
@@ -3975,7 +3975,7 @@ body[data-sky-view='observer'] .stage-key {
   color: var(--design-primary);
   font-size: 11px;
   padding: 5px 10px;
-  min-height: 32px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 
 .workbench-more {
@@ -4010,7 +4010,7 @@ body[data-sky-view='observer'] .stage-key {
 .workbench-extra select {
   padding: 6px 8px;
   font-size: 12px;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 .workbench-loop input {
   width: 17px;
@@ -4147,11 +4147,12 @@ html:has(.has-time-workbench) {
   gap: 6px;
 }
 .workbench-month-tools button {
+  min-width: var(--md-sys-size-target);
   border: 0;
   border-radius: 12px;
   background: var(--design-surface);
   color: var(--design-primary);
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 4px 12px;
 }
 .workbench-month-tools input {
@@ -4224,7 +4225,7 @@ html:has(.has-time-workbench) {
   background: var(--design-primary);
 }
 .analemma-ideal-controls input:focus-visible {
-  outline: 2px solid var(--design-action);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 2px;
   border-radius: 10px;
 }

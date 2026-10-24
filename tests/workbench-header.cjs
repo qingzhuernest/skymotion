@@ -1,5 +1,6 @@
 /** Keep the workbench in one compact header and 3D comparison in its view menu. */
 const assert = require('node:assert/strict');
+const { controlContrast } = require('./material-test-helpers.cjs');
 const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
 const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').replace(
   /\/?$/,
@@ -95,33 +96,15 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
           { border: '0px', gap: '2px', innerCorner: '8px' },
           'Expressive connected group: separate surfaces, small inner corners and no shared outline',
         );
-        const contrast = await page
-          .locator('.body-switch [aria-pressed=true]')
-          .evaluate((button) => {
-            const style = getComputedStyle(button);
-            const context = document.createElement('canvas').getContext('2d');
-            const luminance = (color) => {
-              context.fillStyle = color;
-              context.fillRect(0, 0, 1, 1);
-              const channels = [...context.getImageData(0, 0, 1, 1).data]
-                .slice(0, 3)
-                .map((value) => {
-                  value /= 255;
-                  return value <= 0.04045
-                    ? value / 12.92
-                    : ((value + 0.055) / 1.055) ** 2.4;
-                });
-              return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
-            };
-            const text = luminance(style.color);
-            return [
-              style.backgroundColor,
-              style.getPropertyValue('--md-sys-state-pressed'),
-            ].map((color) => {
-              const surface = luminance(color);
-              return (Math.max(text, surface) + 0.05) / (Math.min(text, surface) + 0.05);
-            });
-          });
+        const selectedButton = page.locator('.body-switch [aria-pressed=true]');
+        await selectedButton.hover();
+        const contrast = [await selectedButton.evaluate(controlContrast)];
+        await page.mouse.down();
+        try {
+          contrast.push(await selectedButton.evaluate(controlContrast));
+        } finally {
+          await page.mouse.up();
+        }
         assert(
           contrast.every((value) => value >= 4.5),
           'Selected text remains readable during hover and press: ' + contrast,

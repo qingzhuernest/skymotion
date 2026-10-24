@@ -20,6 +20,7 @@
   --design-font: 'SkyMotion Reading', 'Songti SC', 'SimSun', serif;
   --design-reading-font: var(--design-font);
   --md-sys-color-primary: var(--design-primary);
+  --md-sys-color-focus: var(--md-sys-color-primary);
   --md-sys-color-on-primary: var(--design-on-action);
   --md-sys-color-primary-container: var(--design-selected);
   --md-sys-color-on-primary-container: var(--design-on-selected);
@@ -36,16 +37,8 @@
   --md-sys-shape-corner-extra-large: 28px;
   --md-sys-shape-corner-full: 999px;
   --md-sys-size-target: 40px;
-  --md-sys-state-hover: color-mix(
-    in srgb,
-    var(--design-primary) 8%,
-    var(--design-surface)
-  );
-  --md-sys-state-pressed: color-mix(
-    in srgb,
-    var(--design-primary) 12%,
-    var(--design-surface)
-  );
+  --md-sys-state-hover: color-mix(in srgb, currentColor 8%, transparent);
+  --md-sys-state-pressed: color-mix(in srgb, currentColor 12%, transparent);
   --md-sys-motion-duration-short: 150ms;
   --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --design-radius-control: 20px;
@@ -92,20 +85,27 @@ body :is(button, input, select, textarea) {
 }
 /* Shared Material component contract. Route modules own placement, not new skins. */
 body :is(button, .page-action, .language-toggle, .layout-launch) {
-  min-height: 40px;
+  min-height: var(--md-sys-size-target, 40px);
   border-radius: var(--md-sys-shape-corner-full);
   font-weight: 500;
   line-height: 1.4;
   transition:
     background-color var(--md-sys-motion-duration-short)
       var(--md-sys-motion-easing-standard),
-    color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+    color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+    box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
 }
-body :is(button, .page-action):not(:disabled):hover {
-  background-color: var(--md-sys-state-hover);
+body
+  :is(button, .page-action, .document-download, .document-links a, .page-nav a):not(
+    :disabled
+  ):hover {
+  box-shadow: inset 0 0 0 999px var(--md-sys-state-hover);
 }
-body :is(button, .page-action):not(:disabled):active {
-  background-color: var(--md-sys-state-pressed);
+body
+  :is(button, .page-action, .document-download, .document-links a, .page-nav a):not(
+    :disabled
+  ):active {
+  box-shadow: inset 0 0 0 999px var(--md-sys-state-pressed);
 }
 body
   :is(
@@ -115,7 +115,7 @@ body
     select,
     textarea
   ) {
-  min-height: 40px;
+  min-height: var(--md-sys-size-target, 40px);
   border: 1px solid var(--md-sys-color-outline);
   border-radius: var(--md-sys-shape-corner-extra-small);
   color: var(--md-sys-color-on-surface);
@@ -145,6 +145,37 @@ body :is([role='menuitem'], .page-nav a) {
 }
 body input:is([type='checkbox'], [type='radio'], [type='range']) {
   accent-color: var(--md-sys-color-primary);
+}
+body input[type='range'] {
+  min-height: var(--md-sys-size-target);
+}
+.md-checkbox-target {
+  display: grid;
+  place-items: center;
+  min-width: var(--md-sys-size-target);
+  min-height: var(--md-sys-size-target);
+  margin: 0;
+  padding: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--design-muted);
+  cursor: pointer;
+}
+.md-checkbox-target:has(input:checked) {
+  color: var(--design-primary);
+}
+.md-checkbox-target:hover {
+  background: var(--md-sys-state-hover);
+}
+.md-checkbox-target:active {
+  background: var(--md-sys-state-pressed);
+}
+.md-dark-surface {
+  --md-sys-color-focus: var(--design-night-ink);
+}
+.md-checkbox-target input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
 }
 .document-page {
   font-family: var(--design-reading-font);
@@ -177,7 +208,7 @@ body
   color: var(--design-ink);
 }
 body :is(a, button, input, select, textarea, summary):focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 body a {
@@ -243,16 +274,6 @@ body
   background: transparent;
 }
 .md-connected-choice button {
-  --md-sys-state-hover: color-mix(
-    in srgb,
-    var(--md-sys-color-on-primary-container) 8%,
-    var(--md-sys-color-primary-container)
-  );
-  --md-sys-state-pressed: color-mix(
-    in srgb,
-    var(--md-sys-color-on-primary-container) 12%,
-    var(--md-sys-color-primary-container)
-  );
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -289,16 +310,6 @@ body
     center/contain no-repeat;
 }
 .md-connected-choice button[aria-pressed='true'] {
-  --md-sys-state-hover: color-mix(
-    in srgb,
-    var(--md-sys-color-on-primary) 8%,
-    var(--md-sys-color-primary)
-  );
-  --md-sys-state-pressed: color-mix(
-    in srgb,
-    var(--md-sys-color-on-primary) 12%,
-    var(--md-sys-color-primary)
-  );
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   border-radius: var(--md-sys-shape-corner-full);
@@ -441,7 +452,7 @@ body
   line-height: 1.5;
 }
 body :is(.ui-parameters, .ui-timeline-host, .side, .timeline) select {
-  min-height: 38px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
@@ -776,7 +787,7 @@ body .scene-tools-panel input[type='checkbox']:checked {
 }
 .document-links a {
   border-radius: var(--design-radius-control);
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   color: var(--design-primary);
   background: var(--design-inset);
   font-size: 12px;
@@ -896,7 +907,7 @@ body :is(.page-action, .author-mail-button):hover {
   color: var(--design-hover);
 }
 .document-page .article-actions :is(.page-action, .page-link):focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 
@@ -1104,7 +1115,7 @@ body .ui-viewbar::-webkit-scrollbar {
 }
 
 body .ui-heading #uiParametersButton {
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   border-radius: 12px;
   background: var(--design-inset);
   color: var(--design-primary);
@@ -1173,7 +1184,7 @@ body .ui-heading #uiParametersButton {
   }
   .ui-viewbar .view-tabs > button {
     flex: 1 1 64px;
-    min-height: 32px;
+    min-height: var(--md-sys-size-target, 40px);
     padding: 5px 6px;
     font-size: 12px;
   }
@@ -1263,7 +1274,7 @@ body .ui-plot #resetView:hover {
   font-family: var(--design-font);
 }
 .ui-parameters .metrics :is(article > span, .metric-definition > summary) {
-  min-height: var(--md-sys-size-target);
+  min-height: 20px;
   line-height: 20px;
 }
 .ui-parameters .metrics article > span {
@@ -1271,6 +1282,7 @@ body .ui-plot #resetView:hover {
   place-items: center;
 }
 .ui-parameters .metrics .metric-definition > summary {
+  min-height: var(--md-sys-size-target);
   justify-content: center;
 }
 .ui-parameters .metrics :is(article > span, small, .metric-definition summary) {
@@ -1341,7 +1353,7 @@ body[data-page='space'] .side .motion-menu-header > button.motion-menu-grip {
   border-radius: 12px;
 }
 body .motion-menu-edge:focus-visible {
-  outline: 2px solid var(--design-action);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 /* Quiet supporting actions: same teal identity without large filled surfaces. */
@@ -1487,7 +1499,7 @@ body .ui-viewbar .view-tabs > button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   text-align: center;
   text-wrap: balance;
 }
@@ -1722,7 +1734,7 @@ body .site-calendar button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 6px;
   border: 1px solid transparent;
   border-radius: 8px;
@@ -1746,7 +1758,9 @@ body .site-calendar button:disabled {
 }
 .site-calendar-head {
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) 40px;
+  grid-template-columns: var(--md-sys-size-target) minmax(0, 1fr) var(
+      --md-sys-size-target
+    );
   gap: 4px;
   align-items: center;
 }
@@ -1770,7 +1784,7 @@ body .site-calendar button:disabled {
 }
 body .site-calendar-year input {
   width: 88px;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   border: 1px solid var(--design-line);
   border-radius: 8px;
   padding: 4px 8px;
@@ -1785,6 +1799,15 @@ body .site-calendar-year input {
 }
 .site-calendar-grid.site-calendar-months {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 360px) {
+  body dialog.site-calendar {
+    width: calc(100vw - 16px);
+    padding: 8px;
+  }
+  .site-calendar-grid {
+    gap: 0;
+  }
 }
 .site-calendar-weekday {
   text-align: center;
@@ -1810,7 +1833,7 @@ body .site-calendar-actions button:hover {
   background: var(--design-selected);
 }
 body input.site-date-field {
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 6px 10px;
   border: 1px solid var(--design-line);
   border-radius: var(--design-radius-control);
@@ -1829,7 +1852,7 @@ body dialog.site-calendar[open] {
 }
 body .site-calendar-year button {
   min-width: 80px;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 4px 12px;
   border: 1px solid var(--design-line);
   background: var(--design-on-action);
@@ -1938,7 +1961,7 @@ body
 }
 body .font-load-notice button {
   flex-shrink: 0;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 6px 10px;
   border: 1px solid var(--design-line);
   border-radius: 8px;
@@ -2006,7 +2029,7 @@ html:lang(en) body[data-page='welcome'] .welcome-quote {
       .welcome-corner-links > a,
       .welcome-corner-links > a:visited
     ) {
-    min-height: 32px;
+    min-height: var(--md-sys-size-target, 40px);
     padding: 3px 8px;
   }
 }

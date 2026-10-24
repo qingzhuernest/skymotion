@@ -283,6 +283,10 @@ SolarSpaceView是父页桥接接口，公开选择和接收联动UTC，不直接
 
 SkyWorkbenchMenu选择内容并保留固定的顶层导航；skyWorkspacePresentation管理组合，不应该因为选择对象就把主菜单改成另一层。点击画布只更新active图位和高亮；不能为选中图位重新挂载所有Canvas。小屏使用原参数抽屉，不另建浮动编辑器。
 
+图位通过捕获阶段的pointerdown和focusin激活，避免图内手势阻止冒泡后丢失目标。placeCards只移动顺序发生变化的容器；选择器交换图位后，apply把焦点恢复到新目标的选择器。focusView和leaveFocusedView统一专注状态，返回按钮挂在可见的图名栏，普通模式也可使用，Esc和再次双击走相同的退出逻辑。
+
+design-system.css集中定义控件目标尺寸、状态层和焦点颜色。鼠标模式使用40px最小目标，粗指针使用48px；小复选框通过外层label扩大点击区。hover和pressed用currentColor的8%和12%内阴影覆盖层，保留组件自身的容器色；深色科学画布由md-dark-surface提供高对比焦点角色。紧凑日历日期格至少40px；画布中的天体标签属于图形标注，另有侧栏同名按钮提供完整操作目标。
+
 ## 参考对象、身份与跨图选中
 
 | 结构 | 字段含义 |
@@ -451,7 +455,7 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [workspace.js](https://github.com/qingzhuernest/skymotion/blob/main/workspace.js) | 太阳/月球视图与原始模块的显隐协调 | isMoonOverlayActive, moonOverlayPosition, initWorkspace, updateWorkspaceLayout, updateWorkspaceUI |
 | [page-navigation.js](https://github.com/qingzhuernest/skymotion/blob/main/page-navigation.js) | 统一页面骨架、路由、画布挂载与参数抽屉 | uiViewHidden, uiViewText, uiViewAttribute, renderUIWorkspace, save, link, addPlace, selectDial, sundialGroup, animateDrawer, finishDrawerClose, closeParameters, openParameters, endDrawerSwipe, updateParameterPresentation |
 | [workbench-menu.js](https://github.com/qingzhuernest/skymotion/blob/main/workbench-menu.js) | 读取统一目录，呈现分层视图与布局入口 | select, sync |
-| [custom-layout.js](https://github.com/qingzhuernest/skymotion/blob/main/custom-layout.js) | 多图排列、拖放、比例、收藏和完整实验协调 | sanitize, load, loadProfiles, button, travel, section, captureExperiment, applyProfile, persistProfiles, mutateProfiles, undoProfiles, markActive, activate, save, announce, change, move, labelButtons, labels, renderOrder, focusProfile, finishEditing, renderProfiles, apply, closeOptions, toggleOptions, start, cancel, targetAt, ratioAt |
+| [custom-layout.js](https://github.com/qingzhuernest/skymotion/blob/main/custom-layout.js) | 多图排列、拖放、比例、收藏和完整实验协调 | sanitize, load, loadProfiles, button, travel, section, captureExperiment, applyProfile, persistProfiles, mutateProfiles, undoProfiles, leaveFocusedView, focusView, placeCards, markActive, activate, save, announce, change, move, labelButtons, labels, renderOrder, focusProfile, finishEditing, renderProfiles, apply, closeOptions, toggleOptions, start, cancel, targetAt, ratioAt |
 | [customization-mode.js](https://github.com/qingzhuernest/skymotion/blob/main/customization-mode.js) | 顶部自定义开关的共用生命周期 | refresh, change |
 | [customization-session.js](https://github.com/qingzhuernest/skymotion/blob/main/customization-session.js) | 一次性编辑意图与跨入口会话延续 | 模块内部方法，参见源码 |
 | [diagram-tools.js](https://github.com/qingzhuernest/skymotion/blob/main/diagram-tools.js) | 对象存储、属性、放置、选择、导入与验证 | updateFold, updateMode, setEditing, selectedOwner, selectedKey, entries, switchView, revealField, revealWithin, placementUI, contextualHelp, arm, placeAt, menuOpen, closeObjectMenu, reorder, updateFiles, readImport, cityLabel, makeObject, startExperiment, persist, stateFor, defs, clean, repaint, draftStatus, record, restoreBasis, updateLocation, actionState, validInputs, fieldError, clearFieldError, updateSmall, mutate, travel, commitActive, save, create, showInspector, rememberContext, hide, open, parameterRail, persistentRailMode, visibleModels, chooseRail, ensureRailNavigation, syncRailNavigation, syncRailShell, unmountPanel, placePanel, renderToolLibrary, renderObjectList, referenceNameAtLocation, attachReferenceControl, commitReferenceField, renderInspector, update, selectedRow, focusSelectedRow, selectReference, textLayout, helper, drawObject, anchor, movementOrigin, hitAnchor, pointAt, beginDrag, moveDrag, finishDrag, cancelDrag, wireCanvas, paint, customizationOn, syncLaunchers, checkCurrentVisibility, syncVisibility, comparisonModel, comparisonList, comparisonChange, comparisonValid, syncInputs, finishNudge, nudge |

@@ -2986,8 +2986,12 @@
                   "Drag dividers to preview proportions and release to resize the canvases, or commit an exact proportion from 30% to 70%."
                 ],
                 [
-                  "点击专注此图临时放大；Esc返回组合。撤销与重做布局不等于撤销科学条件。",
-                  "Focus a pane temporarily and press Escape to return. Layout undo/redo is separate from scientific-condition history."
+                  "双击图名，或在自定义中点击“专注此图”，临时放大一张图。图名旁始终显示“返回多图 · Esc”；点击它、按Esc或再次双击图名都能返回组合。",
+                  "Double-click a pane title, or choose “Focus this view” while customizing, to enlarge it temporarily. “Back to all views · Esc” remains beside the title. Click it, press Escape or double-click the title again to return."
+                ],
+                [
+                  "先点击要替换的图，其边框会标出当前图位，再从侧栏选择另一张图；自定义中的图名选择器也可直接替换。撤销与重做布局不等于撤销科学条件。",
+                  "Click the pane you want to replace; its outline identifies the active target. Choose another view from the sidebar, or use its title selector while customizing. Layout undo/redo is separate from scientific-condition history."
                 ]
               ]
             },
@@ -4561,6 +4565,20 @@
               "text": [
                 "SkyWorkbenchMenu选择内容并保留固定的顶层导航；skyWorkspacePresentation管理组合，不应该因为选择对象就把主菜单改成另一层。点击画布只更新active图位和高亮；不能为选中图位重新挂载所有Canvas。小屏使用原参数抽屉，不另建浮动编辑器。",
                 "SkyWorkbenchMenu selects content beneath stable top navigation; skyWorkspacePresentation manages composition. Object selection must not rewrite the main menu. Selecting a pane updates active/highlight state without remounting all canvases. Small screens reuse the native parameter drawer instead of another floating editor."
+              ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "图位通过捕获阶段的pointerdown和focusin激活，避免图内手势阻止冒泡后丢失目标。placeCards只移动顺序发生变化的容器；选择器交换图位后，apply把焦点恢复到新目标的选择器。focusView和leaveFocusedView统一专注状态，返回按钮挂在可见的图名栏，普通模式也可使用，Esc和再次双击走相同的退出逻辑。",
+                "Capture-phase pointerdown and focusin activate panes even when plot gestures stop bubbling. placeCards moves containers only when order changes; apply restores selector focus to the replacement pane. focusView and leaveFocusedView share the focus-state transition. The return action stays in the visible pane header in ordinary mode; Escape and another title double-click use the same exit path."
+              ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "design-system.css集中定义控件目标尺寸、状态层和焦点颜色。鼠标模式使用40px最小目标，粗指针使用48px；小复选框通过外层label扩大点击区。hover和pressed用currentColor的8%和12%内阴影覆盖层，保留组件自身的容器色；深色科学画布由md-dark-surface提供高对比焦点角色。紧凑日历日期格至少40px；画布中的天体标签属于图形标注，另有侧栏同名按钮提供完整操作目标。",
+                "design-system.css owns target sizes, state layers and focus colors. Fine pointers use a 40px minimum target and coarse pointers use 48px; checkbox labels enlarge the hit area around the small visual square. Hover and pressed states overlay inset shadows at 8% and 12% of currentColor, preserving the container color. md-dark-surface supplies a contrasting focus role on scientific canvases. Compact calendar dates retain a 40px minimum; planetary annotations have equivalent full-size sidebar controls."
               ]
             }
           ],

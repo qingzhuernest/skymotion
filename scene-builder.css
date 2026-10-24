@@ -68,7 +68,7 @@ body .scene-builder button[aria-pressed='true'] {
   color: var(--design-ink);
 }
 body .scene-builder button:focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 2px;
 }
 body .scene-builder button:disabled {
@@ -166,6 +166,8 @@ body .sb-inline input {
 }
 .sb-options label,
 .sb-lock {
+  min-height: var(--md-sys-size-target);
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -270,7 +272,7 @@ body .sb-object-list .sb-object {
     gap: 1px;
   }
   body .sb-toolbar button {
-    min-height: 40px;
+    min-height: var(--md-sys-size-target, 40px);
     padding: 7px;
     font-size: 12px;
   }
@@ -293,7 +295,7 @@ body .sb-object-list .sb-object {
     font-size: 16px;
   }
   body .sb-controls button {
-    min-height: 42px;
+    min-height: var(--md-sys-size-target, 40px);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -438,10 +440,12 @@ body .sb-add-toggle {
   margin-bottom: 14px;
 }
 body .sb-placement-actions button {
-  min-height: 44px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 .sb-object-row {
-  grid-template-columns: minmax(0, 1fr) 24px 40px;
+  grid-template-columns: minmax(0, 1fr) var(--md-sys-size-target) var(
+      --md-sys-size-target
+    );
 }
 body .sb-object-row .sb-row-more {
   min-width: 40px;
@@ -474,7 +478,7 @@ body .sb-object-menu button {
   border-radius: var(--md-sys-shape-corner-extra-small);
   display: block;
   width: 100%;
-  min-height: 44px;
+  min-height: var(--md-sys-size-target, 40px);
   border: 0;
   text-align: start;
   background: transparent;

@@ -22,7 +22,7 @@
   font: inherit;
   font-size: 13px;
   line-height: 1.5;
-  min-height: 40px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 8px 10px;
   color: var(--design-ink);
   background: var(--design-surface);
@@ -255,7 +255,7 @@
 }
 @media (pointer: coarse) {
   .solar-study-controls :is(button, input, select) {
-    min-height: 44px;
+    min-height: var(--md-sys-size-target, 40px);
   }
 }
 @media (min-width: 761px) {

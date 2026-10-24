@@ -10,6 +10,7 @@ html:lang(en) .welcome-quote {
   font-family: var(--design-font);
 }
 .language-toggle {
+  min-width: var(--md-sys-size-target);
   flex-shrink: 0;
   align-self: center;
   border: 1px solid var(--design-line);
@@ -17,7 +18,7 @@ html:lang(en) .welcome-quote {
   background: var(--design-surface);
   color: var(--design-primary);
   padding: 7px 12px;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   font: inherit;
   cursor: pointer;
   white-space: nowrap;
@@ -29,7 +30,7 @@ html:lang(en) .welcome-quote {
   background: var(--design-selected);
 }
 .language-toggle:focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 .welcome-brand .language-toggle {
@@ -54,7 +55,7 @@ html:lang(en) .ui-viewbar button {
 @media (max-width: 600px) {
   .language-toggle {
     padding: 6px 9px;
-    min-height: 34px;
+    min-height: var(--md-sys-size-target, 40px);
   }
   html:lang(en) .page-nav {
     gap: 4px;
@@ -245,7 +246,7 @@ html:lang(en) .document-content h2 {
     font-size: 22px;
   }
   html:lang(en) .ui-viewbar .view-tabs > button {
-    min-height: 40px;
+    min-height: var(--md-sys-size-target, 40px);
   }
 }
 html:lang(en) .ui-parameters .season-buttons {
@@ -287,7 +288,7 @@ html:lang(en)
   html:lang(en)
     body[data-page='welcome']
     :is(.welcome-sky-actions button, .welcome-corner-links > a) {
-    min-height: 40px;
+    min-height: var(--md-sys-size-target, 40px);
   }
 }
 /* Global editing mode sits beside language, outside the scientific heading. */
@@ -300,7 +301,7 @@ html:lang(en)
 }
 .language-actions :is(.layout-launch, .language-toggle) {
   margin: 0;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 7px 12px;
   border-radius: var(--design-radius-control);
   font: inherit;
@@ -318,7 +319,7 @@ body[data-page='space'].space-immersive
   color: var(--design-on-action);
 }
 .language-actions :is(.layout-launch, .language-toggle):focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 @media (max-width: 600px) {
@@ -329,12 +330,12 @@ body[data-page='space'].space-immersive
   }
   .language-actions :is(.layout-launch, .language-toggle) {
     padding: 6px 9px;
-    min-height: 36px;
+    min-height: var(--md-sys-size-target, 40px);
   }
 }
 @media (pointer: coarse) {
   .language-actions :is(.layout-launch, .language-toggle) {
-    min-height: 44px;
+    min-height: var(--md-sys-size-target, 40px);
   }
 }
 

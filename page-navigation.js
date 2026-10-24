@@ -701,7 +701,7 @@ function renderUIWorkspace() {
         header.append(hint, reset);
       }
       const surface = document.createElement('div');
-      surface.className = 'ui-diagram-surface';
+      surface.className = 'ui-diagram-surface md-dark-surface';
       surface.append($(nodeId));
       card.append(header, surface);
       plot.append(card);

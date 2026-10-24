@@ -1,5 +1,6 @@
 /* Quiet controls, progressively disclosed customization, unchanged scientific surfaces. */
 .layout-launch,
+.workspace-back-button,
 .workspace-toolbar button,
 .workspace-pane-tools button,
 .workspace-options button {
@@ -11,6 +12,7 @@
   box-sizing: border-box;
 }
 .layout-launch,
+.workspace-back-button,
 .workspace-toolbar button,
 .workspace-pane-tools button,
 .workspace-options button {
@@ -21,7 +23,7 @@
   white-space: nowrap;
   font-size: 12px;
   padding: 7px 12px;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
 }
 .layout-launch:disabled {
   opacity: 0.5;
@@ -221,12 +223,19 @@
   display: flex !important;
   align-items: center;
   gap: 6px;
-  min-height: 40px;
+  min-height: var(--md-sys-size-target);
   padding: 4px 7px !important;
   background: var(--design-surface) !important;
   color: var(--design-ink) !important;
   flex-shrink: 0;
   border-bottom: 1px solid var(--design-line);
+}
+.workspace-active .ui-diagram-card-head > h2 {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .customization-active .workspace-active .ui-diagram-card-head > h2,
 .customization-active
@@ -276,11 +285,13 @@
   min-height: 0;
 }
 .workspace-active .ui-diagram-card-head > button {
-  font-size: 11px !important;
+  font-size: 14px;
+  min-height: var(--md-sys-size-target);
+  padding: 8px 12px;
   white-space: nowrap;
-  background: var(--design-surface) !important;
-  color: var(--design-primary) !important;
-  border: 1px solid var(--design-line) !important;
+  background: var(--design-surface);
+  color: var(--design-primary);
+  border: 1px solid var(--design-line);
 }
 .workspace-active .workspace-divider:not([hidden]) {
   display: block !important;
@@ -489,7 +500,7 @@
   width: 0;
   flex: 1;
   padding: 6px 9px;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   font-size: 13px;
 }
 .workspace-save-form button {
@@ -542,7 +553,7 @@
   .workspace-options input,
   .workspace-divider
 ):focus-visible {
-  outline: 2px solid var(--design-primary);
+  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 2px;
 }
 .workspace-note {
@@ -557,7 +568,7 @@
 @media (max-width: 760px) {
   .ui-heading .layout-launch {
     font-size: 11px;
-    min-height: 30px;
+    min-height: var(--md-sys-size-target, 40px);
     padding: 5px 9px;
   }
   .workspace-toolbar {
@@ -671,7 +682,7 @@
 .workspace-profile-editor input {
   width: 100%;
   min-width: 0;
-  min-height: 36px;
+  min-height: var(--md-sys-size-target, 40px);
   padding: 6px 9px;
   font: inherit;
 }
