@@ -14,7 +14,7 @@ To show sky, Earth, altitude and analemma together, start with Space view, enter
 
 The interface uses shared Material Design 3 color, shape, state and target-size roles while preserving the requested Chinese Song and English Charter fonts. Edit actions in combined views live in their pane headers instead of covering the scientific content. Observation identity starts the app bar; direct segmented buttons switch Sun/Moon. All four sky viewpoints live under Views & layout → Sky & shadows, without duplicate controls above the canvas.
 
-The compact playback panel groups the exact clock and slider; Moon puts dates first. Calculation notes expand on demand. The opening provides start/skip actions, and manuals offer chapter navigation and reading progress.
+The compact playback panel groups the exact clock and slider; Moon puts dates first. Calculation notes expand on demand. The opening retains direct sky and Enter activation, and manuals offer chapter navigation and reading progress.
 
 ## Using the lab and its documentation
 

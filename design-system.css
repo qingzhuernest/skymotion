@@ -242,37 +242,69 @@ body
 .ui-parameters > h2::before {
   display: none;
 }
-.ui-parameters :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information) {
-  border-color: var(--design-line);
-  border-radius: var(--design-radius-control);
+.ui-parameters
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  ) {
+  border: 1px solid var(--design-line);
+  border-radius: var(--md-sys-shape-corner-medium);
   background: var(--design-surface);
   box-shadow: none;
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )
   > summary {
   font-size: 13px;
   line-height: 1.65;
   color: var(--design-ink);
   background: var(--design-surface);
-  border-radius: 11px;
+  border-radius: calc(var(--md-sys-shape-corner-medium) - 1px);
   padding: 12px 38px 12px 14px;
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open] {
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )[open] {
   border-color: var(--design-open-border);
   box-shadow: none;
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open]
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )[open]
   > summary {
-  background: var(--design-selected);
-  color: var(--design-on-selected);
+  background: var(--design-surface);
+  color: var(--design-primary);
   border-color: var(--design-line);
-  border-radius: 11px 11px 0 0;
+  border-radius: calc(var(--md-sys-shape-corner-medium) - 1px)
+    calc(var(--md-sys-shape-corner-medium) - 1px) 0 0;
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )
   > summary:hover {
   background: var(--design-inset);
 }
@@ -1148,16 +1180,33 @@ body .ui-plot #resetView:hover {
 }
 
 /* Complete the surface audit: legacy cards, body shortcuts and 3D overlays. */
-.ui-parameters .metrics article,
-.ui-parameters .metrics article:first-child {
+.ui-parameters .metrics article {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 8px;
+  padding: 16px 12px;
+  min-width: 0;
+  text-align: center;
   background: var(--design-surface);
   border: 1px solid var(--design-line);
-  border-radius: 16px;
+  border-radius: var(--md-sys-shape-corner-medium);
   box-shadow: none;
 }
-.ui-parameters .metrics :is(strong, article:first-child strong) {
+.ui-parameters .metrics strong {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
   color: var(--design-primary);
   font-family: var(--design-font);
+}
+.ui-parameters .metrics :is(article > span, .metric-definition > summary) {
+  min-height: 24px;
+  line-height: 24px;
+}
+.ui-parameters .metrics .metric-definition > summary {
+  justify-content: center;
 }
 .ui-parameters .metrics :is(article > span, small, .metric-definition summary) {
   color: var(--design-muted);
@@ -2113,72 +2162,13 @@ body #sundialNeedleValue {
   color: var(--design-primary);
 }
 
-/* Explicit opening actions stay outside the inert welcome content. */
-.welcome-opening-actions {
-  display: none;
-}
-html.welcome-opening .welcome-opening-actions {
-  position: absolute;
-  z-index: 3;
-  bottom: max(32px, env(safe-area-inset-bottom));
-  inset-inline: 16px;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.welcome-opening-actions button {
-  min-height: 48px;
-  padding: 12px 24px;
-  border: 1px solid var(--design-line);
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--design-primary);
-  color: var(--design-on-action);
-  font: 16px/1.5 var(--design-font);
-}
-.welcome-opening-actions #skipOpening {
-  background: var(--design-surface);
-  color: var(--design-primary);
-}
-
 .ui-observation-context {
   font-size: 13px;
   line-height: 1.6;
   color: var(--design-muted);
   margin: 12px 0;
 }
-.ui-parameters .metrics article:first-child {
-  grid-column: 1 / -1;
-}
-.ui-parameters .metrics article:first-child strong {
-  font-size: 28px;
-  font-variant-numeric: tabular-nums;
-}
-.ui-model-details summary {
-  padding: 12px 4px;
-  min-height: var(--md-sys-size-target);
-  cursor: pointer;
-  box-sizing: border-box;
-  color: var(--design-primary);
-  font-size: 14px;
-}
 .ui-model-details p {
+  margin: 12px 14px;
   line-height: 1.75;
-}
-
-.ui-parameters .metrics article:not(:first-child) {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 4px 12px;
-}
-.ui-parameters .metrics article:not(:first-child) strong {
-  grid-column: 2;
-  grid-row: 1;
-  margin: 0;
-  font-variant-numeric: tabular-nums;
-}
-.ui-parameters .metrics article:not(:first-child) small {
-  grid-column: 1 / -1;
 }

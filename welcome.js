@@ -111,7 +111,6 @@
   }
   function finishOpening() {
     if (!opening) return;
-    const actionFocused = document.activeElement?.closest('.welcome-opening-actions');
     opening = false;
     canvas.removeAttribute('role');
     delete canvas.dataset.i18nSkip;
@@ -120,7 +119,6 @@
     document.documentElement.style.removeProperty('--opening-reveal');
     openingContent.forEach(node => { node.inert = false; delete node.dataset.openingInert; });
     try { sessionStorage.setItem('skymotion-ad-astra', '1'); } catch {}
-    if (actionFocused) document.getElementById('enterLab')?.focus({ preventScroll: true });
     nextMeteor = 0;
     last = 0;
     request();
@@ -131,11 +129,9 @@
     last = 0;
     request();
   }
-  document.getElementById('startOpening')?.addEventListener('click', activateOpening);
-  document.getElementById('skipOpening')?.addEventListener('click', finishOpening);
   // The constellation stays intact until intentional pointer or keyboard activation.
   document.addEventListener('keydown', event => {
-    if (opening && !event.target.closest?.('.welcome-opening-actions') && ['Enter', ' '].includes(event.key)) {
+    if (opening && ['Enter', ' '].includes(event.key)) {
       event.preventDefault();
       event.stopImmediatePropagation();
       activateOpening();

@@ -560,15 +560,9 @@ body:is(
 }
 .ui-parameters .metrics {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
-  margin: 16px 0;
-}
-.ui-parameters .metrics article {
-  padding: 10px;
-}
-.ui-parameters .metrics strong {
-  font-size: 18px;
+  margin: 12px 0;
 }
 .ui-parameters .model-explanation {
   font-size: 12px;
@@ -863,6 +857,18 @@ body[data-page='analemma'] .workbench-events {
   border-radius: 14px;
   box-shadow: 0 1px 3px var(--design-shadow);
 }
+.ui-diagram-details[data-for='skyPanel'] {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.ui-diagram-details[data-for='skyPanel'] .model-explanation {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
 .ui-diagram-details .panel-title {
   gap: 8px;
   margin-bottom: 12px;
@@ -918,7 +924,14 @@ body[data-page='analemma'] .workbench-events {
   padding-top: 16px;
   border-top: 2px solid var(--md-outline-variant);
 }
-.ui-parameters :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information) {
+.ui-parameters
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  ) {
   margin: 8px 0;
   padding: 0;
   border: 1px solid var(--md-outline-variant);
@@ -929,7 +942,13 @@ body[data-page='analemma'] .workbench-events {
     box-shadow 180ms ease;
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )
   > summary {
   list-style: none;
   display: flex;
@@ -952,12 +971,24 @@ body[data-page='analemma'] .workbench-events {
   box-sizing: border-box;
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )
   > summary::-webkit-details-marker {
   display: none;
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )
   > summary:after {
   content: '';
   position: absolute;
@@ -973,17 +1004,35 @@ body[data-page='analemma'] .workbench-events {
     border-color 180ms ease;
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )
   > summary:hover {
   background: var(--design-surface);
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open] {
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )[open] {
   border-color: var(--design-line);
   box-shadow: 0 2px 5px var(--design-shadow);
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open]
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )[open]
   > summary {
   background: var(--md-primary-container);
   color: var(--md-on-primary-container);
@@ -991,13 +1040,25 @@ body[data-page='analemma'] .workbench-events {
   border-bottom: 1px solid var(--design-line);
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)[open]
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )[open]
   > summary:after {
   border-color: var(--md-primary);
   transform: translateY(-20%) rotate(225deg);
 }
 .ui-parameters
-  :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )
   > summary:focus-visible {
   outline: 3px solid var(--md-primary);
   outline-offset: 2px;
@@ -1125,7 +1186,13 @@ body[data-page='analemma'] .workbench-events {
     padding: 10px;
   }
   .ui-parameters
-    :is(.menu-section, .workbench-more, .analemma-advanced, .ui-information)
+    :is(
+      .menu-section,
+      .workbench-more,
+      .analemma-advanced,
+      .ui-information,
+      .ui-model-details
+    )
     > summary {
     padding: 10px 34px 10px 12px;
     min-height: 48px;
