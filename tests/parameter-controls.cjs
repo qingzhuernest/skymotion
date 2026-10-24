@@ -58,10 +58,11 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
             const r = row.getBoundingClientRect(),
               i = input.getBoundingClientRect();
             const end = r.right - parseFloat(getComputedStyle(row).paddingRight);
-            return Math.abs(i.width - 44) > 1 ||
-              Math.abs(i.height - 26) > 1 ||
+            // MD3 uses a 52×32 visual switch within a minimum 48px action row.
+            return Math.abs(i.width - 52) > 1 ||
+              Math.abs(i.height - 32) > 1 ||
               Math.abs(end - i.right) > 1 ||
-              r.height < 43
+              r.height < 48
               ? [
                   {
                     id: input.id,
