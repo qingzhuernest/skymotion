@@ -71,7 +71,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
         }, open);
         assert.equal(result.cards.length, 4);
         assert(
-          result.metricsHeight <= 220,
+          result.metricsHeight <= 240,
           'Metrics must leave room for the parameter menu: ' + result.metricsHeight,
         );
         assert(

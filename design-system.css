@@ -243,6 +243,16 @@ body
   background: transparent;
 }
 .md-connected-choice button {
+  --md-sys-state-hover: color-mix(
+    in srgb,
+    var(--md-sys-color-on-primary-container) 8%,
+    var(--md-sys-color-primary-container)
+  );
+  --md-sys-state-pressed: color-mix(
+    in srgb,
+    var(--md-sys-color-on-primary-container) 12%,
+    var(--md-sys-color-primary-container)
+  );
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -258,10 +268,7 @@ body
   background: var(--md-sys-color-primary-container);
   font: 500 14px/1.5 var(--design-font);
   white-space: nowrap;
-  transition:
-    border-radius 180ms var(--motion-ease),
-    background-color 180ms ease,
-    color 180ms ease;
+  transition: border-radius 180ms var(--motion-ease);
 }
 .md-connected-choice button:first-child {
   border-radius: var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-small)
@@ -282,6 +289,16 @@ body
     center/contain no-repeat;
 }
 .md-connected-choice button[aria-pressed='true'] {
+  --md-sys-state-hover: color-mix(
+    in srgb,
+    var(--md-sys-color-on-primary) 8%,
+    var(--md-sys-color-primary)
+  );
+  --md-sys-state-pressed: color-mix(
+    in srgb,
+    var(--md-sys-color-on-primary) 12%,
+    var(--md-sys-color-primary)
+  );
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   border-radius: var(--md-sys-shape-corner-full);
@@ -1237,8 +1254,10 @@ body .ui-plot #resetView:hover {
 }
 .ui-parameters .metrics strong {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.4;
+  word-break: keep-all;
+  text-wrap: balance;
   font-variant-numeric: tabular-nums;
   color: var(--design-primary);
   font-family: var(--design-font);
