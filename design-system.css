@@ -17,9 +17,8 @@
   font-display: block;
 }
 :root {
-  --design-font:
-    'SkyMotion Interface', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --design-reading-font: 'SkyMotion Reading', 'Songti SC', 'SimSun', serif;
+  --design-font: 'SkyMotion Reading', 'Songti SC', 'SimSun', serif;
+  --design-reading-font: var(--design-font);
   --md-sys-color-primary: var(--design-primary);
   --md-sys-color-on-primary: var(--design-on-action);
   --md-sys-color-primary-container: var(--design-selected);
@@ -129,8 +128,13 @@ body :is(input, select, textarea)[aria-invalid='true'] {
 body :is(button, input, select, textarea):disabled {
   cursor: not-allowed;
 }
-body :is(dialog, [role='menu'], .dt-object-menu, .sb-row-menu) {
+body dialog {
   border-radius: var(--md-sys-shape-corner-extra-large);
+  color: var(--md-sys-color-on-surface);
+  background-color: var(--md-sys-color-surface-container);
+}
+body :is([role='menu'], .dt-object-menu, .sb-object-menu) {
+  border-radius: var(--md-sys-shape-corner-extra-small);
   color: var(--md-sys-color-on-surface);
   background-color: var(--md-sys-color-surface-container);
 }
@@ -917,9 +921,9 @@ body[data-page='welcome'] .welcome-screen ::selection {
   }
 }
 
-/* Reading headings have a distinct, self-hosted Song face; controls stay sans. */
+/* Preserve the requested reading face in each locale, including headings. */
 .document-page :is(h1, h2) {
-  font-family: 'SkyMotion Reading', 'Songti SC', 'SimSun', serif;
+  font-family: var(--design-reading-font);
   font-weight: 400;
   letter-spacing: 0;
 }
@@ -986,10 +990,10 @@ body .ui-timeline-host .play-button {
   background: var(--design-action);
   color: var(--design-on-action);
 }
-/* The user's type direction: Song display titles, sans controls and tabular data. */
+/* The user's type direction applies to every UI role; numbers remain tabular. */
 body :is(.ui-heading, .space-shell .head, .welcome-intro, .document-header) h1,
 body[data-page='contact'] .reading-page > .dialog-head h2 {
-  font-family: 'SkyMotion Reading', 'Songti SC', 'SimSun', serif;
+  font-family: var(--design-reading-font);
   font-weight: 400;
   letter-spacing: 0;
 }

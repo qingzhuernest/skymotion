@@ -2225,8 +2225,8 @@
             {
               "kind": "paragraph",
               "text": [
-                "视图目录按天空与日影、关联图解、全年变化、对照与搭建分组。空间视图、俯视日影、地平视角和仰望天空位于左侧“天空与日影”内部，月球模式显示对应视角；画布上方不再重复这些按钮。普通模式也能打开组合视图；调整内容和排列需要进入自定义。",
-                "The view catalog groups Sky & shadows, Related diagrams, Annual changes and Compare & build. Spatial view, shadow plan view, horizon view and look-up view are nested under Sky & shadows in the left sidebar; Moon mode uses its corresponding viewpoints. These controls are not duplicated above the canvas. Combined views also work in normal mode; customization enables composition changes."
+                "视图目录按天空与日影、关联图解、全年变化、对照与搭建分组。空间视图、俯视日影、地平视角和仰望天空位于左侧“天空与日影”内部，月球模式显示对应视角；画布上方不再重复这些按钮。组合图的“编辑”入口放在各图标题栏，避免遮住数据和操作提示。普通模式也能打开组合视图；调整内容和排列需要进入自定义。",
+                "The view catalog groups Sky & shadows, Related diagrams, Annual changes and Compare & build. Spatial view, shadow plan view, horizon view and look-up view are nested under Sky & shadows in the left sidebar; Moon mode uses its corresponding viewpoints. These controls are not duplicated above the canvas. In combinations, each pane’s Edit action lives in its header so data and gesture hints remain unobstructed. Combined views also work in normal mode; customization enables composition changes."
               ]
             },
             {
@@ -5042,8 +5042,8 @@
             {
               "kind": "paragraph",
               "text": [
-                "md-sys-color-*定义主操作、选中容器、表面、文字和边界；md-sys-shape-corner-*定义共享圆角；md-sys-size-target定义桌面40px、触屏48px操作目标；md-sys-state-hover与pressed定义状态层；md-sys-motion-*定义短过渡与缓动。组件只消费这些角色，不再各自定义颜色或尺寸。",
-                "md-sys-color-* defines primary actions, selected containers, surfaces, foregrounds and outlines. md-sys-shape-corner-* defines the shared shape scale; md-sys-size-target defines 40px desktop and 48px coarse-pointer targets. md-sys-state-hover/pressed defines state layers, and md-sys-motion-* defines duration and easing. Components consume roles instead of introducing local colors or target sizes."
+                "md-sys-color-*定义主操作、选中容器、表面、文字和边界；md-sys-shape-corner-*定义共享圆角；md-sys-size-target定义桌面40px、触屏48px操作目标；md-sys-state-hover与pressed定义状态层；md-sys-motion-*定义短过渡与缓动。组件只消费这些角色，不再各自定义颜色或尺寸。普通文字字段排除range、checkbox和radio，避免把字段边框套到滑动条和开关上。中文保留SkyMotion Reading宋体，英文保留SkyMotion Charter；Material组件规范不替换既定字体。",
+                "md-sys-color-* defines primary actions, selected containers, surfaces, foregrounds and outlines. md-sys-shape-corner-* defines the shared shape scale; md-sys-size-target defines 40px desktop and 48px coarse-pointer targets. md-sys-state-hover/pressed defines state layers, and md-sys-motion-* defines duration and easing. Components consume roles instead of introducing local colors or target sizes. Text-field selectors exclude range, checkbox and radio controls so field borders cannot leak onto sliders or switches. Preserve SkyMotion Reading for Chinese and SkyMotion Charter for English; Material component roles do not replace the requested typography."
               ]
             },
             {

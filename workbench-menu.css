@@ -74,7 +74,7 @@ body.workbench-editing .ui-parameters .workbench-content-row {
 }
 body .ui-parameters .workbench-content-row button {
   margin: 0;
-  min-height: 44px;
+  min-height: var(--md-sys-size-target);
   border: 0;
   border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
@@ -104,15 +104,15 @@ body .ui-parameters .workbench-viewpoints {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   position: static;
-  gap: 2px;
-  padding: 0 8px 8px 24px;
+  gap: 8px;
+  padding: 8px 8px 12px 24px;
   margin: 0;
   background: transparent;
   border: 0;
 }
 body .ui-parameters .workbench-viewpoints button {
   margin: 0;
-  min-height: 44px;
+  min-height: var(--md-sys-size-target);
   padding: 10px 16px;
   text-align: left;
   border: 0;
@@ -164,7 +164,7 @@ body[data-entry-view] .workspace-options-head h2 {
 }
 body[data-entry-view] .workspace-options-head {
   padding: 0;
-  margin: 0 0 10px;
+  margin: 0 0 16px;
 }
 body[data-entry-view] .ui-diagram-surface > #stage {
   position: relative;
@@ -214,7 +214,7 @@ body[data-entry-view] .dt-rail-navigation button {
     grid-template-columns: minmax(0, 1fr) 44px;
   }
   body .ui-parameters .workbench-content-row button {
-    min-height: 44px;
+    min-height: var(--md-sys-size-target);
   }
   body .ui-parameters .workbench-add-view {
     width: 44px;

@@ -57,7 +57,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
         route + ' keeps the original palette through Material roles',
       );
       assert.equal(result.shape, '999px');
-      assert.match(result.font, /SkyMotion Interface/);
+      assert.match(result.font, route.includes('.en.') ? /SkyMotion Charter/ : /SkyMotion Reading/);
       assert.equal(result.overflow, false, route + ' horizontal overflow');
       if (route.startsWith('lab.')) {
         await page.locator('#observationBody').selectOption('moon');

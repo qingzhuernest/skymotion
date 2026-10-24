@@ -365,7 +365,7 @@ File imports limit size, count, type and context and recheck that the user is st
 
 ui-palette.css owns semantic colors. design-system.css maps them to Material Design 3 color, shape, typography and interaction-state roles; route styles consume those shared roles. Scientific body/track colors remain separate from UI selection.
 
-md-sys-color-* defines primary actions, selected containers, surfaces, foregrounds and outlines. md-sys-shape-corner-* defines the shared shape scale; md-sys-size-target defines 40px desktop and 48px coarse-pointer targets. md-sys-state-hover/pressed defines state layers, and md-sys-motion-* defines duration and easing. Components consume roles instead of introducing local colors or target sizes.
+md-sys-color-* defines primary actions, selected containers, surfaces, foregrounds and outlines. md-sys-shape-corner-* defines the shared shape scale; md-sys-size-target defines 40px desktop and 48px coarse-pointer targets. md-sys-state-hover/pressed defines state layers, and md-sys-motion-* defines duration and easing. Components consume roles instead of introducing local colors or target sizes. Text-field selectors exclude range, checkbox and radio controls so field borders cannot leak onto sliders or switches. Preserve SkyMotion Reading for Chinese and SkyMotion Charter for English; Material component roles do not replace the requested typography.
 
 - Follow DESIGN.md for fonts, radii, control sizes and focus. Reuse existing menus instead of covering the scientific canvas.
 - At 760 pixels or below, use the native dialog drawer and move the same control nodes rather than creating another state copy.

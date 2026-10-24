@@ -72,7 +72,7 @@ City presets are shortcuts for coordinates. The lower shared timeline controls t
 
 ## Choose, replace and combine views
 
-The view catalog groups Sky & shadows, Related diagrams, Annual changes and Compare & build. Spatial view, shadow plan view, horizon view and look-up view are nested under Sky & shadows in the left sidebar; Moon mode uses its corresponding viewpoints. These controls are not duplicated above the canvas. Combined views also work in normal mode; customization enables composition changes.
+The view catalog groups Sky & shadows, Related diagrams, Annual changes and Compare & build. Spatial view, shadow plan view, horizon view and look-up view are nested under Sky & shadows in the left sidebar; Moon mode uses its corresponding viewpoints. These controls are not duplicated above the canvas. In combinations, each pane’s Edit action lives in its header so data and gesture hints remain unobstructed. Combined views also work in normal mode; customization enables composition changes.
 
 1. A view name opens a single view. In a combination, an included name selects its pane and an absent name replaces the active pane.
 2. Click the intended pane and check its green outline and matching catalog item; replacements target this pane.

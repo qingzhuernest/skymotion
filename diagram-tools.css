@@ -83,9 +83,9 @@ body .dt-panel :is(button, input, select):focus-visible {
 .dt-head {
   display: flex;
   align-items: center;
-  gap: 2px;
-  min-height: 40px;
-  padding: 4px 10px;
+  gap: 4px;
+  min-height: var(--md-sys-size-target);
+  padding: 0 8px;
 }
 body .dt-head h2 {
   flex: 1;
@@ -102,7 +102,7 @@ body .dt-head h2 {
 body .dt-head button {
   flex: none;
   position: relative;
-  width: 36px;
+  width: var(--md-sys-size-target);
   height: var(--md-sys-size-target);
   min-height: var(--md-sys-size-target);
   padding: 0;
@@ -134,11 +134,13 @@ body .dt-head button {
 }
 body .dt-panel .dt-history button {
   flex: none;
-  width: 32px;
+  display: grid;
+  place-items: center;
+  width: var(--md-sys-size-target);
   height: var(--md-sys-size-target);
   min-height: var(--md-sys-size-target);
-  min-width: 32px;
-  padding: 8px;
+  min-width: var(--md-sys-size-target);
+  padding: 0;
   border: 0;
   background: transparent;
   color: var(--dt-muted);
@@ -164,10 +166,11 @@ body .dt-head .dt-help-toggle[aria-expanded='true'] {
 }
 .dt-tabs {
   display: flex;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
   min-height: 40px;
-  padding: 0 10px 6px;
+  padding: 0 8px 8px;
   border: 0;
 }
 body .dt-panel .dt-tabs > [data-dt-view] {
@@ -189,8 +192,8 @@ body .dt-tabs [data-dt-view='files'] {
   flex: 0 0 auto;
 }
 body .dt-panel .dt-tabs > [data-dt-view='objects'] {
-  flex: 0 0 32px;
-  width: 32px;
+  flex: 0 0 var(--md-sys-size-target);
+  width: var(--md-sys-size-target);
   font-size: 0;
   padding: 8px;
 }
@@ -384,13 +387,15 @@ body .dt-panel .dt-row > :is(.dt-more, .dt-row-more):hover {
 .dt-city-picker {
   margin: 14px 0;
 }
-body .dt-panel input:not([type='checkbox']):not([type='file']),
+body
+  .dt-panel
+  input:not([type='checkbox']):not([type='file']):not([type='range']):not([type='radio']),
 body .dt-panel select {
   width: 100%;
   min-height: 40px;
   padding: 8px 9px;
   border: 1px solid var(--dt-line);
-  border-radius: var(--design-radius-control);
+  border-radius: var(--md-sys-shape-corner-extra-small);
   background: var(--design-surface);
   color: var(--dt-ink);
   font: inherit;
@@ -486,9 +491,9 @@ body .dt-panel .dt-object-menu {
   inset: auto;
   margin: 0;
   min-width: 170px;
-  padding: 5px;
+  padding: 8px 0;
   border: 1px solid var(--dt-line);
-  border-radius: var(--design-radius-control);
+  border-radius: var(--md-sys-shape-corner-extra-small);
   background: var(--design-surface);
   color: var(--dt-ink);
 }
@@ -497,6 +502,9 @@ body .dt-panel .dt-object-menu {
 }
 body .dt-panel .dt-object-menu button {
   display: block;
+  min-height: var(--md-sys-size-target);
+  padding: 8px 12px;
+  border-radius: var(--md-sys-shape-corner-extra-small);
   width: 100%;
   border: 0;
   text-align: start;
@@ -728,7 +736,11 @@ body .dt-panel[data-collapsed='true'] {
   .dt-list {
     max-height: none;
   }
-  body .dt-panel input:not([type='checkbox']):not([type='file']),
+  body
+    .dt-panel
+    input:not([type='checkbox']):not([type='file']):not([type='range']):not(
+      [type='radio']
+    ),
   body .dt-panel select {
     font-size: 16px;
   }
@@ -748,7 +760,11 @@ body .dt-panel[data-collapsed='true'] {
     width: 44px;
     min-height: 44px;
   }
-  body .dt-panel input:not([type='checkbox']):not([type='file']),
+  body
+    .dt-panel
+    input:not([type='checkbox']):not([type='file']):not([type='range']):not(
+      [type='radio']
+    ),
   body .dt-panel select {
     min-height: 44px;
   }
@@ -769,6 +785,19 @@ body .ui-plot #viewReset {
   font-size: 12px;
   font-weight: 400;
   line-height: 1.5;
+}
+/* Pane actions belong to the pane toolbar, leaving data and plot hints uncovered. */
+body .ui-diagram-card-head > .diagram-tool-launch {
+  position: static;
+  flex: none;
+  margin: 0 0 0 auto;
+  min-height: var(--md-sys-size-target);
+  padding: 8px 12px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: var(--design-primary);
+  font: 500 12px/1.5 var(--design-font);
 }
 body[data-page='space'] #reset.stage-reset {
   min-height: 40px;

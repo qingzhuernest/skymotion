@@ -2930,9 +2930,6 @@
       (m.host || m.canvas.parentElement).classList.add('dt-host');
       wireCanvas(id, m.canvas, m.host || m.canvas);
     }
-    const b = portals.get(id);
-    b.textContent = tr('图内自定义|Customize plot');
-    b.setAttribute('aria-label', tr(titles[m.type] || m.type) + ' · ' + b.textContent);
     syncLaunchers();
     if (current && current.id !== id) checkCurrentVisibility();
     if (
@@ -3033,9 +3030,24 @@
   }
   function syncLaunchers() {
     for (const [key, button] of portals) {
-      const source = models.get(key)?.canvas,
+      const model = models.get(key),
+        source = model?.canvas,
         active =
           !panel.hidden && current?.id === key && panel.getClientRects().length > 0;
+      const header = source
+        ?.closest('.workspace-active .ui-diagram-card')
+        ?.querySelector('.ui-diagram-card-head');
+      const home = model?.host || source?.parentElement;
+      const target = header || home;
+      if (target && button.parentElement !== target) target.append(button);
+      const fullLabel = tr('图内自定义|Customize plot');
+      const label = header ? tr('编辑|Edit') : fullLabel;
+      if (button.textContent !== label) button.textContent = label;
+      button.title = fullLabel;
+      button.setAttribute(
+        'aria-label',
+        tr(titles[model?.type] || model?.type || key) + ' · ' + fullLabel,
+      );
       button.hidden =
         !customizationOn() ||
         active ||

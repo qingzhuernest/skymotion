@@ -35,8 +35,8 @@
       '实验内容不完整或已损坏，当前实验未改变。',
       'The saved experiment is incomplete or damaged. The current experiment is unchanged.',
     ],
-    undo: ['撤销布局调整', 'Undo layout change'],
-    redo: ['重做布局调整', 'Redo layout change'],
+    undo: ['撤销', 'Undo'],
+    redo: ['重做', 'Redo'],
     reset: ['恢复默认布局', 'Reset layout'],
     one: ['单图', 'One view'],
     two: ['双图', 'Two views'],
@@ -354,12 +354,19 @@
   parameterRail.append(panel);
   optionsButton.setAttribute('aria-controls', panel.id);
   optionsButton.setAttribute('aria-expanded', 'false');
-  const panelHead = document.createElement('div');
-  panelHead.className = 'workspace-options-head';
-  const panelTitle = document.createElement('h2');
-  panelHead.append(panelTitle);
-  button(panelHead, 'closeOptions', () => closeOptions(true), 'm7 7 10 10M17 7 7 17');
-  panel.append(panelHead, layoutHistory);
+  // The workbench disclosure already names and closes this section.
+  // A standalone host still needs its own heading and close action.
+  const panelTitle = document.body.hasAttribute('data-entry-view')
+    ? null
+    : document.createElement('h2');
+  if (panelTitle) {
+    const panelHead = document.createElement('div');
+    panelHead.className = 'workspace-options-head';
+    panelHead.append(panelTitle);
+    button(panelHead, 'closeOptions', () => closeOptions(true), 'm7 7 10 10M17 7 7 17');
+    panel.append(panelHead);
+  }
+  panel.append(layoutHistory);
   function section(word) {
     const wrap = document.createElement('section'),
       h = document.createElement('h3');
@@ -924,7 +931,13 @@
         t(b.dataset.word) + (b.dataset.profileName ? ' ' + b.dataset.profileName : ''),
       );
       const span = b.querySelector('.workspace-button-label');
-      if (span) span.textContent = t(b.dataset.word);
+      if (span) {
+        const count = ['one', 'two', 'three', 'four'].indexOf(b.dataset.word);
+        span.textContent =
+          document.documentElement.lang === 'en' && count >= 0
+            ? String(count + 1)
+            : t(b.dataset.word);
+      }
     }
   }
   function labels() {
@@ -932,7 +945,7 @@
     noteShared.textContent = t('shared');
     noteHelp.textContent = t(mobile.matches ? 'phoneHelp' : 'help');
     presets.setAttribute('aria-label', t('count'));
-    panelTitle.textContent = t('options');
+    if (panelTitle) panelTitle.textContent = t('options');
     panel.setAttribute('aria-label', t('options'));
     nameInput.setAttribute(
       'aria-label',

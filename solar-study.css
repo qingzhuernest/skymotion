@@ -57,12 +57,12 @@
   min-width: 0;
 }
 .solar-study-controls select,
-.solar-study-controls input {
+.solar-study-controls input:not([type='range']):not([type='checkbox']) {
   width: 100%;
   min-width: 0;
   min-height: var(--md-sys-size-target);
   border: 1px solid var(--design-line);
-  border-radius: 10px;
+  border-radius: var(--md-sys-shape-corner-extra-small);
   background: var(--design-surface);
   color: var(--design-ink);
   font: inherit;

@@ -1,6 +1,6 @@
 html:lang(en) {
-  --design-reading-font:
-    'SkyMotion Charter', Charter, 'Bitstream Charter', Georgia, serif;
+  --design-font: 'SkyMotion Charter', Charter, 'Bitstream Charter', Georgia, serif;
+  --design-reading-font: var(--design-font);
 }
 html:lang(en) body,
 html:lang(en) :is(button, input, select, textarea, output, dialog) {
@@ -158,7 +158,7 @@ html:lang(en) body[data-page='contact'] .reading-page > .dialog-head h2 {
   margin: 0;
   padding: 8px 28px 8px 14px;
   border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--md-sys-shape-corner-full);
+  border-radius: var(--md-sys-shape-corner-extra-small);
   background-color: var(--md-sys-color-surface);
   color: var(--md-sys-color-on-surface);
   font: inherit;

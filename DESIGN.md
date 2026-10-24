@@ -68,7 +68,7 @@ typography:
     lineHeight: 1.5
     letterSpacing: '0'
   body:
-    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
+    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
     fontSize: 14px
     fontWeight: 400
     lineHeight: 1.65
@@ -78,12 +78,12 @@ typography:
     fontWeight: 400
     lineHeight: 1.9
   field:
-    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
+    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
     fontSize: 13px
     fontWeight: 400
     lineHeight: 1.5
   label:
-    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
+    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
     fontSize: 12px
     fontWeight: 500
     lineHeight: 1.5
@@ -94,12 +94,12 @@ typography:
     lineHeight: 1.5
     letterSpacing: 1px
   caption:
-    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
+    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
     fontSize: 11px
     fontWeight: 400
     lineHeight: 1.6
   compact-section:
-    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
+    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
     fontSize: 17px
     fontWeight: 600
     lineHeight: 1.6
@@ -109,7 +109,7 @@ typography:
     fontWeight: 600
     lineHeight: 1.6
   numeric-output:
-    fontFamily: '"SkyMotion Interface", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'
+    fontFamily: '"SkyMotion Reading", "Songti SC", "SimSun", serif'
     fontSize: 20px
     fontWeight: 500
   compact-lab-title:
@@ -540,7 +540,7 @@ The object editor uses two compact rows: the current plot with Help, Collapse an
 
 ## Material Design 3 component contract
 
-All application controls use the Material Design 3 component language. Preserve the existing green accent and scientific visualization colors. The palette is defined only in ui-palette.css; design-system.css maps it to md-sys-color roles, shape, state and motion tokens. UI controls use the self-hosted sans interface font; reading and branded display text retain the existing reading face.
+All application controls use the Material Design 3 component language. Preserve the existing green accent and scientific visualization colors. The palette is defined only in ui-palette.css; design-system.css maps it to md-sys-color roles, shape, state and motion tokens. Every UI role preserves the requested self-hosted fonts: SkyMotion Reading (Song) for Chinese and SkyMotion Charter for English. Material component roles never replace these fonts.
 
 - App bar: observation identity at the left, stable main navigation, one native outlined Sun/Moon selector, then customization and language. Narrow screens use a compact two-row layout.
 - Navigation: left-side expandable lists use one row height, trailing disclosure chevron, container selection, and shared padding. Sky viewpoints are children of Sky & shadows, never a second toolbar on the canvas.
