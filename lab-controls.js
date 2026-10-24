@@ -413,7 +413,9 @@ $('observationBody').onchange = (event) => {
   lunarAccumulator = 0;
   solarLast = lunarLast = 0;
   syncControls();
-  schedule();
+  // Body selection is a mode boundary, not a continuous slider gesture. Finish
+  // swapping body-owned views and layout buckets before the next action runs.
+  render();
 };
 ['lat', 'lon'].forEach((k) =>
   $(k + 'Input').addEventListener('change', (e) => {

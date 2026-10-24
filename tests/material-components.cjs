@@ -93,6 +93,30 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
       assert.deepEqual(errors, [], route);
       await page.close();
     }
+    const immediate = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    await immediate.goto(base + 'lab.html');
+    await immediate.waitForFunction(
+      () => window.SkyCustomization && !document.querySelector('.layout-launch').disabled,
+    );
+    await immediate.locator('.layout-launch').click();
+    await immediate.evaluate(() => {
+      SkyWorkbenchMenu.select('skyPanel');
+      skyWorkspacePresentation.addView('chartPanel');
+    });
+    await immediate.evaluate(() => {
+      const select = document.getElementById('observationBody');
+      select.value = 'moon';
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+      if (!document.getElementById('bodyTitle').textContent.includes('月球'))
+        throw Error('Body UI must switch before the change handler returns');
+      SkySceneBuilder.open({ kind: 'rod' });
+    });
+    await immediate.locator('.sb-placement-actions button').first().click();
+    assert.equal(
+      await immediate.evaluate(() => SkySceneBuilder.read().objects.length),
+      1,
+    );
+    await immediate.close();
     console.log(
       'PASS Material roles, preserved accent, typography, nested viewpoints, native body selection and responsive layouts across 13 application/document/embedded route variants',
     );
