@@ -409,6 +409,8 @@ SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" \
 
 Checks cover model consistency, real clicks/drags, corrupt-cache recovery, localization/structure, restricted storage, packaging paths and WebGL fallback. Passing does not certify every GPU or real Safari/Firefox device or provide independent ephemeris accuracy certification.
 
+Production publication keeps the latest main commit. A new commit cancels obsolete publication workflows for the same host; the latest commit still must pass the complete checks before deployment.
+
 ## Production, mirror and packaging
 
 A push to main triggers separate Cloudflare Pages and GitHub Pages workflows using shared validate.yml first. A failed validation blocks that deployment. Verify both outcomes rather than treating one green status as success for both.

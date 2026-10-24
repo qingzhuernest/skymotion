@@ -551,4 +551,8 @@ All application controls use the Material Design 3 component language. Preserve 
 
 ## Task-oriented Material controls
 
-Sun and Moon remain direct segmented buttons. Playback layout has one owner, `time-workbench.css`, loaded after shared component styles. The precise clock field shares the slider heading; five-minute steps flank the slider. Moon places the date control first without changing shared date or location state. Native keyboard operation and 48px coarse-pointer targets remain available. The opening retains direct sky and Enter activation, and documentation presents three task-based manual entries rather than a duplicated table and link list.
+Sun and Moon use directly selectable connected buttons in the Material 3 Expressive style: a fully rounded selected item, small inner corners for the unselected item, a narrow gap and no shared outline. Playback layout has one owner, `time-workbench.css`, loaded after shared component styles. The precise clock field shares the slider heading; five-minute steps flank the slider. Moon places the date control first without changing shared date or location state. Native keyboard operation and 48px coarse-pointer targets remain available. The opening retains direct sky and Enter activation, and documentation presents three task-based manual entries rather than a duplicated table and link list.
+
+Readout cards share a compact two-column grid. Detailed notes remain in the existing expandable calculation section; labels follow Sun/Moon state without duplicating observation state.
+
+The reusable `.md-connected-choice` component owns connected-toggle visuals in `design-system.css`; `language.css` owns only the header placement of the Sun/Moon instance. Colors, shape sizes, typography and target sizes come from the shared roles.

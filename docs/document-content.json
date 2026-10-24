@@ -5279,6 +5279,13 @@
                 "当前测试包括模型内部一致性、真实点击和拖动、坏缓存恢复、语言与结构、存储受限、打包路径和WebGL回退。测试通过不等于所有GPU或真实Safari/Firefox设备都已认证，也不等于独立星历精度认证。",
                 "Checks cover model consistency, real clicks/drags, corrupt-cache recovery, localization/structure, restricted storage, packaging paths and WebGL fallback. Passing does not certify every GPU or real Safari/Firefox device or provide independent ephemeris accuracy certification."
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "正式发布只保留最新 main 提交的流程。更新提交到达时会取消同一站点旧提交的发布流程；最新提交仍须完整通过检查，再部署网站。",
+                "Production publication keeps the latest main commit. A new commit cancels obsolete publication workflows for the same host; the latest commit still must pass the complete checks before deployment."
+              ]
             }
           ],
           "aliases": [

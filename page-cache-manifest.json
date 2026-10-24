@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261024-material100",
+  "resourceVersion": "20261024-material101",
   "readingFontVersion": "20261016-font41",
   "pages": [
     "404.en.html",
@@ -164,14 +164,14 @@
   "sizes": {
     "404.en.html": 3108,
     "404.html": 1916,
-    "analemma.en.html": 121373,
-    "analemma.html": 73628,
+    "analemma.en.html": 121393,
+    "analemma.html": 73648,
     "contact.en.html": 7859,
     "contact.html": 4775,
-    "development-guide.en.html": 156967,
-    "development-guide.html": 67666,
-    "diagrams.en.html": 121372,
-    "diagrams.html": 73627,
+    "development-guide.en.html": 157586,
+    "development-guide.html": 67850,
+    "diagrams.en.html": 121392,
+    "diagrams.html": 73647,
     "docs.en.html": 11348,
     "docs.html": 5020,
     "geography-review.en.html": 1666,
@@ -180,17 +180,17 @@
     "guide.html": 30460,
     "index.en.html": 8080,
     "index.html": 6762,
-    "lab.en.html": 121368,
-    "lab.html": 73623,
+    "lab.en.html": 121388,
+    "lab.html": 73643,
     "lunar/index.en.html": 14626,
     "lunar/index.html": 8477,
     "project-guide.en.html": 90298,
     "project-guide.html": 31148,
     "space/index.en.html": 31839,
     "space/index.html": 20985,
-    "sundial.en.html": 119710,
-    "sundial.html": 71959
+    "sundial.en.html": 119730,
+    "sundial.html": 71979
   },
-  "totalBytes": 1376334,
-  "assetBytes": 8023211
+  "totalBytes": 1377297,
+  "assetBytes": 8024765
 }

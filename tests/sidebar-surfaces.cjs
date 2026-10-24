@@ -35,6 +35,9 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
           const rect = (n) => n.getBoundingClientRect();
           const cards = [...document.querySelectorAll('.ui-parameters .metrics article')];
           return {
+            metricsHeight: document
+              .querySelector('.ui-parameters .metrics')
+              .getBoundingClientRect().height,
             cards: cards.map((n) => {
               const r = rect(n),
                 s = getComputedStyle(n),
@@ -43,6 +46,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
               return {
                 width: r.width,
                 x: r.x,
+                y: r.y,
                 center: Math.abs(b.x + b.width / 2 - r.x - r.width / 2),
                 padding: s.padding,
                 font: getComputedStyle(v).fontSize,
@@ -67,13 +71,22 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
         }, open);
         assert.equal(result.cards.length, 4);
         assert(
+          result.metricsHeight <= 220,
+          'Metrics must leave room for the parameter menu: ' + result.metricsHeight,
+        );
+        assert(
+          Math.abs(result.cards[0].y - result.cards[1].y) < 1 &&
+            Math.abs(result.cards[2].y - result.cards[3].y) < 1,
+          'Two aligned metric rows',
+        );
+        assert(
           result.cards.every((c) => c.center < 1 && c.border === '1px'),
           JSON.stringify(result),
         );
         assert(
           result.cards.every(
-            (c) =>
-              Math.abs(c.x - result.cards[0].x) < 1 &&
+            (c, index) =>
+              Math.abs(c.x - result.cards[index % 2].x) < 1 &&
               Math.abs(c.width - result.cards[0].width) < 1 &&
               c.font === result.cards[0].font &&
               c.padding === result.cards[0].padding &&
@@ -87,6 +100,18 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
               m.outer - m.inner === 1 && m.fill === m.headingFill && m.border === '1px',
           ),
           JSON.stringify(result),
+        );
+      }
+      if (width === 1440) {
+        await page.locator('button[data-body=moon]').click();
+        await page.waitForFunction(() => state.body === 'moon');
+        assert.equal(
+          await page.locator('.ui-metric-notes dt').first().innerText(),
+          await page.locator('#altLabel').innerText(),
+        );
+        assert(
+          await page.locator('.ui-model-details #altNote').isVisible(),
+          'Detailed readout notes remain available in the expanded explanation',
         );
       }
       await page.screenshot({

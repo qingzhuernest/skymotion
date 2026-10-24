@@ -929,25 +929,7 @@ canvas:focus-visible {
     display: none;
   }
 }
-.body-switch {
-  display: flex;
-  border: 1px solid var(--design-line);
-  border-radius: 24px;
-  overflow: hidden;
-  margin-bottom: 22px;
-}
-.body-switch button {
-  flex: 1;
-  border: 0;
-  background: transparent;
-  border-radius: 0;
-  padding: 10px;
-  font-size: 15px;
-}
-.body-switch .active {
-  background: var(--design-inset);
-  color: var(--design-primary);
-}
+
 .coordinate-editor {
   display: flex;
   align-items: center;
@@ -999,9 +981,7 @@ canvas:focus-visible {
   margin: 0;
   color: inherit;
 }
-.body-switch button:focus-visible {
-  outline-offset: -4px;
-}
+
 #chart {
   touch-action: none;
 }
@@ -1066,15 +1046,7 @@ canvas:focus-visible {
   justify-content: space-between;
   margin-bottom: 14px;
 }
-.experiment-toolbar .body-switch {
-  margin: 0;
-  width: 230px;
-  flex-shrink: 0;
-  background: var(--design-surface);
-}
-.experiment-toolbar .body-switch button {
-  padding: 8px;
-}
+
 .date-navigation {
   display: flex;
   gap: 5px;
@@ -1104,17 +1076,13 @@ body[data-body='moon'] .chart-panel .panel-title .legend > .dot.sun-dot {
 body[data-body='moon'] .stage-key {
   color: var(--design-night-muted);
 }
-.body-switch {
-  font-size: 14px;
-}
+
 @media (max-width: 760px) {
   .experiment-toolbar {
     margin-bottom: 16px;
     gap: 10px;
   }
-  .experiment-toolbar .body-switch {
-    width: 205px;
-  }
+
   .experiment-toolbar .settings-button {
     margin: 0;
     align-self: center;
@@ -2322,7 +2290,6 @@ button:not(:disabled):active {
   box-shadow: 0 5px 15px var(--design-shadow);
 }
 .view-tabs button,
-.body-switch button,
 .context-view-switch button {
   transition:
     background 200ms var(--motion-ease),

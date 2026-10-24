@@ -409,6 +409,8 @@ SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" \
 
 当前测试包括模型内部一致性、真实点击和拖动、坏缓存恢复、语言与结构、存储受限、打包路径和WebGL回退。测试通过不等于所有GPU或真实Safari/Firefox设备都已认证，也不等于独立星历精度认证。
 
+正式发布只保留最新 main 提交的流程。更新提交到达时会取消同一站点旧提交的发布流程；最新提交仍须完整通过检查，再部署网站。
+
 ## 正式站、镜像与打包
 
 main推送触发Cloudflare Pages与GitHub Pages两个工作流，两边都先调用共享validate.yml。任一工作流的检查失败会阻止其部署；主站与镜像的部署结论分别核对，不能只看到一个绿色状态就声称两边都成功。

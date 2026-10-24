@@ -60,7 +60,10 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
         assert.equal(await page.locator('.ui-shell > .ui-heading').count(), 0);
         if (width > 760) {
           const nav = await page.locator('.page-nav').boundingBox();
-          assert(boxes.heading.right <= nav.x + 1, 'Observation identity precedes main navigation');
+          assert(
+            boxes.heading.right <= nav.x + 1,
+            'Observation identity precedes main navigation',
+          );
         }
         assert.equal(await page.locator('.body-switch button').count(), 2);
         assert.equal(await page.locator('.ui-diagram-card-head [data-view]').count(), 0);
@@ -73,6 +76,25 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
         const navigation = await page.locator('.page-nav a').allTextContents();
         await page.locator('button[data-body=moon]').click();
         await page.waitForFunction(() => state.body === 'moon');
+        await page.waitForFunction(
+          () =>
+            getComputedStyle(document.querySelector('.body-switch [aria-pressed=true]'))
+              .borderTopLeftRadius === '999px',
+        );
+        const segmentShape = await page.locator('.body-switch').evaluate((group) => {
+          const style = getComputedStyle(group);
+          const first = getComputedStyle(group.firstElementChild);
+          return {
+            border: style.borderTopWidth,
+            gap: style.columnGap,
+            innerCorner: first.borderTopRightRadius,
+          };
+        });
+        assert.deepEqual(
+          segmentShape,
+          { border: '0px', gap: '2px', innerCorner: '8px' },
+          'Expressive connected group: separate surfaces, small inner corners and no shared outline',
+        );
         assert.deepEqual(await page.locator('.page-nav a').allTextContents(), navigation);
         await page.screenshot({
           path: `tests/artifacts/workbench-header-context-${width}-${language}.png`,

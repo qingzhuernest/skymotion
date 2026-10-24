@@ -153,55 +153,6 @@ html:lang(en) body[data-page='contact'] .reading-page > .dialog-head h2 {
   margin: 0;
 }
 /* Material single-select segmented buttons preserve the original direct switch. */
-.language-nav.workbench-header .body-switch {
-  display: inline-flex;
-  width: auto;
-  margin: 0;
-  padding: 0;
-  gap: 0;
-  overflow: hidden;
-  border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-sys-color-surface);
-}
-.language-nav.workbench-header .body-switch button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  min-width: 64px;
-  min-height: var(--md-sys-size-target);
-  margin: 0;
-  padding: 8px;
-  gap: 4px;
-  border: 0;
-  border-radius: 0;
-  color: var(--design-primary);
-  background: transparent;
-  font: 500 14px/1.5 var(--design-font);
-  white-space: nowrap;
-}
-.language-nav.workbench-header .body-switch button + button {
-  border-left: 1px solid var(--md-sys-color-outline);
-}
-.language-nav.workbench-header .body-switch button::before {
-  content: '';
-  display: block;
-  width: 14px;
-  height: 14px;
-  flex: none;
-  background: currentColor;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m3 8 3 3 7-7' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
-    center/contain no-repeat;
-  visibility: hidden;
-}
-.language-nav.workbench-header .body-switch button[aria-pressed='true'] {
-  background: var(--design-primary);
-  color: var(--design-on-action);
-}
-.language-nav.workbench-header .body-switch button[aria-pressed='true']::before {
-  visibility: visible;
-}
 @media (max-width: 760px) {
   .language-nav.workbench-header {
     display: grid;

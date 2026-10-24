@@ -137,6 +137,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .md-connected-choice > button,
   .motion-segments > button,
   .ui-shell .ui-grid,
   .ui-shell .ui-parameters,

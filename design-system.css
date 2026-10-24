@@ -230,6 +230,66 @@ body
   font-size: 12px;
   line-height: 1.7;
 }
+/* Shared connected single-choice component, following Material 3 Expressive. */
+.md-connected-choice {
+  display: inline-flex;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  gap: 2px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.md-connected-choice button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 64px;
+  min-height: var(--md-sys-size-target);
+  margin: 0;
+  padding: 8px;
+  gap: 4px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-small);
+  color: var(--md-sys-color-on-primary-container);
+  background: var(--md-sys-color-primary-container);
+  font: 500 14px/1.5 var(--design-font);
+  white-space: nowrap;
+  transition:
+    border-radius 180ms var(--motion-ease),
+    background-color 180ms ease,
+    color 180ms ease;
+}
+.md-connected-choice button:first-child {
+  border-radius: var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-small)
+    var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-full);
+}
+.md-connected-choice button:last-child {
+  border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-full)
+    var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-small);
+}
+.md-connected-choice button::before {
+  content: '';
+  display: none;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m3 8 3 3 7-7' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center/contain no-repeat;
+}
+.md-connected-choice button[aria-pressed='true'] {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-radius: var(--md-sys-shape-corner-full);
+}
+.md-connected-choice button[aria-pressed='true']::before {
+  display: block;
+}
+
 .ui-parameters {
   background: var(--design-inset);
   border-color: var(--design-line);
@@ -417,7 +477,6 @@ body
     .view-tabs:not(.workbench-viewpoints),
     .context-view-switch,
     .globe-drag-options,
-    .body-switch,
     .space-shell .viewbar
   )
   button {
@@ -434,7 +493,6 @@ body
     .view-tabs:not(.workbench-viewpoints),
     .context-view-switch,
     .globe-drag-options,
-    .body-switch,
     .space-shell .viewbar
   )
   button:is(.active, [aria-selected='true'], [aria-pressed='true']) {
@@ -448,7 +506,6 @@ body
     .view-tabs:not(.workbench-viewpoints),
     .context-view-switch,
     .globe-drag-options,
-    .body-switch,
     .space-shell .viewbar
   )
   button:hover {
@@ -461,15 +518,13 @@ body
     .view-tabs:not(.workbench-viewpoints),
     .context-view-switch,
     .globe-drag-options,
-    .body-switch,
     .space-shell .viewbar
   )
   button:is(.active, [aria-selected='true'], [aria-pressed='true']):hover {
   background: var(--design-hover);
   color: var(--design-on-action);
 }
-:is(.ui-shell, .ui-parameter-drawer)
-  :is(.context-view-switch, .globe-drag-options, .body-switch) {
+:is(.ui-shell, .ui-parameter-drawer) :is(.context-view-switch, .globe-drag-options) {
   border-color: var(--design-line);
   background: transparent;
 }
@@ -1030,17 +1085,7 @@ body .page-nav::-webkit-scrollbar,
 body .ui-viewbar::-webkit-scrollbar {
   display: none;
 }
-body .ui-heading .body-switch {
-  gap: 4px;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-}
-body .ui-heading .body-switch button {
-  min-height: 36px;
-  border-radius: 12px;
-}
+
 body .ui-heading #uiParametersButton {
   min-height: 36px;
   border-radius: 12px;
@@ -1091,10 +1136,7 @@ body .ui-heading #uiParametersButton {
   .ui-heading h1 {
     font-size: 19px;
   }
-  .ui-heading .body-switch button {
-    padding: 6px 10px;
-    font-size: 12px;
-  }
+
   .ui-heading #uiParametersButton {
     padding: 6px 8px;
     font-size: 12px;
@@ -1184,8 +1226,8 @@ body .ui-plot #resetView:hover {
   display: grid;
   justify-items: center;
   align-content: center;
-  gap: 8px;
-  padding: 16px 12px;
+  gap: 4px;
+  padding: 8px;
   min-width: 0;
   text-align: center;
   background: var(--design-surface);
@@ -1195,15 +1237,19 @@ body .ui-plot #resetView:hover {
 }
 .ui-parameters .metrics strong {
   margin: 0;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.4;
   font-variant-numeric: tabular-nums;
   color: var(--design-primary);
   font-family: var(--design-font);
 }
 .ui-parameters .metrics :is(article > span, .metric-definition > summary) {
-  min-height: 24px;
-  line-height: 24px;
+  min-height: var(--md-sys-size-target);
+  line-height: 20px;
+}
+.ui-parameters .metrics article > span {
+  display: grid;
+  place-items: center;
 }
 .ui-parameters .metrics .metric-definition > summary {
   justify-content: center;
@@ -2171,4 +2217,21 @@ body #sundialNeedleValue {
 .ui-model-details p {
   margin: 12px 14px;
   line-height: 1.75;
+}
+.ui-metric-notes {
+  margin: 14px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.ui-metric-notes dt {
+  margin-top: 12px;
+  font-weight: 600;
+  color: var(--design-primary);
+}
+.ui-metric-notes dd {
+  margin: 4px 0 0;
+}
+.ui-metric-notes small {
+  display: block;
+  font-size: 12px;
 }

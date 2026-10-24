@@ -31,6 +31,8 @@ function renderUIWorkspace() {
   const u = uiWorkspace,
     moon = state.body === 'moon',
     page = document.body.dataset.page;
+  for (const { source, target } of u.metricNoteLabels || [])
+    uiViewText(target, source.textContent);
   if (page === 'diagrams') {
     if (!moon) {
       u.pendingLunar = false;
@@ -741,12 +743,30 @@ function renderUIWorkspace() {
     const modelSummary = document.createElement('summary');
     uiViewText(modelSummary, '计算与比例说明');
     modelDetails.append(modelSummary);
+    const metrics = document.querySelector('.metrics');
+    const metricNotes = document.createElement('dl');
+    metricNotes.className = 'ui-metric-notes';
+    uiWorkspace.metricNoteLabels = [];
+    for (const article of metrics.children) {
+      const source = article.querySelector(
+        ':scope > span, .metric-definition summary span',
+      );
+      const note = article.querySelector('small');
+      if (!source || !note) continue;
+      const target = document.createElement('dt');
+      const description = document.createElement('dd');
+      uiViewText(target, source.textContent);
+      description.append(note);
+      metricNotes.append(target, description);
+      uiWorkspace.metricNoteLabels.push({ source, target });
+    }
+    modelDetails.append(metricNotes);
     for (const id of ['modelNote', 'plotNote', 'shadowScale', 'shadowTraceNote']) {
       const paragraph = document.getElementById(id);
       if (paragraph) modelDetails.append(paragraph);
     }
     explanation.append(modelDetails);
-    skySettings.append(context, document.querySelector('.metrics'), explanation);
+    skySettings.append(context, metrics, explanation);
     rail.prepend(skySettings);
     uiWorkspace.details.push(skySettings);
     const annualSettings = document.createElement('div');

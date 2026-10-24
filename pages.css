@@ -147,10 +147,7 @@ body:is(
 .ui-body-host {
   margin-left: auto;
 }
-.ui-heading .body-switch {
-  margin: 0;
-  min-width: 0;
-}
+
 #uiParametersButton {
   display: none;
 }
@@ -560,7 +557,7 @@ body:is(
 }
 .ui-parameters .metrics {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin: 12px 0;
 }
@@ -747,9 +744,7 @@ body[data-page='analemma'] .workbench-events {
 .ui-parameters .controls {
   display: block !important;
 }
-.ui-heading .body-switch button {
-  white-space: nowrap;
-}
+
 .ui-body-host {
   flex-shrink: 0;
   min-width: 150px;
@@ -804,16 +799,13 @@ body[data-page='analemma'] .workbench-events {
 .ui-heading h1 {
   white-space: nowrap;
 }
-.ui-body-host .body-switch {
-  width: 150px;
-}
+
 @media (max-width: 760px) {
   .ui-heading {
     height: 44px;
     min-height: 44px;
   }
-  .ui-body-host,
-  .ui-body-host .body-switch {
+  .ui-body-host {
     min-width: 140px;
     width: 140px;
   }
@@ -827,16 +819,7 @@ body[data-page='analemma'] .workbench-events {
     font-size: 16px;
   }
 }
-.ui-heading .body-switch {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  overflow: hidden;
-}
-.ui-heading .body-switch button {
-  min-width: 0;
-  padding: 6px 10px;
-  font-size: 13px;
-}
+
 /* Material surface hierarchy: results, parameter groups and expanded states. */
 :root {
   --md-primary: var(--design-primary);
@@ -1408,16 +1391,16 @@ body:is(
   max-width: none;
 }
 :is(.ui-shell, .ui-parameter-drawer)
-  :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options) {
+  :is(.view-tabs, .context-view-switch, .globe-drag-options) {
   background: var(--md-surface-container);
 }
 :is(.ui-shell, .ui-parameter-drawer)
-  :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options)
+  :is(.view-tabs, .context-view-switch, .globe-drag-options)
   button {
   color: var(--md-on-surface-variant);
 }
 :is(.ui-shell, .ui-parameter-drawer)
-  :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options)
+  :is(.view-tabs, .context-view-switch, .globe-drag-options)
   button.active,
 .ui-shell .ui-viewbar button:is([aria-selected='true'], [aria-pressed='true']) {
   background: var(--md-primary);
@@ -1425,7 +1408,7 @@ body:is(
   font-weight: 600;
 }
 :is(.ui-shell, .ui-parameter-drawer)
-  :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options)
+  :is(.view-tabs, .context-view-switch, .globe-drag-options)
   button.active:hover,
 .ui-shell .ui-viewbar button:is([aria-selected='true'], [aria-pressed='true']):hover {
   background: var(--md-primary-hover);
@@ -1476,7 +1459,7 @@ body:is(
 }
 /* Keep selected text and its background in sync throughout interaction. */
 :is(.ui-shell, .ui-parameter-drawer)
-  :is(.view-tabs, .context-view-switch, .body-switch, .globe-drag-options, .ui-viewbar)
+  :is(.view-tabs, .context-view-switch, .globe-drag-options, .ui-viewbar)
   button {
   transition:
     box-shadow 0.16s,
@@ -2126,13 +2109,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
     min-width: 0;
     margin: 0;
   }
-  .ui-heading .body-switch {
-    min-width: 0;
-  }
-  .ui-heading .body-switch button {
-    font-size: 11px;
-    padding: 6px 9px;
-  }
+
   #uiParametersButton {
     display: inline-flex;
     align-items: center;
@@ -2554,9 +2531,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
   .ui-shell .ui-heading #uiPlaceText {
     font-size: 10px;
   }
-  .ui-shell .ui-heading .body-switch button {
-    font-size: 11px;
-  }
+
   .ui-shell #uiParametersButton {
     font-size: 11px;
   }
