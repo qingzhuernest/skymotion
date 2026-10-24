@@ -107,7 +107,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
       const select = document.getElementById('observationBody');
       select.value = 'moon';
       select.dispatchEvent(new Event('change', { bubbles: true }));
-      if (!document.getElementById('bodyTitle').textContent.includes('月球'))
+      if (document.body.dataset.body !== 'moon')
         throw Error('Body UI must switch before the change handler returns');
       SkySceneBuilder.open({ kind: 'rod' });
     });
