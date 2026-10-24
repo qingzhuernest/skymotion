@@ -285,7 +285,7 @@ SkyWorkbenchMenu选择内容并保留固定的顶层导航；skyWorkspacePresent
 
 图位通过捕获阶段的pointerdown和focusin激活，避免图内手势阻止冒泡后丢失目标。placeCards只移动顺序发生变化的容器；选择器交换图位后，apply把焦点恢复到新目标的选择器。focusView和leaveFocusedView统一专注状态，返回按钮挂在可见的图名栏，普通模式也可使用，Esc和再次双击走相同的退出逻辑。
 
-design-system.css集中定义控件目标尺寸、状态层和焦点颜色。鼠标模式使用40px最小目标，粗指针使用48px；小复选框通过外层label扩大点击区。hover和pressed用currentColor的8%和12%内阴影覆盖层，保留组件自身的容器色；深色科学画布由md-dark-surface提供高对比焦点角色。紧凑日历日期格至少40px；画布中的天体标签属于图形标注，另有侧栏同名按钮提供完整操作目标。
+design-system.css集中定义控件目标尺寸、状态层和焦点颜色。宽屏鼠标模式使用40px最小目标，粗指针或窄屏使用48px；小复选框通过外层label扩大点击区。hover和pressed用currentColor的8%和12%内阴影覆盖层，保留组件自身的容器色；深色科学画布由md-dark-surface提供高对比焦点角色。紧凑日历日期格至少40px；画布中的天体标签属于图形标注，另有侧栏同名按钮提供完整操作目标。
 
 ## 参考对象、身份与跨图选中
 

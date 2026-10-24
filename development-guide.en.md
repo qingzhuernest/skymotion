@@ -285,7 +285,7 @@ SkyWorkbenchMenu selects content beneath stable top navigation; skyWorkspacePres
 
 Capture-phase pointerdown and focusin activate panes even when plot gestures stop bubbling. placeCards moves containers only when order changes; apply restores selector focus to the replacement pane. focusView and leaveFocusedView share the focus-state transition. The return action stays in the visible pane header in ordinary mode; Escape and another title double-click use the same exit path.
 
-design-system.css owns target sizes, state layers and focus colors. Fine pointers use a 40px minimum target and coarse pointers use 48px; checkbox labels enlarge the hit area around the small visual square. Hover and pressed states overlay inset shadows at 8% and 12% of currentColor, preserving the container color. md-dark-surface supplies a contrasting focus role on scientific canvases. Compact calendar dates retain a 40px minimum; planetary annotations have equivalent full-size sidebar controls.
+design-system.css owns target sizes, state layers and focus colors. Wide screens with fine pointers use a 40px minimum target; coarse pointers or narrow screens use 48px; checkbox labels enlarge the hit area around the small visual square. Hover and pressed states overlay inset shadows at 8% and 12% of currentColor, preserving the container color. md-dark-surface supplies a contrasting focus role on scientific canvases. Compact calendar dates retain a 40px minimum; planetary annotations have equivalent full-size sidebar controls.
 
 ## Reference identity and linked selection
 

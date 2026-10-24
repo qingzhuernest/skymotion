@@ -180,7 +180,7 @@ body input[type='range'] {
 .document-page {
   font-family: var(--design-reading-font);
 }
-@media (pointer: coarse) {
+@media (pointer: coarse), (max-width: 760px) {
   :root {
     --md-sys-size-target: 48px;
   }
