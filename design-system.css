@@ -258,7 +258,29 @@ body
   gap: 4px;
   padding-inline: 16px;
 }
-.page-nav a {
+body .md-navigation-tabs {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: 4px;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+body .md-navigation-tabs a {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--md-sys-size-target);
+  padding-block: 8px;
+  white-space: nowrap;
+  text-decoration: none;
+  background: transparent;
+}
+.page-nav a,
+body .md-navigation-tabs a {
   position: relative;
   border-radius: var(--md-sys-shape-corner-small);
   min-height: 40px;
@@ -267,16 +289,19 @@ body
   font-size: 13px;
   font-weight: 500;
 }
-.page-nav a:hover {
+.page-nav a:hover,
+body .md-navigation-tabs a:hover {
   color: var(--design-primary);
   background: var(--design-selected);
 }
-.page-nav a[aria-current='page'] {
+.page-nav a[aria-current='page'],
+body .md-navigation-tabs a[aria-current='page'] {
   color: var(--design-primary);
   background: transparent;
   font-weight: 600;
 }
-.page-nav a[aria-current='page']::after {
+.page-nav a[aria-current='page']::after,
+body .md-navigation-tabs a[aria-current='page']::after {
   content: '';
   position: absolute;
   inset: auto 12px 0;
@@ -789,17 +814,6 @@ body .scene-tools-panel input[type='checkbox']:checked {
 }
 .document-page a {
   color: var(--design-primary);
-}
-.document-links a {
-  border-radius: var(--design-radius-control);
-  min-height: var(--md-sys-size-target, 40px);
-  color: var(--design-primary);
-  background: var(--design-inset);
-  font-size: 12px;
-}
-.document-links a[aria-current='page'] {
-  background: var(--design-action);
-  color: var(--design-on-action);
 }
 .document-toc {
   background: var(--design-paper);

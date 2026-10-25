@@ -129,7 +129,7 @@
       const wasFocused = document.activeElement === button;
       cleanup();
       if (wasFocused) {
-        const heading = document.querySelector('.document-header h1');
+        const heading = document.querySelector('.document-title');
         heading?.setAttribute('tabindex', '-1');
         heading?.focus({ preventScroll: true });
       }

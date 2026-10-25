@@ -70,7 +70,7 @@ try {
  await leave(reduced);await reducedContext.close();console.log('PASS complete Chinese conversation without spatial motion');
  const failedContext=await browser.newContext(),failed=await failedContext.newPage();await failed.route('**/document-entrance.js?*',route=>route.abort());
  await failed.goto(base+'guide.html?lang=zh');await failed.waitForFunction(()=>document.documentElement.hasAttribute('data-fonts-ready'));
- assert.equal(await failed.locator('.document-entrance').count(),0);assert(await failed.locator('.document-header h1').isVisible());await failedContext.close();
+ assert.equal(await failed.locator('.document-entrance').count(),0);assert(await failed.locator('.document-title').isVisible());await failedContext.close();
  console.log('PASS failed entrance script exposes the readable document');
  const autoContext=await browser.newContext(),auto=await autoContext.newPage();await auto.goto(base+'development-guide.en.html?lang=en');await ready(auto);
  await auto.waitForFunction(()=>!document.querySelector('.document-entrance'),null,{timeout:22000});assert.equal(await auto.locator('.document-page').evaluate(n=>n.inert),false);await autoContext.close();

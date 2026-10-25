@@ -354,9 +354,17 @@
           actions.append(customize, button);
           bar.append(actions);
         } else bar.append(button);
-        const heading = document.querySelector(
+        let heading = document.querySelector(
           '.ui-shell > .ui-heading, .space-shell > .head',
         );
+        const documentTitle = document.querySelector('.document-title');
+        if (!heading && documentTitle) {
+          heading = document.createElement('div');
+          heading.className = 'ui-heading';
+          const identity = document.createElement('div');
+          identity.append(documentTitle);
+          heading.append(identity);
+        }
         if (heading) {
           bar.classList.add('workbench-header');
           bar.prepend(heading);

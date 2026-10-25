@@ -386,6 +386,24 @@ async function paintedCorner(page, button, insideRight) {
           base + 'project-guide' + (lang === 'en' ? '.en' : '') + '.html?lang=' + lang,
         );
         await page.locator('.entrance-dialogue').waitFor();
+        await page.waitForFunction(() =>
+          document.querySelector('.workbench-header .document-title'),
+        );
+        assert.equal(
+          await page.locator('.document-header .document-title').count(),
+          0,
+          'Document title is owned by the shared app bar',
+        );
+        assert.equal(
+          await page.locator('.document-links.md-navigation-tabs a').count(),
+          4,
+        );
+        assert(
+          await page
+            .locator('.document-download')
+            .evaluate((n) => n.classList.contains('md-outlined-action')),
+        );
+
         const centers = await page.locator('.entrance-sentence').evaluateAll((nodes) =>
           nodes.map((n) => {
             const r = document.createRange();

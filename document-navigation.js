@@ -21,11 +21,18 @@
         ? 'auto'
         : 'smooth',
     });
-    const heading = document.querySelector('.document-header h1');
+    const heading = document.querySelector('.document-title');
     heading?.setAttribute('tabindex', '-1');
     heading?.focus({ preventScroll: true });
   });
   document.body.append(topButton);
+  const revealDocument = () => {
+    const tabs = document.querySelector('.document-links');
+    const selected = tabs?.querySelector('[aria-current="page"]');
+    if (selected) tabs.scrollLeft = selected.offsetLeft - tabs.offsetLeft - 16;
+  };
+  Promise.resolve(window.skyFirstFontsReady).then(revealDocument);
+  document.addEventListener('skymotion:language', revealDocument);
   const sections = [...content.querySelectorAll(':scope > section')];
   const links = [...toc.querySelectorAll('a')];
   let pending = false;

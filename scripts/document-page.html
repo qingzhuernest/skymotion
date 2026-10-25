@@ -15,10 +15,12 @@ $scripts
 $navigation
 <main class="reading-page document-page">
 <header class="document-header">
-<h1>$title</h1>
+<h1 class="document-title">$title</h1>
 <p class="document-lead">$lead</p>
+<div class="document-tools">
 $siblings
-<a class="document-download" download href="$markdown">下载本文 Markdown</a>
+<a class="document-download md-outlined-action" download href="$markdown">下载本文 Markdown</a>
+</div>
 </header>
 <div class="document-reading-grid">
 $contents
