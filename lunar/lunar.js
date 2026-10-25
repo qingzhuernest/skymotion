@@ -93,6 +93,7 @@
     $('altitude').value = s.altitude;
     $('lunarSpeed').value = s.seconds;
     $('lens').value = s.fov;
+    window.SkyMaterial?.updateRanges();
     $('playOrbit').setAttribute('aria-pressed', String(s.playing));
     text('positionValue', (surface ? 0 : s.angle).toFixed(1) + '°');
     text('phaseValue', s.phase.toFixed(0) + '°');

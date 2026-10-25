@@ -16,7 +16,7 @@
   margin: 0;
   padding: 8px 12px;
   box-sizing: border-box;
-  border: 1px solid var(--design-line);
+  border: 1px solid transparent;
   border-radius: var(--design-radius-surface);
   background: var(--design-surface);
   color: var(--design-ink);
@@ -191,32 +191,6 @@
   cursor: ew-resize;
   touch-action: none;
   accent-color: var(--design-primary);
-}
-.time-workbench input[type='range']::-webkit-slider-runnable-track {
-  height: 4px;
-  border-radius: 4px;
-  background: var(--design-range-track);
-}
-.time-workbench input[type='range']::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  margin-top: -8px;
-  border: 2px solid var(--design-surface);
-  border-radius: 50%;
-  background: var(--design-primary);
-}
-.time-workbench input[type='range']::-moz-range-track {
-  height: 4px;
-  border-radius: 4px;
-  background: var(--design-range-track);
-}
-.time-workbench input[type='range']::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border: 2px solid var(--design-surface);
-  border-radius: 50%;
-  background: var(--design-primary);
 }
 .time-workbench #workbenchDatePanel > input {
   grid-column: 1;

@@ -4,24 +4,7 @@
   const easing = 'cubic-bezier(.2,0,0,1)';
   const springEasing = 'linear';
 
-  function springFrames(from, to) {
-    const frame = (progress, offset) =>
-      Object.fromEntries([
-        ['offset', offset],
-        ...Object.keys(to).map((key) => {
-          const start = parseFloat(from[key]),
-            end = parseFloat(to[key]);
-          const value = start + (end - start) * progress;
-          return [
-            key,
-            `${key === 'width' || key === 'height' ? Math.max(1, value) : value}px`,
-          ];
-        }),
-      ]);
-    return [frame(0, 0), frame(1.065, 0.68), frame(0.985, 0.86), frame(1, 1)];
-  }
-
-  function springPanel(element, frames, duration = 420) {
+  function springPanel(element, frames, duration = 350) {
     const width = element.getBoundingClientRect().width;
     const pixels = (transform) => {
       const value = /translateX\(([-.\d]+)(%|px)?\)/.exec(transform);
@@ -35,7 +18,7 @@
         offset: [0, 0.55, 0.79, 1][i],
         easing: i === 0 ? easing : 'ease-in-out',
       })),
-      { duration: Math.max(420, duration), easing: springEasing },
+      { duration: Math.max(300, duration), easing: springEasing },
     );
   }
 
@@ -87,7 +70,7 @@
               offset: [0, 0.55, 0.79, 1][i],
               easing: i === 0 ? easing : 'ease-in-out',
             })),
-            { duration: 420, easing: springEasing },
+            { duration: 350, easing: springEasing },
           );
           animation.finished
             .catch(() => {})
@@ -119,97 +102,13 @@
     );
     reveals.set(group, animation);
   }
-  const selected = (button) =>
-    button.classList.contains('active') ||
-    button.getAttribute('aria-selected') === 'true' ||
-    button.getAttribute('aria-pressed') === 'true';
-
   function installSegments() {
     const selector =
       '.model-switch,.view-tabs,.context-view-switch,.globe-drag-options,.ui-viewbar,.ui-sundial-types,.sundial-view-controls,.ui-sundial-camera-tools [role="group"],.view-group';
     document.querySelectorAll(selector).forEach((group) => {
       const buttons = [...group.children].filter((node) => node.tagName === 'BUTTON');
-      if (
-        buttons.length < 2 ||
-        group.dataset.motionReady ||
-        group.classList.contains('workbench-viewpoints')
-      )
-        return;
-      group.dataset.motionReady = 'true';
-      // Exclusive binary choices share one component across all workstations.
-      if (
-        buttons.length === 2 &&
-        buttons.every(
-          (button) =>
-            button.hasAttribute('aria-pressed') || button.hasAttribute('aria-selected'),
-        )
-      ) {
-        group.classList.add('md-connected-choice');
-        return;
-      }
-      group.classList.add('motion-segments');
-      const marker = document.createElement('span');
-      marker.className = 'motion-selection';
-      marker.setAttribute('aria-hidden', 'true');
-      group.prepend(marker);
-      let previous = null,
-        animation = null;
-      function update(animate = true) {
-        const button = buttons.find(
-          (node) => selected(node) && node.getClientRects().length,
-        );
-        buttons.forEach((node) => {
-          if (node.classList.contains('motion-selected') !== (node === button))
-            node.classList.toggle('motion-selected', node === button);
-        });
-        if (!button) {
-          marker.hidden = true;
-          previous = null;
-          return;
-        }
-        if (animate && previous === button) return;
-        // Layout coordinates stay stable while the containing options spring into view.
-        const next = {
-          left: `${button.offsetLeft}px`,
-          top: `${button.offsetTop}px`,
-          width: `${button.offsetWidth}px`,
-          height: `${button.offsetHeight}px`,
-        };
-        if (
-          previous === button &&
-          Object.entries(next).every(([key, value]) => marker.style[key] === value)
-        )
-          return;
-        const current = getComputedStyle(marker);
-        const from = {
-          left: current.left,
-          top: current.top,
-          width: current.width,
-          height: current.height,
-        };
-        animation?.cancel();
-        Object.assign(marker.style, next);
-        marker.hidden = false;
-        if (animate && previous && previous !== button && !reduced.matches)
-          animation = marker.animate(springFrames(from, next), { duration: 360, easing });
-        previous = button;
-      }
-      const observer = new MutationObserver(() => update());
-      buttons.forEach((button) =>
-        observer.observe(button, {
-          attributes: true,
-          attributeFilter: ['class', 'aria-selected', 'aria-pressed', 'hidden'],
-        }),
-      );
-      // Only our own class mutation changes once; repeated renders do not restart motion.
-      const resize = new ResizeObserver(() => update(false));
-      resize.observe(group);
-      buttons.forEach((button) => resize.observe(button));
-      // Translation and font loading can move tabs without resizing their parent.
-      const remeasure = () => requestAnimationFrame(() => update(false));
-      document.addEventListener('skymotion:language', remeasure);
-      document.fonts?.addEventListener('loadingdone', remeasure);
-      update(false);
+      if (buttons.length < 2 || group.classList.contains('workbench-viewpoints')) return;
+      group.classList.add('md-connected-choice');
     });
     document.querySelectorAll('.view-tabs').forEach((group) => {
       let visible = Boolean(group.getClientRects().length);

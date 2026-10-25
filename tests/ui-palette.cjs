@@ -119,13 +119,13 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8999/').repla
       await page.waitForFunction(
         () =>
           getComputedStyle(document.querySelector('.layout-launch')).backgroundColor ===
-          'rgb(36, 87, 107)',
+          'rgb(37, 92, 67)',
       );
       assert.equal(
         await page
           .locator('.layout-launch')
           .evaluate((n) => getComputedStyle(n).backgroundColor),
-        'rgb(36, 87, 107)',
+        'rgb(37, 92, 67)',
       );
       // A temporary probe proves callers use the role, rather than matching its current literal.
       await page.evaluate(() =>

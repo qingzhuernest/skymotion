@@ -52,3 +52,7 @@ Lab shares the customization switch beside language while retaining native viewp
 当前用户要求：全站应用控件统一Material Design 3语言，保留绿色主题和科学图语义配色。顶栏左侧为标题/地点，太阳月球使用并列分段按钮直接切换，四个天空视角移入左侧天空与日影分组；主菜单保持稳定。
 
 字体约束：所有交互控件、菜单、标题与正文保持原来的中文 SkyMotion Reading/宋体和英文 SkyMotion Charter。Material Design 的组件语言不得覆盖这一字体要求。修复重叠应调整真实容器、间距与控件类型选择器，不通过新增全局覆盖补丁掩盖。
+
+
+## Current redesign authorization
+The user requests strict Material 3 Expressive across the whole website, explicitly allowing all appearance and layout changes except font replacement. This supersedes earlier palette and shape restrictions. Retain SkyMotion Reading and SkyMotion Charter; use the Material 3 Expressive system rather than Impeccable aesthetics. Preserve experimental capabilities, scientific state semantics and working navigation.

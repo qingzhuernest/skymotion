@@ -30,7 +30,7 @@ body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) {
   grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
   gap: 4px;
-  margin: 4px 8px;
+  margin: 2px 6px;
   padding: 0;
   border: 0;
 }
@@ -41,7 +41,7 @@ body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) button {
   margin: 0;
   min-height: var(--md-sys-size-target);
   border: 0;
-  border-radius: var(--md-sys-shape-corner-full);
+  border-radius: var(--md-sys-shape-corner-large);
   background: transparent;
   color: var(--design-ink);
   font: 500 13px/1.5 var(--design-font);
@@ -72,8 +72,8 @@ body .ui-parameters .workbench-viewpoints {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   position: static;
-  gap: 8px;
-  padding: 8px 8px 12px 24px;
+  gap: 2px;
+  padding: 4px 6px 12px 20px;
   margin: 0;
   background: transparent;
   border: 0;
@@ -84,7 +84,7 @@ body .ui-parameters .workbench-viewpoints button {
   padding: 10px 16px;
   text-align: left;
   border: 0;
-  border-radius: var(--md-sys-shape-corner-full);
+  border-radius: var(--md-sys-shape-corner-large);
   background: transparent;
   color: var(--design-ink);
   font: 500 13px/1.5 var(--design-font);

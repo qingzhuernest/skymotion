@@ -93,8 +93,8 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
         });
         assert.deepEqual(
           segmentShape,
-          { border: '0px', gap: '2px', innerCorner: '8px' },
-          'Expressive connected group: separate surfaces, small inner corners and no shared outline',
+          { border: '0px', gap: '2px', innerCorner: '12px' },
+          'Expressive connected group: separate surfaces, rounded inner corners and no shared outline',
         );
         const selectedButton = page.locator('.body-switch [aria-pressed=true]');
         await selectedButton.hover();

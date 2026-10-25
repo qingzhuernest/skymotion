@@ -287,7 +287,7 @@ SkyWorkbenchMenu选择内容并保留固定的顶层导航；skyWorkspacePresent
 
 design-system.css集中定义控件目标尺寸、状态层和焦点颜色。宽屏鼠标模式使用40px最小目标，粗指针或窄屏使用48px；小复选框通过外层label扩大点击区。hover和pressed用currentColor的8%和12%内阴影覆盖层，保留组件自身的容器色；深色科学画布由md-dark-surface提供高对比焦点角色。紧凑日历日期格至少40px；画布中的天体标签属于图形标注，另有侧栏同名按钮提供完整操作目标。
 
-workbench-content-group与观测设置共用menu-section组件，不再各自定义折叠标题外观。嵌套menu-subsection的标题圆角由外框圆角减去1px边框计算。md-connected-choice统一二选一组件，支持aria-pressed与aria-selected；全局导航固定在页面顶部。月相图使用图位容器查询，而非整页宽度，窄图位按轨道与月面读数上下布局；phaseOrbitLayout与新的画布尺寸同步，拖动仍改变同一真实观测时刻。
+workbench-content-group与观测设置共用menu-section组件，不再各自定义折叠标题外观。嵌套menu-subsection的标题圆角由外框圆角减去1px边框计算。md-connected-choice统一连接式单选组件，支持aria-pressed与aria-selected；全局导航固定在页面顶部。月相图使用图位容器查询，而非整页宽度，窄图位按轨道与月面读数上下布局；phaseOrbitLayout与新的画布尺寸同步，拖动仍改变同一真实观测时刻。
 
 ## 参考对象、身份与跨图选中
 
@@ -369,9 +369,9 @@ interaction-history.js使用适配器读取科学状态、表单字段与路由�
 
 ## 设计变量、可访问性与多端
 
-ui-palette.css拥有语义色变量；design-system.css将其映射到Material Design 3的md-sys-color、形状、字体与状态角色，其他UI样式消费共享角色。科学图的太阳、轨道和天体数据颜色不等同于UI选中色，不能全局替换所有蓝色像素。
+ui-palette.css拥有Material 3 Expressive语义色：绿色主操作、鼠尾草色表面层级、辅助与第三色容器。design-system.css统一颜色、形状、状态和动效角色；页面样式只安排组件位置。科学图的太阳、轨道和天体数据颜色独立于UI选中色。
 
-md-sys-color-*定义主操作、选中容器、表面、文字和边界；md-sys-shape-corner-*定义共享圆角；md-sys-size-target定义桌面40px、触屏48px操作目标；md-sys-state-hover与pressed定义状态层；md-sys-motion-*定义短过渡与缓动。组件只消费这些角色，不再各自定义颜色或尺寸。普通文字字段排除range、checkbox和radio，避免把字段边框套到滑动条和开关上。中文保留SkyMotion Reading宋体，英文保留SkyMotion Charter；Material组件规范不替换既定字体。
+md-sys-color-*定义主操作、辅助色、表面层级、文字与边界；md-sys-shape-corner-*定义4／8／12／16／20／28／32／48px与全圆角形状。小型桌面操作目标40px，窄屏与触屏48px；组件视觉尺寸与操作目标区分。md-sys-state-hover／pressed负责状态层，md-sys-motion-*负责时长与缓动。连接式按钮在选中与按压时改变形状，不再叠加独立滑动底板。滑块轨道16px、竖向手柄4px宽，由material-controls.js根据原生value与范围计算填充进度；程序赋值后由原有状态所有者调用updateRange或updateRanges，键盘、拖动、历史和天文计算仍由原模块管理。中文保留SkyMotion Reading宋体，英文保留SkyMotion Charter。
 
 - 字体、圆角、控件高度和焦点样式遵循DESIGN.md；新增入口复用现有菜单，不覆盖科学画布。
 - 760像素及以下使用原生dialog参数抽屉；同一套控件节点迁移，不复制第二套状态。
@@ -482,7 +482,7 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [lab-history.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-history.js) | 观测快照、历史适配与完整实验数据协调 | 模块内部方法，参见源码 |
 | [lab-customization.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-customization.js) | 兼容的实验台自定义接入 | 模块内部方法，参见源码 |
 | [lab-comparison-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-comparison-controls.js) | 原实验台对照控制适配 | 模块内部方法，参见源码 |
-| [interface-motion.js](https://github.com/qingzhuernest/skymotion/blob/main/interface-motion.js) | 折叠与选中反馈，尊重减少动态设置 | springFrames, springPanel, installDisclosures, revealOptions, installSegments, update, installRail, sync, setCollapsed, gesture, end |
+| [interface-motion.js](https://github.com/qingzhuernest/skymotion/blob/main/interface-motion.js) | 折叠与选中反馈，尊重减少动态设置 | springPanel, installDisclosures, revealOptions, installSegments, installRail, sync, setCollapsed, gesture, end |
 | [language.js](https://github.com/qingzhuernest/skymotion/blob/main/language.js) | 语言切换、字体加载、静态兄弟页与失败重试 | installDictionary, translate, text, element, walk, apply, prepareFonts, showLanguageFailure, change, reveal, observePresentation, init, failure |
 | [language-data.js](https://github.com/qingzhuernest/skymotion/blob/main/language-data.js) | 由生成器输出的双语词典 | 模块内部方法，参见源码 |
 | [page-boot.js](https://github.com/qingzhuernest/skymotion/blob/main/page-boot.js) | 可见绘制前的语言与入口初始化 | freezeCatalog, readingKey, saveReadingWindow, mergeReadingFallback, localeUrl, showFontFailure |
@@ -511,3 +511,4 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [space/nebulae.js](https://github.com/qingzhuernest/skymotion/blob/main/space/nebulae.js) | 星云目录、影像显示与资源管理 | create, choose, load |
 | [lab-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-controls.js) | 观测输入事件、地点日期与表单展示 | setDate, stop, globeLocationAt, globeObserverPoint, selectObservationBody, selectChartDateOrTime, monthDays, syncControls, updateSolarControls, updateLunarControls, selectMonth |
 | [document-navigation.js](https://github.com/qingzhuernest/skymotion/blob/main/document-navigation.js) | 文档目录、章节定位与阅读进度；原生锚点作为无脚本后备 | update |
+| [material-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/material-controls.js) | Material 3 Expressive滑块进度与共享呈现；不写实验状态 | updateRange, updateRanges, install |

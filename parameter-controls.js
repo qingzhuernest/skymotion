@@ -49,6 +49,7 @@
         range.step = options.step || 1;
       }
       range.value = numeric;
+      window.SkyMaterial?.updateRange(range);
       range.disabled = input.disabled;
       wrapper.hidden = label?.hidden || false;
       range.setAttribute('aria-valuetext', options.format ? options.format(value) : String(value));

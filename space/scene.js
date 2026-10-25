@@ -1122,6 +1122,7 @@
     if (moon.visible) placeLabel(moonLabel, moon.position, 0.16);
     const date = utcDate();
     $('day').value = day;
+    window.SkyMaterial?.updateRanges();
     $('dayText').textContent =
       date.toISOString().slice(0, 10) + ' · ' + date.toISOString().slice(11, 16);
     if (document.activeElement !== $('date')) $('date').value = date.toISOString().slice(0, 10);

@@ -1,4 +1,4 @@
-/* SkyMotion / Material Design 3: shared interface roles, separate scientific drawing.
+/* SkyMotion / Material 3 Expressive: shared components, separate scientific drawing.
  * Loaded last on every route. Geometry for switches, history and motion is owned
  * by existing modules; this layer owns typography, surfaces and visual states.
  */
@@ -26,6 +26,15 @@
   --md-sys-color-on-primary-container: var(--design-on-selected);
   --md-sys-color-surface: var(--design-surface);
   --md-sys-color-surface-container: var(--design-inset);
+  --md-sys-color-surface-container-low: var(--design-surface-low);
+  --md-sys-color-surface-container-high: var(--design-surface-high);
+  --md-sys-color-surface-container-highest: var(--design-surface-highest);
+  --md-sys-color-secondary: var(--design-secondary);
+  --md-sys-color-secondary-container: var(--design-secondary-container);
+  --md-sys-color-on-secondary-container: var(--design-on-secondary-container);
+  --md-sys-color-tertiary: var(--design-tertiary);
+  --md-sys-color-tertiary-container: var(--design-tertiary-container);
+  --md-sys-color-on-tertiary-container: var(--design-on-tertiary-container);
   --md-sys-color-on-surface: var(--design-ink);
   --md-sys-color-on-surface-variant: var(--design-muted);
   --md-sys-color-outline: var(--design-switch-line);
@@ -34,15 +43,27 @@
   --md-sys-shape-corner-small: 8px;
   --md-sys-shape-corner-medium: 12px;
   --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-large-increased: 20px;
   --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-extra-large-increased: 32px;
   --md-sys-shape-corner-full: 999px;
   --md-sys-size-target: 40px;
+  --md-comp-connected-button-inner-corner: var(--md-sys-shape-corner-medium);
   --md-sys-state-hover: color-mix(in srgb, currentColor 8%, transparent);
   --md-sys-state-pressed: color-mix(in srgb, currentColor 12%, transparent);
   --md-sys-motion-duration-short: 150ms;
   --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-shape-corner-extra-extra-large: 48px;
+  --md-sys-motion-duration-medium: 350ms;
+  --md-sys-motion-easing-expressive: cubic-bezier(0.34, 1.35, 0.64, 1);
+  --md-sys-motion-duration-press: 120ms;
+  --md-sys-size-slider-track: 16px;
+  --md-sys-size-slider-handle-width: 4px;
+  --md-sys-size-slider-handle-height: 44px;
+  --md-sys-elevation-level-1: 0 2px 6px var(--design-shadow);
+  --md-sys-elevation-level-2: 0 6px 20px var(--design-shadow);
   --design-radius-control: 20px;
-  --design-radius-surface: 16px;
+  --design-radius-surface: 28px;
   --design-space-tight: 8px;
   --design-space-group: 16px;
   --bg: var(--design-paper);
@@ -93,7 +114,9 @@ body :is(button, .page-action, .language-toggle, .layout-launch) {
     background-color var(--md-sys-motion-duration-short)
       var(--md-sys-motion-easing-standard),
     color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
-    box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+    box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+    border-radius var(--md-sys-motion-duration-medium)
+      var(--md-sys-motion-easing-expressive);
 }
 body
   :is(button, .page-action, .document-download, .document-links a, .page-nav a):not(
@@ -106,6 +129,7 @@ body
     :disabled
   ):active {
   box-shadow: inset 0 0 0 999px var(--md-sys-state-pressed);
+  border-radius: var(--md-sys-shape-corner-large);
 }
 body
   :is(
@@ -119,7 +143,7 @@ body
   border: 1px solid var(--md-sys-color-outline);
   border-radius: var(--md-sys-shape-corner-extra-small);
   color: var(--md-sys-color-on-surface);
-  background-color: var(--md-sys-color-surface);
+  background-color: var(--md-sys-color-surface-container-low);
   padding: 8px 12px;
 }
 body :is(input, select, textarea)[aria-invalid='true'] {
@@ -134,7 +158,8 @@ body dialog {
   background-color: var(--md-sys-color-surface-container);
 }
 body :is([role='menu'], .dt-object-menu, .sb-object-menu) {
-  border-radius: var(--md-sys-shape-corner-extra-small);
+  border-radius: var(--md-sys-shape-corner-large-increased);
+  box-shadow: var(--md-sys-elevation-level-2);
   color: var(--md-sys-color-on-surface);
   background-color: var(--md-sys-color-surface-container);
 }
@@ -208,7 +233,7 @@ body
   color: var(--design-ink);
 }
 body :is(a, button, input, select, textarea, summary):focus-visible {
-  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
+  outline: 3px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 body a {
@@ -228,16 +253,16 @@ body
 }
 .page-nav {
   background: var(--design-paper);
-  border-color: var(--design-line);
+  border-color: transparent;
   gap: 4px;
-  padding-inline: 20px;
+  padding-inline: 16px;
 }
 .page-nav a {
   border-radius: var(--md-sys-shape-corner-full);
-  min-height: 36px;
-  padding-inline: 12px;
+  min-height: 40px;
+  padding-inline: 16px;
   color: var(--design-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
 }
 .page-nav a:hover {
@@ -284,21 +309,26 @@ body .md-connected-choice > button {
   padding: 8px;
   gap: 4px;
   border: 0;
-  border-radius: var(--md-sys-shape-corner-small);
+  border-radius: var(--md-comp-connected-button-inner-corner);
   color: var(--md-sys-color-on-primary-container);
   background: var(--md-sys-color-primary-container);
   font: 500 14px/1.5 var(--design-font);
   white-space: normal;
   text-align: center;
-  transition: border-radius 180ms var(--motion-ease);
+  transition:
+    border-radius var(--md-sys-motion-duration-medium)
+      var(--md-sys-motion-easing-expressive),
+    background-color var(--md-sys-motion-duration-short)
+      var(--md-sys-motion-easing-standard),
+    color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
 }
 body .md-connected-choice > button:first-child {
-  border-radius: var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-small)
-    var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-full);
+  border-radius: var(--md-sys-shape-corner-full) var(--md-comp-connected-button-inner-corner)
+    var(--md-comp-connected-button-inner-corner) var(--md-sys-shape-corner-full);
 }
 body .md-connected-choice > button:where(:nth-last-child(1 of button:not([hidden]))) {
-  border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-full)
-    var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-small);
+  border-radius: var(--md-comp-connected-button-inner-corner) var(--md-sys-shape-corner-full)
+    var(--md-sys-shape-corner-full) var(--md-comp-connected-button-inner-corner);
 }
 body .md-connected-choice > button::before {
   content: '';
@@ -310,24 +340,36 @@ body .md-connected-choice > button::before {
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m3 8 3 3 7-7' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
     center/contain no-repeat;
 }
-body .md-connected-choice > button:is([aria-pressed='true'], [aria-selected='true']) {
+body
+  .md-connected-choice
+  > button:is([aria-pressed='true'], [aria-selected='true'], .active, .selected) {
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   border-radius: var(--md-sys-shape-corner-full);
 }
 body
   .md-connected-choice
-  > button:is([aria-pressed='true'], [aria-selected='true'])::before {
+  > button:is([aria-pressed='true'], [aria-selected='true'], .active, .selected)::before {
   display: block;
 }
 
 body .md-connected-choice > button:has(> svg)::before {
   display: none;
 }
+body
+  .md-connected-choice
+  > button:is([aria-pressed='true'], [aria-selected='true'], .active, .selected):active {
+  border-radius: var(--md-sys-shape-corner-large);
+}
+@media (prefers-reduced-motion: reduce) {
+  body .md-connected-choice > button {
+    transition: none;
+  }
+}
 
 .ui-parameters {
-  background: var(--design-inset);
-  border-color: var(--design-line);
+  background: var(--md-sys-color-surface-container);
+  border-color: transparent;
 }
 .ui-parameters > h2 {
   color: var(--design-ink);
@@ -345,8 +387,8 @@ body .md-connected-choice > button:has(> svg)::before {
     .ui-information,
     .ui-model-details
   ) {
-  border: 1px solid var(--design-line);
-  border-radius: var(--md-sys-shape-corner-medium);
+  border: 1px solid transparent;
+  border-radius: var(--md-sys-shape-corner-large-increased);
   background: var(--design-surface);
   box-shadow: none;
 }
@@ -363,8 +405,8 @@ body .md-connected-choice > button:has(> svg)::before {
   line-height: 1.65;
   color: var(--design-ink);
   background: var(--design-surface);
-  border-radius: calc(var(--md-sys-shape-corner-medium) - 1px);
-  padding: 12px 38px 12px 14px;
+  border-radius: calc(var(--md-sys-shape-corner-large-increased) - 1px);
+  padding: 14px 40px 14px 16px;
 }
 .ui-parameters
   :is(
@@ -374,7 +416,7 @@ body .md-connected-choice > button:has(> svg)::before {
     .ui-information,
     .ui-model-details
   )[open] {
-  border-color: var(--design-open-border);
+  border-color: transparent;
   box-shadow: none;
 }
 .ui-parameters
@@ -388,9 +430,9 @@ body .md-connected-choice > button:has(> svg)::before {
   > summary {
   background: var(--design-surface);
   color: var(--design-primary);
-  border-color: var(--design-line);
-  border-radius: calc(var(--md-sys-shape-corner-medium) - 1px)
-    calc(var(--md-sys-shape-corner-medium) - 1px) 0 0;
+  border-color: transparent;
+  border-radius: calc(var(--md-sys-shape-corner-large-increased) - 1px)
+    calc(var(--md-sys-shape-corner-large-increased) - 1px) 0 0;
 }
 .ui-parameters
   :is(
@@ -424,20 +466,20 @@ body .md-connected-choice > button:has(> svg)::before {
 .ui-parameters :is(.menu-subsection, .sun-side-summary) {
   background: var(--design-paper);
   border-color: var(--design-line);
-  border-radius: var(--md-sys-shape-corner-medium);
+  border-radius: var(--md-sys-shape-corner-large);
   box-shadow: none;
 }
 .ui-parameters .menu-subsection > summary {
   color: var(--design-primary);
   background: var(--design-paper);
   font-size: 12px;
-  border-radius: calc(var(--md-sys-shape-corner-medium) - 1px);
+  border-radius: calc(var(--md-sys-shape-corner-large) - 1px);
 }
 .ui-parameters .menu-subsection[open] > summary {
   color: var(--design-ink);
   background: var(--design-selected);
-  border-radius: calc(var(--md-sys-shape-corner-medium) - 1px)
-    calc(var(--md-sys-shape-corner-medium) - 1px) 0 0;
+  border-radius: calc(var(--md-sys-shape-corner-large) - 1px)
+    calc(var(--md-sys-shape-corner-large) - 1px) 0 0;
 }
 .ui-parameters :is(.menu-content, .coordinate-editor, .analemma-controls, .ui-field) {
   color: var(--design-ink);
@@ -455,7 +497,7 @@ body
   color: var(--design-ink);
   border-color: var(--design-line);
   border-radius: var(--md-sys-shape-corner-extra-small);
-  background: var(--design-surface);
+  background: var(--md-sys-color-surface-container-low);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -631,7 +673,7 @@ body[data-page='space'] {
   color: var(--design-ink);
 }
 body[data-page='space'] :is(.card, .visual, .timeline) {
-  border-color: var(--design-line);
+  border-color: transparent;
   border-radius: var(--design-radius-surface);
   background: var(--design-surface);
   box-shadow: none;
@@ -910,7 +952,7 @@ body :is(.page-action, .author-mail-button):hover {
   color: var(--design-hover);
 }
 .document-page .article-actions :is(.page-action, .page-link):focus-visible {
-  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
+  outline: 3px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 
@@ -1013,10 +1055,6 @@ body[data-page='welcome'] .welcome-screen ::selection {
   font-weight: 400;
   letter-spacing: 0;
 }
-.motion-selection {
-  background: var(--design-action);
-  border-radius: var(--design-radius-control);
-}
 .motion-menu-grip,
 .motion-menu-edge {
   color: var(--design-primary);
@@ -1044,28 +1082,72 @@ body[data-page='space'] .side .toggles > label > input[type='checkbox']:checked 
   background: var(--design-action);
   border-color: var(--design-action);
 }
-body[data-page='space'].space-immersive .motion-selection {
-  background: var(--design-action);
+/* Native range semantics, with Expressive filled tracks and a narrow upright handle.
+ * State owners call updateRanges after assigning values; input events update immediately. */
+body input[type='range'] {
+  --md-range-progress: 0%;
+  --md-range-surface: var(--design-surface);
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  height: var(--md-sys-size-target);
+  min-height: var(--md-sys-size-target);
+  padding: 0;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  cursor: pointer;
 }
-body
-  :is(.ui-parameters, .time-workbench)
-  input[type='range']::-webkit-slider-runnable-track {
+body input[type='range']::-webkit-slider-runnable-track {
+  height: var(--md-sys-size-slider-track);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: linear-gradient(
+    to right,
+    var(--design-action) 0 var(--md-range-progress),
+    var(--design-range-track) var(--md-range-progress) 100%
+  );
+}
+body input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  width: var(--md-sys-size-slider-handle-width);
+  height: var(--md-sys-size-slider-handle-height);
+  margin-top: calc(
+    (var(--md-sys-size-slider-track) - var(--md-sys-size-slider-handle-height)) / 2
+  );
+  border: 0;
+  border-radius: 2px;
+  background: var(--design-action);
+  box-shadow: 0 0 0 5px var(--md-range-surface);
+  transition: width 150ms var(--md-sys-motion-easing-standard);
+}
+body input[type='range']::-moz-range-track {
+  height: var(--md-sys-size-slider-track);
+  border-radius: var(--md-sys-shape-corner-full);
   background: var(--design-range-track);
 }
-body :is(.ui-parameters, .time-workbench) input[type='range']::-webkit-slider-thumb {
+body input[type='range']::-moz-range-progress {
+  height: var(--md-sys-size-slider-track);
+  border-radius: var(--md-sys-shape-corner-full);
   background: var(--design-action);
-  border-color: var(--design-surface);
-  box-shadow: none;
 }
-body :is(.ui-parameters, .time-workbench) input[type='range']::-moz-range-track {
-  background: var(--design-range-track);
-}
-body :is(.ui-parameters, .time-workbench) input[type='range']::-moz-range-thumb {
+body input[type='range']::-moz-range-thumb {
+  width: var(--md-sys-size-slider-handle-width);
+  height: var(--md-sys-size-slider-handle-height);
+  border: 0;
+  border-radius: 2px;
   background: var(--design-action);
-  border-color: var(--design-surface);
+  box-shadow: 0 0 0 5px var(--md-range-surface);
 }
-body[data-page='space'] .timeline input[type='range'] {
-  accent-color: var(--design-primary);
+body input[type='range']:active {
+  --md-sys-size-slider-handle-width: 2px;
+}
+body input[type='range']:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+.md-dark-surface input[type='range'],
+body .scene-tools-panel input[type='range'] {
+  --md-range-surface: var(--design-night-surface);
 }
 
 /* The user's type direction applies to every UI role; numbers remain tabular. */
@@ -1119,7 +1201,7 @@ body .ui-viewbar::-webkit-scrollbar {
 
 body .ui-heading #uiParametersButton {
   min-height: var(--md-sys-size-target, 40px);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
   background: var(--design-inset);
   color: var(--design-primary);
   border-color: var(--design-line);
@@ -1134,7 +1216,7 @@ body .ui-heading #uiParametersButton {
   height: 36px;
   padding: 0;
   border: 1px solid var(--design-canvas-action-line);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
   color: var(--design-night-ink);
   background: var(--design-canvas-action-surface);
   display: flex;
@@ -1237,12 +1319,12 @@ body[data-page='space'] #play {
   background: var(--design-action);
   color: var(--design-on-action);
   border: 1px solid var(--design-action);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
   box-shadow: none;
 }
 body[data-page='space'] #reset {
   border: 1px solid var(--design-action);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
   box-shadow: none;
 }
 
@@ -1258,12 +1340,12 @@ body .ui-plot #resetView:hover {
   justify-items: center;
   align-content: center;
   gap: 4px;
-  padding: 8px;
+  padding: 10px 8px;
   min-width: 0;
   text-align: center;
-  background: var(--design-surface);
-  border: 1px solid var(--design-line);
-  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--md-sys-color-secondary-container);
+  border: 1px solid transparent;
+  border-radius: var(--md-sys-shape-corner-large);
   box-shadow: none;
 }
 .ui-parameters .metrics strong {
@@ -1295,7 +1377,7 @@ body .ui-plot #resetView:hover {
 .ui-parameters .model-explanation {
   background: var(--design-paper);
   border-color: var(--design-line);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
   color: var(--design-ink);
   box-shadow: none;
 }
@@ -1304,20 +1386,20 @@ body .ui-plot #resetView:hover {
   background: var(--design-action);
   color: var(--design-on-action);
   border: 1px solid var(--design-action);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
   font-family: var(--design-font);
   box-shadow: none;
 }
 body[data-page='space'] .space-sidebar-host > .side {
   background: var(--design-inset);
-  border-color: var(--design-line);
-  border-radius: 16px;
+  border-color: transparent;
+  border-radius: var(--design-radius-surface);
 }
 body[data-page='space'] .inspection-readout {
   background: var(--design-night-surface);
   color: var(--design-night-ink);
   border: 1px solid var(--design-night-line);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
   font-family: var(--design-font);
 }
 body[data-page='space'] .inspection-readout strong {
@@ -1327,7 +1409,7 @@ body[data-page='space'] .inspection-readout strong {
 body[data-page='space'] .scene-tools summary,
 body .ui-plot #viewReset {
   border: 1px solid var(--design-action);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
   font-family: var(--design-font);
   box-shadow: none;
 }
@@ -1339,24 +1421,24 @@ body .ui-plot #viewReset {
   color: var(--design-ink);
 }
 body[data-page='space'] .scene-tools[open] summary {
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
 }
 
 /* Matching row baselines when the workbench has room for multiple columns. */
 
 body .ui-parameters .menu-footer #reset {
   border-color: var(--design-action);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
 }
 
 body .motion-menu-edge,
 body .ui-parameters .motion-menu-header > button.motion-menu-grip,
 body[data-page='space'] .side .motion-menu-header > button.motion-menu-grip {
   border-color: var(--design-action);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
 }
 body .motion-menu-edge:focus-visible {
-  outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
+  outline: 3px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 /* Quiet supporting actions: same teal identity without large filled surfaces. */
@@ -1957,7 +2039,7 @@ body
   padding: 10px 14px;
   box-sizing: border-box;
   border: 1px solid var(--design-line);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
   background: var(--design-on-action);
   color: var(--design-ink);
   font: 14px/1.5 var(--design-font);

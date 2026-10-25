@@ -1,4 +1,4 @@
-/** One outlined surface geometry for results and disclosure menus. */
+/** Shared filled surface geometry for results and disclosure menus. */
 const assert = require('node:assert/strict');
 const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
 const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').replace(

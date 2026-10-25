@@ -906,3 +906,8 @@ body[data-page='space'] .space-sidebar-host > .side {
 body[data-page='space'] .side > .motion-menu-grip {
   margin-bottom: 0; /* The flex rail already supplies the shared 10px gap. */
 }
+
+/* The model choice has enough room for its selection icon and complete short labels. */
+.viewbar > .view-group:first-child {
+  min-width: 172px;
+}

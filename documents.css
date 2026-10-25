@@ -340,19 +340,23 @@
 
 /* Three task-oriented entries replace the duplicated table and link list. */
 .document-manual-list {
+  display: grid;
+  gap: 4px;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 .document-manual-list li + li {
-  border-top: 1px solid var(--design-line);
+  margin-top: 0;
+  border: 0;
 }
 .document-manual-list li a {
   display: grid;
   gap: 6px;
-  padding: 20px 8px;
+  padding: 24px;
   text-decoration: none;
-  border-radius: var(--md-sys-shape-corner-small);
+  background: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-extra-small);
 }
 .document-manual-list li a:hover {
   background: var(--design-selected);
@@ -425,4 +429,13 @@
   .document-content section > :is(p, ul, ol) {
     max-width: 46em;
   }
+}
+
+.document-manual-list li:first-child a {
+  border-start-start-radius: var(--md-sys-shape-corner-extra-large);
+  border-start-end-radius: var(--md-sys-shape-corner-extra-large);
+}
+.document-manual-list li:last-child a {
+  border-end-start-radius: var(--md-sys-shape-corner-extra-large);
+  border-end-end-radius: var(--md-sys-shape-corner-extra-large);
 }

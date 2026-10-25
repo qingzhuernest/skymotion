@@ -1530,6 +1530,7 @@ function render() {
   renderTimeWorkbench();
   if (typeof renderUIWorkspace === 'function') renderUIWorkspace();
   drawMotionCanvases();
+  window.SkyMaterial?.updateRanges();
   window.SolarSpaceLabCompare?.sync();
 }
 function schedule() {

@@ -11,16 +11,25 @@
   --design-welcome-final: #e9cc9b;
   --design-reading-final: #685844;
 
-  --design-accent: #24576b;
-  --design-accent-hover: #174558;
-  --design-paper: #f4f7f8;
+  --design-accent: #255c43;
+  --design-accent-hover: #174d35;
+  --design-paper: #f5f8f0;
   --design-surface: #ffffff;
-  --design-inset: #ecf2f4;
-  --design-line: #cdd9de;
-  --design-ink: #20323e;
-  --design-muted: #536975;
-  --design-selected: #dcebf0;
-  --design-on-selected: #183e50;
+  --design-inset: #eaf0e4;
+  --design-surface-low: #f0f5eb;
+  --design-surface-high: #e2e9dc;
+  --design-surface-highest: #dce4d6;
+  --design-secondary: #51634e;
+  --design-secondary-container: #d7e8cd;
+  --design-on-secondary-container: #253721;
+  --design-tertiary: #73512c;
+  --design-tertiary-container: #ffdfb4;
+  --design-on-tertiary-container: #352100;
+  --design-line: #d3dccd;
+  --design-ink: #19251c;
+  --design-muted: #4d5d4d;
+  --design-selected: #c5efd0;
+  --design-on-selected: #103b25;
   --design-on-action: #ffffff;
   --design-sun: #f2d7a3;
   --design-night: #101e2c;
@@ -32,18 +41,18 @@
   --design-night-primary: #a9d5e6;
   --design-night-hover: #bce0ec;
   --design-night-selected: #284c61;
-  --design-scrollbar: #9eb1bb;
-  --design-open-border: #8caebc;
-  --design-open-muted: #42616f;
-  --design-switch-line: #8297a3;
-  --design-switch-idle: #c7d4db;
-  --design-switch-thumb: #506b79;
-  --design-disabled-ink: #637985;
-  --design-disabled-surface: #e8eef1;
+  --design-scrollbar: #98ab94;
+  --design-open-border: #8baf90;
+  --design-open-muted: #365840;
+  --design-switch-line: #74836e;
+  --design-switch-idle: #dfe7d9;
+  --design-switch-thumb: #52664d;
+  --design-disabled-ink: #687364;
+  --design-disabled-surface: #e4e9df;
   --design-night-tool-muted: #c7dde8;
   --design-night-tool-selected: #39748c;
   --design-night-label-surface: #142b3ce6;
-  --design-range-track: #c3d8e0;
+  --design-range-track: #d0e6cd;
   --design-canvas-action-line: #73919f;
   --design-canvas-action-surface: #163245;
   --design-print-ink: #000000;
@@ -61,8 +70,13 @@
 }
 
 /* Immersive observation changes surface/foreground roles, never the green action. */
-body[data-page="space"].space-immersive {
+body[data-page='space'].space-immersive {
   --design-paper: var(--design-night);
+  --design-surface-low: var(--design-night-surface);
+  --design-surface-high: var(--design-night-inset);
+  --design-surface-highest: var(--design-night-selected);
+  --design-secondary-container: var(--design-night-inset);
+  --design-on-secondary-container: var(--design-night-ink);
   --design-surface: var(--design-night-surface);
   --design-inset: var(--design-night-inset);
   --design-line: var(--design-night-line);

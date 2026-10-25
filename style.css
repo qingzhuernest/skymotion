@@ -131,11 +131,6 @@ input[type='range'] {
   cursor: pointer;
   margin: 12px 0;
 }
-input[type='range']::-webkit-slider-thumb {
-  appearance: none;
-  border: 3px solid var(--design-night-surface);
-  border-radius: 50%;
-}
 .range-labels,
 .time-labels {
   display: flex;
@@ -745,13 +740,6 @@ button:hover {
 input[type='range'] {
   background: var(--design-inset);
   accent-color: var(--design-primary);
-}
-input[type='range']::-webkit-slider-thumb {
-  background: var(--design-primary);
-  border-color: var(--design-primary);
-  box-shadow: none;
-  height: 19px;
-  width: 19px;
 }
 .play-button {
   background: var(--design-primary);
@@ -4115,18 +4103,6 @@ html:has(.has-time-workbench) {
   background: linear-gradient(var(--design-inset), var(--design-inset)) center/100% 5px
     no-repeat;
 }
-.sundial-sticky-clock input::-webkit-slider-thumb {
-  width: 25px;
-  height: 25px;
-  border: 3px solid var(--design-line);
-}
-.sundial-sticky-clock input::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border: 3px solid var(--design-line);
-  background: var(--design-primary);
-  border-radius: 50%;
-}
 .sundial-lab-controls > label[for='sundialTime'],
 #sundialTime,
 #sundialTime + .time-labels {
@@ -4196,33 +4172,6 @@ html:has(.has-time-workbench) {
   background: transparent;
   touch-action: none;
   cursor: ew-resize;
-}
-.analemma-ideal-controls input[type='range']::-webkit-slider-runnable-track {
-  height: 5px;
-  background: var(--design-inset);
-  border-radius: 5px;
-}
-.analemma-ideal-controls input[type='range']::-webkit-slider-thumb {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 26px;
-  height: 26px;
-  border: 3px solid white;
-  border-radius: 50%;
-  background: var(--design-primary);
-  margin-top: -10.5px;
-}
-.analemma-ideal-controls input[type='range']::-moz-range-track {
-  height: 5px;
-  background: var(--design-inset);
-  border-radius: 5px;
-}
-.analemma-ideal-controls input[type='range']::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border: 3px solid white;
-  border-radius: 50%;
-  background: var(--design-primary);
 }
 .analemma-ideal-controls input:focus-visible {
   outline: 2px solid var(--md-sys-color-focus, var(--design-primary));

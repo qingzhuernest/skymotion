@@ -107,7 +107,7 @@ html:lang(en) body[data-page='contact'] .reading-page > .dialog-head h2 {
   width: 100%;
   min-width: 0;
   background: var(--design-paper);
-  border-bottom: 1px solid var(--design-line);
+  border-bottom: 1px solid transparent;
 }
 .language-nav .page-nav {
   flex: 1;
@@ -120,7 +120,8 @@ html:lang(en) body[data-page='contact'] .reading-page > .dialog-head h2 {
 /* App bar: observation identity, stable primary navigation, body selector, actions. */
 .language-nav.workbench-header {
   gap: 12px;
-  padding: 4px 12px;
+  min-height: 64px;
+  padding: 4px 16px;
 }
 .language-nav.workbench-header .page-nav {
   flex: 1 1 auto;
