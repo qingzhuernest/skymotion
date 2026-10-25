@@ -1252,6 +1252,22 @@ function drawGlobe() {
 const solarSeasonButtons = document.querySelectorAll(
   '#seasonButtons > button[data-angle][data-month]',
 );
+// A remembered sky orientation is current only while its sky pane is current.
+function syncSkyViewControls() {
+  const workspace = typeof uiWorkspace === 'undefined' ? null : uiWorkspace;
+  const presentation = window.skyWorkspacePresentation;
+  const skyCurrent =
+    !document.body.hasAttribute('data-entry-view') ||
+    !workspace ||
+    (presentation?.active
+      ? presentation.activeView === 'skyPanel'
+      : workspace.selected === 'skyPanel');
+  document.querySelectorAll('[data-view]').forEach((button) => {
+    const selected = skyCurrent && button.dataset.view === state.view;
+    button.classList.toggle('active', selected);
+    button.setAttribute('aria-pressed', String(selected));
+  });
+}
 function updateUI() {
   document.body.dataset.body = state.body;
   document.body.dataset.skyView = state.view;
@@ -1399,13 +1415,14 @@ function updateUI() {
   $('dateMode').textContent = state.manual
     ? '理想化实验 · 太阳赤纬已手动调整'
     : '随日期计算 · 可拖动进行理想化实验';
-  solarSeasonButtons.forEach((b) =>
-    b.classList.toggle(
-      'selected',
+  solarSeasonButtons.forEach((button) => {
+    const selected =
       !state.manual &&
-        seasonDate(Number(b.dataset.angle), Number(b.dataset.month)) === state.date,
-    ),
-  );
+      seasonDate(Number(button.dataset.angle), Number(button.dataset.month)) ===
+        state.date;
+    button.classList.toggle('selected', selected);
+    button.setAttribute('aria-pressed', String(selected));
+  });
   const context = sunContext();
   $('subsolar').textContent =
     coord(context.dec, 'lat') + ' / ' + coord(context.lon, 'lon');
@@ -1472,11 +1489,7 @@ function updateUI() {
     button.classList.toggle('active', active);
     button.setAttribute('aria-pressed', String(active));
   });
-  document.querySelectorAll('[data-view]').forEach((b) => {
-    const on = b.dataset.view === state.view;
-    b.classList.toggle('active', on);
-    b.setAttribute('aria-pressed', String(on));
-  });
+  syncSkyViewControls();
 }
 function drawSolarSky() {
   drawSkyScene('sun');

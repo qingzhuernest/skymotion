@@ -20,7 +20,7 @@
   --design-surface-high: #e2e9dc;
   --design-surface-highest: #dce4d6;
   --design-secondary: #51634e;
-  --design-secondary-container: #d7e8cd;
+  --design-secondary-container: #dce4d8;
   --design-on-secondary-container: #253721;
   --design-tertiary: #73512c;
   --design-tertiary-container: #ffdfb4;
@@ -28,7 +28,7 @@
   --design-line: #d3dccd;
   --design-ink: #19251c;
   --design-muted: #4d5d4d;
-  --design-selected: #c5efd0;
+  --design-selected: #d7e2d9;
   --design-on-selected: #103b25;
   --design-on-action: #ffffff;
   --design-sun: #f2d7a3;
@@ -52,7 +52,7 @@
   --design-night-tool-muted: #c7dde8;
   --design-night-tool-selected: #39748c;
   --design-night-label-surface: #142b3ce6;
-  --design-range-track: #d0e6cd;
+  --design-range-track: #d0ddcf;
   --design-canvas-action-line: #73919f;
   --design-canvas-action-surface: #163245;
   --design-print-ink: #000000;

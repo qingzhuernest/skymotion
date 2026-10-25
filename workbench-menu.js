@@ -85,6 +85,7 @@
   const skyEntry = entries.find((entry) => entry.id === 'skyPanel');
   if (viewpoints && skyEntry) {
     skyEntry.row.after(viewpoints);
+    viewpoints.classList.remove('md-connected-choice', 'motion-segments');
     viewpoints.classList.add('workbench-viewpoints');
     viewpoints.addEventListener(
       'click',
@@ -132,6 +133,8 @@
     const api = window.skyWorkspacePresentation;
     const editing = window.SkyCustomization?.active === true;
     const visible = api?.active ? api.visibleIds : new Set([uiWorkspace.selected]);
+    syncSkyViewControls();
+
     for (const group of tree.children) {
       const title = group.querySelector('summary');
       uiViewText(title, tr(group.dataset.zh, group.dataset.en));

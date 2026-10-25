@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
 
-<script src="page-boot.js?v=20261025-expressive108"></script>
+<script src="page-boot.js?v=20261025-expressive109"></script>
 
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="icon" href="favicon.svg" />
-    <link rel="stylesheet" href="ui-palette.css?v=20261025-expressive108" />
-    <link rel="stylesheet" href="style.css?v=20261025-expressive108" />
-    <link rel="stylesheet" href="pages.css?v=20261025-expressive108" />
+    <link rel="stylesheet" href="ui-palette.css?v=20261025-expressive109" />
+    <link rel="stylesheet" href="style.css?v=20261025-expressive109" />
+    <link rel="stylesheet" href="pages.css?v=20261025-expressive109" />
     <!-- search-metadata:start -->
     <title data-i18n-cn="{&quot;Unified Workbench · Sky Motion Lab&quot;:&quot;统一实验台 · 天体视运动实验室&quot;}">Unified Workbench · Sky Motion Lab</title>
     <meta name="description" content="通过联动图解理解太阳直射点、昼夜、升落方位、月相与行星伴月，配合日期和时间观察变化。" />
@@ -20,25 +20,25 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_CN" />
     <!-- search-metadata:end -->
-    <link rel="stylesheet" href="interface-motion.css?v=20261025-expressive108" />
-    <link rel="stylesheet" href="space/lab-compare.css?v=20261025-expressive108" />
-    <link rel="stylesheet" href="controls.css?v=20261025-expressive108" />
-      <link rel="stylesheet" href="design-system.css?v=20261025-expressive108" />
-  <link rel="stylesheet" href="language.css?v=20261025-expressive108" />
-<script src="language-data.js?v=20261025-expressive108" defer></script>
-<script src="language.js?v=20261025-expressive108" defer></script>
-<script src="page-cache.js?v=20261025-expressive108" defer></script>
-<script src="date-picker.js?v=20261025-expressive108" defer></script>
-<link rel="stylesheet" href="custom-layout.css?v=20261025-expressive108" />
-<link rel="stylesheet" href="lunar/lunar.css?v=20261025-expressive108" />
-    <link rel="stylesheet" href="lunar/entry.css?v=20261025-expressive108">
-<link rel="stylesheet" href="solar-study.css?v=20261025-expressive108" />
-<link rel="stylesheet" href="scene-builder.css?v=20261025-expressive108" />
-<link rel="stylesheet" href="parameter-controls.css?v=20261025-expressive108" />
-<link rel="stylesheet" href="diagram-tools.css?v=20261025-expressive108" />
-<link rel="stylesheet" href="workbench-menu.css?v=20261025-expressive108" />
-  <link rel="stylesheet" href="time-workbench.css?v=20261025-expressive108" />
-<script src="material-controls.js?v=20261025-expressive108" defer></script>
+    <link rel="stylesheet" href="interface-motion.css?v=20261025-expressive109" />
+    <link rel="stylesheet" href="space/lab-compare.css?v=20261025-expressive109" />
+    <link rel="stylesheet" href="controls.css?v=20261025-expressive109" />
+      <link rel="stylesheet" href="design-system.css?v=20261025-expressive109" />
+  <link rel="stylesheet" href="language.css?v=20261025-expressive109" />
+<script src="language-data.js?v=20261025-expressive109" defer></script>
+<script src="language.js?v=20261025-expressive109" defer></script>
+<script src="page-cache.js?v=20261025-expressive109" defer></script>
+<script src="date-picker.js?v=20261025-expressive109" defer></script>
+<link rel="stylesheet" href="custom-layout.css?v=20261025-expressive109" />
+<link rel="stylesheet" href="lunar/lunar.css?v=20261025-expressive109" />
+    <link rel="stylesheet" href="lunar/entry.css?v=20261025-expressive109">
+<link rel="stylesheet" href="solar-study.css?v=20261025-expressive109" />
+<link rel="stylesheet" href="scene-builder.css?v=20261025-expressive109" />
+<link rel="stylesheet" href="parameter-controls.css?v=20261025-expressive109" />
+<link rel="stylesheet" href="diagram-tools.css?v=20261025-expressive109" />
+<link rel="stylesheet" href="workbench-menu.css?v=20261025-expressive109" />
+  <link rel="stylesheet" href="time-workbench.css?v=20261025-expressive109" />
+<script src="material-controls.js?v=20261025-expressive109" defer></script>
 </head>
   <body data-page="diagrams" data-entry-view="contextPanel">
     <div id="labShell" hidden inert>
@@ -83,7 +83,7 @@
                   </div>
                   <p class="micro" id="idealDateHint" hidden data-i18n-cn="{&quot;The idealized experiment does not use a date.&quot;:&quot;\n                    理想实验不使用日期。&quot;}">The idealized experiment does not use a date.<button id="dateObservationRestore" class="text-button" data-i18n-cn="{&quot;Restore ephemeris mode&quot;:&quot;\n                      恢复日期观测\n                    &quot;}">Restore ephemeris mode</button>
                   </p>
-                  <div class="season-buttons" id="seasonButtons">
+                  <div class="season-buttons md-connected-choice" id="seasonButtons">
                     <button data-date="2026-03-20" data-angle="0" data-month="3" data-i18n-cn="{&quot;March equinox&quot;:&quot;春分&quot;}">March equinox</button><button data-date="2026-06-21" data-angle="90" data-month="6" class="selected" data-i18n-cn="{&quot;June solstice&quot;:&quot;\n                      夏至&quot;}">June solstice</button><button data-date="2026-09-23" data-angle="180" data-month="9" data-i18n-cn="{&quot;September equinox&quot;:&quot;秋分&quot;}">September equinox</button><button data-date="2026-12-22" data-angle="270" data-month="12" data-i18n-cn="{&quot;December solstice&quot;:&quot;冬至&quot;}">December solstice</button>
                   </div>
                   <details class="menu-subsection" id="coordinatesMenu">
@@ -771,39 +771,39 @@
         <button id="startExplore" class="play-button" data-i18n-cn="{&quot;Start exploring&quot;:&quot;开始探索&quot;}">Start exploring</button>
       </dialog>
     </div>
-    <script src="astronomy.js?v=20261025-expressive108" defer></script>
-    <script src="moon.js?v=20261025-expressive108" defer></script>
-    <script src="coverage.js?v=20261025-expressive108" defer></script>
-    <script src="menu.js?v=20261025-expressive108" defer></script>
-    <script src="workspace.js?v=20261025-expressive108" defer></script>
-    <script src="companion.js?v=20261025-expressive108" defer></script>
-    <script src="analemma.js?v=20261025-expressive108" defer></script>
-    <script src="shadow.js?v=20261025-expressive108" defer></script>
-    <script src="sundial-device.js?v=20261025-expressive108" defer></script>
-    <script src="sundial.js?v=20261025-expressive108" defer></script>
-    <script src="observer.js?v=20261025-expressive108" defer></script>
-    <script src="solar-date.js?v=20261025-expressive108" defer></script>
-    <script src="time-workbench.js?v=20261025-expressive108" defer></script>
-    <script src="motion.js?v=20261025-expressive108" defer></script>
-    <script src="app.js?v=20261025-expressive108" defer></script>
-<script src="lab-controls.js?v=20261025-expressive108" defer></script>
-    <script src="interface-motion.js?v=20261025-expressive108" defer></script>
-    <script src="experiment-storage.js?v=20261025-expressive108" defer></script>
-    <script src="page-navigation.js?v=20261025-expressive108" defer></script>
-<script src="space/lab-compare.js?v=20261025-expressive108" defer></script>
-<script src="observer-explanation.js?v=20261025-expressive108" defer></script>
-    <script src="solar-study.js?v=20261025-expressive108" defer></script>
-    <script src="parameter-controls.js?v=20261025-expressive108" defer></script>
-<script src="scene-builder.js?v=20261025-expressive108" defer></script>
-    <script src="customization-mode.js?v=20261025-expressive108" defer></script>
-<script src="custom-layout.js?v=20261025-expressive108" defer></script>
-    <script src="interaction-history.js?v=20261025-expressive108" defer></script>
-    <script src="lab-history.js?v=20261025-expressive108" defer></script>
-  <script src="diagram-sampling.js?v=20261025-expressive108" defer></script>
-<script src="observer-comparison.js?v=20261025-expressive108" defer></script>
-<script src="customization-session.js?v=20261025-expressive108" defer></script>
-<script src="diagram-tool-definitions.js?v=20261025-expressive108" defer></script>
-<script src="diagram-tools.js?v=20261025-expressive108" defer></script>
-<script src="workbench-menu.js?v=20261025-expressive108" defer></script>
+    <script src="astronomy.js?v=20261025-expressive109" defer></script>
+    <script src="moon.js?v=20261025-expressive109" defer></script>
+    <script src="coverage.js?v=20261025-expressive109" defer></script>
+    <script src="menu.js?v=20261025-expressive109" defer></script>
+    <script src="workspace.js?v=20261025-expressive109" defer></script>
+    <script src="companion.js?v=20261025-expressive109" defer></script>
+    <script src="analemma.js?v=20261025-expressive109" defer></script>
+    <script src="shadow.js?v=20261025-expressive109" defer></script>
+    <script src="sundial-device.js?v=20261025-expressive109" defer></script>
+    <script src="sundial.js?v=20261025-expressive109" defer></script>
+    <script src="observer.js?v=20261025-expressive109" defer></script>
+    <script src="solar-date.js?v=20261025-expressive109" defer></script>
+    <script src="time-workbench.js?v=20261025-expressive109" defer></script>
+    <script src="motion.js?v=20261025-expressive109" defer></script>
+    <script src="app.js?v=20261025-expressive109" defer></script>
+<script src="lab-controls.js?v=20261025-expressive109" defer></script>
+    <script src="interface-motion.js?v=20261025-expressive109" defer></script>
+    <script src="experiment-storage.js?v=20261025-expressive109" defer></script>
+    <script src="page-navigation.js?v=20261025-expressive109" defer></script>
+<script src="space/lab-compare.js?v=20261025-expressive109" defer></script>
+<script src="observer-explanation.js?v=20261025-expressive109" defer></script>
+    <script src="solar-study.js?v=20261025-expressive109" defer></script>
+    <script src="parameter-controls.js?v=20261025-expressive109" defer></script>
+<script src="scene-builder.js?v=20261025-expressive109" defer></script>
+    <script src="customization-mode.js?v=20261025-expressive109" defer></script>
+<script src="custom-layout.js?v=20261025-expressive109" defer></script>
+    <script src="interaction-history.js?v=20261025-expressive109" defer></script>
+    <script src="lab-history.js?v=20261025-expressive109" defer></script>
+  <script src="diagram-sampling.js?v=20261025-expressive109" defer></script>
+<script src="observer-comparison.js?v=20261025-expressive109" defer></script>
+<script src="customization-session.js?v=20261025-expressive109" defer></script>
+<script src="diagram-tool-definitions.js?v=20261025-expressive109" defer></script>
+<script src="diagram-tools.js?v=20261025-expressive109" defer></script>
+<script src="workbench-menu.js?v=20261025-expressive109" defer></script>
 </body>
 </html>

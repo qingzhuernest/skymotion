@@ -142,7 +142,7 @@ class DocumentRenderer:
             chapter_links = '<nav class="document-chapter-links" aria-label="章节导航">' + "".join(adjacent) + '</nav>' if doc["page"] != "docs" else ""
             sections.append('<section id="' + escape(section["id"]) + '">' + aliases + "<h2>" + escape(self.text(section["title"])) + "</h2>" + "".join(self.block(block) for block in section["blocks"]) + chapter_links + "</section>")
         siblings = '<nav class="document-links" aria-label="文档分类">' + "".join('<a href="' + page + '.html"' + (' aria-current="page"' if page == doc["page"] else "") + ">" + label + "</a>" for page, label, _ in LINKS) + "</nav>"
-        contents = '<details class="document-toc"><summary>本页目录</summary><ol>' + "".join('<li><a href="#' + section["id"] + '">' + escape(self.text(section["title"])) + "</a></li>" for section in doc["sections"]) + "</ol></details>"
+        contents = '<nav class="document-toc" aria-label="本页目录"><h2>本页目录</h2><ol>' + "".join('<li><a href="#' + section["id"] + '">' + escape(self.text(section["title"])) + "</a></li>" for section in doc["sections"]) + "</ol></nav>"
         return self.template.substitute(
             version=self.version, title=escape(self.text(doc["title"])), lead=escape(self.text(doc["lead"])), page=doc["page"], markdown=doc["markdown"],
             styles="\n".join('<link rel="stylesheet" href="' + file + "?v=" + self.version + '">' for file in STYLES),

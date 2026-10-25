@@ -49,7 +49,8 @@ const documents = ['docs', 'guide', 'project-guide', 'development-guide'];
             }
           }
           assert(await page.locator('a[download]').isVisible());
-          if (!(await page.locator('.document-toc').getAttribute('open') !== null)) await page.locator('.document-toc summary').click();
+          assert.equal(await page.locator('.document-toc summary').count(), 0);
+          assert.equal(await page.locator('.document-toc').evaluate(n => n.tagName), 'NAV');
           await page.locator('.document-toc ol').waitFor({state:'visible'});
         }
       }

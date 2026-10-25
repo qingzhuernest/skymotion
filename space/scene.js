@@ -33,7 +33,10 @@
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.15;
   renderer.domElement.tabIndex = 0;
-  renderer.domElement.setAttribute('aria-label', '太阳系三维模型；方向键旋转，加减键缩放');
+  renderer.domElement.setAttribute(
+    'aria-label',
+    '太阳系三维模型；方向键旋转，加减键缩放',
+  );
   stage.prepend(renderer.domElement);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(43, 1, 0.05, 800);
@@ -60,7 +63,8 @@
     initial = new Date(Date.UTC(2026, 9, 9));
   let year = initial.getUTCFullYear();
   let day =
-    (Date.UTC(year, initial.getUTCMonth(), initial.getUTCDate(), 12) - Date.UTC(year, 0, 1, 12)) /
+    (Date.UTC(year, initial.getUTCMonth(), initial.getUTCDate(), 12) -
+      Date.UTC(year, 0, 1, 12)) /
     Model.DAY_MS;
   $('day').max = (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / Model.DAY_MS - 1;
   let comparing = false;
@@ -77,7 +81,10 @@
   $('observerLat').value = observer.lat;
   $('observerLon').value = observer.lon;
   const comparison = SolarSpaceCompare.create({ host: $('planeHost'), onSelect: select });
-  const observerDiagram = SolarSpaceObserver.create({ host: $('observerHost'), onSelect: select });
+  const observerDiagram = SolarSpaceObserver.create({
+    host: $('observerHost'),
+    onSelect: select,
+  });
   function comparisonLayout() {
     $('spaceScenes').classList.toggle('is-comparing', comparing);
     $('companion').hidden = !comparing;
@@ -155,7 +162,9 @@
   }
   function line(points, color, opacity) {
     return new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints(points.map((p) => new THREE.Vector3(p.x, p.y, p.z))),
+      new THREE.BufferGeometry().setFromPoints(
+        points.map((p) => new THREE.Vector3(p.x, p.y, p.z)),
+      ),
       new THREE.LineBasicMaterial({ color, transparent: true, opacity }),
     );
   }
@@ -304,7 +313,13 @@
     }
     $('sceneTools').open = false;
   };
-  for (const id of ['trailEnabled', 'trailDays', 'inspectInfo', 'referencePlane', 'earthReference'])
+  for (const id of [
+    'trailEnabled',
+    'trailDays',
+    'inspectInfo',
+    'referencePlane',
+    'earthReference',
+  ])
     $(id).onchange = invalidate;
   for (const button of document.querySelectorAll('[data-camera]')) {
     button.onclick = () => {
@@ -342,10 +357,21 @@
       : '恒星背景未加载；行星模型与时间控制仍可使用。';
   });
 
-  const population = SolarSpacePopulation.create(THREE, renderer, Model, Astronomy, invalidate);
+  const population = SolarSpacePopulation.create(
+    THREE,
+    renderer,
+    Model,
+    Astronomy,
+    invalidate,
+  );
   const nebulae = SolarSpaceNebulae.create(THREE, Model, Astronomy, invalidate);
   scene.add(population.group, nebulae.group);
-  for (const id of ['satellitePoints', 'asteroidPoints', 'cometPoints', 'nebulaBackground'])
+  for (const id of [
+    'satellitePoints',
+    'asteroidPoints',
+    'cometPoints',
+    'nebulaBackground',
+  ])
     $(id).onchange = invalidate;
   window.addEventListener('space:layout', invalidate);
   $('satelliteView').onclick = () => {
@@ -373,7 +399,6 @@
         ? spec.period.toFixed(2) + ' 天'
         : (spec.period / 365.26).toFixed(2) + ' 年';
     $('radius').textContent = spec.radius.toLocaleString('en-US') + ' km';
-    $('focus').textContent = '靠近' + spec.name + '观察';
     $('info').textContent =
       index === 2
         ? '进入日地月关系可观察月球真实方向和星历照明比例。地月距离已放大；不据此判断食的发生。'
@@ -388,6 +413,7 @@
       planet.label.setAttribute('aria-pressed', String(i === index));
     }
     if (view !== 'overview') focus(index);
+    syncViewPresentation();
     invalidate();
   }
   function focus(index) {
@@ -397,10 +423,7 @@
     view = index === 2 ? 'earthmoon' : 'focus';
     targetDistance = index === 2 ? earthMoonDistance() : planetDistance(index);
     if (cameraPreset === 'oblique') elevation = obliqueElevation();
-    $('viewTitle').textContent =
-      index === 2 ? '日地月关系 · 箭头指向太阳' : Model.bodies[index].name + '特写 · 旋转视角';
-    $('overview').classList.toggle('active', index !== 2);
-    $('earthmoon').classList.toggle('active', index === 2);
+    syncViewPresentation();
     invalidate();
   }
   function focusMoon() {
@@ -410,9 +433,7 @@
     inspectingMoon = true;
     if (cameraPreset === 'oblique') elevation = obliqueElevation();
     targetDistance = moonDistance();
-    $('overview').classList.remove('active');
-    $('earthmoon').classList.add('active');
-    $('viewTitle').textContent = '月球近景 · 外部相机视角';
+
     $('name').textContent = '月球';
     $('type').textContent = '地球的天然卫星';
     $('distance').previousElementSibling.textContent = '平均地球距离';
@@ -421,16 +442,24 @@
     $('period').textContent = '27.32 天';
     $('radius').textContent = '1,737.4 km';
     $('actualDistance').previousElementSibling.textContent = '当前地球距离';
-    $('focus').textContent = '靠近月球观察';
     $('info').textContent =
       '这是外部相机近景，亮面随视角变化；地心月面照明比例以星历读数为准。27.32天为恒星月，不等于约29.53天的月相周期。';
     for (const button of picker.children) {
       button.classList.remove('active');
       button.setAttribute('aria-pressed', 'false');
     }
+    syncViewPresentation();
     invalidate();
   }
   function syncViewPresentation() {
+    const closeView = view !== 'overview';
+    const focusLabel = closeView
+      ? '返回太阳系总览'
+      : '靠近' + Model.bodies[selected].name + '观察';
+    if ($('focus').textContent !== focusLabel) $('focus').textContent = focusLabel;
+    $('focus').setAttribute('aria-pressed', String(closeView));
+    $('overview').setAttribute('aria-pressed', String(view !== 'earthmoon'));
+    $('earthmoon').setAttribute('aria-pressed', String(view === 'earthmoon'));
     $('overview').classList.toggle('active', view !== 'earthmoon');
     $('earthmoon').classList.toggle('active', view === 'earthmoon');
     $('viewTitle').textContent = inspectingMoon
@@ -441,7 +470,11 @@
           ? Model.bodies[selected].name + '特写 · 旋转视角'
           : '太阳系总览 · 点击行星查看';
   }
-  $('focus').onclick = () => (inspectingMoon ? focusMoon() : focus(selected));
+  $('focus').onclick = () => {
+    if (view !== 'overview') $('overview').onclick();
+    else if (inspectingMoon) focusMoon();
+    else focus(selected);
+  };
   $('earthmoon').onclick = () => {
     select(2);
     focus(2);
@@ -452,9 +485,7 @@
     view = 'overview';
     if (cameraPreset === 'oblique') elevation = obliqueElevation();
     targetDistance = overviewDistance();
-    $('overview').classList.add('active');
-    $('earthmoon').classList.remove('active');
-    $('viewTitle').textContent = '太阳系总览 · 点击行星查看';
+    syncViewPresentation();
     invalidate();
   };
   $('reset').onclick = () => {
@@ -470,6 +501,7 @@
     cameraPreset = 'oblique';
     elevation = obliqueElevation();
     targetDistance = fittedDistance();
+    syncViewPresentation();
     invalidate();
   };
   $('play').onclick = () => {
@@ -529,7 +561,8 @@
     const before = pointers.get(event.pointerId);
     if (!before) return;
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-    if (start && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 5) moved = true;
+    if (start && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 5)
+      moved = true;
     if (pointers.size === 1) {
       azimuth -= (event.clientX - before.x) * 0.006;
       elevation = Math.max(
@@ -563,12 +596,18 @@
     { passive: false },
   );
   surface.addEventListener('keydown', (event) => {
-    if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', '+', '-', '='].includes(event.key))
+    if (
+      !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', '+', '-', '='].includes(
+        event.key,
+      )
+    )
       return;
     event.preventDefault();
     if (event.key.startsWith('Arrow')) cameraPreset = 'custom';
-    if (event.key === 'ArrowUp') elevation = Math.min(Math.PI / 2 - 0.001, elevation + 0.08);
-    if (event.key === 'ArrowDown') elevation = Math.max(-Math.PI / 2 + 0.001, elevation - 0.08);
+    if (event.key === 'ArrowUp')
+      elevation = Math.min(Math.PI / 2 - 0.001, elevation + 0.08);
+    if (event.key === 'ArrowDown')
+      elevation = Math.max(-Math.PI / 2 + 0.001, elevation - 0.08);
     if (event.key === 'ArrowLeft') azimuth -= 0.08;
     if (event.key === 'ArrowRight') azimuth += 0.08;
     if (event.key === '+' || event.key === '=') targetDistance *= 0.9;
@@ -618,7 +657,11 @@
       physical.earthToSun.z * 10,
     );
     solarArrow.setDirection(
-      new THREE.Vector3(physical.earthToSun.x, physical.earthToSun.y, physical.earthToSun.z),
+      new THREE.Vector3(
+        physical.earthToSun.x,
+        physical.earthToSun.y,
+        physical.earthToSun.z,
+      ),
     );
     const towardSun = new THREE.Vector3(
       physical.earthToSun.x,
@@ -709,7 +752,8 @@
     referencePlane.scale.setScalar(view === 'earthmoon' ? 0.15 : 1);
     const longMoonOption = $('trailDays').querySelector('[value="365"]');
     longMoonOption.disabled = view === 'earthmoon';
-    if (view === 'earthmoon' && $('trailDays').value === '365') $('trailDays').value = '30';
+    if (view === 'earthmoon' && $('trailDays').value === '365')
+      $('trailDays').value = '30';
     updateHistory();
     updateInspection();
     const stamp = playing
@@ -760,14 +804,21 @@
       ? Math.max(96, Math.ceil(days * 4))
       : Math.min(
           512,
-          Math.max(playing ? 48 : 96, Math.ceil((days / Model.bodies[selected].period) * 96)),
+          Math.max(
+            playing ? 48 : 96,
+            Math.ceil((days / Model.bodies[selected].period) * 96),
+          ),
         );
     const bodyId = localMoon ? 'Moon' : Model.bodies[selected].id;
     const key = [year, day, bodyId, days, segments].join(':');
     if (key === historyKey) return;
     const configuration = [year, bodyId, days, segments].join(':');
     const now = performance.now();
-    if (playing && configuration === historyConfiguration && now - historyRefreshTime < 100) {
+    if (
+      playing &&
+      configuration === historyConfiguration &&
+      now - historyRefreshTime < 100
+    ) {
       // Keep the present endpoint exact while costly historical samples refresh at 10 Hz.
       const endpoint = localMoon ? moon.position : planets[selected].mesh.position;
       const positions = history.geometry.getAttribute('position');
@@ -833,14 +884,17 @@
     $('actualDistance').textContent = formatDistance(current);
     $('inspectionReadout').hidden = !$('inspectInfo').checked;
     const localMoon = view === 'earthmoon';
-    const reading = localMoon ? SolarSpaceExploration.actualDistance(physical, 'Moon') : current;
+    const reading = localMoon
+      ? SolarSpaceExploration.actualDistance(physical, 'Moon')
+      : current;
     $('inspectTitle').textContent = inspectingMoon
       ? '月球'
       : localMoon
         ? '日地月'
         : Model.bodies[selected].name;
     $('inspectDistance').textContent =
-      (reading.reference === 'earth' ? '月球距地球 ' : '距太阳 ') + formatDistance(reading);
+      (reading.reference === 'earth' ? '月球距地球 ' : '距太阳 ') +
+      formatDistance(reading);
     $('inspectPhase').hidden = !localMoon;
     if (localMoon)
       $('inspectPhase').textContent =
@@ -877,7 +931,8 @@
       anchorY = y - 10;
     x = Math.max(26, Math.min(width - 26, x));
     for (let attempt = 0; attempt < 5; attempt++) {
-      if (!labelBounds.some((b) => Math.abs(b.x - x) < 56 && Math.abs(b.y - y) < 25)) break;
+      if (!labelBounds.some((b) => Math.abs(b.x - x) < 56 && Math.abs(b.y - y) < 25))
+        break;
       y += 25;
     }
     if (y > height - 30 || y < 50) {
@@ -939,7 +994,11 @@
     const height = stage.clientHeight;
     if (!width || !height) return;
     const pixelRatio = Math.min(devicePixelRatio || 1, 2);
-    if (width === lastStageWidth && height === lastStageHeight && pixelRatio === lastPixelRatio) {
+    if (
+      width === lastStageWidth &&
+      height === lastStageHeight &&
+      pixelRatio === lastPixelRatio
+    ) {
       comparison.resize();
       observerDiagram.resize();
       return;
@@ -1106,7 +1165,11 @@
         }),
         restoreCamera: (q) => {
           if (!q) return;
-          window.SolarSpaceView.restoreSelection({ ...q, cameraPreset: 'custom', fields: [] });
+          window.SolarSpaceView.restoreSelection({
+            ...q,
+            cameraPreset: 'custom',
+            fields: [],
+          });
         },
         redraw: invalidate,
       });
@@ -1116,7 +1179,8 @@
     leaders.replaceChildren();
     for (const p of planets) {
       p.label.hidden = !p.mesh.visible;
-      if (p.mesh.visible) placeLabel(p.label, p.mesh.position, p.spec.size * p.mesh.scale.x);
+      if (p.mesh.visible)
+        placeLabel(p.label, p.mesh.position, p.spec.size * p.mesh.scale.x);
     }
     moonLabel.hidden = !moon.visible;
     if (moon.visible) placeLabel(moonLabel, moon.position, 0.16);
@@ -1125,9 +1189,8 @@
     window.SkyMaterial?.updateRanges();
     $('dayText').textContent =
       date.toISOString().slice(0, 10) + ' · ' + date.toISOString().slice(11, 16);
-    if (document.activeElement !== $('date')) $('date').value = date.toISOString().slice(0, 10);
-    $('overview').setAttribute('aria-pressed', String(view !== 'earthmoon'));
-    $('earthmoon').setAttribute('aria-pressed', String(view === 'earthmoon'));
+    if (document.activeElement !== $('date'))
+      $('date').value = date.toISOString().slice(0, 10);
     if (
       playing ||
       Math.abs(distance - targetDistance) > 0.0001 ||
@@ -1201,7 +1264,8 @@
         pause();
         year = snapshot.year;
         day = snapshot.day;
-        $('day').max = (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / Model.DAY_MS - 1;
+        $('day').max =
+          (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / Model.DAY_MS - 1;
         comparing = snapshot.comparing;
         reference = snapshot.reference;
         Object.assign(observer, snapshot.observer);

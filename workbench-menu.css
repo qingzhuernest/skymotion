@@ -37,31 +37,6 @@ body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) {
 body.workbench-editing .ui-parameters .workbench-content-row {
   grid-template-columns: minmax(0, 1fr) var(--md-sys-size-target);
 }
-body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) button {
-  margin: 0;
-  min-height: var(--md-sys-size-target);
-  border: 0;
-  border-radius: var(--md-sys-shape-corner-large);
-  background: transparent;
-  color: var(--design-ink);
-  font: 500 13px/1.5 var(--design-font);
-  cursor: pointer;
-}
-body
-  .ui-parameters
-  :is(.workbench-content-row, .workbench-setting-row)
-  > button:first-child {
-  min-width: 0;
-  text-align: left;
-  padding: 10px 16px;
-}
-body
-  .ui-parameters
-  :is(.workbench-content-row, .workbench-setting-row)
-  button[aria-pressed='true'] {
-  background: var(--design-selected);
-  color: var(--design-on-selected);
-}
 body .ui-parameters .workbench-add-view {
   width: var(--md-sys-size-target);
   padding: 10px;
@@ -73,25 +48,46 @@ body .ui-parameters .workbench-viewpoints {
   grid-template-columns: minmax(0, 1fr);
   position: static;
   gap: 2px;
-  padding: 4px 6px 12px 20px;
+  padding: 4px 6px 12px;
   margin: 0;
   background: transparent;
   border: 0;
 }
-body .ui-parameters .workbench-viewpoints button {
+/* Shared navigation-row owner: content, viewpoints and settings use identical states. */
+body
+  .ui-parameters
+  :is(.workbench-content-row, .workbench-setting-row, .workbench-viewpoints)
+  > button {
   margin: 0;
+  min-width: 0;
   min-height: var(--md-sys-size-target);
   padding: 10px 16px;
-  text-align: left;
   border: 0;
   border-radius: var(--md-sys-shape-corner-large);
   background: transparent;
   color: var(--design-ink);
   font: 500 13px/1.5 var(--design-font);
+  text-align: left;
+  cursor: pointer;
 }
-body .ui-parameters .workbench-viewpoints button.active {
-  background: var(--design-selected);
-  color: var(--design-on-selected);
+body
+  .ui-parameters
+  :is(.workbench-content-row, .workbench-setting-row, .workbench-viewpoints)
+  > button[aria-pressed='true'] {
+  background: var(--design-action);
+  color: var(--design-on-action);
+}
+body
+  .ui-parameters
+  :is(.workbench-content-row, .workbench-setting-row, .workbench-viewpoints)
+  > button:hover {
+  box-shadow: inset 0 0 0 999px var(--md-sys-state-hover);
+}
+body
+  .ui-parameters
+  :is(.workbench-content-row, .workbench-setting-row, .workbench-viewpoints)
+  > button:active {
+  box-shadow: inset 0 0 0 999px var(--md-sys-state-pressed);
 }
 body:not(.workbench-editing)
   .workbench-content-row:has([data-workbench-view='skyPanel']) {

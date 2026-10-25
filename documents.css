@@ -89,14 +89,12 @@
   background: var(--design-paper);
   overflow: hidden;
 }
-.document-toc summary {
-  cursor: pointer;
+.document-toc > h2 {
+  margin: 0;
   padding: 14px 18px;
   color: var(--design-primary);
   font-size: 14px;
   font-weight: 600;
-}
-.document-toc[open] summary {
   background: var(--design-selected);
   border-bottom: 1px solid var(--design-line);
 }
@@ -125,7 +123,7 @@
   margin: 32px 0 14px;
   padding-top: 24px;
   border-top: 1px solid var(--design-line);
-  scroll-margin-top: 20px;
+  scroll-margin-top: calc(var(--ui-header-height, var(--ui-nav-height, 56px)) + 20px);
 }
 .document-content > h2:first-child,
 .document-content > section:first-child > h2 {
@@ -150,7 +148,7 @@
   padding-left: 2px;
 }
 .document-content section {
-  scroll-margin-top: 20px;
+  scroll-margin-top: calc(var(--ui-header-height, var(--ui-nav-height, 56px)) + 20px);
 }
 .document-content blockquote {
   margin: 24px 0;
@@ -303,6 +301,9 @@
   }
 }
 @media print {
+  .document-back-top {
+    display: none !important;
+  }
   .page-nav,
   .document-links,
   .document-download,
@@ -395,13 +396,6 @@
 .document-chapter-links a {
   padding-block: 10px;
 }
-.document-reading-progress {
-  display: block;
-  width: 100%;
-  height: 4px;
-  margin: 16px 0 0;
-  accent-color: var(--design-primary);
-}
 .document-toc a[aria-current='location'] {
   font-weight: 700;
   text-decoration: underline;
@@ -418,8 +412,8 @@
   }
   .document-reading-grid .document-toc {
     position: sticky;
-    top: 16px;
-    max-height: calc(100dvh - 32px);
+    top: calc(var(--ui-header-height, var(--ui-nav-height)) + 16px);
+    max-height: calc(100dvh - var(--ui-header-height, var(--ui-nav-height)) - 32px);
     overflow: auto;
   }
   .document-toc ol {
@@ -438,4 +432,34 @@
 .document-manual-list li:last-child a {
   border-end-start-radius: var(--md-sys-shape-corner-extra-large);
   border-end-end-radius: var(--md-sys-shape-corner-extra-large);
+}
+
+/* One contextual action for all long documents. */
+.document-back-top {
+  position: fixed;
+  z-index: 35;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--design-selected);
+  color: var(--design-on-selected);
+  box-shadow: var(--md-sys-elevation-level-2);
+  font: 500 14px/1.4 var(--design-font);
+}
+.document-back-top[hidden] {
+  display: none;
+}
+.document-back-top svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }

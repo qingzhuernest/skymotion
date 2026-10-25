@@ -13,13 +13,28 @@
 .space-shell {
   position: relative;
 }
-.motion-menu-header {
-  position: sticky;
-  top: 0;
-  z-index: 4;
-  flex-shrink: 0;
+/* Shared parameter rail: same scroll surface and sticky header on every route. */
+body .md-parameter-rail {
+  isolation: isolate;
+  contain: layout paint;
+  min-width: 0;
+  min-height: 0;
+  padding: 12px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
   background: var(--design-inset);
-  padding: 6px 0;
+  border: 1px solid transparent;
+  border-radius: var(--design-radius-surface);
+}
+.md-parameter-rail > .motion-menu-header {
+  position: sticky;
+  top: -12px;
+  z-index: 6;
+  flex-shrink: 0;
+  margin: -12px -12px 8px;
+  padding: 12px 12px 8px;
+  background: var(--design-inset);
 }
 .motion-menu-header:not(:has(> :not([hidden]))) {
   display: none;
@@ -29,35 +44,54 @@
   margin: 6px 0 0;
   padding: 0;
 }
-.motion-menu-grip {
-  width: 100%;
-  flex-shrink: 0;
-  margin-bottom: 0;
-  color: var(--design-primary);
+/* One icon/label component; state layers never replace the base container color. */
+body :is(button.motion-menu-grip, button.motion-menu-edge) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  min-height: var(--md-sys-size-target);
+  margin: 0;
   border: 1px solid var(--design-line);
-  background: transparent;
-  min-height: var(--md-sys-size-target, 40px);
-  border-radius: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
+  color: var(--design-primary);
+  background: var(--design-surface);
+  font: 500 13px/1.4 var(--design-font);
+  box-shadow: none;
   cursor: ew-resize;
-  transition: transform 180ms ease;
 }
-.motion-menu-edge {
+body button.motion-menu-grip {
+  width: 100%;
+}
+body button.motion-menu-edge {
   position: absolute;
   left: 2px;
   top: 48%;
-  width: var(--md-sys-size-target, 40px);
-  min-width: var(--md-sys-size-target, 40px);
-  height: 64px;
-  padding: 0 !important;
-  border: 1px solid var(--design-line);
-  border-radius: 12px;
-  color: var(--design-primary);
-  background: var(--design-surface);
-  box-shadow: 0 3px 12px var(--design-shadow);
-  z-index: 5;
-  font-size: 24px;
-  cursor: ew-resize;
-  transition: transform 180ms ease;
+  z-index: 8;
+  width: var(--md-sys-size-target);
+  min-width: var(--md-sys-size-target);
+  height: 56px;
+  padding: 0;
+}
+body :is(button.motion-menu-grip, button.motion-menu-edge) svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+body :is(button.motion-menu-grip, button.motion-menu-edge):hover {
+  box-shadow: inset 0 0 0 999px var(--md-sys-state-hover);
+}
+body :is(button.motion-menu-grip, button.motion-menu-edge):active {
+  box-shadow: inset 0 0 0 999px var(--md-sys-state-pressed);
+}
+body :is(button.motion-menu-grip, button.motion-menu-edge)[hidden] {
+  display: none;
 }
 @media (min-width: 761px) {
   .ui-shell #uiParametersButton,
@@ -112,9 +146,7 @@
   .ui-shell .ui-grid,
   .ui-shell .ui-parameters,
   body[data-page='space'] .space-shell,
-  .space-sidebar-host,
-  .motion-menu-edge,
-  .motion-menu-grip {
+  .space-sidebar-host {
     transition: none !important;
   }
   .ui-parameters details[open] > :not(summary) {
@@ -152,11 +184,6 @@
   }
 }
 
-.motion-menu-grip,
-.motion-menu-edge {
-  transition: transform 320ms cubic-bezier(0.22, 1.3, 0.36, 1);
-}
-
 .scene-tools[open] .scene-tools-panel {
   animation: motion-tools-pop 320ms cubic-bezier(0.2, 0, 0, 1);
   transform-origin: bottom right;
@@ -182,20 +209,6 @@
     animation: none;
   }
 }
-
-/* Identical collapse control in conventional and three-dimensional parameter rails. */
-.ui-parameters .motion-menu-header > button.motion-menu-grip,
-body[data-page='space'] .side .motion-menu-header > .motion-menu-grip {
-  height: 36px;
-  min-height: var(--md-sys-size-target, 40px);
-  padding: 6px 12px;
-  border: 1px solid var(--design-line);
-  border-radius: 12px;
-  background: var(--design-on-action);
-  color: var(--design-primary);
-  font: 12px/1.5 var(--design-font, system-ui);
-}
-
 /* Allocate canvas space once; panel/content motion runs on compositor transforms. */
 .motion-rail-animating {
   overflow: clip;

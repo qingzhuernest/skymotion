@@ -81,7 +81,7 @@ The view catalog groups Sky & shadows, Related diagrams and Compare & build. Ana
 1. A view name opens a single view. In a combination, an included name selects its pane and an absent name replaces the active pane.
 2. Click the intended pane and check its green outline and matching catalog item; replacements target this pane.
 3. The control beside a name adds a pane; for an included view it removes it. At least one pane remains.
-4. Sky has one catalog entry. Spatial, overhead-shadow, horizon and looking-up viewpoints are grouped in the sky pane header.
+4. The sky has one set of viewpoint controls, grouped under Sky & shadow in the left sidebar.
 
 > Only entries offering an add control support composition. Earthrise and construction retain their independent scenes.
 
@@ -248,7 +248,7 @@ If storage is denied or full, the status explains visit-only availability. Check
 
 3D Sky uses an independent renderer, UTC dates, physical vectors and teaching display scales. Documentation and customization remain in the stable top navigation area.
 
-1. Select a planet in the scene or list; approach and reset actions change the camera only.
+1. Select a body in the overview or sidebar. Close observation changes the camera and becomes Return to solar-system overview; click again to return. Reset restores the camera angle.
 2. Use Sun–Earth–Moon relationships for lighting, orientation and the lunar orbit, distinguishing physical and display distances.
 3. Use Observe for camera/display options, drag to rotate and scroll or pinch to zoom; follow the pane’s keyboard hints.
 4. Choose a reference plane or local observer for a diagram comparison at the same UTC instant.

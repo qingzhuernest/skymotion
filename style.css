@@ -719,16 +719,8 @@ button:hover {
 .metrics article:first-child strong {
   color: var(--design-primary);
 }
-.selected {
-  color: var(--design-primary) !important;
-  border-color: transparent !important;
-  background: var(--design-inset) !important;
-}
-.season-buttons button {
-  border-radius: 20px;
-  border-color: transparent;
-  background: var(--design-inset);
-}
+
+
 .controls select,
 .controls input[type='date'] {
   background: var(--design-on-action);

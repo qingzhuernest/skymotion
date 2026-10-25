@@ -257,12 +257,12 @@ html:lang(en) .document-content h2 {
 html:lang(en) .ui-parameters .season-buttons {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 2px;
 }
 html:lang(en) .ui-parameters .season-buttons button {
   min-width: 0;
-  min-height: 48px;
-  padding: 8px;
+  min-height: var(--md-sys-size-target);
+  padding: 4px;
   line-height: 1.4;
   overflow-wrap: normal;
   word-break: normal;

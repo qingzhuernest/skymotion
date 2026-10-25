@@ -55,6 +55,11 @@ body[data-page='space'] .space-shell {
   gap: 12px;
 }
 body[data-page='space'] .head {
+  height: auto;
+  min-height: 56px;
+  max-width: none;
+  margin: 0;
+  padding: 0;
   grid-column: 1/-1;
   display: flex;
   align-items: center;
@@ -83,11 +88,9 @@ body[data-page='space'] .space-sidebar-host {
 body[data-page='space'] .side {
   height: 100%;
   overflow: auto;
-  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 2px;
 }
 body[data-page='space'] .card {
   border: 1px solid var(--space-line);
@@ -154,10 +157,6 @@ body[data-page='space'] .facts strong {
 }
 body[data-page='space'] .focus {
   width: 100%;
-  background: var(--space-primary);
-  color: white;
-  font-size: 12px;
-  border: 0;
 }
 body[data-page='space'] .info {
   font-size: 11px;
@@ -851,10 +850,6 @@ body[data-page='space'] .compare-tabs button {
   }
 }
 /* Hover feedback keeps light text on a dark surface. */
-body[data-page='space'] .focus:hover {
-  background: var(--design-action);
-  color: var(--design-on-action);
-}
 body[data-page='space'] .stage-reset:hover {
   background: var(--design-action);
   color: var(--design-on-action);
@@ -892,19 +887,6 @@ body[data-page='space'] .existing-compare-link:hover {
     min-height: 26px;
     padding-block: 3px;
   }
-}
-
-/* Match the experiment rail: collapse control sits inside its surface, 14px from the edge. */
-body[data-page='space'] .space-sidebar-host > .side {
-  padding: 14px;
-  border: 1px solid var(--design-line);
-  border-radius: 18px;
-  background: var(--design-surface);
-  scrollbar-gutter: stable;
-  contain: layout paint;
-}
-body[data-page='space'] .side > .motion-menu-grip {
-  margin-bottom: 0; /* The flex rail already supplies the shared 10px gap. */
 }
 
 /* The model choice has enough room for its selection icon and complete short labels. */

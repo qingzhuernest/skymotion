@@ -25,7 +25,7 @@
   /** Native summary clicks (including keyboard clicks) keep a single, reversible fold. */
   function installDisclosures() {
     document
-      .querySelectorAll('.ui-parameters details,.side details,.document-toc')
+      .querySelectorAll('.ui-parameters details,.side details')
       .forEach((details) => {
         const summary = [...details.children].find((node) => node.tagName === 'SUMMARY');
         if (!summary) return;
@@ -146,17 +146,20 @@
     } catch (_) {}
     let previousModal = mobile.matches || overlay();
     rail.id ||= 'motionParameterRail';
+    rail.classList.add('md-parameter-rail');
     const handle = document.createElement('button');
     handle.type = 'button';
     handle.className = 'motion-menu-edge';
-    handle.textContent = '›';
+    handle.innerHTML =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>';
     handle.setAttribute('aria-label', '展开参数菜单，也可向右拖动');
     handle.title = '展开菜单 · 向右拖动';
     shell.append(handle);
     const grip = document.createElement('button');
     grip.type = 'button';
     grip.className = 'motion-menu-grip';
-    grip.textContent = '‹ 收起菜单';
+    grip.innerHTML =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg><span>收起菜单</span>';
     grip.title = '点击或向左拖动收起菜单';
     const menuHeader = document.createElement('div');
     menuHeader.className = 'motion-menu-header';

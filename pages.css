@@ -173,15 +173,6 @@ body:is(
 }
 .ui-parameters {
   grid-area: parameters;
-  contain: layout paint;
-  min-width: 0;
-  min-height: 0;
-  overflow: auto;
-  overscroll-behavior: contain;
-  scrollbar-gutter: stable;
-  padding: 12px;
-  border: 1px solid transparent;
-  border-radius: var(--ui-radius);
 }
 .ui-parameters .controls {
   background: transparent;
@@ -1367,30 +1358,6 @@ body:is(
 .ui-parameters .globe-notes p {
   max-width: none;
 }
-:is(.ui-shell, .ui-parameter-drawer)
-  :is(.view-tabs, .context-view-switch, .globe-drag-options) {
-  background: var(--md-surface-container);
-}
-:is(.ui-shell, .ui-parameter-drawer)
-  :is(.view-tabs, .context-view-switch, .globe-drag-options)
-  button {
-  color: var(--md-on-surface-variant);
-}
-:is(.ui-shell, .ui-parameter-drawer)
-  :is(.view-tabs, .context-view-switch, .globe-drag-options)
-  button.active,
-.ui-shell .ui-viewbar button:is([aria-selected='true'], [aria-pressed='true']) {
-  background: var(--md-primary);
-  color: var(--md-on-primary);
-  font-weight: 600;
-}
-:is(.ui-shell, .ui-parameter-drawer)
-  :is(.view-tabs, .context-view-switch, .globe-drag-options)
-  button.active:hover,
-.ui-shell .ui-viewbar button:is([aria-selected='true'], [aria-pressed='true']):hover {
-  background: var(--md-primary-hover);
-  color: var(--md-on-primary);
-}
 .ui-parameters button:disabled {
   opacity: 1;
   color: var(--md-on-surface-variant);
@@ -1434,50 +1401,12 @@ body:is(
 .ui-parameters .study-navigation > .menu-subsection > .menu-content {
   padding: 6px;
 }
-/* Keep selected text and its background in sync throughout interaction. */
-:is(.ui-shell, .ui-parameter-drawer)
-  :is(.view-tabs, .context-view-switch, .globe-drag-options, .ui-viewbar)
-  button {
-  transition:
-    box-shadow 0.16s,
-    border-color 0.16s;
-}
 /* Compact navigation entry and one shape for paired segmented controls. */
 .page-nav .ui-solar-shortcuts {
   display: contents;
 }
 .page-nav .ui-solar-shortcuts[hidden] {
   display: none;
-}
-:is(.ui-shell, .ui-parameter-drawer) :is(.context-view-switch, .globe-drag-options) {
-  display: inline-flex;
-  align-items: stretch;
-  gap: 6px;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  flex-wrap: nowrap;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-:is(.ui-shell, .ui-parameter-drawer)
-  :is(.context-view-switch, .globe-drag-options)
-  button {
-  border-radius: var(--ui-control-radius);
-  min-height: var(--ui-control-height);
-  padding: 7px 10px;
-  line-height: 1.5;
-  white-space: nowrap;
-  flex: 1;
-  min-width: 0;
-  background: var(--md-surface-container);
-}
-:is(.ui-shell, .ui-parameter-drawer)
-  :is(.context-view-switch, .globe-drag-options)
-  button.active {
-  background: var(--md-primary);
-  color: var(--md-on-primary);
 }
 body[data-page='analemma'] .ui-parameters .analemma-controls {
   background: transparent;
@@ -1925,18 +1854,9 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
 }
 .ui-parameters
   :is(.context-view-switch, .globe-drag-options, .model-switch)
-  button.active,
-.ui-parameters .season-buttons button.selected {
+  button.active {
   background: var(--md-primary) !important;
   color: var(--md-on-primary) !important;
-}
-.ui-parameters .season-buttons button {
-  flex: 1;
-  padding: 8px 4px;
-  min-width: 0;
-  border-radius: var(--ui-control-radius);
-  background: var(--md-surface-container);
-  color: var(--md-on-surface-variant);
 }
 .ui-parameters #globeRecenter,
 .ui-parameters #analemmaResetView,

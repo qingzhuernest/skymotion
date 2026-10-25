@@ -2366,8 +2366,8 @@
                   "The control beside a name adds a pane; for an included view it removes it. At least one pane remains."
                 ],
                 [
-                  "天空图只有一个目录入口；空间视图、俯视日影、地平视角和仰望天空集中在天空图标题栏。",
-                  "Sky has one catalog entry. Spatial, overhead-shadow, horizon and looking-up viewpoints are grouped in the sky pane header."
+                  "天空图只有一组视角入口；空间视图、俯视日影、地平视角和仰望天空集中在左侧“天空与日影”分组。",
+                  "The sky has one set of viewpoint controls, grouped under Sky & shadow in the left sidebar."
                 ]
               ]
             },
@@ -3155,8 +3155,8 @@
               "kind": "steps",
               "items": [
                 [
-                  "太阳系总览中点击行星或侧栏列表选择天体；靠近观察与重置只改变相机。",
-                  "Select a planet in the scene or list; approach and reset actions change the camera only."
+                  "太阳系总览中点击行星或侧栏列表选择天体；靠近观察只改变相机，按钮随后变为“返回太阳系总览”，再次点击可回到总览；重置恢复相机视角。",
+                  "Select a body in the overview or sidebar. Close observation changes the camera and becomes Return to solar-system overview; click again to return. Reset restores the camera angle."
                 ],
                 [
                   "切换日地月关系观察照明、姿态和月球轨道。物理距离与显示距离按说明区分。",
@@ -6275,8 +6275,8 @@
       "Observation input events, location/date controls and form presentation"
     ],
     "document-navigation.js": [
-      "文档目录、章节定位与阅读进度；原生锚点作为无脚本后备",
-      "Document contents, current chapter and reading progress; native anchors provide a no-script fallback"
+      "文档常显目录、章节定位与返回顶部；原生锚点作为无脚本后备",
+      "Always-visible contents, current chapter and Back to top; native anchors provide a no-script fallback"
     ],
     "material-controls.js": [
       "Material 3 Expressive滑块进度与共享呈现；不写实验状态",

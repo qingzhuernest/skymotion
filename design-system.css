@@ -48,6 +48,7 @@
   --md-sys-shape-corner-extra-large-increased: 32px;
   --md-sys-shape-corner-full: 999px;
   --md-sys-size-target: 40px;
+  --md-comp-connected-button-outer-corner: calc(var(--md-sys-size-target) / 2);
   --md-comp-connected-button-inner-corner: var(--md-sys-shape-corner-medium);
   --md-sys-state-hover: color-mix(in srgb, currentColor 8%, transparent);
   --md-sys-state-pressed: color-mix(in srgb, currentColor 12%, transparent);
@@ -258,7 +259,8 @@ body
   padding-inline: 16px;
 }
 .page-nav a {
-  border-radius: var(--md-sys-shape-corner-full);
+  position: relative;
+  border-radius: var(--md-sys-shape-corner-small);
   min-height: 40px;
   padding-inline: 16px;
   color: var(--design-muted);
@@ -271,8 +273,16 @@ body
 }
 .page-nav a[aria-current='page'] {
   color: var(--design-primary);
-  background: var(--design-selected);
+  background: transparent;
   font-weight: 600;
+}
+.page-nav a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  inset: auto 12px 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: currentColor;
 }
 :is(.ui-heading, body[data-page='space'] .head) h1 {
   color: var(--design-ink);
@@ -323,13 +333,15 @@ body .md-connected-choice > button {
     color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
 }
 body .md-connected-choice > button:first-child {
-  border-radius: var(--md-sys-shape-corner-full)
+  border-radius: var(--md-comp-connected-button-outer-corner)
     var(--md-comp-connected-button-inner-corner)
-    var(--md-comp-connected-button-inner-corner) var(--md-sys-shape-corner-full);
+    var(--md-comp-connected-button-inner-corner)
+    var(--md-comp-connected-button-outer-corner);
 }
 body .md-connected-choice > button:where(:nth-last-child(1 of button:not([hidden]))) {
   border-radius: var(--md-comp-connected-button-inner-corner)
-    var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-full)
+    var(--md-comp-connected-button-outer-corner)
+    var(--md-comp-connected-button-outer-corner)
     var(--md-comp-connected-button-inner-corner);
 }
 body
@@ -351,9 +363,22 @@ body
   }
 }
 
-.ui-parameters {
-  background: var(--md-sys-color-surface-container);
-  border-color: transparent;
+/* Compact seasonal shortcuts:32px painted body within the shared40/48px target. */
+body .season-buttons.md-connected-choice {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
+  gap: 2px;
+}
+body .season-buttons.md-connected-choice > button {
+  min-width: 0;
+  height: var(--md-sys-size-target);
+  min-height: var(--md-sys-size-target);
+  padding: 0 4px;
+  border-inline: 0;
+  border-block: calc((var(--md-sys-size-target) - 32px) / 2) solid transparent;
+  background-clip: padding-box;
+  font-size: 13px;
 }
 .ui-parameters > h2 {
   color: var(--design-ink);
@@ -533,63 +558,6 @@ body
 .ui-parameters .study-navigation .page-link[aria-current='page'] {
   background: var(--design-selected);
 }
-body
-  :is(
-    .ui-viewbar,
-    .view-tabs:not(.workbench-viewpoints),
-    .context-view-switch,
-    .globe-drag-options,
-    .space-shell .viewbar
-  )
-  button {
-  border-radius: var(--design-radius-control);
-  background: var(--design-inset);
-  color: var(--design-muted);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.5;
-}
-body
-  :is(
-    .ui-viewbar,
-    .view-tabs:not(.workbench-viewpoints),
-    .context-view-switch,
-    .globe-drag-options,
-    .space-shell .viewbar
-  )
-  button:is(.active, [aria-selected='true'], [aria-pressed='true']) {
-  background: var(--design-action);
-  color: var(--design-on-action);
-  font-weight: 600;
-}
-body
-  :is(
-    .ui-viewbar,
-    .view-tabs:not(.workbench-viewpoints),
-    .context-view-switch,
-    .globe-drag-options,
-    .space-shell .viewbar
-  )
-  button:hover {
-  background: var(--design-selected);
-  color: var(--design-primary);
-}
-body
-  :is(
-    .ui-viewbar,
-    .view-tabs:not(.workbench-viewpoints),
-    .context-view-switch,
-    .globe-drag-options,
-    .space-shell .viewbar
-  )
-  button:is(.active, [aria-selected='true'], [aria-pressed='true']):hover {
-  background: var(--design-hover);
-  color: var(--design-on-action);
-}
-:is(.ui-shell, .ui-parameter-drawer) :is(.context-view-switch, .globe-drag-options) {
-  border-color: var(--design-line);
-  background: transparent;
-}
 .ui-viewbar {
   background: var(--design-surface);
   border-color: var(--design-line);
@@ -716,7 +684,7 @@ body[data-page='space'] .head-actions button {
   background: var(--design-inset);
   color: var(--design-primary);
 }
-body[data-page='space'] :is(.focus, #play) {
+body[data-page='space'] #play {
   background: var(--design-action);
   color: var(--design-on-action);
   border-radius: var(--design-radius-control);
@@ -740,7 +708,7 @@ body[data-page='space'].space-immersive :is(.head, .viewbar, .timeline) {
   color: var(--design-ink);
 }
 body[data-page='space'].space-immersive
-  :is(.viewbar button.active, #play, .planet-picker button.active, .focus) {
+  :is(.viewbar button.active, #play, .planet-picker button.active) {
   background: var(--design-action);
   color: var(--design-on-action);
 }
@@ -830,11 +798,11 @@ body .scene-tools-panel input[type='checkbox']:checked {
   border-color: var(--design-line);
   border-radius: var(--design-radius-control);
 }
-.document-toc summary {
+.document-toc > h2 {
   color: var(--design-primary);
   font-size: 14px;
 }
-.document-toc[open] summary {
+.document-toc > h2 {
   background: var(--design-selected);
   border-color: var(--design-line);
 }
@@ -1039,13 +1007,7 @@ body[data-page='welcome'] .welcome-screen ::selection {
   font-weight: 400;
   letter-spacing: 0;
 }
-.motion-menu-grip,
-.motion-menu-edge {
-  color: var(--design-primary);
-  background: var(--design-surface);
-  border-color: var(--design-line);
-  box-shadow: none;
-}
+
 body[data-page='space'] .drawer-head {
   background: var(--design-paper);
   border-color: var(--design-line);
@@ -1374,11 +1336,6 @@ body .ui-plot #resetView:hover {
   font-family: var(--design-font);
   box-shadow: none;
 }
-body[data-page='space'] .space-sidebar-host > .side {
-  background: var(--design-inset);
-  border-color: transparent;
-  border-radius: var(--design-radius-surface);
-}
 body[data-page='space'] .inspection-readout {
   background: var(--design-night-surface);
   color: var(--design-night-ink);
@@ -1415,23 +1372,9 @@ body .ui-parameters .menu-footer #reset {
   border-radius: var(--md-sys-shape-corner-large);
 }
 
-body .motion-menu-edge,
-body .ui-parameters .motion-menu-header > button.motion-menu-grip,
-body[data-page='space'] .side .motion-menu-header > button.motion-menu-grip {
-  border-color: var(--design-action);
-  border-radius: var(--md-sys-shape-corner-large);
-}
-body .motion-menu-edge:focus-visible {
-  outline: 3px solid var(--md-sys-color-focus, var(--design-primary));
-  outline-offset: 3px;
-}
 /* Quiet supporting actions: same teal identity without large filled surfaces. */
-
 body .ui-parameters .observer-bodies button,
 body .ui-parameters .menu-footer #reset,
-body .ui-parameters .motion-menu-header > button.motion-menu-grip,
-body[data-page='space'] .side .motion-menu-header > button.motion-menu-grip,
-body .motion-menu-edge,
 body[data-page='space'] .focus {
   background: var(--design-surface);
   color: var(--design-action);
@@ -1441,10 +1384,6 @@ body[data-page='space'] .focus {
 
 body .ui-parameters .observer-bodies button:hover,
 body .ui-parameters .menu-footer #reset:hover,
-body .ui-parameters .motion-menu-header > button.motion-menu-grip:hover,
-body[data-page='space'] .side .motion-menu-header > button.motion-menu-grip:hover,
-body .motion-menu-edge:hover,
-body .motion-menu-edge:active,
 body[data-page='space'] .focus:hover {
   background: var(--design-selected);
   color: var(--design-action-hover);
@@ -2159,6 +2098,7 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
 .entrance-dialogue {
   width: min(100%, 800px);
   margin: auto;
+  text-align: center;
 }
 .entrance-sentence {
   opacity: 0;
@@ -2174,7 +2114,7 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
   margin-bottom: clamp(22px, 3vh, 34px);
 }
 .entrance-sentence[data-voice='answer'] {
-  margin-left: clamp(18px, 3vw, 42px);
+  margin-left: 0;
   color: var(--entrance-answer);
 }
 .entrance-sentence:last-child {

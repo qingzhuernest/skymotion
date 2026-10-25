@@ -3,28 +3,37 @@
   const toc = document.querySelector('.document-toc');
   const content = document.querySelector('.document-content');
   if (!toc || !content) return;
-  const wide = matchMedia('(min-width: 1280px)');
-  const syncLayout = () => {
-    toc.open = wide.matches;
+  const topButton = document.createElement('button');
+  topButton.className = 'document-back-top';
+  topButton.type = 'button';
+  topButton.hidden = true;
+  topButton.innerHTML =
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 6-6 6 6M12 6v14"/></svg><span></span>';
+  const label = () => {
+    topButton.lastElementChild.textContent =
+      document.documentElement.lang === 'en' ? 'Back to top' : '返回顶部';
   };
-  syncLayout();
-  wide.addEventListener('change', syncLayout);
-  const progress = document.createElement('progress');
-  progress.className = 'document-reading-progress';
-  progress.max = 100;
-  progress.setAttribute(
-    'aria-label',
-    document.documentElement.lang === 'en' ? 'Reading progress' : '阅读进度',
-  );
-  document.querySelector('.document-header').append(progress);
+  label();
+  topButton.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth',
+    });
+    const heading = document.querySelector('.document-header h1');
+    heading?.setAttribute('tabindex', '-1');
+    heading?.focus({ preventScroll: true });
+  });
+  document.body.append(topButton);
   const sections = [...content.querySelectorAll(':scope > section')];
   const links = [...toc.querySelectorAll('a')];
   let pending = false;
   function update() {
     pending = false;
-    const maximum = document.documentElement.scrollHeight - innerHeight;
-    progress.value =
-      maximum > 0 ? Math.min(100, Math.max(0, (scrollY / maximum) * 100)) : 100;
+    topButton.hidden =
+      scrollY < Math.min(480, innerHeight * 0.75) ||
+      !!document.querySelector('.document-entrance');
     let current = sections[0];
     for (const section of sections)
       if (section.getBoundingClientRect().top <= 100) current = section;
@@ -42,11 +51,6 @@
   addEventListener('scroll', schedule, { passive: true });
   addEventListener('resize', schedule);
   addEventListener('load', schedule, { once: true });
-  document.addEventListener('skymotion:language', () => {
-    progress.setAttribute(
-      'aria-label',
-      document.documentElement.lang === 'en' ? 'Reading progress' : '阅读进度',
-    );
-  });
+  document.addEventListener('skymotion:language', label);
   update();
 })();
