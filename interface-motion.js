@@ -136,6 +136,17 @@
       )
         return;
       group.dataset.motionReady = 'true';
+      // Exclusive binary choices share one component across all workstations.
+      if (
+        buttons.length === 2 &&
+        buttons.every(
+          (button) =>
+            button.hasAttribute('aria-pressed') || button.hasAttribute('aria-selected'),
+        )
+      ) {
+        group.classList.add('md-connected-choice');
+        return;
+      }
       group.classList.add('motion-segments');
       const marker = document.createElement('span');
       marker.className = 'motion-selection';

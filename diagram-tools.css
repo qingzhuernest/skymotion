@@ -547,27 +547,19 @@ body .dt-host[tabindex]:focus-visible {
   top: 0;
   z-index: 3;
   display: flex;
-  gap: 6px;
   padding: 6px 0;
   margin: 0 0 4px;
   background: var(--design-inset);
 }
 body .dt-rail-navigation button {
   flex: 1;
-  min-height: var(--md-sys-size-target);
+  min-width: 0;
   padding: 6px;
-  border: 1px solid var(--design-line);
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--design-surface);
-  color: var(--design-primary);
-  font: inherit;
   font-size: 12px;
-  cursor: pointer;
+  white-space: normal;
 }
-body .dt-rail-navigation button[aria-selected='true'] {
-  border-color: var(--design-selected);
-  background: var(--design-selected);
-  color: var(--design-on-selected);
+.dt-rail-navigation[data-choice-count='3'] button::before {
+  display: none;
 }
 body .dt-rail-navigation button:focus-visible {
   outline: 2px solid var(--md-sys-color-focus, var(--design-primary));

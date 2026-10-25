@@ -377,7 +377,7 @@
   quickLayout.append(presets);
   const arrange = section('arrange'),
     axisGroup = document.createElement('div');
-  axisGroup.className = 'workspace-choice-group';
+  axisGroup.className = 'workspace-choice-group md-connected-choice';
   arrange.append(axisGroup);
   const axisButtons = ['columns', 'rows'].map((axis) =>
     button(
@@ -389,7 +389,7 @@
     ),
   );
   const featuredGroup = document.createElement('div');
-  featuredGroup.className = 'workspace-choice-group';
+  featuredGroup.className = 'workspace-choice-group md-connected-choice';
   arrange.append(featuredGroup);
   const featuredButtons = [false, true].map((v) =>
     button(

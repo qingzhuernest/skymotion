@@ -568,7 +568,7 @@ body[data-page='space'] .viewbar {
 }
 body[data-page='space'] .view-group {
   display: flex;
-  gap: 5px;
+  gap: 2px;
 }
 body[data-page='space'] .view-group + .view-group {
   padding-left: 10px;

@@ -3,34 +3,34 @@
   <head>
     <meta charset="UTF-8" />
 
-<script src="../page-boot.js?v=20261024-material106"></script>
+<script src="../page-boot.js?v=20261025-material107"></script>
 
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title data-i18n-cn="{&quot;3D Solar System · Sky Motion Lab&quot;:&quot;太阳系三维模型 · 天体视运动实验室&quot;}">3D Solar System · Sky Motion Lab</title>
     <meta name="description" content="旋转、缩放三维太阳系，观察八大行星与日地月空间关系。真实星历计算位置，教学尺度显示大小与距离。" />
     <link rel="canonical" href="https://skymotion-5md.pages.dev/space/" />
     <link rel="icon" href="../favicon.svg" />
-    <link rel="stylesheet" href="../ui-palette.css?v=20261024-material106" />
-    <link rel="stylesheet" href="../pages.css?v=20261024-material106" />
-    <link rel="stylesheet" href="space.css?v=20261024-material106" />
-    <link rel="stylesheet" href="compare.css?v=20261024-material106" />
-    <link rel="stylesheet" href="exploration.css?v=20261024-material106" />
-    <link rel="stylesheet" href="embed.css?v=20261024-material106" />
-    <link rel="stylesheet" href="immersive.css?v=20261024-material106" />
-    <link rel="stylesheet" href="population.css?v=20261024-material106" />
-    <link rel="stylesheet" href="../interface-motion.css?v=20261024-material106" />
-    <link rel="stylesheet" href="../controls.css?v=20261024-material106" />
-    <link rel="stylesheet" href="../design-system.css?v=20261024-material106" />
-  <link rel="stylesheet" href="../language.css?v=20261024-material106" />
-<script src="../language-data.js?v=20261024-material106" defer></script>
-<script src="../language.js?v=20261024-material106" defer></script>
-<script src="../page-cache.js?v=20261024-material106" defer></script>
-<script src="../date-picker.js?v=20261024-material106" defer></script>
-<link rel="stylesheet" href="../parameter-controls.css?v=20261024-material106" />
-<link rel="stylesheet" href="../diagram-tools.css?v=20261024-material106" />
+    <link rel="stylesheet" href="../ui-palette.css?v=20261025-material107" />
+    <link rel="stylesheet" href="../pages.css?v=20261025-material107" />
+    <link rel="stylesheet" href="space.css?v=20261025-material107" />
+    <link rel="stylesheet" href="compare.css?v=20261025-material107" />
+    <link rel="stylesheet" href="exploration.css?v=20261025-material107" />
+    <link rel="stylesheet" href="embed.css?v=20261025-material107" />
+    <link rel="stylesheet" href="immersive.css?v=20261025-material107" />
+    <link rel="stylesheet" href="population.css?v=20261025-material107" />
+    <link rel="stylesheet" href="../interface-motion.css?v=20261025-material107" />
+    <link rel="stylesheet" href="../controls.css?v=20261025-material107" />
+    <link rel="stylesheet" href="../design-system.css?v=20261025-material107" />
+  <link rel="stylesheet" href="../language.css?v=20261025-material107" />
+<script src="../language-data.js?v=20261025-material107" defer></script>
+<script src="../language.js?v=20261025-material107" defer></script>
+<script src="../page-cache.js?v=20261025-material107" defer></script>
+<script src="../date-picker.js?v=20261025-material107" defer></script>
+<link rel="stylesheet" href="../parameter-controls.css?v=20261025-material107" />
+<link rel="stylesheet" href="../diagram-tools.css?v=20261025-material107" />
 </head>
   <body data-page="space">
-    <script src="embed.js?v=20261024-material106" defer></script>
+    <script src="embed.js?v=20261025-material107" defer></script>
     <nav class="page-nav" aria-label="Page navigation" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;页面导航&quot;}"><a href="../index.en.html" data-cn-href="../index.html" data-i18n-cn="{&quot;Welcome&quot;:&quot;欢迎页&quot;}">Welcome</a><a href="../lab.en.html" data-cn-href="../lab.html" data-i18n-cn="{&quot;Lab&quot;:&quot;实验台&quot;}">Lab</a><a href="../docs.en.html" data-cn-href="../docs.html" data-i18n-cn="{&quot;Documentation&quot;:&quot;文档中心&quot;}">Documentation</a><a href="./index.en.html" aria-current="page" data-cn-href="./" data-i18n-cn="{&quot;3D Sky&quot;:&quot;三维天空&quot;}">3D Sky</a></nav>
     <main class="space-shell">
       <header class="head">
@@ -105,13 +105,15 @@
       </div>
       <section class="visual" aria-label="3D solar system and 2D reference" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;太阳系三维与二维对照&quot;}">
         <div class="viewbar">
-          <div class="view-group" role="group" aria-label="View subject" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观察对象&quot;}">
+          <div class="view-group md-connected-choice" role="group" aria-label="View subject" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观察对象&quot;}">
             <button id="overview" class="active" type="button" aria-pressed="true" data-i18n-cn="{&quot;Solar system&quot;:&quot;\n              太阳系\n            &quot;}">Solar system</button>
             <button id="earthmoon" type="button" aria-pressed="false" data-i18n-cn="{&quot;Sun–Earth–Moon&quot;:&quot;\n              日地月\n            &quot;}">Sun–Earth–Moon</button>
           </div>
-          <div class="view-group" role="group" aria-label="Display mode" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;显示方式&quot;}">
+          <div class="view-group">
+            <div class="md-connected-choice" role="group" aria-label="Display mode" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;显示方式&quot;}">
             <button id="singleView" class="active" type="button" aria-pressed="true" data-i18n-cn="{&quot;3D&quot;:&quot;\n              三维\n            &quot;}">3D</button>
             <button id="compareView" type="button" aria-pressed="false" data-i18n-cn="{&quot;Reference&quot;:&quot;\n              参照\n            &quot;}">Reference</button>
+            </div>
             <a class="existing-compare-link" href="../diagrams.en.html?compare=1" data-cn-href="../diagrams.html?compare=1" data-i18n-cn="{&quot;Compare with lab&quot;:&quot;原图对照&quot;}">Compare with lab</a>
           </div>
         </div>
@@ -170,7 +172,7 @@
             </details>
           </div>
           <section class="companion space-compare" id="companion" aria-label="2D reference at the same instant" hidden data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;同一时刻的二维参照&quot;}">
-            <div class="compare-tabs" role="group" aria-label="2D reference type" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;二维参照类型&quot;}">
+            <div class="compare-tabs md-connected-choice" role="group" aria-label="2D reference type" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;二维参照类型&quot;}">
               <button id="planeView" type="button" class="active" aria-pressed="true" data-i18n-cn="{&quot;Space top view&quot;:&quot;\n                空间俯视\n              &quot;}">Space top view</button>
               <button id="observerView" type="button" aria-pressed="false" data-i18n-cn="{&quot;Local sky&quot;:&quot;\n                本地天空\n              &quot;}">Local sky</button>
             </div>
@@ -222,29 +224,29 @@
         <a id="nebulaSource" href="#" target="_blank" rel="noopener" data-i18n-cn="{&quot;NASA image source&quot;:&quot;NASA影像来源&quot;}">NASA image source</a>
       </p>
     </dialog>
-    <script src="../interface-motion.js?v=20261024-material106" defer></script>
-    <script src="ui.js?v=20261024-material106" defer></script>
-    <script src="vendor/three.min.js?v=20261024-material106" defer></script>
-    <script src="../astronomy.js?v=20261024-material106" defer></script>
-    <script src="model.js?v=20261024-material106" defer></script>
-    <script src="earth-frame.js?v=20261024-material106" defer></script>
-    <script src="exploration.js?v=20261024-material106" defer></script>
-    <script src="appearance.js?v=20261024-material106" defer></script>
-    <script src="stars.js?v=20261024-material106" defer></script>
-    <script src="population.js?v=20261024-material106" defer></script>
-    <script src="nebulae.js?v=20261024-material106" defer></script>
-    <script src="compare.js?v=20261024-material106" defer></script>
-    <script src="observer.js?v=20261024-material106" defer></script>
-    <script src="../experiment-storage.js?v=20261024-material106" defer></script>
-    <script src="scene.js?v=20261024-material106" defer></script>
-    <script src="immersive.js?v=20261024-material106" defer></script>
-    <script src="../interaction-history.js?v=20261024-material106" defer></script>
-    <script src="history.js?v=20261024-material106" defer></script>
-  <script src="../customization-mode.js?v=20261024-material106" defer></script>
-<script src="customization.js?v=20261024-material106" defer></script>
-<script src="../diagram-sampling.js?v=20261024-material106" defer></script>
-<script src="../parameter-controls.js?v=20261024-material106" defer></script>
-<script src="../diagram-tool-definitions.js?v=20261024-material106" defer></script>
-<script src="../diagram-tools.js?v=20261024-material106" defer></script>
+    <script src="../interface-motion.js?v=20261025-material107" defer></script>
+    <script src="ui.js?v=20261025-material107" defer></script>
+    <script src="vendor/three.min.js?v=20261025-material107" defer></script>
+    <script src="../astronomy.js?v=20261025-material107" defer></script>
+    <script src="model.js?v=20261025-material107" defer></script>
+    <script src="earth-frame.js?v=20261025-material107" defer></script>
+    <script src="exploration.js?v=20261025-material107" defer></script>
+    <script src="appearance.js?v=20261025-material107" defer></script>
+    <script src="stars.js?v=20261025-material107" defer></script>
+    <script src="population.js?v=20261025-material107" defer></script>
+    <script src="nebulae.js?v=20261025-material107" defer></script>
+    <script src="compare.js?v=20261025-material107" defer></script>
+    <script src="observer.js?v=20261025-material107" defer></script>
+    <script src="../experiment-storage.js?v=20261025-material107" defer></script>
+    <script src="scene.js?v=20261025-material107" defer></script>
+    <script src="immersive.js?v=20261025-material107" defer></script>
+    <script src="../interaction-history.js?v=20261025-material107" defer></script>
+    <script src="history.js?v=20261025-material107" defer></script>
+  <script src="../customization-mode.js?v=20261025-material107" defer></script>
+<script src="customization.js?v=20261025-material107" defer></script>
+<script src="../diagram-sampling.js?v=20261025-material107" defer></script>
+<script src="../parameter-controls.js?v=20261025-material107" defer></script>
+<script src="../diagram-tool-definitions.js?v=20261025-material107" defer></script>
+<script src="../diagram-tools.js?v=20261025-material107" defer></script>
 </body>
 </html>

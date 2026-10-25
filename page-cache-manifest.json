@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261024-material106",
+  "resourceVersion": "20261025-material107",
   "readingFontVersion": "20261016-font41",
   "pages": [
     "404.en.html",
@@ -168,8 +168,8 @@
     "analemma.html": 73648,
     "contact.en.html": 7859,
     "contact.html": 4775,
-    "development-guide.en.html": 160464,
-    "development-guide.html": 68782,
+    "development-guide.en.html": 162074,
+    "development-guide.html": 69277,
     "diagrams.en.html": 121392,
     "diagrams.html": 73647,
     "docs.en.html": 11348,
@@ -182,15 +182,15 @@
     "index.html": 6778,
     "lab.en.html": 121388,
     "lab.html": 73643,
-    "lunar/index.en.html": 14708,
-    "lunar/index.html": 8559,
-    "project-guide.en.html": 91561,
-    "project-guide.html": 31514,
-    "space/index.en.html": 31871,
-    "space/index.html": 21017,
+    "lunar/index.en.html": 14748,
+    "lunar/index.html": 8599,
+    "project-guide.en.html": 92781,
+    "project-guide.html": 31881,
+    "space/index.en.html": 31976,
+    "space/index.html": 21122,
     "sundial.en.html": 119730,
     "sundial.html": 71979
   },
-  "totalBytes": 1382996,
-  "assetBytes": 8049700
+  "totalBytes": 1386978,
+  "assetBytes": 8057637
 }

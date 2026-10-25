@@ -287,6 +287,8 @@ Capture-phase pointerdown and focusin activate panes even when plot gestures sto
 
 design-system.css owns target sizes, state layers and focus colors. Wide screens with fine pointers use a 40px minimum target; coarse pointers or narrow screens use 48px; checkbox labels enlarge the hit area around the small visual square. Hover and pressed states overlay inset shadows at 8% and 12% of currentColor, preserving the container color. md-dark-surface supplies a contrasting focus role on scientific canvases. Compact calendar dates retain a 40px minimum; planetary annotations have equivalent full-size sidebar controls.
 
+workbench-content-group and observation settings reuse menu-section instead of separate disclosure skins. Nested menu-subsection heading radii subtract the 1px border from the outer radius. md-connected-choice provides binary choices using aria-pressed or aria-selected, while global navigation stays at the top. Moon phase uses pane container queries rather than viewport width, stacking orbit and disk readouts in narrow panes. phaseOrbitLayout follows the resized canvas, and dragging still changes the same real observation instant.
+
 ## Reference identity and linked selection
 
 | Structure | Field meaning |

@@ -55,6 +55,8 @@ The page contains a stable main menu, experiment heading, left control rail, rig
 
 The app bar starts with observation identity, followed by the main menu and direct Sun/Moon segmented buttons. Customization and language stay on the right, with a compact reflow on narrow screens. Find 3D comparison in Views & layout → Compare & build to observe the original scientific diagram alongside a scene sharing the same UTC.
 
+The fixed top bar is global navigation. Views & layout and Observation controls share the same grouped layout, with the selected choice highlighted in green. Open spatial models through 3D Sky in the top bar; experiment parameters do not repeat cross-page shortcuts. The current diagram’s 3D comparison remains in Views & layout. Text buttons beside the clock slider change time by five minutes.
+
 ## Set location, date and time
 
 City presets are shortcuts for coordinates. The lower shared timeline controls the current observation; annual sampling and Earthrise have separate controls described below.

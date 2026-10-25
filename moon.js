@@ -6,11 +6,17 @@ const lunarCache = new Map(),
   noonCache = new Map();
 function sunEquatorial(t) {
   return Astronomy.EquatorFromVector(
-    Astronomy.RotateVector(Astronomy.Rotation_EQJ_EQD(t), Astronomy.GeoVector('Sun', t, true)),
+    Astronomy.RotateVector(
+      Astronomy.Rotation_EQJ_EQD(t),
+      Astronomy.GeoVector('Sun', t, true),
+    ),
   );
 }
 function sunHourAngle(t, lon) {
-  return ((15 * (Astronomy.SiderealTime(t) + lon / 15 - sunEquatorial(t).ra) + 540) % 360) - 180;
+  return (
+    ((15 * (Astronomy.SiderealTime(t) + lon / 15 - sunEquatorial(t).ra) + 540) % 360) -
+    180
+  );
 }
 function solarNoonUTC(date, lon) {
   const key = date + ':' + lon;
@@ -77,8 +83,10 @@ function ephemerisDay(body) {
   }
   let peak = maxIndex * 5,
     trough = minIndex * 5;
-  if (maxIndex > 0 && maxIndex < 288) peak = refineExtremum(body, peak - 5, peak + 5, true);
-  if (minIndex > 0 && minIndex < 288) trough = refineExtremum(body, trough - 5, trough + 5, false);
+  if (maxIndex > 0 && maxIndex < 288)
+    peak = refineExtremum(body, peak - 5, peak + 5, true);
+  if (minIndex > 0 && minIndex < 288)
+    trough = refineExtremum(body, trough - 5, trough + 5, false);
   const maxAlt = skyRaw(body, peak, state.date, state.lat, state.lon).alt,
     minAlt = skyRaw(body, trough, state.date, state.lat, state.lon).alt;
   nodes.push({ time: peak, alt: maxAlt }, { time: trough, alt: minAlt });
@@ -134,7 +142,12 @@ function ephemerisDay(body) {
     minAlt,
     crossings,
     boundaryPeak: peak === 0 || peak === 1440,
-    kind: above > 1439.999 ? '全天在地平线上方' : above < 0.001 ? '全天在地平线下方' : '普通升落',
+    kind:
+      above > 1439.999
+        ? '全天在地平线上方'
+        : above < 0.001
+          ? '全天在地平线下方'
+          : '普通升落',
   };
   if (lunarCache.size > 16) lunarCache.delete(lunarCache.keys().next().value);
   lunarCache.set(key, result);
@@ -265,21 +278,41 @@ function lunarFaceTexture() {
   lunarFace = document.createElement('canvas');
   lunarFace.width = lunarFace.height = 256;
   const c = lunarFace.getContext('2d');
-  c.fillStyle = '#c8c7c3'; c.fillRect(0, 0, 256, 256);
+  c.fillStyle = '#c8c7c3';
+  c.fillRect(0, 0, 256, 256);
   let seed = 2105;
-  const random = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
+  const random = () =>
+    (seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296;
   // Irregular, soft basaltic plains avoid the former featureless blue appearance.
-  for (const [x, y, rx, ry] of [[86,76,35,24],[130,59,32,23],[166,86,29,36],
-    [67,117,23,32],[119,107,27,24],[111,145,21,16]]) {
-    const shade = c.createRadialGradient(x,y,3,x,y,Math.max(rx,ry));
-    shade.addColorStop(0,'#777772aa'); shade.addColorStop(1,'#77777200');
-    c.fillStyle=shade; c.beginPath(); c.ellipse(x,y,rx,ry,.25,0,Math.PI*2); c.fill();
+  for (const [x, y, rx, ry] of [
+    [86, 76, 35, 24],
+    [130, 59, 32, 23],
+    [166, 86, 29, 36],
+    [67, 117, 23, 32],
+    [119, 107, 27, 24],
+    [111, 145, 21, 16],
+  ]) {
+    const shade = c.createRadialGradient(x, y, 3, x, y, Math.max(rx, ry));
+    shade.addColorStop(0, '#777772aa');
+    shade.addColorStop(1, '#77777200');
+    c.fillStyle = shade;
+    c.beginPath();
+    c.ellipse(x, y, rx, ry, 0.25, 0, Math.PI * 2);
+    c.fill();
   }
-  for (let i=0;i<220;i++) {
-    const x=12+random()*232,y=12+random()*232,r=.6+random()**3*6;
-    c.fillStyle='#62625d16'; c.beginPath(); c.arc(x,y,r,0,Math.PI*2); c.fill();
-    c.strokeStyle='#f4f2e428'; c.lineWidth=.7;
-    c.beginPath(); c.arc(x,y,r,-2.8,.3); c.stroke();
+  for (let i = 0; i < 220; i++) {
+    const x = 12 + random() * 232,
+      y = 12 + random() * 232,
+      r = 0.6 + random() ** 3 * 6;
+    c.fillStyle = '#62625d16';
+    c.beginPath();
+    c.arc(x, y, r, 0, Math.PI * 2);
+    c.fill();
+    c.strokeStyle = '#f4f2e428';
+    c.lineWidth = 0.7;
+    c.beginPath();
+    c.arc(x, y, r, -2.8, 0.3);
+    c.stroke();
   }
   return lunarFace;
 }
@@ -321,8 +354,11 @@ function drawMoon(c, x, y, r, phase, brightAngle = null) {
   c.fillStyle = lit;
   c.fill();
   // Clip texture to the existing illuminated path; phase area and limb angle stay unchanged.
-  c.save(); c.clip(); c.globalCompositeOperation = 'multiply';
-  c.drawImage(lunarFaceTexture(), x-r, y-r, r*2, r*2); c.restore();
+  c.save();
+  c.clip();
+  c.globalCompositeOperation = 'multiply';
+  c.drawImage(lunarFaceTexture(), x - r, y - r, r * 2, r * 2);
+  c.restore();
   c.restore();
   c.strokeStyle = '#c6dcf78a';
   c.lineWidth = 1;
@@ -337,10 +373,14 @@ function drawPhasePanel() {
   const phase = visualPhase(),
     { c, w, h } = resize($('phaseOrbit'));
   if (!w || !h) return;
-  const center = { x: w * 0.37, y: h * 0.52 },
+  const center = { x: w * 0.37, y: h * 0.5 },
     sunX = w - 54;
-  const r = Math.max(12, Math.min(w * 0.27, Math.max(12, (h - 62) * 0.4), sunX - center.x - 32));
-  text(c, '北黄极上方俯视 · 尺寸与距离为示意', w / 2, 13, '#b6c8dc', w < 260 ? 9 : 11);
+  const r = Math.max(
+    12,
+    Math.min(w * 0.27, Math.max(12, (h - 128) * 0.5), sunX - center.x - 32),
+  );
+  text(c, '北黄极上方俯视', w / 2, center.y - r - 46, '#b6c8dc', 11);
+  text(c, '尺寸与距离为示意', w / 2, center.y - r - 30, '#b6c8dc', 10);
   // Parallel rays are a local approximation of the distant Sun, not convergent beams.
   for (const fraction of [-0.8, -0.55, -0.3, 0, 0.3, 0.55, 0.8]) {
     const y = center.y + fraction * r,
@@ -424,12 +464,42 @@ function drawPhasePanel() {
   c.beginPath();
   c.arc(x, y, 8, 0, Math.PI * 2);
   c.stroke();
-  phaseOrbitLayout = { center, r, moon: { x, y }, sun: { x: sunX, y: center.y }, sunHalo: 48 };
-  text(c, '拖动月球 · 连续调整日期与时刻', w / 2, h - 12, '#a9c4e0', w < 260 ? 9 : 11);
+  phaseOrbitLayout = {
+    center,
+    r,
+    moon: { x, y },
+    sun: { x: sunX, y: center.y },
+    sunHalo: 48,
+  };
+  text(c, '拖动月球', w / 2, center.y + r + 35, '#a9c4e0', 11);
+  text(c, '连续调整日期与时刻', w / 2, center.y + r + 51, '#a9c4e0', 10);
   const disk = resize($('phaseDisk'));
   drawMoon(disk.c, disk.w / 2, disk.h / 2, Math.min(disk.w, disk.h) * 0.43, phase);
-  window.SkyDiagramTools?.paint('phase',{type:'phase',canvas:$('phaseOrbit'),c,w,h,body:state.body,date:state.date,time:state.time,lat:state.lat,lon:state.lon,center,radius:r,sunX,project:angle=>({x:center.x+r*Math.cos(angle*rad),y:center.y-r*Math.sin(angle*rad)}),phaseAt:(date,time)=>Astronomy.MoonPhase(instantUTC(time,date,state.lon)),fractionAt:(date,time)=>Astronomy.Illumination('Moon',instantUTC(time,date,state.lon)).phase_fraction,pick:(x,y)=>({angle:((Math.atan2(center.y-y,x-center.x)*deg)+360)%360})});
-
+  window.SkyDiagramTools?.paint('phase', {
+    type: 'phase',
+    canvas: $('phaseOrbit'),
+    c,
+    w,
+    h,
+    body: state.body,
+    date: state.date,
+    time: state.time,
+    lat: state.lat,
+    lon: state.lon,
+    center,
+    radius: r,
+    sunX,
+    project: (angle) => ({
+      x: center.x + r * Math.cos(angle * rad),
+      y: center.y - r * Math.sin(angle * rad),
+    }),
+    phaseAt: (date, time) => Astronomy.MoonPhase(instantUTC(time, date, state.lon)),
+    fractionAt: (date, time) =>
+      Astronomy.Illumination('Moon', instantUTC(time, date, state.lon)).phase_fraction,
+    pick: (x, y) => ({
+      angle: (Math.atan2(center.y - y, x - center.x) * deg + 360) % 360,
+    }),
+  });
 }
 
 /** Dragging changes the real observation instant; no invented phase-angle formula is used. */
@@ -454,7 +524,8 @@ function initPhaseInteraction() {
     pendingFrame = 0;
     if (!drag || state.body !== 'moon') return;
     const angle = (((drag.originPhase + drag.travel) % 360) + 360) % 360;
-    const estimate = drag.originUTC.getTime() + (drag.travel / 360) * 29.530588 * 86400000;
+    const estimate =
+      drag.originUTC.getTime() + (drag.travel / 360) * 29.530588 * 86400000;
     const event = Astronomy.SearchMoonPhase(angle, new Date(estimate - 4 * 86400000), 8);
     if (!event) return;
     const utc = event.date,

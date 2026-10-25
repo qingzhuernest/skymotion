@@ -1373,7 +1373,7 @@
   function ensureRailNavigation(rail) {
     if (railNavigation?.closest('.ui-parameters, .side') === rail) return;
     rail.id ||= 'diagram-parameter-rail';
-    railNavigation = E('nav', 'dt-rail-navigation', rail);
+    railNavigation = E('nav', 'dt-rail-navigation md-connected-choice', rail);
     railNavigation.dataset.i18nSkip = '';
     railNavigation.setAttribute('role', 'tablist');
     railNavigation.setAttribute('aria-label', tr('侧栏内容|Sidebar section'));
@@ -1438,6 +1438,9 @@
       b.setAttribute('aria-selected', String(chosen));
       b.tabIndex = chosen ? 0 : -1;
     }
+    railNavigation.dataset.choiceCount = String(
+      [...railNavigation.children].filter((b) => !b.hidden).length,
+    );
   }
   function syncRailShell() {
     const rail = parameterRail() || railNavigation?.closest('.ui-parameters, .side');

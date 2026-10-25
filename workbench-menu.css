@@ -20,47 +20,10 @@ body .ui-parameters[data-editor-view='views'] {
 .workbench-route-tabs {
   display: none !important;
 }
-/* Material navigation lists: same 48px rhythm as the observation accordion. */
+/* Catalog groups reuse the observation accordion component. */
 .workbench-content-group,
 .workbench-layout-section {
   margin-block: 8px;
-  border: 1px solid var(--design-line);
-  border-radius: var(--design-radius-control);
-  background: var(--design-surface);
-  overflow: clip;
-}
-.workbench-content-group > summary,
-.workbench-layout-section > summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 48px;
-  padding: 10px 14px;
-  list-style: none;
-  cursor: pointer;
-  color: var(--design-ink);
-  font: 500 14px/1.5 var(--design-font);
-}
-.workbench-content-group > summary::-webkit-details-marker,
-.workbench-layout-section > summary::-webkit-details-marker {
-  display: none;
-}
-.workbench-content-group > summary::after,
-.workbench-layout-section > summary::after {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: rotate(45deg);
-  margin-inline: 8px 2px;
-}
-:is(.workbench-content-group, .workbench-layout-section)[open] > summary::after {
-  transform: rotate(225deg);
-}
-:is(.workbench-content-group, .workbench-layout-section)[open] > summary {
-  background: var(--design-selected);
-  color: var(--design-on-selected);
 }
 body .ui-parameters :is(.workbench-content-row, .workbench-setting-row) {
   display: grid;

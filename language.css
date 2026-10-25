@@ -98,6 +98,10 @@ html:lang(en) body[data-page='contact'] .reading-page > .dialog-head h2 {
   font-family: var(--design-font);
 }
 .language-nav {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   width: 100%;

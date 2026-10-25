@@ -280,12 +280,6 @@ function renderUIWorkspace() {
   link('openSundials', 'sundial.html', '日晷实验台');
   link('sundialLink', 'sundial.html', '日晷实验台');
   link('analemmaLink', 'analemma.html', '日行迹与“8”字成因');
-  // Space views have their own UTC clock and camera; opening them preserves laboratory state.
-  const spaceMenu = document.createElement('details');
-  spaceMenu.className = page === 'diagrams' ? 'menu-section' : 'menu-subsection';
-  spaceMenu.innerHTML =
-    '<summary>空间模型</summary><div class="menu-content"><a class="page-link" href="space/">太阳系三维模型</a><a class="page-link" href="space/?view=earthmoon">日地月空间关系</a></div>';
-  if (page === 'lab') $('studyMenu').querySelector('.study-navigation').append(spaceMenu);
   for (const [id, target] of [
     ['eventsLink', 'riseSetPanel'],
     ['chartLink', 'chartPanel'],
@@ -317,7 +311,6 @@ function renderUIWorkspace() {
     title = shell.querySelector('h1');
   shell.querySelector('.ui-timeline-host').append($('timeWorkbench'));
   rail.append($('workbenchMore'));
-  if (page === 'diagrams') rail.append(spaceMenu);
   $('workbenchMore').querySelector('summary').textContent = '播放与快捷时刻';
   const bodySwitch = document.querySelector('.body-switch');
   shell.querySelector('.ui-body-host').append(bodySwitch);

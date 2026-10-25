@@ -923,5 +923,9 @@
   " · 实验台": " · Lab",
   "拖动旋转方位盘 · 点击升落点跳转时刻 · Home 复位": "Drag to rotate · Select rise/set points to change time · Home to reset",
   "升落方位图；拖动旋转，双指或滚轮缩放，点击升落点跳转时刻，方向键旋转，Home复位": "Rise/set compass; drag or arrow keys to rotate, pinch or scroll to zoom, select event points to change time, Home to reset",
-  "计算与比例说明": "Calculation and scale notes"
+  "计算与比例说明": "Calculation and scale notes",
+  "北黄极上方俯视": "View from above the north ecliptic pole",
+  "尺寸与距离为示意": "Sizes and distances are illustrative",
+  "拖动月球": "Drag the Moon",
+  "连续调整日期与时刻": "Adjust date and time continuously"
 }

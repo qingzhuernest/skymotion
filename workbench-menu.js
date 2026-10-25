@@ -42,7 +42,7 @@
   for (const [zh, en, items, key] of groups) {
     const group = document.createElement('details');
     group.open = true;
-    group.className = 'workbench-content-group';
+    group.className = 'workbench-content-group menu-section';
     group.dataset.group = key;
     const summary = document.createElement('summary');
     group.append(summary);
@@ -95,7 +95,7 @@
     );
   }
   const layout = document.createElement('details');
-  layout.className = 'workbench-layout-section';
+  layout.className = 'workbench-layout-section menu-section';
   const summary = document.createElement('summary');
   layout.append(summary);
   const options = document.getElementById('workspaceOptions');

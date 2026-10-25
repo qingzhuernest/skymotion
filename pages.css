@@ -333,13 +333,15 @@ body:is(
   min-height: 32px;
   padding: 5px 12px;
 }
-.ui-plot > #phaseContent {
+.ui-plot #phaseContent {
   height: 100%;
   flex: 1;
   min-height: 0;
   margin: 0;
   border-radius: 0;
   grid-template-columns: minmax(0, 1.5fr) minmax(110px, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  min-width: 0;
   padding: 10px;
 }
 .ui-plot #phaseOrbit {
@@ -353,8 +355,9 @@ body:is(
   text-align: center;
 }
 .ui-plot #phaseDisk {
-  width: 80px;
-  height: 80px;
+  width: min(140px, 80%);
+  height: auto;
+  aspect-ratio: 1;
   margin: 0 auto 8px;
 }
 .ui-plot .phase-view p {
@@ -1583,6 +1586,8 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   white-space: nowrap;
 }
 .ui-diagram-surface {
+  container-type: inline-size;
+  container-name: diagram-surface;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -2478,12 +2483,17 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
   outline: 2px solid var(--design-inset);
   outline-offset: -3px;
 }
-@media (max-width: 600px) {
-  .ui-plot > #phaseContent {
+@container diagram-surface (max-width: 620px) {
+  .ui-plot #phaseContent {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto;
-    gap: 0;
+    grid-template-rows: minmax(260px, auto) auto;
+    align-content: safe center;
+    overflow-y: auto;
+    gap: 16px;
     padding: 8px;
+  }
+  .ui-plot #phaseOrbit {
+    height: clamp(260px, 90cqi, 440px);
   }
   .ui-plot .phase-view {
     display: flex;
@@ -2494,8 +2504,8 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
     text-align: left;
   }
   .ui-plot #phaseDisk {
-    width: 52px;
-    height: 52px;
+    width: 72px;
+    height: 72px;
     flex-shrink: 0;
     margin: 0;
   }

@@ -287,6 +287,8 @@ SkyWorkbenchMenu选择内容并保留固定的顶层导航；skyWorkspacePresent
 
 design-system.css集中定义控件目标尺寸、状态层和焦点颜色。宽屏鼠标模式使用40px最小目标，粗指针或窄屏使用48px；小复选框通过外层label扩大点击区。hover和pressed用currentColor的8%和12%内阴影覆盖层，保留组件自身的容器色；深色科学画布由md-dark-surface提供高对比焦点角色。紧凑日历日期格至少40px；画布中的天体标签属于图形标注，另有侧栏同名按钮提供完整操作目标。
 
+workbench-content-group与观测设置共用menu-section组件，不再各自定义折叠标题外观。嵌套menu-subsection的标题圆角由外框圆角减去1px边框计算。md-connected-choice统一二选一组件，支持aria-pressed与aria-selected；全局导航固定在页面顶部。月相图使用图位容器查询，而非整页宽度，窄图位按轨道与月面读数上下布局；phaseOrbitLayout与新的画布尺寸同步，拖动仍改变同一真实观测时刻。
+
 ## 参考对象、身份与跨图选中
 
 | 结构 | 字段含义 |

@@ -2224,6 +2224,13 @@
                 "实验台顶部左侧显示标题和地点，随后是主菜单；太阳与月球通过并列的双按钮直接切换。自定义和语言入口保持在顶部右侧，窄屏按可用宽度排列。“三维对照”位于左侧“视图与布局 → 对照与搭建”，可与原科学图共享UTC并排观察。",
                 "The app bar starts with observation identity, followed by the main menu and direct Sun/Moon segmented buttons. Customization and language stay on the right, with a compact reflow on narrow screens. Find 3D comparison in Views & layout → Compare & build to observe the original scientific diagram alongside a scene sharing the same UTC."
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "顶栏是固定的全局导航。侧栏“视图与布局”和“观测条件”使用相同的分组样式，选中的切换项以绿色突出。三维模型从顶栏“三维天空”进入，实验参数中不再放置重复的跨页入口；当前图解的三维对照位于“视图与布局”中。时间滑条旁的文字按钮每次调整五分钟。",
+                "The fixed top bar is global navigation. Views & layout and Observation controls share the same grouped layout, with the selected choice highlighted in green. Open spatial models through 3D Sky in the top bar; experiment parameters do not repeat cross-page shortcuts. The current diagram’s 3D comparison remains in Views & layout. Text buttons beside the clock slider change time by five minutes."
+              ]
             }
           ]
         },
@@ -4579,6 +4586,13 @@
               "text": [
                 "design-system.css集中定义控件目标尺寸、状态层和焦点颜色。宽屏鼠标模式使用40px最小目标，粗指针或窄屏使用48px；小复选框通过外层label扩大点击区。hover和pressed用currentColor的8%和12%内阴影覆盖层，保留组件自身的容器色；深色科学画布由md-dark-surface提供高对比焦点角色。紧凑日历日期格至少40px；画布中的天体标签属于图形标注，另有侧栏同名按钮提供完整操作目标。",
                 "design-system.css owns target sizes, state layers and focus colors. Wide screens with fine pointers use a 40px minimum target; coarse pointers or narrow screens use 48px; checkbox labels enlarge the hit area around the small visual square. Hover and pressed states overlay inset shadows at 8% and 12% of currentColor, preserving the container color. md-dark-surface supplies a contrasting focus role on scientific canvases. Compact calendar dates retain a 40px minimum; planetary annotations have equivalent full-size sidebar controls."
+              ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "workbench-content-group与观测设置共用menu-section组件，不再各自定义折叠标题外观。嵌套menu-subsection的标题圆角由外框圆角减去1px边框计算。md-connected-choice统一二选一组件，支持aria-pressed与aria-selected；全局导航固定在页面顶部。月相图使用图位容器查询，而非整页宽度，窄图位按轨道与月面读数上下布局；phaseOrbitLayout与新的画布尺寸同步，拖动仍改变同一真实观测时刻。",
+                "workbench-content-group and observation settings reuse menu-section instead of separate disclosure skins. Nested menu-subsection heading radii subtract the 1px border from the outer radius. md-connected-choice provides binary choices using aria-pressed or aria-selected, while global navigation stays at the top. Moon phase uses pane container queries rather than viewport width, stacking orbit and disk readouts in narrow panes. phaseOrbitLayout follows the resized canvas, and dragging still changes the same real observation instant."
               ]
             }
           ],
