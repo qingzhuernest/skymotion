@@ -209,12 +209,10 @@ async function paintedCorner(page, button, insideRight) {
       () => typeof spaceState === 'function' && !spaceState().fallback,
     );
     const explanation = space.locator('.side > details.menu-section');
-    const disclosure = await explanation
-      .locator('summary')
-      .evaluate((n) => ({
-        style: getComputedStyle(n).listStyleType,
-        icon: getComputedStyle(n, '::after').content,
-      }));
+    const disclosure = await explanation.locator('summary').evaluate((n) => ({
+      style: getComputedStyle(n).listStyleType,
+      icon: getComputedStyle(n, '::after').content,
+    }));
     assert.deepEqual(
       disclosure,
       { style: 'none', icon: '""' },
@@ -407,9 +405,28 @@ async function paintedCorner(page, button, insideRight) {
           'Document title is owned by the shared app bar',
         );
         assert.equal(
-          await page.locator('.document-links.md-navigation-tabs a').count(),
+          await page.locator('.document-links.md-connected-choice a').count(),
           4,
         );
+        const category = await page
+          .locator('.document-links [aria-current="page"]')
+          .evaluate((n) => {
+            const s = getComputedStyle(n);
+            return {
+              fill: s.backgroundColor,
+              color: s.color,
+              radius: s.borderRadius,
+              check: getComputedStyle(n, '::before').content,
+            };
+          });
+        assert.equal(
+          category.fill,
+          await page
+            .locator('.page-nav [aria-current="page"]')
+            .evaluate((n) => getComputedStyle(n).color),
+        );
+        assert.equal(category.radius, '999px');
+        assert.equal(category.check, 'none');
         assert(
           await page
             .locator('.document-download')

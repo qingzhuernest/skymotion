@@ -258,29 +258,7 @@ body
   gap: 4px;
   padding-inline: 16px;
 }
-body .md-navigation-tabs {
-  display: flex;
-  align-items: stretch;
-  flex-wrap: nowrap;
-  gap: 4px;
-  min-width: 0;
-  max-width: 100%;
-  overflow-x: auto;
-  scrollbar-width: thin;
-}
-body .md-navigation-tabs a {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--md-sys-size-target);
-  padding-block: 8px;
-  white-space: nowrap;
-  text-decoration: none;
-  background: transparent;
-}
-.page-nav a,
-body .md-navigation-tabs a {
+.page-nav a {
   position: relative;
   border-radius: var(--md-sys-shape-corner-small);
   min-height: 40px;
@@ -289,19 +267,16 @@ body .md-navigation-tabs a {
   font-size: 13px;
   font-weight: 500;
 }
-.page-nav a:hover,
-body .md-navigation-tabs a:hover {
+.page-nav a:hover {
   color: var(--design-primary);
   background: var(--design-selected);
 }
-.page-nav a[aria-current='page'],
-body .md-navigation-tabs a[aria-current='page'] {
+.page-nav a[aria-current='page'] {
   color: var(--design-primary);
   background: transparent;
   font-weight: 600;
 }
-.page-nav a[aria-current='page']::after,
-body .md-navigation-tabs a[aria-current='page']::after {
+.page-nav a[aria-current='page']::after {
   content: '';
   position: absolute;
   inset: auto 12px 0;
@@ -333,7 +308,7 @@ body .md-navigation-tabs a[aria-current='page']::after {
   border-radius: 0;
   background: transparent;
 }
-body .md-connected-choice > button {
+body .md-connected-choice > :is(button, a) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -350,6 +325,7 @@ body .md-connected-choice > button {
   font: 500 14px/1.5 var(--design-font);
   white-space: normal;
   text-align: center;
+  text-decoration: none;
   transition:
     border-radius var(--md-sys-motion-duration-medium)
       var(--md-sys-motion-easing-expressive),
@@ -357,13 +333,15 @@ body .md-connected-choice > button {
       var(--md-sys-motion-easing-standard),
     color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
 }
-body .md-connected-choice > button:first-child {
+body .md-connected-choice > :is(button, a):first-child {
   border-radius: var(--md-comp-connected-button-outer-corner)
     var(--md-comp-connected-button-inner-corner)
     var(--md-comp-connected-button-inner-corner)
     var(--md-comp-connected-button-outer-corner);
 }
-body .md-connected-choice > button:where(:nth-last-child(1 of button:not([hidden]))) {
+body
+  .md-connected-choice
+  > :is(button, a):where(:nth-last-child(1 of :is(button, a):not([hidden]))) {
   border-radius: var(--md-comp-connected-button-inner-corner)
     var(--md-comp-connected-button-outer-corner)
     var(--md-comp-connected-button-outer-corner)
@@ -371,7 +349,13 @@ body .md-connected-choice > button:where(:nth-last-child(1 of button:not([hidden
 }
 body
   .md-connected-choice
-  > button:is([aria-pressed='true'], [aria-selected='true'], .active, .selected) {
+  > :is(button, a):is(
+    [aria-pressed='true'],
+    [aria-selected='true'],
+    [aria-current='page'],
+    .active,
+    .selected
+  ) {
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   border-radius: var(--md-sys-shape-corner-full);
@@ -379,11 +363,17 @@ body
 
 body
   .md-connected-choice
-  > button:is([aria-pressed='true'], [aria-selected='true'], .active, .selected):active {
+  > :is(button, a):is(
+    [aria-pressed='true'],
+    [aria-selected='true'],
+    [aria-current='page'],
+    .active,
+    .selected
+  ):active {
   border-radius: var(--md-sys-shape-corner-large);
 }
 @media (prefers-reduced-motion: reduce) {
-  body .md-connected-choice > button {
+  body .md-connected-choice > :is(button, a) {
     transition: none;
   }
 }
@@ -396,7 +386,7 @@ body .md-choice-grid.md-connected-choice {
   width: 100%;
   gap: 2px;
 }
-body .md-connected-choice.md-compact-choice > button {
+body .md-connected-choice.md-compact-choice > :is(button, a) {
   --md-choice-fill: var(--md-sys-color-primary-container);
   position: relative;
   isolation: isolate;
@@ -411,12 +401,12 @@ body .md-connected-choice.md-compact-choice > button {
   font-size: 12px;
   line-height: 1.3;
 }
-body .md-connected-choice.md-compact-choice > button:is(:hover, :active) {
+body .md-connected-choice.md-compact-choice > :is(button, a):is(:hover, :active) {
   background: transparent;
   border-radius: var(--md-sys-shape-corner-full);
   box-shadow: none;
 }
-body .md-connected-choice.md-compact-choice > button::before {
+body .md-connected-choice.md-compact-choice > :is(button, a)::before {
   content: '';
   position: absolute;
   z-index: -1;
@@ -427,13 +417,13 @@ body .md-connected-choice.md-compact-choice > button::before {
 }
 body
   .md-connected-choice.md-compact-choice
-  > button:is([aria-pressed='true'], .active, .selected) {
+  > :is(button, a):is([aria-pressed='true'], .active, .selected) {
   --md-choice-fill: var(--md-sys-color-primary);
 }
-body .md-connected-choice.md-compact-choice > button:hover::before {
+body .md-connected-choice.md-compact-choice > :is(button, a):hover::before {
   box-shadow: inset 0 0 0 999px var(--md-sys-state-hover);
 }
-body .md-connected-choice.md-compact-choice > button:active::before {
+body .md-connected-choice.md-compact-choice > :is(button, a):active::before {
   box-shadow: inset 0 0 0 999px var(--md-sys-state-pressed);
 }
 .ui-parameters > h2 {

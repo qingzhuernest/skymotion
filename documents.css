@@ -44,8 +44,16 @@
   justify-content: space-between;
   gap: 12px;
 }
-.document-links {
-  flex: 1 1 auto;
+.document-tools > .document-links {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.document-tools > .document-links a {
+  flex: none;
+  white-space: nowrap;
 }
 .document-page a {
   color: var(--design-primary);
