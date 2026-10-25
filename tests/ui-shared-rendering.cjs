@@ -41,6 +41,18 @@ async function paintedCorner(page, button, insideRight) {
   });
   try {
     const railStyles = [];
+    const choiceStates = [];
+    const choiceStyle = (n) => {
+      const s = getComputedStyle(n);
+      return {
+        fill: s.backgroundColor,
+        color: s.color,
+        border: s.border,
+        font: s.fontSize,
+        padding: s.padding,
+        radius: s.borderRadius,
+      };
+    };
     for (const width of [1440, 390]) {
       const page = await browser.newPage({
         viewport: { width, height: 960 },
@@ -70,6 +82,17 @@ async function paintedCorner(page, button, insideRight) {
           'Painted inner corners must be visibly rounded, not just report12px: ' +
             JSON.stringify(corner),
         );
+      }
+      if (width === 1440) {
+        const choice = page.locator('.body-switch [data-body=moon]');
+        await page.mouse.move(width - 5, 400);
+        choiceStates.push(await choice.evaluate(choiceStyle));
+        await choice.hover();
+        choiceStates.push(await choice.evaluate(choiceStyle));
+        await page.mouse.down();
+        choiceStates.push(await choice.evaluate(choiceStyle));
+        await page.mouse.up();
+        await page.locator('[data-body=sun]').click();
       }
       if (width < 760) await helpers.openDrawer(page);
       await page.locator('[data-rail-section=views]').click();
@@ -185,6 +208,21 @@ async function paintedCorner(page, button, insideRight) {
     await space.waitForFunction(
       () => typeof spaceState === 'function' && !spaceState().fallback,
     );
+    const modelChoice = space.locator('#earthmoon');
+    const modelStates = [];
+    await space.mouse.move(5, 400);
+    modelStates.push(await modelChoice.evaluate(choiceStyle));
+    await modelChoice.hover();
+    modelStates.push(await modelChoice.evaluate(choiceStyle));
+    await space.mouse.down();
+    modelStates.push(await modelChoice.evaluate(choiceStyle));
+    await space.mouse.up();
+    assert.deepEqual(
+      modelStates,
+      choiceStates,
+      'Lab and3D exclusive controls share normal, hover and pressed skins',
+    );
+    await space.locator('#overview').click();
     const auxiliary = await space
       .locator('.head-actions > .md-outlined-action:not([hidden])')
       .evaluateAll((nodes) =>

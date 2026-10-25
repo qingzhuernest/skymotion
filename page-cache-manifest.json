@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261025-expressive111",
+  "resourceVersion": "20261025-expressive112",
   "readingFontVersion": "20261016-font41",
   "pages": [
     "404.en.html",
@@ -193,5 +193,5 @@
     "sundial.html": 72176
   },
   "totalBytes": 1392979,
-  "assetBytes": 8078761
+  "assetBytes": 8078685
 }
