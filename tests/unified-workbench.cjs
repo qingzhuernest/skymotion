@@ -75,6 +75,13 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44125/').repl
       .locator('.view-tabs')
       .evaluate((node) => !!node.closest('#workbenchViews') && !node.closest('#stage'));
     assert(tabsOutsideCanvas, 'View controls do not overlay the canvas');
+    // Orientation is highlighted only when the sky pane is the current pane.
+    await page.locator('#sky').click({ position: { x: 8, y: 8 } });
+    await page.waitForFunction(
+      () =>
+        skyWorkspacePresentation.activeView === 'skyPanel' &&
+        !!document.querySelector('.view-tabs button.active'),
+    );
     const selectedView = await page.locator('.view-tabs').evaluate((node) => {
       const group = node.getBoundingClientRect();
       const marker = node.querySelector('button.active').getBoundingClientRect();
