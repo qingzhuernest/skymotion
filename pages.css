@@ -359,7 +359,7 @@ body:is(
   flex-direction: column;
   flex: 1;
   min-height: 0;
-  background: var(--design-on-action);
+  background: var(--design-surface);
 }
 .ui-plot .context-view-switch {
   flex-shrink: 0;
@@ -1318,7 +1318,7 @@ body:is(
   font-size: 11px;
   border: 1px solid var(--design-line);
   border-radius: 16px;
-  background: var(--design-on-action);
+  background: var(--design-surface);
   color: var(--design-primary);
   padding: 5px 10px;
 }
@@ -2466,7 +2466,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
   overflow-y: auto;
   overscroll-behavior: contain;
   color: var(--design-ink);
-  background: var(--design-on-action);
+  background: var(--design-surface);
   border: 1px solid var(--design-line);
   border-radius: var(--ui-radius);
   font-size: 14px;

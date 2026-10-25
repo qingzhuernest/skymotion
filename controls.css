@@ -88,7 +88,7 @@
   top: 2px;
   left: 2px;
   transform: translateX(20px);
-  background: var(--design-on-action);
+  background: var(--design-surface);
 }
 
 :is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)

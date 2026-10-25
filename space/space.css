@@ -96,7 +96,7 @@ body[data-page='space'] .card {
   border: 1px solid var(--space-line);
   border-radius: 18px;
   padding: 16px;
-  background: white;
+  background: var(--design-surface);
   flex: none;
 }
 body[data-page='space'] .card h2 {
@@ -200,7 +200,7 @@ body[data-page='space'] .visual {
   flex-direction: column;
   min-height: 0;
   min-width: 0;
-  background: white;
+  background: var(--design-surface);
   border: 1px solid var(--space-line);
   border-radius: 18px;
   overflow: hidden;
@@ -296,7 +296,7 @@ body[data-page='space'] .footer-note {
 body[data-page='space'] .timeline {
   grid-column: 2;
   grid-row: 2;
-  background: white;
+  background: var(--design-surface);
   border: 1px solid var(--space-line);
   border-radius: 18px;
   padding: 10px 14px;
@@ -350,7 +350,7 @@ body[data-page='space'] .date-actions {
 body[data-page='space'] .date-actions input {
   border: 1px solid var(--space-line);
   border-radius: var(--space-control-radius);
-  background: white;
+  background: var(--design-surface);
   color: var(--design-ink);
   padding: 4px 6px;
   font-size: 11px;

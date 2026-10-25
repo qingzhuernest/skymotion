@@ -574,7 +574,7 @@ body
   :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
   :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
   > input[type='checkbox']:checked::after {
-  background: var(--design-on-action);
+  background: var(--design-surface);
 }
 .ui-parameters .study-navigation .page-link {
   color: var(--design-primary);
@@ -996,7 +996,7 @@ body[data-page='welcome'] .welcome-screen ::selection {
 @media print {
   body {
     color: var(--design-print-ink);
-    background: var(--design-on-action);
+    background: var(--design-surface);
   }
   .document-page {
     border: 0;
@@ -1747,7 +1747,7 @@ body dialog.site-calendar {
   box-sizing: border-box;
   border: 1px solid var(--design-line);
   border-radius: var(--design-radius-surface);
-  background: var(--design-on-action);
+  background: var(--design-surface);
   color: var(--design-ink);
   font-family: var(--design-font);
   box-shadow: 0 12px 36px var(--design-shadow-dialog);
@@ -1816,7 +1816,7 @@ body .site-calendar-year input {
   padding: 4px 8px;
   font: inherit;
   color: var(--design-ink);
-  background: var(--design-on-action);
+  background: var(--design-surface);
 }
 .site-calendar-grid {
   display: grid;
@@ -1852,7 +1852,7 @@ body .site-calendar-year input {
 body .site-calendar-actions button {
   padding: 6px 16px;
   border-color: var(--design-line);
-  background: var(--design-on-action);
+  background: var(--design-surface);
   color: var(--design-accent);
 }
 body .site-calendar-actions button:hover {
@@ -1881,7 +1881,7 @@ body .site-calendar-year button {
   min-height: var(--md-sys-size-target, 40px);
   padding: 4px 12px;
   border: 1px solid var(--design-line);
-  background: var(--design-on-action);
+  background: var(--design-surface);
   color: var(--design-accent);
 }
 body dialog.site-calendar:not([open]) {
@@ -1981,7 +1981,7 @@ body
   box-sizing: border-box;
   border: 1px solid var(--design-line);
   border-radius: var(--md-sys-shape-corner-large);
-  background: var(--design-on-action);
+  background: var(--design-surface);
   color: var(--design-ink);
   font: 14px/1.5 var(--design-font);
 }
@@ -1991,7 +1991,7 @@ body .font-load-notice button {
   padding: 6px 10px;
   border: 1px solid var(--design-line);
   border-radius: 8px;
-  background: var(--design-on-action);
+  background: var(--design-surface);
   color: var(--design-accent);
   font: inherit;
   cursor: pointer;

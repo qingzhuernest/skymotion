@@ -238,7 +238,7 @@
 }
 .development-flow li {
   counter-increment: flow;
-  background: var(--design-on-action);
+  background: var(--design-surface);
   border: 1px solid var(--design-line);
   border-radius: 10px;
   padding: 10px;
