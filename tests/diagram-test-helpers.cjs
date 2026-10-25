@@ -5,9 +5,13 @@ exports.selectDiagram = async (page, id) => {
     if (await page.evaluate(() => matchMedia('(max-width:760px)').matches))
       await exports.openDrawer(page);
     await viewTab.click();
+    const rememberedView =
+      id === 'skyPanel' ? await page.evaluate(() => state.view) : null;
     const entry =
       id === 'skyPanel'
-        ? page.locator('.workbench-viewpoints button.active')
+        ? page.locator(
+            `.workbench-viewpoints button[data-view=${JSON.stringify(rememberedView)}]`,
+          )
         : page.locator(`[data-diagram="${id}"]`);
     await entry.evaluate((node) => {
       const group = node.closest('details');
