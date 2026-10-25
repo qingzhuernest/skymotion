@@ -3,35 +3,35 @@
   <head>
     <meta charset="UTF-8" />
 
-    <script src="../page-boot.js?v=20261025-expressive113"></script>
+    <script src="../page-boot.js?v=20261025-expressive114"></script>
 
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title data-i18n-cn="{&quot;3D Solar System · Sky Motion Lab&quot;:&quot;太阳系三维模型 · 天体视运动实验室&quot;}">3D Solar System · Sky Motion Lab</title>
     <meta name="description" content="旋转、缩放三维太阳系，观察八大行星与日地月空间关系。真实星历计算位置，教学尺度显示大小与距离。" />
     <link rel="canonical" href="https://skymotion-5md.pages.dev/space/" />
     <link rel="icon" href="../favicon.svg" />
-    <link rel="stylesheet" href="../ui-palette.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="../pages.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="space.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="compare.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="exploration.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="embed.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="immersive.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="population.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="../interface-motion.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="../controls.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="../design-system.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="../language.css?v=20261025-expressive113" />
-    <script src="../language-data.js?v=20261025-expressive113" defer></script>
-    <script src="../language.js?v=20261025-expressive113" defer></script>
-    <script src="../page-cache.js?v=20261025-expressive113" defer></script>
-    <script src="../date-picker.js?v=20261025-expressive113" defer></script>
-    <link rel="stylesheet" href="../parameter-controls.css?v=20261025-expressive113" />
-    <link rel="stylesheet" href="../diagram-tools.css?v=20261025-expressive113" />
-    <script src="../material-controls.js?v=20261025-expressive113" defer></script>
+    <link rel="stylesheet" href="../ui-palette.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="../pages.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="space.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="compare.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="exploration.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="embed.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="immersive.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="population.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="../interface-motion.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="../controls.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="../design-system.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="../language.css?v=20261025-expressive114" />
+    <script src="../language-data.js?v=20261025-expressive114" defer></script>
+    <script src="../language.js?v=20261025-expressive114" defer></script>
+    <script src="../page-cache.js?v=20261025-expressive114" defer></script>
+    <script src="../date-picker.js?v=20261025-expressive114" defer></script>
+    <link rel="stylesheet" href="../parameter-controls.css?v=20261025-expressive114" />
+    <link rel="stylesheet" href="../diagram-tools.css?v=20261025-expressive114" />
+    <script src="../material-controls.js?v=20261025-expressive114" defer></script>
   </head>
   <body data-page="space">
-    <script src="embed.js?v=20261025-expressive113" defer></script>
+    <script src="embed.js?v=20261025-expressive114" defer></script>
     <nav class="page-nav" aria-label="Page navigation" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;页面导航&quot;}"><a href="../index.en.html" data-cn-href="../index.html" data-i18n-cn="{&quot;Welcome&quot;:&quot;欢迎页&quot;}">Welcome</a><a href="../lab.en.html" data-cn-href="../lab.html" data-i18n-cn="{&quot;Lab&quot;:&quot;实验台&quot;}">Lab</a><a href="../docs.en.html" data-cn-href="../docs.html" data-i18n-cn="{&quot;Documentation&quot;:&quot;文档中心&quot;}">Documentation</a><a href="./index.en.html" aria-current="page" data-cn-href="./" data-i18n-cn="{&quot;3D Sky&quot;:&quot;三维天空&quot;}">3D Sky</a></nav>
     <main class="space-shell">
       <header class="head ui-heading">
@@ -79,8 +79,9 @@
             </div>
             <p class="info" data-i18n-cn="{&quot;North latitude and east longitude are positive. Sky positions include topocentric parallax but exclude atmospheric refraction. Bodies below the horizon are identified.&quot;:&quot;\n              北纬、东经为正。天空位置含地平视差，未计大气折射；地平线下的天体也会注明。\n            &quot;}">North latitude and east longitude are positive. Sky positions include topocentric parallax but exclude atmospheric refraction. Bodies below the horizon are identified.</p>
           </section>
-          <details class="card">
+          <details class="card menu-section">
             <summary data-i18n-cn="{&quot;Scale and model notes&quot;:&quot;尺度与模型说明&quot;}">Scale and model notes</summary>
+            <div class="menu-content">
             <p class="info" data-i18n-cn="{&quot;Positions come from Astronomy Engine; orbit guides sample the ephemeris. Heliocentric distances use a power-law display compression, while body sizes are enlarged separately. The Sun–Earth–Moon view uses a separate Earth–Moon distance scale. Screen sizes and distances are not to physical scale.&quot;:&quot;\n              位置由 Astronomy Engine\n              计算，轨道是星历采样的路径。日心距离采用幂函数压缩，球体大小另行放大；日地月视图单独放大地月距离。屏幕上的大小和距离不是实际比例。\n            &quot;}">Positions come from Astronomy Engine; orbit guides sample the ephemeris. Heliocentric distances use a power-law display compression, while body sizes are enlarged separately. The Sun–Earth–Moon view uses a separate Earth–Moon distance scale. Screen sizes and distances are not to physical scale.</p>
             <p class="info" data-i18n-cn="{&quot;In the Sun–Earth–Moon view, the arrow points toward the distant Sun and sunlight is parallel. The Moon seen from the external camera is not the phase seen from Earth; its geocentric illuminated fraction is calculated separately. Surface and cloud textures are illustrative, not images for the selected date. Earth&#x27;s rotation and axis follow UTC; other bodies&#x27; orientations are illustrative. Eclipses and local rise/set events are not simulated here.&quot;:&quot;\n              日地月视图的箭头指向远处太阳，照明使用平行光；外部相机所见月面不等同于地球观测月相。地心月面照明比例另用星历计算。表面与云层纹理为外观示意，非当天影像；地球自转与地轴按UTC计算，其余天体姿态为示意，不模拟日月食，也不计算本地升落。\n            &quot;}">In the Sun–Earth–Moon view, the arrow points toward the distant Sun and sunlight is parallel. The Moon seen from the external camera is not the phase seen from Earth; its geocentric illuminated fraction is calculated separately. Surface and cloud textures are illustrative, not images for the selected date. Earth's rotation and axis follow UTC; other bodies' orientations are illustrative. Eclipses and local rise/set events are not simulated here.</p>
             <p class="info" data-i18n-cn="{&quot;The date slider changes UTC continuously; selecting a calendar date sets 12:00 UTC. Rotation and zoom change only the camera, not physical positions. This page has its own state, so your main lab settings are preserved.&quot;:&quot;\n              日期轴连续改变 UTC 时刻；日历选择定位当天12:00\n              UTC。旋转和缩放只改变相机，不改变天体物理位置。此页面使用独立状态，返回实验台时保留原有观察设置。\n            &quot;}">The date slider changes UTC continuously; selecting a calendar date sets 12:00 UTC. Rotation and zoom change only the camera, not physical positions. This page has its own state, so your main lab settings are preserved.</p>
@@ -89,6 +90,7 @@
             <p class="info" data-i18n-cn="{&quot;Magnitude controls displayed brightness, and B−V approximates star color. Point sizes and glow are display effects. The background excludes atmospheric scintillation, proper motion, annual parallax, and horizon obstruction; it is not a precision observing chart.&quot;:&quot;\n              星等控制显示明暗，B−V色指数近似恒星颜色；星点大小与柔光为显示处理。背景不做大气闪烁，也未加入恒星自行、周年视差或地平遮挡，不作为精密观测星图。&quot;}">Magnitude controls displayed brightness, and B−V approximates star color. Point sizes and glow are display effects. The background excludes atmospheric scintillation, proper motion, annual parallax, and horizon obstruction; it is not a precision observing chart.<a href="assets/stars-license.txt" data-i18n-cn="{&quot;HYG source and license&quot;:&quot;HYG数据来源与许可&quot;}">HYG source and license</a>
             </p>
             <a href="../project-guide.en.html#section-12" data-cn-href="../project-guide.html#section-12" data-i18n-cn="{&quot;Space model documentation&quot;:&quot;项目中的空间模型说明&quot;}">Space model documentation</a>
+            </div>
           </details>
         </aside>
       </div>
@@ -216,29 +218,29 @@
         <a id="nebulaSource" href="#" target="_blank" rel="noopener" data-i18n-cn="{&quot;NASA image source&quot;:&quot;NASA影像来源&quot;}">NASA image source</a>
       </p>
     </dialog>
-    <script src="../interface-motion.js?v=20261025-expressive113" defer></script>
-    <script src="ui.js?v=20261025-expressive113" defer></script>
-    <script src="vendor/three.min.js?v=20261025-expressive113" defer></script>
-    <script src="../astronomy.js?v=20261025-expressive113" defer></script>
-    <script src="model.js?v=20261025-expressive113" defer></script>
-    <script src="earth-frame.js?v=20261025-expressive113" defer></script>
-    <script src="exploration.js?v=20261025-expressive113" defer></script>
-    <script src="appearance.js?v=20261025-expressive113" defer></script>
-    <script src="stars.js?v=20261025-expressive113" defer></script>
-    <script src="population.js?v=20261025-expressive113" defer></script>
-    <script src="nebulae.js?v=20261025-expressive113" defer></script>
-    <script src="compare.js?v=20261025-expressive113" defer></script>
-    <script src="observer.js?v=20261025-expressive113" defer></script>
-    <script src="../experiment-storage.js?v=20261025-expressive113" defer></script>
-    <script src="scene.js?v=20261025-expressive113" defer></script>
-    <script src="immersive.js?v=20261025-expressive113" defer></script>
-    <script src="../interaction-history.js?v=20261025-expressive113" defer></script>
-    <script src="history.js?v=20261025-expressive113" defer></script>
-    <script src="../customization-mode.js?v=20261025-expressive113" defer></script>
-    <script src="customization.js?v=20261025-expressive113" defer></script>
-    <script src="../diagram-sampling.js?v=20261025-expressive113" defer></script>
-    <script src="../parameter-controls.js?v=20261025-expressive113" defer></script>
-    <script src="../diagram-tool-definitions.js?v=20261025-expressive113" defer></script>
-    <script src="../diagram-tools.js?v=20261025-expressive113" defer></script>
+    <script src="../interface-motion.js?v=20261025-expressive114" defer></script>
+    <script src="ui.js?v=20261025-expressive114" defer></script>
+    <script src="vendor/three.min.js?v=20261025-expressive114" defer></script>
+    <script src="../astronomy.js?v=20261025-expressive114" defer></script>
+    <script src="model.js?v=20261025-expressive114" defer></script>
+    <script src="earth-frame.js?v=20261025-expressive114" defer></script>
+    <script src="exploration.js?v=20261025-expressive114" defer></script>
+    <script src="appearance.js?v=20261025-expressive114" defer></script>
+    <script src="stars.js?v=20261025-expressive114" defer></script>
+    <script src="population.js?v=20261025-expressive114" defer></script>
+    <script src="nebulae.js?v=20261025-expressive114" defer></script>
+    <script src="compare.js?v=20261025-expressive114" defer></script>
+    <script src="observer.js?v=20261025-expressive114" defer></script>
+    <script src="../experiment-storage.js?v=20261025-expressive114" defer></script>
+    <script src="scene.js?v=20261025-expressive114" defer></script>
+    <script src="immersive.js?v=20261025-expressive114" defer></script>
+    <script src="../interaction-history.js?v=20261025-expressive114" defer></script>
+    <script src="history.js?v=20261025-expressive114" defer></script>
+    <script src="../customization-mode.js?v=20261025-expressive114" defer></script>
+    <script src="customization.js?v=20261025-expressive114" defer></script>
+    <script src="../diagram-sampling.js?v=20261025-expressive114" defer></script>
+    <script src="../parameter-controls.js?v=20261025-expressive114" defer></script>
+    <script src="../diagram-tool-definitions.js?v=20261025-expressive114" defer></script>
+    <script src="../diagram-tools.js?v=20261025-expressive114" defer></script>
   </body>
 </html>

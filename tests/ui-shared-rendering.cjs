@@ -208,6 +208,18 @@ async function paintedCorner(page, button, insideRight) {
     await space.waitForFunction(
       () => typeof spaceState === 'function' && !spaceState().fallback,
     );
+    const explanation = space.locator('.side > details.menu-section');
+    const disclosure = await explanation
+      .locator('summary')
+      .evaluate((n) => ({
+        style: getComputedStyle(n).listStyleType,
+        icon: getComputedStyle(n, '::after').content,
+      }));
+    assert.deepEqual(
+      disclosure,
+      { style: 'none', icon: '""' },
+      '3D explanation uses the shared disclosure component',
+    );
     const modelChoice = space.locator('#earthmoon');
     const modelStates = [];
     await space.mouse.move(5, 400);

@@ -444,7 +444,8 @@ body .md-connected-choice.md-compact-choice > button:active::before {
 .ui-parameters > h2::before {
   display: none;
 }
-.ui-parameters
+body
+  :is(.ui-parameters, .md-parameter-rail)
   :is(
     .menu-section,
     .workbench-more,
@@ -452,12 +453,14 @@ body .md-connected-choice.md-compact-choice > button:active::before {
     .ui-information,
     .ui-model-details
   ) {
+  padding: 0;
   border: 1px solid transparent;
   border-radius: var(--md-sys-shape-corner-large-increased);
   background: var(--design-surface);
   box-shadow: none;
 }
-.ui-parameters
+body
+  :is(.ui-parameters, .md-parameter-rail)
   :is(
     .menu-section,
     .workbench-more,
@@ -466,6 +469,12 @@ body .md-connected-choice.md-compact-choice > button:active::before {
     .ui-model-details
   )
   > summary {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  list-style: none;
+  cursor: pointer;
   font-size: 13px;
   line-height: 1.65;
   color: var(--design-ink);
@@ -473,7 +482,8 @@ body .md-connected-choice.md-compact-choice > button:active::before {
   border-radius: calc(var(--md-sys-shape-corner-large-increased) - 1px);
   padding: 14px 40px 14px 16px;
 }
-.ui-parameters
+body
+  :is(.ui-parameters, .md-parameter-rail)
   :is(
     .menu-section,
     .workbench-more,
@@ -484,7 +494,8 @@ body .md-connected-choice.md-compact-choice > button:active::before {
   border-color: transparent;
   box-shadow: none;
 }
-.ui-parameters
+body
+  :is(.ui-parameters, .md-parameter-rail)
   :is(
     .menu-section,
     .workbench-more,
@@ -499,7 +510,8 @@ body .md-connected-choice.md-compact-choice > button:active::before {
   border-radius: calc(var(--md-sys-shape-corner-large-increased) - 1px)
     calc(var(--md-sys-shape-corner-large-increased) - 1px) 0 0;
 }
-.ui-parameters
+body
+  :is(.ui-parameters, .md-parameter-rail)
   :is(
     .menu-section,
     .workbench-more,
@@ -509,6 +521,55 @@ body .md-connected-choice.md-compact-choice > button:active::before {
   )
   > summary:hover {
   background: var(--design-inset);
+}
+/* Shared disclosure icon and body, including3D explanation sections. */
+body
+  :is(.ui-parameters, .md-parameter-rail)
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )
+  > summary::-webkit-details-marker {
+  display: none;
+}
+body
+  :is(.ui-parameters, .md-parameter-rail)
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )
+  > summary::after {
+  content: '';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border: 0;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+}
+body
+  :is(.ui-parameters, .md-parameter-rail)
+  :is(
+    .menu-section,
+    .workbench-more,
+    .analemma-advanced,
+    .ui-information,
+    .ui-model-details
+  )[open]
+  > summary::after {
+  transform: translateY(-50%) rotate(225deg);
+}
+body :is(.ui-parameters, .md-parameter-rail) .menu-section > .menu-content {
+  padding: 14px 16px 16px;
 }
 .ui-parameters
   :is(
