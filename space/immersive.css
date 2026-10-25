@@ -1,6 +1,9 @@
 /* One canvas and one timeline; immersive observation changes layout only. */
-body[data-page='space'] .head .head-actions {
+body[data-page='space'] .viewbar .head-actions {
   display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  min-width: 0;
   align-items: center;
   gap: 8px;
   flex: none;
@@ -21,28 +24,17 @@ body[data-page='space'].space-immersive .space-shell {
   max-width: none;
   height: 100dvh;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   padding: max(8px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right))
     max(8px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
   gap: 8px;
-}
-body[data-page='space'].space-immersive .head {
-  position: static;
-  grid-row: 1;
-}
-body[data-page='space'].space-immersive .head > div {
-  display: flex;
-}
-body[data-page='space'].space-immersive h1 {
-  font-size: 15px;
-  margin: 0;
 }
 body[data-page='space'].space-immersive #spaceParameters {
   display: block;
 }
 body[data-page='space'].space-immersive .visual {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 1;
   border-color: var(--design-night-line);
   background: var(--design-night-surface);
 }
@@ -51,22 +43,21 @@ body[data-page='space'].space-immersive .viewbar {
   border-color: var(--design-night-line);
   padding: 6px;
 }
-body[data-page='space'].space-immersive
-  :is(.head button, .viewbar button, .viewbar a, .time-head button) {
+body[data-page='space'].space-immersive .time-head button {
   border-color: var(--design-night-line);
   background: var(--design-night-inset);
   color: var(--design-night-ink);
   font-size: 12px;
   min-height: var(--md-sys-size-target);
 }
-body[data-page='space'].space-immersive :is(.viewbar button.active, .time-head button) {
+body[data-page='space'].space-immersive .time-head button {
   background: var(--design-action);
   color: var(--design-on-action);
 }
 body[data-page='space'].space-immersive .timeline {
   position: static;
   grid-column: 1;
-  grid-row: 3;
+  grid-row: 2;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 0 16px;
@@ -120,16 +111,8 @@ body[data-page='space'].space-immersive :is(a, button, input, select):focus-visi
   body[data-page='space'] .head-actions {
     gap: 4px;
   }
-  body[data-page='space'] #spaceImmersive {
-    font-size: 11px;
-    padding: 5px 8px;
-  }
   body[data-page='space'].space-immersive h1 {
     font-size: 13px;
-  }
-  body[data-page='space'].space-immersive .head button {
-    font-size: 11px;
-    padding: 5px 8px;
   }
   body[data-page='space'].space-immersive .timeline {
     grid-template-columns: minmax(0, 1fr);
@@ -149,10 +132,6 @@ body[data-page='space'].space-immersive :is(a, button, input, select):focus-visi
   body[data-page='space'].space-immersive .time-head output {
     font-size: 11px;
     margin-left: 3px;
-  }
-  body[data-page='space'].space-immersive .viewbar :is(button, a) {
-    font-size: 10px;
-    padding: 5px 7px;
   }
 }
 

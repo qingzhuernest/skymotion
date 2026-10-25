@@ -46,12 +46,12 @@ body[data-page='space'] button:disabled {
 body[data-page='space'] .space-shell {
   max-width: 1600px;
   margin: auto;
-  height: calc(100dvh - var(--ui-nav-height));
+  height: calc(100dvh - var(--ui-header-height, var(--ui-nav-height)));
   min-height: 0;
   padding: 12px 20px 16px;
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   gap: 12px;
 }
 body[data-page='space'] .head {
@@ -81,7 +81,7 @@ body[data-page='space'] #spaceParameters {
 }
 body[data-page='space'] .space-sidebar-host {
   grid-column: 1;
-  grid-row: 2/4;
+  grid-row: 1/3;
   min-height: 0;
   overflow: hidden;
 }
@@ -207,7 +207,7 @@ body[data-page='space'] .card a {
 }
 body[data-page='space'] .visual {
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -222,14 +222,6 @@ body[data-page='space'] .viewbar {
   gap: 6px;
   padding: 8px;
   flex-shrink: 0;
-}
-body[data-page='space'] .viewbar button {
-  font-size: 12px;
-  border: 0;
-}
-body[data-page='space'] .viewbar button.active {
-  background: var(--space-primary);
-  color: white;
 }
 body[data-page='space'] .stage {
   position: relative;
@@ -315,7 +307,7 @@ body[data-page='space'] .footer-note {
 }
 body[data-page='space'] .timeline {
   grid-column: 2;
-  grid-row: 3;
+  grid-row: 2;
   background: white;
   border: 1px solid var(--space-line);
   border-radius: 18px;
@@ -469,11 +461,6 @@ body[data-page='space'] #spaceDrawerBody {
     padding: 6px;
     gap: 4px;
   }
-  body[data-page='space'] .viewbar button {
-    font-size: 11px;
-    padding: 5px 8px;
-    min-height: var(--md-sys-size-target);
-  }
   body[data-page='space'] .time-head output {
     display: block;
     margin: 0;
@@ -564,14 +551,7 @@ body[data-page='space'] #spaceDrawerBody {
 body[data-page='space'] .viewbar {
   justify-content: space-between;
   align-items: center;
-}
-body[data-page='space'] .view-group {
-  display: flex;
-  gap: 2px;
-}
-body[data-page='space'] .view-group + .view-group {
-  padding-left: 10px;
-  border-left: 1px solid var(--space-line);
+  flex-wrap: wrap;
 }
 body[data-page='space'] .space-scenes {
   flex: 1;
@@ -649,12 +629,6 @@ body[data-page='space'] .observer-fields input {
 @media (max-width: 620px) {
   body[data-page='space'] .viewbar {
     gap: 5px;
-  }
-  body[data-page='space'] .view-group {
-    gap: 3px;
-  }
-  body[data-page='space'] .view-group + .view-group {
-    padding-left: 5px;
   }
   body[data-page='space'] .compare-tabs {
     padding: 3px 8px;
@@ -777,15 +751,6 @@ body[data-page='space'] .compare-tabs button {
   body[data-page='space'] .space-shell {
     grid-template-rows: minmax(0, 1fr) auto;
   }
-  body[data-page='space'] .head {
-    position: absolute;
-    top: 44px;
-    right: 17px;
-    z-index: 5;
-  }
-  body[data-page='space'] .head > div {
-    display: none;
-  }
   body[data-page='space'] #spaceParameters {
     min-height: 26px;
     padding: 3px 8px;
@@ -814,10 +779,6 @@ body[data-page='space'] .compare-tabs button {
   }
   body[data-page='space'] .viewbar {
     padding: 4px 70px 4px 6px;
-  }
-  body[data-page='space'] .viewbar button {
-    min-height: var(--md-sys-size-target);
-    padding-block: 3px;
   }
   body[data-page='space'] .compare-tabs {
     padding: 2px 6px;
@@ -856,40 +817,4 @@ body[data-page='space'] .stage-reset:hover {
 }
 body[data-page='space'] .observer-readout button:hover {
   background: var(--design-action);
-}
-
-body[data-page='space'] .existing-compare-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  border-radius: 14px;
-  border: 0;
-  background: var(--design-surface);
-  color: var(--design-primary);
-  font-size: 12px;
-  padding: 7px 12px;
-  min-height: 34px;
-  white-space: nowrap;
-}
-body[data-page='space'] .existing-compare-link:hover {
-  background: var(--design-inset);
-}
-@media (max-width: 760px) {
-  body[data-page='space'] .existing-compare-link {
-    font-size: 11px;
-    padding: 5px 8px;
-    min-height: 30px;
-  }
-}
-@media (max-height: 330px) and (min-width: 600px) {
-  body[data-page='space'] .existing-compare-link {
-    min-height: 26px;
-    padding-block: 3px;
-  }
-}
-
-/* The model choice has enough room for its selection icon and complete short labels. */
-.viewbar > .view-group:first-child {
-  min-width: 172px;
 }

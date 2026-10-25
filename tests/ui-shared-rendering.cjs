@@ -185,10 +185,42 @@ async function paintedCorner(page, button, insideRight) {
       reducedMotion: 'reduce',
     });
     console.log('Checking 3D shared rail and focus');
-    space.on('pageerror', (e) => console.error('3D page error:', e.message));
+    const spaceErrors = [];
+    space.on('pageerror', (e) => spaceErrors.push(e.message));
     await space.goto(base + 'space/index.html');
     await space.waitForFunction(
       () => typeof spaceState === 'function' && !spaceState().fallback,
+    );
+    const auxiliary = await space
+      .locator('.head-actions > .md-outlined-action:not([hidden])')
+      .evaluateAll((nodes) =>
+        nodes.map((n) => {
+          const s = getComputedStyle(n),
+            r = n.getBoundingClientRect();
+          return {
+            fill: s.backgroundColor,
+            color: s.color,
+            border: s.border,
+            radius: s.borderRadius,
+            height: r.height,
+            top: r.top,
+            font: s.fontSize,
+            padding: s.padding,
+          };
+        }),
+      );
+    assert(auxiliary.length >= 2);
+    assert.deepEqual(
+      await space
+        .locator('.viewbar > .md-connected-choice')
+        .evaluateAll((nodes) => nodes.map((n) => getComputedStyle(n).gap)),
+      ['2px', '2px'],
+      'Both3D exclusive groups use the shared connected gap',
+    );
+    assert.deepEqual(
+      auxiliary[0],
+      auxiliary[1],
+      '3D auxiliary actions share the same component and alignment',
     );
     await space.locator('#focus').click();
     await space.waitForFunction(() => spaceState().view === 'earthmoon');
@@ -202,11 +234,13 @@ async function paintedCorner(page, button, insideRight) {
       () => document.getElementById('focus').getAttribute('aria-pressed') === 'false',
     );
     const alignment = await space.evaluate(() => {
-      const a = document.querySelector('.head h1').getBoundingClientRect(),
-        b = document.querySelector('.space-sidebar-host').getBoundingClientRect();
-      return Math.abs(a.x - b.x);
+      const a = document
+          .querySelector('.workbench-header .ui-heading h1')
+          .getBoundingClientRect(),
+        b = document.querySelector('.page-nav').getBoundingClientRect();
+      return a.right - b.left;
     });
-    assert(alignment < 1);
+    assert(alignment <= 1, '3D identity precedes the stable primary navigation');
     const sticky = await space.locator('.side').evaluate((rail) => {
       rail.scrollTop = 300;
       const header = rail.querySelector('.motion-menu-header');
@@ -238,7 +272,45 @@ async function paintedCorner(page, button, insideRight) {
       };
     });
     assert.deepEqual(style, railStyles[0], 'Lab and3D use one shared rail handle');
+    assert.deepEqual(spaceErrors, []);
     await space.close();
+    for (const [width, language] of [
+      [320, 'en'],
+      [390, 'zh'],
+    ]) {
+      console.log('Checking responsive 3D app bar', width, language);
+      const page = await browser.newPage({
+        viewport: { width, height: 960 },
+        reducedMotion: 'reduce',
+        isMobile: true,
+        hasTouch: true,
+      });
+      await page.goto(base + 'space/index' + (language === 'en' ? '.en' : '') + '.html');
+      await page.waitForFunction(
+        () =>
+          typeof spaceState === 'function' &&
+          document.documentElement.hasAttribute('data-fonts-ready'),
+      );
+      const navigation = await page.locator('.page-nav a').allTextContents();
+      for (const immersive of [false, true, false]) {
+        if (
+          ((await page.locator('body').getAttribute('class')) || '').includes(
+            'space-immersive',
+          ) !== immersive
+        )
+          await page.locator('#spaceImmersive').click();
+        assert.equal(
+          await page.evaluate(
+            () => document.documentElement.scrollWidth > innerWidth + 1,
+          ),
+          false,
+          '3D app bar and toolbar must fit narrow screens in both modes',
+        );
+        assert(await page.locator('#spaceImmersive').isVisible());
+        assert.deepEqual(await page.locator('.page-nav a').allTextContents(), navigation);
+      }
+      await page.close();
+    }
     for (const width of [1440, 390])
       for (const lang of ['zh', 'en']) {
         const page = await browser.newPage({
@@ -255,12 +327,12 @@ async function paintedCorner(page, button, insideRight) {
             const r = document.createRange();
             r.selectNodeContents(n);
             const b = r.getBoundingClientRect();
-            return b.x + b.width / 2;
+            return b.x;
           }),
         );
         assert(
-          centers.every((c) => Math.abs(c - width / 2) < 2),
-          'Opening text must share the viewport center: ' + centers,
+          centers.every((c) => Math.abs(c - centers[0]) < 2),
+          'Dialogue lines share a single left edge: ' + centers,
         );
         await page.locator('.entrance-continue').click();
         await page.locator('.document-entrance').waitFor({ state: 'detached' });
@@ -280,7 +352,7 @@ async function paintedCorner(page, button, insideRight) {
         await page.close();
       }
     console.log(
-      'PASS painted connected corners, shared sidebar selection/hover,32px seasonal bodies, identical rail handles, close/overview feedback, aligned opening text, fixed contents and Back to top',
+      'PASS painted connected corners, shared sidebar selection/hover,32px seasonal bodies, identical rail handles, close/overview feedback, left-aligned opening dialogue, fixed contents and Back to top',
     );
   } finally {
     await browser.close();

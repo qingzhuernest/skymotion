@@ -679,11 +679,6 @@ body[data-page='space'] .planet-picker button.active {
   background: var(--design-action);
   color: var(--design-on-action);
 }
-body[data-page='space'] .head-actions button {
-  border-radius: var(--design-radius-control);
-  background: var(--design-inset);
-  color: var(--design-primary);
-}
 body[data-page='space'] #play {
   background: var(--design-action);
   color: var(--design-on-action);
@@ -692,11 +687,6 @@ body[data-page='space'] #play {
 body[data-page='space'] .time-head output {
   color: var(--design-primary);
   font-size: 18px;
-}
-body[data-page='space'] .existing-compare-link {
-  color: var(--design-primary);
-  background: var(--design-inset);
-  border-radius: var(--design-radius-control);
 }
 /* A dark observation surface needs its own legible foreground, including drawers. */
 body[data-page='space'].space-immersive {
@@ -707,8 +697,7 @@ body[data-page='space'].space-immersive :is(.head, .viewbar, .timeline) {
   background: var(--design-paper);
   color: var(--design-ink);
 }
-body[data-page='space'].space-immersive
-  :is(.viewbar button.active, #play, .planet-picker button.active) {
+body[data-page='space'].space-immersive :is(#play, .planet-picker button.active) {
   background: var(--design-action);
   color: var(--design-on-action);
 }
@@ -982,10 +971,6 @@ body[data-page='welcome'] .welcome-screen ::selection {
     font-size: 17px;
   }
   .ui-parameters :is(.menu-summary, .micro) {
-    font-size: 11px;
-  }
-  body[data-page='space'] .head-actions button {
-    padding-inline: 8px;
     font-size: 11px;
   }
 }
@@ -1468,16 +1453,30 @@ body
   background: var(--design-selected);
   color: var(--design-hover);
 }
-body[data-page='space'] :is(#spaceImmersive, #spaceParameters, .existing-compare-link) {
+/* Shared outlined auxiliary action, independent of route and element tag. */
+body :is(button, a).md-outlined-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: var(--md-sys-size-target);
+  padding: 8px 12px;
+  margin: 0;
   background: var(--design-surface);
   color: var(--design-primary);
   border: 1px solid var(--design-line);
   border-radius: var(--design-radius-control);
+  font: 500 14px/1.5 var(--design-font);
+  text-decoration: none;
+  white-space: nowrap;
 }
-body[data-page='space']
-  :is(#spaceImmersive, #spaceParameters, .existing-compare-link):hover {
-  background: var(--design-selected);
-  color: var(--design-ink);
+body :is(button, a).md-outlined-action:hover {
+  background: var(--design-surface);
+  box-shadow: inset 0 0 0 999px var(--md-sys-state-hover);
+}
+body :is(button, a).md-outlined-action:active {
+  box-shadow: inset 0 0 0 999px var(--md-sys-state-pressed);
 }
 
 /* Reading rhythm: the canvas leads; controls form a quiet, legible frame. */
@@ -2098,7 +2097,7 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
 .entrance-dialogue {
   width: min(100%, 800px);
   margin: auto;
-  text-align: center;
+  text-align: left;
 }
 .entrance-sentence {
   opacity: 0;

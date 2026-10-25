@@ -354,14 +354,18 @@
           actions.append(customize, button);
           bar.append(actions);
         } else bar.append(button);
-        const heading = document.querySelector('.ui-shell > .ui-heading');
+        const heading = document.querySelector(
+          '.ui-shell > .ui-heading, .space-shell > .head',
+        );
         if (heading) {
           bar.classList.add('workbench-header');
           bar.prepend(heading);
-          bar.insertBefore(
-            heading.querySelector('.ui-body-host'),
-            bar.querySelector('.language-actions') || button,
-          );
+          const bodySelector = heading.querySelector('.ui-body-host');
+          if (bodySelector)
+            bar.insertBefore(
+              bodySelector,
+              bar.querySelector('.language-actions') || button,
+            );
           const measureHeader = () =>
             document.documentElement.style.setProperty(
               '--ui-header-height',

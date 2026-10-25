@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261025-expressive109",
+  "resourceVersion": "20261025-expressive110",
   "readingFontVersion": "20261016-font41",
   "pages": [
     "404.en.html",
@@ -187,11 +187,11 @@
     "lunar/index.html": 8718,
     "project-guide.en.html": 93197,
     "project-guide.html": 32104,
-    "space/index.en.html": 32143,
-    "space/index.html": 21289,
+    "space/index.en.html": 32003,
+    "space/index.html": 20605,
     "sundial.en.html": 119894,
     "sundial.html": 72143
   },
-  "totalBytes": 1393041,
-  "assetBytes": 8069147
+  "totalBytes": 1392217,
+  "assetBytes": 8066862
 }

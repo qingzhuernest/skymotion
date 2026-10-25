@@ -3,45 +3,41 @@
   <head>
     <meta charset="UTF-8" />
 
-<script src="../page-boot.js?v=20261025-expressive109"></script>
+    <script src="../page-boot.js?v=20261025-expressive110"></script>
 
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title data-i18n-cn="{&quot;3D Solar System · Sky Motion Lab&quot;:&quot;太阳系三维模型 · 天体视运动实验室&quot;}">3D Solar System · Sky Motion Lab</title>
     <meta name="description" content="旋转、缩放三维太阳系，观察八大行星与日地月空间关系。真实星历计算位置，教学尺度显示大小与距离。" />
     <link rel="canonical" href="https://skymotion-5md.pages.dev/space/" />
     <link rel="icon" href="../favicon.svg" />
-    <link rel="stylesheet" href="../ui-palette.css?v=20261025-expressive109" />
-    <link rel="stylesheet" href="../pages.css?v=20261025-expressive109" />
-    <link rel="stylesheet" href="space.css?v=20261025-expressive109" />
-    <link rel="stylesheet" href="compare.css?v=20261025-expressive109" />
-    <link rel="stylesheet" href="exploration.css?v=20261025-expressive109" />
-    <link rel="stylesheet" href="embed.css?v=20261025-expressive109" />
-    <link rel="stylesheet" href="immersive.css?v=20261025-expressive109" />
-    <link rel="stylesheet" href="population.css?v=20261025-expressive109" />
-    <link rel="stylesheet" href="../interface-motion.css?v=20261025-expressive109" />
-    <link rel="stylesheet" href="../controls.css?v=20261025-expressive109" />
-    <link rel="stylesheet" href="../design-system.css?v=20261025-expressive109" />
-  <link rel="stylesheet" href="../language.css?v=20261025-expressive109" />
-<script src="../language-data.js?v=20261025-expressive109" defer></script>
-<script src="../language.js?v=20261025-expressive109" defer></script>
-<script src="../page-cache.js?v=20261025-expressive109" defer></script>
-<script src="../date-picker.js?v=20261025-expressive109" defer></script>
-<link rel="stylesheet" href="../parameter-controls.css?v=20261025-expressive109" />
-<link rel="stylesheet" href="../diagram-tools.css?v=20261025-expressive109" />
-<script src="../material-controls.js?v=20261025-expressive109" defer></script>
-</head>
+    <link rel="stylesheet" href="../ui-palette.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="../pages.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="space.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="compare.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="exploration.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="embed.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="immersive.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="population.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="../interface-motion.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="../controls.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="../design-system.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="../language.css?v=20261025-expressive110" />
+    <script src="../language-data.js?v=20261025-expressive110" defer></script>
+    <script src="../language.js?v=20261025-expressive110" defer></script>
+    <script src="../page-cache.js?v=20261025-expressive110" defer></script>
+    <script src="../date-picker.js?v=20261025-expressive110" defer></script>
+    <link rel="stylesheet" href="../parameter-controls.css?v=20261025-expressive110" />
+    <link rel="stylesheet" href="../diagram-tools.css?v=20261025-expressive110" />
+    <script src="../material-controls.js?v=20261025-expressive110" defer></script>
+  </head>
   <body data-page="space">
-    <script src="embed.js?v=20261025-expressive109" defer></script>
+    <script src="embed.js?v=20261025-expressive110" defer></script>
     <nav class="page-nav" aria-label="Page navigation" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;页面导航&quot;}"><a href="../index.en.html" data-cn-href="../index.html" data-i18n-cn="{&quot;Welcome&quot;:&quot;欢迎页&quot;}">Welcome</a><a href="../lab.en.html" data-cn-href="../lab.html" data-i18n-cn="{&quot;Lab&quot;:&quot;实验台&quot;}">Lab</a><a href="../docs.en.html" data-cn-href="../docs.html" data-i18n-cn="{&quot;Documentation&quot;:&quot;文档中心&quot;}">Documentation</a><a href="./index.en.html" aria-current="page" data-cn-href="./" data-i18n-cn="{&quot;3D Sky&quot;:&quot;三维天空&quot;}">3D Sky</a></nav>
     <main class="space-shell">
-      <header class="head">
+      <header class="head ui-heading">
         <div>
           <h1 data-i18n-cn="{&quot;3D solar system&quot;:&quot;太阳系三维模型&quot;}">3D solar system</h1>
           <p data-i18n-cn="{&quot;Eight planets · Sun–Earth–Moon geometry&quot;:&quot;八大行星 · 日地月空间关系&quot;}">Eight planets · Sun–Earth–Moon geometry</p>
-        </div>
-        <div class="head-actions">
-          <button id="spaceImmersive" type="button" aria-pressed="false" data-i18n-cn="{&quot;Immersive view&quot;:&quot;\n            沉浸观察\n          &quot;}">Immersive view</button>
-          <button id="spaceParameters" type="button" aria-controls="spaceDrawer" aria-expanded="false" aria-haspopup="dialog" data-i18n-cn="{&quot;☷ Settings&quot;:&quot;\n            ☷ 参数\n          &quot;}">☷ Settings</button>
         </div>
       </header>
       <div class="space-sidebar-host" id="spaceSidebarHost">
@@ -52,18 +48,10 @@
             <h3 class="planet-name" id="name" data-i18n-cn="{&quot;Earth&quot;:&quot;地球&quot;}">Earth</h3>
             <p class="planet-type" id="type" data-i18n-cn="{&quot;Terrestrial planet&quot;:&quot;类地行星&quot;}">Terrestrial planet</p>
             <div class="facts">
-              <div>
-                <span data-i18n-cn="{&quot;Mean distance from Sun&quot;:&quot;平均太阳距离&quot;}">Mean distance from Sun</span><strong id="distance">1.00 AU</strong>
-              </div>
-              <div>
-                <span data-i18n-cn="{&quot;Orbital period&quot;:&quot;公转周期&quot;}">Orbital period</span><strong id="period" data-i18n-cn="{&quot;365.26 days&quot;:&quot;365.26 天&quot;}">365.26 days</strong>
-              </div>
-              <div>
-                <span data-i18n-cn="{&quot;Mean radius&quot;:&quot;平均半径&quot;}">Mean radius</span><strong id="radius">6,371 km</strong>
-              </div>
-              <div>
-                <span data-i18n-cn="{&quot;Current distance from Sun&quot;:&quot;当前太阳距离&quot;}">Current distance from Sun</span><strong id="actualDistance">—</strong>
-              </div>
+              <div><span data-i18n-cn="{&quot;Mean distance from Sun&quot;:&quot;平均太阳距离&quot;}">Mean distance from Sun</span><strong id="distance">1.00 AU</strong></div>
+              <div><span data-i18n-cn="{&quot;Orbital period&quot;:&quot;公转周期&quot;}">Orbital period</span><strong id="period" data-i18n-cn="{&quot;365.26 days&quot;:&quot;365.26 天&quot;}">365.26 days</strong></div>
+              <div><span data-i18n-cn="{&quot;Mean radius&quot;:&quot;平均半径&quot;}">Mean radius</span><strong id="radius">6,371 km</strong></div>
+              <div><span data-i18n-cn="{&quot;Current distance from Sun&quot;:&quot;当前太阳距离&quot;}">Current distance from Sun</span><strong id="actualDistance">—</strong></div>
             </div>
             <button class="focus" id="focus" type="button" data-i18n-cn="{&quot;View Earth up close&quot;:&quot;靠近地球观察&quot;}">View Earth up close</button>
             <p class="info" id="info"></p>
@@ -108,14 +96,17 @@
         <div class="viewbar">
           <div class="view-group md-connected-choice" role="group" aria-label="View subject" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观察对象&quot;}">
             <button id="overview" class="active" type="button" aria-pressed="true" data-i18n-cn="{&quot;Solar system&quot;:&quot;\n              太阳系\n            &quot;}">Solar system</button>
-            <button id="earthmoon" type="button" aria-pressed="false" data-i18n-cn="{&quot;Sun–Earth–Moon&quot;:&quot;\n              日地月\n            &quot;}">Sun–Earth–Moon</button>
+            <button id="earthmoon" type="button" aria-pressed="false" data-i18n-cn="{&quot;Sun–Earth–Moon&quot;:&quot;日地月&quot;}">Sun–Earth–Moon</button>
           </div>
-          <div class="view-group">
-            <div class="md-connected-choice" role="group" aria-label="Display mode" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;显示方式&quot;}">
+          <div class="view-group md-connected-choice" role="group" aria-label="Display mode" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;显示方式&quot;}">
             <button id="singleView" class="active" type="button" aria-pressed="true" data-i18n-cn="{&quot;3D&quot;:&quot;\n              三维\n            &quot;}">3D</button>
-            <button id="compareView" type="button" aria-pressed="false" data-i18n-cn="{&quot;Reference&quot;:&quot;\n              参照\n            &quot;}">Reference</button>
-            </div>
-            <a class="existing-compare-link" href="../diagrams.en.html?compare=1" data-cn-href="../diagrams.html?compare=1" data-i18n-cn="{&quot;Compare with lab&quot;:&quot;原图对照&quot;}">Compare with lab</a>
+            <button id="compareView" type="button" aria-pressed="false" data-i18n-cn="{&quot;Reference&quot;:&quot;参照&quot;}">Reference</button>
+          </div>
+          <div class="head-actions">
+            <a class="existing-compare-link md-outlined-action" href="../diagrams.en.html?compare=1" data-cn-href="../diagrams.html?compare=1" data-i18n-cn="{&quot;Compare with lab&quot;:&quot;原图对照&quot;}">Compare with lab</a>
+
+            <button id="spaceImmersive" class="md-outlined-action" type="button" aria-pressed="false" data-i18n-cn="{&quot;Immersive view&quot;:&quot;\n              沉浸观察\n            &quot;}">Immersive view</button>
+            <button id="spaceParameters" class="md-outlined-action" type="button" aria-controls="spaceDrawer" aria-expanded="false" aria-haspopup="dialog" data-i18n-cn="{&quot;☷ Settings&quot;:&quot;\n              ☷ 参数\n            &quot;}">☷ Settings</button>
           </div>
         </div>
         <div class="space-scenes" id="spaceScenes">
@@ -127,7 +118,7 @@
                 <path d="M4 9a8 8 0 1 1 .4 7M4 9V4m0 5h5" />
               </svg>
             </button>
-            <p class="nebula-hint" id="nebulaHint" hidden data-i18n-cn="{&quot;Nebula background: enlarged observational image&quot;:&quot;\n              星云背景：观测影像放大示意\n            &quot;}">Nebula background: enlarged observational image</p>
+            <p class="nebula-hint" id="nebulaHint" hidden data-i18n-cn="{&quot;Nebula background: enlarged observational image&quot;:&quot;星云背景：观测影像放大示意&quot;}">Nebula background: enlarged observational image</p>
             <div id="labels"></div>
             <div class="inspection-readout" id="inspectionReadout" aria-label="Physical values for the selected body" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;当前天体真实读数&quot;}">
               <strong id="inspectTitle" data-i18n-cn="{&quot;Earth&quot;:&quot;地球&quot;}">Earth</strong>
@@ -161,7 +152,7 @@
                   <label class="tools-check" for="satellitePoints" data-i18n-cn="{&quot;Planetary satellites&quot;:&quot;行星卫星群&quot;}">Planetary satellites<input type="checkbox" id="satellitePoints" checked role="switch" /></label>
                   <label class="tools-check" for="asteroidPoints" data-i18n-cn="{&quot;Main-belt asteroids&quot;:&quot;主带小行星&quot;}">Main-belt asteroids<input type="checkbox" id="asteroidPoints" checked role="switch" /></label>
                   <label class="tools-check" for="cometPoints" data-i18n-cn="{&quot;Periodic comets&quot;:&quot;周期彗星&quot;}">Periodic comets<input type="checkbox" id="cometPoints" checked role="switch" /></label>
-                  <button id="satelliteView" type="button" data-i18n-cn="{&quot;View the selected planet&#x27;s satellites&quot;:&quot;\n                    观察所选行星卫星群\n                  &quot;}">View the selected planet's satellites</button>
+                  <button id="satelliteView" type="button" data-i18n-cn="{&quot;View the selected planet&#x27;s satellites&quot;:&quot;观察所选行星卫星群&quot;}">View the selected planet's satellites</button>
                   <label class="tools-check" for="nebulaBackground" data-i18n-cn="{&quot;Nebula image background&quot;:&quot;星云影像背景&quot;}">Nebula image background<input type="checkbox" id="nebulaBackground" role="switch" /></label>
                   <button id="nebulaPhotos" type="button" disabled data-i18n-cn="{&quot;View observational nebula images&quot;:&quot;\n                    查看真实星云影像\n                  &quot;}">View observational nebula images</button>
                   <p class="tools-note" id="populationStatus" data-i18n-cn="{&quot;Local small-body data loads when you enter immersive view.&quot;:&quot;\n                    进入沉浸观察时加载本地小天体数据。\n                  &quot;}">Local small-body data loads when you enter immersive view.</p>
@@ -205,7 +196,9 @@
           <h2 id="spaceDrawerTitle" data-i18n-cn="{&quot;Solar system model&quot;:&quot;太阳系空间模型&quot;}">Solar system model</h2>
         </div>
         <button id="spaceDrawerClose" type="button" aria-label="Close settings" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;关闭参数菜单&quot;}">
-          <svg aria-hidden="true" viewbox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" /></svg>
+          <svg aria-hidden="true" viewbox="0 0 24 24">
+            <path d="m6 6 12 12M18 6 6 18" />
+          </svg>
         </button>
       </header>
       <div id="spaceDrawerBody"></div>
@@ -213,9 +206,7 @@
     <dialog id="nebulaViewer" aria-labelledby="nebulaTitle">
       <header class="nebula-header">
         <h2 id="nebulaTitle" data-i18n-cn="{&quot;Observational nebula images&quot;:&quot;真实星云影像&quot;}">Observational nebula images</h2>
-        <button id="nebulaClose" type="button" aria-label="Close nebula images" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;关闭星云影像&quot;}">
-          ×
-        </button>
+        <button id="nebulaClose" type="button" aria-label="Close nebula images" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;关闭星云影像&quot;}">×</button>
       </header>
       <select id="nebulaChoice" aria-label="Select a nebula image" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;选择星云影像&quot;}"></select>
       <figure class="nebula-photo"><img id="nebulaImage" alt="" /></figure>
@@ -225,29 +216,29 @@
         <a id="nebulaSource" href="#" target="_blank" rel="noopener" data-i18n-cn="{&quot;NASA image source&quot;:&quot;NASA影像来源&quot;}">NASA image source</a>
       </p>
     </dialog>
-    <script src="../interface-motion.js?v=20261025-expressive109" defer></script>
-    <script src="ui.js?v=20261025-expressive109" defer></script>
-    <script src="vendor/three.min.js?v=20261025-expressive109" defer></script>
-    <script src="../astronomy.js?v=20261025-expressive109" defer></script>
-    <script src="model.js?v=20261025-expressive109" defer></script>
-    <script src="earth-frame.js?v=20261025-expressive109" defer></script>
-    <script src="exploration.js?v=20261025-expressive109" defer></script>
-    <script src="appearance.js?v=20261025-expressive109" defer></script>
-    <script src="stars.js?v=20261025-expressive109" defer></script>
-    <script src="population.js?v=20261025-expressive109" defer></script>
-    <script src="nebulae.js?v=20261025-expressive109" defer></script>
-    <script src="compare.js?v=20261025-expressive109" defer></script>
-    <script src="observer.js?v=20261025-expressive109" defer></script>
-    <script src="../experiment-storage.js?v=20261025-expressive109" defer></script>
-    <script src="scene.js?v=20261025-expressive109" defer></script>
-    <script src="immersive.js?v=20261025-expressive109" defer></script>
-    <script src="../interaction-history.js?v=20261025-expressive109" defer></script>
-    <script src="history.js?v=20261025-expressive109" defer></script>
-  <script src="../customization-mode.js?v=20261025-expressive109" defer></script>
-<script src="customization.js?v=20261025-expressive109" defer></script>
-<script src="../diagram-sampling.js?v=20261025-expressive109" defer></script>
-<script src="../parameter-controls.js?v=20261025-expressive109" defer></script>
-<script src="../diagram-tool-definitions.js?v=20261025-expressive109" defer></script>
-<script src="../diagram-tools.js?v=20261025-expressive109" defer></script>
-</body>
+    <script src="../interface-motion.js?v=20261025-expressive110" defer></script>
+    <script src="ui.js?v=20261025-expressive110" defer></script>
+    <script src="vendor/three.min.js?v=20261025-expressive110" defer></script>
+    <script src="../astronomy.js?v=20261025-expressive110" defer></script>
+    <script src="model.js?v=20261025-expressive110" defer></script>
+    <script src="earth-frame.js?v=20261025-expressive110" defer></script>
+    <script src="exploration.js?v=20261025-expressive110" defer></script>
+    <script src="appearance.js?v=20261025-expressive110" defer></script>
+    <script src="stars.js?v=20261025-expressive110" defer></script>
+    <script src="population.js?v=20261025-expressive110" defer></script>
+    <script src="nebulae.js?v=20261025-expressive110" defer></script>
+    <script src="compare.js?v=20261025-expressive110" defer></script>
+    <script src="observer.js?v=20261025-expressive110" defer></script>
+    <script src="../experiment-storage.js?v=20261025-expressive110" defer></script>
+    <script src="scene.js?v=20261025-expressive110" defer></script>
+    <script src="immersive.js?v=20261025-expressive110" defer></script>
+    <script src="../interaction-history.js?v=20261025-expressive110" defer></script>
+    <script src="history.js?v=20261025-expressive110" defer></script>
+    <script src="../customization-mode.js?v=20261025-expressive110" defer></script>
+    <script src="customization.js?v=20261025-expressive110" defer></script>
+    <script src="../diagram-sampling.js?v=20261025-expressive110" defer></script>
+    <script src="../parameter-controls.js?v=20261025-expressive110" defer></script>
+    <script src="../diagram-tool-definitions.js?v=20261025-expressive110" defer></script>
+    <script src="../diagram-tools.js?v=20261025-expressive110" defer></script>
+  </body>
 </html>
