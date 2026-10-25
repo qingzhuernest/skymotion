@@ -218,7 +218,7 @@
   planets[2].mesh.add(earthReference);
   let earthFrame;
   const picker = document.createElement('div');
-  picker.className = 'planet-picker';
+  picker.className = 'planet-picker md-connected-choice md-choice-grid md-compact-choice';
   picker.setAttribute('aria-label', '选择行星');
   for (const [index, spec] of Model.bodies.entries()) {
     const button = document.createElement('button');

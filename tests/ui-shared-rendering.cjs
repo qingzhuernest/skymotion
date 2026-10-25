@@ -117,10 +117,7 @@ async function paintedCorner(page, button, insideRight) {
           const s = getComputedStyle(n);
           return {
             height: n.getBoundingClientRect().height,
-            painted:
-              n.getBoundingClientRect().height -
-              parseFloat(s.borderTopWidth) -
-              parseFloat(s.borderBottomWidth),
+            painted: parseFloat(getComputedStyle(n, '::before').height),
             class: n.parentElement.className,
           };
         });
@@ -140,12 +137,9 @@ async function paintedCorner(page, button, insideRight) {
         const selectedSeason = await seasons.nth(index).evaluate((n) => {
           const s = getComputedStyle(n);
           return {
-            fill: s.backgroundColor,
+            fill: getComputedStyle(n, '::before').backgroundColor,
             color: s.color,
-            painted:
-              n.getBoundingClientRect().height -
-              parseFloat(s.borderTopWidth) -
-              parseFloat(s.borderBottomWidth),
+            painted: parseFloat(getComputedStyle(n, '::before').height),
           };
         });
         assert.deepEqual(
@@ -222,6 +216,35 @@ async function paintedCorner(page, button, insideRight) {
       auxiliary[1],
       '3D auxiliary actions share the same component and alignment',
     );
+    const planetShapes = await space
+      .locator('.planet-picker button')
+      .evaluateAll((nodes) =>
+        nodes.map((n) => {
+          const s = getComputedStyle(n, '::before');
+          return {
+            painted: parseFloat(s.height),
+            corner: s.borderRadius,
+            target: n.getBoundingClientRect().height,
+          };
+        }),
+      );
+    assert.equal(planetShapes.length, 8);
+    assert(
+      planetShapes.every(
+        (p) => p.painted === 32 && p.corner === '999px' && p.target >= 40,
+      ),
+      'All planets, including the selected planet, keep their flatter proportions',
+    );
+    await space.locator('[data-planet="4"]').click();
+    await space.waitForFunction(() => spaceState().selected === 4);
+    assert.equal(
+      await space
+        .locator('[data-planet="4"]')
+        .evaluate((n) => getComputedStyle(n, '::before').borderRadius),
+      '999px',
+    );
+    await space.locator('[data-planet="2"]').click();
+    await space.waitForFunction(() => spaceState().selected === 2);
     await space.locator('#focus').click();
     await space.waitForFunction(() => spaceState().view === 'earthmoon');
     await space.waitForFunction(() =>
@@ -285,7 +308,10 @@ async function paintedCorner(page, button, insideRight) {
         isMobile: true,
         hasTouch: true,
       });
-      await page.goto(base + 'space/index' + (language === 'en' ? '.en' : '') + '.html');
+      await page.goto(base + 'space/index' + (language === 'en' ? '.en' : '') + '.html', {
+        waitUntil: 'domcontentloaded',
+        timeout: 60000,
+      });
       await page.waitForFunction(
         () =>
           typeof spaceState === 'function' &&
@@ -352,7 +378,7 @@ async function paintedCorner(page, button, insideRight) {
         await page.close();
       }
     console.log(
-      'PASS painted connected corners, shared sidebar selection/hover,32px seasonal bodies, identical rail handles, close/overview feedback, left-aligned opening dialogue, fixed contents and Back to top',
+      'PASS painted connected corners, shared sidebar selection/hover,32px seasonal and planet surfaces, identical rail handles, close/overview feedback, left-aligned opening dialogue, fixed contents and Back to top',
     );
   } finally {
     await browser.close();

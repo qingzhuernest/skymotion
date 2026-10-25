@@ -371,7 +371,7 @@ interaction-history.js使用适配器读取科学状态、表单字段与路由�
 
 ui-palette.css拥有Material 3 Expressive语义色：绿色主操作、鼠尾草色表面层级、辅助与第三色容器。design-system.css统一颜色、形状、状态和动效角色；页面样式只安排组件位置。科学图的太阳、轨道和天体数据颜色独立于UI选中色。
 
-md-sys-color-*定义主操作、辅助色、表面层级、文字与边界；md-sys-shape-corner-*定义4／8／12／16／20／28／32／48px与全圆角形状。小型桌面操作目标40px，窄屏与触屏48px；组件视觉尺寸与操作目标区分。md-sys-state-hover／pressed负责状态层，md-sys-motion-*负责时长与缓动。连接式按钮在选中与按压时改变形状，不再叠加独立滑动底板。滑块轨道16px、竖向手柄4px宽，由material-controls.js根据原生value与范围计算填充进度；程序赋值后由原有状态所有者调用updateRange或updateRanges，键盘、拖动、历史和天文计算仍由原模块管理。中文保留SkyMotion Reading宋体，英文保留SkyMotion Charter。
+md-sys-color-*定义主操作、辅助色、表面层级、文字与边界；md-sys-shape-corner-*定义4／8／12／16／20／28／32／48px与全圆角形状。小型桌面操作目标40px，窄屏与触屏48px；组件视觉尺寸与操作目标区分。md-sys-state-hover／pressed负责状态层，md-sys-motion-*负责时长与缓动。常规连接式按钮在选中与按压时改变形状，不再叠加独立滑动底板；季节与行星选择共用紧凑网格，32px可见表面保留圆角轮廓，以较低高度呈现扁平比例。滑块轨道16px、竖向手柄4px宽，由material-controls.js根据原生value与范围计算填充进度；程序赋值后由原有状态所有者调用updateRange或updateRanges，键盘、拖动、历史和天文计算仍由原模块管理。中文保留SkyMotion Reading宋体，英文保留SkyMotion Charter。
 
 - 字体、圆角、控件高度和焦点样式遵循DESIGN.md；新增入口复用现有菜单，不覆盖科学画布。
 - 760像素及以下使用原生dialog参数抽屉；同一套控件节点迁移，不复制第二套状态。

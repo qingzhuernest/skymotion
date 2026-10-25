@@ -363,22 +363,53 @@ body
   }
 }
 
-/* Compact seasonal shortcuts:32px painted body within the shared40/48px target. */
-body .season-buttons.md-connected-choice {
+/* Compact grids share a32px low-profile surface within a full40/48px target.
+   The painted surface is independent of target padding, including on touch screens. */
+body .md-choice-grid.md-connected-choice {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--md-choice-columns, 4), minmax(0, 1fr));
   width: 100%;
   gap: 2px;
 }
-body .season-buttons.md-connected-choice > button {
+body .md-connected-choice.md-compact-choice > button {
+  --md-choice-fill: var(--md-sys-color-primary-container);
+  position: relative;
+  isolation: isolate;
   min-width: 0;
   height: var(--md-sys-size-target);
   min-height: var(--md-sys-size-target);
   padding: 0 4px;
-  border-inline: 0;
-  border-block: calc((var(--md-sys-size-target) - 32px) / 2) solid transparent;
-  background-clip: padding-box;
-  font-size: 13px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  box-shadow: none;
+  font-size: 12px;
+  line-height: 1.3;
+}
+body .md-connected-choice.md-compact-choice > button:is(:hover, :active) {
+  background: transparent;
+  border-radius: var(--md-sys-shape-corner-full);
+  box-shadow: none;
+}
+body .md-connected-choice.md-compact-choice > button::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: calc((var(--md-sys-size-target) - 32px) / 2) 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-choice-fill);
+  pointer-events: none;
+}
+body
+  .md-connected-choice.md-compact-choice
+  > button:is([aria-pressed='true'], .active, .selected) {
+  --md-choice-fill: var(--md-sys-color-primary);
+}
+body .md-connected-choice.md-compact-choice > button:hover::before {
+  box-shadow: inset 0 0 0 999px var(--md-sys-state-hover);
+}
+body .md-connected-choice.md-compact-choice > button:active::before {
+  box-shadow: inset 0 0 0 999px var(--md-sys-state-pressed);
 }
 .ui-parameters > h2 {
   color: var(--design-ink);
@@ -667,18 +698,6 @@ body[data-page='space'] .facts div {
   border-color: var(--design-line);
   padding-bottom: 8px;
 }
-body[data-page='space'] .planet-picker {
-  gap: 6px;
-}
-body[data-page='space'] .planet-picker button {
-  background: var(--design-inset);
-  color: var(--design-muted);
-  border-radius: var(--md-sys-shape-corner-full);
-}
-body[data-page='space'] .planet-picker button.active {
-  background: var(--design-action);
-  color: var(--design-on-action);
-}
 body[data-page='space'] #play {
   background: var(--design-action);
   color: var(--design-on-action);
@@ -697,7 +716,7 @@ body[data-page='space'].space-immersive :is(.head, .viewbar, .timeline) {
   background: var(--design-paper);
   color: var(--design-ink);
 }
-body[data-page='space'].space-immersive :is(#play, .planet-picker button.active) {
+body[data-page='space'].space-immersive #play {
   background: var(--design-action);
   color: var(--design-on-action);
 }

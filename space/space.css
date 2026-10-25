@@ -119,19 +119,7 @@ body[data-page='space'] .planet-type {
   margin: 2px 0;
 }
 body[data-page='space'] .planet-picker {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 5px;
-  margin: 0 0 14px;
-}
-body[data-page='space'] .planet-picker button {
-  padding: 5px 2px;
-  font-size: 11px;
-  border: 0;
-}
-body[data-page='space'] .planet-picker button.active {
-  background: var(--space-primary);
-  color: white;
+  margin-bottom: 14px;
 }
 body[data-page='space'] .facts {
   display: grid;

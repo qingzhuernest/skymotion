@@ -255,9 +255,7 @@ html:lang(en) .document-content h2 {
   }
 }
 html:lang(en) .ui-parameters .season-buttons {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2px;
+  --md-choice-columns: 2;
 }
 html:lang(en) .ui-parameters .season-buttons button {
   min-width: 0;
