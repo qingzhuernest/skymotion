@@ -323,22 +323,14 @@ body .md-connected-choice > button {
     color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
 }
 body .md-connected-choice > button:first-child {
-  border-radius: var(--md-sys-shape-corner-full) var(--md-comp-connected-button-inner-corner)
+  border-radius: var(--md-sys-shape-corner-full)
+    var(--md-comp-connected-button-inner-corner)
     var(--md-comp-connected-button-inner-corner) var(--md-sys-shape-corner-full);
 }
 body .md-connected-choice > button:where(:nth-last-child(1 of button:not([hidden]))) {
-  border-radius: var(--md-comp-connected-button-inner-corner) var(--md-sys-shape-corner-full)
-    var(--md-sys-shape-corner-full) var(--md-comp-connected-button-inner-corner);
-}
-body .md-connected-choice > button::before {
-  content: '';
-  display: none;
-  width: 14px;
-  height: 14px;
-  flex: none;
-  background: currentColor;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m3 8 3 3 7-7' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
-    center/contain no-repeat;
+  border-radius: var(--md-comp-connected-button-inner-corner)
+    var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-full)
+    var(--md-comp-connected-button-inner-corner);
 }
 body
   .md-connected-choice
@@ -347,15 +339,7 @@ body
   color: var(--md-sys-color-on-primary);
   border-radius: var(--md-sys-shape-corner-full);
 }
-body
-  .md-connected-choice
-  > button:is([aria-pressed='true'], [aria-selected='true'], .active, .selected)::before {
-  display: block;
-}
 
-body .md-connected-choice > button:has(> svg)::before {
-  display: none;
-}
 body
   .md-connected-choice
   > button:is([aria-pressed='true'], [aria-selected='true'], .active, .selected):active {

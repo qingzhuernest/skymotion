@@ -11,7 +11,7 @@ ui-palette.css owns literal colors. Primary #255c43, on-primary white; primary-c
 
 ## Components and density
 - Global top app bar: stable primary destinations, observation identity, direct Sun/Moon connected choice, customization and language. 64px desktop minimum, responsive two-row small-screen composition.
-- Navigation: primary destination indicators use the primary container. Connected exclusive controls use a 2px gap, 12px inner corners and a fully rounded selected segment; press morphs to 16px. No second moving selection backplate.
+- Navigation: primary destination indicators use the primary container. Connected exclusive controls use a 2px gap, 12px inner corners and a fully rounded selected segment; press morphs to 16px. No second moving selection backplate or decorative checkmark; color, shape and accessible state identify selection.
 - Sidebar: one shared menu-section implementation for content and settings. White 20px grouped surfaces on a tonal rail; nested groups use 16px corners. Inner heading radius subtracts the 1px structural stroke so background never covers the outline. List rows share alignment and state roles.
 - Buttons: filled primary, filled tonal, outlined, text and icon roles. Small desktop targets at least40px; narrow or coarse-pointer targets48px. Visual density must not reduce target size. Explicit focus, disabled, hover and pressed states.
 - Fields: Material outlined fields, visible labels, native editing and keyboard support. Switches use the shared52×32 track and selected thumb geometry; checkboxes remain distinct controls.

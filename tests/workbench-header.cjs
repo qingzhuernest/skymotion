@@ -97,6 +97,11 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
           'Expressive connected group: separate surfaces, rounded inner corners and no shared outline',
         );
         const selectedButton = page.locator('.body-switch [aria-pressed=true]');
+        assert.equal(
+          await selectedButton.evaluate((n) => getComputedStyle(n, '::before').content),
+          'none',
+          'Selection is conveyed by fill and shape without an extra checkmark',
+        );
         await selectedButton.hover();
         const contrast = [await selectedButton.evaluate(controlContrast)];
         await page.mouse.down();

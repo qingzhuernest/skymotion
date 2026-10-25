@@ -558,9 +558,6 @@ body .dt-rail-navigation button {
   font-size: 12px;
   white-space: normal;
 }
-.dt-rail-navigation[data-choice-count='3'] button::before {
-  display: none;
-}
 body .dt-rail-navigation button:focus-visible {
   outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 2px;
