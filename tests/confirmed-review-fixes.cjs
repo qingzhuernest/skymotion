@@ -62,7 +62,7 @@ assert.equal(discs.length,2);assert.deepEqual(discs[1].slice(0,2),lines[0]);
   await page.waitForFunction(()=>Math.abs(state.time-960)<3);
   assert.equal(await page.locator('#workbenchTime').inputValue(),String(await page.evaluate(()=>state.time)));
   await page.evaluate(()=>SkyPreferences.set({theme:'dark',palette:'sage'}));
-  const sageReset=await page.locator('#viewReset').evaluate(e=>getComputedStyle(e).color);await page.evaluate(()=>SkyPreferences.set({palette:'blue'}));assert.notEqual(await page.locator('#viewReset').evaluate(e=>getComputedStyle(e).color),sageReset);
+  const sageReset=await page.locator('#viewReset').evaluate(e=>getComputedStyle(e).color);await page.evaluate(()=>SkyPreferences.set({palette:'blue'}));await page.waitForFunction(previous=>getComputedStyle(document.getElementById('viewReset')).color!==previous,sageReset);assert.notEqual(await page.locator('#viewReset').evaluate(e=>getComputedStyle(e).color),sageReset);
   await page.goto(base+'contact.en.html?lang=en');await page.waitForSelector('html[data-fonts-ready]');
   await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async()=>{}},configurable:true}));await page.locator('#copyAuthorEmail').click();assert.equal(await page.locator('#authorCopyStatus').textContent(),'Email address copied');
   await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async()=>{throw Error('blocked');}},configurable:true}));await page.locator('#copyAuthorEmail').click();assert.equal(await page.locator('#authorCopyStatus').textContent(),'Touch and hold the email address to copy it');
