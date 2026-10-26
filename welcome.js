@@ -222,7 +222,7 @@
     request();
   }
   function pulse(x, y, color = '#c6e0ff') {
-    if (!reducedMotion.matches && sparks.length < 28)
+    if (!(reducedMotion.matches || !window.SkyPreferences?.get().welcomeMotion) && sparks.length < 28)
       sparks.push({ x, y, color, born: performance.now() });
     request();
   }
@@ -315,13 +315,13 @@
     }
     // Keep touch-screen scenes near 60 frames/s even on high-refresh displays.
     const interval = coarsePointer.matches ? 16 : 15;
-    if (!reducedMotion.matches && now - paintTime < interval) {
+    if (!(reducedMotion.matches || !window.SkyPreferences?.get().welcomeMotion) && now - paintTime < interval) {
       request();
       return;
     }
     const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
     last = paintTime = now;
-    if (opening && (reducedMotion.matches || !document.documentElement.classList.contains('welcome-opening'))) finishOpening();
+    if (opening && ((reducedMotion.matches || !window.SkyPreferences?.get().welcomeMotion) || !document.documentElement.classList.contains('welcome-opening'))) finishOpening();
     if (opening && openingReady && openingActivated) {
       openingTime += dt;
       const travel = Math.max(0, Math.min(1, (openingTime - 1.35) / 2.7));
@@ -330,11 +330,11 @@
       document.documentElement.style.setProperty('--opening-reveal', reveal * reveal * (3-2*reveal));
       if (openingTime >= 4.05) finishOpening();
     }
-    if (!reducedMotion.matches) {
+    if (!(reducedMotion.matches || !window.SkyPreferences?.get().welcomeMotion)) {
       clock += dt;
       if (!opening) advance(dt, now);
     }
-    if (!reducedMotion.matches && !opening) {
+    if (!(reducedMotion.matches || !window.SkyPreferences?.get().welcomeMotion) && !opening) {
       if (!nextMeteor) nextMeteor = now + 1500;
       if (now >= nextMeteor) {
         if (meteors.length < 6) spawnMeteors(now, 1 + Math.round(random()));
@@ -438,11 +438,11 @@
         meteors.splice(i, 1);
         continue;
       }
-      const travel = reducedMotion.matches ? 0 : age * Math.min(width, height) * meteor.speed;
+      const travel = (reducedMotion.matches || !window.SkyPreferences?.get().welcomeMotion) ? 0 : age * Math.min(width, height) * meteor.speed;
       const x = meteor.u * width + Math.cos(meteor.angle) * travel;
       const y = meteor.v * height + Math.sin(meteor.angle) * travel;
       ctx.globalAlpha = Math.sin(Math.PI * age) * meteor.brightness;
-      if (reducedMotion.matches) {
+      if ((reducedMotion.matches || !window.SkyPreferences?.get().welcomeMotion)) {
         ctx.fillStyle = meteor.color;
         ctx.beginPath();
         ctx.arc(x, y, 2.5, 0, Math.PI * 2);
@@ -470,7 +470,7 @@
     }
     ctx.globalAlpha = 1;
     ctx.lineWidth = 1;
-    if (!reducedMotion.matches || sparks.length || meteors.length) request();
+    if (!(reducedMotion.matches || !window.SkyPreferences?.get().welcomeMotion) || sparks.length || meteors.length) request();
     else last = 0;
   }
   function edgeKey(a, b) {
@@ -677,8 +677,8 @@
     }
   }
   $('welcomeMeteor').onclick = () => {
-    spawnMeteors(performance.now(), reducedMotion.matches ? 1 : 4);
-    setStatus(reducedMotion.matches ? '一颗亮星出现在星空中' : '几颗流星正划过星空');
+    spawnMeteors(performance.now(), (reducedMotion.matches || !window.SkyPreferences?.get().welcomeMotion) ? 1 : 4);
+    setStatus((reducedMotion.matches || !window.SkyPreferences?.get().welcomeMotion) ? '一颗亮星出现在星空中' : '几颗流星正划过星空');
     request();
   };
   document.addEventListener('visibilitychange', () => {
@@ -696,6 +696,7 @@
     last = 0;
     request();
   });
+  window.SkyPreferences?.subscribe(() => { last = 0; request(); });
   new ResizeObserver(resize).observe(canvas);
   resize();
   window.skyWelcomeReady = true;

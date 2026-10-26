@@ -11,7 +11,7 @@ body[data-page='space'][data-embedded='true']:not([data-synchronized='true']) .v
   margin: 0;
   text-align: center;
   color: var(--design-night-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 body[data-page='space'][data-embedded='true']
   :is(.page-nav, .head, .space-sidebar-host, .timeline, .viewbar, .footer-note, #spaceDrawer) {

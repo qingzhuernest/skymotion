@@ -1,0 +1,7 @@
+{
+  "name":"skymotion-theme-colors",
+  "private":true,
+  "type":"module",
+  "scripts":{"build":"esbuild source.js --bundle --minify --format=iife --legal-comments=inline --outfile=../../theme-colors.js"},
+  "devDependencies":{"@material/material-color-utilities":"0.3.0","esbuild":"0.25.12"}
+}

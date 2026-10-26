@@ -38,6 +38,8 @@ The dictionaries cover every shared initial-state field and core subsystem struc
 
 site-catalog.json defines page paths, main navigation, view names, groups and availability. lab-state.json defines defaults, ranges, choices and camera fields. scripts/site_sources.py validates these sources and generates marked sections in boot and state modules; edit the canonical data rather than generated regions.
 
+preferences.js is the single preference owner, exposing get, set, subscribe, reset, export and parseImport. Version 1 records use skymotion-preferences; language remains compatible with its existing storage key. Material Color Utilities 0.3.0 in theme-colors.js generates palettes mapped to the existing design color roles. The bundled library is Apache-2.0; see theme-colors.LICENSE. Scientific state is excluded from preference records.
+
 ## Data flow from input to drawing
 
 1. A native input or slider validates and commits to state, stopping incompatible playback. Reference edits instead update the store identified by source and body.

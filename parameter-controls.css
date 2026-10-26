@@ -61,7 +61,7 @@ body input.parameter-scrub:focus-visible {
 .dt-purpose-help {
   margin: 6px 0;
   color: var(--design-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.6;
 }
 @media (pointer: coarse) {

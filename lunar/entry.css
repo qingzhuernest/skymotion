@@ -49,11 +49,11 @@ body.lunar-orbit-active
 }
 .lunar-controls-host .lunar-explanation h2 {
   margin: 4px 0 12px;
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
   line-height: 1.5;
 }
 .lunar-controls-host .lunar-explanation p {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.9;
 }
 .lunar-controls-host .lunar-mode {
@@ -80,7 +80,7 @@ body.lunar-orbit-active
   margin: 24px 0 0;
 }
 .lunar-controls-host .lunar-readouts dd {
-  font-size: 24px;
+  font-size: calc(24px * var(--ui-font-scale, 1));
 }
 .lunar-timeline-host .lunar-workbench {
   margin: 0;
@@ -133,7 +133,7 @@ body[data-page="diagrams"] .ui-plot {
   border-radius: 12px;
   background: var(--design-surface);
   color: var(--design-ink);
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   line-height: 1.6;
   box-shadow: 0 4px 14px rgb(32 50 62 / 12%);
 }

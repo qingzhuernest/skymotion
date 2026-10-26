@@ -118,6 +118,19 @@ def generated_sources(root=ROOT):
         if path.is_file():
             source = path.read_text()
             source = re.sub(r'((?:src|href)="(?!https?://|//)[^"]+\.(?:js|css)\?v=)[^"]+', lambda match: match[1] + catalog['resourceVersion'], source)
+            directory = posixpath.dirname(page['path']) or '.'
+            prefix = posixpath.relpath('.', directory)
+            prefix = '/' if page['path'] == '404.html' else ('' if prefix == '.' else prefix + '/')
+            assets = '\n'.join([
+                '<script src="' + prefix + 'theme-colors.js?v=' + catalog['resourceVersion'] + '"></script>',
+                '<script src="' + prefix + 'preferences.js?v=' + catalog['resourceVersion'] + '"></script>',
+            ])
+            source = re.sub(r'\n?(?:<script src="[^"\n]*(?:theme-colors|preferences)\.js[^"\n]*"></script>|<link rel="stylesheet" href="[^"\n]*preferences\.css[^"\n]*">)', '', source)
+            source = re.sub(r'(<meta\s+charset=[^>]+>)', lambda match: match[1] + '\n' + assets, source, count=1, flags=re.I)
+            if page['path'] == '404.html':
+                source = source.replace('href="controls.css?', 'href="/controls.css?')
+            extra = '' if 'controls.css?' in source else '<link rel="stylesheet" href="' + prefix + 'controls.css?v=' + catalog['resourceVersion'] + '">\n'
+            source = source.replace('</head>', extra + '<link rel="stylesheet" href="' + prefix + 'preferences.css?v=' + catalog['resourceVersion'] + '">\n</head>', 1)
             result[page['path']] = re.sub(r'<nav\b[^>]*class="page-nav"[\s\S]*?</nav>', lambda _: navigation_html(catalog, page['path']), source)
     return result
 

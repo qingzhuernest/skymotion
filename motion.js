@@ -2,7 +2,7 @@
  * 统一动画调度与视觉插值；科学输入和精确读数仍由各计算模块提供。
  */
 /* One frame scheduler; visual interpolation never changes scientific input state. */
-const reducedMotion = matchMedia('(prefers-reduced-motion:reduce)');
+const reducedMotion = (window.SkyPreferences?.reducedMotion || matchMedia('(prefers-reduced-motion:reduce)'));
 let motionRAF = 0,
   motionLast = 0,
   motionUI = 0,

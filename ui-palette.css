@@ -85,4 +85,5 @@ body[data-page='space'].space-immersive {
   --design-primary: var(--design-night-primary);
   --design-hover: var(--design-night-hover);
   --design-selected: var(--design-night-selected);
+  --design-on-selected: var(--design-night-ink);
 }

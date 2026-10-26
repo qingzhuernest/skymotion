@@ -52,7 +52,7 @@ body .scene-builder button {
   background: var(--design-surface);
   color: var(--design-ink);
   font: inherit;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   min-height: var(--md-sys-size-target);
   padding: 7px 11px;
   border-radius: var(--md-sys-shape-corner-full);
@@ -91,7 +91,7 @@ body .sb-toolbar button[aria-pressed='true'] {
   flex-wrap: wrap;
   justify-content: space-between;
   color: var(--design-night-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   pointer-events: none;
 }
 .sb-footer {
@@ -102,7 +102,7 @@ body .sb-toolbar button[aria-pressed='true'] {
   flex-wrap: wrap;
   justify-content: space-between;
   color: var(--design-night-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.7;
   pointer-events: none;
 }
@@ -114,16 +114,16 @@ body .sb-toolbar button[aria-pressed='true'] {
 }
 .sb-controls h2 {
   margin: 0 0 10px;
-  font-size: 21px;
+  font-size: calc(21px * var(--ui-font-scale, 1));
   font-weight: 400;
 }
 .sb-controls h3 {
   margin: 24px 0 10px;
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   font-weight: 600;
 }
 .sb-intro {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.8;
   color: var(--design-muted);
   margin: 0 0 12px;
@@ -141,7 +141,7 @@ body .sb-add button {
   align-items: center;
   gap: 8px;
   margin: 12px 0;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 body .sb-controls input:not([type='checkbox']):not([type='range']):not([type='radio']),
 body .sb-controls select {
@@ -154,7 +154,7 @@ body .sb-controls select {
   border: 1px solid var(--design-line);
   border-radius: var(--md-sys-shape-corner-extra-small);
   font: inherit;
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
 }
 body .sb-inline input {
   max-width: 72px;
@@ -171,7 +171,7 @@ body .sb-inline input {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 .sb-options input,
 .sb-lock input {
@@ -194,7 +194,7 @@ body .sb-object-list .sb-object {
   width: 100%;
 }
 .sb-object-symbol {
-  font-size: 20px;
+  font-size: calc(20px * var(--ui-font-scale, 1));
   line-height: 1;
   width: 18px;
   text-align: center;
@@ -202,7 +202,7 @@ body .sb-object-list .sb-object {
 }
 .sb-object small {
   margin-left: auto;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   color: var(--design-muted);
 }
 .sb-fields {
@@ -215,7 +215,7 @@ body .sb-object-list .sb-object {
   flex-direction: column;
   gap: 5px;
   min-width: 0;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   color: var(--design-muted);
 }
 .sb-fields label:first-child {
@@ -239,7 +239,7 @@ body .sb-object-list .sb-object {
   padding-top: 14px;
 }
 .sb-examples summary {
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   cursor: pointer;
 }
 .sb-examples > div {
@@ -249,13 +249,13 @@ body .sb-object-list .sb-object {
 }
 .sb-model-note {
   margin: 16px 0 0;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.8;
   color: var(--design-muted);
 }
 .sb-status {
   margin: 16px 0 0;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.8;
 }
 .sb-status {
@@ -274,12 +274,12 @@ body .sb-object-list .sb-object {
   body .sb-toolbar button {
     min-height: var(--md-sys-size-target, 40px);
     padding: 7px;
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-font-scale, 1));
   }
   .sb-hud {
     inset: 72px 16px auto;
     gap: 4px;
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
   }
   .sb-hud span:last-child {
     max-width: 190px;
@@ -287,12 +287,12 @@ body .sb-object-list .sb-object {
   }
   .sb-footer {
     inset: auto 14px 14px;
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
     gap: 5px;
   }
   body .sb-controls input:not([type='checkbox']):not([type='range']):not([type='radio']),
   body .sb-controls select {
-    font-size: 16px;
+    font-size: calc(16px * var(--ui-font-scale, 1));
   }
   body .sb-controls button {
     min-height: var(--md-sys-size-target, 40px);
@@ -344,11 +344,11 @@ body.scene-builder-active .ui-parameter-drawer .ui-parameters {
 }
 body .sb-tool-grid button {
   padding-inline: 6px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .sb-records {
   margin-top: 12px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.7;
   color: var(--design-muted);
 }
@@ -372,7 +372,7 @@ body .sb-tool-grid button {
   right: 14px;
   text-align: center;
   color: var(--design-night-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   pointer-events: none;
 }
 .sb-mobile-compare {
@@ -407,7 +407,7 @@ body .sb-tool-grid button {
 }
 .sb-tool-section summary {
   cursor: pointer;
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   font-weight: 500;
 }
 .sb-tool-section[open] > .sb-tool-grid {
@@ -484,7 +484,7 @@ body .sb-object-menu button {
   background: transparent;
   color: var(--design-ink);
   font: inherit;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 body .sb-object-menu button:hover {
   background: var(--design-inset);

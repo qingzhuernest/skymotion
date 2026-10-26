@@ -9,7 +9,7 @@
 }
 .solar-study-controls h2 {
   margin: 0 0 18px;
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
   font-weight: 500;
 }
 .solar-study-switch {
@@ -20,7 +20,7 @@
 .solar-study-controls button {
   width: 100%;
   font: inherit;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.5;
   min-height: var(--md-sys-size-target, 40px);
   padding: 8px 10px;
@@ -45,7 +45,7 @@
 .solar-study-muted,
 .solar-study-status,
 .solar-study-primary {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.8;
   color: var(--design-muted);
   margin: 12px 0;
@@ -53,7 +53,7 @@
 .solar-study-controls label {
   display: grid;
   gap: 6px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   min-width: 0;
 }
 .solar-study-controls select,
@@ -82,7 +82,7 @@
   min-width: 0;
 }
 .solar-study-controls legend {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   padding-right: 8px;
 }
 .solar-study-coordinates {
@@ -119,13 +119,13 @@
   border: 0;
 }
 .solar-study-heading h2 {
-  font-size: 20px;
+  font-size: calc(20px * var(--ui-font-scale, 1));
   font-weight: 400;
   margin: 0 0 5px;
   line-height: 1.5;
 }
 .solar-study-heading p {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.6;
   color: var(--design-night-muted);
   margin: 0;
@@ -145,7 +145,7 @@
   margin: 0;
 }
 .solar-study-card figcaption {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   text-align: center;
   line-height: 1.7;
   color: var(--design-night-muted);
@@ -163,7 +163,7 @@
 }
 .solar-study-readings table {
   width: 100%;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   border-collapse: collapse;
   color: var(--design-night-ink);
   line-height: 1.6;
@@ -171,7 +171,7 @@
 }
 .solar-study-readings caption {
   text-align: left;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   color: var(--design-night-muted);
   padding: 0 0 8px;
 }
@@ -199,14 +199,14 @@
   color: var(--design-night-muted);
   flex: none;
   margin: 10px 0 0;
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   line-height: 1.7;
 }
 .solar-study-blocked {
   margin: auto;
   max-width: 420px;
   color: var(--design-night-ink);
-  font-size: 16px;
+  font-size: calc(16px * var(--ui-font-scale, 1));
   line-height: 1.9;
 }
 @media (max-width: 900px) {
@@ -217,10 +217,10 @@
     padding: 16px;
   }
   .solar-study-heading h2 {
-    font-size: 18px;
+    font-size: calc(18px * var(--ui-font-scale, 1));
   }
   .solar-study-card figcaption {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
   }
 }
 @media (max-width: 600px) {
@@ -240,14 +240,14 @@
     max-height: 255px;
   }
   .solar-study-readings table {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
   }
   .solar-study-readings th,
   .solar-study-readings td {
     padding: 8px 7px;
   }
   .solar-study-heading h2 {
-    font-size: 17px;
+    font-size: calc(17px * var(--ui-font-scale, 1));
   }
   .solar-study-controls {
     padding: 14px;
@@ -325,10 +325,10 @@
     color: var(--design-night-muted);
   }
   .solar-study-panel[data-mode='time'] tbody td:nth-child(2) {
-    font-size: 15px;
+    font-size: calc(15px * var(--ui-font-scale, 1));
   }
   .solar-study-panel[data-mode='time'] tbody td:nth-child(n + 3) {
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-font-scale, 1));
   }
   .solar-study-panel[data-mode='time'] tbody tr + tr {
     border-top: 1px solid var(--design-night-line);

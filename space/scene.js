@@ -28,7 +28,7 @@
     }
     return;
   }
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, ({low:1,standard:1.5,high:2}[window.SkyPreferences?.get().quality] || 1.5)));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.15;
@@ -147,7 +147,7 @@
   let physical = null;
   let lastScienceDay = null;
   let labelBounds = [];
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reducedMotion = window.SkyPreferences?.reducedMotion || matchMedia('(prefers-reduced-motion: reduce)');
   const target = new THREE.Vector3();
   const smoothTarget = new THREE.Vector3();
   let trackedBody = '';
@@ -537,6 +537,17 @@
     pause();
     invalidate();
   };
+  const syncPreferences = () => {
+    const prefs = window.SkyPreferences?.get();
+    if (!prefs) return;
+    $('orbits').checked = prefs.orbits;
+    $('names').checked = prefs.names;
+    resize(); invalidate();
+  };
+  window.SkyPreferences?.subscribe(syncPreferences);
+  for (const name of ['orbits','names']) $(name).addEventListener('change', () => {
+    window.SkyPreferences?.set({[name]:$(name).checked});
+  });
   $('orbits').onchange = invalidate;
   $('names').onchange = invalidate;
   $('parallelRays').onchange = invalidate;
@@ -589,13 +600,17 @@
       event.preventDefault();
       targetDistance = Math.max(
         minimumDistance(),
-        Math.min(300, targetDistance * Math.exp(event.deltaY * 0.001)),
+        Math.min(300, targetDistance * Math.exp(event.deltaY * 0.001 * ({low:0.5,standard:1,high:1.5}[window.SkyPreferences?.get().zoom] || 1))),
       );
       invalidate();
     },
     { passive: false },
   );
   surface.addEventListener('keydown', (event) => {
+    if (event.key.toLowerCase() === 'r' && !event.repeat && !event.isComposing && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && !document.querySelector('dialog[open]')) {
+      event.preventDefault(); $('reset').click(); return;
+    }
+
     if (
       !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', '+', '-', '='].includes(
         event.key,
@@ -993,7 +1008,7 @@
     const width = stage.clientWidth;
     const height = stage.clientHeight;
     if (!width || !height) return;
-    const pixelRatio = Math.min(devicePixelRatio || 1, 2);
+    const pixelRatio = Math.min(devicePixelRatio || 1, ({low:1,standard:1.5,high:2}[window.SkyPreferences?.get().quality] || 1.5));
     if (
       width === lastStageWidth &&
       height === lastStageHeight &&
@@ -1075,7 +1090,7 @@
       smoothTarget.z += target.z - previousTarget.z;
     }
     trackedBody = nextTrackedBody;
-    const amount = reducedMotion ? 1 : 1 - Math.exp(-dt * 9);
+    const amount = reducedMotion.matches ? 1 : 1 - Math.exp(-dt * 9);
     smoothTarget.lerp(target, amount);
     distance += (targetDistance - distance) * amount;
     if (Math.abs(distance - targetDistance) < Math.max(0.0001, targetDistance * 0.0001))
@@ -1092,6 +1107,7 @@
       document.body.classList.contains('space-immersive'),
       $('nebulaBackground').checked,
     );
+    starSky.group.visible = window.SkyPreferences?.get().stars !== false;
     starSky.follow(camera);
     // Two lighting passes share the same depth buffer. Light layers in a single
     // Three.js pass select lights by camera, not by each receiving mesh.
@@ -1201,7 +1217,7 @@
   }
   select(2);
   if (new URLSearchParams(location.search).get('view') === 'earthmoon') focus(2);
-  resize();
+  syncPreferences();
   window.spaceState = () => ({
     date: utcDate().toISOString(),
     day,
@@ -1298,14 +1314,14 @@
       elevation,
       distance: targetDistance,
       fields: [...document.querySelectorAll('input[id],select[id]')]
-        .filter((node) => !['day', 'date'].includes(node.id))
+        .filter((node) => !['day', 'date'].includes(node.id) && !node.closest('.preferences-dialog'))
         .map((node) => [node.id, node.type === 'checkbox' ? node.checked : node.value]),
     }),
     restoreSelection(snapshot) {
       if (!snapshot) return;
       for (const [id, value] of snapshot.fields || []) {
         const node = $(id);
-        if (!node) continue;
+        if (!node || node.closest('.preferences-dialog')) continue;
         if (node.type === 'checkbox') node.checked = value;
         else node.value = value;
       }
@@ -1320,6 +1336,7 @@
         elevation = snapshot.elevation;
         distance = targetDistance = snapshot.distance;
       }
+      window.SkyPreferences?.set({orbits:$('orbits').checked,names:$('names').checked});
       syncViewPresentation();
       invalidate();
     },

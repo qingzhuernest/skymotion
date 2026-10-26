@@ -61,7 +61,7 @@
   };
   const root = document.documentElement,
     english = root.lang === 'en';
-  const reduced = matchMedia('(prefers-reduced-motion:reduce)');
+  const reduced = (window.SkyPreferences?.reducedMotion || matchMedia('(prefers-reduced-motion:reduce)'));
   const life = new AbortController(),
     animations = [];
   let stage,

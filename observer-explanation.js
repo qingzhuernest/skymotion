@@ -34,7 +34,7 @@
       <p class="observer-explanation-example">例如：北京夏至附近，太阳从东北升起、西北落下。面向南时，升落位置在身后，因此前方太阳轨迹的两端可以停在空中；转向东、北或西再比较。</p>`;
       plot.append(button);
       document.body.append(dialog);
-      const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+      const reduced = (window.SkyPreferences?.reducedMotion || matchMedia('(prefers-reduced-motion: reduce)'));
       let animation = null,
         generation = 0;
       function close() {

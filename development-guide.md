@@ -38,6 +38,8 @@
 
 页面路径、主导航、视图名称、分组和可用条件统一定义在site-catalog.json；lab-state.json统一定义状态初值、范围、枚举和相机字段。scripts/site_sources.py校验这些数据并生成启动脚本和状态模块的标记区段，禁止直接修改生成区段。
 
+preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、export 与 parseImport。版本 1 记录使用 skymotion-preferences；语言兼容原存储键。主题颜色由 theme-colors.js 中的 Material Color Utilities 0.3.0 生成，并映射到现有 design 颜色角色。第三方代码为 Apache-2.0，许可见 theme-colors.LICENSE；科学状态不属于偏好记录。
+
 ## 从输入到图形的数据流
 
 1. 原生输入或滑条先验证数值、提交到state，停止不适用的播放；自定义对象则写入对应source与body的对象存储。

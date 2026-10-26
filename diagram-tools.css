@@ -62,7 +62,7 @@ body .dt-panel button {
   background: var(--design-surface);
   color: var(--dt-ink);
   font: inherit;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.5;
   cursor: pointer;
 }
@@ -92,7 +92,7 @@ body .dt-head h2 {
   min-width: 0;
   margin: 0;
   color: var(--dt-ink);
-  font-size: 16px;
+  font-size: calc(16px * var(--ui-font-scale, 1));
   font-weight: 500;
   line-height: 1.5;
   overflow: hidden;
@@ -178,7 +178,7 @@ body .dt-panel .dt-tabs > [data-dt-view] {
   min-width: 0;
   flex: 1;
   padding: 6px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   border-radius: var(--design-radius-control);
 }
 body .dt-tabs [data-dt-view='library'] {
@@ -222,14 +222,14 @@ body .dt-panel .dt-tabs > [data-dt-view='objects'] {
 .dt-status,
 .dt-result,
 .dt-reference-help {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.7;
   color: var(--dt-muted);
   overflow-wrap: anywhere;
 }
 body .dt-panel h3 {
   margin: 0 0 10px;
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   font-weight: 600;
   color: var(--dt-ink);
   line-height: 1.5;
@@ -263,7 +263,7 @@ body .dt-place {
 .dt-add-group {
   margin: 18px 0 6px;
   font: inherit;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   font-weight: 600;
   color: var(--dt-muted);
 }
@@ -378,7 +378,7 @@ body .dt-panel .dt-row > :is(.dt-more, .dt-row-more):hover {
   gap: 6px;
   min-width: 0;
   color: var(--dt-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.5;
 }
 .dt-fields .dt-name-edit,
@@ -400,7 +400,7 @@ body .dt-panel select {
   background: var(--design-surface);
   color: var(--dt-ink);
   font: inherit;
-  font-size: 15px;
+  font-size: calc(15px * var(--ui-font-scale, 1));
   font-variant-numeric: tabular-nums;
 }
 body .dt-panel input:disabled {
@@ -413,7 +413,7 @@ body .dt-lock {
   gap: 8px;
   min-height: var(--md-sys-size-target, 40px);
   grid-column: 1/-1;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .dt-result {
   margin: 12px 0;
@@ -438,7 +438,7 @@ body .dt-lock {
 }
 .dt-location p {
   white-space: pre-line;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.7;
   margin: 0 0 10px;
   color: var(--dt-muted);
@@ -485,7 +485,7 @@ body .dt-panel > .dt-footer {
   flex: 1;
   margin: 0;
   min-height: 20px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 body .dt-panel .dt-object-menu {
   position: fixed;
@@ -516,7 +516,7 @@ body .dt-panel .dt-object-menu button:hover {
 }
 .dt-field-error {
   font: inherit;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.55;
   color: var(--design-error-ink);
 }
@@ -555,7 +555,7 @@ body .dt-rail-navigation button {
   flex: 1;
   min-width: 0;
   padding: 6px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   white-space: normal;
 }
 body .dt-rail-navigation button:focus-visible {
@@ -613,7 +613,7 @@ body .dt-context-empty {
   padding: 18px 14px;
   color: var(--design-ink);
   font: inherit;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.7;
 }
 .dt-context-empty p {
@@ -732,7 +732,7 @@ body .dt-panel[data-collapsed='true'] {
       [type='radio']
     ),
   body .dt-panel select {
-    font-size: 16px;
+    font-size: calc(16px * var(--ui-font-scale, 1));
   }
 }
 @media (max-width: 760px) and (max-height: 600px) {
@@ -772,7 +772,7 @@ body .ui-plot #viewReset {
   color: var(--design-night-ink);
   box-shadow: none;
   font-family: var(--design-font);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   font-weight: 400;
   line-height: 1.5;
 }
@@ -787,7 +787,7 @@ body .ui-diagram-card-head > .diagram-tool-launch {
   border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
   color: var(--design-primary);
-  font: 500 12px/1.5 var(--design-font);
+  font: 500 calc(12px * var(--ui-font-scale, 1))/1.5 var(--design-font);
 }
 body[data-page='space'] #reset.stage-reset {
   min-height: var(--md-sys-size-target, 40px);
@@ -824,7 +824,7 @@ body[data-page='space'] #reset.stage-reset {
   width: var(--md-sys-size-target, 40px);
   min-width: var(--md-sys-size-target, 40px);
   padding: 8px;
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
 }
 @media (pointer: coarse), (max-width: 760px) {
   body .dt-host .diagram-tool-launch,

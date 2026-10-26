@@ -25,7 +25,7 @@
   justify-content: center;
   min-height: 36px;
   padding: 6px 12px;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   color: var(--design-primary);
   text-decoration: none;
   border-radius: var(--design-radius-control, 12px);
@@ -47,7 +47,7 @@ a:focus-visible {
   border-radius: var(--ui-radius);
 }
 .reading-page h1 {
-  font-size: 26px;
+  font-size: calc(26px * var(--ui-font-scale, 1));
 }
 .reading-page li {
   margin: 12px 0;
@@ -85,7 +85,7 @@ a:focus-visible {
   min-height: 44px;
   padding: 8px 12px;
   margin: 0 !important;
-  font-size: 12px !important;
+  font-size: calc(12px * var(--ui-font-scale, 1)) !important;
   line-height: 1.5;
   text-align: center;
   color: #a9bfdc;
@@ -136,12 +136,12 @@ body:is(
   flex-shrink: 0;
 }
 .ui-heading h1 {
-  font-size: 23px;
+  font-size: calc(23px * var(--ui-font-scale, 1));
   line-height: 1.3;
   margin: 0;
 }
 .ui-heading #uiPlaceText {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   color: var(--design-muted);
 }
 .ui-body-host {
@@ -208,7 +208,7 @@ body:is(
   max-width: 110px;
 }
 .ui-parameters .micro {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.7;
 }
 .ui-parameters .solar-overlay-bar {
@@ -223,7 +223,7 @@ body:is(
   white-space: normal;
   flex-wrap: wrap;
   gap: 8px;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 .ui-parameters .overlay-toggle input {
   flex-shrink: 0;
@@ -262,7 +262,7 @@ body:is(
   background: var(--design-surface);
   color: var(--design-primary);
   border-radius: 18px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   padding: 6px 12px;
   flex-shrink: 0;
 }
@@ -308,19 +308,19 @@ body:is(
   top: 10px;
   left: 12px;
   right: 12px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .ui-plot .stage-key {
   bottom: 10px;
   left: 12px;
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
 }
 .ui-plot .stage-bottom {
   bottom: 10px;
   right: 12px;
 }
 .ui-plot #resetView {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   min-height: 32px;
   padding: 5px 12px;
 }
@@ -352,7 +352,7 @@ body:is(
   margin: 0 auto 8px;
 }
 .ui-plot .phase-view p {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
 }
 .ui-plot #sunContextContent {
   display: flex;
@@ -376,10 +376,10 @@ body:is(
 }
 .ui-plot .globe-notes {
   flex-basis: 130px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .ui-plot .globe-notes p {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
 }
 .ui-plot #earthMapView {
   flex: 1;
@@ -397,7 +397,7 @@ body:is(
   display: none;
 }
 .ui-plot .map-key {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   flex-shrink: 0;
   padding: 4px;
 }
@@ -409,7 +409,7 @@ body:is(
   padding-bottom: 8px;
 }
 .ui-parameters .workbench-more summary {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   min-height: 36px;
 }
 .ui-parameters .workbench-extra {
@@ -436,7 +436,7 @@ body:is(
 .ui-field {
   display: grid;
   gap: 6px;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   margin: 14px 0;
 }
 .ui-field select {
@@ -456,7 +456,7 @@ body:is(
   display: none;
 }
 .ui-parameters .analemma-controls label {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 .ui-parameters .analemma-controls select,
 .ui-parameters .analemma-controls input {
@@ -475,11 +475,11 @@ body:is(
   margin: 12px 0;
 }
 .ui-parameters .analemma-results {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   padding: 10px;
 }
 .ui-parameters .sundial-time-label {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   margin: 14px 0 0;
 }
 .ui-parameters .sundial-view-controls {
@@ -494,7 +494,7 @@ body:is(
 }
 .ui-parameters .sundial-toolbar button {
   min-height: var(--md-sys-size-target, 40px);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   padding: 7px 12px;
 }
 .ui-parameters .sundial-toolbar label {
@@ -507,10 +507,10 @@ body:is(
   gap: 8px;
 }
 .ui-parameters .sundial-clock strong {
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
 }
 .ui-information summary {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   color: var(--design-primary);
   cursor: pointer;
 }
@@ -522,7 +522,7 @@ body:is(
   margin: 0;
 }
 .ui-diagram-details .panel-title h2 {
-  font-size: 16px;
+  font-size: calc(16px * var(--ui-font-scale, 1));
 }
 .ui-diagram-details .event-layout {
   display: block;
@@ -547,7 +547,7 @@ body:is(
   max-width: 100%;
 }
 .ui-diagram-details .companion-measures strong {
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
 }
 .ui-parameters .metrics {
   display: grid;
@@ -557,7 +557,7 @@ body:is(
   margin: 12px 0;
 }
 .ui-parameters .model-explanation {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .ui-parameters .observer-control-row {
   display: none !important;
@@ -566,7 +566,7 @@ body:is(
   gap: 6px;
 }
 .ui-parameters .observer-bodies button {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
 }
 .ui-parameters #observerControls {
   padding: 8px;
@@ -601,7 +601,7 @@ body[data-page='analemma'] .workbench-events {
     padding: 5px 8px;
   }
   .page-nav a {
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-font-scale, 1));
     padding: 5px 9px;
   }
   .reading-page {
@@ -615,7 +615,7 @@ body[data-page='analemma'] .workbench-events {
     gap: 8px;
   }
   .ui-heading #uiPlaceText {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
   }
   .ui-grid {
     grid-template-columns: 1fr;
@@ -626,7 +626,7 @@ body[data-page='analemma'] .workbench-events {
     padding: 10px;
   }
   .ui-parameters > h2 {
-    font-size: 14px;
+    font-size: calc(14px * var(--ui-font-scale, 1));
     margin-bottom: 8px;
   }
   .ui-viewbar {
@@ -634,23 +634,23 @@ body[data-page='analemma'] .workbench-events {
     min-height: 36px;
   }
   .ui-viewbar button {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
     padding: 4px 9px;
     min-height: var(--md-sys-size-target, 40px);
   }
   .ui-viewbar .view-tabs button {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
     padding: 4px 9px;
   }
 
   .ui-plot .stage-top {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
   }
   .ui-plot .stage-key {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
   }
   .ui-plot #resetView {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
     min-height: 28px;
     padding: 4px 9px;
   }
@@ -659,17 +659,17 @@ body[data-page='analemma'] .workbench-events {
     height: 50px;
   }
   .ui-plot .phase-view strong {
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-font-scale, 1));
   }
   .ui-plot .phase-view p {
     display: none;
   }
   .ui-plot .phase-view span {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
   }
   .ui-plot .globe-notes {
     flex-basis: 95px;
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
   }
   .ui-plot .globe-notes p {
     display: none;
@@ -679,7 +679,7 @@ body[data-page='analemma'] .workbench-events {
   }
   .welcome-corner-links > a {
     padding: 8px 6px;
-    font-size: 11px !important;
+    font-size: calc(11px * var(--ui-font-scale, 1)) !important;
   }
 }
 @media (max-height: 500px) {
@@ -702,7 +702,7 @@ body[data-page='analemma'] .workbench-events {
   .ui-viewbar button {
     min-height: var(--md-sys-size-target, 40px);
     padding: 3px 9px;
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
   }
 
   .ui-parameters {
@@ -721,7 +721,7 @@ body[data-page='analemma'] .workbench-events {
   display: none;
 }
 #uiEarthSettings .globe-notes {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   margin: 12px 0;
 }
 #uiEarthSettings .context-view-switch {
@@ -732,7 +732,7 @@ body[data-page='analemma'] .workbench-events {
 #uiEarthSettings .context-view-switch button {
   flex: 1;
   min-width: 0;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   padding: 8px 6px;
   white-space: nowrap;
 }
@@ -784,7 +784,7 @@ body[data-page='analemma'] .workbench-events {
     min-height: 34px;
   }
   .ui-heading h1 {
-    font-size: 16px;
+    font-size: calc(16px * var(--ui-font-scale, 1));
   }
 }
 
@@ -832,12 +832,12 @@ body[data-page='analemma'] .workbench-events {
   border-radius: 12px;
 }
 .ui-diagram-details .event-values button strong {
-  font-size: 20px;
+  font-size: calc(20px * var(--ui-font-scale, 1));
   line-height: 1.5;
 }
 .ui-diagram-details .event-values button span,
 .ui-diagram-details .event-values button small {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.6;
 }
 /* Rise and set share one quiet readout treatment; labels distinguish the events. */
@@ -854,7 +854,7 @@ body[data-page='analemma'] .workbench-events {
   border-color: var(--design-line);
 }
 .ui-parameters > h2 {
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   color: var(--md-on-surface);
   display: flex;
   align-items: center;
@@ -913,7 +913,7 @@ body[data-page='analemma'] .workbench-events {
   border-radius: 13px;
   cursor: pointer;
   color: var(--md-on-surface);
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   font-weight: 600;
   background: var(--md-surface);
   transition:
@@ -1016,7 +1016,7 @@ body[data-page='analemma'] .workbench-events {
 }
 .ui-parameters .menu-summary {
   color: var(--md-on-surface-variant);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   font-weight: 400;
 }
 .ui-parameters .menu-section[open] > summary .menu-summary {
@@ -1040,7 +1040,7 @@ body[data-page='analemma'] .workbench-events {
   border-radius: var(--ui-control-radius);
   background: var(--design-surface);
   color: var(--md-primary);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.5;
   text-align: left;
   white-space: normal;
@@ -1073,7 +1073,7 @@ body[data-page='analemma'] .workbench-events {
   padding: 10px 32px 10px 10px;
   min-height: 44px;
   gap: 2px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   color: var(--design-muted);
   border-radius: 9px;
 }
@@ -1155,7 +1155,7 @@ body[data-page='analemma'] .workbench-events {
     padding: 8px;
   }
   .ui-diagram-details .event-values button strong {
-    font-size: 18px;
+    font-size: calc(18px * var(--ui-font-scale, 1));
   }
 }
 
@@ -1180,7 +1180,7 @@ body[data-page='analemma'] .workbench-events {
 }
 .metric-info-icon {
   color: var(--design-primary);
-  font-size: 16px;
+  font-size: calc(16px * var(--ui-font-scale, 1));
   flex-shrink: 0;
 }
 .metric-definition[open] > summary {
@@ -1192,7 +1192,7 @@ body[data-page='analemma'] .workbench-events {
   outline-offset: 2px;
 }
 .metric-definition > p {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.7;
   color: var(--design-muted);
   margin: 6px 0 10px;
@@ -1220,10 +1220,10 @@ body[data-page='analemma'] .workbench-events {
   gap: 6px;
 }
 .ui-parameters > .sundial-reading span {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .ui-parameters > .sundial-reading strong {
-  font-size: 24px;
+  font-size: calc(24px * var(--ui-font-scale, 1));
   color: var(--design-primary);
 }
 /* Keep document focus/scroll helpers from shifting the viewport; panels scroll inside. */
@@ -1282,7 +1282,7 @@ body:is(
 }
 .globe-drag-settings .field-label {
   color: var(--design-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   margin-bottom: 6px;
 }
 .globe-drag-options {
@@ -1299,7 +1299,7 @@ body:is(
   border: 0;
   border-radius: 10px;
   padding: 7px 5px;
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   line-height: 1.5;
   background: transparent;
   color: var(--design-muted);
@@ -1309,13 +1309,13 @@ body:is(
   color: var(--design-on-action);
 }
 .globe-drag-settings p {
-  font-size: 11px !important;
+  font-size: calc(11px * var(--ui-font-scale, 1)) !important;
   color: var(--design-muted) !important;
   line-height: 1.7;
   margin: 8px 0;
 }
 .globe-drag-settings #globeRecenter {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   border: 1px solid var(--design-line);
   border-radius: 16px;
   background: var(--design-surface);
@@ -1391,7 +1391,7 @@ body:is(
   padding: 10px 36px 10px 12px;
   border-radius: 10px;
   color: var(--md-primary);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.5;
 }
 .ui-parameters .study-navigation > .menu-subsection[open] > summary {
@@ -1430,7 +1430,7 @@ body[data-page='analemma'] .ui-parameters .analemma-comparison .overlay-toggle {
 body[data-page='analemma'] .ui-parameters .analemma-comparison button {
   min-height: var(--md-sys-size-target, 40px);
   align-self: flex-start;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   padding: 7px 12px;
 }
 body[data-page='analemma'] .ui-parameters .analemma-advanced {
@@ -1464,7 +1464,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
 }
 .ui-diagram-card-head h2 {
   margin: 0;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   font-weight: 500;
   color: var(--design-ink);
 }
@@ -1475,7 +1475,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   display: none;
 }
 .ui-diagram-card-head > span {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
 }
 .ui-diagram-card-head button {
   margin-left: auto;
@@ -1485,7 +1485,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   border-radius: 10px;
   background: transparent;
   color: var(--design-ink);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   white-space: nowrap;
 }
 .ui-diagram-surface {
@@ -1541,7 +1541,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   .ui-plot[data-kind='solarCompare']:not([data-workspace-count])
     .ui-diagram-card-head
     button {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
   }
   .ui-plot[data-kind='solarCompare']:not([data-workspace-count])
     .ui-diagram-card-head
@@ -1596,7 +1596,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
 .ui-sundial .ui-viewbar .sundial-view-controls button {
   min-height: var(--md-sys-size-target, 40px);
   padding: 6px 12px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .ui-sundial-readout {
   display: flex;
@@ -1617,11 +1617,11 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   border: 0;
 }
 .ui-sundial-readout .sundial-reading span {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   color: var(--md-on-surface-variant);
 }
 .ui-sundial-readout .sundial-reading strong {
-  font-size: 20px;
+  font-size: calc(20px * var(--ui-font-scale, 1));
   color: var(--md-primary);
 }
 .ui-sundial-presets {
@@ -1634,7 +1634,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   border-radius: 999px;
   padding: 5px 10px;
   min-height: var(--md-sys-size-target, 40px);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   background: var(--design-surface);
   color: var(--md-primary);
 }
@@ -1664,7 +1664,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   padding: 6px 12px;
   background: var(--design-surface);
   color: var(--md-on-surface-variant);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   line-height: 1.5;
 }
 .ui-sundial .ui-parameters .sundial-time-label {
@@ -1689,7 +1689,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .ui-sundial .ui-parameters #sundialOffset {
   width: 72px;
@@ -1700,7 +1700,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   margin: 8px 0;
 }
 .ui-sundial .ui-parameters .sundial-make summary {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   color: var(--md-primary);
 }
 @media (max-width: 760px), (max-height: 540px) {
@@ -1711,7 +1711,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
     gap: 4px;
   }
   .ui-sundial .ui-viewbar .sundial-view-controls button {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
     min-height: var(--md-sys-size-target, 40px);
     padding: 4px 8px;
   }
@@ -1721,13 +1721,13 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
     gap: 4px;
   }
   .ui-sundial-readout .sundial-reading span {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
   }
   .ui-sundial-readout .sundial-reading strong {
-    font-size: 16px;
+    font-size: calc(16px * var(--ui-font-scale, 1));
   }
   .ui-sundial-presets button {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
     padding: 3px 7px;
     min-height: 25px;
   }
@@ -1735,13 +1735,13 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
     padding: 4px 8px;
   }
   .ui-sundial-camera-tools button {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
     padding: 3px 8px;
     min-height: var(--md-sys-size-target, 40px);
   }
   .ui-sundial-hint {
     padding: 4px 8px;
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
   }
 }
 
@@ -1789,7 +1789,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
 .ui-parameters :is(button, a.page-link) {
   min-height: var(--ui-control-height);
   border-radius: var(--ui-control-radius);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.5;
   box-sizing: border-box;
   transition:
@@ -1812,7 +1812,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   border-radius: var(--ui-control-radius);
   background: var(--md-surface);
   color: var(--md-on-surface);
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   line-height: 1.5;
   box-sizing: border-box;
 }
@@ -1849,7 +1849,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   border-radius: var(--ui-control-radius);
   background: var(--md-surface-container);
   color: var(--md-on-surface-variant);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   white-space: normal;
 }
 .ui-parameters
@@ -1868,7 +1868,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
   border: 0;
   background: var(--md-surface-container);
   color: var(--md-primary);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .ui-parameters .menu-footer #reset {
   padding: 8px 12px;
@@ -1885,7 +1885,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
     padding: 10px 14px 12px;
   }
   .ui-heading h1 {
-    font-size: 19px;
+    font-size: calc(19px * var(--ui-font-scale, 1));
   }
   .ui-parameters {
     padding: 10px;
@@ -1940,11 +1940,11 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
 }
 .ui-drawer-header span {
   color: var(--md-on-surface-variant);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
 }
 .ui-drawer-header h2 {
   margin: 2px 0 0;
-  font-size: 17px;
+  font-size: calc(17px * var(--ui-font-scale, 1));
   line-height: 1.4;
 }
 .ui-drawer-header button {
@@ -2004,7 +2004,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
     min-width: 0;
   }
   .ui-heading h1 {
-    font-size: 17px;
+    font-size: calc(17px * var(--ui-font-scale, 1));
     white-space: normal;
     overflow-wrap: anywhere;
   }
@@ -2024,7 +2024,7 @@ body[data-page='analemma'] .ui-parameters .analemma-results {
     border-radius: 999px;
     background: var(--md-primary-container);
     color: var(--md-on-primary-container);
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-font-scale, 1));
     white-space: nowrap;
   }
   #uiParametersButton[aria-expanded='true'] {
@@ -2090,7 +2090,7 @@ body[data-page='welcome'] :is(a, button) {
   -webkit-tap-highlight-color: transparent;
 }
 body[data-page='welcome'] .welcome-brand {
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   font-weight: 500;
   letter-spacing: 0.03em;
   flex-shrink: 0;
@@ -2100,7 +2100,7 @@ body[data-page='welcome'] .welcome-brand > span {
   height: 28px;
 }
 body[data-page='welcome'] .welcome-brand small {
-  font-size: 9px;
+  font-size: calc(9px * var(--ui-font-scale, 1));
   letter-spacing: 2px;
 }
 body[data-page='welcome'] .welcome-layout {
@@ -2143,7 +2143,7 @@ body[data-page='welcome'] .welcome-intro {
   max-width: 620px;
 }
 body[data-page='welcome'] .welcome-intro h1 {
-  font-size: clamp(32px, 4.5vw, 64px);
+  font-size: calc(clamp(32px, 4.5vw, 64px) * var(--ui-font-scale, 1));
   font-weight: 600;
   line-height: 1.3;
   letter-spacing: 0;
@@ -2151,7 +2151,7 @@ body[data-page='welcome'] .welcome-intro h1 {
 }
 body[data-page='welcome'] .welcome-intro > p {
   color: #b8c5d8;
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
   line-height: 1.7;
   margin: 0 0 32px;
 }
@@ -2161,7 +2161,7 @@ body[data-page='welcome'] .welcome-enter {
   width: 200px;
   padding: 14px 24px;
   gap: 20px;
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
   background: var(--design-sun);
   color: #253044;
   box-shadow: none;
@@ -2212,7 +2212,7 @@ body[data-page='welcome']
   border: 1px solid #b8c5d329;
   background: #101b2bd9;
   color: #d0dbea;
-  font-size: 12px !important;
+  font-size: calc(12px * var(--ui-font-scale, 1)) !important;
   font-weight: 400;
   line-height: 1.5;
   text-decoration: none;
@@ -2244,7 +2244,7 @@ body[data-page='welcome'] #welcomeStarStatus {
 body[data-page='welcome'] .welcome-quote {
   flex-shrink: 0;
   font-family: 'Welcome Hand', 'Kaiti SC', KaiTi, cursive;
-  font-size: clamp(15px, 1.35vw, 19px);
+  font-size: calc(clamp(15px, 1.35vw, 19px) * var(--ui-font-scale, 1));
   font-weight: 400;
   line-height: 1.5;
   letter-spacing: 1px;
@@ -2277,7 +2277,7 @@ body[data-page='welcome'] .welcome-quote {
       .welcome-corner-links > a:visited
     ) {
     min-height: var(--md-sys-size-target, 40px);
-    font-size: 11px !important;
+    font-size: calc(11px * var(--ui-font-scale, 1)) !important;
     padding: 3px 8px;
   }
 }
@@ -2293,12 +2293,12 @@ body[data-page='welcome'] .welcome-quote {
     max-width: 900px;
   }
   body[data-page='welcome'] .welcome-intro h1 {
-    font-size: clamp(42px, 4.3vw, 64px);
+    font-size: calc(clamp(42px, 4.3vw, 64px) * var(--ui-font-scale, 1));
     line-height: 1.22;
     margin-bottom: 20px;
   }
   body[data-page='welcome'] .welcome-intro > p {
-    font-size: 15px;
+    font-size: calc(15px * var(--ui-font-scale, 1));
   }
 }
 /* Preserve separate rows for the quote and controls even with very little landscape height. */
@@ -2340,7 +2340,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
 }
 @media (max-width: 600px) and (min-height: 501px) {
   body[data-page='welcome'] .welcome-intro h1 {
-    font-size: clamp(25px, 7.1vw, 34px);
+    font-size: calc(clamp(25px, 7.1vw, 34px) * var(--ui-font-scale, 1));
     white-space: normal;
   }
   body[data-page='welcome'] .welcome-layout {
@@ -2354,15 +2354,15 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
     max-width: 600px;
   }
   body[data-page='welcome'] .welcome-intro h1 {
-    font-size: clamp(25px, 3.8vw, 36px);
+    font-size: calc(clamp(25px, 3.8vw, 36px) * var(--ui-font-scale, 1));
     margin-bottom: 10px;
   }
   body[data-page='welcome'] .welcome-intro > p {
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-font-scale, 1));
     margin-bottom: 16px;
   }
   body[data-page='welcome'] .welcome-quote {
-    font-size: 13px;
+    font-size: calc(13px * var(--ui-font-scale, 1));
   }
 }
 /* Moon phase controls are a touch surface, independent of the observer camera. */
@@ -2405,7 +2405,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
   }
   .ui-plot .phase-view p {
     margin: 4px 0;
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
   }
 }
 @media (max-width: 360px) {
@@ -2418,7 +2418,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
     grid-row: 1;
   }
   .ui-shell .ui-heading h1 {
-    font-size: 15px;
+    font-size: calc(15px * var(--ui-font-scale, 1));
   }
   .ui-shell .ui-body-host {
     grid-column: 1;
@@ -2433,15 +2433,15 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
 }
 @media (max-width: 600px) {
   .ui-shell .ui-heading h1 {
-    font-size: 15px;
+    font-size: calc(15px * var(--ui-font-scale, 1));
     line-height: 1.35;
   }
   .ui-shell .ui-heading #uiPlaceText {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
   }
 
   .ui-shell #uiParametersButton {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
   }
 }
 
@@ -2455,7 +2455,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
   background: var(--design-surface);
   border: 1px solid var(--design-line);
   border-radius: var(--ui-control-radius);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   white-space: nowrap;
 }
 .observer-explanation {
@@ -2469,7 +2469,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
   background: var(--design-surface);
   border: 1px solid var(--design-line);
   border-radius: var(--ui-radius);
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   line-height: 1.8;
   box-shadow: 0 16px 48px var(--design-shadow);
 }
@@ -2484,7 +2484,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
 .observer-explanation h2 {
   margin: 0;
   flex: 1;
-  font-size: 19px;
+  font-size: calc(19px * var(--ui-font-scale, 1));
   line-height: 1.5;
 }
 
@@ -2502,13 +2502,13 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
 @media (max-width: 600px) {
   .observer-explanation {
     padding: 16px;
-    font-size: 13px;
+    font-size: calc(13px * var(--ui-font-scale, 1));
   }
   .observer-explanation h2 {
-    font-size: 17px;
+    font-size: calc(17px * var(--ui-font-scale, 1));
   }
   .ui-viewbar > .observer-explanation-button {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
     padding: 6px 8px;
   }
 }
@@ -2538,7 +2538,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
   display: grid;
   gap: 6px;
   color: var(--design-ink);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 .observer-link-settings select {
   width: 100%;
@@ -2553,7 +2553,7 @@ body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links
 .observer-link-settings p {
   margin: 0;
   color: var(--design-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.65;
   overflow-wrap: anywhere;
 }

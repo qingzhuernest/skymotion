@@ -17,7 +17,7 @@
   topButton.addEventListener('click', () => {
     window.scrollTo({
       top: 0,
-      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
+      behavior: !window.SkyPreferences?.smoothScroll
         ? 'auto'
         : 'smooth',
     });

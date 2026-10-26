@@ -66,7 +66,7 @@ body
   border-radius: var(--md-sys-shape-corner-large);
   background: transparent;
   color: var(--design-ink);
-  font: 500 13px/1.5 var(--design-font);
+  font: 500 calc(13px * var(--ui-font-scale, 1))/1.5 var(--design-font);
   text-align: left;
   cursor: pointer;
 }
@@ -112,7 +112,7 @@ body:not(.workbench-editing)
   align-items: start;
   gap: 8px;
   margin: 8px 0 16px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .workbench-clock-link input {
   accent-color: var(--design-primary);
@@ -124,7 +124,7 @@ body[data-entry-view] .workspace-navigation:has(> .workspace-toolbar[hidden]) {
   display: none;
 }
 body[data-entry-view] .workspace-options-head h2 {
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
 }
 body[data-entry-view] .workspace-options-head {
   padding: 0;
@@ -164,7 +164,7 @@ body[data-entry-view] .dt-rail-navigation {
 }
 body[data-entry-view] .dt-rail-navigation button {
   padding-inline: 5px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 #eventCompass {
   cursor: grab;
@@ -188,7 +188,7 @@ body[data-entry-view] .dt-rail-navigation button {
 .workbench-sampling-clock {
   margin-left: auto;
   color: var(--design-muted);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   white-space: nowrap;
 }
 body[data-entry-view]:not(.customization-active)

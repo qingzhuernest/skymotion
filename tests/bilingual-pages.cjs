@@ -15,12 +15,17 @@ for english in Path('.').resolve().rglob('*.en.html'):
     def check_scripts(node):
         if node.tag=='script' and node.attr('src'):
             keys={key for key,value in node.attrs}
-            if 'page-boot.js' in node.attr('src'):
-                assert 'defer' not in keys,'Locale boot must run before visible parsing'
+            if any(name in node.attr('src') for name in ('page-boot.js','theme-colors.js','preferences.js')):
+                assert 'defer' not in keys,'Theme and locale boot must run before visible parsing'
             else:
                 assert 'defer' in keys and 'async' not in keys,f'Parser-blocking or unordered script in {chinese}: {node.attr("src")}'
         for child in node.children: check_scripts(child)
-    check_scripts(m.parse(chinese.read_text()))
+    tree=m.parse(chinese.read_text())
+    check_scripts(tree)
+    sources=[node.attr('src').split('?')[0].split('/')[-1] for node in m.elements(tree) if node.tag=='script' and node.attr('src')]
+    for name in ('theme-colors.js','preferences.js','page-boot.js'):
+        assert sources.count(name)==1, f'Expected exactly one early bootstrap: {name}'
+    assert sources.index('theme-colors.js') < sources.index('preferences.js') < sources.index('page-boot.js'), 'Restore theme before locale and visible parsing'
     def check_english_text(node, skip=False):
         # Explicit bilingual quotes and code samples retain their source language.
         skip=skip or node.tag in ('script','style','pre','code') or (node.attr('lang') or '').startswith('zh') or any(k=='data-i18n-skip' for k,v in node.attrs)

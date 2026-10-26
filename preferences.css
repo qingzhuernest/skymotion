@@ -1,0 +1,63 @@
+/* Shared settings surface; component colors come only from the global role palette. */
+html {scroll-behavior:auto}
+html[data-smooth-scroll='true'] {scroll-behavior:smooth}
+body .preferences-launch {flex:none;margin:0;width:var(--md-sys-size-target,40px);min-width:var(--md-sys-size-target,40px);padding:8px;display:inline-flex;align-items:center;justify-content:center}
+.welcome-brand .language-actions {margin-inline-start:auto}
+body dialog.preferences-dialog {box-sizing:border-box;width:min(920px,calc(100vw - 48px));max-width:920px;max-height:calc(100dvh - 48px);padding:24px;border:1px solid var(--design-line);border-radius:28px;background:var(--design-surface);color:var(--design-ink);font:inherit;overflow:auto;box-shadow:0 24px 80px var(--design-shadow-dialog)}
+.preferences-dialog::backdrop {background:var(--design-scrim)}
+.preferences-dialog *, .preferences-dialog *::before {box-sizing:border-box}
+.preferences-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;background:transparent;height:auto;padding:0}
+.preferences-heading h2 {font-size:calc(24px * var(--ui-font-scale,1));margin:0}
+.preferences-search {width:100%;margin-bottom:20px}
+.preferences-dialog :is(input:not([type='checkbox']):not([type='color']),select) {font:inherit;color:var(--design-ink);background:var(--design-inset);border:1px solid var(--design-line);border-radius:12px;padding:10px 12px;min-height:44px;min-width:0;max-width:100%}
+.preferences-layout {display:grid;grid-template-columns:190px minmax(0,1fr);gap:24px}
+.preferences-categories {display:flex;flex-direction:column;gap:4px;align-self:start}
+.preferences-categories button {font:inherit;text-align:start;padding:12px 16px;border:0;border-radius:16px;color:var(--design-ink);background:transparent;min-height:44px;white-space:normal}
+.preferences-categories button[aria-pressed='true'] {color:var(--design-on-selected);background:var(--design-selected);font-weight:700}
+.preferences-content {min-width:0;max-height:55dvh;overflow:auto;padding:0 8px 8px}
+.preference-section h3 {margin:0 0 12px;font-size:calc(20px * var(--ui-font-scale,1))}
+.preference-row {display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--design-line);flex-wrap:wrap}
+.preference-row label {flex:1 1 160px}
+.preference-row select {width:min(210px,100%)}
+.preference-row input[type='color'] {width:64px;height:44px;border:1px solid var(--design-line);border-radius:12px;background:var(--design-inset);padding:4px}
+.preference-row #pref-primary-hex {width:110px}
+.preference-note,.preferences-help p,.preferences-message {color:var(--design-muted);line-height:1.7}
+.preference-reset {margin-top:24px}
+.preferences-content .md-outlined-action {margin-inline-end:8px;margin-top:12px}
+.preferences-confirm {margin-top:16px;padding:16px;background:var(--design-inset);border-radius:16px}
+.preferences-confirm button {margin-inline-end:8px}
+.preferences-message {margin:16px 0 0;min-height:1.5em}
+.preferences-dialog :focus-visible {outline:3px solid var(--design-primary);outline-offset:3px}
+.preference-search-hidden,[hidden] {display:none!important}
+html[data-density='compact'] {--preference-panel-padding:10px}
+html[data-density='compact'] :is(.menu-content,.card,.ui-readout) {padding-block:10px}
+html[data-density='compact'] :is(.workbench-viewpoints,.workbench-content-group) {gap:2px}
+html[data-density='compact'] :is(.menu-section > summary,.workbench-viewpoints button) {padding-block:8px}
+html[data-reduced-motion='true'] *,html[data-reduced-motion='true'] *::before,html[data-reduced-motion='true'] *::after {animation-duration:0.01ms!important;animation-delay:0ms!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}
+html body .document-page {max-width:calc(var(--reading-width,75ch) + 330px);font-size:calc(16px * var(--reading-scale,1));line-height:var(--reading-leading,1.85)}
+html body .document-content {max-width:var(--reading-width,75ch)}
+html body .document-content :is(p,li,td,th) {font-size:inherit}
+html body .document-toc {font-size:calc(14px * var(--reading-scale,1));line-height:var(--reading-leading,1.85)}
+html body .document-content h2 {font-size:calc(24px * var(--reading-scale,1))}
+html body .document-content h3 {font-size:calc(20px * var(--reading-scale,1))}
+html[data-theme='dark'] body {background:var(--design-paper);color:var(--design-ink)}
+html[data-theme='dark'] :is(input,select,textarea) {color-scheme:dark}
+@media (max-width:760px) {
+ body dialog.preferences-dialog {width:100%;height:100dvh;max-height:100dvh;max-width:100%;margin:0;border:0;border-radius:0;padding:20px}
+ .preferences-layout {grid-template-columns:minmax(0,1fr);gap:16px}
+ .preferences-categories {flex-direction:row;overflow-x:auto;padding:4px 2px}
+ .preferences-categories button {white-space:nowrap;flex:none;min-height:48px}
+ .preferences-content {max-height:none;overflow:visible;padding:0}
+ .preferences-heading {position:sticky;top:-20px;background:var(--design-surface);padding-block:12px;z-index:2}
+ .preferences-dialog :is(button,select,input:not([type='checkbox'])) {min-height:48px}
+ .preference-row:has(input[type='checkbox']) {min-height:68px}
+ html body .document-page {width:calc(100% - 24px);padding-inline:16px}
+}
+@media (pointer:coarse) {.preference-row:has(input[type='checkbox']) {min-height:68px}.preferences-dialog button {min-height:48px}}
+@media print {.preferences-launch,body dialog.preferences-dialog {display:none!important}}
+/* Printing remains legible when the saved screen theme is dark. */
+@media print {
+ :root {--design-paper:#ffffff!important;--design-surface:#ffffff!important;--design-inset:#ffffff!important;--design-surface-low:#ffffff!important;--design-surface-high:#ffffff!important;--design-ink:#000000!important;--design-muted:#333333!important;--design-accent:#174d35!important;--design-line:#777777!important;--design-selected:#ffffff!important;--design-on-selected:#000000!important}
+ .language-actions {display:none!important}
+ html body .document-page {width:100%;max-width:none;margin:0;padding:0;border:0}
+}

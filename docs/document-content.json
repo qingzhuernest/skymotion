@@ -2231,6 +2231,13 @@
                 "顶栏是固定的全局导航。侧栏“视图与布局”和“观测条件”使用相同的分组样式，选中的切换项以绿色突出。三维模型从顶栏“三维天空”进入，实验参数中不再放置重复的跨页入口；当前图解的三维对照位于“视图与布局”中。时间滑条旁的文字按钮每次调整五分钟。",
                 "The fixed top bar is global navigation. Views & layout and Observation controls share the same grouped layout, with the selected choice highlighted in green. Open spatial models through 3D Sky in the top bar; experiment parameters do not repeat cross-page shortcuts. The current diagram’s 3D comparison remains in Views & layout. Text buttons beside the clock slider change time by five minutes."
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "顶部“设置”集中管理全站主题、夜间定时、配色、阅读字号、界面密度、动画与三维显示偏好。三维页的轨道线、天体名称开关与设置同步。偏好保存在当前浏览器和站点，可单独导入、导出或恢复；这些操作不删除实验、收藏和布局存档，也不改变地点与观测时刻。",
+                "Settings in the top bar controls site-wide themes, scheduled night mode, palette, reading sizes, density, motion and 3D display preferences. Orbit and body-label switches on the 3D page stay synchronized. Preferences are stored in this browser and site and can be imported, exported or reset separately; these actions preserve experiments, favorites and layouts and do not change location or observation time."
+              ]
             }
           ]
         },
@@ -3373,6 +3380,13 @@
               "text": [
                 "页面路径、主导航、视图名称、分组和可用条件统一定义在site-catalog.json；lab-state.json统一定义状态初值、范围、枚举和相机字段。scripts/site_sources.py校验这些数据并生成启动脚本和状态模块的标记区段，禁止直接修改生成区段。",
                 "site-catalog.json defines page paths, main navigation, view names, groups and availability. lab-state.json defines defaults, ranges, choices and camera fields. scripts/site_sources.py validates these sources and generates marked sections in boot and state modules; edit the canonical data rather than generated regions."
+              ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、export 与 parseImport。版本 1 记录使用 skymotion-preferences；语言兼容原存储键。主题颜色由 theme-colors.js 中的 Material Color Utilities 0.3.0 生成，并映射到现有 design 颜色角色。第三方代码为 Apache-2.0，许可见 theme-colors.LICENSE；科学状态不属于偏好记录。",
+                "preferences.js is the single preference owner, exposing get, set, subscribe, reset, export and parseImport. Version 1 records use skymotion-preferences; language remains compatible with its existing storage key. Material Color Utilities 0.3.0 in theme-colors.js generates palettes mapped to the existing design color roles. The bundled library is Apache-2.0; see theme-colors.LICENSE. Scientific state is excluded from preference records."
               ]
             }
           ],

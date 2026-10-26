@@ -1,6 +1,6 @@
 /* Shared parameter geometry. Scoped away from welcome, diagrams and inline playback actions. */
-:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop) {
+:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox'])) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 52px;
   align-items: center;
@@ -14,14 +14,14 @@
   border-radius: 0;
   background: transparent;
   color: var(--design-ink);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.6;
   white-space: normal;
   cursor: pointer;
 }
 
-:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
   > span {
   min-width: 0;
   grid-column: 1;
@@ -29,8 +29,8 @@
   overflow-wrap: anywhere;
 }
 
-:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
   > input[type='checkbox'] {
   appearance: none;
   box-sizing: border-box;
@@ -55,8 +55,8 @@
     border-color 180ms ease;
 }
 
-:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
   > input[type='checkbox']::after {
   content: '';
   display: block;
@@ -73,33 +73,33 @@
     background-color 180ms ease;
 }
 
-:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
   > input[type='checkbox']:checked {
   border-color: var(--design-primary);
   background: var(--design-action);
 }
 
-:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
   > input[type='checkbox']:checked::after {
   width: 24px;
   height: 24px;
   top: 2px;
   left: 2px;
   transform: translateX(20px);
-  background: var(--design-surface);
+  background: var(--design-on-action);
 }
 
-:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
   > input[type='checkbox']:focus-visible {
   outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 3px;
 }
 
-:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+:is(.ui-parameters, .ui-timeline-host, body[data-page='space'] .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
   > input[type='checkbox']:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -172,17 +172,19 @@ body[data-page='space'] .scene-tools-panel .tools-field select {
       .ui-parameters,
       .ui-timeline-host,
       body[data-page='space'] .side,
-      .scene-tools-panel
+      .scene-tools-panel,
+      .preferences-dialog
     )
-    :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+    :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
     > input[type='checkbox'],
   :is(
       .ui-parameters,
       .ui-timeline-host,
       body[data-page='space'] .side,
-      .scene-tools-panel
+      .scene-tools-panel,
+      .preferences-dialog
     )
-    :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+    :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
     > input[type='checkbox']::after {
     transition: none;
   }

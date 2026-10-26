@@ -1,6 +1,6 @@
 /** Presentation-only motion. Astronomy state and canvas gestures remain independent. */
 (() => {
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = (window.SkyPreferences?.reducedMotion || matchMedia('(prefers-reduced-motion: reduce)'));
   const easing = 'cubic-bezier(.2,0,0,1)';
   const springEasing = 'linear';
 
@@ -142,8 +142,9 @@
     if (!shell || !rail || !button || document.body.dataset.embedded === 'true') return;
     let collapsed = false;
     try {
-      collapsed = sessionStorage.getItem('sky-menu-collapsed') === 'true';
+      collapsed = window.SkyPreferences?.get().rememberRail !== false && localStorage.getItem('sky-menu-collapsed') === 'true';
     } catch (_) {}
+    window.SkyPreferences?.subscribe((prefs) => { if (!prefs.rememberRail) { try { localStorage.removeItem('sky-menu-collapsed'); } catch {} } });
     let previousModal = mobile.matches || overlay();
     rail.id ||= 'motionParameterRail';
     rail.classList.add('md-parameter-rail');
@@ -225,7 +226,7 @@
         border = hostStyle.border;
       collapsed = value;
       try {
-        sessionStorage.setItem('sky-menu-collapsed', String(value));
+        if (window.SkyPreferences?.get().rememberRail !== false) localStorage.setItem('sky-menu-collapsed', String(value));
       } catch (_) {}
       sync();
       if (modal || reduced.matches) return;

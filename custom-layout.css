@@ -21,7 +21,7 @@
 .layout-launch {
   flex-shrink: 0;
   white-space: nowrap;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   padding: 7px 12px;
   min-height: var(--md-sys-size-target, 40px);
 }
@@ -78,7 +78,7 @@
   gap: 6px;
   min-height: var(--md-sys-size-target);
   padding: 5px 8px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   white-space: nowrap;
 }
 .workspace-toolbar button[aria-pressed='true'],
@@ -236,7 +236,7 @@
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -265,7 +265,7 @@
   flex-shrink: 0;
 }
 .workspace-pane-tools select {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   min-width: 0;
   max-width: 100%;
   width: 100%;
@@ -288,7 +288,7 @@
   min-height: 0;
 }
 .workspace-active .ui-diagram-card-head > button {
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   min-height: var(--md-sys-size-target);
   padding: 8px 12px;
   white-space: nowrap;
@@ -376,7 +376,7 @@
   border-radius: var(--md-sys-shape-corner-large);
   box-shadow: 0 6px 22px var(--design-shadow);
   padding: 10px 16px;
-  font: 14px var(--design-font);
+  font: calc(14px * var(--ui-font-scale, 1)) var(--design-font);
 }
 .workspace-guide {
   position: fixed;
@@ -403,7 +403,7 @@
   width: 100%;
   min-width: 0;
   color: var(--design-ink);
-  font: 13px/1.6 var(--design-font);
+  font: calc(13px * var(--ui-font-scale, 1))/1.6 var(--design-font);
 }
 .workspace-options-head {
   margin-bottom: 16px;
@@ -412,7 +412,7 @@
   gap: 12px;
 }
 .workspace-options-head h2 {
-  font-size: 17px;
+  font-size: calc(17px * var(--ui-font-scale, 1));
   font-weight: 600;
   line-height: 1.4;
   margin: 0;
@@ -435,13 +435,13 @@
 }
 .workspace-options h3 {
   margin: 0 0 8px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   font-weight: 600;
   color: var(--design-muted);
 }
 .workspace-options button {
   padding: 6px 9px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   min-height: var(--md-sys-size-target);
 }
 .workspace-choice-group {
@@ -477,7 +477,7 @@
 .workspace-order-row > span {
   flex: 1;
   min-width: 0;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -507,7 +507,7 @@
   flex: 1;
   padding: 6px 9px;
   min-height: var(--md-sys-size-target, 40px);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 .workspace-save-form button {
   flex-shrink: 0;
@@ -515,7 +515,7 @@
 .workspace-settings-hint,
 .workspace-settings-status {
   margin: 8px 0 0;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.7;
   color: var(--design-muted);
 }
@@ -573,7 +573,7 @@
 }
 @media (max-width: 760px) {
   .ui-heading .layout-launch {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
     min-height: var(--md-sys-size-target, 40px);
     padding: 5px 9px;
   }
@@ -584,7 +584,7 @@
   .workspace-toolbar button {
     min-height: var(--md-sys-size-target);
     padding: 4px 7px;
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
   }
   .workspace-toolbar .workspace-button-label {
     display: none;
@@ -609,7 +609,7 @@
   }
   .workspace-tabs button {
     white-space: nowrap;
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
   }
   .workspace-tabs .workspace-button-label {
     display: block;
@@ -671,7 +671,7 @@
 }
 .workspace-proportions legend {
   color: var(--design-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   padding: 0 0 6px;
 }
 .workspace-proportions label {
@@ -679,7 +679,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .workspace-proportions input {
   margin-top: auto;
@@ -709,7 +709,7 @@
 .workspace-current-marker {
   display: block;
   color: var(--design-muted);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   line-height: 1.5;
 }
 .workspace-profile-row[data-current='true'] .workspace-profile-apply {
@@ -760,7 +760,7 @@ body .workspace-save-form .workspace-save-scope {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   color: var(--design-ink);
 }
 body .workspace-save-form .workspace-save-scope input {

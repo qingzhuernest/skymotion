@@ -198,7 +198,7 @@ function initShadow() {
     closeMenu();
     schedule();
     $('stage').scrollIntoView({
-      behavior: reducedMotion.matches ? 'instant' : 'smooth',
+      behavior: !window.SkyPreferences?.smoothScroll ? 'instant' : 'smooth',
       block: 'center',
     });
     focusAfterReveal($('sky'));

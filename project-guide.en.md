@@ -57,6 +57,8 @@ The app bar starts with observation identity, followed by the main menu and dire
 
 The fixed top bar is global navigation. Views & layout and Observation controls share the same grouped layout, with the selected choice highlighted in green. Open spatial models through 3D Sky in the top bar; experiment parameters do not repeat cross-page shortcuts. The current diagram’s 3D comparison remains in Views & layout. Text buttons beside the clock slider change time by five minutes.
 
+Settings in the top bar controls site-wide themes, scheduled night mode, palette, reading sizes, density, motion and 3D display preferences. Orbit and body-label switches on the 3D page stay synchronized. Preferences are stored in this browser and site and can be imported, exported or reset separately; these actions preserve experiments, favorites and layouts and do not change location or observation time.
+
 ## Set location, date and time
 
 City presets are shortcuts for coordinates. The lower shared timeline controls the current observation; annual sampling and Earthrise have separate controls described below.

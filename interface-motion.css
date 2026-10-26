@@ -57,7 +57,7 @@ body :is(button.motion-menu-grip, button.motion-menu-edge) {
   border-radius: var(--md-sys-shape-corner-large);
   color: var(--design-primary);
   background: var(--design-surface);
-  font: 500 13px/1.4 var(--design-font);
+  font: 500 calc(13px * var(--ui-font-scale, 1))/1.4 var(--design-font);
   box-shadow: none;
   cursor: ew-resize;
 }
@@ -106,7 +106,7 @@ body :is(button.motion-menu-grip, button.motion-menu-edge)[hidden] {
     border-radius: 12px;
     background: var(--design-surface);
     color: var(--design-primary);
-    font-size: 13px;
+    font-size: calc(13px * var(--ui-font-scale, 1));
     white-space: nowrap;
   }
   .ui-shell .ui-grid,

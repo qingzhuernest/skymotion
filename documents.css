@@ -6,7 +6,7 @@
   margin: 24px auto;
   padding: 36px 40px;
   color: var(--design-ink);
-  font-size: 16px;
+  font-size: calc(16px * var(--ui-font-scale, 1));
   line-height: 1.85;
   overflow-wrap: anywhere;
   border: 1px solid var(--design-line);
@@ -21,13 +21,13 @@
   background: transparent;
 }
 .document-kicker {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   letter-spacing: 0.06em;
   color: var(--design-muted);
   margin: 0 0 10px;
 }
 .document-page h1 {
-  font-size: 28px;
+  font-size: calc(28px * var(--ui-font-scale, 1));
   line-height: 1.4;
   margin: 0 0 14px;
   font-weight: 700;
@@ -76,7 +76,7 @@
   margin: 0;
   padding: 14px 18px;
   color: var(--design-primary);
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   font-weight: 600;
   background: var(--design-selected);
   border-bottom: 1px solid var(--design-line);
@@ -90,7 +90,7 @@
 }
 .document-toc li {
   margin: 0;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.65;
   min-width: 0;
 }
@@ -101,7 +101,7 @@
   text-decoration: underline;
 }
 .document-content h2 {
-  font-size: 21px;
+  font-size: calc(21px * var(--ui-font-scale, 1));
   line-height: 1.5;
   margin: 32px 0 14px;
   padding-top: 24px;
@@ -115,7 +115,7 @@
   border-top: 0;
 }
 .document-content h3 {
-  font-size: 17px;
+  font-size: calc(17px * var(--ui-font-scale, 1));
   line-height: 1.6;
   margin: 24px 0 10px;
 }
@@ -150,7 +150,7 @@
 .document-page table {
   border-collapse: collapse;
   width: 100%;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   min-width: 640px;
   table-layout: fixed;
 }
@@ -232,7 +232,7 @@
   color: var(--design-primary);
 }
 .development-flow p {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 .document-page .article-actions {
   display: flex;
@@ -253,17 +253,17 @@
     width: calc(100% - 24px);
     margin: 12px auto;
     padding: 22px 20px;
-    font-size: 14px;
+    font-size: calc(14px * var(--ui-font-scale, 1));
   }
   .document-page h1 {
-    font-size: 23px;
+    font-size: calc(23px * var(--ui-font-scale, 1));
   }
   .document-header {
     padding-bottom: 20px;
     margin-bottom: 20px;
   }
   .document-content h2 {
-    font-size: 19px;
+    font-size: calc(19px * var(--ui-font-scale, 1));
     margin-top: 28px;
     padding-top: 20px;
   }
@@ -314,7 +314,7 @@
 
 .document-page .micro {
   color: var(--design-muted);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.8;
 }
 
@@ -342,14 +342,14 @@
   background: var(--design-selected);
 }
 .document-manual-list strong {
-  font-size: 20px;
+  font-size: calc(20px * var(--ui-font-scale, 1));
 }
 .document-manual-list span {
   color: var(--design-ink);
 }
 .document-manual-list .document-audience {
   color: var(--design-muted);
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
 }
 .document-manual-list .document-list-action {
   color: var(--design-primary);
@@ -370,7 +370,7 @@
   margin-top: 24px;
   padding-top: 12px;
   border-top: 1px solid var(--design-line);
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
 }
 .document-chapter-links a {
   padding-block: 10px;
@@ -428,7 +428,7 @@
   background: var(--design-selected);
   color: var(--design-on-selected);
   box-shadow: var(--md-sys-elevation-level-2);
-  font: 500 14px/1.4 var(--design-font);
+  font: 500 calc(14px * var(--ui-font-scale, 1))/1.4 var(--design-font);
 }
 .document-back-top[hidden] {
   display: none;

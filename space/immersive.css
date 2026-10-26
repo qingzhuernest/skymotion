@@ -47,7 +47,7 @@ body[data-page='space'].space-immersive .time-head button {
   border-color: var(--design-night-line);
   background: var(--design-night-inset);
   color: var(--design-night-ink);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   min-height: var(--md-sys-size-target);
 }
 body[data-page='space'].space-immersive .time-head button {
@@ -79,7 +79,7 @@ body[data-page='space'].space-immersive .time-head label {
 body[data-page='space'].space-immersive .time-head output {
   display: inline;
   color: var(--design-night-ink);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   margin-left: 8px;
 }
 body[data-page='space'].space-immersive .timeline > input[type='range'] {
@@ -112,7 +112,7 @@ body[data-page='space'].space-immersive :is(a, button, input, select):focus-visi
     gap: 4px;
   }
   body[data-page='space'].space-immersive h1 {
-    font-size: 13px;
+    font-size: calc(13px * var(--ui-font-scale, 1));
   }
   body[data-page='space'].space-immersive .timeline {
     grid-template-columns: minmax(0, 1fr);
@@ -124,13 +124,13 @@ body[data-page='space'].space-immersive :is(a, button, input, select):focus-visi
     justify-content: flex-end;
   }
   body[data-page='space'].space-immersive .time-head label {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
   }
   body[data-page='space'].space-immersive .time-head label {
     color: var(--design-night-muted);
   }
   body[data-page='space'].space-immersive .time-head output {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
     margin-left: 3px;
   }
 }

@@ -33,7 +33,7 @@ body[data-page='diagrams'] .ui-linked-toggle {
   border: 1px solid var(--design-line);
   border-radius: var(--design-radius-control);
   padding: 5px 12px;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   background: var(--design-surface);
   color: var(--design-primary);
   touch-action: manipulation;
@@ -77,7 +77,7 @@ body[data-page='diagrams'] .ui-linked-scenes.is-linked > .ui-linked-note {
   background: var(--design-plot);
   color: var(--design-night-muted);
   border-bottom: 1px solid var(--design-night-line);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   line-height: 1.45;
 }
 body[data-page='diagrams'] .ui-linked-scenes.is-linked > .ui-linked-space {
@@ -99,7 +99,7 @@ body[data-page='diagrams'] .ui-linked-frame {
 body[data-page='diagrams'] .ui-linked-menu-note {
   margin: 10px 0 0;
   padding: 8px 0;
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   line-height: 1.6;
   color: var(--design-muted);
 }
@@ -117,12 +117,12 @@ body[data-page='diagrams'] .ui-linked-menu-note {
 }
 @media (max-width: 760px), (max-height: 540px) {
   body[data-page='diagrams'] .ui-linked-toggle {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
     padding: 4px 8px;
     min-height: var(--md-sys-size-target, 40px);
   }
   body[data-page='diagrams'] .ui-linked-scenes.is-linked > .ui-linked-note {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-font-scale, 1));
     padding: 4px 6px;
   }
 }
@@ -168,7 +168,7 @@ body[data-page='diagrams'] .ui-linked-menu-note {
     min-height: 22px;
   }
   body[data-page='diagrams'] .ui-timeline-host .workbench-panel-head output {
-    font-size: 16px;
+    font-size: calc(16px * var(--ui-font-scale, 1));
   }
   body[data-page='diagrams'] .ui-timeline-host .time-workbench input[type='range'] {
     height: 26px;

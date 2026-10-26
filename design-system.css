@@ -93,7 +93,7 @@ body {
   color: var(--design-ink);
   background: var(--design-paper);
   font-family: var(--design-font);
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -264,7 +264,7 @@ body
   min-height: 40px;
   padding-inline: 16px;
   color: var(--design-muted);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   font-weight: 500;
 }
 .page-nav a:hover {
@@ -286,14 +286,14 @@ body
 }
 :is(.ui-heading, body[data-page='space'] .head) h1 {
   color: var(--design-ink);
-  font-size: 24px;
+  font-size: calc(24px * var(--ui-font-scale, 1));
   font-weight: 600;
   line-height: 1.35;
   letter-spacing: -0.025em;
 }
 :is(.ui-heading #uiPlaceText, body[data-page='space'] .head p) {
   color: var(--design-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.7;
 }
 /* Shared connected single-choice component, following Material 3 Expressive. */
@@ -322,7 +322,7 @@ body .md-connected-choice > :is(button, a) {
   border-radius: var(--md-comp-connected-button-inner-corner);
   color: var(--md-sys-color-on-primary-container);
   background: var(--md-sys-color-primary-container);
-  font: 500 14px/1.5 var(--design-font);
+  font: 500 calc(14px * var(--ui-font-scale, 1))/1.5 var(--design-font);
   white-space: normal;
   text-align: center;
   text-decoration: none;
@@ -398,7 +398,7 @@ body .md-connected-choice.md-compact-choice > :is(button, a) {
   border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
   box-shadow: none;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.3;
 }
 body .md-connected-choice.md-compact-choice > :is(button, a):is(:hover, :active) {
@@ -428,7 +428,7 @@ body .md-connected-choice.md-compact-choice > :is(button, a):active::before {
 }
 .ui-parameters > h2 {
   color: var(--design-ink);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   font-weight: 600;
 }
 .ui-parameters > h2::before {
@@ -465,7 +465,7 @@ body
   gap: 3px;
   list-style: none;
   cursor: pointer;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.65;
   color: var(--design-ink);
   background: var(--design-surface);
@@ -559,7 +559,7 @@ body
   transform: translateY(-50%) rotate(225deg);
 }
 body :is(.ui-parameters, .md-parameter-rail) .menu-section > .menu-content {
-  padding: 14px 16px 16px;
+  padding: var(--preference-panel-padding, 14px) 16px 16px;
 }
 .ui-parameters
   :is(
@@ -573,7 +573,7 @@ body :is(.ui-parameters, .md-parameter-rail) .menu-section > .menu-content {
     .globe-notes
   ) {
   color: var(--design-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.75;
 }
 .ui-parameters .menu-section[open] > summary .menu-summary {
@@ -588,7 +588,7 @@ body :is(.ui-parameters, .md-parameter-rail) .menu-section > .menu-content {
 .ui-parameters .menu-subsection > summary {
   color: var(--design-primary);
   background: var(--design-paper);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   border-radius: calc(var(--md-sys-shape-corner-large) - 1px);
 }
 .ui-parameters .menu-subsection[open] > summary {
@@ -599,7 +599,7 @@ body :is(.ui-parameters, .md-parameter-rail) .menu-section > .menu-content {
 }
 .ui-parameters :is(.menu-content, .coordinate-editor, .analemma-controls, .ui-field) {
   color: var(--design-ink);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 body
   :is(.ui-parameters, .ui-timeline-host, .side, .timeline, .scene-tools-panel)
@@ -614,48 +614,48 @@ body
   border-color: var(--design-line);
   border-radius: var(--md-sys-shape-corner-extra-small);
   background: var(--md-sys-color-surface-container-low);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.5;
 }
 body :is(.ui-parameters, .ui-timeline-host, .side, .timeline) select {
   min-height: var(--md-sys-size-target, 40px);
 }
 body
-  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop) {
+  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox'])) {
   color: var(--design-ink);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 body
-  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
   > input[type='checkbox'] {
   border-color: var(--design-switch-line);
   background: var(--design-switch-idle);
 }
 body
-  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
   > input[type='checkbox']:checked {
   border-color: var(--design-primary);
   background: var(--design-action);
 }
 body
-  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
   > input[type='checkbox']::after {
   background: var(--design-switch-thumb);
 }
 body
-  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel)
-  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop)
+  :is(.ui-parameters, .ui-timeline-host, .side, .scene-tools-panel, .preferences-dialog)
+  :is(.toggle-row, .overlay-toggle, .toggles > label, .tools-check, .workbench-loop, .preference-row:has(input[type='checkbox']))
   > input[type='checkbox']:checked::after {
-  background: var(--design-surface);
+  background: var(--design-on-action);
 }
 .ui-parameters .study-navigation .page-link {
   color: var(--design-primary);
   background: var(--design-paper);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   font-weight: 500;
   border-radius: var(--design-radius-control);
 }
@@ -704,7 +704,7 @@ body[data-page='space'] #spaceDrawer {
 }
 .ui-drawer-header h2 {
   color: var(--design-ink);
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
   font-weight: 600;
 }
 .ui-drawer-header span {
@@ -742,11 +742,11 @@ body[data-page='space'] .card {
 }
 body[data-page='space'] .card h2 {
   color: var(--design-ink);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   font-weight: 600;
 }
 body[data-page='space'] .planet-name {
-  font-size: 24px;
+  font-size: calc(24px * var(--ui-font-scale, 1));
   font-weight: 600;
   color: var(--design-ink);
 }
@@ -763,7 +763,7 @@ body[data-page='space']
   color: var(--design-muted);
 }
 body[data-page='space'] .info {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.8;
 }
 body[data-page='space'] .facts strong {
@@ -781,7 +781,7 @@ body[data-page='space'] #play {
 }
 body[data-page='space'] .time-head output {
   color: var(--design-primary);
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
 }
 /* A dark observation surface needs its own legible foreground, including drawers. */
 body[data-page='space'].space-immersive {
@@ -797,7 +797,7 @@ body[data-page='space'].space-immersive #play {
   color: var(--design-on-action);
 }
 body[data-page='space'].space-immersive h1 {
-  font-size: 16px;
+  font-size: calc(16px * var(--ui-font-scale, 1));
   color: var(--design-ink);
 }
 body[data-page='space'].space-immersive .stage .label {
@@ -840,7 +840,7 @@ body .scene-tools-panel input[type='checkbox']:checked {
   max-width: 960px;
   padding: 40px 48px;
   font-family: var(--design-font);
-  font-size: 16px;
+  font-size: calc(16px * var(--ui-font-scale, 1));
   line-height: 1.9;
   border-color: var(--design-line);
 }
@@ -854,7 +854,7 @@ body .scene-tools-panel input[type='checkbox']:checked {
 }
 .document-page h1 {
   color: var(--design-ink);
-  font-size: 30px;
+  font-size: calc(30px * var(--ui-font-scale, 1));
   line-height: 1.45;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -873,26 +873,26 @@ body .scene-tools-panel input[type='checkbox']:checked {
 }
 .document-toc > h2 {
   color: var(--design-primary);
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
 }
 .document-toc > h2 {
   background: var(--design-selected);
   border-color: var(--design-line);
 }
 .document-toc li {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.8;
 }
 .document-content h2 {
   color: var(--design-ink);
-  font-size: 22px;
+  font-size: calc(22px * var(--ui-font-scale, 1));
   line-height: 1.5;
   font-weight: 600;
   border-color: var(--design-line);
   margin-top: 40px;
 }
 .document-content h3 {
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
   line-height: 1.6;
   font-weight: 600;
   margin-top: 28px;
@@ -909,7 +909,7 @@ body .scene-tools-panel input[type='checkbox']:checked {
 .document-page :is(th, td) {
   border-color: var(--design-line);
   padding: 12px;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.8;
 }
 .document-page th {
@@ -930,7 +930,7 @@ body .scene-tools-panel input[type='checkbox']:checked {
 }
 .document-page .micro {
   color: var(--design-muted);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 .development-flow {
   background: var(--design-inset);
@@ -967,7 +967,7 @@ body :is(.page-action, .author-mail-button):hover {
   color: var(--design-primary);
   border: 1px solid var(--design-line);
   border-radius: var(--design-radius-control);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.5;
   text-decoration: none;
 }
@@ -984,7 +984,7 @@ body :is(.page-action, .author-mail-button):hover {
 body[data-page='contact'] .reading-page {
   max-width: 880px;
   padding: 36px;
-  font-size: 15px;
+  font-size: calc(15px * var(--ui-font-scale, 1));
   line-height: 1.85;
 }
 .author-email-box {
@@ -1025,24 +1025,24 @@ body[data-page='welcome'] .welcome-screen ::selection {
   }
   .page-nav a {
     padding-inline: 10px;
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
   }
   :is(.ui-heading, body[data-page='space'] .head) h1 {
-    font-size: 19px;
+    font-size: calc(19px * var(--ui-font-scale, 1));
   }
   .document-page {
     padding: 24px 20px;
-    font-size: 15px;
+    font-size: calc(15px * var(--ui-font-scale, 1));
   }
   .document-page h1 {
-    font-size: 24px;
+    font-size: calc(24px * var(--ui-font-scale, 1));
   }
   .document-content h2 {
-    font-size: 20px;
+    font-size: calc(20px * var(--ui-font-scale, 1));
     margin-top: 32px;
   }
   .document-content h3 {
-    font-size: 17px;
+    font-size: calc(17px * var(--ui-font-scale, 1));
   }
 
   body[data-page='contact'] .reading-page {
@@ -1052,10 +1052,10 @@ body[data-page='welcome'] .welcome-screen ::selection {
 }
 @media (max-width: 420px) {
   :is(.ui-heading, body[data-page='space'] .head) h1 {
-    font-size: 17px;
+    font-size: calc(17px * var(--ui-font-scale, 1));
   }
   .ui-parameters :is(.menu-summary, .micro) {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
   }
 }
 @media print {
@@ -1262,12 +1262,12 @@ body .ui-heading #uiParametersButton {
     gap: 8px;
   }
   .ui-heading h1 {
-    font-size: 19px;
+    font-size: calc(19px * var(--ui-font-scale, 1));
   }
 
   .ui-heading #uiParametersButton {
     padding: 6px 8px;
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-font-scale, 1));
   }
   .ui-viewbar {
     padding: 6px;
@@ -1286,7 +1286,7 @@ body .ui-heading #uiParametersButton {
     flex: 1 1 64px;
     min-height: var(--md-sys-size-target, 40px);
     padding: 5px 6px;
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-font-scale, 1));
   }
 }
 
@@ -1365,7 +1365,7 @@ body .ui-plot #resetView:hover {
 }
 .ui-parameters .metrics strong {
   margin: 0;
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
   line-height: 1.4;
   word-break: keep-all;
   text-wrap: balance;
@@ -1551,7 +1551,7 @@ body :is(button, a).md-outlined-action {
   color: var(--design-primary);
   border: 1px solid var(--design-line);
   border-radius: var(--design-radius-control);
-  font: 500 14px/1.5 var(--design-font);
+  font: 500 calc(14px * var(--ui-font-scale, 1))/1.5 var(--design-font);
   text-decoration: none;
   white-space: nowrap;
 }
@@ -1697,7 +1697,7 @@ body
   background: var(--design-surface);
   color: var(--design-primary);
   font-variant-numeric: tabular-nums;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 .document-page .development-flow p {
   margin: 16px 0 0;
@@ -1870,7 +1870,7 @@ body .site-calendar button:disabled {
   justify-content: space-between;
   gap: 12px;
   margin: 12px 0;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   color: var(--design-muted);
 }
 body .site-calendar-year input {
@@ -1903,7 +1903,7 @@ body .site-calendar-year input {
 .site-calendar-weekday {
   text-align: center;
   padding: 6px 0;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
   color: var(--design-muted);
 }
 .site-calendar-actions {
@@ -1931,7 +1931,7 @@ body input.site-date-field {
   background: var(--design-surface);
   color: var(--design-ink);
   font-family: var(--design-font);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   font-variant-numeric: tabular-nums;
   cursor: pointer;
 }
@@ -2048,7 +2048,7 @@ body
   border-radius: var(--md-sys-shape-corner-large);
   background: var(--design-surface);
   color: var(--design-ink);
-  font: 14px/1.5 var(--design-font);
+  font: calc(14px * var(--ui-font-scale, 1))/1.5 var(--design-font);
 }
 body .font-load-notice button {
   flex-shrink: 0;
@@ -2080,7 +2080,7 @@ html:lang(en) body[data-page='welcome'] .welcome-quote {
   color: var(--design-welcome-quote);
   font-family: 'SkyMotion Charter', Charter, 'Bitstream Charter', Georgia, serif;
   font-style: normal;
-  font-size: clamp(14px, 1.2vw, 17px);
+  font-size: calc(clamp(14px, 1.2vw, 17px) * var(--ui-font-scale, 1));
   line-height: 1.55;
   letter-spacing: 0;
   text-wrap: balance;
@@ -2088,7 +2088,7 @@ html:lang(en) body[data-page='welcome'] .welcome-quote {
 @media (max-height: 400px) {
   html:lang(en) body[data-page='welcome'] .welcome-quote {
     width: 100%;
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-font-scale, 1));
     line-height: 1.45;
   }
 }
@@ -2097,7 +2097,7 @@ html:lang(en) body[data-page='welcome'] .welcome-quote {
     padding: 4px 0;
   }
   body[data-page='welcome'] .welcome-intro h1 {
-    font-size: 25px;
+    font-size: calc(25px * var(--ui-font-scale, 1));
     margin-bottom: 8px;
   }
   body[data-page='welcome'] .welcome-intro > p {
@@ -2186,14 +2186,14 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
 .entrance-sentence {
   opacity: 0;
   margin: 0 0 clamp(14px, 2vh, 24px);
-  font-size: clamp(19px, 2.1vw, 27px);
+  font-size: calc(clamp(19px, 2.1vw, 27px) * var(--ui-font-scale, 1));
   font-weight: 400;
   line-height: 1.55;
   letter-spacing: 0;
   text-wrap: pretty;
 }
 .entrance-sentence:first-child {
-  font-size: clamp(28px, 3.6vw, 46px);
+  font-size: calc(clamp(28px, 3.6vw, 46px) * var(--ui-font-scale, 1));
   margin-bottom: clamp(22px, 3vh, 34px);
 }
 .entrance-sentence[data-voice='answer'] {
@@ -2203,7 +2203,7 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
 .entrance-sentence:last-child {
   margin-top: 22px;
   margin-bottom: 0;
-  font-size: clamp(21px, 2.5vw, 31px);
+  font-size: calc(clamp(21px, 2.5vw, 31px) * var(--ui-font-scale, 1));
   color: var(--entrance-last);
 }
 html:not(:lang(en)) .entrance-sentence {
@@ -2220,7 +2220,7 @@ html:not(:lang(en)) .entrance-sentence {
   border-radius: 0;
   background: transparent;
   color: var(--entrance-answer);
-  font: 400 14px/1.5 var(--design-font);
+  font: 400 calc(14px * var(--ui-font-scale, 1))/1.5 var(--design-font);
   text-decoration: underline;
   text-decoration-color: currentColor;
   text-underline-offset: 6px;
@@ -2240,16 +2240,16 @@ html:not(:lang(en)) .entrance-sentence {
     padding-bottom: 64px;
   }
   .entrance-sentence {
-    font-size: 17px;
+    font-size: calc(17px * var(--ui-font-scale, 1));
     line-height: 1.35 !important;
     margin-bottom: 10px;
   }
   .entrance-sentence:first-child {
-    font-size: 25px;
+    font-size: calc(25px * var(--ui-font-scale, 1));
     margin-bottom: 14px;
   }
   .entrance-sentence:last-child {
-    font-size: 19px;
+    font-size: calc(19px * var(--ui-font-scale, 1));
     margin-top: 12px;
   }
   .entrance-continue {
@@ -2258,15 +2258,15 @@ html:not(:lang(en)) .entrance-sentence {
 }
 @media (max-height: 330px) {
   .entrance-sentence {
-    font-size: 15px;
+    font-size: calc(15px * var(--ui-font-scale, 1));
     margin-bottom: 5px;
   }
   .entrance-sentence:first-child {
-    font-size: 20px;
+    font-size: calc(20px * var(--ui-font-scale, 1));
     margin-bottom: 8px;
   }
   .entrance-sentence:last-child {
-    font-size: 16px;
+    font-size: calc(16px * var(--ui-font-scale, 1));
     margin-top: 8px;
   }
 }
@@ -2276,7 +2276,7 @@ html:not(:lang(en)) .entrance-sentence {
     padding-bottom: 70px;
   }
   .entrance-sentence {
-    font-size: 17px;
+    font-size: calc(17px * var(--ui-font-scale, 1));
     margin-bottom: 12px;
     line-height: 1.5;
   }
@@ -2284,11 +2284,11 @@ html:not(:lang(en)) .entrance-sentence {
     line-height: 1.65;
   }
   .entrance-sentence:first-child {
-    font-size: 26px;
+    font-size: calc(26px * var(--ui-font-scale, 1));
     margin-bottom: 18px;
   }
   .entrance-sentence:last-child {
-    font-size: 19px;
+    font-size: calc(19px * var(--ui-font-scale, 1));
     margin-top: 16px;
   }
 }
@@ -2343,7 +2343,7 @@ body #sundialNeedleValue {
 }
 
 .ui-observation-context {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.6;
   color: var(--design-muted);
   margin: 12px 0;
@@ -2354,7 +2354,7 @@ body #sundialNeedleValue {
 }
 .ui-metric-notes {
   margin: 14px;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.7;
 }
 .ui-metric-notes dt {
@@ -2367,5 +2367,5 @@ body #sundialNeedleValue {
 }
 .ui-metric-notes small {
   display: block;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
 }

@@ -33,3 +33,7 @@ The English interface uses locally hosted Bitstream Charter regular, bold, itali
 ## 2026-10-13 production distribution
 
 The bilingual production release distributes the same original astronomy libraries, catalogs and license notices. Reading and Charter fonts are hosted locally with their bundled license files; interface refinement does not change third-party attribution or data licensing.
+
+## Material Color Utilities
+
+Theme generation bundles `@material/material-color-utilities` 0.3.0 under Apache-2.0. The license is retained in `theme-colors.LICENSE`. Rebuild with `npm ci --prefix scripts/theme-colors` and `npm run build --prefix scripts/theme-colors`. Build tools are excluded from the published static package.

@@ -61,7 +61,7 @@ html:lang(en) .ui-viewbar button {
     gap: 4px;
   }
   html:lang(en) .ui-viewbar button {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-font-scale, 1));
   }
 }
 html:lang(en)
@@ -141,7 +141,7 @@ html:lang(en) body[data-page='contact'] .reading-page > .dialog-head h2 {
 }
 .language-nav.workbench-header .ui-heading h1 {
   margin: 0;
-  font-size: 16px;
+  font-size: calc(16px * var(--ui-font-scale, 1));
   line-height: 1.3;
   white-space: nowrap;
   overflow: hidden;
@@ -149,7 +149,7 @@ html:lang(en) body[data-page='contact'] .reading-page > .dialog-head h2 {
 }
 .language-nav.workbench-header .ui-heading :is(#uiPlaceText, p) {
   display: block;
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -182,7 +182,7 @@ html:lang(en) body[data-page='contact'] .reading-page > .dialog-head h2 {
     padding: 4px 0;
   }
   .language-nav.workbench-header .ui-heading h1 {
-    font-size: 14px;
+    font-size: calc(14px * var(--ui-font-scale, 1));
   }
   .language-nav.workbench-header .ui-body-host,
   .language-nav.workbench-header .body-switch {
@@ -209,26 +209,26 @@ body[data-embedded='true'] .language-nav {
 
 /* Charter needs a readable body size, not the compact Chinese caption scale. */
 html:lang(en) .page-nav a {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
 }
 html:lang(en)
   .ui-parameters
   :is(.micro, .globe-drag-help, .globe-notes, .geometry-notes, .menu-summary) {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
   line-height: 1.7;
 }
 html:lang(en) .ui-information :is(p, li),
 html:lang(en) .side .card > p {
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-font-scale, 1));
   line-height: 1.7;
 }
 html:lang(en) .ui-information h2 {
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
 }
 
 html:lang(en) .document-page {
   max-width: var(--document-reading-width, 880px);
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-font-scale, 1));
   line-height: 1.75;
 }
 html:lang(en) .document-content > :is(p, ul, ol, blockquote),
@@ -236,19 +236,19 @@ html:lang(en) .document-lead {
   max-width: 72ch;
 }
 html:lang(en) .document-page h1 {
-  font-size: clamp(28px, 3vw, 38px);
+  font-size: calc(clamp(28px, 3vw, 38px) * var(--ui-font-scale, 1));
   line-height: 1.2;
 }
 html:lang(en) .document-content h2 {
-  font-size: 26px;
+  font-size: calc(26px * var(--ui-font-scale, 1));
   line-height: 1.3;
 }
 @media (max-width: 760px) {
   html:lang(en) .document-page {
-    font-size: 16px;
+    font-size: calc(16px * var(--ui-font-scale, 1));
   }
   html:lang(en) .document-content h2 {
-    font-size: 22px;
+    font-size: calc(22px * var(--ui-font-scale, 1));
   }
   html:lang(en) .ui-viewbar .view-tabs > button {
     min-height: var(--md-sys-size-target, 40px);
@@ -329,7 +329,7 @@ body[data-page='space'].space-immersive
   .language-actions {
     gap: 6px;
     margin: 0 10px 0 6px;
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-font-scale, 1));
   }
   .language-actions :is(.layout-launch, .language-toggle) {
     padding: 6px 9px;

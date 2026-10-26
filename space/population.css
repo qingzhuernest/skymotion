@@ -16,7 +16,7 @@ body[data-page='space'] .population-tools button {
   border-color: var(--design-night-line);
   border-radius: var(--md-sys-shape-corner-full);
   min-height: var(--md-sys-size-target);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
 }
 body[data-page='space'] .nebula-hint {
   position: absolute;
@@ -25,7 +25,7 @@ body[data-page='space'] .nebula-hint {
   z-index: 3;
   margin: 0;
   color: var(--design-night-muted);
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-font-scale, 1));
   pointer-events: none;
   max-width: calc(100% - 80px);
 }
@@ -56,14 +56,14 @@ body[data-page='space'] .nebula-header {
   gap: 10px;
 }
 body[data-page='space'] .nebula-header h2 {
-  font-size: 17px;
+  font-size: calc(17px * var(--ui-font-scale, 1));
   margin: 0;
 }
 body[data-page='space'] #nebulaClose {
   width: 40px;
   height: 40px;
   padding: 0;
-  font-size: 24px;
+  font-size: calc(24px * var(--ui-font-scale, 1));
   background: var(--design-night-inset);
   color: var(--design-night-ink);
   border-color: var(--design-night-line);
@@ -95,7 +95,7 @@ body[data-page='space'] #nebulaImage {
   border-radius: 8px;
 }
 body[data-page='space'] .nebula-caption {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-font-scale, 1));
   line-height: 1.7;
   color: var(--design-night-muted);
   margin: 0;
@@ -109,6 +109,6 @@ body[data-page='space'] .nebula-caption a {
     gap: 8px;
   }
   body[data-page='space'] .nebula-header h2 {
-    font-size: 15px;
+    font-size: calc(15px * var(--ui-font-scale, 1));
   }
 }

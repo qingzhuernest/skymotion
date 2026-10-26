@@ -2,26 +2,30 @@
 <html lang="zh-CN" data-rendered-language="zh">
 <head>
 <meta charset="utf-8">
-<script src="page-boot.js?v=20261025-expressive115"></script>
+<script src="theme-colors.js?v=20261026-settings116"></script>
+<script src="preferences.js?v=20261026-settings116"></script>
+<script src="page-boot.js?v=20261026-settings116"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" href="favicon.svg">
 <title>项目介绍与功能使用手册 · 天体视运动实验室</title>
 <meta name="description" content="从界面入口到每个模块的操作，说明能做什么、怎样使用、哪些条件会联动，以及对象、布局和完整实验分别怎样保存。">
 <link rel="canonical" href="https://skymotion-5md.pages.dev/project-guide">
-<link rel="stylesheet" href="ui-palette.css?v=20261025-expressive115">
-<link rel="stylesheet" href="style.css?v=20261025-expressive115">
-<link rel="stylesheet" href="pages.css?v=20261025-expressive115">
-<link rel="stylesheet" href="documents.css?v=20261025-expressive115">
-<link rel="stylesheet" href="interface-motion.css?v=20261025-expressive115">
-<link rel="stylesheet" href="design-system.css?v=20261025-expressive115">
-<link rel="stylesheet" href="language.css?v=20261025-expressive115">
-<script src="material-controls.js?v=20261025-expressive115" defer></script>
-<script src="document-entrance.js?v=20261025-expressive115" defer></script>
-<script src="document-navigation.js?v=20261025-expressive115" defer></script>
-<script src="language-data.js?v=20261025-expressive115" defer></script>
-<script src="language.js?v=20261025-expressive115" defer></script>
-<script src="page-cache.js?v=20261025-expressive115" defer></script>
-<script src="date-picker.js?v=20261025-expressive115" defer></script>
+<link rel="stylesheet" href="ui-palette.css?v=20261026-settings116">
+<link rel="stylesheet" href="style.css?v=20261026-settings116">
+<link rel="stylesheet" href="pages.css?v=20261026-settings116">
+<link rel="stylesheet" href="documents.css?v=20261026-settings116">
+<link rel="stylesheet" href="interface-motion.css?v=20261026-settings116">
+<link rel="stylesheet" href="design-system.css?v=20261026-settings116">
+<link rel="stylesheet" href="language.css?v=20261026-settings116">
+<script src="material-controls.js?v=20261026-settings116" defer></script>
+<script src="document-entrance.js?v=20261026-settings116" defer></script>
+<script src="document-navigation.js?v=20261026-settings116" defer></script>
+<script src="language-data.js?v=20261026-settings116" defer></script>
+<script src="language.js?v=20261026-settings116" defer></script>
+<script src="page-cache.js?v=20261026-settings116" defer></script>
+<script src="date-picker.js?v=20261026-settings116" defer></script>
+<link rel="stylesheet" href="controls.css?v=20261026-settings116">
+<link rel="stylesheet" href="preferences.css?v=20261026-settings116">
 </head>
 <body data-page="project-guide">
 <nav class="page-nav" aria-label="页面导航"><a href="index.html">欢迎页</a><a href="lab.html">实验台</a><a href="docs.html" aria-current="page">文档中心</a><a href="space/">三维天空</a></nav>
@@ -37,7 +41,7 @@
 <div class="document-reading-grid">
 <nav class="document-toc" aria-label="本页目录"><h2>本页目录</h2><ol><li><a href="#overview">项目定位与页面入口</a></li><li><a href="#controls">先读懂界面与控制</a></li><li><a href="#conditions">地点、日期与时间怎样设置</a></li><li><a href="#views">怎样选择、替换和组合图</a></li><li><a href="#sun">太阳与日影的四个视角</a></li><li><a href="#earth">地球与昼夜、地图和地轴图</a></li><li><a href="#altitude">全天高度曲线</a></li><li><a href="#bearings">日出日落与月出月落方位</a></li><li><a href="#moon">月相、照明比例和行星伴月</a></li><li><a href="#earthrise">地升地落的独立控制</a></li><li><a href="#analemma">日行迹与成因实验</a></li><li><a href="#sundial">日晷装置与太阳日影</a></li><li><a href="#customization">进入自定义与对象编辑</a></li><li><a href="#comparisons">城市、日期与时刻对照</a></li><li><a href="#builder">搭建杆、球、圈与测量</a></li><li><a href="#layout">布局、顺序与专注观察</a></li><li><a href="#saving">草稿、收藏和完整实验</a></li><li><a href="#space">三维天空与太阳系</a></li><li><a href="#keyboard">撤回、键盘与触屏</a></li><li><a href="#help">操作问题排查与模型边界</a></li></ol></nav>
 <div class="document-content"><section id="overview"><span id="section-0" aria-hidden="true"></span><span id="section-1" aria-hidden="true"></span><span id="unified-workbench" aria-hidden="true"></span><span id="section-10" aria-hidden="true"></span><h2>项目定位与页面入口</h2><p>天体视运动实验室用于把地点、日期、时间与可核对的天空和空间图解联系起来。核心计算在浏览器执行，不依赖账号或实时星历接口。顶部只有欢迎页、实验台、文档中心和三维天空四个主入口。</p><ol><li>初次使用先打开实验台，观察默认太阳场景；需要教学任务时从文档中心进入学习指南。</li><li>需要查按钮、保存范围或具体模块时，使用本手册目录；需要修改代码时进入开发者文档。</li><li>顶部主菜单负责切换主要区域；左侧栏目和图内视角属于当前工作区，不会改写顶部主菜单。</li></ol><div class="document-table"><table><thead><tr><th>入口</th><th>用途</th></tr></thead><tbody><tr><td>欢迎页</td><td>项目欢迎画面、星空互动和文档入口</td></tr><tr><td>实验台</td><td>太阳、月球、关联图解、日行迹、对照与搭建共用工作区</td></tr><tr><td>文档中心</td><td>学习指南、项目与功能使用、开发者文档及Markdown下载</td></tr><tr><td>三维天空</td><td>太阳系、日地月、参考对照、当地天空与天体探索</td></tr></tbody></table></div><p>原实验台、关联图解与日行迹网址仍可打开相应内容。它们是统一工作区的兼容入口，不是互不相通的三套实验。</p><p>太阳与月球使用顶部并列按钮直接切换，也可聚焦后使用左右方向键。底部时间栏把精确时刻与滑块放在一起，两侧按钮每次调整五分钟；月球优先呈现日期控制。观测条件先显示当前模式、地点和日期，计算与比例说明按需展开。</p><nav class="document-chapter-links" aria-label="章节导航"><a rel="next" href="#controls">先读懂界面与控制 →</a></nav></section>
-<section id="controls"><h2>先读懂界面与控制</h2><p>页面分为固定主菜单、实验标题、左侧控制区、右侧图形和下方时间栏。桌面可边调边看，宽度不超过760像素时使用参数抽屉。</p><ol><li>在标题旁选择太阳或月相；确认标题下方的经纬度和下方时间栏的日期。</li><li>左侧视图与布局用于选图；观测条件保留原参数；进入自定义后，图中对象用于编辑附加参考和标记。</li><li>需要扩大图形时，使用始终保留的收起菜单；从边缘展开按钮恢复。手机点击参数打开抽屉，设置后关闭回到画面。</li><li>语言按钮切换中英文；它不会重置科学条件。减少动态效果跟随系统设置。</li></ol><p class="document-note">鼠标拖动、滑条拖动和键盘操作具有不同对象：先看当前图位和当前选中对象。不要把移动相机、移动基准地点和移动附加城市混为一谈。</p><p>实验台顶部左侧显示标题和地点，随后是主菜单；太阳与月球通过并列的双按钮直接切换。自定义和语言入口保持在顶部右侧，窄屏按可用宽度排列。“三维对照”位于左侧“视图与布局 → 对照与搭建”，可与原科学图共享UTC并排观察。</p><p>顶栏是固定的全局导航。侧栏“视图与布局”和“观测条件”使用相同的分组样式，选中的切换项以绿色突出。三维模型从顶栏“三维天空”进入，实验参数中不再放置重复的跨页入口；当前图解的三维对照位于“视图与布局”中。时间滑条旁的文字按钮每次调整五分钟。</p><nav class="document-chapter-links" aria-label="章节导航"><a rel="prev" href="#overview">← 项目定位与页面入口</a><a rel="next" href="#conditions">地点、日期与时间怎样设置 →</a></nav></section>
+<section id="controls"><h2>先读懂界面与控制</h2><p>页面分为固定主菜单、实验标题、左侧控制区、右侧图形和下方时间栏。桌面可边调边看，宽度不超过760像素时使用参数抽屉。</p><ol><li>在标题旁选择太阳或月相；确认标题下方的经纬度和下方时间栏的日期。</li><li>左侧视图与布局用于选图；观测条件保留原参数；进入自定义后，图中对象用于编辑附加参考和标记。</li><li>需要扩大图形时，使用始终保留的收起菜单；从边缘展开按钮恢复。手机点击参数打开抽屉，设置后关闭回到画面。</li><li>语言按钮切换中英文；它不会重置科学条件。减少动态效果跟随系统设置。</li></ol><p class="document-note">鼠标拖动、滑条拖动和键盘操作具有不同对象：先看当前图位和当前选中对象。不要把移动相机、移动基准地点和移动附加城市混为一谈。</p><p>实验台顶部左侧显示标题和地点，随后是主菜单；太阳与月球通过并列的双按钮直接切换。自定义和语言入口保持在顶部右侧，窄屏按可用宽度排列。“三维对照”位于左侧“视图与布局 → 对照与搭建”，可与原科学图共享UTC并排观察。</p><p>顶栏是固定的全局导航。侧栏“视图与布局”和“观测条件”使用相同的分组样式，选中的切换项以绿色突出。三维模型从顶栏“三维天空”进入，实验参数中不再放置重复的跨页入口；当前图解的三维对照位于“视图与布局”中。时间滑条旁的文字按钮每次调整五分钟。</p><p>顶部“设置”集中管理全站主题、夜间定时、配色、阅读字号、界面密度、动画与三维显示偏好。三维页的轨道线、天体名称开关与设置同步。偏好保存在当前浏览器和站点，可单独导入、导出或恢复；这些操作不删除实验、收藏和布局存档，也不改变地点与观测时刻。</p><nav class="document-chapter-links" aria-label="章节导航"><a rel="prev" href="#overview">← 项目定位与页面入口</a><a rel="next" href="#conditions">地点、日期与时间怎样设置 →</a></nav></section>
 <section id="conditions"><h2>地点、日期与时间怎样设置</h2><p>城市预设是设置经纬度的快捷方式。下方公共时间栏控制当前观测；日行迹和地升地落另有专门控制，分别见对应章节。</p><ol><li>在观测条件选择城市，或拖动纬度、经度滑条；需要精确值时再输入数值。纬度北正南负，经度东正西负。</li><li>用日期滑条、前后一天按钮、季节快捷日期或日历设置日期。日历支持跨月、跨年，确认后才应用，取消保持原日期。</li><li>拖动时刻滑条连续观察，使用时间输入或前后五分钟按钮微调。先暂停再进行条件对照。</li><li>使用逐日播放时读清播放对象：按天变日期与日内变时刻不同；循环开关决定到边界后继续还是停止。</li></ol><div class="document-table"><table><thead><tr><th>量</th><th>范围与解释</th></tr></thead><tbody><tr><td>纬度</td><td>−90°至90°；极点方位有特殊定义限制</td></tr><tr><td>经度</td><td>−180°至180°；跨日期变更线比较时注意当地日期</td></tr><tr><td>日期</td><td>真实日期观测支持1900—2100年，闰日必须有效</td></tr><tr><td>日内时刻</td><td>当地真太阳时；24:00用于日边界，某些全年采样控件以23:59为上限</td></tr><tr><td>理想赤纬</td><td>太阳理想实验可单独调赤纬，不应解释为某个唯一真实UTC瞬间</td></tr></tbody></table></div><nav class="document-chapter-links" aria-label="章节导航"><a rel="prev" href="#controls">← 先读懂界面与控制</a><a rel="next" href="#views">怎样选择、替换和组合图 →</a></nav></section>
 <section id="views"><h2>怎样选择、替换和组合图</h2><p>视图目录按天空与日影、关联图解、对照与搭建分组；日行迹归入关联图解，三维对照归入对照与搭建。空间视图、俯视日影、地平视角和仰望天空位于左侧“天空与日影”内部，月球模式显示对应视角；画布上方不再重复这些按钮。组合图的“编辑”入口放在各图标题栏，避免遮住数据和操作提示。普通模式也能打开组合视图；调整内容和排列需要进入自定义。</p><ol><li>点击图名打开单图。组合中点击已显示图名会选中对应图位，点击未显示图名会替换当前图位。</li><li>先点要操作的图窗，看绿色边框与左侧对应项；此后替换操作针对这个图位。</li><li>图名右侧的加入控件新增一个图位；已加入时变为移除。至少保留一张图。</li><li>天空图只有一组视角入口；空间视图、俯视日影、地平视角和仰望天空集中在左侧“天空与日影”分组。</li></ol><p class="document-note">不是每个独立模块都能嵌入组合。目录中有加入控件的内容才支持加入；地升地落和搭建保留独立场景。</p><nav class="document-chapter-links" aria-label="章节导航"><a rel="prev" href="#conditions">← 地点、日期与时间怎样设置</a><a rel="next" href="#sun">太阳与日影的四个视角 →</a></nav></section>
 <section id="sun"><span id="section-3" aria-hidden="true"></span><span id="section-5" aria-hidden="true"></span><h2>太阳与日影的四个视角</h2><p>四个视角共享基准地点、日期和时刻。改变视角不应改变这些科学条件。</p><ol><li>空间视图：拖动旋转相机，滚轮或双指缩放，使用复位视角恢复；查看日轨迹、杆和影子。</li><li>俯视日影：从地面上方比较影长、方向和影尖轨迹；显示放大倍率只影响画面尺度。</li><li>地平视角：从地平线附近看升落和高度变化，注意虚线表示地平线下的延伸。</li><li>仰望天空：转动朝向寻找太阳、月球或行星。转头不同于改变观测地点。</li></ol><p>显示辅助中的轨迹、角度线、影子、影尖记录和月球叠加按当前模式提供。夜间、极昼、极夜或太阳近地平线时，某些影子读数可能不存在或超出画面。</p><nav class="document-chapter-links" aria-label="章节导航"><a rel="prev" href="#views">← 怎样选择、替换和组合图</a><a rel="next" href="#earth">地球与昼夜、地图和地轴图 →</a></nav></section>
