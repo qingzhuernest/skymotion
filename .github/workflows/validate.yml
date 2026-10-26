@@ -2,6 +2,10 @@ name: Validate SkyMotion release
 
 on:
   workflow_call:
+    inputs:
+      full_regression:
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -29,5 +33,12 @@ jobs:
         run: |
           echo "SKY_MOTION_PLAYWRIGHT=$GITHUB_WORKSPACE/tests/browser/node_modules/playwright" >> "$GITHUB_ENV"
           node -e "console.log('SKY_MOTION_CHROMIUM='+require('./tests/browser/node_modules/playwright').chromium.executablePath())" >> "$GITHUB_ENV"
-      - name: Run all model, browser, bilingual and packaging regressions
-        run: node .github/scripts/verify-site.cjs
+      - name: Run release checks
+        env:
+          FULL_REGRESSION: ${{ inputs.full_regression }}
+        run: |
+          if [ "$FULL_REGRESSION" = "true" ]; then
+            node .github/scripts/verify-site.cjs
+          else
+            node .github/scripts/verify-site.cjs settings-center.cjs shared-ui-lifecycle.cjs settings-updates.cjs confirmed-review-fixes.cjs deployment-paths.cjs
+          fi
