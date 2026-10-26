@@ -53,8 +53,9 @@
   --design-night-tool-selected: #39748c;
   --design-night-label-surface: #142b3ce6;
   --design-range-track: #c3d4bd;
-  --design-canvas-action-line: #73919f;
-  --design-canvas-action-surface: #163245;
+  --design-canvas-action-line: var(--design-line);
+  --design-canvas-action-surface: var(--design-surface);
+  --design-canvas-action-ink: var(--design-action);
   --design-print-ink: #000000;
   --design-daylight-label-ink: #082331;
   --design-night-plot-label: #d0e5f2;

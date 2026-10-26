@@ -74,10 +74,13 @@ html[data-custom-canvas='true'] body[data-page='space'] .label {background:var(-
 
 html[data-custom-canvas='true'] body #stage {background:var(--canvas-background)}
 /* Range hit areas remain native; steppers offer precise touch adjustments. */
-.preferences-dialog .preference-range {gap:8px;display:grid;grid-template-columns:40px minmax(60px,1fr) 40px 4.5em;flex-basis:320px;--md-range-surface:var(--design-surface)}
+.preferences-dialog .preference-range {gap:6px;display:grid;grid-template-columns:32px minmax(60px,1fr) 32px 4.5em;flex-basis:320px;--md-range-surface:var(--design-surface)}
 .preferences-dialog .preference-range input[type='range'] {width:100%;min-width:0;touch-action:pan-y}
 .preferences-dialog .md-select {width:min(240px,100%)}
 @media(max-width:480px) {
- .preferences-dialog .preference-range {grid-template-columns:40px minmax(60px,1fr) 40px;flex-basis:100%}
+ .preferences-dialog .preference-range {grid-template-columns:32px minmax(60px,1fr) 32px;flex-basis:100%}
  .preference-range output {grid-column:1/-1;min-width:0}
 }
+
+.preferences-dialog .preference-language {display:flex;width:min(240px,100%);gap:4px}
+.preferences-dialog .preference-language > button {flex:1;min-width:0;padding:6px 12px}

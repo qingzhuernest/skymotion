@@ -19,7 +19,7 @@
     const card=document.createElement('section');card.className='ui-diagram-card';card.dataset.diagramCard=id;card.hidden=true;
     const head=document.createElement('div');head.className='ui-diagram-card-head';head.append(document.createElement('h2'));
     const surface=document.createElement('div');surface.className='sky-perspective-surface';surface.id=id+'-surface';surface.hidden=true;
-    const canvas=document.createElement('canvas');canvas.id=id+'-canvas';canvas.tabIndex=0;canvas.style.touchAction=view==='horizon'?'pan-y':'none';
+    const canvas=document.createElement('canvas');canvas.id=id+'-canvas';canvas.tabIndex=0;canvas.style.touchAction='none';installSkyTrackScrub(canvas);
     canvas.setAttribute('aria-label',SkySiteCatalog.label(id,state.body)[0]);surface.append(canvas);
     const holder=document.createElement('div');holder.className='ui-diagram-surface';holder.append(surface);card.append(head,holder);uiWorkspace.plot.append(card);
     uiWorkspace.cards[id]=card;uiWorkspace.nodes.push(surface);surfaces.set(view,canvas);

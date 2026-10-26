@@ -55,6 +55,18 @@ assert.equal(discs.length,2);assert.deepEqual(discs[1].slice(0,2),lines[0]);
   await page.goForward();await page.waitForFunction(()=>state.time===840);
   assert.equal(await page.locator('meta[name=description]').evaluate(e=>/[\u3400-\u9fff]/.test(e.content)),false);
   assert.equal(await page.locator('#eventCompass').evaluate(e=>/[\u3400-\u9fff]/.test(e.getAttribute('aria-label'))),false);
+  await page.evaluate(()=>{state.view='horizon';state.time=720;schedule();});
+  await page.waitForFunction(()=>skyTrackHandles.has(document.getElementById('sky')));
+  const drag=await page.evaluate(()=>{const canvas=document.getElementById('sky'),r=canvas.getBoundingClientRect(),handle=skyTrackHandles.get(canvas);return {x:r.x+handle.x,y:r.y+handle.y,target:handle.at(960),left:r.x,top:r.y};});
+  await page.mouse.move(drag.x,drag.y);await page.mouse.down();await page.mouse.move(drag.left+drag.target.x,drag.top+drag.target.y,{steps:12});await page.mouse.up();
+  await page.waitForFunction(()=>Math.abs(state.time-960)<3);
+  assert.equal(await page.locator('#workbenchTime').inputValue(),String(await page.evaluate(()=>state.time)));
+  await page.evaluate(()=>SkyPreferences.set({theme:'dark',palette:'sage'}));
+  const sageReset=await page.locator('#viewReset').evaluate(e=>getComputedStyle(e).color);await page.evaluate(()=>SkyPreferences.set({palette:'blue'}));assert.notEqual(await page.locator('#viewReset').evaluate(e=>getComputedStyle(e).color),sageReset);
+  await page.goto(base+'contact.en.html?lang=en');await page.waitForSelector('html[data-fonts-ready]');
+  await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async()=>{}},configurable:true}));await page.locator('#copyAuthorEmail').click();assert.equal(await page.locator('#authorCopyStatus').textContent(),'Email address copied');
+  await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async()=>{throw Error('blocked');}},configurable:true}));await page.locator('#copyAuthorEmail').click();assert.equal(await page.locator('#authorCopyStatus').textContent(),'Touch and hold the email address to copy it');
+  await page.goto(base+'index.html');await page.waitForSelector('html[data-fonts-ready]');assert.equal(await page.locator('#enterLab').evaluate(e=>getComputedStyle(e).color),'rgb(48, 37, 17)');
   assert.deepEqual(errors,[]);
   console.log('PASS ideal-session analemma entry, dedicated clock and playback, invalid clock rejection, cross-language history undo/redo, English metadata/aria, lunar marker aligned with orbit');
  } finally { await browser.close(); }

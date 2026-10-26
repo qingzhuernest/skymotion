@@ -766,10 +766,10 @@ body .dt-host .diagram-tool-launch,
 body .ui-plot #viewReset {
   min-height: var(--md-sys-size-target, 40px);
   padding: 8px 12px;
-  border: 1px solid var(--design-night-line);
+  border: 1px solid var(--design-canvas-action-line);
   border-radius: var(--design-radius-control);
-  background: var(--design-night-surface);
-  color: var(--design-night-ink);
+  background: var(--design-canvas-action-surface);
+  color: var(--design-canvas-action-ink);
   box-shadow: none;
   font-family: var(--design-font);
   font-size: calc(12px * var(--ui-font-scale, 1));
@@ -791,10 +791,10 @@ body .ui-diagram-card-head > .diagram-tool-launch {
 }
 body[data-page='space'] #reset.stage-reset {
   min-height: var(--md-sys-size-target, 40px);
-  border: 1px solid var(--design-night-line);
+  border: 1px solid var(--design-canvas-action-line);
   border-radius: var(--design-radius-control);
-  background: var(--design-night-surface);
-  color: var(--design-night-ink);
+  background: var(--design-canvas-action-surface);
+  color: var(--design-canvas-action-ink);
   box-shadow: none;
   font-family: var(--design-font);
   font-weight: 400;
@@ -803,9 +803,9 @@ body[data-page='space'] #reset.stage-reset {
 body .dt-host .diagram-tool-launch:hover,
 body .ui-plot #viewReset:hover,
 body[data-page='space'] #reset.stage-reset:hover {
-  background: var(--design-night-inset);
+  background: var(--design-inset);
   border-color: var(--design-line);
-  color: var(--design-night-ink);
+  color: var(--design-canvas-action-ink);
 }
 body .dt-host .diagram-tool-launch:focus-visible,
 body .ui-plot #viewReset:focus-visible,

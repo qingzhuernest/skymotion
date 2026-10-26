@@ -9,7 +9,7 @@
   const options = {theme:['light','dark','system','schedule'],palette:['sage','blue','gray','custom'],
     surfaceMode:['theme','custom'],canvasMode:['theme','custom'],contrast:['standard','high'],density:['standard','compact'],motion:['system','reduce'],
     quality:['low','standard','high'],zoom:['low','standard','high']};
-  const ranges = {uiScale:{min:1,max:1.5,step:.01},readingScale:{min:1,max:2,step:.01},
+  const ranges = {uiScale:{min:.8,max:1.5,step:.01},readingScale:{min:.8,max:2,step:.01},
     leading:{min:1.5,max:2.4,step:.01},width:{min:80,max:120,step:1}};
   function migrate(preferences, version) {
     if(!preferences||typeof preferences!=='object'||Array.isArray(preferences))return preferences;
@@ -210,7 +210,16 @@
         notify(storageOK?t('已保存','Saved'):t('当前浏览器无法保存设置，仅本页有效','Storage is unavailable; changes apply to this page only'));
       }catch{notify(t('无法应用。夜间开始和结束需不同；颜色需有效。','Could not apply. Night times must differ and colors must be valid.'));refresh();}
     });
-    if(control.tagName==='SELECT')window.SkyMaterial?.enhanceSelect(control);
+    if(name==='language') {
+      control.classList.add('md-select-native');control.tabIndex=-1;control.setAttribute('aria-hidden','true');
+      label.id=id+'-label';label.removeAttribute('for');
+      const choices=node('div',{class:'preference-language md-connected-choice',role:'group','aria-labelledby':label.id});
+      for(const [value,text] of [['zh','中文'],['en','English']]) {
+        const button=node('button',{type:'button','data-language-choice':value,'aria-pressed':String(language()===value)},text);
+        button.onclick=()=>{control.value=value;control.dispatchEvent(new Event('change',{bubbles:true}));};choices.append(button);
+      }
+      row.append(choices);window.SkyMaterial?.updateChoices(choices);
+    } else if(control.tagName==='SELECT')window.SkyMaterial?.enhanceSelect(control);
     return row;
   }
   function refresh() {
@@ -220,6 +229,7 @@
       const value=name==='language'?language():state[name];
       if(input.type==='checkbox')input.checked=value;else input.value=value;
       if(input.tagName==='SELECT')window.SkyMaterial?.syncSelect(input);
+      if(name==='language')dialog.querySelectorAll('[data-language-choice]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.languageChoice===value)));
       if(ranges[name]) {
         const text=name==='leading'?Number(value).toFixed(2)+t(' 倍','×'):Math.round(Number(value)*(name==='width'?1:100))+'%';
         dialog.querySelector('#pref-'+name+'-value').textContent=text;

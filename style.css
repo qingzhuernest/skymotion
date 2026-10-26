@@ -773,8 +773,8 @@ input[type='range'] {
 }
 .view-reset {
   background: var(--design-canvas-action-surface);
-  border-color: var(--design-night-line);
-  color: var(--design-night-ink);
+  border-color: var(--design-canvas-action-line);
+  color: var(--design-canvas-action-ink);
   border-radius: 20px;
 }
 .view-reset:hover {

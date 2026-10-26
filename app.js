@@ -292,8 +292,10 @@ function drawMoonDayEndpoints(c, project, w, h, positionAt) {
   return boxes;
 }
 const skyTrackCache = new Map();
+const skyTrackHandles = new WeakMap();
 function drawSkyScene(kind, canvas=$('sky'), display=null) {
   const view=display?.view ?? state.view;
+  if(view!=='horizon')skyTrackHandles.delete(canvas);
   if (view === 'observer') {
     drawObserverSky(canvas,display);
     return;
@@ -505,6 +507,7 @@ function drawSkyScene(kind, canvas=$('sky'), display=null) {
   const s = visualPosition(kind === 'moon' ? 'Moon' : 'Sun', bodyPosition()),
     sun = project(s),
     origin = project({ x: 0, y: 0, z: 0 });
+  if(view==='horizon')skyTrackHandles.set(canvas,{x:sun.x,y:sun.y,at:minute=>project(bodyPosition(minute))});
   if (view !== 'horizon') {
     const groundRadius =
       kind === 'sun' ? shadowGroundRadius() : 6.25 * Math.max(1, state.height);
@@ -1420,7 +1423,7 @@ function updateUI() {
           ? moon
             ? '北向上 · 查看月球方位'
             : '北向上 · 影子背向太阳'
-          : '方位展开 · 观察天体高度';
+          : moon ? '拖动月球沿轨迹调时' : '拖动太阳沿轨迹调时';
   const name = selectedPlaceName();
   $('sceneSubtitle').textContent =
     `${name} · ${coord(state.lat, 'lat')} · ${!moon && state.manual ? '自定直射纬度' : state.date}`;

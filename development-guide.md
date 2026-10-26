@@ -511,6 +511,6 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [space/population.js](https://github.com/qingzhuernest/skymotion/blob/main/space/population.js) | 卫星和小天体数据与近似轨道 | solveKepler, epochDays, prepare, convert, position, displaySatellite, satelliteDistance, create, load, setPositions |
 | [space/stars.js](https://github.com/qingzhuernest/skymotion/blob/main/space/stars.js) | 恒星目录、选取与标注 | temperature, color, direction, create |
 | [space/nebulae.js](https://github.com/qingzhuernest/skymotion/blob/main/space/nebulae.js) | 星云目录、影像显示与资源管理 | create, choose, load |
-| [lab-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-controls.js) | 观测输入事件、地点日期与表单展示 | setDate, stop, globeLocationAt, globeObserverPoint, selectObservationBody, selectChartDateOrTime, monthDays, syncControls, updateSolarControls, updateLunarControls, selectMonth |
+| [lab-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-controls.js) | 观测输入事件、地点日期与表单展示 | setDate, stop, globeLocationAt, globeObserverPoint, selectObservationBody, selectChartDateOrTime, monthDays, syncControls, updateSolarControls, updateLunarControls, selectMonth, installSkyTrackScrub |
 | [document-navigation.js](https://github.com/qingzhuernest/skymotion/blob/main/document-navigation.js) | 文档常显目录、章节定位与返回顶部；原生锚点作为无脚本后备 | update |
 | [material-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/material-controls.js) | Material 3 Expressive滑块进度与共享呈现；不写实验状态 | updateRange, updateRanges, updateChoices, dismissSelect, syncSelect, enhanceSelect, mark, sync, position, open, install |

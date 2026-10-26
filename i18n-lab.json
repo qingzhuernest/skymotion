@@ -939,5 +939,9 @@
   "展开实验参数菜单": "Expand experiment settings",
   "收起实验参数菜单": "Collapse experiment settings",
   "展开设置菜单": "Expand settings",
-  "收起设置菜单": "Collapse settings"
+  "收起设置菜单": "Collapse settings",
+  "邮箱已复制": "Email address copied",
+  "请长按邮箱地址复制": "Touch and hold the email address to copy it",
+  "拖动月球沿轨迹调时": "Drag the Moon along its path to change time",
+  "拖动太阳沿轨迹调时": "Drag the Sun along its path to change time"
 }

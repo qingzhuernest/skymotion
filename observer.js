@@ -400,7 +400,7 @@ function renderObserverControls() {
   const active = state.view === "observer" && !window.skyWorkspacePresentation?.active;
   $("observerControls").hidden = !active;
   $("solarOverlayBar").hidden = state.body === "moon" || active;
-  $("sky").style.touchAction = ["observer", "orbit"].includes(window.SkyPerspectives?.primaryView() || state.view)
+  $("sky").style.touchAction = ["observer", "orbit", "horizon"].includes(window.SkyPerspectives?.primaryView() || state.view)
     ? "none"
     : "pan-y";
   if (!active) return;

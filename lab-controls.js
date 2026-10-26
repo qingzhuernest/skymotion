@@ -642,3 +642,28 @@ syncControls();
 new ResizeObserver(schedule).observe($('stage'));
 window.addEventListener('resize', schedule);
 render();
+
+// One path-scrubbing interaction for the primary and combination horizon canvases.
+function installSkyTrackScrub(canvas) {
+  let gesture=null;
+  const local=event=>{const r=canvas.getBoundingClientRect();return {x:event.clientX-r.left,y:event.clientY-r.top};};
+  canvas.addEventListener('pointerdown',event=>{
+    const handle=skyTrackHandles.get(canvas),p=local(event);
+    if(gesture||event.button!==0||!handle||Math.hypot(p.x-handle.x,p.y-handle.y)>28)return;
+    event.preventDefault();stop();gesture={id:event.pointerId,time:state.time};canvas.setPointerCapture(event.pointerId);
+  });
+  canvas.addEventListener('pointermove',event=>{
+    const handle=skyTrackHandles.get(canvas);
+    if(!gesture||gesture.id!==event.pointerId||!handle)return;
+    event.preventDefault();const p=local(event);let best=state.time,distance=Infinity;
+    const consider=minute=>{const q=handle.at(minute),d=(q.x-p.x)**2+(q.y-p.y)**2;if(d<distance){distance=d;best=minute;}};
+    for(let minute=0;minute<=1440;minute+=6)consider(minute);
+    const coarse=best;for(let minute=Math.max(0,coarse-6);minute<=Math.min(1439,coarse+6);minute++)consider(minute);
+    state.time=clamp(best,0,1439);schedule();
+  });
+  canvas.addEventListener('pointerup',event=>{if(gesture?.id===event.pointerId)gesture=null;});
+  const cancel=()=>{if(!gesture)return;state.time=gesture.time;gesture=null;schedule();};
+  canvas.addEventListener('pointercancel',cancel);canvas.addEventListener('lostpointercapture',cancel);addEventListener('blur',cancel);
+  canvas.addEventListener('keydown',event=>{if(!skyTrackHandles.has(canvas)||!['ArrowLeft','ArrowRight'].includes(event.key))return;event.preventDefault();workbenchSetTime(state.time+(event.key==='ArrowLeft'?-5:5));});
+}
+installSkyTrackScrub($('sky'));
