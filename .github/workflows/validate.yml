@@ -40,5 +40,5 @@ jobs:
           if [ "$FULL_REGRESSION" = "true" ]; then
             node .github/scripts/verify-site.cjs
           else
-            node .github/scripts/verify-site.cjs settings-center.cjs shared-ui-lifecycle.cjs settings-updates.cjs confirmed-review-fixes.cjs deployment-paths.cjs
+            node .github/scripts/verify-site.cjs settings-center.cjs shared-ui-lifecycle.cjs settings-updates.cjs settings-expressive.cjs confirmed-review-fixes.cjs deployment-paths.cjs
           fi

@@ -9,7 +9,7 @@
   const options = {theme:['light','dark','system','schedule'],palette:['sage','blue','gray','custom'],
     surfaceMode:['theme','custom'],canvasMode:['theme','custom'],contrast:['standard','high'],density:['standard','compact'],motion:['system','reduce'],
     quality:['low','standard','high'],zoom:['low','standard','high']};
-  const ranges = {uiScale:{min:1,max:1.25,step:.01},readingScale:{min:1,max:1.5,step:.01},
+  const ranges = {uiScale:{min:1,max:1.5,step:.01},readingScale:{min:1,max:2,step:.01},
     leading:{min:1.5,max:2.4,step:.01},width:{min:80,max:120,step:1}};
   function migrate(preferences, version) {
     if(!preferences||typeof preferences!=='object'||Array.isArray(preferences))return preferences;
@@ -191,7 +191,12 @@
     if(ranges[name]) {
       const container=node('div',{class:'preference-range'});
       const value=node('output',{for:id,id:id+'-value','aria-live':'off'});
-      container.append(control,value);row.append(container);
+      const stepper = (direction) => {
+        const button=node('button',{type:'button',class:'md-range-step','aria-label':t(direction<0?'减小':'增大',direction<0?'Decrease ':'Increase ')+copy(labels[name])},direction<0?'−':'+');
+        button.onclick=()=>{direction<0?control.stepDown():control.stepUp();control.dispatchEvent(new Event('input',{bubbles:true}));};
+        return button;
+      };
+      container.append(stepper(-1),control,stepper(1),value);row.append(container);
     }else row.append(control);
     const colorMode=name==='primary'?{palette:'custom'}:name==='surfaceColor'?{surfaceMode:'custom'}:name==='canvasColor'?{canvasMode:'custom'}:null;
     if(colorMode) {
@@ -205,6 +210,7 @@
         notify(storageOK?t('已保存','Saved'):t('当前浏览器无法保存设置，仅本页有效','Storage is unavailable; changes apply to this page only'));
       }catch{notify(t('无法应用。夜间开始和结束需不同；颜色需有效。','Could not apply. Night times must differ and colors must be valid.'));refresh();}
     });
+    if(control.tagName==='SELECT')window.SkyMaterial?.enhanceSelect(control);
     return row;
   }
   function refresh() {
@@ -213,6 +219,7 @@
       const input=dialog.querySelector('#pref-'+name);if(!input)continue;
       const value=name==='language'?language():state[name];
       if(input.type==='checkbox')input.checked=value;else input.value=value;
+      if(input.tagName==='SELECT')window.SkyMaterial?.syncSelect(input);
       if(ranges[name]) {
         const text=name==='leading'?Number(value).toFixed(2)+t(' 倍','×'):Math.round(Number(value)*(name==='width'?1:100))+'%';
         dialog.querySelector('#pref-'+name+'-value').textContent=text;
@@ -282,7 +289,7 @@
     layout.append(nav,content);dialog.append(layout);
     confirmation=node('div',{class:'preferences-confirm',hidden:'',role:'group','aria-label':t('确认设置操作','Confirm settings change')});confirmation.append(node('p'),node('button',{type:'button',class:'md-outlined-action','data-cancel':''},t('取消','Cancel')),node('button',{type:'button',class:'md-outlined-action','data-confirm':''},t('确认','Confirm')));dialog.append(confirmation);
     message=node('p',{class:'preferences-message',role:'status','aria-live':'polite'});dialog.append(message);
-    dialog.addEventListener('close',()=>{confirmation.hidden=true;pendingImport=null;pendingReset=null;launcher?.focus({preventScroll:true});});
+    dialog.addEventListener('close',()=>{window.SkyMaterial?.dismissSelect();confirmation.hidden=true;pendingImport=null;pendingReset=null;launcher?.focus({preventScroll:true});});
     dialog.addEventListener('cancel',event=>{if(!confirmation.hidden){event.preventDefault();confirmation.hidden=true;pendingImport=null;pendingReset=null;}});
     document.body.append(dialog);refresh();filter();
   }
@@ -305,13 +312,14 @@
   document.addEventListener('skymotion:header-ready',mount);
   document.addEventListener('skymotion:language',()=>{
     if(launcher){launcher.setAttribute('aria-label',t('设置','Settings'));launcher.title=t('设置','Settings');}
-    if(dialog){const open=dialog.open,focusId=document.activeElement?.id;dialog.remove();dialog=null;if(open){build();dialog.showModal();(focusId&&dialog.querySelector('#'+CSS.escape(focusId))||dialog.querySelector('.preferences-search')).focus();}}
+    if(dialog){window.SkyMaterial?.dismissSelect();const open=dialog.open,focusId=document.activeElement?.id;dialog.remove();dialog=null;if(open){build();dialog.showModal();(focusId&&dialog.querySelector('#'+CSS.escape(focusId))||dialog.querySelector('.preferences-search')).focus();}}
     mount();
   });
   // Registered before experiment shortcuts: a modal owns Escape even in a focused pane.
   addEventListener('keydown',event=>{
     if(!dialog?.open||event.key!=='Escape'||event.isComposing)return;
     event.preventDefault();event.stopImmediatePropagation();
+    if(window.SkyMaterial?.dismissSelect())return;
     if(!confirmation.hidden){confirmation.hidden=true;pendingImport=null;pendingReset=null;confirmTrigger?.focus();}
     else dialog.close();
   },true);
