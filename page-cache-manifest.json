@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261026-settings117",
+  "resourceVersion": "20261026-settings118",
   "readingFontVersion": "20261016-font41",
   "pages": [
     "404.en.html",
@@ -175,8 +175,8 @@
     "analemma.html": 74043,
     "contact.en.html": 8699,
     "contact.html": 5111,
-    "development-guide.en.html": 165771,
-    "development-guide.html": 70781,
+    "development-guide.en.html": 165788,
+    "development-guide.html": 70798,
     "diagrams.en.html": 122282,
     "diagrams.html": 74042,
     "docs.en.html": 12078,
@@ -198,6 +198,6 @@
     "sundial.en.html": 120566,
     "sundial.html": 72301
   },
-  "totalBytes": 1408795,
-  "assetBytes": 8284948
+  "totalBytes": 1408829,
+  "assetBytes": 8285068
 }

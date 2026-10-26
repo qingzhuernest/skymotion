@@ -159,12 +159,13 @@
           ? tr('在当前图位显示：', 'Show in the current pane: ') + name
           : tr('查看：', 'View: ') + name,
       );
+      const selected = entry.perspective
+        ? skyViewSelected(entry.perspective)
+        : entry.id === 'solarCompare' ? !!api?.active : visible?.has(layoutId);
       entry.row.classList.toggle(
         'workbench-current-view',
-        api?.active ? api.activeView === layoutId : uiWorkspace.selected === entry.id,
+        api?.active ? api.activeView === layoutId : Boolean(selected),
       );
-      const selected =
-        entry.id === 'solarCompare' ? !!api?.active : visible?.has(layoutId);
       uiViewAttribute(entry.button, 'aria-pressed', String(!!selected));
       uiViewAttribute(
         entry.button,

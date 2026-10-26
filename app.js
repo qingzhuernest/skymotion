@@ -1260,20 +1260,22 @@ function drawGlobe() {
 const solarSeasonButtons = document.querySelectorAll(
   '#seasonButtons > button[data-angle][data-month]',
 );
-// A remembered sky orientation is current only while its sky pane is current.
-function syncSkyViewControls() {
+// One selection rule for sidebar styling, ARIA and the rendered sky projection.
+function skyViewSelected(view) {
   const workspace = typeof uiWorkspace === 'undefined' ? null : uiWorkspace;
   const presentation = window.skyWorkspacePresentation;
-  const skyCurrent =
-    !document.body.hasAttribute('data-entry-view') ||
-    !workspace ||
-    (presentation?.active
-      ? presentation.activeView === 'skyPanel'
-      : workspace.selected === 'skyPanel');
+  const id = window.SkyPerspectives?.ids[view] || 'skyPanel';
+  if (presentation?.active && window.SkyPerspectives)
+    return presentation.views.includes(id);
+  if (!document.body.hasAttribute('data-entry-view') || !workspace)
+    return state.view === view;
+  return workspace.selected === 'skyPanel'
+    ? state.view === view
+    : workspace.selected === id;
+}
+function syncSkyViewControls() {
   document.querySelectorAll('[data-view]').forEach((button) => {
-    const selected = presentation?.active && window.SkyPerspectives
-      ? presentation.views.includes(window.SkyPerspectives.ids[button.dataset.view])
-      : skyCurrent && button.dataset.view === state.view;
+    const selected = skyViewSelected(button.dataset.view);
     button.classList.toggle('active', selected);
     button.setAttribute('aria-pressed', String(selected));
   });

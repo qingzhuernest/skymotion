@@ -37,6 +37,17 @@ assert.equal(discs.length,2);assert.deepEqual(discs[1].slice(0,2),lines[0]);
   await page.evaluate(()=>workbenchPlay());assert.equal(await page.evaluate(()=>analemmaPlaying),true);assert.equal(await page.evaluate(()=>state.playing),false);await page.evaluate(()=>workbenchPlay());
   await page.locator('#workbenchClockInput').evaluate(e=>{e.value='25:00';e.dispatchEvent(new Event('change',{bubbles:true}));});assert.equal(await page.evaluate(()=>state.analemmaClock),853);
   await page.goto(base+'lab.html?lang=zh');await page.waitForSelector('html[data-fonts-ready]');
+  await page.locator('[data-rail-section=views]').click();
+  for (const view of ['horizon','top','observer','orbit']) {
+    await page.locator(`[data-view=${view}]`).click();
+    await page.waitForFunction(view=>state.view===view,view);
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    assert.equal(await page.locator('.workbench-viewpoints [data-view][aria-pressed=true]').count(),1);
+    assert.equal(await page.locator('.workbench-viewpoints [data-view][aria-pressed=true]').getAttribute('data-view'),view);
+    assert.equal(await page.locator('.workbench-viewpoints [data-view].active').getAttribute('data-view'),view);
+    assert.equal(await page.locator('.workbench-viewpoints .workbench-current-view [data-view]').getAttribute('data-view'),view);
+    assert.equal(await page.evaluate(()=>document.body.dataset.skyView),view);
+  }
   const previous=await page.evaluate(()=>state.time);
   await page.locator('#workbenchTime').evaluate(e=>{e.value=840;e.dispatchEvent(new Event('input',{bubbles:true}));});await page.waitForTimeout(450);
   await toggleLanguage(page);assert.equal(await page.evaluate(()=>document.documentElement.lang),'en');
