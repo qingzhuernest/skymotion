@@ -70,6 +70,19 @@ const base=(process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:38716/').replac
    await page.keyboard.press('Escape');
   }
   const blocked=await browser.newPage();await blocked.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw Error('blocked');}});});await open(blocked,'docs.html');await blocked.selectOption('#pref-theme','dark');assert.equal(await blocked.getAttribute('html','data-theme'),'dark');assert.equal(await blocked.evaluate(()=>SkyPreferences.storageAvailable),false);await blocked.close();
+  await page.setViewportSize({width:1280,height:960});
+  await page.goto(base+'lab.html?lang=zh');await page.waitForFunction(()=>window.SkyWorkbenchMenu);
+  await page.waitForSelector('.language-toggle:not(:disabled)');
+  await page.evaluate(()=>skyWorkspacePresentation.openOverview());
+  await page.locator('.ui-diagram-card:visible h2').first().dblclick();
+  await page.waitForFunction(()=>document.querySelector('.ui-plot').dataset.workspaceFocus==='true');
+  await page.waitForTimeout(300);
+  const beforeHistory=await page.evaluate(()=>history.length);
+  await page.locator('.preferences-launch').click();await page.selectOption('#pref-theme','dark');
+  await page.waitForTimeout(500);assert.equal(await page.evaluate(()=>history.length),beforeHistory);
+  await page.keyboard.press('Escape');assert.equal(await page.locator('dialog.preferences-dialog').evaluate(d=>d.open),false);await page.locator('dialog.preferences-dialog').waitFor({state:'hidden'});
+  assert.equal(await page.locator('.ui-plot').getAttribute('data-workspace-focus'),'true');
+  console.log('PASS settings changes stay outside experiment history and Escape closes the modal');
   assert.deepEqual(errors,[]);console.log('PASS phone English, maximum text, no horizontal overflow, blocked storage and zero page errors');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

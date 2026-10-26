@@ -266,5 +266,12 @@
     if(dialog){const open=dialog.open,focusId=document.activeElement?.id;dialog.remove();dialog=null;if(open){build();dialog.showModal();(focusId&&dialog.querySelector('#'+CSS.escape(focusId))||dialog.querySelector('.preferences-search')).focus();}}
     mount();
   });
-  document.addEventListener('DOMContentLoaded',()=>{mount();const observer=new MutationObserver(()=>{mount();});observer.observe(document.body,{childList:true,subtree:true});apply();},{once:true});
+  // Registered before experiment shortcuts: a modal owns Escape even in a focused pane.
+  addEventListener('keydown',event=>{
+    if(!dialog?.open||event.key!=='Escape'||event.isComposing)return;
+    event.preventDefault();event.stopImmediatePropagation();
+    if(!confirmation.hidden){confirmation.hidden=true;pendingImport=null;pendingReset=null;confirmTrigger?.focus();}
+    else dialog.close();
+  },true);
+  document.addEventListener('DOMContentLoaded',()=>{mount();apply();},{once:true});
 })();

@@ -11,7 +11,7 @@
       }
     };
     const actionable = (target) =>
-      target?.nodeType === 1 && target.closest('button,input,select,canvas');
+      target?.nodeType === 1 && !target.closest('.preferences-dialog,.preferences-launch') && target.closest('button,input,select,canvas');
     let pointerStart = null,
       skipClick = false;
     document.addEventListener(
@@ -197,7 +197,7 @@
   const actionable = (target) =>
     target?.nodeType === 1 &&
     !target.closest(
-      '.diagram-tools,.scene-builder,.motion-menu-grip,.motion-menu-edge,#uiParametersButton,#spaceParameters,#uiDrawerClose,#spaceDrawerClose',
+      '.preferences-dialog,.preferences-launch,.diagram-tools,.scene-builder,.motion-menu-grip,.motion-menu-edge,#uiParametersButton,#spaceParameters,#uiDrawerClose,#spaceDrawerClose',
     ) &&
     target.closest('button,input,select,a,canvas');
   document.addEventListener(
@@ -260,7 +260,8 @@
   );
   document.addEventListener(
     'change',
-    () => {
+    (event) => {
+      if (event.target.closest('.preferences-dialog')) return;
       gesture = false;
       pointerStart = null;
       queue();
