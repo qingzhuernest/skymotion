@@ -8,7 +8,7 @@ const base=(process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:38716/').replac
  const errors=[];
  context.on('page',p=>p.on('pageerror',e=>errors.push(e.message)));
  const page=await context.newPage();
- const open=async(p,route)=>{await p.goto(base+route);await p.waitForSelector('.language-toggle:not(:disabled)');await p.locator('.preferences-launch').click();await p.locator('dialog.preferences-dialog').waitFor({state:'visible'});};
+ const open=async(p,route)=>{await p.goto(base+route);await p.waitForSelector('html[data-fonts-ready]');await p.locator('.preferences-launch').click();await p.locator('dialog.preferences-dialog').waitFor({state:'visible'});};
  const category=async(p,name)=>{await p.locator(`[data-category-link="${name}"]`).click();};
  try {
   await open(page,'docs.html');
@@ -28,17 +28,17 @@ const base=(process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:38716/').replac
   await page.clock.install({time:new Date(2026,9,26,23,0,0)});await page.evaluate(()=>document.dispatchEvent(new Event('visibilitychange')));assert.equal(await page.getAttribute('html','data-theme'),'dark');
   await page.clock.setSystemTime(new Date(2026,9,27,8,0,0));await page.evaluate(()=>document.dispatchEvent(new Event('visibilitychange')));assert.equal(await page.getAttribute('html','data-theme'),'light');
   await page.selectOption('#pref-theme','system');await page.emulateMedia({colorScheme:'dark'});await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');
-  await category(page,'reading');await page.selectOption('#pref-uiScale','1.25');assert.equal(await page.locator('.document-links a').first().evaluate(e=>getComputedStyle(e).fontSize),'17.5px');await page.selectOption('#pref-readingScale','1.5');await page.selectOption('#pref-leading','loose');await page.selectOption('#pref-width','wide');
+  await category(page,'reading');await require('./preferences-test-helpers.cjs').setRange(page,'uiScale',1.25);assert.equal(await page.locator('.document-links a').first().evaluate(e=>getComputedStyle(e).fontSize),'17.5px');await require('./preferences-test-helpers.cjs').setRange(page,'readingScale',1.5);await require('./preferences-test-helpers.cjs').setRange(page,'leading',2.15);await require('./preferences-test-helpers.cjs').setRange(page,'width',120);
   assert.equal(await page.locator('.document-content p').first().evaluate(e=>getComputedStyle(e).fontSize),'24px');
   await category(page,'animation');await page.selectOption('#pref-motion','reduce');assert.equal(await page.getAttribute('html','data-reduced-motion'),'true');assert(await page.locator('#pref-smoothScroll').isDisabled());
   await page.selectOption('#pref-motion','system');await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>document.documentElement.dataset.reducedMotion==='true');
-  const second=await context.newPage();await second.goto(base+'lab.html');await second.waitForSelector('.language-toggle:not(:disabled)');await second.evaluate(()=>SkyPreferences.set({palette:'blue',theme:'light',uiScale:1}));await page.waitForFunction(()=>SkyPreferences.get().palette==='blue');
+  const second=await context.newPage();await second.goto(base+'lab.html');await second.waitForSelector('html[data-fonts-ready]');await second.evaluate(()=>SkyPreferences.set({palette:'blue',theme:'light',uiScale:1}));await page.waitForFunction(()=>SkyPreferences.get().palette==='blue');
   await second.close();
   await page.locator('.preferences-search').fill('轨道');assert(await page.locator('#pref-orbits').isVisible());
   await page.locator('.preferences-search').fill('不存在的设置');assert(await page.locator('.preference-empty').isVisible());
   await page.locator('.preferences-search').fill('');await category(page,'data');
   const original=await page.evaluate(()=>SkyPreferences.export());
-  for(const invalid of ['{',JSON.stringify({version:2,preferences:{}}),JSON.stringify({version:1,preferences:{uiScale:10}}),JSON.stringify({version:1,preferences:{nightStart:'07:00',nightEnd:'07:00'}})]) {
+  for(const invalid of ['{',JSON.stringify({version:99,preferences:{}}),JSON.stringify({version:1,preferences:{uiScale:10}}),JSON.stringify({version:1,preferences:{nightStart:'07:00',nightEnd:'07:00'}})]) {
    assert(await page.evaluate(text=>{try{SkyPreferences.parseImport(text);return false;}catch{return true;}},invalid));
   }
   assert.equal(await page.evaluate(()=>SkyPreferences.export()),original);
@@ -72,7 +72,7 @@ const base=(process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:38716/').replac
   const blocked=await browser.newPage();await blocked.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw Error('blocked');}});});await open(blocked,'docs.html');await blocked.selectOption('#pref-theme','dark');assert.equal(await blocked.getAttribute('html','data-theme'),'dark');assert.equal(await blocked.evaluate(()=>SkyPreferences.storageAvailable),false);await blocked.close();
   await page.setViewportSize({width:1280,height:960});
   await page.goto(base+'lab.html?lang=zh');await page.waitForFunction(()=>window.SkyWorkbenchMenu);
-  await page.waitForSelector('.language-toggle:not(:disabled)');
+  await page.waitForSelector('html[data-fonts-ready]');
   await page.evaluate(()=>skyWorkspacePresentation.openOverview());
   await page.locator('.ui-diagram-card:visible h2').first().dblclick();
   await page.waitForFunction(()=>document.querySelector('.ui-plot').dataset.workspaceFocus==='true');

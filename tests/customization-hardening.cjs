@@ -32,7 +32,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8972/').repla
     await require('./diagram-test-helpers.cjs').objectAction(page,'复制');
     await require('./diagram-test-helpers.cjs').objectAction(page,'保存');
     await page.locator('.dt-head button').last().click();
-    await page.locator('.language-toggle').click();
+    await require('./preferences-test-helpers.cjs').toggleLanguage(page);
     await page.waitForFunction(() => document.documentElement.lang === 'en');
     await require('./diagram-test-helpers.cjs').openWorkbench(page);
     const labels = await page.locator('.dt-row button').allTextContents();

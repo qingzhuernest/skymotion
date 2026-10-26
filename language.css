@@ -208,7 +208,7 @@ body[data-embedded='true'] .language-nav {
 }
 
 /* Charter needs a readable body size, not the compact Chinese caption scale. */
-html:lang(en) .page-nav a {
+html:lang(en) .page-nav :is(a, .preferences-launch) {
   font-size: calc(13px * var(--ui-font-scale, 1));
 }
 html:lang(en)

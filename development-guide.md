@@ -38,7 +38,7 @@
 
 页面路径、主导航、视图名称、分组和可用条件统一定义在site-catalog.json；lab-state.json统一定义状态初值、范围、枚举和相机字段。scripts/site_sources.py校验这些数据并生成启动脚本和状态模块的标记区段，禁止直接修改生成区段。
 
-preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、export 与 parseImport。版本 1 记录使用 skymotion-preferences；语言兼容原存储键。主题颜色由 theme-colors.js 中的 Material Color Utilities 0.3.0 生成，并映射到现有 design 颜色角色。第三方代码为 Apache-2.0，许可见 theme-colors.LICENSE；科学状态不属于偏好记录。
+preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、export 与 parseImport。版本 2 记录使用 skymotion-preferences，兼容版本 1；语言兼容原存储键。主题颜色由 theme-colors.js 中的 Material Color Utilities 0.3.0 生成，并映射到现有 design 颜色角色。第三方代码为 Apache-2.0，许可见 theme-colors.LICENSE；科学状态不属于偏好记录。
 
 ## 从输入到图形的数据流
 
@@ -478,7 +478,7 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [companion.js](https://github.com/qingzhuernest/skymotion/blob/main/companion.js) | 行星伴月、角距离与日期搜索 | companionSnapshot, futureCompanionDates, closestCompanionDay, renderCompanion, drawCompanionSky, initCompanion |
 | [motion.js](https://github.com/qingzhuernest/skymotion/blob/main/motion.js) | 按需帧调度、播放累计与相机平滑 | elementVisible, canPaint, requestMotionFrame, snapshotMotion, syncMotionTarget, motionProgress, mixDirection, visualPosition, visualPhase, visualTrackPosition, visualChartDay, motionCamera, easeCompanionView, settleMotion, revealMotion, drawMotionCanvases, motionFrame, initMotion, focusAfterReveal |
 | [menu.js](https://github.com/qingzhuernest/skymotion/blob/main/menu.js) | 原参数菜单分组与折叠行为 | updateMenu, closeMenu, initMenu |
-| [time-workbench.js](https://github.com/qingzhuernest/skymotion/blob/main/time-workbench.js) | 公共时间条、日期条与播放控制 | workbenchBasis, workbenchTimeMax, workbenchSetTime, workbenchShiftDate, workbenchSetBasis, workbenchPlay, workbenchIsPlaying, renderTimeWorkbench, initTimeWorkbench |
+| [time-workbench.js](https://github.com/qingzhuernest/skymotion/blob/main/time-workbench.js) | 公共时间条、日期条与播放控制 | workbenchIsAnalemmaEntry, workbenchBasis, workbenchTimeMax, workbenchSetTime, workbenchShiftDate, workbenchSetBasis, workbenchPlay, workbenchIsPlaying, renderTimeWorkbench, initTimeWorkbench |
 | [experiment-storage.js](https://github.com/qingzhuernest/skymotion/blob/main/experiment-storage.js) | 版本化会话校验、存储回退与恢复事务协调 | validDate, searchResult, sanitizeMode, read, write, transaction |
 | [interaction-history.js](https://github.com/qingzhuernest/skymotion/blob/main/interaction-history.js) | 浏览器参数历史、手势分组与恢复锁 | read, stateFor, replace, commit, begin, queue, restore |
 | [lab-history.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-history.js) | 观测快照、历史适配与完整实验数据协调 | 模块内部方法，参见源码 |
@@ -513,4 +513,4 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [space/nebulae.js](https://github.com/qingzhuernest/skymotion/blob/main/space/nebulae.js) | 星云目录、影像显示与资源管理 | create, choose, load |
 | [lab-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/lab-controls.js) | 观测输入事件、地点日期与表单展示 | setDate, stop, globeLocationAt, globeObserverPoint, selectObservationBody, selectChartDateOrTime, monthDays, syncControls, updateSolarControls, updateLunarControls, selectMonth |
 | [document-navigation.js](https://github.com/qingzhuernest/skymotion/blob/main/document-navigation.js) | 文档常显目录、章节定位与返回顶部；原生锚点作为无脚本后备 | update |
-| [material-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/material-controls.js) | Material 3 Expressive滑块进度与共享呈现；不写实验状态 | updateRange, updateRanges, install |
+| [material-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/material-controls.js) | Material 3 Expressive滑块进度与共享呈现；不写实验状态 | updateRange, updateRanges, updateChoices, install |

@@ -201,7 +201,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
     await require('./diagram-test-helpers.cjs').selectDiagram(p, 'lunarOrbit');
     await p.locator('[data-rail-section=conditions]').click();
     assert.equal(await p.locator('#lunarOrbitPanel iframe').count(), 1);
-    await p.locator('.language-toggle').click();
+    await require('./preferences-test-helpers.cjs').toggleLanguage(p);
     await frame.waitForFunction(() => document.documentElement.lang === 'en');
     await frame.waitForFunction(() => !/[\u3400-\u9fff]/.test(document.body.innerText));
     await p.waitForFunction(
@@ -261,7 +261,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8920/').repla
       await route.continue();
     });
     await delayed.goto(base + 'diagrams.html');
-    await delayed.waitForSelector('.language-toggle:not(:disabled)');
+    await delayed.waitForSelector('html[data-fonts-ready]');
     await delayed.locator('button[data-body=moon]').click();
     await delayed.waitForSelector('#lunarOrbitPanel iframe[src]', { state: 'attached' });
     await require('./diagram-test-helpers.cjs').selectDiagram(delayed, 'lunarOrbit');

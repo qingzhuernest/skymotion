@@ -1,7 +1,11 @@
 /* Shared settings surface; component colors come only from the global role palette. */
 html {scroll-behavior:auto}
 html[data-smooth-scroll='true'] {scroll-behavior:smooth}
-body .preferences-launch {flex:none;margin:0;width:var(--md-sys-size-target,40px);min-width:var(--md-sys-size-target,40px);padding:8px;display:inline-flex;align-items:center;justify-content:center}
+body .preferences-launch {flex:none;margin:0}
+body .page-nav .preferences-launch {border:0;background:transparent;display:flex;align-items:center;justify-content:center;white-space:nowrap}
+.preference-range {display:flex;align-items:center;gap:16px;flex:1 1 250px;max-width:100%;min-width:0}
+.preference-range input[type='range'] {flex:1;min-width:80px;width:auto;margin:0}
+.preference-range output {min-width:4.5em;text-align:end;font-variant-numeric:tabular-nums}
 .welcome-brand .language-actions {margin-inline-start:auto}
 body dialog.preferences-dialog {box-sizing:border-box;width:min(920px,calc(100vw - 48px));max-width:920px;max-height:calc(100dvh - 48px);padding:24px;border:1px solid var(--design-line);border-radius:28px;background:var(--design-surface);color:var(--design-ink);font:inherit;overflow:auto;box-shadow:0 24px 80px var(--design-shadow-dialog)}
 .preferences-dialog::backdrop {background:var(--design-scrim)}
@@ -9,7 +13,7 @@ body dialog.preferences-dialog {box-sizing:border-box;width:min(920px,calc(100vw
 .preferences-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;background:transparent;height:auto;padding:0}
 .preferences-heading h2 {font-size:calc(24px * var(--ui-font-scale,1));margin:0}
 .preferences-search {width:100%;margin-bottom:20px}
-.preferences-dialog :is(input:not([type='checkbox']):not([type='color']),select) {font:inherit;color:var(--design-ink);background:var(--design-inset);border:1px solid var(--design-line);border-radius:12px;padding:10px 12px;min-height:44px;min-width:0;max-width:100%}
+.preferences-dialog :is(input:not([type='checkbox']):not([type='color']):not([type='range']),select) {font:inherit;color:var(--design-ink);background:var(--design-inset);border:1px solid var(--design-line);border-radius:12px;padding:10px 12px;min-height:44px;min-width:0;max-width:100%}
 .preferences-layout {display:grid;grid-template-columns:190px minmax(0,1fr);gap:24px}
 .preferences-categories {display:flex;flex-direction:column;gap:4px;align-self:start}
 .preferences-categories button {font:inherit;text-align:start;padding:12px 16px;border:0;border-radius:16px;color:var(--design-ink);background:transparent;min-height:44px;white-space:normal}
@@ -20,7 +24,7 @@ body dialog.preferences-dialog {box-sizing:border-box;width:min(920px,calc(100vw
 .preference-row label {flex:1 1 160px}
 .preference-row select {width:min(210px,100%)}
 .preference-row input[type='color'] {width:64px;height:44px;border:1px solid var(--design-line);border-radius:12px;background:var(--design-inset);padding:4px}
-.preference-row #pref-primary-hex {width:110px}
+.preference-row input[id$="-hex"] {width:110px}
 .preference-note,.preferences-help p,.preferences-message {color:var(--design-muted);line-height:1.7}
 .preference-reset {margin-top:24px}
 .preferences-content .md-outlined-action {margin-inline-end:8px;margin-top:12px}
@@ -41,7 +45,7 @@ html body .document-toc {font-size:calc(14px * var(--reading-scale,1));line-heig
 html body .document-content h2 {font-size:calc(24px * var(--reading-scale,1))}
 html body .document-content h3 {font-size:calc(20px * var(--reading-scale,1))}
 html[data-theme='dark'] body {background:var(--design-paper);color:var(--design-ink)}
-html[data-theme='dark'] :is(input,select,textarea) {color-scheme:dark}
+html :is(input,select,textarea) {color-scheme:var(--interface-color-scheme,normal)}
 @media (max-width:760px) {
  body dialog.preferences-dialog {width:100%;height:100dvh;max-height:100dvh;max-width:100%;margin:0;border:0;border-radius:0;padding:20px}
  .preferences-layout {grid-template-columns:minmax(0,1fr);gap:16px}
@@ -49,7 +53,7 @@ html[data-theme='dark'] :is(input,select,textarea) {color-scheme:dark}
  .preferences-categories button {white-space:nowrap;flex:none;min-height:48px}
  .preferences-content {max-height:none;overflow:visible;padding:0}
  .preferences-heading {position:sticky;top:-20px;background:var(--design-surface);padding-block:12px;z-index:2}
- .preferences-dialog :is(button,select,input:not([type='checkbox'])) {min-height:48px}
+ .preferences-dialog :is(button,select,input:not([type='checkbox']):not([type='range'])) {min-height:48px}
  .preference-row:has(input[type='checkbox']) {min-height:68px}
  html body .document-page {width:calc(100% - 24px);padding-inline:16px}
 }
@@ -61,3 +65,11 @@ html[data-theme='dark'] :is(input,select,textarea) {color-scheme:dark}
  .language-actions {display:none!important}
  html body .document-page {width:100%;max-width:none;margin:0;padding:0;border:0}
 }
+
+.sky-perspective-surface {position:relative;min-height:0;width:100%;height:100%;background:var(--design-plot);overflow:hidden}
+.sky-perspective-surface canvas {display:block;width:100%;height:100%}
+
+html[data-custom-canvas='true'] body[data-page='space'] .stage {background:var(--canvas-background)}
+html[data-custom-canvas='true'] body[data-page='space'] .label {background:var(--canvas-background);color:var(--canvas-ink);border:1px solid currentColor}
+
+html[data-custom-canvas='true'] body #stage {background:var(--canvas-background)}

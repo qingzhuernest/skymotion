@@ -152,7 +152,7 @@
       ![2, 3].includes(d.version) ||
       !Array.isArray(d.views) ||
       !d.views.length ||
-      d.views.length > ids.length ||
+      d.views.length > Math.min(6,ids.length) ||
       new Set(d.views).size !== d.views.length ||
       d.views.some((id) => !ids.includes(id)) ||
       !Number.isFinite(d.ratio) ||
@@ -174,6 +174,7 @@
       return null;
     return {
       version: 3,
+      skyCameras: window.SkyPerspectives?.normalize(d.skyCameras) || {},
       enabled: d.enabled === true,
       views: [...d.views],
       ratio: d.ratio,
@@ -821,6 +822,9 @@
     get editing() {
       return customizing;
     },
+    updateSkyCamera(view,camera) {
+      change(()=>{data.skyCameras={...(data.skyCameras||{}),[view]:{...camera}};});
+    },
     addView(id) {
       if (
         !customizing ||
@@ -828,6 +832,7 @@
         (workspaceBody === 'moon' && id === 'analemmaPanel')
       )
         return false;
+      if(api.active && !data.views.includes(id) && data.views.length>=6)return false;
       const previous = uiWorkspace.selected;
       if (!api.active)
         data.views = [Object.hasOwn(cards, previous) ? previous : 'contextPanel'];
@@ -852,12 +857,14 @@
     active: false,
     visibleIds: new Set(),
     sync() {
+      window.SkyPerspectives?.restore(data.skyCameras);
       if (workspaceBody !== state.body) {
         cancel();
         closeOptions();
         save();
         workspaceBody = state.body;
         data = load();
+        window.SkyPerspectives?.restore(data.skyCameras);
         data.enabled = customizing;
         profiles = loadProfiles();
         undo = [];

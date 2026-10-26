@@ -46,7 +46,7 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   await early.locator('#welcomeMeteor').click();
   assert.match(await early.locator('#welcomeStarStatus').innerText(),/Meteors are crossing the sky/);
   releaseDictionary();await early.waitForLoadState('domcontentloaded');
-  await early.locator('.language-toggle:not(:disabled)').click();
+  await require('./preferences-test-helpers.cjs').toggleLanguage(early);
   await early.waitForFunction(()=>document.documentElement.lang==='zh-CN');
   assert.match(await early.locator('#welcomeStarStatus').innerText(),/几颗流星/);
   await earlyContext.close();

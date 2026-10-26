@@ -37,9 +37,9 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8997/').repla
       await route.continue();
     });
     await locale.goto(base + 'lab.en.html', { waitUntil: 'domcontentloaded', timeout: 90000 });
-    await locale.locator('.language-toggle').waitFor({ state: 'visible' });
+    await locale.locator('.preferences-launch').waitFor({state:'visible'});
     assert.equal(await locale.evaluate(() => !!window.skyEnglishDictionary), false);
-    await locale.locator('.language-toggle').click();
+    await require('./preferences-test-helpers.cjs').toggleLanguage(locale);
     await locale.waitForFunction(() => document.documentElement.lang === 'zh-CN', null, {
       timeout: 30000,
     });

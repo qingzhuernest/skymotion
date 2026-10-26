@@ -2,9 +2,12 @@
  * 图形下方的时间工作台；同步日期、时刻和播放控件。
  */
 /* One reachable time control surface; scientific state remains mode-specific. */
+function workbenchIsAnalemmaEntry() {
+  return document.body.dataset.entryView === 'analemmaPanel';
+}
 let workbenchLastBody = null;
 function workbenchBasis() {
-  if (document.body.dataset.page === 'analemma') return 'date';
+  if (workbenchIsAnalemmaEntry()) return 'date';
   return state.body === 'moon'
     ? state.moonDayPlayback
       ? 'day'
@@ -14,12 +17,12 @@ function workbenchBasis() {
       : 'day';
 }
 function workbenchTimeMax() {
-  if (document.body.dataset.page === 'analemma') return 1439;
+  if (workbenchIsAnalemmaEntry()) return 1439;
   return state.body === 'sun' && state.solarDateMode && !state.manual ? 1439 : 1440;
 }
 function workbenchSetTime(value) {
   stop();
-  state[document.body.dataset.page === 'analemma' ? 'analemmaClock' : 'time'] = clamp(
+  state[workbenchIsAnalemmaEntry() ? 'analemmaClock' : 'time'] = clamp(
     Number(value) || 0,
     0,
     workbenchTimeMax(),
@@ -33,14 +36,14 @@ function workbenchShiftDate(delta) {
   schedule();
 }
 function workbenchSetBasis(basis) {
-  if (document.body.dataset.page === 'analemma') return;
+  if (workbenchIsAnalemmaEntry()) return;
   stop();
   if (state.body === 'moon') state.moonDayPlayback = basis === 'day';
   else if (!state.manual) enableSolarDateMode(basis === 'date');
   schedule();
 }
 function workbenchPlay() {
-  if (document.body.dataset.page === 'analemma') {
+  if (workbenchIsAnalemmaEntry()) {
     $('analemmaPlay').onclick();
     return;
   }
@@ -62,7 +65,7 @@ function workbenchPlay() {
   }
 }
 function workbenchIsPlaying() {
-  return document.body.dataset.page === 'analemma' ? analemmaPlaying : state.playing;
+  return workbenchIsAnalemmaEntry() ? analemmaPlaying : state.playing;
 }
 function renderTimeWorkbench() {
   const root = $('timeWorkbench');
@@ -108,7 +111,7 @@ function renderTimeWorkbench() {
         : '太阳 · 一天内的时间变化';
   $('workbenchBasis').value = basis;
   $('workbenchBasis').querySelector('[value="date"]').disabled = ideal;
-  const analemmaPage = document.body.dataset.page === 'analemma',
+  const analemmaPage = workbenchIsAnalemmaEntry(),
     clock = analemmaPage ? state.analemmaClock : state.time;
   $('workbenchClockLabel').textContent =
     basis === 'date' && !(moon && elementVisible($('phaseOrbit')))
@@ -248,7 +251,7 @@ function initTimeWorkbench() {
   document.body.classList.add('has-time-workbench');
   $('workbenchTime').oninput = (e) => workbenchSetTime(e.target.value);
   $('workbenchClockInput').onchange = (e) => {
-    if (/^\d{2}:\d{2}$/.test(e.target.value)) {
+    if (/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(e.target.value)) {
       const [hour, minute] = e.target.value.split(':').map(Number);
       workbenchSetTime(hour * 60 + minute);
     } else schedule();
@@ -259,7 +262,7 @@ function initTimeWorkbench() {
   ])
     $(id).onclick = () =>
       workbenchSetTime(
-        (document.body.dataset.page === 'analemma' ? state.analemmaClock : state.time) +
+        (workbenchIsAnalemmaEntry() ? state.analemmaClock : state.time) +
           amount,
       );
   $('workbenchMonth').onchange = (e) => {

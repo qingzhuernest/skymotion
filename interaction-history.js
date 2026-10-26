@@ -83,7 +83,8 @@
     skipClick = false;
   const key = 'skyMotionInteraction';
   const clone = (value) => JSON.parse(JSON.stringify(value));
-  const owned = (value) => value?.[key]?.page === location.pathname && value[key].version === 1;
+  const canonicalPage = (path) => String(path).replace(/\.en(?=\.html$|$)/, '');
+  const owned = (value) => value?.[key]?.version === 1 && canonicalPage(value[key].page) === canonicalPage(location.pathname);
   function read() {
     return {
       model: adapter?.read() || null,
@@ -94,7 +95,7 @@
     };
   }
   function stateFor(snapshot) {
-    return { ...history.state, [key]: { version: 1, page: location.pathname, snapshot } };
+    return { ...history.state, [key]: { version: 1, page: canonicalPage(location.pathname), snapshot } };
   }
   function replace(snapshot) {
     const signature = JSON.stringify(snapshot);
@@ -153,6 +154,7 @@
         .filter(a => Number.isFinite(a.effect?.getComputedTiming().endTime))
         .map(a => { try { a.finish(); } catch {} return a.finished; }));
       if (generation !== restoreGeneration) return;
+      adapter.restore(clone(snapshot.model));
       for (const entry of snapshot.fields) {
         if (!Array.isArray(entry) || entry.length !== 2 || typeof entry[0] !== 'string') continue;
         const [id, value] = entry, node = document.getElementById(id);
@@ -161,7 +163,6 @@
           if (typeof value === 'boolean') node.checked = value;
         } else if (typeof value === 'string' || (typeof value === 'number' && Number.isFinite(value))) node.value = value;
       }
-      adapter.restore(clone(snapshot.model));
       window.dispatchEvent(new Event('sky:history-restored'));
     } catch (error) {
       if (generation !== restoreGeneration) return;

@@ -20,7 +20,7 @@
     zh,
     en,
     catalog.views
-      .filter((view) => view.group === group)
+      .filter((view) => view.group === group && !view.sidebarHidden)
       .map((view) => [view.id, ...(view.labels.sun || view.labels.moon)]),
     catalog.groupIds[group],
   ]);
@@ -87,13 +87,15 @@
     skyEntry.row.after(viewpoints);
     viewpoints.classList.remove('md-connected-choice', 'motion-segments');
     viewpoints.classList.add('workbench-viewpoints');
-    viewpoints.addEventListener(
-      'click',
-      (event) => {
-        if (event.target.closest('[data-view]')) select('skyPanel');
-      },
-      true,
-    );
+    for(const button of [...viewpoints.querySelectorAll('button[data-view]')]) {
+      const perspective=button.dataset.view,id=window.SkyPerspectives.ids[perspective];
+      const row=document.createElement('div');row.className='workbench-content-row';row.dataset.skyPerspective=perspective;
+      const add=skyEntry.add.cloneNode(true);add.dataset.addSkyView=id;
+      add.onclick=()=>{const api=window.skyWorkspacePresentation;if(api.active&&api.views.includes(id))api.removeView(id);else api.addView(id);sync();};
+      viewpoints.append(row);row.append(button,add);
+      entries.push({id,perspective,name:button.textContent,translation:button.textContent,button,add,row});
+    }
+    viewpoints.addEventListener('click',event=>{if(event.target.closest('[data-view]')&&!window.skyWorkspacePresentation?.active)select('skyPanel');},true);
   }
   const layout = document.createElement('details');
   layout.className = 'workbench-layout-section menu-section';
@@ -145,7 +147,7 @@
       );
       uiViewHidden(entry.row, !available || available.hidden);
       const label = catalog.label(entry.id, state.body);
-      const name = tr(...(label || [entry.name, entry.translation]));
+      const name = entry.perspective==='orbit'?tr('空间视图','Spatial view'):tr(...(label || [entry.name, entry.translation]));
       const layoutId = catalog.layoutId(entry.id, state.body);
       uiViewText(entry.button, name);
       uiViewAttribute(
@@ -180,7 +182,7 @@
         ) + name,
       );
       uiViewAttribute(entry.add, 'aria-pressed', String(!!included));
-      entry.add.disabled = !!included && api.views.length === 1;
+      entry.add.disabled = !!included && api.views.length === 1 || !included && api?.active && api.views.length>=6;
     }
     for (const group of tree.children) {
       const setting = group.querySelector('.workbench-setting-row');

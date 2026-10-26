@@ -96,6 +96,7 @@ function renderUIWorkspace() {
       lunarOrbit: $('lunarOrbitPanel'),
       solarStudy: $('solarStudyPanel'),
       sceneBuilder: $('sceneBuilderPanel'),
+      skyTopPanel:$('skyTopPanel-surface'),skyHorizonPanel:$('skyHorizonPanel-surface'),skyObserverPanel:$('skyObserverPanel-surface'),
     }[u.selected];
     const lunar = moon && u.selected === 'lunarOrbit';
     u.plot.closest('.ui-shell').classList.toggle('ui-lunar-orbit', lunar);
@@ -143,7 +144,7 @@ function renderUIWorkspace() {
           (!window.skyWorkspacePresentation?.active ||
             window.skyWorkspacePresentation.visibleIds.has(id))) ||
         (id === u.selected &&
-          (!moon || ['skyPanel', 'chartPanel', 'riseSetPanel'].includes(id)));
+          (!moon || ['skyPanel', 'chartPanel', 'riseSetPanel'].includes(id) || window.SkyPerspectives?.isSky(id)));
       uiViewHidden(card, !visible);
       if (visible)
         visibleNodes.add(
@@ -159,7 +160,7 @@ function renderUIWorkspace() {
     u.plot.dataset.kind = u.selected;
     u.plot.closest('.ui-shell').classList.toggle('ui-solar-compare', comparing);
     if ($('uiEarthSettings')) $('uiEarthSettings').hidden = moon;
-    u.details.forEach((n) => (n.hidden = n.dataset.for !== u.selected));
+    u.details.forEach((n) => (n.hidden = n.dataset.for !== u.selected && !(n.dataset.for==='skyPanel' && window.SkyPerspectives?.isSky(u.selected))));
     if ($('uiEarthSettings')) {
       const home = comparing ? $('uiCompareSettings') : $('contextPanel');
       if ($('uiEarthSettings').parentElement !== home) home.append($('uiEarthSettings'));
@@ -172,8 +173,8 @@ function renderUIWorkspace() {
     $('angles').closest('label').hidden = true;
     $('shadowMenu').hidden = true;
     const skyVisible =
-      u.selected === 'skyPanel' ||
-      (comparing && window.skyWorkspacePresentation?.visibleIds.has('skyPanel'));
+      (u.selected === 'skyPanel' || window.SkyPerspectives?.isSky(u.selected)) ||
+      (comparing && [...(window.skyWorkspacePresentation?.visibleIds || [])].some(id=>id==='skyPanel'||window.SkyPerspectives?.isSky(id)));
     const showOverlay = !moon && (skyVisible || u.selected === 'chartPanel' || comparing);
     $('displayMenu').hidden = !showOverlay && !skyVisible;
     $('track').closest('label').hidden = !skyVisible;
@@ -228,7 +229,7 @@ function renderUIWorkspace() {
   }
   const returnBody = state.body;
   function save() {
-    if (page === 'analemma' || page === 'sundial') {
+    if (workbenchIsAnalemmaEntry() || page === 'sundial') {
       for (const k of [
         'date',
         'lat',
@@ -242,7 +243,7 @@ function renderUIWorkspace() {
       modeStates.sun.dec = dateDec(modeStates.sun.date, modeStates.sun.lon);
     }
     SkyMotionSession.write({
-      body: ['analemma', 'sundial'].includes(page) ? returnBody : state.body,
+      body: (workbenchIsAnalemmaEntry() || page === 'sundial') ? returnBody : state.body,
       sun: modeStates.sun,
       moon: modeStates.moon,
       sundialLength,
@@ -287,7 +288,7 @@ function renderUIWorkspace() {
     ['geometryLink', 'solarGeometryPanel'],
   ])
     link(id, 'diagrams.html#' + target);
-  if (['analemma', 'sundial'].includes(page)) {
+  if (workbenchIsAnalemmaEntry() || page === 'sundial') {
     state = {
       ...modeStates.sun,
       playing: false,
@@ -314,7 +315,7 @@ function renderUIWorkspace() {
   $('workbenchMore').querySelector('summary').textContent = '播放与快捷时刻';
   const bodySwitch = document.querySelector('.body-switch');
   shell.querySelector('.ui-body-host').append(bodySwitch);
-  if (['analemma', 'sundial'].includes(page))
+  if (workbenchIsAnalemmaEntry() || page === 'sundial')
     shell.querySelector('.ui-body-host').hidden = true;
   rail.tabIndex = -1;
   function addPlace() {
@@ -470,6 +471,7 @@ function renderUIWorkspace() {
     uiWorkspace.tabs = bar;
     for (const [id, name] of [
       ['skyPanel', '天空与日影'],
+      ['skyTopPanel','俯视日影'],['skyHorizonPanel','地平视角'],['skyObserverPanel','仰望天空'],
       ['analemmaPanel', '日行迹'],
       ['contextPanel', '地球 / 月相'],
       ['chartPanel', '变化曲线'],

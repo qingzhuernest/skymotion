@@ -5,7 +5,7 @@
   // BEGIN GENERATED CATALOG
   // prettier-ignore
   const catalog = {
-    "resourceVersion": "20261026-settings116",
+    "resourceVersion": "20261026-settings117",
     "pages": [
       {
         "path": "index.html",
@@ -98,6 +98,54 @@
           "moon": [
             "月球天空",
             "Lunar sky"
+          ]
+        }
+      },
+      {
+        "id": "skyTopPanel",
+        "group": 0,
+        "sidebarHidden": true,
+        "skyView": "top",
+        "labels": {
+          "sun": [
+            "俯视日影",
+            "Top-down shadows"
+          ],
+          "moon": [
+            "俯视日影",
+            "Top-down shadows"
+          ]
+        }
+      },
+      {
+        "id": "skyHorizonPanel",
+        "group": 0,
+        "sidebarHidden": true,
+        "skyView": "horizon",
+        "labels": {
+          "sun": [
+            "地平视角",
+            "Horizon view"
+          ],
+          "moon": [
+            "地平视角",
+            "Horizon view"
+          ]
+        }
+      },
+      {
+        "id": "skyObserverPanel",
+        "group": 0,
+        "sidebarHidden": true,
+        "skyView": "observer",
+        "labels": {
+          "sun": [
+            "仰望天空",
+            "Look up"
+          ],
+          "moon": [
+            "仰望天空",
+            "Look up"
           ]
         }
       },

@@ -59,6 +59,8 @@ The fixed top bar is global navigation. Views & layout and Observation controls 
 
 Settings in the top bar controls site-wide themes, scheduled night mode, palette, reading sizes, density, motion and 3D display preferences. Orbit and body-label switches on the 3D page stay synchronized. Preferences are stored in this browser and site and can be imported, exported or reset separately; these actions preserve experiments, favorites and layouts and do not change location or observation time.
 
+Settings in the main navigation includes language selection. Text size, line spacing and reading width use continuous sliders. Page/panel and scientific-canvas backgrounds can be chosen independently. In customization mode, add the four sky perspectives to one layout with their row actions; they share location, date and time while retaining their own projection and camera.
+
 ## Set location, date and time
 
 City presets are shortcuts for coordinates. The lower shared timeline controls the current observation; annual sampling and Earthrise have separate controls described below.

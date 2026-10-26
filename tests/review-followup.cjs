@@ -21,13 +21,13 @@ try{
  await p.evaluate(()=>{let fail=true;SkyMotionHistory.register({read:()=>({valid:true}),restore(){if(fail){fail=false;throw Error('test restoration failure')}}});});
  await p.waitForFunction(()=>!SkyMotionHistory.restoring);await p.close();console.log('PASS corrupt historical fields and adapter failures release the restore lock');
  const q=await browser.newPage({viewport:{width:390,height:844}});let blocked=true;
- await q.route('**/fonts/charter_*.woff2',r=>blocked?r.abort():r.continue());await q.goto(base+'lab.html?lang=zh');await q.waitForSelector('.language-toggle:not(:disabled)');
- const initial=await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat}));await q.locator('.language-toggle').click();
+ await q.route('**/fonts/charter_*.woff2',r=>blocked?r.abort():r.continue());await q.goto(base+'lab.html?lang=zh');await q.waitForSelector('html[data-fonts-ready]');
+ const initial=await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat}));await require('./preferences-test-helpers.cjs').toggleLanguage(q);
  await q.waitForSelector('.language-load-notice');assert(await q.locator('.language-load-notice').isVisible());assert.match(await q.locator('.language-load-notice').innerText(),/English/);assert.equal(await q.evaluate(()=>document.documentElement.lang),'zh-CN');
  blocked=false;await q.locator('.language-load-notice button').click();await q.waitForFunction(()=>document.documentElement.lang==='en');
  assert.equal(await q.locator('.language-load-notice').count(),0);assert.deepEqual(await q.evaluate(()=>({date:state.date,time:state.time,lat:state.lat})),initial); // Diagram routing moves companion controls outside .ui-parameters. Theme the component itself.
  for(const route of ['diagrams.html','diagrams.en.html']){
-  await q.goto(base+route);await q.waitForSelector('.language-toggle:not(:disabled)');
+  await q.goto(base+route);await q.waitForSelector('html[data-fonts-ready]');
   await q.locator('button[data-body=moon]').click();
   await require('./diagram-test-helpers.cjs').selectDiagram(q, 'companionModule');
   assert.equal(await q.locator('#companionClock').count(),0,'Redundant time shortcut is removed');

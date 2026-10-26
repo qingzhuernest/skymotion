@@ -32,7 +32,7 @@
     const terms = Object.keys(dictionary)
       .filter((key) => chinese.test(key) && key.length <= 120)
       .sort((a, b) => b.length - a.length);
-    fragments = new RegExp(terms.map(escape).join('|'), 'g');
+    fragments = terms.length ? new RegExp(terms.map(escape).join('|'), 'g') : null;
     cache.clear();
   }
   if (window.skyEnglishDictionary) installDictionary([window.skyEnglishDictionary]);
@@ -130,7 +130,7 @@
       }
       attributes.set(node, saved);
     }
-    for (const name of translatedAttributes) {
+    for (const name of node.matches('meta[name=description],meta[property="og:title"],meta[property="og:description"]') ? [...translatedAttributes, 'content'] : translatedAttributes) {
       const current = node.getAttribute(name);
       if (current === null) continue;
       if (language === 'zh') {
@@ -279,7 +279,7 @@
     delete document.documentElement.dataset.languagePending;
     document.dispatchEvent(new CustomEvent('skymotion:ready'));
   }
-  window.skySetLanguage = change;
+  window.skySetLanguage = async (next, persist = true) => { if (!dictionaryReady) await init(); return change(next, persist); };
   // Storage is optional; an embedded lesson must also work when it is blocked.
   addEventListener('message', (event) => {
     if (
@@ -329,6 +329,9 @@
       button = document.createElement('button');
       button.type = 'button';
       button.className = 'language-toggle';
+      button.hidden = true;
+      button.setAttribute('aria-hidden', 'true');
+      button.tabIndex = -1;
       button.dataset.i18nSkip = '';
       button.textContent = language === 'en' ? '中文' : 'English';
       button.setAttribute('aria-label', 'Switch language / 切换语言');
@@ -386,6 +389,7 @@
         (document.querySelector('.welcome-brand') || document.body).append(button);
       }
     }
+    document.dispatchEvent(new CustomEvent('skymotion:header-ready'));
     button.disabled = false;
     const maps = window.skyEnglishDictionary
       ? [window.skyEnglishDictionary]

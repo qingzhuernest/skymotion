@@ -214,6 +214,7 @@ function drawMotionCanvases() {
     drawPhasePanel();
     if (state.companion && canPaint($('companionSky'))) drawCompanionSky(companionSnapshot());
   }
+  window.SkyPerspectives?.draw();
 }
 function motionFrame(now) {
   motionRAF = 0;

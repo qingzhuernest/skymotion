@@ -147,8 +147,8 @@ function observerGroundFrame(w, h, base, bearing = state.observerAz ?? 180) {
     }),
   };
 }
-function drawObserverGround(c, w, h, frame) {
-  const ground = observerGroundFrame(w, h, frame.base),
+function drawObserverGround(c, w, h, frame, bearing=state.observerAz ?? 180) {
+  const ground = observerGroundFrame(w, h, frame.base,bearing),
     { center, Rx, Ry } = ground;
   c.save();
   c.beginPath();
@@ -208,21 +208,23 @@ function drawObserverGround(c, w, h, frame) {
   c.fill();
   text(
     c,
-    "地面方位参考 · 面向 " + heading(state.observerAz ?? 180),
+    "地面方位参考 · 面向 " + heading(bearing),
     w / 2,
     h - 9,
     "#c6ddd0",
     10,
   );
 }
-function drawObserverSky() {
-  if (!canPaint($("sky"))) return;
-  const { c, w, h } = resize($("sky")),
-    frame = observerFrame(w, h),
+function drawObserverSky(canvas=$('sky'),display=null) {
+  const bearing=display?.observerAz ?? state.observerAz ?? 180;
+  if (!canPaint(canvas)) return;
+  const { c, w, h } = resize(canvas),
+    frame = observerFrame(w, h,bearing),
     bodies = observerBodies(),
     sun = bodies.find((p) => p.body === "Sun").position,
     day = sun.alt >= 0,
     twilight = sun.alt >= -18;
+  c.skyNaturalBackdrop=true;
   const sky = c.createLinearGradient(0, 0, 0, frame.base);
   sky.addColorStop(0, day ? "#427ca9" : twilight ? "#142844" : "#071425");
   sky.addColorStop(1, day ? "#c2ddeb" : twilight ? "#a07464" : "#263c53");
@@ -242,12 +244,12 @@ function drawObserverSky() {
     day ? "#cfdfc8" : "#90aba0",
     1.5,
   );
-  drawObserverGround(c, w, h, frame);
+  drawObserverGround(c, w, h, frame,bearing);
   if (state.angles) {
     for (const alt of [30, 60]) {
       const curve = [];
       for (let d = -90; d <= 90; d += 3) {
-        const az = ((state.observerAz ?? 180) + d) * rad;
+        const az = (bearing + d) * rad;
         curve.push(
           frame.project({
             x: Math.cos(alt * rad) * Math.sin(az),
@@ -267,7 +269,6 @@ function drawObserverSky() {
       );
     }
   }
-  const bearing = state.observerAz ?? 180;
   for (const offset of [-60, 0, 60]) {
     const az = (bearing + offset + 360) % 360,
       p = frame.project({ x: Math.sin(az * rad), y: 0, z: Math.cos(az * rad) });
@@ -369,16 +370,16 @@ function drawObserverSky() {
     );
   }
 
-  $("sky").setAttribute(
+  canvas.setAttribute(
     "aria-label",
     "地面观察者仰望天空，面向 " +
       bearing.toFixed(0) +
       " 度；只绘制地平线上方及前方的天体",
   );
-  paintLabReferences(c,w,h,p=>({...frame.project(p),hidden:p.y<0||frame.front(p)<0}),state.body);
+  paintLabReferences(c,w,h,p=>({...frame.project(p),hidden:p.y<0||frame.front(p)<0}),state.body,'observer');
 }
 function arrangeObserverTime() {
-  const active = state.view === "observer",
+  const active = state.view === "observer" && !window.skyWorkspacePresentation?.active,
     daily = active && state.body === "sun" && !state.solarDateMode,
     host = $("observerTimeHost"),
     timeline = $("sunTimeline");
@@ -396,10 +397,10 @@ function arrangeObserverTime() {
 }
 function renderObserverControls() {
   arrangeObserverTime();
-  const active = state.view === "observer";
+  const active = state.view === "observer" && !window.skyWorkspacePresentation?.active;
   $("observerControls").hidden = !active;
   $("solarOverlayBar").hidden = state.body === "moon" || active;
-  $("sky").style.touchAction = ["observer", "orbit"].includes(state.view)
+  $("sky").style.touchAction = ["observer", "orbit"].includes(window.SkyPerspectives?.primaryView() || state.view)
     ? "none"
     : "pan-y";
   if (!active) return;

@@ -75,7 +75,7 @@ assert.equal(value, 1);
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto(base + 'docs.html?lang=zh');
     for (const language of ['en', 'zh']) {
-      await page.locator('.language-toggle:not(:disabled)').click();
+      await require('./preferences-test-helpers.cjs').toggleLanguage(page);
       await page.waitForFunction(
         (language) =>
           document.documentElement.lang === (language === 'en' ? 'en' : 'zh-CN'),
@@ -87,7 +87,7 @@ assert.equal(value, 1);
         language === 'en',
       );
       await page.reload();
-      await page.waitForSelector('.language-toggle:not(:disabled)');
+      await page.waitForSelector('html[data-fonts-ready]');
       assert.equal(
         await page.locator('html').getAttribute('lang'),
         language === 'en' ? 'en' : 'zh-CN',

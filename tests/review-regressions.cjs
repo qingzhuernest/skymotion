@@ -23,9 +23,9 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
     const locale = await browser.newPage();
     await locale.addInitScript(() => { if (!sessionStorage.getItem('review-locale')) { localStorage.setItem('skymotion-language','zh'); sessionStorage.setItem('review-locale','1'); } });
     await locale.goto(base + 'lab.en.html?lang=en');
-    await locale.waitForSelector('.language-toggle:not(:disabled)');
+    await locale.waitForSelector('html[data-fonts-ready]');
     await locale.locator('.page-nav a').nth(2).click();
-    await locale.waitForSelector('.language-toggle:not(:disabled)');
+    await locale.waitForSelector('html[data-fonts-ready]');
     assert.equal(await locale.locator('html').getAttribute('lang'),'en');
     await locale.close();
     console.log('PASS explicit English selection survives navigation despite an earlier Chinese preference');
@@ -33,7 +33,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
     for (const width of [390,960]) {
       const page = await browser.newPage({viewport:{width,height:1000}});
       await page.goto(base + 'lab.en.html');
-      await page.waitForSelector('.language-toggle:not(:disabled)');
+      await page.waitForSelector('html[data-fonts-ready]');
       const field = page.locator('#workbenchDate');
       const original = await field.inputValue();
       await field.click();

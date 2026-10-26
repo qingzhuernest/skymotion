@@ -152,7 +152,7 @@
 
       if (earthmoon) {
         // Same independently enlarged Moon vector as the 3D view; discard only vertical y.
-        const moonScale = 2.4 / 0.002569555;
+        const moonScale = global.SolarSpaceModel.MOON_DISPLAY_SCALE;
         const scale = extent / 4.3;
         if (orbits) path(lunarPath, scale, '#7890ac66');
         const moon = project(

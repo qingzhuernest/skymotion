@@ -196,7 +196,9 @@ def transform(node: Node, translator: Translator, source: str, page_paths: set[s
     original_attributes = {}
     if node.kind == 'element' and not skip:
         for key, value in list(node.attrs):
-            if key in ATTRIBUTES and value is not None and CHINESE.search(value):
+            presentation_meta = node.tag == 'meta' and key == 'content' and (
+                node.attr('name') == 'description' or node.attr('property') in ('og:title', 'og:description'))
+            if (key in ATTRIBUTES or presentation_meta) and value is not None and CHINESE.search(value):
                 translated = translator(value)
                 if translated != value:
                     original_attributes[key] = value
@@ -260,6 +262,8 @@ def assert_unchanged(original: Node, generated: Node, source: str) -> None:
     allowed = ATTRIBUTES | {'href', 'lang', 'data-rendered-language', 'data-cn-href', 'data-i18n-cn', 'data-i18n-cn-attrs'}
     for old, new in zip(before, after):
         permitted = allowed
+        if old.tag == 'meta' and (old.attr('name') == 'description' or old.attr('property') in ('og:title', 'og:description')):
+            permitted = allowed | {'content'}
         if old.tag == 'meta' and (old.attr('http-equiv') or '').lower() == 'refresh':
             permitted = allowed | {'content'}
             old_refresh = old.attr('content') or ''

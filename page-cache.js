@@ -5,7 +5,7 @@
   const status = window.skyPageCache = { state: 'waiting', completed: 0, total: 0, failed: [] };
   window.skyPageCacheReady = (async () => {
     try {
-      if (window.skyFirstFontsReady) await window.skyFirstFontsReady;
+      if (window.skyFirstFontsReady) await Promise.resolve(window.skyFirstFontsReady).catch(() => {});
       if (document.readyState !== 'complete') await new Promise(resolve => addEventListener('load',resolve,{once:true}));
       await new Promise(resolve => (window.requestIdleCallback || (fn => setTimeout(fn, 100)))(resolve, { timeout: 500 }));
       status.state = 'loading';

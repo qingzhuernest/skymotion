@@ -3,15 +3,25 @@
   'use strict';
   const key = 'skymotion-preferences', root = document.documentElement;
   const defaults = Object.freeze({theme:'system', nightStart:'22:00', nightEnd:'07:00', pureBlack:false,
-    palette:'sage', primary:'#255c43', contrast:'standard', uiScale:1, readingScale:1,
-    leading:'standard', width:'standard', density:'standard', motion:'system', welcomeMotion:true,
+    palette:'sage', primary:'#255c43',surfaceMode:'theme',surfaceColor:'#e2e9de',canvasMode:'theme',canvasColor:'#132438', contrast:'standard', uiScale:1, readingScale:1,
+    leading:1.85, width:100, density:'standard', motion:'system', welcomeMotion:true,
     smoothScroll:true, orbits:true, names:true, stars:true, quality:'standard', zoom:'standard', rememberRail:true});
   const options = {theme:['light','dark','system','schedule'],palette:['sage','blue','gray','custom'],
-    contrast:['standard','high'],uiScale:[1,1.1,1.25],readingScale:[1,1.15,1.3,1.5],leading:['standard','loose'],
-    width:['narrow','standard','wide'],density:['standard','compact'],motion:['system','reduce'],
+    surfaceMode:['theme','custom'],canvasMode:['theme','custom'],contrast:['standard','high'],density:['standard','compact'],motion:['system','reduce'],
     quality:['low','standard','high'],zoom:['low','standard','high']};
+  const ranges = {uiScale:{min:1,max:1.25,step:.01},readingScale:{min:1,max:1.5,step:.01},
+    leading:{min:1.5,max:2.4,step:.01},width:{min:80,max:120,step:1}};
+  function migrate(preferences, version) {
+    if(!preferences||typeof preferences!=='object'||Array.isArray(preferences))return preferences;
+    const next={...preferences};
+    if(version===1){
+      if(typeof next.leading==='string')next.leading={standard:1.85,loose:2.15}[next.leading] ?? next.leading;
+      if(typeof next.width==='string')next.width={narrow:80,standard:100,wide:120}[next.width] ?? next.width;
+    }
+    return next;
+  }
   const groups = {
-    appearance:['theme','nightStart','nightEnd','pureBlack','palette','primary','contrast'],
+    appearance:['theme','nightStart','nightEnd','pureBlack','palette','primary','surfaceMode','surfaceColor','canvasMode','canvasColor','contrast'],
     reading:['uiScale','readingScale','leading','width','language'],layout:['density'],
     animation:['motion','welcomeMotion','smoothScroll'],space:['orbits','names','stars','quality'],
     operation:['zoom','rememberRail'],data:[]};
@@ -24,9 +34,9 @@
     const next = {};
     for (const [name, value] of Object.entries(input)) {
       if (!Object.hasOwn(defaults, name)) continue;
-      const valid = options[name] ? options[name].includes(value) :
+      const valid = ranges[name] ? typeof value==='number' && Number.isFinite(value) && value>=ranges[name].min && value<=ranges[name].max : options[name] ? options[name].includes(value) :
         typeof defaults[name] === 'boolean' ? typeof value === 'boolean' :
-        name === 'primary' ? typeof value === 'string' && /^#[\da-f]{6}$/i.test(value) :
+        ['primary','surfaceColor','canvasColor'].includes(name) ? typeof value === 'string' && /^#[\da-f]{6}$/i.test(value) :
         typeof value === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
       if (!valid) { if (strict) throw Error('invalid'); else continue; }
       next[name] = value;
@@ -36,14 +46,14 @@
   function load() {
     try {
       const saved = JSON.parse(localStorage.getItem(key) || 'null');
-      if (saved?.version === 1) state = {...defaults, ...validate(saved.preferences, false)};
+      if ([1,2].includes(saved?.version)) state = {...defaults, ...validate(migrate(saved.preferences,saved.version), false)};
     } catch { storageOK = false; }
     if (state.nightStart === state.nightEnd) { state.nightStart = defaults.nightStart; state.nightEnd = defaults.nightEnd; }
   }
   function language() { return root.lang === 'en' ? 'en' : 'zh'; }
   const t = (zh,en) => language() === 'en' ? en : zh;
   const reduce = () => state.motion === 'reduce' || systemMotion.matches;
-  let lastReduced;
+  let lastReduced,canvasStyle=Object.freeze({custom:false,color:'#132438',ink:'#e4eef3'});
   const reducedMotion = {get matches(){return reduce();},addEventListener(type,fn){if(type==='change')motionListeners.add(fn);},removeEventListener(type,fn){if(type==='change')motionListeners.delete(fn);}};
   function dark() {
     if (state.theme === 'system') return systemDark.matches;
@@ -72,11 +82,26 @@
       if(nativeSage) root.style.removeProperty('--design-'+role);
       else root.style.setProperty('--design-'+role,colors[state.contrast==='high' && source==='outlineVariant'?'outline':source]);
     }
+    if(state.surfaceMode==='custom') {
+      const bg=state.surfaceColor,paint=window.SkyThemePaint,fg=paint.foreground(bg),away=fg==='#000000'?'#ffffff':'#000000';
+      const setRole=(name,value)=>root.style.setProperty('--design-'+name,value);
+      setRole('paper',bg);setRole('ink',fg);setRole('muted',fg);
+      for(const [name,amount] of Object.entries({surface:.08,inset:.12,'surface-low':.04,'surface-high':.16,'surface-highest':.2,'disabled-surface':.12}))setRole(name,paint.mix(bg,away,amount));
+      const primary=paint.readable(colors.primary,bg,state.contrast==='high'?7:4.5);
+      setRole('accent',primary);setRole('accent-hover',primary);setRole('on-action',paint.foreground(primary));
+      setRole('line',paint.readable(colors.outline,bg,3));setRole('disabled-ink',fg);
+      root.style.colorScheme=fg==='#ffffff'?'dark':'light';
+    }
+    root.style.setProperty('--interface-color-scheme',root.style.colorScheme);
+    canvasStyle=Object.freeze({custom:state.canvasMode==='custom',color:state.canvasColor,ink:window.SkyThemePaint.foreground(state.canvasColor)});
+    root.dataset.customCanvas=String(canvasStyle.custom);
+    if(canvasStyle.custom)root.style.setProperty('--design-plot',canvasStyle.color);else root.style.removeProperty('--design-plot');
+    root.style.setProperty('--canvas-background',canvasStyle.color);root.style.setProperty('--canvas-ink',canvasStyle.ink);
     if(isDark && state.pureBlack) root.style.setProperty('--design-paper','#000000');
     root.style.setProperty('--ui-font-scale',state.uiScale);
     root.style.setProperty('--reading-scale',state.readingScale);
-    root.style.setProperty('--reading-width',({narrow:60,standard:75,wide:90}[state.width])+'ch');
-    root.style.setProperty('--reading-leading',state.leading==='loose'?'2.15':'1.85');
+    root.style.setProperty('--reading-width',(state.width*.75)+'ch');
+    root.style.setProperty('--reading-leading',String(state.leading));
     root.dataset.density=state.density;root.dataset.reducedMotion=String(reduce());
     root.dataset.smoothScroll=String(state.smoothScroll&&!reduce());
     if(lastReduced!==reduce()) {lastReduced=reduce();for(const fn of motionListeners)fn({matches:lastReduced});}
@@ -86,12 +111,14 @@
     refresh();
   }
   function save() {
-    try {localStorage.setItem(key,JSON.stringify({version:1,preferences:state}));storageOK=true;}
+    try {localStorage.setItem(key,JSON.stringify({version:2,preferences:state}));storageOK=true;}
     catch {storageOK=false;}
   }
   function set(patch) {
     const next={...state,...validate(patch)};
     if(next.nightStart===next.nightEnd)throw Error('schedule');
+    if(patch.surfaceMode==='custom'||patch.surfaceColor!==undefined)next.pureBlack=false;
+    if(patch.pureBlack===true)next.surfaceMode='theme';
     state=next;save();apply();return {...state};
   }
   function reset(group) {
@@ -102,8 +129,8 @@
   function parseImport(text) {
     if(new TextEncoder().encode(text).length>65536)throw Error('size');
     const parsed=JSON.parse(text);
-    if(parsed?.version!==1)throw Error('version');
-    const preferences=validate(parsed.preferences);
+    if(![1,2].includes(parsed?.version))throw Error('version');
+    const preferences=validate(migrate(parsed.preferences,parsed.version));
     if(parsed.language!==undefined&&!['zh','en'].includes(parsed.language))throw Error('language');
     const next={...state,...preferences};
     if(next.nightStart===next.nightEnd)throw Error('schedule');
@@ -111,7 +138,9 @@
   }
   load();
   window.SkyPreferences = {get:()=>({...state}),set,reset,subscribe(fn){subscribers.add(fn);return()=>subscribers.delete(fn);},
-    reducedMotion, export:()=>JSON.stringify({version:1,preferences:state,language:language()},null,2),parseImport,
+    reducedMotion, export:()=>JSON.stringify({version:2,preferences:state,language:language()},null,2),parseImport,
+    get canvasStyle(){return canvasStyle;},
+    canvasInk:(color,minimum=4.5)=>canvasStyle.custom?window.SkyThemePaint.readable(color,canvasStyle.color,minimum):color,
     get storageAvailable(){return storageOK;},get dark(){return dark();},
     get smoothScroll(){return state.smoothScroll&&!reduce();}};
   apply();
@@ -132,12 +161,12 @@
     appearance:['外观与夜间','Appearance & night'],reading:['阅读与语言','Reading & language'],layout:['布局','Layout'],
     animation:['动画','Motion'],space:['三维显示','3D display'],operation:['操作与帮助','Controls & help'],data:['设置数据','Settings data'],
     theme:['主题模式','Theme'],nightStart:['夜间开始','Night starts'],nightEnd:['夜间结束','Night ends'],pureBlack:['纯黑页面背景','Pure black background'],
-    palette:['配色','Palette'],primary:['自选主色','Custom primary color'],contrast:['对比度','Contrast'],uiScale:['界面字号','Interface text size'],
+    surfaceMode:['页面与面板背景','Page & panel background'],surfaceColor:['自选页面背景','Custom page background'],canvasMode:['科学画布背景','Scientific canvas background'],canvasColor:['自选画布背景','Custom canvas background'],palette:['配色','Palette'],primary:['自选主色','Custom primary color'],contrast:['对比度','Contrast'],uiScale:['界面字号','Interface text size'],
     readingScale:['文档字号','Document text size'],leading:['文档行距','Document line spacing'],width:['文档正文宽度','Document width'],language:['语言','Language'],
     density:['界面密度','Interface density'],motion:['减少动画','Reduced motion'],welcomeMotion:['欢迎页背景动效','Welcome background motion'],
     smoothScroll:['平滑滚动','Smooth scrolling'],orbits:['轨道线','Orbit lines'],names:['天体名称','Body labels'],stars:['背景星点','Background stars'],
     quality:['渲染质量','Rendering quality'],zoom:['三维缩放灵敏度','3D zoom sensitivity'],rememberRail:['记住桌面侧栏状态','Remember desktop sidebar']};
-  const values={light:['浅色','Light'],dark:['深色','Dark'],system:['跟随系统','System'],schedule:['定时','Scheduled'],sage:['鼠尾草绿','Sage'],blue:['雾蓝','Mist blue'],gray:['暖灰','Warm gray'],custom:['自选','Custom'],standard:['标准','Standard'],high:['增强／高','High'],low:['低／省电','Low'],loose:['宽松','Relaxed'],narrow:['窄','Narrow'],wide:['宽','Wide'],compact:['紧凑','Compact'],reduce:['减少','Reduce'],zh:['中文','中文'],en:['English','English']};
+  const values={theme:['跟随主题','Follow theme'],light:['浅色','Light'],dark:['深色','Dark'],system:['跟随系统','System'],schedule:['定时','Scheduled'],sage:['鼠尾草绿','Sage'],blue:['雾蓝','Mist blue'],gray:['暖灰','Warm gray'],custom:['自选','Custom'],standard:['标准','Standard'],high:['增强／高','High'],low:['低／省电','Low'],loose:['宽松','Relaxed'],narrow:['窄','Narrow'],wide:['宽','Wide'],compact:['紧凑','Compact'],reduce:['减少','Reduce'],zh:['中文','中文'],en:['English','English']};
   const copy = pair=>t(...pair);
   let confirmation, confirmTrigger;
   const node=(tag,attrs={},text)=>{const el=document.createElement(tag);for(const [k,v]of Object.entries(attrs)){if(k==='class')el.className=v;else el.setAttribute(k,v);}if(text!==undefined)el.textContent=text;return el;};
@@ -153,20 +182,26 @@
     const row=node('div',{class:'preference-row','data-setting':name});
     const id='pref-'+name,label=node('label',{for:id},copy(labels[name]));row.append(label);
     let control;
-    if(name==='language'||options[name]) {
+    if(ranges[name]) {control=node('input',{id,type:'range',...ranges[name]});}
+    else if(name==='language'||options[name]) {
       control=node('select',{id});
       for(const value of name==='language'?['zh','en']:options[name])control.append(node('option',{value},typeof value==='number'?Math.round(value*100)+'%':copy(({quality:{low:['省电','Power saving'],standard:['标准','Standard'],high:['清晰','Clear']},contrast:{standard:['标准','Standard'],high:['增强','Enhanced']},zoom:{low:['低','Low'],standard:['标准','Standard'],high:['高','High']}}[name]?.[value]) || values[value])));
     }else if(typeof defaults[name]==='boolean')control=node('input',{id,type:'checkbox',role:'switch'});
-    else control=node('input',{id,type:name==='primary'?'color':'time'});
-    row.append(control);
-    if(name==='primary') {
-      const hex=node('input',{id:'pref-primary-hex',type:'text',pattern:'#[0-9a-fA-F]{6}',maxlength:'7','aria-label':t('主色十六进制值','Primary hex color')});
-      hex.addEventListener('change',()=>{if(!/^#[\da-f]{6}$/i.test(hex.value)){hex.setAttribute('aria-invalid','true');notify(t('请输入 #RRGGBB 格式颜色','Use a #RRGGBB color'));return;}hex.removeAttribute('aria-invalid');set({primary:hex.value,palette:'custom'});});row.append(hex);
+    else control=node('input',{id,type:['primary','surfaceColor','canvasColor'].includes(name)?'color':'time'});
+    if(ranges[name]) {
+      const container=node('div',{class:'preference-range'});
+      const value=node('output',{for:id,id:id+'-value','aria-live':'off'});
+      container.append(control,value);row.append(container);
+    }else row.append(control);
+    const colorMode=name==='primary'?{palette:'custom'}:name==='surfaceColor'?{surfaceMode:'custom'}:name==='canvasColor'?{canvasMode:'custom'}:null;
+    if(colorMode) {
+      const hex=node('input',{id:'pref-'+name+'-hex',type:'text',pattern:'#[0-9a-fA-F]{6}',maxlength:'7','aria-label':copy(labels[name])+' '+t('十六进制值','hex color')});
+      hex.addEventListener('change',()=>{if(!/^#[\da-f]{6}$/i.test(hex.value)){hex.setAttribute('aria-invalid','true');notify(t('请输入 #RRGGBB 格式颜色','Use a #RRGGBB color'));return;}hex.removeAttribute('aria-invalid');set({[name]:hex.value,...colorMode});});row.append(hex);
     }
-    control.addEventListener('change',async()=>{
+    control.addEventListener(ranges[name]?'input':'change',async()=>{
       try{
         if(name==='language')await window.skySetLanguage(control.value);
-        else set({[name]:control.type==='checkbox'?control.checked:typeof defaults[name]==='number'?Number(control.value):control.value,...(name==='primary'?{palette:'custom'}:{})});
+        else set({[name]:control.type==='checkbox'?control.checked:typeof defaults[name]==='number'?Number(control.value):control.value,...(colorMode||{})});
         notify(storageOK?t('已保存','Saved'):t('当前浏览器无法保存设置，仅本页有效','Storage is unavailable; changes apply to this page only'));
       }catch{notify(t('无法应用。夜间开始和结束需不同；颜色需有效。','Could not apply. Night times must differ and colors must be valid.'));refresh();}
     });
@@ -178,11 +213,18 @@
       const input=dialog.querySelector('#pref-'+name);if(!input)continue;
       const value=name==='language'?language():state[name];
       if(input.type==='checkbox')input.checked=value;else input.value=value;
+      if(ranges[name]) {
+        const text=name==='leading'?Number(value).toFixed(2)+t(' 倍','×'):Math.round(Number(value)*(name==='width'?1:100))+'%';
+        dialog.querySelector('#pref-'+name+'-value').textContent=text;
+        input.setAttribute('aria-valuetext',text);window.SkyMaterial?.updateRange(input);
+      }
     }
-    dialog.querySelector('#pref-primary-hex').value=state.primary;
+    for(const name of ['primary','surfaceColor','canvasColor'])dialog.querySelector('#pref-'+name+'-hex').value=state[name];
     for(const name of ['nightStart','nightEnd'])dialog.querySelector(`[data-setting="${name}"]`).hidden=state.theme!=='schedule';
     dialog.querySelector('[data-setting="pureBlack"]').hidden=!dark();
     dialog.querySelector('[data-setting="primary"]').hidden=state.palette!=='custom';
+    dialog.querySelector('[data-setting="surfaceColor"]').hidden=state.surfaceMode!=='custom';
+    dialog.querySelector('[data-setting="canvasColor"]').hidden=state.canvasMode!=='custom';
     for(const name of ['welcomeMotion','smoothScroll']){const input=dialog.querySelector('#pref-'+name);input.disabled=reduce();}
     if(!storageOK)notify(t('当前浏览器无法保存设置，仅本页有效','Storage is unavailable; changes apply to this page only'));
   }
@@ -215,7 +257,7 @@
       const section=node('section',{id:'preferences-'+category,class:'preference-section','data-category':category});section.append(node('h3',{},copy(labels[category])));
       for(const name of fields)section.append(field(name));
       if(category==='space')section.append(node('p',{class:'preference-note'},t('适用于三维天空。显示设置不改变科学计算精度。','Applies to 3D Sky. Display settings do not change scientific precision.')));
-      if(category==='appearance')section.append(node('p',{class:'preference-note'},t('定时使用设备本地时间。纯黑仅影响深色页面背景；三维沉浸模式保持深色。','Schedules use device local time. Pure black affects dark page backgrounds; immersive 3D stays dark.')));
+      if(category==='appearance')section.append(node('p',{class:'preference-note'},t('定时使用设备本地时间。页面和画布可分别自选底色；纯黑与自选页面背景互斥。真实天空、地表和天体纹理保留物理着色。','Schedules use device local time. Page and canvas backgrounds are independent. Pure black and a custom page background are alternatives. Natural sky, ground and body textures retain their physical colors.')));
       if(category==='animation')section.append(node('p',{class:'preference-note'},t('减少动画也遵循系统偏好，不会暂停你主动播放的科学模拟。','System reduced-motion preferences are respected. User-started scientific playback continues.')));
       if(category==='operation') {
         const help=node('div',{class:'preferences-help'});help.append(node('h4',{},t('快捷键与手势','Keyboard & gestures')));
@@ -227,7 +269,7 @@
         exportBtn.onclick=()=>{const url=URL.createObjectURL(new Blob([window.SkyPreferences.export()],{type:'application/json'}));const a=node('a',{href:url,download:'skymotion-settings.json'});a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
         const importBtn=node('button',{type:'button',class:'md-outlined-action'},t('导入设置','Import settings'));
         const file=node('input',{type:'file',accept:'.json,application/json',hidden:''});
-        importBtn.onclick=()=>file.click();file.onchange=async()=>{try{if(!file.files[0])return;if(file.files[0].size>65536)throw Error('size');pendingImport=parseImport(await file.files[0].text());showConfirmation(t('导入将覆盖文件包含的偏好与语言，不修改实验或收藏。是否应用？','Import overwrites the preferences and language included in the file, without changing experiments or favorites. Apply?'),()=>{set(pendingImport.preferences);if(pendingImport.language)window.skySetLanguage(pendingImport.language).catch(()=>notify(t('语言切换未完成，请重试','Language change failed; please retry')));});}catch{notify(t('无法导入：请使用有效的设置文件（版本 1，最大 64 KB）。','Import failed: use a valid version 1 settings file, up to 64 KB.'));}finally{file.value='';}};
+        importBtn.onclick=()=>file.click();file.onchange=async()=>{try{if(!file.files[0])return;if(file.files[0].size>65536)throw Error('size');pendingImport=parseImport(await file.files[0].text());showConfirmation(t('导入将覆盖文件包含的偏好与语言，不修改实验或收藏。是否应用？','Import overwrites the preferences and language included in the file, without changing experiments or favorites. Apply?'),()=>{set(pendingImport.preferences);if(pendingImport.language)window.skySetLanguage(pendingImport.language).catch(()=>notify(t('语言切换未完成，请重试','Language change failed; please retry')));});}catch{notify(t('无法导入：请使用有效的设置文件（版本 1 或 2，最大 64 KB）。','Import failed: use a valid version 1 or 2 settings file, up to 64 KB.'));}finally{file.value='';}};
         section.append(node('p',{},t('设置保存在当前浏览器和站点。导出文件不含实验、收藏或布局。','Settings stay in this browser and site. Exports exclude experiments, favorites and layouts.')),exportBtn,importBtn,file);
         const all=node('button',{type:'button',class:'md-outlined-action'},t('恢复全部设置','Reset all settings'));all.onclick=()=>showConfirmation(t('恢复全部偏好和中文语言。保留实验、收藏和布局存档。','Reset all preferences and switch to Chinese. Experiments, favorites and layouts are preserved.'),()=>reset());section.append(all);
       }else {
@@ -247,20 +289,20 @@
   function mount() {
     if(document.body?.dataset.embedded==='true'||parent!==window)return;
     const bar=document.querySelector('.language-nav,.welcome-brand');if(!bar)return;
-    if(launcher?.isConnected) {
-      const languageButton=bar.querySelector(':scope > .language-toggle');
-      if(languageButton)launcher.parentElement.prepend(languageButton);
-      return;
+    const nav=bar.querySelector('.page-nav');
+    const immersive=document.body.classList.contains('space-immersive');
+    let host=immersive?document.querySelector('.head-actions'):nav;
+    if(!host){host=bar.querySelector('.language-actions');if(!host){host=node('div',{class:'language-actions'});bar.append(host);}}
+    if(!launcher){
+      launcher=node('button',{type:'button',class:'preferences-launch','data-i18n-skip':'','aria-haspopup':'dialog'},t('设置','Settings'));
+      launcher.onclick=()=>{if(!dialog)build();dialog.showModal();dialog.querySelector('.preferences-search').focus();};
     }
-    let host=bar.querySelector('.language-actions');
-    if(!host){host=node('div',{class:'language-actions'});bar.append(host);}
-    const languageButton=bar.querySelector('.language-toggle');
-    if(languageButton&&languageButton.parentElement!==host)host.prepend(languageButton);
-    if(!launcher){launcher=node('button',{type:'button',class:'preferences-launch md-outlined-action','data-i18n-skip':'','aria-haspopup':'dialog'},t('设置','Settings'));launcher.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="var(--design-surface)"/><circle cx="15" cy="17" r="3" fill="var(--design-surface)"/></svg>';
-      launcher.setAttribute('aria-label',t('设置','Settings'));launcher.title=t('设置','Settings');
-      launcher.onclick=()=>{if(!dialog)build();dialog.showModal();dialog.querySelector('.preferences-search').focus();};}
-    if(!launcher.isConnected)host.append(launcher);
+    launcher.classList.toggle('md-outlined-action',host!==nav);
+    launcher.textContent=t('设置','Settings');launcher.setAttribute('aria-label',t('设置','Settings'));
+    if(launcher.parentElement!==host)host.append(launcher);
   }
+  addEventListener('space:layout',mount);
+  document.addEventListener('skymotion:header-ready',mount);
   document.addEventListener('skymotion:language',()=>{
     if(launcher){launcher.setAttribute('aria-label',t('设置','Settings'));launcher.title=t('设置','Settings');}
     if(dialog){const open=dialog.open,focusId=document.activeElement?.id;dialog.remove();dialog=null;if(open){build();dialog.showModal();(focusId&&dialog.querySelector('#'+CSS.escape(focusId))||dialog.querySelector('.preferences-search')).focus();}}

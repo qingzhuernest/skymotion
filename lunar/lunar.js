@@ -128,6 +128,7 @@
     text('lessonText', t(surface ? 'surfaceLesson' : 'lesson'));
     return q;
   }
+  window.SkyPreferences?.subscribe(()=>invalidate());
   function invalidate() {
     if (!raf && active && !document.hidden && !disposed) raf = requestAnimationFrame(frame);
   }
@@ -450,7 +451,7 @@
     g.eye.fov = s.fov;
     g.eye.lookAt(pos.clone().add(forward));
     renderer.setScissorTest(false);
-    renderer.setClearColor(0x0d1825);
+    renderer.setClearColor(window.SkyPreferences?.canvasStyle.custom?window.SkyPreferences.canvasStyle.color:0x0d1825);
     renderer.clear();
     renderer.setScissorTest(true);
     for (const [rect, camera, scene] of [
@@ -470,6 +471,8 @@
       camera.updateProjectionMatrix();
       renderer.setViewport(x, y, rect.width, rect.height);
       renderer.setScissor(x, y, rect.width, rect.height);
+      if(window.SkyPreferences?.canvasStyle.custom)scene.background=new THREE.Color(window.SkyPreferences.canvasStyle.color);
+      else scene.background=new THREE.Color(scene===g.overview?0x0e1b29:0x08121e);
       renderer.render(scene, camera);
     }
     projectLabel('mapEarth', v(0, -0.6, 0), g.mapCamera, bounds.orbit);

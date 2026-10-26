@@ -16,15 +16,28 @@
   function updateRanges(root = document) {
     root.querySelectorAll('input[type="range"]').forEach(updateRange);
   }
-  window.SkyMaterial = Object.freeze({ updateRange, updateRanges });
+  function updateChoices(root=document) {
+    const sync=(group)=>{
+      const all=[...group.children].filter(n=>n.matches('button,a'));
+      const visible=all.filter(n=>!n.hidden);
+      for(const child of all){
+        const edge=visible.length===1&&child===visible[0]?'only':child===visible[0]?'first':child===visible.at(-1)?'last':'middle';
+        if(child.dataset.choiceEdge!==edge)child.dataset.choiceEdge=edge;
+      }
+    };
+    if(root.matches?.('.md-connected-choice'))sync(root);
+    root.querySelectorAll?.('.md-connected-choice').forEach(sync);
+  }
+  window.SkyMaterial = Object.freeze({ updateRange, updateRanges, updateChoices });
   // Native pointer and keyboard input keep their own behavior.
   document.addEventListener('input', (event) => updateRange(event.target), true);
   document.addEventListener('change', (event) => updateRange(event.target), true);
   function install() {
     updateRanges();
+    updateChoices();
     new MutationObserver((records) => {
       for (const record of records) {
-        if (record.type === 'attributes') updateRange(record.target);
+        if (record.type === 'attributes') { updateRange(record.target);const group=record.target.closest('.md-connected-choice');if(group)updateChoices(group); }
         else
           for (const node of record.addedNodes) {
             if (
@@ -34,13 +47,14 @@
               continue;
             updateRange(node);
             updateRanges(node);
+            updateChoices(node);
           }
       }
     }).observe(document.body, {
       subtree: true,
       childList: true,
       attributes: true,
-      attributeFilter: ['min', 'max', 'value', 'type'],
+      attributeFilter: ['min', 'max', 'value', 'type', 'hidden', 'class'],
     });
   }
   if (document.readyState === 'loading')

@@ -20,7 +20,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8992/').repla
    await p.locator('#spaceImmersive').click();
    await p.waitForFunction(()=>document.querySelector('.head-actions .language-actions'));await p.waitForFunction(()=>getComputedStyle(document.querySelector('.layout-launch')).backgroundColor==='rgb(37, 92, 67)');assert.equal(await p.locator('.layout-launch').evaluate(n=>getComputedStyle(n).backgroundColor),'rgb(37, 92, 67)','immersive customization retains the same approved green');
    assert(await p.locator('.layout-launch').isVisible());
-   assert(await p.locator('.language-toggle').isVisible());
+   assert.equal(await p.locator('.language-toggle').isVisible(),false);assert(await p.locator('.preferences-launch').isVisible());
    await require('./diagram-test-helpers.cjs').openWorkbench(p);
    await require('./diagram-test-helpers.cjs').openWorkbench(p);await p.locator('.dt-panel').waitFor({state:'visible'});
    assert(await p.locator('.layout-launch').isVisible());

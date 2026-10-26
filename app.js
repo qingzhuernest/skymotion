@@ -154,13 +154,14 @@ function resize(canvas) {
   const c = canvas.getContext('2d');
   c.setTransform(dpr, 0, 0, dpr, 0, 0);
   c.clearRect(0, 0, w, h);
+  c.skyNaturalBackdrop=false;
   return { c, w, h };
 }
 function poly(c, points, color, width = 1, dash = []) {
   if (!points.length) return;
   c.beginPath();
   points.forEach((p, i) => (i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)));
-  c.strokeStyle = color;
+  c.strokeStyle = !c.skyNaturalBackdrop ? (window.SkyPreferences?.canvasInk(color,3)||color) : color;
   c.lineWidth = width;
   c.setLineDash(dash);
   c.stroke();
@@ -168,7 +169,13 @@ function poly(c, points, color, width = 1, dash = []) {
 }
 function text(c, s, x, y, color = '#9cacc0', size = 12, align = 'center') {
   c.font = `${size}px "SkyMotion Reading", serif`;
-  c.fillStyle = color;
+  const canvasStyle=window.SkyPreferences?.canvasStyle;
+  if(canvasStyle?.custom&&!c.skyNaturalBackdrop) {
+    const width=c.measureText(String(s)).width;
+    c.fillStyle=canvasStyle.color;
+    c.fillRect(x-(align==='center'?width/2:align==='right'?width:0)-2,y-size*.65,width+4,size*1.3);
+    c.fillStyle=window.SkyPreferences.canvasInk(color);
+  }else c.fillStyle=color;
   c.textAlign = align;
   c.textBaseline = 'middle';
   c.fillText(s, x, y);
@@ -285,20 +292,21 @@ function drawMoonDayEndpoints(c, project, w, h, positionAt) {
   return boxes;
 }
 const skyTrackCache = new Map();
-function drawSkyScene(kind) {
-  if (state.view === 'observer') {
-    drawObserverSky();
+function drawSkyScene(kind, canvas=$('sky'), display=null) {
+  const view=display?.view ?? state.view;
+  if (view === 'observer') {
+    drawObserverSky(canvas,display);
     return;
   }
-  if (!canPaint($('sky'))) return;
-  const camera = motionCamera();
-  const { c, w, h } = resize($('sky')),
+  if (!canPaint(canvas)) return;
+  const camera = display || motionCamera();
+  const { c, w, h } = resize(canvas),
     R = Math.min(w * 0.37, h * 0.41) * camera.zoom,
     C = { x: w * 0.5, y: h * 0.56 };
   let project;
-  if (state.view === 'top') {
+  if (view === 'top') {
     project = (p) => ({ x: C.x + p.x * R, y: C.y - p.z * R });
-  } else if (state.view === 'horizon') {
+  } else if (view === 'horizon') {
     project = (p) => {
       const az = (Math.atan2(p.x, p.z) * deg + 360) % 360,
         alt = Math.asin(clamp(p.y, -1, 1)) * deg;
@@ -318,7 +326,7 @@ function drawSkyScene(kind) {
       };
     };
   }
-  if (state.view === 'horizon') {
+  if (view === 'horizon') {
     for (let a = 0; a <= 360; a += 45) {
       const x = 40 + (a / 360) * (w - 80);
       poly(
@@ -381,7 +389,7 @@ function drawSkyScene(kind) {
         ],
         '#698a9722',
       );
-    if (state.view === 'orbit') {
+    if (view === 'orbit') {
       for (let a = 0; a < 180; a += 30) {
         const ps = [];
         for (let alt = 0; alt <= 180; alt += 3)
@@ -439,7 +447,7 @@ function drawSkyScene(kind) {
         state.lon,
         state.manual,
         (actual && !state.manual) || positionFn ? 'date' : d,
-        state.view,
+        view,
         w,
         h,
         camera.yaw,
@@ -452,7 +460,7 @@ function drawSkyScene(kind) {
       segments = skyTrackSegments(
         positionAt,
         project,
-        state.view === 'horizon',
+        view === 'horizon',
         40,
         w - 40,
       );
@@ -497,7 +505,7 @@ function drawSkyScene(kind) {
   const s = visualPosition(kind === 'moon' ? 'Moon' : 'Sun', bodyPosition()),
     sun = project(s),
     origin = project({ x: 0, y: 0, z: 0 });
-  if (state.view !== 'horizon') {
+  if (view !== 'horizon') {
     const groundRadius =
       kind === 'sun' ? shadowGroundRadius() : 6.25 * Math.max(1, state.height);
     if (kind === 'sun' && state.solarDateMode && state.solarDateTrail)
@@ -506,7 +514,7 @@ function drawSkyScene(kind) {
     if (kind === 'sun' && state.shadow) drawCurrentShadow(c, project, s, groundRadius);
     if (state.angles) {
       poly(c, [origin, sun], s.alt >= 0 ? '#ffdb8366' : '#6c849644', 1, [4, 4]);
-      if (state.view === 'orbit') {
+      if (view === 'orbit') {
         const foot = project({ x: s.x, y: 0, z: s.z });
         poly(c, [origin, foot, sun], '#c0d2e04a', 1, [3, 4]);
       }
@@ -520,7 +528,7 @@ function drawSkyScene(kind) {
     c.beginPath();
     c.arc(origin.x, origin.y, 9, 0, Math.PI * 2);
     c.stroke();
-    if (state.view === 'orbit') {
+    if (view === 'orbit') {
       const tip = project({ x: 0, y: Math.min(state.height / groundRadius, 0.85), z: 0 });
       poly(c, [origin, tip], '#c8e6ff', 3);
     }
@@ -537,14 +545,14 @@ function drawSkyScene(kind) {
     c.globalAlpha = 0.3;
   }
   if (kind === 'moon') drawMoon(c, sun.x, sun.y, 11, visualPhase());
-  else glow(c, sun.x, sun.y, state.view === 'top' ? 6 : 8);
+  else glow(c, sun.x, sun.y, view === 'top' ? 6 : 8);
   c.globalAlpha = 1;
   if (sun.x > 20 && sun.x < w - 20 && sun.y > 45 && sun.y < h - 40)
     text(
       c,
       `${s.alt.toFixed(1)}°`,
       sun.x + 19,
-      state.view === 'top' ? sun.y + 18 : sun.y - 13,
+      view === 'top' ? sun.y + 18 : sun.y - 13,
       '#ffe2a5',
       12,
       'left',
@@ -559,11 +567,11 @@ function drawSkyScene(kind) {
     if (p.x > 20 && p.x < w - 45 && p.y > 45 && p.y < h - 40)
       text(c, '月 ' + m.alt.toFixed(1) + '°', p.x + 16, p.y + 15, '#c8ddff', 12, 'left');
   }
-  if (kind === 'sun' && state.view !== 'horizon') {
+  if (kind === 'sun' && view !== 'horizon') {
     const p = project({ x: 0.5, y: 0, z: 0 });
     text(c, (shadowGroundRadius() / 2).toFixed(2) + ' m', p.x, p.y + 16, '#92aebd', 10);
   }
-  if (state.view === 'top' && kind === 'moon')
+  if (view === 'top' && kind === 'moon')
     text(
       c,
       (kind === 'moon' ? '月球' : '太阳') + '在地平面上的投影',
@@ -572,7 +580,7 @@ function drawSkyScene(kind) {
       '#91a5b9',
       12,
     );
-  paintLabReferences(c, w, h, project, kind);
+  paintLabReferences(c, w, h, project, kind, view);
 }
 function drawSunAltitudeChart() {
   if (!canPaint($('chart'))) return;
@@ -1263,14 +1271,16 @@ function syncSkyViewControls() {
       ? presentation.activeView === 'skyPanel'
       : workspace.selected === 'skyPanel');
   document.querySelectorAll('[data-view]').forEach((button) => {
-    const selected = skyCurrent && button.dataset.view === state.view;
+    const selected = presentation?.active && window.SkyPerspectives
+      ? presentation.views.includes(window.SkyPerspectives.ids[button.dataset.view])
+      : skyCurrent && button.dataset.view === state.view;
     button.classList.toggle('active', selected);
     button.setAttribute('aria-pressed', String(selected));
   });
 }
 function updateUI() {
   document.body.dataset.body = state.body;
-  document.body.dataset.skyView = state.view;
+  document.body.dataset.skyView = window.SkyPerspectives?.primaryView() || state.view;
   const moon = state.body === 'moon',
     body = moon ? '月球' : '太阳',
     s = bodyPosition(),
@@ -1492,10 +1502,10 @@ function updateUI() {
   syncSkyViewControls();
 }
 function drawSolarSky() {
-  drawSkyScene('sun');
+  drawSkyScene('sun',$('sky'),window.SkyPerspectives?.primaryDisplay());
 }
 function drawLunarSky() {
-  if ($('lunarSkyDetails').open) drawSkyScene('moon');
+  if ($('lunarSkyDetails').open) drawSkyScene('moon',$('sky'),window.SkyPerspectives?.primaryDisplay());
 }
 function renderSolarPipeline() {
   updateUI();
@@ -1651,7 +1661,7 @@ function advanceLunarPlayback() {
   $('date').value = state.date;
 }
 
-function paintLabReferences(c, w, h, project, kind) {
+function paintLabReferences(c, w, h, project, kind, view=state.view) {
   if (
     document.body.dataset.page !== 'lab' &&
     !document.body.hasAttribute('data-entry-view')
@@ -1687,9 +1697,9 @@ function paintLabReferences(c, w, h, project, kind) {
     }
     return best ? { time: best.time } : null;
   };
-  window.SkyDiagramTools?.paint('lab-sky', {
+  window.SkyDiagramTools?.paint(c.canvas.id==='sky'?'lab-sky':'lab-sky-'+c.canvas.id, {
     type: 'sky',
-    canvas: $('sky'),
+    canvas: c.canvas,
     c,
     w,
     h,
@@ -1698,7 +1708,7 @@ function paintLabReferences(c, w, h, project, kind) {
     time: state.time,
     lat: state.lat,
     lon: state.lon,
-    view: state.view,
+    view,
     projectSky: project,
     position,
     pick,

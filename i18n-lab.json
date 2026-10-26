@@ -423,7 +423,7 @@
   "在地平线下方": "Below horizon",
   "在地平面上的投影": "Projection on horizon plane",
   "关闭参数菜单": "Close parameter menu",
-  "打开实验参数菜单": "Open experiment parameters",
+  "打开实验参数菜单": "Open experiment settings",
   "四图对照": "Four-diagram comparison",
   "固定当地真太阳时": "Fixed local apparent solar time",
   "固定观测时刻": "Fixed observation time",
@@ -927,5 +927,17 @@
   "北黄极上方俯视": "View from above the north ecliptic pole",
   "尺寸与距离为示意": "Sizes and distances are illustrative",
   "拖动月球": "Drag the Moon",
-  "连续调整日期与时刻": "Adjust date and time continuously"
+  "连续调整日期与时刻": "Adjust date and time continuously",
+  "通过联动图解理解太阳直射点、昼夜、升落方位、月相与行星伴月，配合日期和时间观察变化。": "Explore the subsolar point, day and night, rise and set bearings, Moon phases and planetary conjunctions through linked diagrams, dates and times.",
+  "在线观察太阳和月球的视运动，探索月相、日影、互动日晷与8字日行迹。支持电脑、平板和手机，提供学习指南与模型说明。": "Explore the apparent motion of the Sun and Moon, lunar phases, shadows, interactive sundials and the analemma. Includes learning guides and model explanations for desktop, tablet and phone.",
+  "互动操作地平式与赤道式日晷，改变观测时刻和晷针长度，观察投影并理解当地真太阳时与钟表时间。": "Explore horizontal and equatorial sundials. Change the observation time and gnomon length to understand shadows, local apparent solar time and clock time.",
+  "欢迎反馈天体视运动实验室的知识疑问、操作问题与教学建议。请提供模块、地点、日期、时刻、操作步骤和设备信息。": "Send questions, report problems or share teaching suggestions for Sky Motion Lab. Include the module, location, date, time, steps and device details.",
+  "升落方位图；拖动升落点改变日期和方位，点击跳转时刻，左右方向键调整日期，滚轮缩放，Home复位": "Rise and set bearings. Drag a rise or set point to change the date and bearing; click to jump to its time. Use Left and Right to change the date, the wheel to zoom, and Home to reset.",
+  "展开参数菜单，也可向右拖动": "Expand the settings menu, or drag right",
+  "展开菜单 · 向右拖动": "Expand menu · Drag right",
+  "点击或向左拖动收起菜单": "Click or drag left to collapse the menu",
+  "展开实验参数菜单": "Expand experiment settings",
+  "收起实验参数菜单": "Collapse experiment settings",
+  "展开设置菜单": "Expand settings",
+  "收起设置菜单": "Collapse settings"
 }

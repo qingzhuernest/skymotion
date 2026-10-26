@@ -432,7 +432,7 @@
           date,
           time: minute,
           instant: valid && !state.manual ? instantUTC(minute, date, state.lon).getTime() : null,
-          point: valid
+          point: (state.manual || valid)
             ? state.manual
               ? solar(state.lat, state.dec, minute)
               : skyRaw('Sun', minute, date, state.lat, state.lon)

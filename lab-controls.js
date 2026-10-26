@@ -101,6 +101,7 @@ $('height').onchange = (e) => {
 document.querySelectorAll('[data-view]').forEach(
   (b) =>
     (b.onclick = () => {
+      if(window.SkyPerspectives?.select(b.dataset.view)) return;
       state.view = b.dataset.view;
       document
         .querySelectorAll('[data-view]')
@@ -162,13 +163,13 @@ document.addEventListener('visibilitychange', () => {
 });
 let drag = null;
 $('sky').addEventListener('pointerdown', (e) => {
-  if (drag || e.button !== 0 || !['orbit', 'observer'].includes(state.view)) return;
+  if (drag || e.button !== 0 || !['orbit', 'observer'].includes((window.SkyPerspectives?.primaryView() || state.view))) return;
   drag = { x: e.clientX, y: e.clientY, id: e.pointerId };
   $('sky').setPointerCapture(e.pointerId);
 });
 $('sky').addEventListener('pointermove', (e) => {
   if (!drag || drag.id !== e.pointerId) return;
-  if (state.view === 'observer') {
+  if ((window.SkyPerspectives?.primaryView() || state.view) === 'observer') {
     state.observerAz =
       ((state.observerAz ?? 180) - (e.clientX - drag.x) * 0.35 + 360) % 360;
     drag = { x: e.clientX, y: e.clientY, id: e.pointerId };
@@ -191,7 +192,7 @@ window.addEventListener('blur', () => {
 $('sky').addEventListener(
   'wheel',
   (e) => {
-    if (['horizon', 'observer'].includes(state.view)) return;
+    if (['horizon', 'observer'].includes((window.SkyPerspectives?.primaryView() || state.view))) return;
     e.preventDefault();
     state.zoom = clamp(state.zoom - e.deltaY * 0.0008, 0.65, 1.35);
     schedule();
@@ -199,7 +200,7 @@ $('sky').addEventListener(
   { passive: false },
 );
 $('sky').onkeydown = (e) => {
-  if (state.view === 'observer' && ['ArrowLeft', 'ArrowRight', 'Home'].includes(e.key)) {
+  if ((window.SkyPerspectives?.primaryView() || state.view) === 'observer' && ['ArrowLeft', 'ArrowRight', 'Home'].includes(e.key)) {
     e.preventDefault();
     state.observerAz =
       e.key === 'Home'
@@ -208,7 +209,7 @@ $('sky').onkeydown = (e) => {
     schedule();
     return;
   }
-  if (state.view !== 'orbit') return;
+  if ((window.SkyPerspectives?.primaryView() || state.view) !== 'orbit') return;
   if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
   e.preventDefault();
   if (e.key === 'ArrowLeft') state.yaw -= 0.1;
