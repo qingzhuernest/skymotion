@@ -5,7 +5,7 @@
   // BEGIN GENERATED CATALOG
   // prettier-ignore
   const catalog = {
-    "resourceVersion": "20261026-settings120",
+    "resourceVersion": "20261027-settings121",
     "pages": [
       {
         "path": "index.html",

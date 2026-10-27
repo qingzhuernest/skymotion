@@ -8,11 +8,12 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{
   await page.goto(base+'docs.html?lang=zh');await page.waitForSelector('html[data-fonts-ready]');await page.locator('.preferences-launch').click();
-  const controls=await page.locator('.preferences-dialog select').count();assert(controls>8);assert.equal(await page.locator('.preferences-dialog [role=combobox]').count(),controls-1);
-  await page.locator('[data-category-link=layout]').click();await page.locator('#pref-density-trigger').click();
-  await page.locator('#pref-density-menu').waitFor({state:'visible'});await page.locator('#pref-density-menu [data-value=compact]').click();assert.equal(await page.evaluate(()=>SkyPreferences.get().density),'compact');
-  await page.locator('#pref-density-trigger').focus();await page.keyboard.press('Enter');await page.keyboard.press('Home');await page.keyboard.press('Enter');assert.equal(await page.evaluate(()=>SkyPreferences.get().density),'standard');
-  await page.locator('#pref-density-trigger').click();await page.keyboard.press('Escape');assert.equal(await page.locator('.preferences-dialog').isVisible(),true);assert.equal(await page.locator('#pref-density-trigger').getAttribute('aria-expanded'),'false');
+  assert.equal(await page.evaluate(()=>document.activeElement.id),'preferences-title');
+  await page.locator('.preferences-search').focus();await page.keyboard.press('Escape');await page.locator('.preferences-launch').click();assert.equal(await page.evaluate(()=>document.activeElement.id),'preferences-title');
+  const controls=await page.locator('.preferences-dialog select').count();assert(controls>8);assert.equal(await page.locator('.preferences-dialog .preference-choices').count(),controls);assert.equal(await page.locator('.preferences-dialog [role=combobox]').count(),0);
+  await page.locator('[data-category-link=layout]').click();await page.locator('[data-setting=density] [data-choice-value=compact]').click();assert.equal(await page.evaluate(()=>SkyPreferences.get().density),'compact');
+  await page.locator('[data-setting=density] [data-choice-value=compact]').focus();await page.keyboard.press('Home');assert.equal(await page.evaluate(()=>SkyPreferences.get().density),'standard');assert.equal(await page.locator('[data-setting=density] [aria-pressed=true]').count(),1);
+  await page.locator('[data-category-link=space]').click();await page.locator('[data-setting=quality] [data-choice-value=high]').click();assert.equal(await page.evaluate(()=>SkyPreferences.get().quality),'high');assert.equal(await page.locator('[data-setting=quality] [aria-pressed=true]').count(),1);
   await page.locator('[data-category-link=reading]').click();
   const font=()=>page.locator('.document-links a').first().evaluate(e=>parseFloat(getComputedStyle(e).fontSize));const originalFont=await font();
   const slider=page.locator('#pref-uiScale');await slider.focus();await page.keyboard.press('Home');assert.equal(await page.evaluate(()=>SkyPreferences.get().uiScale),.8);
@@ -24,11 +25,10 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   const reading=page.locator('#pref-readingScale'),touch=await reading.boundingBox();await page.touchscreen.tap(touch.x+touch.width*.8,touch.y+touch.height/2);assert(await page.evaluate(()=>SkyPreferences.get().readingScale>1.5));
   await reading.focus();await page.keyboard.press('End');assert.equal(await page.evaluate(()=>SkyPreferences.get().readingScale),2);assert.equal(await page.locator('.document-content p').first().evaluate(e=>parseFloat(getComputedStyle(e).fontSize)),32);
   for(const width of [960,390,320]){await page.setViewportSize({width,height:1000});assert(await page.locator('.preferences-dialog').evaluate(e=>e.scrollWidth<=e.clientWidth+1));}
-  await page.setViewportSize({width:960,height:1000});await page.locator('[data-category-link=appearance]').click();await page.locator('#pref-theme-trigger').click();await page.locator('#pref-theme-menu [data-value=dark]').click();assert.equal(await page.evaluate(()=>document.documentElement.dataset.theme),'dark');
-  await page.locator('#pref-theme-trigger').click();const bounds=await page.locator('#pref-theme-menu').boundingBox();assert(bounds.x>=0&&bounds.y>=0&&bounds.x+bounds.width<=960&&bounds.y+bounds.height<=1000);
-  await page.screenshot({path:'/tmp/settings119-expressive-dark.png'});await page.keyboard.press('Escape');
-  await page.locator('[data-category-link=reading]').click();await page.locator('[data-language-choice=en]').click();await page.waitForFunction(()=>document.documentElement.lang==='en');assert.equal(await page.locator('[data-language-choice=en]').getAttribute('aria-pressed'),'true');
+  await page.setViewportSize({width:960,height:1000});await page.locator('[data-category-link=appearance]').click();await page.locator('[data-setting=theme] [data-choice-value=dark]').click();assert.equal(await page.evaluate(()=>document.documentElement.dataset.theme),'dark');
+  await page.screenshot({path:'/tmp/settings121-connected-dark.png'});
+  await page.locator('[data-category-link=reading]').click();await page.locator('[data-setting=language] [data-choice-value=en]').click();await page.waitForFunction(()=>document.documentElement.lang==='en');assert.equal(await page.locator('[data-setting=language] [data-choice-value=en]').getAttribute('aria-pressed'),'true');
   await page.keyboard.press('Escape');await page.locator('.preferences-dialog').waitFor({state:'hidden'});await page.reload();await page.waitForSelector('html[data-fonts-ready]');assert.equal(await page.evaluate(()=>SkyPreferences.get().uiScale),1.5);assert.equal(await page.evaluate(()=>SkyPreferences.get().readingScale),2);
-  assert.deepEqual(errors,[]);console.log('PASS shared Expressive menus, keyboard/Escape behavior, real slider drag/touch, actual 150% interface and 200% document text, responsive layout and persistence');
+  assert.deepEqual(errors,[]);console.log('PASS connected choices for every categorical setting, no search autofocus on opening or reopening, keyboard selection, real slider drag/touch, actual 150% interface and 200% document text, responsive layout and persistence');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

@@ -28,83 +28,81 @@
     if(root.matches?.('.md-connected-choice'))sync(root);
     root.querySelectorAll?.('.md-connected-choice').forEach(sync);
   }
-  const selects = new WeakMap();
-  let openSelect = null, selectSequence = 0;
-  function dismissSelect() {
-    if (!openSelect) return false;
-    const { menu, trigger } = openSelect;
-    if (menu.hidePopover && menu.matches(':popover-open')) menu.hidePopover();
-    menu.hidden = true;
-    trigger.setAttribute('aria-expanded', 'false');
-    trigger.removeAttribute('aria-activedescendant');
-    openSelect = null;
-    return true;
+  const choices = new WeakMap();
+  const pending = new Set();let choiceTask=false,choiceSequence=0;
+  function queueChoice(select) {
+    if(!select?.matches?.('select'))return;
+    pending.add(select);if(choiceTask)return;choiceTask=true;
+    queueMicrotask(()=>{choiceTask=false;const batch=[...pending];pending.clear();for(const item of batch)enhanceChoices(item);});
   }
-  function syncSelect(select) { selects.get(select)?.sync(); }
-  function enhanceSelect(select) {
-    if (!select?.matches('select') || selects.has(select)) return;
-    const wrapper = document.createElement('div');wrapper.className = 'md-select';
-    select.before(wrapper);wrapper.append(select);
-    select.classList.add('md-select-native');select.tabIndex = -1;select.setAttribute('aria-hidden', 'true');
-    const id = select.id || 'md-select-' + (++selectSequence);
-    const trigger = document.createElement('button');trigger.type = 'button';trigger.id = id + '-trigger';trigger.className = 'md-select-trigger';
-    trigger.setAttribute('role', 'combobox');trigger.setAttribute('aria-haspopup', 'listbox');trigger.setAttribute('aria-expanded', 'false');
-    const label = wrapper.parentElement.querySelector('label');
-    if (label) {label.id ||= id + '-label';label.htmlFor = trigger.id;trigger.setAttribute('aria-labelledby', label.id + ' ' + id + '-value');}
-    const value = document.createElement('span');value.id = id + '-value';
-    trigger.append(value);trigger.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>');
-    const menu = document.createElement('div');menu.id = id + '-menu';menu.className = 'md-select-menu';menu.hidden = true;menu.setAttribute('role', 'listbox');
-    menu.setAttribute('aria-labelledby', label?.id || trigger.id);menu.setAttribute('popover', 'manual');
-    trigger.setAttribute('aria-controls', menu.id);wrapper.append(trigger, menu);
-    const items = [...select.options].map((option, index) => {
-      const item = document.createElement('button');item.type = 'button';item.id = id + '-option-' + index;item.setAttribute('role', 'option');item.tabIndex = -1;item.textContent = option.textContent;item.disabled = option.disabled;item.dataset.value = option.value;
-      item.onclick = () => {if(item.disabled)return;dismissSelect();trigger.focus();select.value = option.value;select.dispatchEvent(new Event('change', { bubbles: true }));};
-      menu.append(item);return item;
-    });
-    let index = 0;
-    function mark() {items.forEach((item,i)=>item.classList.toggle('md-menu-active', i === index));trigger.setAttribute('aria-activedescendant',items[index]?.id || '');items[index]?.scrollIntoView({block:'nearest'});}
-    function sync() {value.textContent = select.selectedOptions[0]?.textContent || '';trigger.disabled = select.disabled;items.forEach((item,i)=>{item.setAttribute('aria-selected',String(select.options[i].selected));item.disabled=select.options[i].disabled;});}
-    function position() {
-      const bounds = trigger.getBoundingClientRect(), gap = 6, margin = 12;
-      const width = Math.min(Math.max(bounds.width, 200), innerWidth - margin * 2);
-      const roomBelow = innerHeight - bounds.bottom - margin - gap;
-      const roomAbove = bounds.top - margin - gap;
-      const above = roomBelow < Math.min(menu.scrollHeight, 240) && roomAbove > roomBelow;
-      const height = Math.min(320, Math.max(100, above ? roomAbove : roomBelow));
-      menu.style.width = width + 'px';menu.style.maxHeight = height + 'px';
-      menu.style.left = Math.max(margin, Math.min(bounds.left, innerWidth - width - margin)) + 'px';
-      menu.style.top = (above ? Math.max(margin, bounds.top - Math.min(menu.scrollHeight, height) - gap) : bounds.bottom + gap) + 'px';
+  function syncChoices(select) { choices.get(select)?.sync(); }
+  function enhanceChoices(select) {
+    if(!select?.matches?.('select'))return;
+    if(choices.has(select)){syncChoices(select);return;}
+    const key=select.id||'md-choice-'+(++choiceSequence),field=document.createElement('span');field.className='md-choice-field';field.dataset.choiceFor=key;
+    const details=document.createElement('details'),summary=document.createElement('summary');details.className='md-choice-disclosure';details.append(summary);
+    const search=document.createElement('input');search.type='search';search.className='md-choice-search';
+    const group=document.createElement('div');group.className='preference-choices md-choice-buttons md-connected-choice';group.setAttribute('role','group');
+    select.classList.add('md-choice-native');select.tabIndex=-1;select.setAttribute('aria-hidden','true');
+    let signature='',buttons=[],long=false;
+    function caption(){
+      const label=select.labels?.[0]||select.parentElement.querySelector('label');
+      return select.getAttribute('aria-label')||(label?[...label.childNodes].filter(n=>n!==select&&n!==field&&!n.contains?.(select)&&!n.contains?.(field)).map(n=>n.textContent).join(' ').trim():'')||(document.documentElement.lang==='en'?'Choose an option':'选择选项');
     }
-    function open() {dismissSelect();sync();menu.hidden = false;if (menu.showPopover) menu.showPopover();openSelect={menu,trigger,wrapper,position};trigger.setAttribute('aria-expanded','true');index=Math.max(0,select.selectedIndex);position();mark();}
-    trigger.onclick = () => openSelect?.trigger === trigger ? dismissSelect() : open();
-    trigger.onkeydown = event => {
-      const keys=['ArrowDown','ArrowUp','Home','End','Enter',' ','Escape','Tab'];
-      if(!keys.includes(event.key))return;
-      if(event.key==='Tab'){dismissSelect();return;}
-      event.preventDefault();event.stopPropagation();
-      if(event.key==='Escape'){dismissSelect();return;}
-      if(openSelect?.trigger!==trigger){open();return;}
-      if(event.key==='Enter'||event.key===' '){items[index]?.click();return;}
-      const direction=event.key==='ArrowUp'?-1:1;
-      index=event.key==='Home'?0:event.key==='End'?items.length-1:(index+direction+items.length)%items.length;
-      for(let count=0;items[index]?.disabled&&count<items.length;count++)index=(index+direction+items.length)%items.length;
-      mark();
-    };
-    select.addEventListener('change',sync);select.closest('dialog')?.addEventListener('close',dismissSelect);
-    selects.set(select,{sync});sync();
+    function filter(){const query=search.value.trim().toLocaleLowerCase();for(const button of buttons)button.hidden=button.skyOption.hidden||Boolean(query&&!button.textContent.toLocaleLowerCase().includes(query));updateChoices(group);}
+    search.addEventListener('input',filter);
+    summary.addEventListener('click',event=>{if(select.disabled)event.preventDefault();});
+    details.addEventListener('keydown',event=>{if(event.key==='Escape'&&details.open){event.preventDefault();event.stopPropagation();details.open=false;summary.focus();}});
+    function sync(){
+      if(!select.isConnected){field.remove();return;}
+      if(select.nextElementSibling!==field)select.after(field);
+      field.hidden=select.hidden||select.style.display==='none';
+      const options=[...select.options];field.hidden=field.hidden||options.length===0;const next=JSON.stringify(options.map(o=>[o.value,o.textContent,o.disabled,o.hidden]));
+      if(signature!==next){
+        signature=next;const focused=document.activeElement?.closest('.md-choice-field')===field?document.activeElement.dataset.choiceValue:null;
+        long=options.filter(o=>!o.hidden).length>4;field.classList.toggle('md-choice-many',long);group.dataset.choiceCount=options.length;
+        group.replaceChildren();buttons=options.map((option,index)=>{
+          const button=document.createElement('button');button.type='button';button.id=key+'-choice-'+index;button.dataset.choiceValue=option.value;button.textContent=option.textContent;button.skyOption=option;
+          button.onclick=()=>{if(button.disabled)return;select.value=option.value;select.dispatchEvent(new Event('input',{bubbles:true}));select.dispatchEvent(new Event('change',{bubbles:true}));if(long){details.open=false;summary.focus({preventScroll:true});}};
+          button.onkeydown=event=>{
+            if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+            event.preventDefault();event.stopPropagation();const visible=buttons.filter(b=>!b.hidden&&!b.disabled),i=visible.indexOf(button);
+            const target=event.key==='Home'?visible[0]:event.key==='End'?visible.at(-1):visible[(i+(event.key==='ArrowLeft'?-1:1)+visible.length)%visible.length];
+            if(target){target.focus();target.click();}
+          };group.append(button);return button;
+        });
+        if(long){details.append(search,group);field.replaceChildren(details);}else field.replaceChildren(group);
+        if(focused!==null)buttons.find(b=>b.dataset.choiceValue===focused)?.focus({preventScroll:true});
+      }
+      const label=caption();group.setAttribute('aria-label',label);summary.setAttribute('aria-label',label+': '+(select.selectedOptions[0]?.textContent||''));
+      const english=document.documentElement.lang==='en';search.placeholder=english?'Search options':'搜索选项';search.setAttribute('aria-label',search.placeholder);
+      const text=select.selectedOptions[0]?.textContent||label;if(summary.textContent!==text)summary.textContent=text;
+      summary.setAttribute('aria-disabled',String(select.disabled));search.disabled=select.disabled;
+      buttons.forEach((button,index)=>{const option=options[index],selected=option.selected;button.setAttribute('aria-pressed',String(selected));button.tabIndex=selected||long?0:-1;button.disabled=select.disabled||option.disabled;});filter();
+    }
+    select.addEventListener('change',sync);select.addEventListener('focus',()=>{if(long)summary.focus({preventScroll:true});else buttons.find(b=>b.getAttribute('aria-pressed')==='true')?.focus({preventScroll:true});});
+    choices.set(select,{sync});select.after(field);sync();
   }
-  document.addEventListener('pointerdown',event=>{if(openSelect&&!openSelect.wrapper.contains(event.target))dismissSelect();},true);
-  document.addEventListener('scroll',()=>openSelect?.position(),true);
-  addEventListener('resize',()=>openSelect?.position());
-  window.SkyMaterial = Object.freeze({ updateRange, updateRanges, updateChoices, enhanceSelect, syncSelect, dismissSelect });
+  function enhanceAll(root=document){if(root.matches?.('select'))queueChoice(root);root.querySelectorAll?.('select').forEach(queueChoice);}
+  // Keep native property semantics while synchronizing programmatic selection changes.
+  for(const [prototype,key] of [[HTMLSelectElement.prototype,'value'],[HTMLSelectElement.prototype,'selectedIndex'],[HTMLOptionElement.prototype,'selected']]){
+    const descriptor=Object.getOwnPropertyDescriptor(prototype,key);
+    if(descriptor?.set)Object.defineProperty(prototype,key,{...descriptor,set(value){const before=descriptor.get.call(this);descriptor.set.call(this,value);if(before!==descriptor.get.call(this))queueChoice(this instanceof HTMLSelectElement?this:this.closest('select'));}});
+  }
+  document.addEventListener('skymotion:language',()=>enhanceAll());
+  window.SkyMaterial=Object.freeze({updateRange,updateRanges,updateChoices,enhanceChoices,syncChoices});
   // Native pointer and keyboard input keep their own behavior.
   document.addEventListener('input', (event) => updateRange(event.target), true);
   document.addEventListener('change', (event) => updateRange(event.target), true);
   function install() {
     updateRanges();
     updateChoices();
+    enhanceAll();
     new MutationObserver((records) => {
       for (const record of records) {
+        if(record.target.nodeType===1&&record.target.closest('.md-choice-field'))continue;
+        for(const removed of record.removedNodes){if(removed.nodeType===1){if(removed.matches('select'))queueChoice(removed);removed.querySelectorAll('select').forEach(queueChoice);}}
+        const select=record.target.nodeType===1?record.target.closest('select'):record.target.parentElement?.closest('select');if(select)queueChoice(select);
         if (record.type === 'attributes') { updateRange(record.target);const group=record.target.closest('.md-connected-choice');if(group)updateChoices(group); }
         else
           for (const node of record.addedNodes) {
@@ -113,6 +111,7 @@
               node.namespaceURI !== 'http://www.w3.org/1999/xhtml'
             )
               continue;
+            enhanceAll(node);
             updateRange(node);
             updateRanges(node);
             updateChoices(node);
@@ -122,7 +121,8 @@
       subtree: true,
       childList: true,
       attributes: true,
-      attributeFilter: ['min', 'max', 'value', 'type', 'hidden', 'class'],
+      attributeFilter: ['min', 'max', 'value', 'type', 'hidden', 'class', 'disabled', 'label', 'selected', 'aria-label'],
+      characterData:true,
     });
   }
   if (document.readyState === 'loading')

@@ -210,16 +210,7 @@
         notify(storageOK?t('已保存','Saved'):t('当前浏览器无法保存设置，仅本页有效','Storage is unavailable; changes apply to this page only'));
       }catch{notify(t('无法应用。夜间开始和结束需不同；颜色需有效。','Could not apply. Night times must differ and colors must be valid.'));refresh();}
     });
-    if(name==='language') {
-      control.classList.add('md-select-native');control.tabIndex=-1;control.setAttribute('aria-hidden','true');
-      label.id=id+'-label';label.removeAttribute('for');
-      const choices=node('div',{class:'preference-language md-connected-choice',role:'group','aria-labelledby':label.id});
-      for(const [value,text] of [['zh','中文'],['en','English']]) {
-        const button=node('button',{type:'button','data-language-choice':value,'aria-pressed':String(language()===value)},text);
-        button.onclick=()=>{control.value=value;control.dispatchEvent(new Event('change',{bubbles:true}));};choices.append(button);
-      }
-      row.append(choices);window.SkyMaterial?.updateChoices(choices);
-    } else if(control.tagName==='SELECT')window.SkyMaterial?.enhanceSelect(control);
+    if(control.tagName==='SELECT')window.SkyMaterial?.enhanceChoices(control);
     return row;
   }
   function refresh() {
@@ -228,8 +219,7 @@
       const input=dialog.querySelector('#pref-'+name);if(!input)continue;
       const value=name==='language'?language():state[name];
       if(input.type==='checkbox')input.checked=value;else input.value=value;
-      if(input.tagName==='SELECT')window.SkyMaterial?.syncSelect(input);
-      if(name==='language')dialog.querySelectorAll('[data-language-choice]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.languageChoice===value)));
+      if(input.tagName==='SELECT')window.SkyMaterial?.syncChoices(input);
       if(ranges[name]) {
         const text=name==='leading'?Number(value).toFixed(2)+t(' 倍','×'):Math.round(Number(value)*(name==='width'?1:100))+'%';
         dialog.querySelector('#pref-'+name+'-value').textContent=text;
@@ -263,7 +253,7 @@
   }
   function build() {
     dialog=node('dialog',{class:'preferences-dialog','data-i18n-skip':'','aria-labelledby':'preferences-title'});
-    const header=node('header',{class:'preferences-heading'});header.append(node('h2',{id:'preferences-title'},t('设置','Settings')));
+    const header=node('header',{class:'preferences-heading'});header.append(node('h2',{id:'preferences-title',tabindex:'-1',autofocus:''},t('设置','Settings')));
     const close=node('button',{type:'button',class:'md-outlined-action','aria-label':t('关闭设置','Close settings')},t('关闭','Close'));
     close.onclick=()=>dialog.close();header.append(close);dialog.append(header);
     const search=node('input',{type:'search',class:'preferences-search',placeholder:t('搜索设置','Search settings'),'aria-label':t('搜索设置','Search settings')});search.oninput=()=>filter(search.value);dialog.append(search);
@@ -299,7 +289,7 @@
     layout.append(nav,content);dialog.append(layout);
     confirmation=node('div',{class:'preferences-confirm',hidden:'',role:'group','aria-label':t('确认设置操作','Confirm settings change')});confirmation.append(node('p'),node('button',{type:'button',class:'md-outlined-action','data-cancel':''},t('取消','Cancel')),node('button',{type:'button',class:'md-outlined-action','data-confirm':''},t('确认','Confirm')));dialog.append(confirmation);
     message=node('p',{class:'preferences-message',role:'status','aria-live':'polite'});dialog.append(message);
-    dialog.addEventListener('close',()=>{window.SkyMaterial?.dismissSelect();confirmation.hidden=true;pendingImport=null;pendingReset=null;launcher?.focus({preventScroll:true});});
+    dialog.addEventListener('close',()=>{confirmation.hidden=true;pendingImport=null;pendingReset=null;launcher?.focus({preventScroll:true});});
     dialog.addEventListener('cancel',event=>{if(!confirmation.hidden){event.preventDefault();confirmation.hidden=true;pendingImport=null;pendingReset=null;}});
     document.body.append(dialog);refresh();filter();
   }
@@ -312,7 +302,7 @@
     if(!host){host=bar.querySelector('.language-actions');if(!host){host=node('div',{class:'language-actions'});bar.append(host);}}
     if(!launcher){
       launcher=node('button',{type:'button',class:'preferences-launch','data-i18n-skip':'','aria-haspopup':'dialog'},t('设置','Settings'));
-      launcher.onclick=()=>{if(!dialog)build();dialog.showModal();dialog.querySelector('.preferences-search').focus();};
+      launcher.onclick=()=>{if(!dialog)build();dialog.showModal();dialog.querySelector('#preferences-title').focus({preventScroll:true});};
     }
     launcher.classList.toggle('md-outlined-action',host!==nav);
     launcher.textContent=t('设置','Settings');launcher.setAttribute('aria-label',t('设置','Settings'));
@@ -322,14 +312,13 @@
   document.addEventListener('skymotion:header-ready',mount);
   document.addEventListener('skymotion:language',()=>{
     if(launcher){launcher.setAttribute('aria-label',t('设置','Settings'));launcher.title=t('设置','Settings');}
-    if(dialog){window.SkyMaterial?.dismissSelect();const open=dialog.open,focusId=document.activeElement?.id;dialog.remove();dialog=null;if(open){build();dialog.showModal();(focusId&&dialog.querySelector('#'+CSS.escape(focusId))||dialog.querySelector('.preferences-search')).focus();}}
+    if(dialog){const open=dialog.open,focusId=document.activeElement?.id;dialog.remove();dialog=null;if(open){build();dialog.showModal();(focusId&&dialog.querySelector('#'+CSS.escape(focusId))||dialog.querySelector('#preferences-title')).focus({preventScroll:true});}}
     mount();
   });
   // Registered before experiment shortcuts: a modal owns Escape even in a focused pane.
   addEventListener('keydown',event=>{
     if(!dialog?.open||event.key!=='Escape'||event.isComposing)return;
     event.preventDefault();event.stopImmediatePropagation();
-    if(window.SkyMaterial?.dismissSelect())return;
     if(!confirmation.hidden){confirmation.hidden=true;pendingImport=null;pendingReset=null;confirmTrigger?.focus();}
     else dialog.close();
   },true);
