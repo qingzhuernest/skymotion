@@ -2216,9 +2216,10 @@ html:not(:lang(en)) .entrance-sentence {
   letter-spacing: 0.025em;
 }
 body .document-entrance .entrance-continue {
-  position: static;
-  align-self: flex-start;
-  margin-top: 28px;
+  position: fixed;
+  right: max(24px, env(safe-area-inset-right));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  margin: 0;
   min-height: var(--md-sys-size-target,44px);
   padding: 10px 20px;
   border: 1px solid var(--design-line);
@@ -2255,7 +2256,6 @@ body .document-entrance .entrance-continue {
     font-size: calc(19px * var(--ui-font-scale, 1));
     margin-top: 12px;
   }
-  body .document-entrance .entrance-continue {margin-top:16px}
 }
 @media (max-height: 330px) {
   .entrance-sentence {

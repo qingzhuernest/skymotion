@@ -46,7 +46,7 @@ try {
  await popup.addInitScript(()=>{Object.defineProperty(history,'length',{configurable:true,get:()=>4});sessionStorage.setItem('skymotion-reading-seen','["guide","project-guide"]');sessionStorage.setItem('skymotion-ad-astra','1');window.name=''});
  await popup.goto(base+'guide.en.html?lang=en',{referer:base+'lab.en.html'});await ready(popup);assert.equal(await popup.evaluate(()=>document.documentElement.lang),'en');await leave(popup);await popup.reload();assert.equal(await popup.locator('.document-entrance').count(),0);await popup.close();
  const clean=await context.newPage();
- await clean.route('**/guide.en',route=>route.fulfill({path:require('node:path').resolve('guide.en.html'),contentType:'text/html'}));
+ await clean.route('**/guide.en',route=>route.fulfill({path:require('node:path').resolve('site/guide.en.html'),contentType:'text/html'}));
  await clean.goto(base+'guide.en',{referer:base+'lab.en.html'});await ready(clean);assert.match(await clean.locator('.entrance-dialogue').innerText(),/Why do we study geography/);await leave(clean);await clean.close();
  const cover=await context.newPage();await cover.addInitScript(()=>{Object.defineProperty(history,'length',{configurable:true,get:()=>4});sessionStorage.setItem('skymotion-ad-astra','1');window.name=''});
  await cover.goto(base+'index.en.html?lang=en',{referer:base+'lab.en.html'});assert.equal(await cover.evaluate(()=>document.documentElement.classList.contains('welcome-opening')),true);await cover.close();
