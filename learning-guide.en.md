@@ -35,6 +35,8 @@ This guide supports classroom teaching and independent inquiry. Start with a tes
 
 - [First use: read interface and control instructions](project-guide.en.html#controls)
 
+[Open the corresponding experiment →](lab.en.html#skyPanel)
+
 ## Four conventions to state before an experiment
 
 - Location is a physical condition; rotating the camera changes only the view. Move the observer using coordinates, location sliders or the explicit observer-move tool.
@@ -42,7 +44,7 @@ This guide supports classroom teaching and independent inquiry. Start with a tes
 - The current clock, annual analemma sample clock, 3D UTC time and independent Earthrise flight controls are not one interchangeable clock.
 - Real-date observation, ideal solar-declination experiments and the circular Earthrise lesson have different assumptions; name the mode before comparing results.
 
-- [Open playback and time controls →](lab.en.html?control=workbenchMore#skyPanel)
+[Set observation conditions in the Lab →](lab.en.html?control=conditionsMenu#skyPanel)
 
 ## Planning a lesson
 
@@ -73,6 +75,8 @@ Customization should serve a question. Decide which conditions to compare before
 4. To keep a full experiment, include conditions and objects in the saved-layout form, and retain a written record describing local-device storage.
 
 - [Read complete customization instructions](project-guide.en.html#customization)
+
+[Open plot object editing →](lab.en.html?edit=1&sidebar=references#skyPanel)
 
 ## Investigation 1: How does the Sun move through a day?
 
@@ -105,7 +109,7 @@ Give one piece of evidence from each view and explain why the dashed path below 
 
 - [Practice this chapter in the laboratory](lab.en.html)
 
-- [Open the sky and shadow experiment →](lab.en.html#skyPanel)
+[Open the corresponding experiment →](lab.en.html#skyPanel)
 
 ## Investigation 2: Seasonal changes at one place
 
@@ -138,6 +142,8 @@ Connect the subsolar latitude to the curve peak and name the conditions that mus
 
 - [Practice this chapter in the laboratory](diagrams.en.html#chartPanel)
 
+[Set observation conditions in the Lab →](lab.en.html?control=conditionsMenu#skyPanel)
+
 ## Investigation 3: Latitude and the day–night pattern
 
 ### Inquiry question
@@ -168,6 +174,8 @@ Altitude depends on latitude, declination and hour angle. Latitude changes the l
 Describe ordinary crossings, continuous daylight, continuous darkness and tangency, using the curve rather than one image as evidence.
 
 - [Practice this chapter in the laboratory](diagrams.en.html#contextPanel)
+
+[Set observation conditions in the Lab →](lab.en.html?control=conditionsMenu#skyPanel)
 
 ## Investigation 4: The same clock reading versus the same instant
 
@@ -200,7 +208,7 @@ Make a two-column record explicitly labeled fixed UTC and fixed apparent solar t
 
 - [Practice this chapter in the laboratory](diagrams.en.html)
 
-- [Open the combined comparison view →](lab.en.html#solarCompare)
+[Open combined comparisons →](lab.en.html#solarCompare)
 
 ## Investigation 5: Rod height, shadow length and shadow-tip paths
 
@@ -233,6 +241,8 @@ State what rod height, camera zoom and display magnification each change, and ex
 
 - [Practice this chapter in the laboratory](lab.en.html)
 
+[Open the corresponding experiment →](lab.en.html#skyPanel)
+
 ## Investigation 6: Why can a sundial tell time?
 
 ### Inquiry question
@@ -264,7 +274,7 @@ Give at least two reasons why a physical sundial may disagree with a phone clock
 
 - [Practice this chapter in the laboratory](sundial.en.html)
 
-- [Open the sundial experiment →](sundial.en.html)
+[Open the sundial experiment →](sundial.en.html)
 
 ## Investigation 7: Moon phases and lunar rising and setting
 
@@ -297,6 +307,8 @@ Use separate records to explain monthly phase variation and daily altitude chang
 
 - [Practice this chapter in the laboratory](lab.en.html)
 
+[Open Moon phases and lunar observations →](lab.en.html?body=moon#contextPanel)
+
 ## Investigation 8: Planet–Moon comparisons and angular separation
 
 ### Inquiry question
@@ -327,6 +339,8 @@ The local-sky display projects viewing directions, while the 3D Solar System is 
 Explain why a search result does not guarantee naked-eye visibility and list additional observing conditions to check.
 
 - [Practice this chapter in the laboratory](diagrams.en.html#companionModule)
+
+[Open Moon and planet observations →](lab.en.html?body=moon#companionModule)
 
 ## Investigation 9: Why can the analemma look like a figure eight?
 
@@ -359,7 +373,7 @@ Record sampling basis, UTC offset, sample clock, location and model mode; omitti
 
 - [Practice this chapter in the laboratory](analemma.en.html)
 
-- [Open the analemma experiment →](analemma.en.html)
+[Open the analemma experiment →](analemma.en.html)
 
 ## Investigation 10: Why does Earth rise and set above the Moon?
 
@@ -392,7 +406,7 @@ Sketch the observer–limb–Earth sight line and distinguish turning the camera
 
 - [Practice this chapter in the laboratory](lunar/index.en.html)
 
-- [Open the Earthrise experiment →](lunar/index.en.html)
+[Open Earthrise →](lunar/index.en.html)
 
 ## Investigation 11: Explain apparent motion using a spatial model
 
@@ -425,7 +439,7 @@ Identify one deliberately exaggerated display quantity and one quantity computed
 
 - [Practice this chapter in the laboratory](space/index.en.html)
 
-- [Open 3D Sky →](space/index.en.html)
+[Open 3D Sky →](space/index.en.html)
 
 ## Reusable experiment record
 

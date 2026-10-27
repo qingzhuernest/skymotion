@@ -40,6 +40,8 @@
 
 preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、export 与 parseImport。版本 2 记录使用 skymotion-preferences，兼容版本 1；语言兼容原存储键。主题颜色由 theme-colors.js 中的 Material Color Utilities 0.3.0 生成，并映射到现有 design 颜色角色。第三方代码为 Apache-2.0，许可见 theme-colors.LICENSE；科学状态不属于偏好记录。
 
+[打开对应实验台 →](lab.html#skyPanel)
+
 ## 从输入到图形的数据流
 
 1. 原生输入或滑条先验证数值、提交到state，停止不适用的播放；自定义对象则写入对应source与body的对象存储。
@@ -56,6 +58,8 @@ preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、
 | 持久化 | 版本化序列化、验证与失败回退 | 把无效缓存直接赋给全部state |
 
 prepareObservationState负责每帧呈现前的模型联动和派生值更新。workbench-menu.js只组织与显示菜单；lab-controls.js集中处理输入和表单展示。对象字段的整理与校验由diagram-tool-definitions.js提供，编辑器调用该接口，避免保存与显示各自解释对象。
+
+[打开对应实验台 →](lab.html#skyPanel)
 
 ## 共享科学状态的完整变量表
 
@@ -122,6 +126,8 @@ initialSun是太阳默认状态；initialMoon继承它并覆盖月球字段。mo
 | planet | 伴月对照的行星标识 | Mercury、Venus、Mars、Jupiter、Saturn | Moon: "Venus" |
 | companionSearchResult | 伴月搜索结果及其条件范围 | 对象或null；含日期、地点、时刻、角距离 | Moon: null |
 
+[在实验台设置观测条件 →](lab.html?control=conditionsMenu#skyPanel)
+
 ## 单位、角度与空值约定
 
 | 名称 | 单位/方向 | 使用位置 |
@@ -139,6 +145,8 @@ initialSun是太阳默认状态；initialMoon继承它并覆盖月球字段。mo
 
 不要把屏幕像素、归一化地面坐标、Three.js显示单位与物理长度混用。局部函数中的w、h通常是CSS像素尺寸，dpr是像素密度；物理向量必须另存，不能被压缩显示坐标覆盖。
 
+[在实验台设置观测条件 →](lab.html?control=conditionsMenu#skyPanel)
+
 ## 时间管线与日期换算
 
 公共state.time采用当地真太阳时。sunHourAngle从太阳赤经与恒星时求时角；solarNoonUTC从经度近似出发迭代求太阳时角为0的UTC；instantUTC再迭代匹配目标时角。skyRaw把这个UTC交给Astronomy Engine求站心赤道坐标与无折射地平坐标。
@@ -155,6 +163,8 @@ position = skyRaw(body, time_minutes, date_YYYY_MM_DD, latitude, longitude)
 
 setDate验证公历日期和1900—2100范围，应用真实日期时关闭manual并重算太阳赤纬。日期字符串不能当作设备时区中的随意午夜；源码以明确的UTC构造保持一致。
 
+[打开时间控制 →](lab.html?control=workbenchMore#skyPanel)
+
 ## 当地坐标、太阳公式与地轴关系
 
 solar使用纬度φ、赤纬δ和时角H。输入角度先乘rad；输出方向向量为东x、上y、北z，向量在理想模型中为单位长度。
@@ -170,6 +180,8 @@ az = (atan2(x, z) * deg + 360) % 360
 skyRaw返回相同当地接口，但数值来自真实日期站心星历。不要把理想公式与真实星历输出逐项强制设成一样；它们用于不同模式。coverage.js中的地轴图使用地表法向、当地北向和东向基向量，将当地太阳方向映射到地球示意。
 
 horizontal方位在天顶、天底和极点附近需要额外谨慎；几何地平线不包含地形或折射。逆三角函数前必须限制舍入误差范围，缺失事件使用null，不用NaN或伪造0°。
+
+[在实验台设置观测条件 →](lab.html?control=conditionsMenu#skyPanel)
 
 ## 升落、昼长与反求日期
 
@@ -195,6 +207,8 @@ set  = 720 + 4*H0_degrees
 
 拖点修改真实日期而非直接写入az。不可达目标取有实际事件的最近候选并提示。指针移动合并到动画帧，候选事件按手势复用，不能每个像素都重建全年星历。
 
+[打开升落方位图 →](lab.html#riseSetPanel)
+
 ## 日影、平面相交与日晷
 
 对水平地面和竖杆，太阳方向的竖直分量决定影长；太阳低于地平线时不绘制直射阳光的地面影子。接近地平线时影长发散，需要裁剪显示而不是改物理结果。
@@ -206,6 +220,8 @@ shadow_length = rod_height / tan(altitude)
 ```
 
 水平和赤道日晷通过晷针、晷面与光线的几何求交。H表示竖直高度时不能直接拿倾斜杆总长代入水平影长公式。shadowZoom、相机zoom和真实height必须分开。
+
+[打开日晷实验 →](sundial.html)
 
 ## 日行迹数据结构与理想模型
 
@@ -222,6 +238,8 @@ analemmaSample为一个日期返回UTC、时角hour、赤纬dec、均时差eot�
 | analemmaPlot / analemmaMarker | 当前投影命中信息与平滑日期点；不是新的物理轨道 |
 
 理想成因模型用牛顿迭代解开普勒方程E−e·sinE=M，再由倾角求赤经赤纬。apparent采样用迭代匹配真太阳钟。真实模式直接调用Astronomy Engine；两套模式必须有明确UI标记。月份标签只改显示密度，不删去科学采样点。
+
+[打开日行迹实验 →](analemma.html)
 
 ## 月球星历、月相与独立地升模型
 
@@ -242,6 +260,8 @@ analemmaSample为一个日期返回UTC、时角hour、赤纬dec、均时差eot�
 | q.period | 2π√((R+h)³/MU)给出的物理圆轨道周期 | 秒 |
 
 lunar/model.js与实验台星历state分离。父页通过同源消息管理可见/活动状态和语言；退出该模块要暂停绘制或播放，晚到的加载结果不能抢回用户已切换的视图。snapshot/restore验证允许范围并恢复为暂停。
+
+[打开地升地落实验 →](lunar/index.html)
 
 ## 三维物理向量、显示尺度与相机
 
@@ -265,6 +285,8 @@ space/model.js保留AU物理向量。先把EQJ赤道坐标旋转到黄道坐标�
 | linkedView / embedded | 嵌入视图类型与是否由父页嵌入 |
 
 SolarSpaceView是父页桥接接口，公开选择和接收联动UTC，不直接把压缩显示坐标写回当地星历。WebGL初始化失败时提供二维回退并禁用不适用控件；历史恢复必须先暂停。
+
+[打开三维天空 →](space/index.html)
 
 ## 工作区、布局与菜单状态
 
@@ -291,6 +313,8 @@ design-system.css集中定义控件目标尺寸、状态层和焦点颜色。宽
 
 workbench-content-group与观测设置共用menu-section组件，不再各自定义折叠标题外观。嵌套menu-subsection的标题圆角由外框圆角减去1px边框计算。md-connected-choice统一连接式单选组件，支持aria-pressed与aria-selected；全局导航固定在页面顶部。月相图使用图位容器查询，而非整页宽度，窄图位按轨道与月面读数上下布局；phaseOrbitLayout与新的画布尺寸同步，拖动仍改变同一真实观测时刻。
 
+[打开布局与保存面板 →](lab.html?edit=1&control=layout#solarCompare)
+
 ## 参考对象、身份与跨图选中
 
 | 结构 | 字段含义 |
@@ -310,6 +334,8 @@ workbench-content-group与观测设置共用menu-section组件，不再各自定
 定义表决定每类图可用字段及其范围；clean按该模式整理对象，单图最多40项。事件、曲线和城市都必须带足计算条件。跨图强调按source和id同时匹配，其他对照降低透明度；不要只比较id而混淆不同来源。
 
 add或patch修改参考，不改基准；observeLocation或设为基准才明确应用地点。城市名称、坐标滑条、输入框和各图颜色都应来自同一个对象；不得各维护一份不相通的城市数组。
+
+[打开图中对象编辑 →](lab.html?edit=1&sidebar=references#skyPanel)
 
 ## 地面场景与物体变量
 
@@ -331,6 +357,8 @@ add或patch修改参考，不改基准；observeLocation或设为基准才明确
 | buckets | 太阳/月球分别保存的内存场景、历史与选择 |
 
 sanitize验证物体类型、有限数值、约束和测量引用。参考场景不允许再包含下一层reference。prepareExperiment必须在验证后恢复seq等临时计数器，验证不能消耗用户可见编号；restoreExperiment清理进行中的手势并保留暂停状态。
+
+[打开地面搭建实验 →](lab.html?edit=1#sceneBuilder)
 
 ## 存储格式、完整实验与恢复
 
@@ -354,6 +382,8 @@ sanitize验证物体类型、有限数值、约束和测量引用。参考场景
 
 完整实验先由SkyLabExperiment.prepareComplete校验，再交给SkyMotionSession.transaction协调。每个参与模块先创建私有检查点，随后逐项提交；异常或明确拒绝会按相反顺序回滚，并保留原对象的撤销记录。布局、观测、参考对象和地面场景各自负责还原自己的状态，历史收尾位于finally中。
 
+[打开布局与保存面板 →](lab.html?edit=1&control=layout#solarCompare)
+
 ## 历史、手势与异步任务
 
 interaction-history.js使用适配器读取科学状态、表单字段与路由。指针、原生滑条和输入提交采用分组；相机和菜单动作被排除或由各自编辑器管理。restoreGeneration避免旧异步恢复覆盖新动作，restoring锁必须在finally路径释放。
@@ -369,6 +399,8 @@ interaction-history.js使用适配器读取科学状态、表单字段与路由�
 
 文件导入必须限定大小、数量、类型与当前上下文；读取完成时确认用户仍在原图。动画可在页面隐藏时暂停，画布本身不能通过先隐藏再显现制造导航空白。
 
+[打开对应实验台 →](lab.html#skyPanel)
+
 ## 设计变量、可访问性与多端
 
 ui-palette.css拥有Material 3 Expressive语义色：绿色主操作、鼠尾草色表面层级、辅助与第三色容器。design-system.css统一颜色、形状、状态和动效角色；页面样式只安排组件位置。科学图的太阳、轨道和天体数据颜色独立于UI选中色。
@@ -380,6 +412,8 @@ md-sys-color-*定义主操作、辅助色、表面层级、文字与边界；md-
 - 用aria-pressed、aria-selected、aria-expanded说明状态；交互图形提供键盘焦点和可读操作提示。
 - 尊重prefers-reduced-motion；避免每帧重建菜单DOM，只有文字或属性真正改变时更新。
 - 触屏检查实际点击目标，桌面重点核对鼠标、键盘、缩放后的布局与Windows常见画幅。
+
+[打开对应实验台 →](lab.html#skyPanel)
 
 ## 文档与语言生成管线
 
@@ -397,6 +431,8 @@ python3 scripts/prerender-pages.py --check
 正文不记录零散发布日记；功能使用、教学任务和变量说明各归其位。Markdown与网页由同一内容源生成，避免网页改了、下载文件仍旧的分叉。
 
 文档输入由scripts/document_model.py先验证路径、章节与别名唯一性、双语文本、内容类型、表格列数、链接目标和状态说明覆盖率。scripts/build-documents.py只负责渲染与输出，页面外壳在scripts/document-page.html；变量表读取lab-state.json，不再靠正则猜测JavaScript源码的缩进。
+
+[打开文档中心 →](docs.html)
 
 ## 本地开发、验证与提交
 

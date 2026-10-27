@@ -255,6 +255,12 @@
   document.addEventListener('skymotion:customization', sync);
   document.addEventListener('DOMContentLoaded',()=>{
     const params=new URLSearchParams(location.search),targetId=params.get('control');
+    if(params.get('edit')==='1')window.SkyCustomization?.enter();
+    const body=params.get('body');if(['sun','moon'].includes(body))document.querySelector('.body-switch [data-body="'+body+'"]').click();
+    if(params.get('edit')==='1'||body){const view=location.hash.slice(1);if(catalog.views.some(item=>item.id===view))select(view);}
+    const sidebar=params.get('sidebar');if(['views','conditions'].includes(sidebar))window.SkyDiagramTools?.selectSidebar(sidebar);
+    if(sidebar==='references')Promise.resolve(window.skyFirstFontsReady).then(()=>requestAnimationFrame(()=>window.SkyDiagramTools?.selectSidebar(sidebar))).catch(()=>{});
+    if(targetId==='layout'){window.SkyWorkbenchMenu.openLayout();return;}
     const allowed=new Set(['conditionsMenu','coordinatesMenu','workbenchMore','modelMenu','displayMenu']);
     if(!allowed.has(targetId))return;
     window.SkyDiagramTools?.selectSidebar('conditions');

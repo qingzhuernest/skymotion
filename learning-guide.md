@@ -35,6 +35,8 @@
 
 - [第一次操作：先读界面与控制说明](project-guide.html#controls)
 
+[打开对应实验台 →](lab.html#skyPanel)
+
 ## 实验前必须说清的四个约定
 
 - 地点是实际观测条件；相机转动只改变看图方向。要移动地点，应使用经纬度、地点滑条或明确的观察点移动工具。
@@ -42,7 +44,7 @@
 - 下方当前时刻、日行迹全年采样时刻、三维UTC日期和地升地落的独立飞行控制，不应当作一个相同的钟。
 - 真实日期、理想太阳赤纬实验和圆轨道地升模型的假设不同；比较结果前先写明模式。
 
-- [打开实验台的播放与时间控制 →](lab.html?control=workbenchMore#skyPanel)
+[在实验台设置观测条件 →](lab.html?control=conditionsMenu#skyPanel)
 
 ## 怎样安排一节课
 
@@ -73,6 +75,8 @@
 4. 提交完整实验时，在排列与收藏勾选连同观测与对象保存；同时导出文字记录，说明设备本地保存的范围。
 
 - [查看完整自定义操作步骤](project-guide.html#customization)
+
+[打开图中对象编辑 →](lab.html?edit=1&sidebar=references#skyPanel)
 
 ## 任务一：太阳一天怎样运动？
 
@@ -105,7 +109,7 @@
 
 - [进入实验台实践本节](lab.html)
 
-- [打开天空与日影实验 →](lab.html#skyPanel)
+[打开对应实验台 →](lab.html#skyPanel)
 
 ## 任务二：同一地点的季节差异
 
@@ -138,6 +142,8 @@
 
 - [进入实验台实践本节](diagrams.html#chartPanel)
 
+[在实验台设置观测条件 →](lab.html?control=conditionsMenu#skyPanel)
+
 ## 任务三：纬度与昼夜分布
 
 ### 探究问题
@@ -168,6 +174,8 @@
 分别写出普通升落、极昼、极夜和相切的判据，并用曲线而非只凭一帧图像说明理由。
 
 - [进入实验台实践本节](diagrams.html#contextPanel)
+
+[在实验台设置观测条件 →](lab.html?control=conditionsMenu#skyPanel)
 
 ## 任务四：同一时刻与同一瞬间
 
@@ -200,7 +208,7 @@
 
 - [进入实验台实践本节](diagrams.html)
 
-- [打开组合对照视图 →](lab.html#solarCompare)
+[打开组合对照视图 →](lab.html#solarCompare)
 
 ## 任务五：杆高、影长与影尖轨迹
 
@@ -233,6 +241,8 @@
 
 - [进入实验台实践本节](lab.html)
 
+[打开对应实验台 →](lab.html#skyPanel)
+
 ## 任务六：日晷为什么可以计时？
 
 ### 探究问题
@@ -264,7 +274,7 @@
 
 - [进入实验台实践本节](sundial.html)
 
-- [打开日晷实验 →](sundial.html)
+[打开日晷实验 →](sundial.html)
 
 ## 任务七：月相与月球的升落
 
@@ -297,6 +307,8 @@
 
 - [进入实验台实践本节](lab.html)
 
+[打开月相与月球实验 →](lab.html?body=moon#contextPanel)
+
 ## 任务八：行星伴月与角距离
 
 ### 探究问题
@@ -327,6 +339,8 @@
 解释一次伴月搜索结果不能保证肉眼可见，并写出还需核对的观测条件。
 
 - [进入实验台实践本节](diagrams.html#companionModule)
+
+[打开行星伴月观察 →](lab.html?body=moon#companionModule)
 
 ## 任务九：日行迹为什么像“8”字？
 
@@ -359,7 +373,7 @@
 
 - [进入实验台实践本节](analemma.html)
 
-- [打开日行迹实验 →](analemma.html)
+[打开日行迹实验 →](analemma.html)
 
 ## 任务十：月球上为什么有地升地落？
 
@@ -392,7 +406,7 @@
 
 - [进入实验台实践本节](lunar/index.html)
 
-- [打开地升地落实验 →](lunar/index.html)
+[打开地升地落实验 →](lunar/index.html)
 
 ## 任务十一：用空间模型解释天空视运动
 
@@ -425,7 +439,7 @@
 
 - [进入实验台实践本节](space/index.html)
 
-- [打开三维天空 →](space/index.html)
+[打开三维天空 →](space/index.html)
 
 ## 可复用的实验记录表
 

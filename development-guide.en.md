@@ -40,6 +40,8 @@ site-catalog.json defines page paths, main navigation, view names, groups and av
 
 preferences.js is the single preference owner, exposing get, set, subscribe, reset, export and parseImport. Version 2 records use skymotion-preferences and accept version 1 records; language remains compatible with its existing storage key. Material Color Utilities 0.3.0 in theme-colors.js generates palettes mapped to the existing design color roles. The bundled library is Apache-2.0; see theme-colors.LICENSE. Scientific state is excluded from preference records.
 
+[Open the corresponding experiment →](lab.en.html#skyPanel)
+
 ## Data flow from input to drawing
 
 1. A native input or slider validates and commits to state, stopping incompatible playback. Reference edits instead update the store identified by source and body.
@@ -56,6 +58,8 @@ preferences.js is the single preference owner, exposing get, set, subscribe, res
 | Persistence | Versioned serialization, validation and fallback | Assigning invalid cached data wholesale to state |
 
 prepareObservationState reconciles model bindings and derived values before presentation. workbench-menu.js presents the catalog, while lab-controls.js handles inputs and form presentation. diagram-tool-definitions.js owns reference normalization and validation, so storage and the editor share one interpretation of each object.
+
+[Open the corresponding experiment →](lab.en.html#skyPanel)
 
 ## Complete shared-state dictionary
 
@@ -122,6 +126,8 @@ initialSun defines solar defaults. initialMoon inherits them and overrides lunar
 | planet | Planet identifier for lunar comparison | Mercury, Venus, Mars, Jupiter, Saturn | Moon: "Venus" |
 | companionSearchResult | Lunar close-approach search result and its conditions | Object or null; includes dates, site, clock and angular separation | Moon: null |
 
+[Set observation conditions in the Lab →](lab.en.html?control=conditionsMenu#skyPanel)
+
 ## Units, angles and missing values
 
 | Name | Unit/direction | Use |
@@ -139,6 +145,8 @@ initialSun defines solar defaults. initialMoon inherits them and overrides lunar
 
 Do not mix pixels, normalized ground coordinates, Three.js display units and physical lengths. Local w/h usually denote CSS pixels and dpr device-pixel ratio. Physical vectors must be retained separately from compressed display coordinates.
 
+[Set observation conditions in the Lab →](lab.en.html?control=conditionsMenu#skyPanel)
+
 ## Time pipeline and date conversion
 
 Shared state.time is apparent solar time. sunHourAngle uses solar right ascension and sidereal time; solarNoonUTC starts from longitude and iterates to zero hour angle, and instantUTC iterates to the requested angle. skyRaw then uses Astronomy Engine for topocentric equatorial and unrefracted horizon coordinates.
@@ -155,6 +163,8 @@ The analemma clock basis uses a civil clock with a fixed UTC offset, whereas app
 
 setDate validates the calendar and 1900–2100 range, disables manual when applying a real date and recomputes declination. A date string is not an arbitrary device-zone midnight; explicit UTC construction maintains consistency.
 
+[Open time controls →](lab.en.html?control=workbenchMore#skyPanel)
+
 ## Local coordinates, solar equations and axis geometry
 
 solar uses latitude φ, declination δ and hour angle H. Degree inputs are multiplied by rad. Its ideal unit vector is east x, up y and north z.
@@ -170,6 +180,8 @@ az = (atan2(x, z) * deg + 360) % 360
 skyRaw exposes the same local interface but uses real-date topocentric astronomy. Do not force ideal and ephemeris outputs to match component by component: they serve different modes. Axis geometry uses surface normal, local north and east to map the Sun direction onto the Earth illustration.
 
 Treat horizontal azimuth carefully near zenith, nadir and geographic poles. The geometric horizon omits terrain and refraction. Clamp rounding errors before inverse trigonometric functions and represent missing events with null rather than NaN or fabricated 0°.
+
+[Set observation conditions in the Lab →](lab.en.html?control=conditionsMenu#skyPanel)
 
 ## Rise/set, daylight and inverse date search
 
@@ -195,6 +207,8 @@ Real-date ephemerisDay and SkyDiagramSampling.events sample and refine horizon c
 
 Dragging changes date rather than assigning az. Unreachable targets use a verified event and show a nearest-result explanation. Pointer updates coalesce into frames and candidate events are reused within the gesture rather than recomputing a year for every pixel.
 
+[Open rise and set bearings →](lab.en.html#riseSetPanel)
+
 ## Shadows, plane intersections and sundials
 
 For horizontal ground and a vertical rod, the vertical solar component determines shadow length. Below the horizon, direct-sunlight ground shadows are absent. Near the horizon, length diverges; clip the display rather than changing the physical result.
@@ -206,6 +220,8 @@ shadow_length = rod_height / tan(altitude)
 ```
 
 Horizontal and equatorial dials use gnomon–plane–ray intersections. Do not substitute the full length of a tilted rod for vertical height H in the horizontal-shadow formula. Keep shadowZoom, camera zoom and physical height separate.
+
+[Open the sundial experiment →](sundial.en.html)
 
 ## Analemma data and the ideal cause model
 
@@ -222,6 +238,8 @@ analemmaSample returns UTC, hour angle, declination, equation of time, altitude 
 | analemmaPlot / analemmaMarker | Hit/projection state and smoothed date marker, not a new physical orbit |
 
 The ideal cause model solves E−e·sinE=M by Newton iteration, then uses tilt for RA/declination. Apparent-time sampling iterates to the solar clock. Real mode calls Astronomy Engine; the UI must distinguish them. Month-label density changes do not remove scientific samples.
+
+[Open the analemma experiment →](analemma.en.html)
 
 ## Lunar astronomy, phases and independent Earthrise
 
@@ -242,6 +260,8 @@ The ordinary lunar sky uses real-date topocentric position and illumination, wit
 | q.period | Physical circular-orbit period from 2π√((R+h)³/MU) | Seconds |
 
 lunar/model.js is separate from the Lab ephemeris state. Same-origin parent messages manage activity and language. Leaving pauses work, and late loading must not steal a newly selected view. Snapshot/restore validates supported ranges and restores paused.
+
+[Open Earthrise →](lunar/index.en.html)
 
 ## 3D physical vectors, display scales and cameras
 
@@ -265,6 +285,8 @@ space/model.js retains physical AU vectors. EQJ equatorial coordinates rotate to
 | linkedView / embedded | Embedded view type and parent-embedding flag |
 
 SolarSpaceView bridges parent selection and shared UTC without writing compressed coordinates back into local astronomy. WebGL failure offers a 2D fallback and disables unavailable controls; history restore pauses first.
+
+[Open 3D Sky →](space/index.en.html)
 
 ## Workspace, layout and menu state
 
@@ -291,6 +313,8 @@ design-system.css owns target sizes, state layers and focus colors. Wide screens
 
 workbench-content-group and observation settings reuse menu-section instead of separate disclosure skins. Nested menu-subsection heading radii subtract the 1px border from the outer radius. md-connected-choice provides connected exclusive choices using aria-pressed or aria-selected, while global navigation stays at the top. Moon phase uses pane container queries rather than viewport width, stacking orbit and disk readouts in narrow panes. phaseOrbitLayout follows the resized canvas, and dragging still changes the same real observation instant.
 
+[Open layout and saving controls →](lab.en.html?edit=1&control=layout#solarCompare)
+
 ## Reference identity and linked selection
 
 | Structure | Field meaning |
@@ -310,6 +334,8 @@ workbench-content-group and observation settings reuse menu-section instead of s
 Definitions select valid fields and ranges; clean normalizes references, with at most 40 per plot. Events, curves and sites retain their computation conditions. Linked emphasis matches both source and ID and dims other comparisons rather than matching ID alone.
 
 Add/patch updates a reference without relocating the baseline. observeLocation or Make baseline explicitly applies the site. Names, sliders, inputs and cross-view colors must share one reference rather than disconnected city arrays.
+
+[Open plot object editing →](lab.en.html?edit=1&sidebar=references#skyPanel)
 
 ## Ground-scene and object variables
 
@@ -331,6 +357,8 @@ Add/patch updates a reference without relocating the baseline. observeLocation o
 | buckets | Separate solar/lunar in-memory scenes, history and selection |
 
 sanitize validates kinds, finite numbers, constraints and measurement IDs. A reference scene cannot contain another reference layer. prepareExperiment restores temporary counters such as seq so validation does not consume visible numbering; restoreExperiment clears active gestures and retains pause.
+
+[Open the ground scene builder →](lab.en.html?edit=1#sceneBuilder)
 
 ## Storage formats and full-experiment restoration
 
@@ -354,6 +382,8 @@ sanitize validates kinds, finite numbers, constraints and measurement IDs. A ref
 
 Full experiments are validated by SkyLabExperiment.prepareComplete and coordinated by SkyMotionSession.transaction. Each participant captures an owner-local checkpoint before any commit. Exceptions or explicit rejection roll back in reverse order, preserving object undo history. Layout, conditions, references and ground restore their own state; history completion runs in finally.
 
+[Open layout and saving controls →](lab.en.html?edit=1&control=layout#solarCompare)
+
 ## History, gestures and asynchronous work
 
 interaction-history.js uses adapters for scientific state, form values and routes. Pointer, slider and input commits are grouped; camera/menu actions are excluded or locally managed. restoreGeneration rejects superseded async work, and the restoring lock must be released on every exit.
@@ -369,6 +399,8 @@ interaction-history.js uses adapters for scientific state, form values and route
 
 File imports limit size, count, type and context and recheck that the user is still in the same plot when reading finishes. Pause hidden-page animation without hiding and re-showing the scientific canvas during navigation.
 
+[Open the corresponding experiment →](lab.en.html#skyPanel)
+
 ## Design tokens, accessibility and responsive behavior
 
 ui-palette.css owns Material 3 Expressive semantic colors: green actions, sage surface levels, secondary and tertiary containers. design-system.css owns color, shape, state and motion roles; route styles arrange components. Scientific body and orbit colors remain independent of interface selection.
@@ -380,6 +412,8 @@ md-sys-color-* defines primary and secondary actions, surface levels, foreground
 - Use aria-pressed, aria-selected and aria-expanded, with keyboard focus and readable canvas instructions.
 - Respect prefers-reduced-motion and avoid rebuilding menus every frame; update text or attributes only when changed.
 - Check actual touch targets and desktop mouse/keyboard behavior, zoomed layouts and common Windows viewport sizes.
+
+[Open the corresponding experiment →](lab.en.html#skyPanel)
 
 ## Documentation and localization generation
 
@@ -397,6 +431,8 @@ python3 scripts/prerender-pages.py --check
 Keep release diaries out of the manuals. Feature usage, teaching tasks and variable meanings have separate homes. One content source generates pages and Markdown to prevent stale downloads.
 
 scripts/document_model.py validates paths, unique section IDs and aliases, bilingual text, block types, table dimensions, link targets and state documentation coverage before output. scripts/build-documents.py handles rendering and writing, using scripts/document-page.html for the shell. State tables read lab-state.json rather than inferring JavaScript declarations from indentation.
+
+[Open documentation →](docs.en.html)
 
 ## Local development, verification and commits
 

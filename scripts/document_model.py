@@ -57,6 +57,9 @@ def validate(data, root):
         ids = set()
         for section in doc["sections"]:
             bilingual(section["title"])
+            for action in section.get('actions', []):
+                bilingual(action['text'])
+                links.append((page, action['href']))
             for identifier in [section["id"], *section.get("aliases", [])]:
                 if not re.fullmatch(r"[A-Za-z][\w.-]*", identifier) or identifier in ids:
                     raise ValueError("Invalid or duplicate anchor: " + page + "#" + identifier)

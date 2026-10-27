@@ -132,14 +132,8 @@ class DocumentRenderer:
         sections = []
         for index, section in enumerate(doc["sections"]):
             aliases = "".join('<span id="' + escape(alias) + '" aria-hidden="true"></span>' for alias in section.get("aliases", []))
-            adjacent = []
-            if index:
-                previous = doc["sections"][index - 1]
-                adjacent.append('<a rel="prev" href="#' + previous["id"] + '">← ' + escape(self.text(previous["title"])) + '</a>')
-            if index + 1 < len(doc["sections"]):
-                following = doc["sections"][index + 1]
-                adjacent.append('<a rel="next" href="#' + following["id"] + '">' + escape(self.text(following["title"])) + ' →</a>')
-            chapter_links = '<nav class="document-chapter-links" aria-label="章节导航">' + "".join(adjacent) + '</nav>' if doc["page"] != "docs" else ""
+            actions = ''.join('<a class="md-outlined-action" href="' + escape(item['href']) + '">' + escape(self.text(item['text'])) + '</a>' for item in section.get('actions', []))
+            chapter_links = '<nav class="document-section-actions" aria-label="对应实验与功能">' + actions + '</nav>' if actions else ''
             sections.append('<section id="' + escape(section["id"]) + '">' + aliases + "<h2>" + escape(self.text(section["title"])) + "</h2>" + "".join(self.block(block) for block in section["blocks"]) + chapter_links + "</section>")
         siblings = '<nav class="document-links md-connected-choice" aria-label="文档分类">' + "".join('<a href="' + page + '.html"' + (' aria-current="page"' if page == doc["page"] else "") + ">" + label + "</a>" for page, label, _ in LINKS) + "</nav>"
         contents = '<nav class="document-toc" aria-label="本页目录"><h2>本页目录</h2><ol>' + "".join('<li><a href="#' + section["id"] + '">' + escape(self.text(section["title"])) + "</a></li>" for section in doc["sections"]) + "</ol></nav>"
@@ -156,6 +150,8 @@ class DocumentRenderer:
         lines += ["- [" + self.text(section["title"], language) + "](" + localized(doc["page"] + ".html", language) + "#" + section["id"] + ")" for section in doc["sections"]]
         for section in doc["sections"]:
             lines += ["", "## " + self.text(section["title"], language), "", "\n\n".join(self.block(block, language, True) for block in section["blocks"])]
+            for item in section.get('actions', []):
+                lines += ['', '[' + self.text(item['text'], language) + '](' + localized(item['href'], language) + ')']
         return "\n".join(lines) + "\n"
 
     def outputs(self):
@@ -166,7 +162,7 @@ class DocumentRenderer:
                 result[localized(doc["markdown"], language)] = self.markdown(doc, language)
         for _, zh, en in LINKS:
             self.dictionary[zh] = en
-        self.dictionary.update({"章节导航": "Chapter navigation", "阅读进度": "Reading progress", "文档分类": "Document categories", "本页目录": "Contents", "下载本文 Markdown": "Download this document as Markdown", "返回文档中心": "Back to documentation"})
+        self.dictionary.update({"对应实验与功能": "Related experiments and features", "阅读进度": "Reading progress", "文档分类": "Document categories", "本页目录": "Contents", "下载本文 Markdown": "Download this document as Markdown", "返回文档中心": "Back to documentation"})
         existing = json.loads((self.root / "i18n-docs.json").read_text())
         existing.update(self.dictionary)
         result["i18n-docs.json"] = json.dumps(existing, ensure_ascii=False, indent=2) + "\n"
