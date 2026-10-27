@@ -288,7 +288,7 @@ def is_site_file(path: Path, root: Path) -> bool:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--dist', type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument('--dist', type=Path, default=(Path(__file__).resolve().parents[1] / "site"))
     parser.add_argument('--check', action='store_true', help='Check generated files without changing them')
     args = parser.parse_args()
     dist = args.dist.resolve()

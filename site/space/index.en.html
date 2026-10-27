@@ -1,0 +1,250 @@
+<!doctype html>
+<html data-rendered-language="en" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+<script src="../theme-colors.js?v=20261027-repository125"></script>
+<script src="../preferences.js?v=20261027-repository125"></script>
+
+    <script src="../page-boot.js?v=20261027-repository125"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title data-i18n-cn="{&quot;3D Solar System · Sky Motion Lab&quot;:&quot;太阳系三维模型 · 天体视运动实验室&quot;}">3D Solar System · Sky Motion Lab</title>
+    <meta name="description" content="旋转、缩放3D Solar System，Explore八大行星与Sun–Earth–Moon geometry。真实星历计算位置，教学尺 degrees显示大小与距离。" data-i18n-cn-attrs="{&quot;content&quot;:&quot;旋转、缩放三维太阳系，观察八大行星与日地月空间关系。真实星历计算位置，教学尺度显示大小与距离。&quot;}" />
+    <link rel="canonical" href="https://skymotion-5md.pages.dev/space/" />
+    <link rel="icon" href="../favicon.svg" />
+    <link rel="stylesheet" href="../ui-palette.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="../pages.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="space.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="compare.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="exploration.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="embed.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="immersive.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="population.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="../interface-motion.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="../controls.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="../design-system.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="../language.css?v=20261027-repository125" />
+    <script src="../language-data.js?v=20261027-repository125" defer></script>
+    <script src="../language.js?v=20261027-repository125" defer></script>
+    <script src="../page-cache.js?v=20261027-repository125" defer></script>
+    <script src="../date-picker.js?v=20261027-repository125" defer></script>
+    <link rel="stylesheet" href="../parameter-controls.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="../diagram-tools.css?v=20261027-repository125" />
+    <script src="../material-controls.js?v=20261027-repository125" defer></script>
+
+<link rel="stylesheet" href="../preferences.css?v=20261027-repository125">
+</head>
+  <body data-page="space">
+    <script src="embed.js?v=20261027-repository125" defer></script>
+    <nav class="page-nav" aria-label="Page navigation" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;页面导航&quot;}"><a href="../index.en.html" data-cn-href="../index.html" data-i18n-cn="{&quot;Welcome&quot;:&quot;欢迎页&quot;}">Welcome</a><a href="../lab.en.html" data-cn-href="../lab.html" data-i18n-cn="{&quot;Lab&quot;:&quot;实验台&quot;}">Lab</a><a href="../docs.en.html" data-cn-href="../docs.html" data-i18n-cn="{&quot;Documentation&quot;:&quot;文档中心&quot;}">Documentation</a><a href="./index.en.html" aria-current="page" data-cn-href="./" data-i18n-cn="{&quot;3D Sky&quot;:&quot;三维天空&quot;}">3D Sky</a></nav>
+    <main class="space-shell">
+      <header class="head ui-heading">
+        <div>
+          <h1 data-i18n-cn="{&quot;3D solar system&quot;:&quot;太阳系三维模型&quot;}">3D solar system</h1>
+          <p data-i18n-cn="{&quot;Eight planets · Sun–Earth–Moon geometry&quot;:&quot;八大行星 · 日地月空间关系&quot;}">Eight planets · Sun–Earth–Moon geometry</p>
+        </div>
+      </header>
+      <div class="space-sidebar-host" id="spaceSidebarHost">
+        <aside class="side" aria-label="Space model settings" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;空间模型参数&quot;}">
+          <section class="card">
+            <h2 data-i18n-cn="{&quot;Select a body&quot;:&quot;选择天体&quot;}">Select a body</h2>
+            <span class="kicker" data-i18n-cn="{&quot;Selected body&quot;:&quot;选中天体&quot;}">Selected body</span>
+            <h3 class="planet-name" id="name" data-i18n-cn="{&quot;Earth&quot;:&quot;地球&quot;}">Earth</h3>
+            <p class="planet-type" id="type" data-i18n-cn="{&quot;Terrestrial planet&quot;:&quot;类地行星&quot;}">Terrestrial planet</p>
+            <div class="facts">
+              <div><span data-i18n-cn="{&quot;Mean distance from Sun&quot;:&quot;平均太阳距离&quot;}">Mean distance from Sun</span><strong id="distance">1.00 AU</strong></div>
+              <div><span data-i18n-cn="{&quot;Orbital period&quot;:&quot;公转周期&quot;}">Orbital period</span><strong id="period" data-i18n-cn="{&quot;365.26 days&quot;:&quot;365.26 天&quot;}">365.26 days</strong></div>
+              <div><span data-i18n-cn="{&quot;Mean radius&quot;:&quot;平均半径&quot;}">Mean radius</span><strong id="radius">6,371 km</strong></div>
+              <div><span data-i18n-cn="{&quot;Current distance from Sun&quot;:&quot;当前太阳距离&quot;}">Current distance from Sun</span><strong id="actualDistance">—</strong></div>
+            </div>
+            <button class="focus" id="focus" type="button" data-i18n-cn="{&quot;View Earth up close&quot;:&quot;靠近地球观察&quot;}">View Earth up close</button>
+            <p class="info" id="info"></p>
+            <p class="info" id="moonReadout" hidden></p>
+          </section>
+          <section class="card">
+            <h2 data-i18n-cn="{&quot;Playback and display&quot;:&quot;播放与显示&quot;}">Playback and display</h2>
+            <label class="field" for="spaceSpeed" data-i18n-cn="{&quot;Playback speed&quot;:&quot;播放速度&quot;}">Playback speed<select id="spaceSpeed">
+                <option value="2" data-i18n-cn="{&quot;2 days/s&quot;:&quot;2天／秒&quot;}">2 days/s</option>
+                <option value="10" selected data-i18n-cn="{&quot;10 days/s&quot;:&quot;10天／秒&quot;}">10 days/s</option>
+                <option value="30" data-i18n-cn="{&quot;30 days/s&quot;:&quot;30天／秒&quot;}">30 days/s</option>
+              </select></label>
+            <div class="toggles">
+              <label data-i18n-cn="{&quot;Loop this year&quot;:&quot;循环本年&quot;}">Loop this year<input type="checkbox" id="spaceLoop" checked role="switch" /></label>
+              <label data-i18n-cn="{&quot;Orbit guides&quot;:&quot;轨道线&quot;}">Orbit guides<input type="checkbox" id="orbits" checked role="switch" /></label>
+              <label data-i18n-cn="{&quot;Body names&quot;:&quot;天体名称&quot;}">Body names<input type="checkbox" id="names" checked role="switch" /></label><label hidden data-i18n-cn="{&quot;Parallel sunlight&quot;:&quot;太阳平行光&quot;}">Parallel sunlight<input type="checkbox" id="parallelRays" checked role="switch" /></label>
+            </div>
+          </section>
+          <section class="card" id="observerSettings" hidden>
+            <h2 data-i18n-cn="{&quot;Location for the local sky&quot;:&quot;本地天空的观察地点&quot;}">Location for the local sky</h2>
+            <p class="info" data-i18n-cn="{&quot;This location applies only to the sky reference. Both views share the UTC control below; the main lab is unchanged.&quot;:&quot;\n              地点只用于右侧天空图；两图共用下方 UTC 时刻，不改原实验台。\n            &quot;}">This location applies only to the sky reference. Both views share the UTC control below; the main lab is unchanged.</p>
+            <div class="observer-fields">
+              <label for="observerLat" data-i18n-cn="{&quot;Latitude&quot;:&quot;纬度\n                &quot;}">Latitude<input id="observerLat" type="number" min="-90" max="90" step="0.1" value="39.9" />°</label>
+              <label for="observerLon" data-i18n-cn="{&quot;Longitude&quot;:&quot;经度\n                &quot;}">Longitude<input id="observerLon" type="number" min="-180" max="180" step="0.1" value="116.4" />°</label>
+            </div>
+            <p class="info" data-i18n-cn="{&quot;North latitude and east longitude are positive. Sky positions include topocentric parallax but exclude atmospheric refraction. Bodies below the horizon are identified.&quot;:&quot;\n              北纬、东经为正。天空位置含地平视差，未计大气折射；地平线下的天体也会注明。\n            &quot;}">North latitude and east longitude are positive. Sky positions include topocentric parallax but exclude atmospheric refraction. Bodies below the horizon are identified.</p>
+          </section>
+          <details class="card menu-section">
+            <summary data-i18n-cn="{&quot;Scale and model notes&quot;:&quot;尺度与模型说明&quot;}">Scale and model notes</summary>
+            <div class="menu-content">
+            <p class="info" data-i18n-cn="{&quot;Positions come from Astronomy Engine; orbit guides sample the ephemeris. Heliocentric distances use a power-law display compression, while body sizes are enlarged separately. The Sun–Earth–Moon view uses a separate Earth–Moon distance scale. Screen sizes and distances are not to physical scale.&quot;:&quot;\n              位置由 Astronomy Engine\n              计算，轨道是星历采样的路径。日心距离采用幂函数压缩，球体大小另行放大；日地月视图单独放大地月距离。屏幕上的大小和距离不是实际比例。\n            &quot;}">Positions come from Astronomy Engine; orbit guides sample the ephemeris. Heliocentric distances use a power-law display compression, while body sizes are enlarged separately. The Sun–Earth–Moon view uses a separate Earth–Moon distance scale. Screen sizes and distances are not to physical scale.</p>
+            <p class="info" data-i18n-cn="{&quot;In the Sun–Earth–Moon view, the arrow points toward the distant Sun and sunlight is parallel. The Moon seen from the external camera is not the phase seen from Earth; its geocentric illuminated fraction is calculated separately. Surface and cloud textures are illustrative, not images for the selected date. Earth&#x27;s rotation and axis follow UTC; other bodies&#x27; orientations are illustrative. Eclipses and local rise/set events are not simulated here.&quot;:&quot;\n              日地月视图的箭头指向远处太阳，照明使用平行光；外部相机所见月面不等同于地球观测月相。地心月面照明比例另用星历计算。表面与云层纹理为外观示意，非当天影像；地球自转与地轴按UTC计算，其余天体姿态为示意，不模拟日月食，也不计算本地升落。\n            &quot;}">In the Sun–Earth–Moon view, the arrow points toward the distant Sun and sunlight is parallel. The Moon seen from the external camera is not the phase seen from Earth; its geocentric illuminated fraction is calculated separately. Surface and cloud textures are illustrative, not images for the selected date. Earth's rotation and axis follow UTC; other bodies' orientations are illustrative. Eclipses and local rise/set events are not simulated here.</p>
+            <p class="info" data-i18n-cn="{&quot;The date slider changes UTC continuously; selecting a calendar date sets 12:00 UTC. Rotation and zoom change only the camera, not physical positions. This page has its own state, so your main lab settings are preserved.&quot;:&quot;\n              日期轴连续改变 UTC 时刻；日历选择定位当天12:00\n              UTC。旋转和缩放只改变相机，不改变天体物理位置。此页面使用独立状态，返回实验台时保留原有观察设置。\n            &quot;}">The date slider changes UTC continuously; selecting a calendar date sets 12:00 UTC. Rotation and zoom change only the camera, not physical positions. This page has its own state, so your main lab settings are preserved.</p>
+            <p class="info" data-i18n-cn="{&quot;Reference views share the same UTC. The top view projects onto the fixed ecliptic plane; the local sky shows azimuth and altitude at the selected location. These 2D views stay fixed as the 3D camera rotates, distinguishing spatial motion from apparent sky motion.&quot;:&quot;\n              “参照”共用同一 UTC\n              时刻：空间俯视是固定黄道平面的投影，本地天空是所选地点的方位与高度。二维图不会随三维相机旋转，便于分清空间运动和视运动。\n            &quot;}">Reference views share the same UTC. The top view projects onto the fixed ecliptic plane; the local sky shows azimuth and altitude at the selected location. These 2D views stay fixed as the 3D camera rotates, distinguishing spatial motion from apparent sky motion.</p>
+            <p class="info" id="starCatalogStatus" data-i18n-cn="{&quot;Loading the local star catalog…&quot;:&quot;正在加载本地恒星目录…&quot;}">Loading the local star catalog…</p>
+            <p class="info" data-i18n-cn="{&quot;Magnitude controls displayed brightness, and B−V approximates star color. Point sizes and glow are display effects. The background excludes atmospheric scintillation, proper motion, annual parallax, and horizon obstruction; it is not a precision observing chart.&quot;:&quot;\n              星等控制显示明暗，B−V色指数近似恒星颜色；星点大小与柔光为显示处理。背景不做大气闪烁，也未加入恒星自行、周年视差或地平遮挡，不作为精密观测星图。&quot;}">Magnitude controls displayed brightness, and B−V approximates star color. Point sizes and glow are display effects. The background excludes atmospheric scintillation, proper motion, annual parallax, and horizon obstruction; it is not a precision observing chart.<a href="assets/stars-license.txt" data-i18n-cn="{&quot;HYG source and license&quot;:&quot;HYG数据来源与许可&quot;}">HYG source and license</a>
+            </p>
+            <a href="../project-guide.en.html#section-12" data-cn-href="../project-guide.html#section-12" data-i18n-cn="{&quot;Space model documentation&quot;:&quot;项目中的空间模型说明&quot;}">Space model documentation</a>
+            </div>
+          </details>
+        </aside>
+      </div>
+      <section class="visual" aria-label="3D solar system and 2D reference" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;太阳系三维与二维对照&quot;}">
+        <div class="viewbar">
+          <div class="view-group md-connected-choice" role="group" aria-label="View subject" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观察对象&quot;}">
+            <button id="overview" class="active" type="button" aria-pressed="true" data-i18n-cn="{&quot;Solar system&quot;:&quot;\n              太阳系\n            &quot;}">Solar system</button>
+            <button id="earthmoon" type="button" aria-pressed="false" data-i18n-cn="{&quot;Sun–Earth–Moon&quot;:&quot;日地月&quot;}">Sun–Earth–Moon</button>
+          </div>
+          <div class="view-group md-connected-choice" role="group" aria-label="Display mode" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;显示方式&quot;}">
+            <button id="singleView" class="active" type="button" aria-pressed="true" data-i18n-cn="{&quot;3D&quot;:&quot;\n              三维\n            &quot;}">3D</button>
+            <button id="compareView" type="button" aria-pressed="false" data-i18n-cn="{&quot;Reference&quot;:&quot;参照&quot;}">Reference</button>
+          </div>
+          <div class="head-actions">
+            <a class="existing-compare-link md-outlined-action" href="../diagrams.en.html?compare=1" data-cn-href="../diagrams.html?compare=1" data-i18n-cn="{&quot;Compare with lab&quot;:&quot;原图对照&quot;}">Compare with lab</a>
+
+            <button id="spaceImmersive" class="md-outlined-action" type="button" aria-pressed="false" data-i18n-cn="{&quot;Immersive view&quot;:&quot;\n              沉浸观察\n            &quot;}">Immersive view</button>
+            <button id="spaceParameters" class="md-outlined-action" type="button" aria-controls="spaceDrawer" aria-expanded="false" aria-haspopup="dialog" data-i18n-cn="{&quot;☷ Settings&quot;:&quot;\n              ☷ 参数\n            &quot;}">☷ Settings</button>
+          </div>
+        </div>
+        <div class="space-scenes" id="spaceScenes">
+          <div class="stage md-dark-surface" id="stage">
+            <p class="stage-note" id="viewTitle" data-i18n-cn="{&quot;Solar system overview&quot;:&quot;太阳系总览&quot;}">Solar system overview</p>
+            <p class="stage-hint" data-i18n-cn="{&quot;Drag to orbit · Pinch to zoom&quot;:&quot;拖动旋转 · 双指缩放&quot;}">Drag to orbit · Pinch to zoom</p>
+            <button id="reset" class="stage-reset" type="button" aria-label="Reset 3D camera" title="Reset 3D camera" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;复位三维视角&quot;,&quot;title&quot;:&quot;复位三维视角&quot;}">
+              <svg aria-hidden="true" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 9a8 8 0 1 1 .4 7M4 9V4m0 5h5" />
+              </svg>
+            </button>
+            <p class="nebula-hint" id="nebulaHint" hidden data-i18n-cn="{&quot;Nebula background: enlarged observational image&quot;:&quot;星云背景：观测影像放大示意&quot;}">Nebula background: enlarged observational image</p>
+            <div id="labels"></div>
+            <div class="inspection-readout" id="inspectionReadout" aria-label="Physical values for the selected body" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;当前天体真实读数&quot;}">
+              <strong id="inspectTitle" data-i18n-cn="{&quot;Earth&quot;:&quot;地球&quot;}">Earth</strong>
+              <span id="inspectDistance"></span>
+              <span id="inspectPhase" hidden></span>
+            </div>
+            <details class="scene-tools" id="sceneTools">
+              <summary data-i18n-cn="{&quot;Explore&quot;:&quot;观察&quot;}">Explore</summary>
+              <div class="scene-tools-panel md-dark-surface">
+                <span class="tools-heading" data-i18n-cn="{&quot;Camera angle&quot;:&quot;相机视角&quot;}">Camera angle</span>
+                <div class="camera-presets" role="group" aria-label="3D camera presets" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;三维相机预设&quot;}">
+                  <button type="button" data-camera="oblique" aria-pressed="true" data-i18n-cn="{&quot;Oblique&quot;:&quot;\n                    立体\n                  &quot;}">Oblique</button>
+                  <button type="button" data-camera="top" aria-pressed="false" data-i18n-cn="{&quot;Top&quot;:&quot;\n                    俯视\n                  &quot;}">Top</button>
+                  <button type="button" data-camera="side" aria-pressed="false" data-i18n-cn="{&quot;Side&quot;:&quot;\n                    侧视\n                  &quot;}">Side</button>
+                </div>
+                <label class="tools-field" for="inspectBody" data-i18n-cn="{&quot;Body close-up&quot;:&quot;天体近景&quot;}">Body close-up<select id="inspectBody">
+                    <option value="" data-i18n-cn="{&quot;Select a body…&quot;:&quot;选择天体…&quot;}">Select a body…</option>
+                  </select></label>
+                <label class="tools-check" for="trailEnabled" data-i18n-cn="{&quot;Past path&quot;:&quot;历史轨迹&quot;}">Past path<input type="checkbox" id="trailEnabled" role="switch" /></label>
+                <label class="tools-field" for="trailDays" data-i18n-cn="{&quot;Lookback period&quot;:&quot;回看时段&quot;}">Lookback period<select id="trailDays">
+                    <option value="7" data-i18n-cn="{&quot;Past 7 days&quot;:&quot;过去7天&quot;}">Past 7 days</option>
+                    <option value="30" selected data-i18n-cn="{&quot;Past 30 days&quot;:&quot;过去30天&quot;}">Past 30 days</option>
+                    <option value="90" data-i18n-cn="{&quot;Past 90 days&quot;:&quot;过去90天&quot;}">Past 90 days</option>
+                    <option value="365" data-i18n-cn="{&quot;Past 365 days&quot;:&quot;过去365天&quot;}">Past 365 days</option>
+                  </select></label>
+                <label class="tools-check" for="inspectInfo" data-i18n-cn="{&quot;Show physical values&quot;:&quot;显示真实读数&quot;}">Show physical values<input type="checkbox" id="inspectInfo" checked role="switch" /></label>
+                <label class="tools-check" for="earthReference" data-i18n-cn="{&quot;Earth&#x27;s axis and equator&quot;:&quot;地轴与赤道&quot;}">Earth's axis and equator<input type="checkbox" id="earthReference" checked title="Red: Earth&#x27;s axis. Blue: equator. Earth&#x27;s orientation uses the same UTC." role="switch" data-i18n-cn-attrs="{&quot;title&quot;:&quot;红线为地轴，蓝圈为赤道；地球姿态按同一UTC计算&quot;}" /></label>
+                <label class="tools-check" for="referencePlane" data-i18n-cn="{&quot;Ecliptic plane&quot;:&quot;黄道参考面&quot;}">Ecliptic plane<input type="checkbox" id="referencePlane" title="Fixed J2000 ecliptic plane, not the local horizon plane" role="switch" data-i18n-cn-attrs="{&quot;title&quot;:&quot;固定J2000黄道平面，并非当地地平面&quot;}" /></label>
+                <div class="population-tools">
+                  <span class="tools-heading" data-i18n-cn="{&quot;Solar system and deep-sky details&quot;:&quot;太阳系与深空细节&quot;}">Solar system and deep-sky details</span>
+                  <label class="tools-check" for="satellitePoints" data-i18n-cn="{&quot;Planetary satellites&quot;:&quot;行星卫星群&quot;}">Planetary satellites<input type="checkbox" id="satellitePoints" checked role="switch" /></label>
+                  <label class="tools-check" for="asteroidPoints" data-i18n-cn="{&quot;Main-belt asteroids&quot;:&quot;主带小行星&quot;}">Main-belt asteroids<input type="checkbox" id="asteroidPoints" checked role="switch" /></label>
+                  <label class="tools-check" for="cometPoints" data-i18n-cn="{&quot;Periodic comets&quot;:&quot;周期彗星&quot;}">Periodic comets<input type="checkbox" id="cometPoints" checked role="switch" /></label>
+                  <button id="satelliteView" type="button" data-i18n-cn="{&quot;View the selected planet&#x27;s satellites&quot;:&quot;观察所选行星卫星群&quot;}">View the selected planet's satellites</button>
+                  <label class="tools-check" for="nebulaBackground" data-i18n-cn="{&quot;Nebula image background&quot;:&quot;星云影像背景&quot;}">Nebula image background<input type="checkbox" id="nebulaBackground" role="switch" /></label>
+                  <button id="nebulaPhotos" type="button" disabled data-i18n-cn="{&quot;View observational nebula images&quot;:&quot;\n                    查看真实星云影像\n                  &quot;}">View observational nebula images</button>
+                  <p class="tools-note" id="populationStatus" data-i18n-cn="{&quot;Local small-body data loads when you enter immersive view.&quot;:&quot;\n                    进入沉浸观察时加载本地小天体数据。\n                  &quot;}">Local small-body data loads when you enter immersive view.</p>
+                  <p class="tools-note" data-i18n-cn="{&quot;Satellites and small bodies appear as enlarged, unnamed points. Except for the Moon and the four Galilean moons, orbits are approximated from JPL mean elements. Coverage follows the available orbit table; not every newly discovered object has orbital data. Nebula backgrounds are enlarged observational images, not their actual angular sizes or naked-eye views.&quot;:&quot;\n                    卫星与小天体是无名称的放大点标记。除月球与木星四大卫星外，轨道用JPL平均要素作近似；覆盖当前轨道表，不代表全部新发现对象都有可用轨道。星云背景为放大观测影像，不是实际角直径或肉眼视场。&quot;}">Satellites and small bodies appear as enlarged, unnamed points. Except for the Moon and the four Galilean moons, orbits are approximated from JPL mean elements. Coverage follows the available orbit table; not every newly discovered object has orbital data. Nebula backgrounds are enlarged observational images, not their actual angular sizes or naked-eye views.<a href="assets/population-credits.txt" data-i18n-cn="{&quot;Data and image sources&quot;:&quot;数据与影像来源&quot;}">Data and image sources</a>
+                  </p>
+                </div>
+                <p class="tools-note" id="trailNote" data-i18n-cn="{&quot;The path looks back from the current UTC; its bright end is the present. Distances use a teaching display scale.&quot;:&quot;\n                  轨迹按UTC回溯，亮端为当前时刻；距离采用教学尺度。\n                &quot;}">The path looks back from the current UTC; its bright end is the present. Distances use a teaching display scale.</p>
+              </div>
+            </details>
+          </div>
+          <section class="companion space-compare" id="companion" aria-label="2D reference at the same instant" hidden data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;同一时刻的二维参照&quot;}">
+            <div class="compare-tabs md-connected-choice" role="group" aria-label="2D reference type" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;二维参照类型&quot;}">
+              <button id="planeView" type="button" class="active" aria-pressed="true" data-i18n-cn="{&quot;Space top view&quot;:&quot;\n                空间俯视\n              &quot;}">Space top view</button>
+              <button id="observerView" type="button" aria-pressed="false" data-i18n-cn="{&quot;Local sky&quot;:&quot;\n                本地天空\n              &quot;}">Local sky</button>
+            </div>
+            <div class="compare-surface" id="planeHost"></div>
+            <div class="compare-surface observer-host" id="observerHost" hidden></div>
+          </section>
+        </div>
+        <div class="footer-note">
+          <span data-i18n-cn="{&quot;Display scale · Sizes and distances scaled separately&quot;:&quot;教学尺度 · 大小与距离分别缩放&quot;}">Display scale · Sizes and distances scaled separately</span><span data-i18n-cn="{&quot;Earth orientation follows UTC · Textures are illustrative&quot;:&quot;地球姿态按UTC · 纹理为示意&quot;}">Earth orientation follows UTC · Textures are illustrative</span>
+        </div>
+      </section>
+      <section class="timeline" aria-label="Space model date controls" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;空间模型日期控制&quot;}">
+        <div class="time-head">
+          <label for="day" data-i18n-cn="{&quot;Observation time · UTC&quot;:&quot;观测时刻 · UTC &quot;}">Observation time · UTC<output id="dayText" for="day"></output></label><button id="play" type="button" data-i18n-cn="{&quot;Play dates&quot;:&quot;播放日期&quot;}">Play dates</button>
+        </div>
+        <input id="day" type="range" min="0" max="364" step="0.01" value="280" aria-label="Adjust the UTC observation date and time continuously" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;连续调整UTC观测日期与时刻&quot;}" />
+        <div class="scale">
+          <span data-i18n-cn="{&quot;Jan&quot;:&quot;1月&quot;}">Jan</span><span data-i18n-cn="{&quot;Apr&quot;:&quot;4月&quot;}">Apr</span><span data-i18n-cn="{&quot;Jul&quot;:&quot;7月&quot;}">Jul</span><span data-i18n-cn="{&quot;Oct&quot;:&quot;10月&quot;}">Oct</span><span data-i18n-cn="{&quot;Dec&quot;:&quot;12月&quot;}">Dec</span>
+        </div>
+        <div class="date-actions">
+          <label for="date" data-i18n-cn="{&quot;Choose date&quot;:&quot;选择日期&quot;}">Choose date</label><input id="date" type="date" min="1900-01-01" max="2100-12-31" aria-label="UTC date, set to 12:00" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;UTC日期，定位当天12点&quot;}" /><span data-i18n-cn="{&quot;Calendar dates use 12:00 UTC&quot;:&quot;日历定位12:00 UTC&quot;}">Calendar dates use 12:00 UTC</span>
+        </div>
+      </section>
+    </main>
+    <dialog id="spaceDrawer" aria-labelledby="spaceDrawerTitle">
+      <header class="drawer-head">
+        <div>
+          <span data-i18n-cn="{&quot;Experiment settings&quot;:&quot;实验参数&quot;}">Experiment settings</span>
+          <h2 id="spaceDrawerTitle" data-i18n-cn="{&quot;Solar system model&quot;:&quot;太阳系空间模型&quot;}">Solar system model</h2>
+        </div>
+        <button id="spaceDrawerClose" type="button" aria-label="Close settings" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;关闭参数菜单&quot;}">
+          <svg aria-hidden="true" viewbox="0 0 24 24">
+            <path d="m6 6 12 12M18 6 6 18" />
+          </svg>
+        </button>
+      </header>
+      <div id="spaceDrawerBody"></div>
+    </dialog>
+    <dialog id="nebulaViewer" aria-labelledby="nebulaTitle">
+      <header class="nebula-header">
+        <h2 id="nebulaTitle" data-i18n-cn="{&quot;Observational nebula images&quot;:&quot;真实星云影像&quot;}">Observational nebula images</h2>
+        <button id="nebulaClose" type="button" aria-label="Close nebula images" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;关闭星云影像&quot;}">×</button>
+      </header>
+      <select id="nebulaChoice" aria-label="Select a nebula image" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;选择星云影像&quot;}"></select>
+      <figure class="nebula-photo"><img id="nebulaImage" alt="" /></figure>
+      <p class="nebula-caption" data-i18n-cn="{&quot;Nebulae lie far beyond the solar system. These enlarged observational images do not show actual angular size, distance, or naked-eye visibility.&quot;:&quot;\n        星云远在太阳系之外；这里放大查看观测影像，不能据此判断实际角直径、距离或肉眼可见性。\n      &quot;}">Nebulae lie far beyond the solar system. These enlarged observational images do not show actual angular size, distance, or naked-eye visibility.</p>
+      <p class="nebula-caption">
+        <span id="nebulaCredit"></span>
+        <a id="nebulaSource" href="#" target="_blank" rel="noopener" data-i18n-cn="{&quot;NASA image source&quot;:&quot;NASA影像来源&quot;}">NASA image source</a>
+      </p>
+    </dialog>
+    <script src="../interface-motion.js?v=20261027-repository125" defer></script>
+    <script src="ui.js?v=20261027-repository125" defer></script>
+    <script src="vendor/three.min.js?v=20261027-repository125" defer></script>
+    <script src="../astronomy.js?v=20261027-repository125" defer></script>
+    <script src="model.js?v=20261027-repository125" defer></script>
+    <script src="earth-frame.js?v=20261027-repository125" defer></script>
+    <script src="exploration.js?v=20261027-repository125" defer></script>
+    <script src="appearance.js?v=20261027-repository125" defer></script>
+    <script src="stars.js?v=20261027-repository125" defer></script>
+    <script src="population.js?v=20261027-repository125" defer></script>
+    <script src="nebulae.js?v=20261027-repository125" defer></script>
+    <script src="compare.js?v=20261027-repository125" defer></script>
+    <script src="observer.js?v=20261027-repository125" defer></script>
+    <script src="../experiment-storage.js?v=20261027-repository125" defer></script>
+    <script src="scene.js?v=20261027-repository125" defer></script>
+    <script src="immersive.js?v=20261027-repository125" defer></script>
+    <script src="../interaction-history.js?v=20261027-repository125" defer></script>
+    <script src="history.js?v=20261027-repository125" defer></script>
+    <script src="../customization-mode.js?v=20261027-repository125" defer></script>
+    <script src="customization.js?v=20261027-repository125" defer></script>
+    <script src="../diagram-sampling.js?v=20261027-repository125" defer></script>
+    <script src="../parameter-controls.js?v=20261027-repository125" defer></script>
+    <script src="../diagram-tool-definitions.js?v=20261027-repository125" defer></script>
+    <script src="../diagram-tools.js?v=20261027-repository125" defer></script>
+  </body>
+</html>

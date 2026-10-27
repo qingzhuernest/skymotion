@@ -1,0 +1,86 @@
+{
+  "reviewedAt": "2026-10-27",
+  "baseMain": "8fc07b7e231363b4882fb397f9c3e2b7cd65f848",
+  "branches": [
+    {
+      "original": "copilot/set-up-pages-io-website",
+      "commit": "f9abb3d63a6fa722ce08ab7b7eb3add654d75ab0",
+      "aheadOfMain": 1,
+      "behindMain": 137,
+      "action": "archive",
+      "retainedAs": "archive/2026-10/github-pages-migration"
+    },
+    {
+      "original": "fix/companion-layout",
+      "commit": "c2b9b85a80bc65bbe553bc2d5a217fc5468c220f",
+      "aheadOfMain": 1,
+      "behindMain": 100,
+      "action": "archive",
+      "retainedAs": "archive/2026-10/companion-layout"
+    },
+    {
+      "original": "fix/companion-theme",
+      "commit": "5b7aa8cc2cb0d03adfbf1a2316f2f106513facbc",
+      "aheadOfMain": 3,
+      "behindMain": 101,
+      "action": "archive",
+      "retainedAs": "archive/2026-10/companion-theme"
+    },
+    {
+      "original": "impeccable-preview",
+      "commit": "b62d974a5a0bb6ee329356e374ba1598dd6e84b1",
+      "aheadOfMain": 0,
+      "behindMain": 89,
+      "action": "delete-merged",
+      "retainedAs": null
+    },
+    {
+      "original": "main",
+      "commit": "8fc07b7e231363b4882fb397f9c3e2b7cd65f848",
+      "aheadOfMain": 0,
+      "behindMain": 0,
+      "action": "retain",
+      "retainedAs": "main"
+    },
+    {
+      "original": "preview/custom-workspace-2026-10-15",
+      "commit": "8b0a24c56cf4d3f9e1d967b20b88b97768268860",
+      "aheadOfMain": 0,
+      "behindMain": 87,
+      "action": "delete-merged",
+      "retainedAs": null
+    },
+    {
+      "original": "preview/lunar-orbit-2026-10-15",
+      "commit": "182307048c5fb3caf0269bcbf7beb0daf45cc63c",
+      "aheadOfMain": 6,
+      "behindMain": 89,
+      "action": "archive",
+      "retainedAs": "archive/2026-10/lunar-orbit"
+    },
+    {
+      "original": "preview/unified-customization-20261021",
+      "commit": "3379c38f48e1b7aa6da95bfb82d9f0af77396484",
+      "aheadOfMain": 0,
+      "behindMain": 11,
+      "action": "delete-merged",
+      "retainedAs": null
+    },
+    {
+      "original": "project-archive",
+      "commit": "75fb1a798d07da84f5550370e359fcfded088491",
+      "aheadOfMain": 1,
+      "behindMain": 178,
+      "action": "retain",
+      "retainedAs": "project-archive"
+    },
+    {
+      "original": "release/earthrise-2026-10-16",
+      "commit": "267217598db27c5bb3e16c96b9214ede2826cd7d",
+      "aheadOfMain": 2,
+      "behindMain": 99,
+      "action": "archive",
+      "retainedAs": "archive/2026-10/earthrise"
+    }
+  ]
+}

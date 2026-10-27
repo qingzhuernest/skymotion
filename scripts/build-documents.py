@@ -10,7 +10,7 @@ from urllib.parse import urlsplit, urlunsplit
 from document_model import load, state_fields, validate
 from site_sources import load_catalog, navigation_html
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = (Path(__file__).resolve().parents[1] / "site")
 LINKS = [
     ("docs", "文档中心", "Documentation"),
     ("guide", "学习指南", "Learning guide"),
@@ -40,7 +40,7 @@ class DocumentRenderer:
         self.dictionary = {}
         self.fields = state_fields(root)
         self.version = load_catalog(root)["resourceVersion"]
-        self.template = Template((root / "scripts/document-page.html").read_text())
+        self.template = Template((Path(__file__).resolve().parent / "document-page.html").read_text())
         self.sources = []
         for path, description in data["source_files"].items():
             source = (root / path).read_text()

@@ -7,7 +7,7 @@ import posixpath
 from pathlib import Path
 import re
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = (Path(__file__).resolve().parents[1] / "site")
 
 
 def read_json(root, name):

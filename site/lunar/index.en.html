@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" data-rendered-language="en">
+  <head>
+    <meta charset="UTF-8" />
+<script src="../theme-colors.js?v=20261027-repository125"></script>
+<script src="../preferences.js?v=20261027-repository125"></script>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <script src="../page-boot.js?v=20261027-repository125"></script>
+    <title data-i18n-cn="{&quot;Earth from the Moon · Sky Motion Lab&quot;:&quot;从月球看地球 · 天体视运动实验室&quot;}">Earth from the Moon · Sky Motion Lab</title>
+    <link rel="icon" href="../favicon.svg" />
+    <link rel="stylesheet" href="../ui-palette.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="../style.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="../pages.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="../design-system.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="../language.css?v=20261027-repository125" />
+    <link rel="stylesheet" href="lunar.css?v=20261027-repository125" />
+    <script src="../language-data.js?v=20261027-repository125" defer></script>
+    <script src="../language.js?v=20261027-repository125" defer></script>
+    <script src="../space/vendor/three.min.js" defer></script>
+    <script src="../space/appearance.js?v=20261027-repository125" defer></script>
+    <script src="model.js?v=20261027-repository125" defer></script>
+    <script src="lunar.js?v=20261027-repository125" defer></script>
+    <script src="../page-cache.js?v=20261027-repository125" defer></script>
+  <link rel="stylesheet" href="../parameter-controls.css?v=20261027-repository125" />
+<link rel="stylesheet" href="../diagram-tools.css?v=20261027-repository125" />
+<script src="../material-controls.js?v=20261027-repository125" defer></script>
+<link rel="stylesheet" href="../preferences.css?v=20261027-repository125">
+</head>
+  <body data-page="lunar">
+    <nav class="page-nav" aria-label="Page navigation" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;页面导航&quot;}"><a href="../index.en.html" data-cn-href="../index.html" data-i18n-cn="{&quot;Welcome&quot;:&quot;欢迎页&quot;}">Welcome</a><a href="../lab.en.html" aria-current="page" data-cn-href="../lab.html" data-i18n-cn="{&quot;Lab&quot;:&quot;实验台&quot;}">Lab</a><a href="../docs.en.html" data-cn-href="../docs.html" data-i18n-cn="{&quot;Documentation&quot;:&quot;文档中心&quot;}">Documentation</a><a href="../space/index.en.html" data-cn-href="../space/" data-i18n-cn="{&quot;3D Sky&quot;:&quot;三维天空&quot;}">3D Sky</a></nav>
+    <main class="lunar-shell">
+      <header class="lunar-heading">
+        <div>
+          <h1 data-i18n-cn="{&quot;Earth from the Moon&quot;:&quot;从月球看地球&quot;}">Earth from the Moon</h1>
+          <p data-i18n-cn="{&quot;One lunar orbit, two perspectives.&quot;:&quot;同一段绕月飞行，两种观察视角。&quot;}">One lunar orbit, two perspectives.</p>
+        </div>
+        <div class="lunar-mode md-connected-choice" role="group" aria-label="Observer mode" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;观察方式&quot;}">
+          <button type="button" data-mode="orbit" aria-pressed="true" data-i18n-cn="{&quot;Lunar orbiter&quot;:&quot;绕月飞行&quot;}">Lunar orbiter</button><button type="button" data-mode="surface" aria-pressed="false" data-i18n-cn="{&quot;Fixed lunar site&quot;:&quot;月面固定&quot;}">Fixed lunar site</button>
+        </div>
+      </header>
+      <div class="lunar-mobile-tabs md-connected-choice" role="group" aria-label="Diagram view" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;图解视图&quot;}">
+        <button type="button" data-lunar-view="orbit" aria-pressed="false" data-i18n-cn="{&quot;Orbit diagram&quot;:&quot;轨道示意&quot;}">Orbit diagram</button><button type="button" data-lunar-view="sky" aria-pressed="true" data-i18n-cn="{&quot;Astronaut view&quot;:&quot;宇航员视角&quot;}">Astronaut view</button>
+      </div>
+      <div class="lunar-stage md-dark-surface" id="lunarStage" data-mobile-view="sky">
+        <canvas id="lunarCanvas" aria-label="Linked lunar orbit and astronaut views" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;联动的绕月轨道与宇航员视角&quot;}"></canvas>
+        <section class="lunar-pane">
+          <header>
+            <h2 data-i18n-cn="{&quot;Orbit diagram&quot;:&quot;轨道示意&quot;}">Orbit diagram</h2>
+            <span data-i18n-cn="{&quot;Sizes and distances scaled separately&quot;:&quot;大小与距离分别缩放&quot;}">Sizes and distances scaled separately</span>
+          </header>
+          <div class="lunar-view md-dark-surface" id="orbitView" tabindex="0" role="group" aria-label="Drag the Moon or observer to change the viewpoint" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;拖动月球或观察者，改变观察位置&quot;}">
+            <span class="lunar-object-label" id="mapEarth" data-i18n-cn="{&quot;Earth&quot;:&quot;地球&quot;}">Earth</span><span class="lunar-object-label" id="mapMoon" data-i18n-cn="{&quot;Moon&quot;:&quot;月球&quot;}">Moon</span><span class="lunar-object-label observer-label" id="mapObserver" data-i18n-cn="{&quot;Observer&quot;:&quot;观察者&quot;}">Observer</span>
+            <p class="lunar-view-help" data-i18n-cn="{&quot;Drag the Moon to change the geometry; drag the observer to move along the lunar orbit.&quot;:&quot;拖动月球改变构型；拖动观察者改变绕月位置。&quot;}">Drag the Moon to change the geometry; drag the observer to move along the lunar orbit.</p>
+          </div>
+        </section>
+        <section class="lunar-pane">
+          <header>
+            <h2 data-i18n-cn="{&quot;Astronaut view&quot;:&quot;宇航员视角&quot;}">Astronaut view</h2>
+            <button type="button" id="resetLook" data-i18n-cn="{&quot;Reset view&quot;:&quot;复位视角&quot;}">Reset view</button>
+          </header>
+          <div class="lunar-view md-dark-surface" id="astronautView" tabindex="0" role="group" aria-label="Drag to look around" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;拖动画面转头观察&quot;}">
+            <div class="lunar-camera-tools">
+              <button type="button" id="followEarth" aria-pressed="true" data-i18n-cn="{&quot;Look toward Earth&quot;:&quot;朝向地球&quot;}">Look toward Earth</button><label for="lens" data-i18n-cn="{&quot;Field of view&quot;:&quot;视场&quot;}">Field of view</label><select id="lens">
+                <option value="24">24°</option>
+                <option value="45">45°</option>
+                <option value="70">70°</option>
+              </select>
+            </div>
+            <span class="lunar-earth-label" id="skyEarth" data-i18n-cn="{&quot;Earth&quot;:&quot;地球&quot;}">Earth</span>
+            <div class="lunar-view-status">
+              <strong id="visibilityText" role="status"></strong><span id="cameraHint" data-i18n-cn="{&quot;Drag the view to look around.&quot;:&quot;拖动画面可自由转头。&quot;}">Drag the view to look around.</span><button type="button" id="revealEarth" hidden data-i18n-cn="{&quot;Watch Earthrise&quot;:&quot;看地升&quot;}">Watch Earthrise</button>
+            </div>
+          </div>
+        </section>
+        <p id="lunarFailure" class="lunar-failure" hidden data-i18n-cn="{&quot;The 3D view could not start. The sliders and geometry readouts still work. Try reloading the page.&quot;:&quot;\n          三维画面未能启动。下方滑块与几何读数仍可使用，请尝试重新加载页面。\n        &quot;}">The 3D view could not start. The sliders and geometry readouts still work. Try reloading the page.</p>
+      </div>
+      <section class="lunar-workbench" aria-label="Lunar orbit controls" data-i18n-cn-attrs="{&quot;aria-label&quot;:&quot;绕月演示控制&quot;}">
+        <div class="lunar-play-row">
+          <div class="lunar-play-actions">
+            <button type="button" id="playOrbit" aria-pressed="false">
+              <svg viewbox="0 0 20 20" aria-hidden="true"><path d="m6 4 9 6-9 6Z" /></svg><span data-i18n-cn="{&quot;Play lunar orbit&quot;:&quot;播放绕月飞行&quot;}">Play lunar orbit</span></button><button type="button" id="seekRise" data-i18n-cn="{&quot;Watch Earthrise&quot;:&quot;看地升&quot;}">Watch Earthrise</button><button type="button" id="resetOrbit" data-i18n-cn="{&quot;Reset&quot;:&quot;重置&quot;}">Reset</button>
+          </div>
+          <div class="lunar-options">
+            <label for="altitude" data-i18n-cn="{&quot;Orbital altitude&quot;:&quot;轨道高度&quot;}">Orbital altitude</label><select id="altitude">
+              <option value="100">100 km</option>
+              <option value="300">300 km</option>
+              <option value="1000">1,000 km</option></select><label for="lunarSpeed" data-i18n-cn="{&quot;Playback speed&quot;:&quot;演示速度&quot;}">Playback speed</label><select id="lunarSpeed">
+              <option value="80" data-i18n-cn="{&quot;80 s / orbit&quot;:&quot;80 秒／圈&quot;}">80 s / orbit</option>
+              <option value="40" selected data-i18n-cn="{&quot;40 s / orbit&quot;:&quot;40 秒／圈&quot;}">40 s / orbit</option>
+              <option value="20" data-i18n-cn="{&quot;20 s / orbit&quot;:&quot;20 秒／圈&quot;}">20 s / orbit</option>
+            </select>
+          </div>
+        </div>
+        <div class="lunar-sliders">
+          <label for="orbitAngle"><span><span data-i18n-cn="{&quot;Position along orbit&quot;:&quot;绕月位置&quot;}">Position along orbit</span><output id="positionValue">258°</output></span><input id="orbitAngle" type="range" min="0" max="360" step="0.1" value="258" /><small data-i18n-cn="{&quot;Measured from the near side, in the direction of flight.&quot;:&quot;从近地侧起，沿飞行方向计量。&quot;}">Measured from the near side, in the direction of flight.</small></label><label for="phaseAngle"><span><span data-i18n-cn="{&quot;Sun–Earth–Moon geometry&quot;:&quot;日地月构型&quot;}">Sun–Earth–Moon geometry</span><output id="phaseValue">45°</output></span><input id="phaseAngle" type="range" min="0" max="360" step="1" value="45" /><small data-i18n-cn="{&quot;Move the Moon around Earth to compare the illuminated Earth seen from the Moon.&quot;:&quot;改变月球公转位置，比较从月球所见的地球亮面。&quot;}">Move the Moon around Earth to compare the illuminated Earth seen from the Moon.</small></label>
+        </div>
+      </section>
+      <dl class="lunar-readouts">
+        <div>
+          <dt data-i18n-cn="{&quot;Earth altitude&quot;:&quot;地球高度角&quot;}">Earth altitude</dt>
+          <dd id="earthAltitude">—</dd>
+          <small data-i18n-cn="{&quot;Relative to the local horizontal&quot;:&quot;相对当地水平面&quot;}">Relative to the local horizontal</small>
+        </div>
+        <div>
+          <dt data-i18n-cn="{&quot;Lunar limb altitude&quot;:&quot;月面边缘高度&quot;}">Lunar limb altitude</dt>
+          <dd id="horizonAltitude">—</dd>
+          <small data-i18n-cn="{&quot;The orbital horizon lies below the horizontal&quot;:&quot;轨道上的地平线低于水平面&quot;}">The orbital horizon lies below the horizontal</small>
+        </div>
+        <div>
+          <dt data-i18n-cn="{&quot;Physical orbital period&quot;:&quot;真实绕月周期&quot;}">Physical orbital period</dt>
+          <dd id="orbitPeriod">—</dd>
+          <small data-i18n-cn="{&quot;Playback is accelerated&quot;:&quot;演示播放已加速&quot;}">Playback is accelerated</small>
+        </div>
+        <div>
+          <dt data-i18n-cn="{&quot;Illuminated Earth&quot;:&quot;地球亮面比例&quot;}">Illuminated Earth</dt>
+          <dd id="earthIllumination">—</dd>
+          <small data-i18n-cn="{&quot;Earth’s disk as seen from the Moon&quot;:&quot;月球所见的地球圆面&quot;}">Earth’s disk as seen from the Moon</small>
+        </div>
+      </dl>
+      <section class="lunar-explanation">
+        <h2 id="lessonTitle" data-i18n-cn="{&quot;Why does Earth rise and set?&quot;:&quot;地球为什么会升落？&quot;}">Why does Earth rise and set?</h2>
+        <p id="lessonText" data-i18n-cn="{&quot;A lunar orbiter changes its observing position. The Moon reveals or hides Earth as the line of sight crosses the lunar limb.&quot;:&quot;\n          宇航员绕月飞行时，观察位置不断改变，月球会遮住或露出地球。地升地落来自视线与月面边缘的相对运动。\n        &quot;}">A lunar orbiter changes its observing position. The Moon reveals or hides Earth as the line of sight crosses the lunar limb.</p>
+        <details>
+          <summary data-i18n-cn="{&quot;Model assumptions and scale&quot;:&quot;模型的范围与比例&quot;}">Model assumptions and scale</summary>
+          <p data-i18n-cn="{&quot;Independent teaching model: lunar radius 1,737.4 km and Earth–Moon distance 384,400 km, with circular orbits and synchronous lunar rotation. Sun–Earth–Moon geometry is held fixed during each orbital demonstration. The fixed surface site is at the center of the near side.&quot;:&quot;\n            独立教学模型：月球半径 1,737.4 km，地月距离 384,400\n            km；采用圆轨道与月球同步自转。一次绕月演示中，日地月构型固定。月面固定模式位于近地侧中央。\n          &quot;}">Independent teaching model: lunar radius 1,737.4 km and Earth–Moon distance 384,400 km, with circular orbits and synchronous lunar rotation. Sun–Earth–Moon geometry is held fixed during each orbital demonstration. The fixed surface site is at the center of the near side.</p>
+          <p data-i18n-cn="{&quot;The astronaut view uses physical geometry and an adjustable field of view; the diagram scales bodies and orbits separately. Surface textures are illustrative. Terrain, libration, orbital inclination, eclipses and atmospheric refraction are omitted. This is not a tool for mission planning or date-based prediction.&quot;:&quot;\n            右图按真实几何关系绘制，视场可调；左图分别放大天体和轨道。表面纹理为示意。不计地形、天平动、轨道倾角、食与大气折射；不用于航天任务或日期预报。\n          &quot;}">The astronaut view uses physical geometry and an adjustable field of view; the diagram scales bodies and orbits separately. Surface textures are illustrative. Terrain, libration, orbital inclination, eclipses and atmospheric refraction are omitted. This is not a tool for mission planning or date-based prediction.</p>
+        </details>
+      </section>
+    </main>
+  <script src="../experiment-storage.js?v=20261027-repository125" defer></script>
+<script src="../diagram-sampling.js?v=20261027-repository125" defer></script>
+<script src="../parameter-controls.js?v=20261027-repository125" defer></script>
+<script src="../diagram-tool-definitions.js?v=20261027-repository125" defer></script>
+<script src="../diagram-tools.js?v=20261027-repository125" defer></script>
+</body>
+</html>

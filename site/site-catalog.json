@@ -1,0 +1,309 @@
+{
+  "resourceVersion": "20261027-repository125",
+  "pages": [
+    {
+      "path": "index.html",
+      "reading": false
+    },
+    {
+      "path": "lab.html",
+      "reading": false
+    },
+    {
+      "path": "diagrams.html",
+      "reading": false,
+      "navigation": "lab.html"
+    },
+    {
+      "path": "analemma.html",
+      "reading": false,
+      "navigation": "lab.html"
+    },
+    {
+      "path": "sundial.html",
+      "reading": false,
+      "navigation": "lab.html"
+    },
+    {
+      "path": "guide.html",
+      "reading": true,
+      "navigation": "docs.html"
+    },
+    {
+      "path": "project-guide.html",
+      "reading": true,
+      "navigation": "docs.html"
+    },
+    {
+      "path": "development-guide.html",
+      "reading": true,
+      "navigation": "docs.html"
+    },
+    {
+      "path": "docs.html",
+      "reading": false,
+      "navigation": "docs.html"
+    },
+    {
+      "path": "contact.html",
+      "reading": false
+    },
+    {
+      "path": "geography-review.html",
+      "reading": false
+    },
+    {
+      "path": "404.html",
+      "reading": false
+    },
+    {
+      "path": "space/index.html",
+      "reading": false
+    },
+    {
+      "path": "lunar/index.html",
+      "reading": false,
+      "navigation": "lab.html"
+    }
+  ],
+  "groups": [
+    [
+      "天空与日影",
+      "Sky & shadows"
+    ],
+    [
+      "关联图解",
+      "Related diagrams"
+    ],
+    [
+      "对照与搭建",
+      "Compare & build"
+    ]
+  ],
+  "views": [
+    {
+      "id": "skyPanel",
+      "group": 0,
+      "labels": {
+        "sun": [
+          "天空与日影",
+          "Sky & shadows"
+        ],
+        "moon": [
+          "月球天空",
+          "Lunar sky"
+        ]
+      }
+    },
+    {
+      "id": "skyTopPanel",
+      "group": 0,
+      "sidebarHidden": true,
+      "skyView": "top",
+      "labels": {
+        "sun": [
+          "俯视日影",
+          "Top-down shadows"
+        ],
+        "moon": [
+          "俯视日影",
+          "Top-down shadows"
+        ]
+      }
+    },
+    {
+      "id": "skyHorizonPanel",
+      "group": 0,
+      "sidebarHidden": true,
+      "skyView": "horizon",
+      "labels": {
+        "sun": [
+          "地平视角",
+          "Horizon view"
+        ],
+        "moon": [
+          "地平视角",
+          "Horizon view"
+        ]
+      }
+    },
+    {
+      "id": "skyObserverPanel",
+      "group": 0,
+      "sidebarHidden": true,
+      "skyView": "observer",
+      "labels": {
+        "sun": [
+          "仰望天空",
+          "Look up"
+        ],
+        "moon": [
+          "仰望天空",
+          "Look up"
+        ]
+      }
+    },
+    {
+      "id": "contextPanel",
+      "group": 1,
+      "labels": {
+        "sun": [
+          "地球与昼夜",
+          "Earth & daylight"
+        ],
+        "moon": [
+          "月相与关系",
+          "Moon phase and relationships"
+        ]
+      }
+    },
+    {
+      "id": "chartPanel",
+      "group": 1,
+      "labels": {
+        "sun": [
+          "全天高度曲线",
+          "Daily altitude"
+        ],
+        "moon": [
+          "逐日照明比例",
+          "Daily illumination"
+        ]
+      }
+    },
+    {
+      "id": "riseSetPanel",
+      "group": 1,
+      "labels": {
+        "sun": [
+          "日出日落方位",
+          "Rise/set bearings"
+        ],
+        "moon": [
+          "月出月落方位",
+          "Moonrise and moonset"
+        ]
+      }
+    },
+    {
+      "id": "solarGeometryPanel",
+      "group": 1,
+      "labels": {
+        "sun": [
+          "地轴与地平面",
+          "Axis & horizon"
+        ]
+      }
+    },
+    {
+      "id": "companionModule",
+      "group": 1,
+      "labels": {
+        "moon": [
+          "行星伴月",
+          "Moon & planets"
+        ]
+      },
+      "layout": {
+        "moon": "solarGeometryPanel"
+      }
+    },
+    {
+      "id": "lunarOrbit",
+      "group": 1,
+      "labels": {
+        "moon": [
+          "地升地落",
+          "Earthrise"
+        ]
+      }
+    },
+    {
+      "id": "analemmaPanel",
+      "group": 1,
+      "labels": {
+        "sun": [
+          "日行迹",
+          "Analemma"
+        ]
+      }
+    },
+    {
+      "id": "solarCompare",
+      "group": 2,
+      "labels": {
+        "sun": [
+          "组合视图",
+          "Combined views"
+        ],
+        "moon": [
+          "组合视图",
+          "Combined views"
+        ]
+      }
+    },
+    {
+      "id": "solarStudy",
+      "group": 2,
+      "labels": {
+        "sun": [
+          "地点与时间对照",
+          "Place & time comparison"
+        ]
+      },
+      "editing": true,
+      "sidebar": "conditions"
+    },
+    {
+      "id": "sceneBuilder",
+      "group": 2,
+      "labels": {
+        "sun": [
+          "搭建实验",
+          "Build experiment"
+        ],
+        "moon": [
+          "搭建实验",
+          "Build experiment"
+        ]
+      },
+      "editing": true,
+      "sidebar": "references"
+    }
+  ],
+  "navigation": [
+    [
+      "index.html",
+      [
+        "欢迎页",
+        "Welcome"
+      ]
+    ],
+    [
+      "lab.html",
+      [
+        "实验台",
+        "Lab"
+      ]
+    ],
+    [
+      "docs.html",
+      [
+        "文档中心",
+        "Documentation"
+      ]
+    ],
+    [
+      "space/",
+      [
+        "三维天空",
+        "3D Sky"
+      ]
+    ]
+  ],
+  "groupIds": [
+    "sky",
+    "related",
+    "compare"
+  ]
+}

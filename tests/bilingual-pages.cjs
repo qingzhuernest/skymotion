@@ -7,8 +7,8 @@ sys.path.insert(0, "scripts")
 from importlib.machinery import SourceFileLoader
 m=SourceFileLoader('prerender','scripts/prerender-pages.py').load_module()
 count=0
-for english in Path('.').resolve().rglob('*.en.html'):
-    if not m.is_site_file(english,Path('.').resolve()): continue
+for english in Path('site').resolve().rglob('*.en.html'):
+    if not m.is_site_file(english,Path('site').resolve()): continue
     chinese=english.with_name(english.name.replace('.en.html','.html'))
     assert chinese.is_file(),f'Missing source: {chinese}'
     m.assert_unchanged(m.parse(chinese.read_text()),m.parse(english.read_text()),str(chinese))
@@ -34,7 +34,7 @@ for english in Path('.').resolve().rglob('*.en.html'):
         for child in node.children: check_english_text(child,skip)
     check_english_text(m.parse(english.read_text()))
     count+=1
-expected=len(__import__('json').loads(Path('site-catalog.json').read_text())['pages'])
+expected=len(__import__('json').loads(Path('site/site-catalog.json').read_text())['pages'])
 assert count==expected,f'Expected {expected} bilingual pairs, got {count}'
 print(f'PASS all {count} bilingual DOM, attribute, form-value and script pairs, with complete English text')
 `],{stdio:'inherit'});

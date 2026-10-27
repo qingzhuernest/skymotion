@@ -37,6 +37,7 @@ jobs:
         env:
           FULL_REGRESSION: ${{ inputs.full_regression }}
         run: |
+          python3 scripts/repository-index.py --check
           if [ "$FULL_REGRESSION" = "true" ]; then
             node .github/scripts/verify-site.cjs
           else

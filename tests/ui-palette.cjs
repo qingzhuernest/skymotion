@@ -2,7 +2,7 @@
 const assert = require('node:assert/strict'),
   fs = require('node:fs'),
   path = require('node:path');
-const root = path.resolve(__dirname, '..');
+const root = path.resolve(__dirname, '../site');
 const shared = [
   'design-system.css',
   'controls.css',

@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs');
 const{chromium}=require(process.env.SKY_MOTION_PLAYWRIGHT||'playwright');
 const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/\/?$/,'/');
-for(const doc of ['guide','project-guide','development-guide'])for(const lang of ['', '.en']){const source=fs.readFileSync(doc+lang+'.html','utf8');assert(!source.includes('document-chapter-links'));assert(!/rel="(?:prev|next)"/.test(source));assert(source.includes('document-section-actions'));}
+for(const doc of ['guide','project-guide','development-guide'])for(const lang of ['', '.en']){const source=fs.readFileSync('site/'+doc+lang+'.html','utf8');assert(!source.includes('document-chapter-links'));assert(!/rel="(?:prev|next)"/.test(source));assert(source.includes('document-section-actions'));}
 (async()=>{
  const browser=await chromium.launch({executablePath:process.env.SKY_MOTION_CHROMIUM||'/usr/bin/chromium',args:['--no-sandbox','--use-angle=swiftshader']});
  const page=await browser.newPage({viewport:{width:1280,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));

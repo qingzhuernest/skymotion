@@ -1,13 +1,13 @@
 const assert = require('node:assert/strict'),
   fs = require('node:fs'),
   vm = require('node:vm'),
-  A = require('../astronomy.js');
+  A = require('../site/astronomy.js');
 const sandbox = vm.createContext({ Astronomy: A, Date });
 for (const f of ['model.js', 'population.js'])
-  vm.runInContext(fs.readFileSync('space/' + f, 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync('site/space/' + f, 'utf8'), sandbox);
 const P = sandbox.SolarSpacePopulation,
   M = sandbox.SolarSpaceModel,
-  data = JSON.parse(fs.readFileSync('space/assets/population.json', 'utf8'));
+  data = JSON.parse(fs.readFileSync('site/space/assets/population.json', 'utf8'));
 assert.equal(data.satellites.length, 455);
 assert.equal(data.smallBodies.length, 1212);
 const tally = {};

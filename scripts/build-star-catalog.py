@@ -1,7 +1,7 @@
 """Extract a small, attributed J2000 reference sky from HYG 4.1 (CC BY-SA 4.0)."""
 import csv, io, json, math, pathlib, urllib.request
 SOURCE = 'https://raw.githubusercontent.com/astronexus/HYG-Database/main/hyg/CURRENT/hygdata_v41.csv'
-DESTINATION = pathlib.Path(__file__).resolve().parents[1] / 'space/assets/stars.json'
+DESTINATION = (pathlib.Path(__file__).resolve().parents[1] / "site") / 'space/assets/stars.json'
 rows = []
 with urllib.request.urlopen(SOURCE, timeout=60) as response:
     for star in csv.DictReader(io.TextIOWrapper(response, encoding='utf-8')):

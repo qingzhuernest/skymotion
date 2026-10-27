@@ -5,7 +5,7 @@ import json, math
 from pathlib import Path
 from fontTools.ttLib import TTFont
 from fontTools.pens.basePen import BasePen
-root = Path(__file__).resolve().parents[1]
+root = (Path(__file__).resolve().parents[1] / "site")
 font = TTFont(root / 'fonts/charter_italic.woff2')
 glyphs = font.getGlyphSet()
 class OutlinePen(BasePen):

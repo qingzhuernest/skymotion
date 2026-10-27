@@ -11,7 +11,7 @@ from fontTools import subset
 from fontTools.ttLib import TTFont
 from fontTools.pens.recordingPen import DecomposingRecordingPen
 
-root = Path(__file__).resolve().parents[1]
+root = (Path(__file__).resolve().parents[1] / "site")
 for name in ('reading-regular.woff2', 'reading-bold.woff2'):
     path = root / 'fonts' / name
     original = TTFont(path)

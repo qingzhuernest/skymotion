@@ -3,11 +3,11 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const Astronomy = require('../astronomy.js');
+const Astronomy = require('../site/astronomy.js');
 const sandbox = { Astronomy, Date };
 vm.createContext(sandbox);
 for (const file of ['model.js', 'earth-frame.js'])
-  vm.runInContext(fs.readFileSync(path.join(__dirname, '../space', file), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '../site/space', file), 'utf8'), sandbox);
 const Model = sandbox.SolarSpaceModel;
 const EarthFrame = sandbox.SolarSpaceEarthFrame;
 const rad = Math.PI / 180;

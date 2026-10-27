@@ -1,7 +1,7 @@
 const {addTool}=require('./diagram-test-helpers.cjs');
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const {chromium}=require(process.env.SKY_MOTION_PLAYWRIGHT||'playwright');
-const source=fs.readFileSync(require('node:path').join(__dirname,'../diagram-sampling.js'),'utf8');
+const source=fs.readFileSync(require('node:path').join(__dirname,'../site/diagram-sampling.js'),'utf8');
 const numerical=fn=>{const ctx={window:{},solar:(lat,dec,t)=>({alt:fn(t),az:90}),skyRaw:(body,t)=>({alt:fn(t),az:90})};vm.runInNewContext(source,ctx);return ctx.window.SkyDiagramSampling;};
 for(const center of [.05,5,25,1435,1439.95]){const radius=center<1||center>1439?.02:.5,s=numerical(t=>radius**2-(t-center)**2),events=s.events('2026-06-21',0,'Sun',0,0,0);assert.equal(events.length,2);assert(Math.abs(events[0].time-(center-radius))<.0001);assert(Math.abs(events[1].time-(center+radius))<.0001);}
 assert.equal(numerical(t=>-((t-720)**2)).events('2026-06-21',0,'Sun',0,0,0).length,0);

@@ -1,6 +1,6 @@
 /** Independent Earthrise geometry and lazy, pauseable diagram integration. */
 const assert = require('node:assert/strict');
-const M = require('../lunar/model.js');
+const M = require('../site/lunar/model.js');
 for (const h of [100, 300, 1000]) {
   assert(M.sample(0, h).visibility === 'visible');
   assert(M.sample(180, h).visibility === 'hidden');

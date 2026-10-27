@@ -6,7 +6,7 @@ import urllib.parse
 import urllib.request
 from html.parser import HTMLParser
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
+ROOT = (pathlib.Path(__file__).resolve().parents[1] / "site")
 SATELLITES = 'https://ssd.jpl.nasa.gov/sats/elem/'
 FIELDS = 'full_name,epoch,a,e,i,om,w,ma,n'
 

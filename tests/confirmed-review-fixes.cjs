@@ -15,7 +15,7 @@ const ctx = new Proxy({
 }, {get(o,k) { return o[k] || (()=>{}); }});
 const canvas = {setAttribute(){},addEventListener(){},getContext(){return ctx;}};
 const sandbox = {document:{createElement(){return canvas;}},SolarSpaceModel:{MOON_DISPLAY_SCALE:1.5/0.002569555}};
-vm.runInNewContext(fs.readFileSync('space/compare.js','utf8'),sandbox);
+vm.runInNewContext(fs.readFileSync('site/space/compare.js','utf8'),sandbox);
 const compare=sandbox.SolarSpaceCompare.create({host:{append(){},getBoundingClientRect(){return {width:600,height:400};}}});
 const moon={x:0.002,z:0.001},factor=sandbox.SolarSpaceModel.MOON_DISPLAY_SCALE;
 compare.render({view:'earthmoon',snapshot:{moon,earthToSun:{x:0,z:0},moonIllumination:0.5},lunarPath:[{x:moon.x*factor,z:moon.z*factor}],parallelRays:false,names:false});

@@ -19,7 +19,7 @@ function startServer() {
         'server.serve_forever()',
       ].join('\n'),
     ],
-    { stdio: ['ignore', 'pipe', 'ignore'] },
+    { cwd: 'site', stdio: ['ignore', 'pipe', 'ignore'] },
   );
   const ready = new Promise((resolve, reject) => {
     let output = '';

@@ -5,13 +5,15 @@ from pathlib import Path
 import argparse,re
 from fontTools.ttLib import TTFont
 from fontTools import subset
-root=Path(__file__).resolve().parents[1]
+root=(Path(__file__).resolve().parents[1] / "site")
 parser=argparse.ArgumentParser()
 parser.add_argument('--font-directory',default='/usr/share/fonts/opentype/noto')
 args=parser.parse_args()
 existing=set(TTFont(root/'fonts/reading-regular.woff2').getBestCmap())
-sources=['preferences.js','site-catalog.json','page-navigation.js','workbench-menu.js','custom-layout.js','diagram-tools.js','docs/document-content.json']
+sources=['preferences.js','site-catalog.json','page-navigation.js','workbench-menu.js','custom-layout.js','diagram-tools.js']
+sources_text=(root.parent/'docs/document-content.json').read_text()
 characters={ord(c) for name in sources for c in (root/name).read_text() if '\u3400'<=c<='\u9fff'}-existing
+characters |= {ord(c) for c in sources_text if '\u3400'<=c<='\u9fff'}-existing
 rules=[]
 for style in ['regular','bold']:
     font=TTFont(Path(args.font_directory)/('NotoSerifCJK-'+style.title()+'.ttc'),fontNumber=2)

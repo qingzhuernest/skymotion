@@ -128,5 +128,5 @@ def validate(data, root):
 
 
 def load(root):
-    data = json.loads((root / "docs/document-content.json").read_text())
+    data = json.loads((Path(__file__).resolve().parents[1] / "docs/document-content.json").read_text())
     return validate(data, root)

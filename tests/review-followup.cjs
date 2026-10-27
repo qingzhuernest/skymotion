@@ -85,9 +85,9 @@ try{
  await q.close();console.log('PASS mobile language failure is visible and retries English without resetting the experiment');
 }finally{await browser.close()}
  // Verify cache warming matches foreground font keys and prioritizes the chosen locale.
- const vm=require('node:vm'),manifest=JSON.parse(fs.readFileSync('page-cache-manifest.json','utf8')),requests=[];
+ const vm=require('node:vm'),manifest=JSON.parse(fs.readFileSync('site/page-cache-manifest.json','utf8')),requests=[];
  const sandbox={URL,Promise,setTimeout,CustomEvent:class{},addEventListener(){},document:{body:{dataset:{}},currentScript:{src:'https://example.test/page-cache.js'},readyState:'complete',documentElement:{lang:'zh-CN'},dispatchEvent(){}},fetch:async url=>{requests.push(String(url));return {ok:true,json:async()=>manifest,arrayBuffer:async()=>new ArrayBuffer(0)}}};
- sandbox.window={requestIdleCallback:fn=>fn()};vm.runInNewContext(fs.readFileSync('page-cache.js','utf8'),sandbox);await sandbox.window.skyPageCacheReady;
+ sandbox.window={requestIdleCallback:fn=>fn()};vm.runInNewContext(fs.readFileSync('site/page-cache.js','utf8'),sandbox);await sandbox.window.skyPageCacheReady;
  assert.equal(sandbox.window.skyPageCache.state,'ready');assert.equal(requests.length,manifest.pages.length+manifest.assets.length+1);
  assert(requests.slice(1,13).every(url=>!url.includes('.en.html')));
  for(const weight of ['regular','bold'])assert(requests.includes(`https://example.test/fonts/reading-${weight}.woff2?v=${manifest.readingFontVersion}`));
@@ -96,8 +96,8 @@ try{
  console.log('PASS all-page warming, locale priority and matching font cache URLs');
  const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'skymotion-freshness-'));
  try{
-  const manifest=JSON.parse(fs.readFileSync('page-cache-manifest.json','utf8'));
-  for(const name of [...manifest.pages,...manifest.assets,'page-cache-manifest.json','scripts/prerender-pages.py','scripts/site_sources.py']){const target=path.join(temporary,name);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(name,target)}
+  const manifest=JSON.parse(fs.readFileSync('site/page-cache-manifest.json','utf8'));
+  for(const name of [...manifest.pages,...manifest.assets,'page-cache-manifest.json']){const target=path.join(temporary,name);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(path.join('site',name),target)}
   const check=()=>spawnSync('python3',['scripts/prerender-pages.py','--dist',temporary,'--check'],{encoding:'utf8'});
   assert.equal(check().status,0,'Unmodified generated fixture must pass');
   const dictionary=path.join(temporary,'i18n-docs.json'),map=JSON.parse(fs.readFileSync(dictionary,'utf8'));map['欢迎页']='Welcome — updated';fs.writeFileSync(dictionary,JSON.stringify(map));

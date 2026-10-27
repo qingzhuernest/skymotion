@@ -10,7 +10,7 @@ import copy, json, sys, tempfile, shutil
 sys.path.insert(0,'scripts')
 from document_model import load, validate, state_fields
 from site_sources import generated_sources, load_catalog
-root=Path.cwd()
+root=Path.cwd()/'site'
 data=load(root)
 def rejected(change):
     draft=copy.deepcopy(data)
@@ -39,7 +39,7 @@ with tempfile.TemporaryDirectory() as directory:
     else:raise AssertionError('New undocumented state was accepted')
 from importlib.machinery import SourceFileLoader
 import re
-builder=SourceFileLoader('document_builder',str(root/'scripts/build-documents.py')).load_module()
+builder=SourceFileLoader('document_builder',str(root.parent/'scripts/build-documents.py')).load_module()
 renderer=builder.DocumentRenderer(data,root)
 renderer.version='next-release-test'
 page=renderer.page(data['documents'][0])

@@ -2,11 +2,11 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const Astronomy = require('../astronomy.js');
-const catalog = JSON.parse(fs.readFileSync('space/assets/stars.json', 'utf8'));
+const Astronomy = require('../site/astronomy.js');
+const catalog = JSON.parse(fs.readFileSync('site/space/assets/stars.json', 'utf8'));
 const context = vm.createContext({ Astronomy, Date });
 for (const file of ['model.js', 'stars.js'])
-  vm.runInContext(fs.readFileSync('space/' + file, 'utf8'), context);
+  vm.runInContext(fs.readFileSync('site/space/' + file, 'utf8'), context);
 const sky = context.SolarSpaceStars;
 const model = context.SolarSpaceModel;
 assert.equal(catalog.epoch, 'J2000');

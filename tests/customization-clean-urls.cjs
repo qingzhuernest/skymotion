@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict');
 const{chromium}=require(process.env.SKY_MOTION_PLAYWRIGHT||'playwright');
 const http=require('node:http'),fs=require('node:fs/promises'),path=require('node:path');
-const root=path.resolve(__dirname,'..');
+const root=path.resolve(__dirname,'../site');
 const server=http.createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');if(/^\/(?:lab|diagrams)(?:\.en)?\.html$/.test(url.pathname)){res.writeHead(307,{location:url.pathname.replace(/\.html$/,'')});res.end();return;}const clean=/^\/(?:lab|diagrams)(?:\.en)?$/.test(url.pathname)?url.pathname+'.html':url.pathname;const file=path.resolve(root,'.'+clean);if(!file.startsWith(root+path.sep))throw Error();const data=await fs.readFile(file),mime={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json','.woff2':'font/woff2','.woff':'font/woff','.svg':'image/svg+xml','.jpg':'image/jpeg','.png':'image/png'};res.writeHead(200,{'content-type':mime[path.extname(file)]||'application/octet-stream'});res.end(data);}catch{res.writeHead(404);res.end();}});
 (async()=>{await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const base='http://127.0.0.1:'+server.address().port+'/';const browser=await chromium.launch({executablePath:process.env.SKY_MOTION_CHROMIUM||'/usr/bin/chromium',args:['--no-sandbox','--disable-gpu','--use-angle=swiftshader']});try{
  for(const suffix of['','.en']){

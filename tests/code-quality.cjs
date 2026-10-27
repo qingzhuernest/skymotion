@@ -10,7 +10,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
 );
 
 const context = vm.createContext({ window: {} });
-vm.runInContext(fs.readFileSync('experiment-storage.js', 'utf8'), context);
+vm.runInContext(fs.readFileSync('site/experiment-storage.js', 'utf8'), context);
 const transaction = context.window.SkyMotionSession.transaction;
 const order = [];
 let value = 1;

@@ -18,20 +18,24 @@
 
 ## 使用与文档
 
-- [文档中心](docs.html)：顶部统一入口，按教学、功能使用和开发查阅。
-- [学习指南](learning-guide.md)：课程设计、探究任务、观察记录和评价。
-- [项目介绍与功能使用](project-guide.md)：全部模块、参数、对照、自定义、保存与操作方法。
-- [开发说明](development-guide.md)：源码职责、状态、计算、渲染、检查与部署。
-- [自定义操作](docs/customization-interaction.zh.md)：添加城市、时间标记、参考线和实验物体，编辑属性并保存方案。
+- [文档中心](site/docs.html)：顶部统一入口，按教学、功能使用和开发查阅。
+- [学习指南](site/learning-guide.md)：课程设计、探究任务、观察记录和评价。
+- [项目介绍与功能使用](site/project-guide.md)：全部模块、参数、对照、自定义、保存与操作方法。
+- [开发说明](site/development-guide.md)：源码职责、状态、计算、渲染、检查与部署。
+- [自定义操作](site/docs/customization-interaction.zh.md)：添加城市、时间标记、参考线和实验物体，编辑属性并保存方案。
 
-自定义入口位于语言按钮旁。进入后，“观测条件”继续控制基准实验，“图中对象”负责添加和调整对照。城市与时刻在相关图中联动，杆、球和圆圈等在实验地面摆放。操作示例见[学习指南的自定义章节](guide.html#customization)。
+自定义入口位于语言按钮旁。进入后，“观测条件”继续控制基准实验，“图中对象”负责添加和调整对照。城市与时刻在相关图中联动，杆、球和圆圈等在实验地面摆放。操作示例见[学习指南的自定义章节](site/guide.html#customization)。
 
 “实验台 → 月球 → 视图与布局 → 地升地落”提供绕月轨道与宇航员视角的联动演示。该演示使用独立的示意轨道，保留左侧说明、参数栏和底部控制；它不是按真实日期求得的航天器轨道预报。
+
+## 仓库结构
+
+网站源码和发布文件在 [`site/`](site/)，文档原稿在 [`docs/`](docs/)，生成工具在 [`scripts/`](scripts/)，验证在 [`tests/`](tests/)。目录职责、完整文件清单与分支保留依据见 [仓库维护说明](docs/repository.md)。正式发布只使用 `main`。
 
 ## 本地运行
 
 ```sh
-python3 -m http.server 8000
+python3 -m http.server 8000 --directory site
 ```
 
 打开 `http://localhost:8000/`。英文使用独立页面，例如 `lab.en.html` 和 `space/index.en.html`。需要现代浏览器；三维视图需要 WebGL。
@@ -40,20 +44,20 @@ python3 -m http.server 8000
 
 文档中心与三份手册的双语原稿统一保存在 `docs/document-content.json`。先生成 HTML 和 Markdown，再生成英文页面与共享字典：
 
-页面和视图目录统一在 `site-catalog.json`，观测初值与校验规则统一在 `lab-state.json`。修改这些数据后先运行 `python3 scripts/site_sources.py`；生成区段由检查核对，不再手工维护多份目录或枚举。
+页面和视图目录统一在 `site/site-catalog.json`，观测初值与校验规则统一在 `site/lab-state.json`。修改这些数据后先运行 `python3 scripts/site_sources.py`；生成区段由检查核对，不再手工维护多份目录或枚举。
 
 ```sh
 python3 scripts/site_sources.py
 python3 scripts/build-documents.py
-python3 scripts/prerender-pages.py --dist .
+python3 scripts/prerender-pages.py --dist site
 python3 scripts/prerender-pages.py --check
 ```
 
 生成器同步英文 HTML、`language-data.js` 和资源预热清单，同时保留 DOM ID、表单值、数值属性与科学脚本。三份文档的中英文 Markdown 下载文件也须同步。内容按主题更新到原章节，不在文末叠加发布日志。
 
-界面颜色统一在 `ui-palette.css` 定义，控件通过 `--design-*` 变量调用；不要在页面模块里另写色号。对象菜单将撤销、重做并入操作行，帮助按需展开，给列表和属性保留空间。
+界面颜色统一在 `site/ui-palette.css` 定义，控件通过 `--design-*` 变量调用；不要在页面模块里另写色号。对象菜单将撤销、重做并入操作行，帮助按需展开，给列表和属性保留空间。
 
-[界面集中审查记录](docs/ui-code-review.zh.md)列出已复现的问题、公共开关的职责与验证范围。
+[界面集中审查记录](site/docs/ui-code-review.zh.md)列出已复现的问题、公共开关的职责与验证范围。
 
 ## 自动检查
 
@@ -87,4 +91,4 @@ SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" SKY_MOTION_CH
 问题反馈请附模块、地点、实验日期与时刻、复现步骤，以及设备和浏览器信息：[联系作者](https://skymotion-5md.pages.dev/contact.html) · [GitHub Issues](https://github.com/qingzhuernest/skymotion/issues)。
 
 
-自定义可按实验目的建立城市、时刻和日期对照，所选对象支持滑条预览、精确输入、整段撤销与取消；用法见[学习指南](learning-guide.md)。
+自定义可按实验目的建立城市、时刻和日期对照，所选对象支持滑条预览、精确输入、整段撤销与取消；用法见[学习指南](site/learning-guide.md)。

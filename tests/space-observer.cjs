@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const path = require('node:path');
-const Astronomy = require('../astronomy.js');
+const Astronomy = require('../site/astronomy.js');
 const noop = () => {};
 const context = new Proxy(
   { measureText: (s) => ({ width: s.length * 7 }) },
@@ -36,7 +36,7 @@ const sandbox = {
 };
 vm.createContext(sandbox);
 for (const name of ['model.js', 'observer.js'])
-  vm.runInContext(fs.readFileSync(path.join(__dirname, '../space/', name), 'utf8'), sandbox);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '../site/space/', name), 'utf8'), sandbox);
 const diagram = sandbox.SolarSpaceObserver.create({ host: node('div') });
 let count = 0,
   below = 0;

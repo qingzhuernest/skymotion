@@ -16,17 +16,13 @@ output = Path(args.output)
 output.mkdir(parents=True, exist_ok=False)
 tracked = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
 for name in tracked:
-    if not name:
-        continue
     source = Path(name)
-    if (
-        any(part.startswith('.') for part in source.parts)
-        or source.parts[0] in ('tests', 'scripts', 'archive')
-        or name in ('README.md', 'README.en.md', 'DESIGN.md', 'PRODUCT.md')
-        or name.startswith('BUG-AUDIT-')
-    ):
+    if not name or source.parts[0] != 'site':
         continue
-    target = output / source
+    relative = source.relative_to('site')
+    if any(part.startswith('.') for part in relative.parts) and relative.as_posix() != '.nojekyll':
+        continue
+    target = output / relative
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, target)
 if not (output / 'index.html').is_file():

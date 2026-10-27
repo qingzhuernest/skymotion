@@ -1,5 +1,5 @@
 # Keep the upstream astronomy library and its license intact.
-astronomy.js
+site/astronomy.js
 # Documents and retained binary assets are not application source.
 *.md
 *.jpg
@@ -9,4 +9,4 @@ archive/
 node_modules/
 
 # Preserve the bundled Three.js upstream implementation.
-space/vendor/
+site/space/vendor/

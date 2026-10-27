@@ -1,0 +1,19 @@
+SkyMotion / 天体视运动实验室
+Copyright (c) 2026 Ernest Chua and contributors
+
+Unless a file carries a separate license or is identified as third-party
+material, the original application source code in this repository is licensed
+under the GNU Affero General Public License, version 3 only
+(SPDX-License-Identifier: AGPL-3.0-only). See LICENSE for the complete terms.
+
+Commercial use is permitted. Redistribution must comply with the license's
+source-code and notice requirements. If you modify the program and allow users
+to interact with it remotely through a computer network, section 13 requires
+your modified version to prominently offer those users access to its
+Corresponding Source. The program is provided without warranty, as specified
+in the license.
+
+Source code: https://github.com/qingzhuernest/skymotion
+Third-party code, data, fonts and images retain their own licenses and source
+terms; they are not relicensed by this notice. See THIRD-PARTY-NOTICES.md and
+the notices accompanying the individual files.

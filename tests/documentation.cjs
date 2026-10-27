@@ -41,7 +41,7 @@ const documents = ['docs', 'guide', 'project-guide', 'development-guide'];
           for (const href of links) {
             if (/^https?:/.test(href)) continue;
             const target = new URL(href,page.url()), relative = decodeURIComponent(target.pathname).slice(1);
-            const filename = path.resolve(relative.endsWith('/') ? relative+'index.html' : relative);
+            const filename = path.resolve('site', relative.endsWith('/') ? relative+'index.html' : relative);
             assert(fs.existsSync(filename),href);
             if (target.hash) {
               const source = fs.readFileSync(filename,'utf8');
@@ -64,7 +64,7 @@ const documents = ['docs', 'guide', 'project-guide', 'development-guide'];
       assert.equal(await page.locator('.page-nav a').filter({hasText:'学习指南'}).count(),0,route);
     }
     const source = JSON.parse(fs.readFileSync('docs/document-content.json','utf8'));
-    const defaults = JSON.parse(fs.readFileSync('lab-state.json','utf8')).defaults;
+    const defaults = JSON.parse(fs.readFileSync('site/lab-state.json','utf8')).defaults;
     assert.deepEqual(Object.keys(source.state_dictionary).sort(),Object.keys({...defaults.sun,...defaults.moon}).sort());
     assert(source.documents.find(d=>d.page==='guide').sections.length>=18);
     assert(source.documents.find(d=>d.page==='project-guide').sections.length>=20);

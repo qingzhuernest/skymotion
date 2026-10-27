@@ -1,10 +1,10 @@
 /** Session corruption, legacy migration, valid observations and unavailable storage. */
 const assert = require('node:assert/strict'), fs = require('node:fs'), vm = require('node:vm');
-const app = fs.readFileSync('app.js', 'utf8').split('const seasons =')[0];
+const app = fs.readFileSync('site/app.js', 'utf8').split('const seasons =')[0];
 function load(storage) {
   const context = vm.createContext({ window: {}, document: {}, sessionStorage: storage });
   vm.runInContext(app + '\nwindow.defaults = { sun: initialSun, moon: initialMoon };', context);
-  vm.runInContext(fs.readFileSync('experiment-storage.js', 'utf8'), context);
+  vm.runInContext(fs.readFileSync('site/experiment-storage.js', 'utf8'), context);
   return { api: context.window.SkyMotionSession, defaults: context.window.defaults };
 }
 let raw = '{broken';

@@ -18,20 +18,20 @@ The compact playback panel groups the exact clock and slider; Moon puts dates fi
 
 ## Using the lab and its documentation
 
-- [Documentation center](docs.en.html): one top-menu entry for teaching, feature usage and development.
-- [Learning guide](learning-guide.en.md): lesson design, investigations, recording and assessment.
-- [Project & feature manual](project-guide.en.md): all modules, controls, comparisons, customization, saving and interaction.
-- [Development guide](development-guide.en.md): code responsibilities, state, calculations, rendering, checks and deployment.
-- [Customization instructions](docs/customization-interaction.en.md): add cities, time markers, reference lines and physical objects, edit their properties and save plans.
+- [Documentation center](site/docs.en.html): one top-menu entry for teaching, feature usage and development.
+- [Learning guide](site/learning-guide.en.md): lesson design, investigations, recording and assessment.
+- [Project & feature manual](site/project-guide.en.md): all modules, controls, comparisons, customization, saving and interaction.
+- [Development guide](site/development-guide.en.md): code responsibilities, state, calculations, rendering, checks and deployment.
+- [Customization instructions](site/docs/customization-interaction.en.md): add cities, time markers, reference lines and physical objects, edit their properties and save plans.
 
-Customize is beside the language button. Observation controls continues to set the baseline experiment; Plot objects adds and adjusts comparisons. Cities and times remain linked across relevant diagrams. Rods, spheres and circles are placed on the experiment ground. See the [customization examples](guide.en.html#customization).
+Customize is beside the language button. Observation controls continues to set the baseline experiment; Plot objects adds and adjusts comparisons. Cities and times remain linked across relevant diagrams. Rods, spheres and circles are placed on the experiment ground. See the [customization examples](site/guide.en.html#customization).
 
 Related Diagrams → Moon → Earthrise and Earthset links a lunar-orbit overview with an astronaut view. This independent illustrative orbit retains the left explanation, parameters and bottom controls. It is not a spacecraft trajectory prediction for a real date.
 
 ## Run locally
 
 ```sh
-python3 -m http.server 8000
+python3 -m http.server 8000 --directory site
 ```
 
 Open `http://localhost:8000/`. English has separate pages, such as `lab.en.html` and `space/index.en.html`. A modern browser is required; 3D views require WebGL.
@@ -40,20 +40,20 @@ Open `http://localhost:8000/`. English has separate pages, such as `lab.en.html`
 
 The bilingual source for the documentation center and three manuals is `docs/document-content.json`. Generate HTML and Markdown first, then English pages and the shared dictionary:
 
-Pages and views share `site-catalog.json`; observation defaults and validation rules share `lab-state.json`. After editing these sources, run `python3 scripts/site_sources.py`. Generated regions are checked, so routes and enums are no longer maintained by hand in multiple modules.
+Pages and views share `site/site-catalog.json`; observation defaults and validation rules share `site/lab-state.json`. After editing these sources, run `python3 scripts/site_sources.py`. Generated regions are checked, so routes and enums are no longer maintained by hand in multiple modules.
 
 ```sh
 python3 scripts/site_sources.py
 python3 scripts/build-documents.py
-python3 scripts/prerender-pages.py --dist .
+python3 scripts/prerender-pages.py --dist site
 python3 scripts/prerender-pages.py --check
 ```
 
 The generator synchronizes English HTML, `language-data.js` and the preload manifest while preserving DOM IDs, form values, numerical attributes and scientific scripts. Keep the Chinese and English Markdown downloads of all three documents aligned. Update the relevant topic rather than appending release logs to the document.
 
-Interface colors are defined in `ui-palette.css`; controls consume `--design-*` variables instead of defining page-specific colors. The compact object menu keeps history in the action row and expands help on demand, leaving more room for objects and properties.
+Interface colors are defined in `site/ui-palette.css`; controls consume `--design-*` variables instead of defining page-specific colors. The compact object menu keeps history in the action row and expands help on demand, leaving more room for objects and properties.
 
-The [concentrated UI review](docs/ui-code-review.en.md) records reproduced defects, shared mode-switch ownership and validation scope.
+The [concentrated UI review](site/docs/ui-code-review.en.md) records reproduced defects, shared mode-switch ownership and validation scope.
 
 ## Automated checks
 
@@ -87,4 +87,8 @@ Original application code uses [GNU AGPLv3](LICENSE) (AGPL-3.0-only). Third-part
 For an issue, include the module, location, experiment date and time, reproduction steps, device and browser: [Contact the author](https://skymotion-5md.pages.dev/contact.en.html) · [GitHub Issues](https://github.com/qingzhuernest/skymotion/issues).
 
 
-Customization starts from experiment goals for cities, times and dates. Selected references support slider previews, precise inputs, grouped undo and cancellation. See the [learning guide](learning-guide.en.md).
+Customization starts from experiment goals for cities, times and dates. Selected references support slider previews, precise inputs, grouped undo and cancellation. See the [learning guide](site/learning-guide.en.md).
+
+## Repository layout
+
+`site/` contains the public website; `docs/` holds authoring and maintenance records; `scripts/` contains generators; `tests/` contains verification. See the [repository guide](docs/repository.md) for file ownership and branch policy. Only `main` publishes production.
