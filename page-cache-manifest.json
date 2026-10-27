@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261027-doclinks123",
+  "resourceVersion": "20261027-doclinks124",
   "readingFontVersion": "20261016-font41",
   "pages": [
     "404.en.html",
@@ -199,5 +199,5 @@
     "sundial.html": 72301
   },
   "totalBytes": 1396527,
-  "assetBytes": 8327687
+  "assetBytes": 8327817
 }

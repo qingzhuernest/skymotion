@@ -2183,8 +2183,12 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
   width: min(100%, 800px);
   margin: auto;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .entrance-sentence {
+  width: 100%;
   opacity: 0;
   margin: 0 0 clamp(14px, 2vh, 24px);
   font-size: calc(clamp(19px, 2.1vw, 27px) * var(--ui-font-scale, 1));
@@ -2201,7 +2205,7 @@ html.welcome-opening[data-language-pending] :is(body, .welcome-screen, #welcomeS
   margin-left: 0;
   color: var(--entrance-answer);
 }
-.entrance-sentence:last-child {
+.entrance-sentence:last-of-type {
   margin-top: 22px;
   margin-bottom: 0;
   font-size: calc(clamp(21px, 2.5vw, 31px) * var(--ui-font-scale, 1));
@@ -2211,20 +2215,18 @@ html:not(:lang(en)) .entrance-sentence {
   line-height: 1.75;
   letter-spacing: 0.025em;
 }
-.entrance-continue {
-  position: fixed;
-  bottom: max(40px, env(safe-area-inset-bottom));
-  right: max(32px, calc((100vw - 960px) / 2 + 32px));
-  min-height: 44px;
-  padding: 8px 0 8px 20px;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: var(--entrance-answer);
+body .document-entrance .entrance-continue {
+  position: static;
+  align-self: flex-start;
+  margin-top: 28px;
+  min-height: var(--md-sys-size-target,44px);
+  padding: 10px 20px;
+  border: 1px solid var(--design-line);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--design-surface);
+  color: var(--design-action);
   font: 400 calc(14px * var(--ui-font-scale, 1))/1.5 var(--design-font);
-  text-decoration: underline;
-  text-decoration-color: currentColor;
-  text-underline-offset: 6px;
+  text-decoration: none;
   cursor: pointer;
 }
 .entrance-continue:hover {
@@ -2249,13 +2251,11 @@ html:not(:lang(en)) .entrance-sentence {
     font-size: calc(25px * var(--ui-font-scale, 1));
     margin-bottom: 14px;
   }
-  .entrance-sentence:last-child {
+  .entrance-sentence:last-of-type {
     font-size: calc(19px * var(--ui-font-scale, 1));
     margin-top: 12px;
   }
-  .entrance-continue {
-    bottom: 24px;
-  }
+  body .document-entrance .entrance-continue {margin-top:16px}
 }
 @media (max-height: 330px) {
   .entrance-sentence {
@@ -2266,7 +2266,7 @@ html:not(:lang(en)) .entrance-sentence {
     font-size: calc(20px * var(--ui-font-scale, 1));
     margin-bottom: 8px;
   }
-  .entrance-sentence:last-child {
+  .entrance-sentence:last-of-type {
     font-size: calc(16px * var(--ui-font-scale, 1));
     margin-top: 8px;
   }
@@ -2288,7 +2288,7 @@ html:not(:lang(en)) .entrance-sentence {
     font-size: calc(26px * var(--ui-font-scale, 1));
     margin-bottom: 18px;
   }
-  .entrance-sentence:last-child {
+  .entrance-sentence:last-of-type {
     font-size: calc(19px * var(--ui-font-scale, 1));
     margin-top: 16px;
   }

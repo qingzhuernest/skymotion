@@ -165,10 +165,11 @@
     });
     button = document.createElement('button');
     button.type = 'button';
-    button.className = 'entrance-continue';
+    button.className = 'entrance-continue md-outlined-action';
     button.textContent = english ? 'Continue reading' : '继续阅读';
     button.addEventListener('click', () => exit(true), { signal: life.signal });
-    stage.append(dialogue, button);
+    dialogue.append(button);
+    stage.append(dialogue);
     for (const node of document.querySelectorAll(
       'body > .page-nav,body > .document-page',
     )) {
