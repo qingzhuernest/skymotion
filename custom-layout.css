@@ -2,7 +2,7 @@
 .layout-launch,
 .workspace-back-button,
 .workspace-toolbar button,
-.workspace-pane-tools button,
+.workspace-pane-tools > button,
 .workspace-options button {
   font: inherit;
   color: var(--design-primary);
@@ -14,7 +14,7 @@
 .layout-launch,
 .workspace-back-button,
 .workspace-toolbar button,
-.workspace-pane-tools button,
+.workspace-pane-tools > button,
 .workspace-options button {
   cursor: pointer;
 }
@@ -254,7 +254,7 @@
   min-width: 0;
   flex: 1;
 }
-.workspace-pane-tools button {
+.workspace-pane-tools > button {
   display: grid;
   place-items: center;
   width: var(--md-sys-size-target);
@@ -544,7 +544,7 @@
 :is(
   .layout-launch,
   .workspace-toolbar button,
-  .workspace-pane-tools button,
+  .workspace-pane-tools > button,
   .workspace-pane-tools select,
   .workspace-options button
 ):hover {
@@ -553,7 +553,7 @@
 :is(
   .layout-launch,
   .workspace-toolbar button,
-  .workspace-pane-tools button,
+  .workspace-pane-tools > button,
   .workspace-pane-tools select,
   .workspace-options button,
   .workspace-options input,
@@ -640,7 +640,7 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .workspace-toolbar button,
-  .workspace-pane-tools button,
+  .workspace-pane-tools > button,
   .workspace-options button {
     transition:
       background-color 140ms,

@@ -14,6 +14,20 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
     await field('place').locator('summary').click();const choose=await page.locator('#place').evaluate(select=>[...select.options].find(option=>option.value!==select.value&&option.value!=='custom').value);
     await field('place').locator('[data-choice-value="'+choose+'"]').click();assert.equal(await page.locator('#place').inputValue(),choose);assert.equal(await page.evaluate(()=>state.lat),Number(choose.split(',')[0]));
     await page.locator('.layout-launch').click();await page.waitForFunction(()=>document.querySelectorAll('.workspace-pane-tools select').length>0);await page.waitForFunction(()=>[...document.querySelectorAll('.workspace-pane-tools select')].every(s=>s.nextElementSibling?.matches('.md-choice-field')));
+    await page.waitForFunction(()=>skyWorkspacePresentation.editing);
+    await page.evaluate(()=>skyWorkspacePresentation.openOverview());await page.waitForFunction(()=>skyWorkspacePresentation.active);
+    for(const id of ['skyPanel','skyTopPanel','skyHorizonPanel','skyObserverPanel']){await page.evaluate(id=>skyWorkspacePresentation.addView(id),id);await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));}
+    for(const id of await page.evaluate(()=>skyWorkspacePresentation.views.filter(id=>!['skyPanel','skyTopPanel','skyHorizonPanel','skyObserverPanel'].includes(id)))){await page.evaluate(id=>skyWorkspacePresentation.removeView(id),id);}
+    const currentViews=await page.evaluate(()=>skyWorkspacePresentation.views);assert.equal(currentViews.length,4,JSON.stringify(currentViews));
+    await page.setViewportSize({width:960,height:1000});
+    const pane=page.locator('.ui-diagram-card:visible').nth(3),before=await pane.locator('canvas').first().boundingBox();
+    await pane.locator('.workspace-pane-tools .md-choice-disclosure > summary').click();
+    const popup=pane.locator('.md-choice-panel');await popup.waitFor({state:'visible'});assert.equal(await page.locator('input[type=search]').count(),0);const bounds=await popup.boundingBox(),after=await pane.locator('canvas').first().boundingBox();
+    assert(bounds.width>=300&&bounds.x>=0&&bounds.y>=0&&bounds.x+bounds.width<=960&&bounds.y+bounds.height<=1000,JSON.stringify(bounds));assert(Math.abs(before.height-after.height)<1,'chooser changed pane canvas height');
+    for(const box of await popup.locator('button:visible').evaluateAll(nodes=>nodes.map(n=>({width:n.getBoundingClientRect().width,height:n.getBoundingClientRect().height})))){assert(box.width>=120,JSON.stringify(box));assert(box.height>=44&&box.height<120,JSON.stringify(box));}
+    await page.screenshot({path:'/tmp/settings122-four-pane-choice.png'});
+    await popup.locator('[data-choice-value=chartPanel]').click();await page.waitForFunction(()=>skyWorkspacePresentation.views.includes('chartPanel'));assert.equal(await page.locator('.md-choice-panel:popover-open').count(),0);
+
    }else if(route.startsWith('space')){
     await field('spaceSpeed').locator('[data-choice-value="30"]').click();assert.equal(await page.locator('#spaceSpeed').inputValue(),'30');
     await page.evaluate(()=>{document.getElementById('spaceSpeed').value='2';});await page.waitForFunction(()=>document.querySelector('[data-choice-for=spaceSpeed] [data-choice-value="2"]').getAttribute('aria-pressed')==='true');

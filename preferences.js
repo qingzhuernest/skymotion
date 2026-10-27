@@ -235,32 +235,19 @@
     for(const name of ['welcomeMotion','smoothScroll']){const input=dialog.querySelector('#pref-'+name);input.disabled=reduce();}
     if(!storageOK)notify(t('当前浏览器无法保存设置，仅本页有效','Storage is unavailable; changes apply to this page only'));
   }
-  function filter(query='') {
-    query=query.trim().toLocaleLowerCase();let count=0;
-    for(const section of dialog.querySelectorAll('.preference-section')) {
-      const category=section.dataset.category;
-      const categoryMatch=section.querySelector('h3').textContent.toLocaleLowerCase().includes(query);
-      let visible=!!query&&(categoryMatch||!section.querySelector('.preference-row')&&section.textContent.toLocaleLowerCase().includes(query));
-      for(const row of section.querySelectorAll('.preference-row')) {
-        const match=!query||categoryMatch||row.textContent.toLocaleLowerCase().includes(query);
-        row.classList.toggle('preference-search-hidden',!match);if(match)visible=true;
-      }
-      section.hidden=query?!visible:category!==activeGroup;
-      if(!section.hidden)count++;
-    }
-    dialog.querySelector('.preference-empty').hidden=count>0;
-    for(const button of dialog.querySelectorAll('[data-category-link]'))button.setAttribute('aria-pressed',String(!query&&button.dataset.categoryLink===activeGroup));
+  function showCategory() {
+    for(const section of dialog.querySelectorAll('.preference-section'))section.hidden=section.dataset.category!==activeGroup;
+    for(const button of dialog.querySelectorAll('[data-category-link]'))button.setAttribute('aria-pressed',String(button.dataset.categoryLink===activeGroup));
   }
   function build() {
     dialog=node('dialog',{class:'preferences-dialog','data-i18n-skip':'','aria-labelledby':'preferences-title'});
     const header=node('header',{class:'preferences-heading'});header.append(node('h2',{id:'preferences-title',tabindex:'-1',autofocus:''},t('设置','Settings')));
     const close=node('button',{type:'button',class:'md-outlined-action','aria-label':t('关闭设置','Close settings')},t('关闭','Close'));
     close.onclick=()=>dialog.close();header.append(close);dialog.append(header);
-    const search=node('input',{type:'search',class:'preferences-search',placeholder:t('搜索设置','Search settings'),'aria-label':t('搜索设置','Search settings')});search.oninput=()=>filter(search.value);dialog.append(search);
     const layout=node('div',{class:'preferences-layout'}),nav=node('nav',{class:'preferences-categories','aria-label':t('设置分类','Settings categories')}),content=node('div',{class:'preferences-content'});
     for(const [category,fields] of Object.entries(groups)) {
       const button=node('button',{type:'button','data-category-link':category,'aria-controls':'preferences-'+category},copy(labels[category]));
-      button.onclick=()=>{activeGroup=category;search.value='';filter();content.scrollTop=0;};nav.append(button);
+      button.onclick=()=>{activeGroup=category;showCategory();content.scrollTop=0;};nav.append(button);
       const section=node('section',{id:'preferences-'+category,class:'preference-section','data-category':category});section.append(node('h3',{},copy(labels[category])));
       for(const name of fields)section.append(field(name));
       if(category==='space')section.append(node('p',{class:'preference-note'},t('适用于三维天空。显示设置不改变科学计算精度。','Applies to 3D Sky. Display settings do not change scientific precision.')));
@@ -285,13 +272,12 @@
       }
       content.append(section);
     }
-    content.append(node('p',{class:'preference-empty',hidden:''},t('没有匹配的设置','No matching settings')));
     layout.append(nav,content);dialog.append(layout);
     confirmation=node('div',{class:'preferences-confirm',hidden:'',role:'group','aria-label':t('确认设置操作','Confirm settings change')});confirmation.append(node('p'),node('button',{type:'button',class:'md-outlined-action','data-cancel':''},t('取消','Cancel')),node('button',{type:'button',class:'md-outlined-action','data-confirm':''},t('确认','Confirm')));dialog.append(confirmation);
     message=node('p',{class:'preferences-message',role:'status','aria-live':'polite'});dialog.append(message);
     dialog.addEventListener('close',()=>{confirmation.hidden=true;pendingImport=null;pendingReset=null;launcher?.focus({preventScroll:true});});
     dialog.addEventListener('cancel',event=>{if(!confirmation.hidden){event.preventDefault();confirmation.hidden=true;pendingImport=null;pendingReset=null;}});
-    document.body.append(dialog);refresh();filter();
+    document.body.append(dialog);refresh();showCategory();
   }
   function mount() {
     if(document.body?.dataset.embedded==='true'||parent!==window)return;

@@ -34,9 +34,7 @@ const base=(process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:38716/').replac
   await page.selectOption('#pref-motion','system');await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>document.documentElement.dataset.reducedMotion==='true');
   const second=await context.newPage();await second.goto(base+'lab.html');await second.waitForSelector('html[data-fonts-ready]');await second.evaluate(()=>SkyPreferences.set({palette:'blue',theme:'light',uiScale:1}));await page.waitForFunction(()=>SkyPreferences.get().palette==='blue');
   await second.close();
-  await page.locator('.preferences-search').fill('轨道');assert(await page.locator('#pref-orbits').isVisible());
-  await page.locator('.preferences-search').fill('不存在的设置');assert(await page.locator('.preference-empty').isVisible());
-  await page.locator('.preferences-search').fill('');await category(page,'data');
+  assert.equal(await page.locator('input[type=search]').count(),0);await category(page,'data');
   const original=await page.evaluate(()=>SkyPreferences.export());
   for(const invalid of ['{',JSON.stringify({version:99,preferences:{}}),JSON.stringify({version:1,preferences:{uiScale:10}}),JSON.stringify({version:1,preferences:{nightStart:'07:00',nightEnd:'07:00'}})]) {
    assert(await page.evaluate(text=>{try{SkyPreferences.parseImport(text);return false;}catch{return true;}},invalid));
@@ -48,7 +46,7 @@ const base=(process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:38716/').replac
   await file.setInputFiles({name:'settings.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({version:1,preferences:{palette:'gray',uiScale:1.1}}))});await page.locator('.preferences-confirm [data-confirm]').click();assert.equal(await page.evaluate(()=>SkyPreferences.get().palette),'gray');
   await page.keyboard.press('Escape');assert(await page.locator('.preferences-launch').evaluate(e=>e===document.activeElement));
   await page.reload();await page.waitForFunction(()=>window.SkyPreferences);assert.equal(await page.evaluate(()=>SkyPreferences.get().uiScale),1.1);
-  console.log('PASS themes, schedule, contrast, reading, motion, search, storage, safe import and keyboard close');
+  console.log('PASS themes, schedule, contrast, reading, motion, categories, storage, safe import and keyboard close');
   await page.emulateMedia({reducedMotion:'no-preference',colorScheme:'light'});await page.evaluate(()=>SkyPreferences.reset());
   await open(page,'space/');await category(page,'space');await page.uncheck('#pref-orbits');await page.uncheck('#pref-names');await page.uncheck('#pref-stars');await page.selectOption('#pref-quality','low');
   assert.equal(await page.locator('#orbits').isChecked(),false);assert.equal(await page.locator('#names').isChecked(),false);

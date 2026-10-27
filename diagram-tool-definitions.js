@@ -292,6 +292,8 @@
         visible: raw.visible !== false,
         locked: raw.locked === true,
       };
+      if(typeof raw.name==='string'&&raw.name.trim())o.name=raw.name.trim().slice(0,60);
+      else if(raw.customLabel===true&&typeof raw.label==='string')o.name=raw.label.trim().slice(0,60);
       if (!o.customLabel) {
         const n = Number.isInteger(raw.copyNumber)
           ? raw.copyNumber

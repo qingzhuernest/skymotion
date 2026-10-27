@@ -61,6 +61,8 @@ Settings in the top bar controls site-wide themes, scheduled night mode, palette
 
 Settings in the main navigation includes language selection. Text size, line spacing and reading width use continuous sliders. Page/panel and scientific-canvas backgrounds can be chosen independently. In customization mode, add the four sky perspectives to one layout with their row actions; they share location, date and time while retaining their own projection and camera.
 
+- [Open playback and time controls →](lab.en.html?control=workbenchMore#skyPanel)
+
 ## Set location, date and time
 
 City presets are shortcuts for coordinates. The lower shared timeline controls the current observation; annual sampling and Earthrise have separate controls described below.
@@ -77,6 +79,8 @@ City presets are shortcuts for coordinates. The lower shared timeline controls t
 | Date | Real-date observation supports 1900–2100 and validates leap days |
 | Daily clock | Local apparent solar time; 24:00 represents a day boundary, while some annual sampling controls stop at 23:59 |
 | Ideal declination | Ideal solar mode adjusts declination independently and does not imply a unique real UTC instant |
+
+- [Set location, date and time in the Lab →](lab.en.html?control=conditionsMenu#skyPanel)
 
 ## Choose, replace and combine views
 
@@ -100,6 +104,8 @@ The four viewpoints share the baseline location, date and clock; switching viewp
 
 Display aids offer tracks, angle references, shadows, tip traces and lunar overlays where supported. At night, during polar conditions or close to the horizon, shadow readings may be absent or extend beyond the canvas.
 
+- [Open the sky and shadow experiment →](lab.en.html#skyPanel)
+
 ## Earth, daylight, maps and axis geometry
 
 Earth & daylight connects sunlight, the subsolar point, observer and day–night pattern. Axis & horizon connects the rotation axis, equator and local horizon.
@@ -109,6 +115,8 @@ Earth & daylight connects sunlight, the subsolar point, observer and day–night
 3. Use movement constraints to change only latitude or longitude. Align observer location changes the camera orientation.
 4. Rotate the axis view and use its legend to distinguish axis, equator, horizon, zenith and sunlight.
 
+- [Open the Earth and day/night view →](lab.en.html#contextPanel)
+
 ## Daily altitude curves
 
 The solar chart uses apparent solar time horizontally and altitude vertically. The lunar illumination chart has different axes.
@@ -117,6 +125,8 @@ The solar chart uses apparent solar time horizontally and altitude vertically. T
 2. Add a date comparison curve in customization and change its reference date using the object’s own slider or calendar.
 3. Add horizontal levels, time markers or two-point time/altitude differences and check endpoints and units.
 4. Compare peaks, zero crossings and curves wholly above or below zero. Identical conditions may produce overlapping curves.
+
+- [Open the daily altitude chart →](lab.en.html#chartPanel)
 
 ## Solar and lunar rise/set bearings
 
@@ -128,6 +138,8 @@ Events use the body center crossing the geometric horizon, without atmospheric r
 4. Left/Right changes date by a day; scroll or pinch zooms; Home resets zoom; Escape cancels a drag and restores its starting date.
 
 > No endpoint is draggable if that event is absent. Use date or location controls first. At a pole the model does not assign a unique bearing.
+
+- [Open rise and set bearings →](lab.en.html#riseSetPanel)
 
 ## Phases, illumination and Moon–planet comparisons
 
@@ -151,6 +163,8 @@ Open Earthrise through Related diagrams in Moon mode. The orbital diagram and as
 
 Fixed-surface mode disables inapplicable orbital angle, altitude and flight controls. The model uses synchronous rotation, a spherical Moon and a circular orbit without libration or terrain.
 
+- [Open the Earthrise experiment →](lunar/index.en.html)
+
 ## Analemma and cause experiments
 
 The analemma records solar direction through a year at a fixed sample clock for one site. Its header labels sampling time and basis; the lower timeline retains current observing conditions.
@@ -161,6 +175,8 @@ The analemma records solar direction through a year at a fixed sample clock for 
 4. Overlay clocks, sites or reference tracks. Small panes reduce month labels and prioritize the current month.
 5. In the cause experiment, vary tilt and eccentricity independently, then return to real-date mode before interpreting the ephemeris.
 
+- [Open the analemma experiment →](analemma.en.html)
+
 ## Sundials and solar shadows
 
 Sundial pages and Lab controls provide rod shadows and horizontal/equatorial apparatus. They share location and sunlight with teaching diagrams, while display scaling is distinct from physical dimensions.
@@ -169,6 +185,8 @@ Sundial pages and Lab controls provide rod shadows and horizontal/equatorial app
 2. Compare orbit, overhead, tip-path or apparatus viewpoints and reset the camera when needed.
 3. Check solar-time and fixed-offset explanations rather than assuming civil local time.
 4. When the Sun is below the horizon or no valid ray–plane intersection exists, use the status instead of expecting a reading.
+
+- [Open the sundial experiment →](sundial.en.html)
 
 ## Customization and object editing
 
@@ -193,6 +211,8 @@ The common switch sits beside language. Entering preserves original observation 
 
 Tools are filtered by view, body and mode; not every plot offers the same set. Tracks, snapshots and observer stations have view-specific meanings.
 
+Object name (list) and Plot annotation text are edited and saved separately: the first names the object in the list, while the second controls the text drawn on the plot. Changing one does not overwrite the other.
+
 ## City, date and clock comparisons
 
 Comparison references are added to the baseline experiment. Adding a city does not relocate the baseline, and identical conditions can produce overlapping curves.
@@ -204,6 +224,8 @@ Comparison references are added to the baseline experiment. Adding a city does n
 5. The same-place recipe adds earlier/later clock markers with their own slider. Date curves use their own dates without changing the shared date.
 
 The dedicated place/time scene can show the current and surrounding clocks or the baseline and two comparison locations, with interval, sites and readings in its observation controls.
+
+- [Open the combined comparison view →](lab.en.html#solarCompare)
 
 ## Construct rods, spheres, circles and measurements
 
@@ -261,6 +283,8 @@ If storage is denied or full, the status explains visit-only availability. Check
 Available exploration controls cover stars, satellites, small bodies and nebulae. Different objects may use catalogs, approximate orbits or processed imagery; source and license labels are not measurement-accuracy guarantees.
 
 Lab’s 3D comparison retains the local scientific view alongside a linked spatial scene. UTC is shared while cameras remain independent. If WebGL is unavailable, continue in the 2D Lab.
+
+- [Open 3D Sky →](space/index.en.html)
 
 ## Undo, keyboard and touch
 

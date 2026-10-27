@@ -42,6 +42,8 @@ This guide supports classroom teaching and independent inquiry. Start with a tes
 - The current clock, annual analemma sample clock, 3D UTC time and independent Earthrise flight controls are not one interchangeable clock.
 - Real-date observation, ideal solar-declination experiments and the circular Earthrise lesson have different assumptions; name the mode before comparing results.
 
+- [Open playback and time controls →](lab.en.html?control=workbenchMore#skyPanel)
+
 ## Planning a lesson
 
 ### Example for an approximately forty-minute lesson
@@ -102,6 +104,8 @@ The daily change mainly reflects Earth’s rotation. The path is apparent motion
 Give one piece of evidence from each view and explain why the dashed path below the horizon is not a physical underground orbit.
 
 - [Practice this chapter in the laboratory](lab.en.html)
+
+- [Open the sky and shadow experiment →](lab.en.html#skyPanel)
 
 ## Investigation 2: Seasonal changes at one place
 
@@ -196,6 +200,8 @@ Make a two-column record explicitly labeled fixed UTC and fixed apparent solar t
 
 - [Practice this chapter in the laboratory](diagrams.en.html)
 
+- [Open the combined comparison view →](lab.en.html#solarCompare)
+
 ## Investigation 5: Rod height, shadow length and shadow-tip paths
 
 ### Inquiry question
@@ -257,6 +263,8 @@ The apparatus geometry determines ray–plane intersections. Solar time, civil t
 Give at least two reasons why a physical sundial may disagree with a phone clock.
 
 - [Practice this chapter in the laboratory](sundial.en.html)
+
+- [Open the sundial experiment →](sundial.en.html)
 
 ## Investigation 7: Moon phases and lunar rising and setting
 
@@ -351,6 +359,8 @@ Record sampling basis, UTC offset, sample clock, location and model mode; omitti
 
 - [Practice this chapter in the laboratory](analemma.en.html)
 
+- [Open the analemma experiment →](analemma.en.html)
+
 ## Investigation 10: Why does Earth rise and set above the Moon?
 
 ### Inquiry question
@@ -382,6 +392,8 @@ Sketch the observer–limb–Earth sight line and distinguish turning the camera
 
 - [Practice this chapter in the laboratory](lunar/index.en.html)
 
+- [Open the Earthrise experiment →](lunar/index.en.html)
+
 ## Investigation 11: Explain apparent motion using a spatial model
 
 ### Inquiry question
@@ -412,6 +424,8 @@ Converting spatial positions to local sky directions requires the observer, Eart
 Identify one deliberately exaggerated display quantity and one quantity computed from the ephemeris, explaining their different purposes.
 
 - [Practice this chapter in the laboratory](space/index.en.html)
+
+- [Open 3D Sky →](space/index.en.html)
 
 ## Reusable experiment record
 

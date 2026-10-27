@@ -12,7 +12,6 @@ body dialog.preferences-dialog {box-sizing:border-box;width:min(920px,calc(100vw
 .preferences-dialog *, .preferences-dialog *::before {box-sizing:border-box}
 .preferences-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;background:transparent;height:auto;padding:0}
 .preferences-heading h2 {font-size:calc(24px * var(--ui-font-scale,1));margin:0}
-.preferences-search {width:100%;margin-bottom:20px}
 .preferences-dialog :is(input:not([type='checkbox']):not([type='color']):not([type='range']),select) {font:inherit;color:var(--design-ink);background:var(--design-inset);border:1px solid var(--design-line);border-radius:12px;padding:10px 12px;min-height:44px;min-width:0;max-width:100%}
 .preferences-layout {display:grid;grid-template-columns:190px minmax(0,1fr);gap:24px}
 .preferences-categories {display:flex;flex-direction:column;gap:4px;align-self:start}
@@ -32,7 +31,7 @@ body dialog.preferences-dialog {box-sizing:border-box;width:min(920px,calc(100vw
 .preferences-confirm button {margin-inline-end:8px}
 .preferences-message {margin:16px 0 0;min-height:1.5em}
 .preferences-dialog :focus-visible {outline:3px solid var(--design-primary);outline-offset:3px}
-.preference-search-hidden,[hidden] {display:none!important}
+[hidden] {display:none!important}
 html[data-density='compact'] {--preference-panel-padding:10px}
 html[data-density='compact'] :is(.menu-content,.card,.ui-readout) {padding-block:10px}
 html[data-density='compact'] :is(.workbench-viewpoints,.workbench-content-group) {gap:2px}

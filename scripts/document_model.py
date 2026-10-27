@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 from urllib.parse import unquote, urlsplit
 from html.parser import HTMLParser
-from site_sources import load_state
+from site_sources import load_state, load_catalog
 
 KINDS = {"paragraph", "heading", "note", "code", "list", "steps", "table", "links", "document-list", "source-index", "state-table"}
 
@@ -112,6 +112,8 @@ def validate(data, root):
             ids = anchors.get(relative)
             if ids is None:
                 ids = AnchorParser(target.read_text()).ids
+            if relative in {'lab.html','diagrams.html'}:
+                ids = ids | {view['id'] for view in load_catalog(root)['views']}
             if unquote(url.fragment) not in ids:
                 raise ValueError("Missing linked anchor: " + href)
     for path, description in data["source_files"].items():

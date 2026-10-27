@@ -395,6 +395,7 @@
       const q = copy(o);
       q.locked = false;
       q.id = 'd' + Date.now() + ++serial;
+      if(o.name){let n=2;while(s.objects.some(x=>x.name===o.name+' '+n))n++;q.name=o.name+' '+n;}
       if (o.customLabel) {
         let n = 2;
         while (s.objects.some((x) => x.label === o.label + ' ' + n)) n++;
@@ -1057,13 +1058,17 @@
     delete input.dataset.error;
     input.parentElement.querySelector('.dt-field-error')?.remove();
   }
+  function referenceName(object, model=current) {
+    if(object.name)return object.name;
+    return object.customLabel ? tr(defs(model).find(def=>def.id===object.type)?.title||object.label) : tr(object.label);
+  }
   function updateSmall() {
     if (!current) return;
     const s = stateFor(selectedOwner());
     for (const b of list.querySelectorAll('[data-reference-id]')) {
       const o = s.objects.find((o) => o.id === b.dataset.referenceId.split(':').at(-1));
       if (o) {
-        const label = o.customLabel ? o.label : tr(o.label);
+        const label = referenceName(o,models.get(b.dataset.referenceSource)||current);
         const swatch = b.querySelector('.dt-reference-swatch');
         b.textContent = label;
         if (swatch) b.prepend(swatch);
@@ -1655,7 +1660,7 @@
       const row = E('div', 'dt-row', list),
         b = E('button', '', row);
       b.type = 'button';
-      b.textContent = o.customLabel ? o.label : tr(o.label);
+      b.textContent = referenceName(o,models.get(source)||current);
       b.setAttribute(
         'aria-pressed',
         String(o.id === selected && source === selectedOwner().id),
@@ -1688,7 +1693,7 @@
       visible.checked = o.visible;
       visible.setAttribute(
         'aria-label',
-        tr('显示|Show') + ' ' + (o.customLabel ? o.label : tr(o.label)),
+        tr('显示|Show') + ' ' + referenceName(o,models.get(source)||current),
       );
       visible.onchange = () => {
         commitActive();
@@ -1931,8 +1936,11 @@
     }
     if (o) {
       const def = defs(selectedOwner()).find((d) => d.id === o.type);
+      const nameLabel=E('label','dt-name-edit',form);nameLabel.append(document.createTextNode(tr('对象名称（列表）|Object name (list)')));
+      const nameInput=E('input','',nameLabel);nameInput.value=referenceName(o,selectedOwner());nameInput.maxLength=60;nameInput.dataset.field='name';nameInput.dataset.committedValue=nameInput.value;
+      nameInput.onchange=()=>{const value=nameInput.value.trim();mutate(()=>{if(value)o.name=value;else delete o.name;},true);nameInput.value=referenceName(o,selectedOwner());nameInput.dataset.committedValue=nameInput.value;};
       const label = E('label', 'dt-name-edit', form);
-      label.append(document.createTextNode(tr('名称 / 说明|Name / note')));
+      label.append(document.createTextNode(tr('图上标注文字|Plot annotation text')));
       const input = E('input', '', label);
       input.value = o.customLabel ? o.label : tr(o.label);
       input.maxLength = 60;
@@ -1941,6 +1949,7 @@
       input.onchange = () => {
         const value = input.value.trim();
         mutate(() => {
+          if(!o.name)o.name=referenceName(o,selectedOwner());
           o.label = value || def.title;
           o.customLabel = !!value;
           if (!value) delete o.copyNumber;
@@ -3222,6 +3231,7 @@
         const q = copy(o);
         q.id = 'd' + Date.now() + ++serial;
         q.locked = false;
+        if(o.name){let n=2;while(s.objects.some(x=>x.name===o.name+' '+n))n++;q.name=o.name+' '+n;}
         if (q.customLabel) {
           let n = 2;
           while (s.objects.some((x) => x.label === o.label + ' ' + n)) n++;

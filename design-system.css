@@ -2213,8 +2213,8 @@ html:not(:lang(en)) .entrance-sentence {
 }
 .entrance-continue {
   position: fixed;
-  bottom: max(24px, env(safe-area-inset-bottom));
-  right: clamp(24px, 6vw, 96px);
+  bottom: max(40px, env(safe-area-inset-bottom));
+  right: max(32px, calc((100vw - 960px) / 2 + 32px));
   min-height: 44px;
   padding: 8px 0 8px 20px;
   border: 0;
@@ -2254,7 +2254,7 @@ html:not(:lang(en)) .entrance-sentence {
     margin-top: 12px;
   }
   .entrance-continue {
-    bottom: 12px;
+    bottom: 24px;
   }
 }
 @media (max-height: 330px) {
@@ -2382,12 +2382,15 @@ body .md-choice-buttons {display:grid;grid-template-columns:repeat(var(--choice-
 body .md-choice-buttons[data-choice-count='1'] {--choice-count:1}
 body .md-choice-buttons[data-choice-count='3'] {--choice-count:3}
 body .md-choice-buttons[data-choice-count='4'] {--choice-count:4}
-body .md-choice-buttons > button {min-width:0;padding:6px 10px;overflow-wrap:anywhere}
+body .md-choice-buttons > button {box-sizing:border-box;width:100%;height:auto;min-height:var(--md-sys-size-target);min-width:0;padding:6px 10px;overflow-wrap:anywhere}
 body .md-choice-disclosure {width:100%;min-width:0;margin:0;border:0;background:transparent}
 body .md-choice-disclosure > summary {display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;list-style:none;padding:8px 12px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);color:var(--design-action);background:var(--design-surface);cursor:pointer;white-space:normal;overflow-wrap:anywhere}
 body .md-choice-disclosure > summary::-webkit-details-marker {display:none}
 body .md-choice-disclosure > summary::after {content:'⌄';flex:none;position:static;transform:none}
 body .md-choice-disclosure[open] > summary::after {content:'⌃'}
-body .md-choice-disclosure > .md-choice-search {box-sizing:border-box;width:100%;max-width:100%;margin:8px 0;font:inherit;padding:8px 12px;border:1px solid var(--design-line);border-radius:12px;background:var(--design-inset);color:var(--design-ink)}
 body .md-choice-many .md-choice-buttons {grid-template-columns:repeat(2,minmax(0,1fr));max-height:280px;overflow:auto;overscroll-behavior:contain;padding:4px;box-sizing:border-box}
 @media(max-width:480px) {body .md-choice-buttons[data-choice-count='4'] {--choice-count:2}}
+
+/* Expanded choices live outside pane layout and clipping, retaining the shared buttons. */
+body .md-choice-panel {position:fixed;inset:auto;margin:0;padding:12px;box-sizing:border-box;overflow:auto;overscroll-behavior:contain;background:var(--design-surface);color:var(--design-ink);border:1px solid var(--design-line);border-radius:20px;box-shadow:0 8px 24px var(--design-shadow-dialog);font:inherit;z-index:1000}
+body .md-choice-panel .md-choice-buttons > button {width:100%;height:auto;min-height:44px;white-space:normal;word-break:normal;overflow-wrap:break-word}

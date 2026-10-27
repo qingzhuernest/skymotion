@@ -145,10 +145,13 @@
   max-width: 100%;
   overflow-x: auto;
   margin: 18px 0;
-  border-radius: 10px;
+  border-radius: 16px;
 }
 .document-page table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--design-line);
+  border-radius: 16px;
   width: 100%;
   font-size: calc(13px * var(--ui-font-scale, 1));
   min-width: 640px;
@@ -175,8 +178,16 @@
   text-align: left;
   padding: 10px;
   vertical-align: top;
-  border: 1px solid var(--design-line);
+  border: 0;
+  border-right: 1px solid var(--design-line);
+  border-bottom: 1px solid var(--design-line);
 }
+.document-page tr > :last-child {border-right:0}
+.document-page tbody tr:last-child > * {border-bottom:0}
+.document-page thead tr:first-child > :first-child {border-top-left-radius:15px}
+.document-page thead tr:first-child > :last-child {border-top-right-radius:15px}
+.document-page tbody tr:last-child > :first-child {border-bottom-left-radius:15px}
+.document-page tbody tr:last-child > :last-child {border-bottom-right-radius:15px}
 .document-page th {
   background: var(--design-selected);
 }

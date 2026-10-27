@@ -306,6 +306,18 @@
                   "Real-date observation, ideal solar-declination experiments and the circular Earthrise lesson have different assumptions; name the mode before comparing results."
                 ]
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lab.html?control=workbenchMore#skyPanel",
+                  "text": [
+                    "打开实验台的播放与时间控制 →",
+                    "Open playback and time controls →"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -588,6 +600,18 @@
                     "Practice this chapter in the laboratory"
                   ],
                   "href": "lab.html"
+                }
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lab.html#skyPanel",
+                  "text": [
+                    "打开天空与日影实验 →",
+                    "Open the sky and shadow experiment →"
+                  ]
                 }
               ]
             }
@@ -947,6 +971,18 @@
                   "href": "diagrams.html"
                 }
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lab.html#solarCompare",
+                  "text": [
+                    "打开组合对照视图 →",
+                    "Open the combined comparison view →"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -1183,6 +1219,18 @@
                     "Practice this chapter in the laboratory"
                   ],
                   "href": "sundial.html"
+                }
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "sundial.html",
+                  "text": [
+                    "打开日晷实验 →",
+                    "Open the sundial experiment →"
+                  ]
                 }
               ]
             }
@@ -1542,6 +1590,18 @@
                   "href": "analemma.html"
                 }
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "analemma.html",
+                  "text": [
+                    "打开日行迹实验 →",
+                    "Open the analemma experiment →"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -1661,6 +1721,18 @@
                   "href": "lunar/index.html"
                 }
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lunar/index.html",
+                  "text": [
+                    "打开地升地落实验 →",
+                    "Open the Earthrise experiment →"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -1778,6 +1850,18 @@
                     "Practice this chapter in the laboratory"
                   ],
                   "href": "space/index.html"
+                }
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "space/index.html",
+                  "text": [
+                    "打开三维天空 →",
+                    "Open 3D Sky →"
+                  ]
                 }
               ]
             }
@@ -2245,6 +2329,18 @@
                 "主导航中的“设置”包含语言切换。阅读字号、行距和宽度支持连续拖动；页面与面板背景、科学画布背景可分别自选。自定义模式中，天空的四个视角可通过各行的加入按钮同时放入组合；共享地点、日期和时刻，各图保留自己的投影和视角。",
                 "Settings in the main navigation includes language selection. Text size, line spacing and reading width use continuous sliders. Page/panel and scientific-canvas backgrounds can be chosen independently. In customization mode, add the four sky perspectives to one layout with their row actions; they share location, date and time while retaining their own projection and camera."
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lab.html?control=workbenchMore#skyPanel",
+                  "text": [
+                    "打开实验台的播放与时间控制 →",
+                    "Open playback and time controls →"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -2347,6 +2443,18 @@
                   ]
                 ]
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lab.html?control=conditionsMenu#skyPanel",
+                  "text": [
+                    "在实验台设置地点、日期与时间 →",
+                    "Set location, date and time in the Lab →"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -2435,6 +2543,18 @@
                 "显示辅助中的轨迹、角度线、影子、影尖记录和月球叠加按当前模式提供。夜间、极昼、极夜或太阳近地平线时，某些影子读数可能不存在或超出画面。",
                 "Display aids offer tracks, angle references, shadows, tip traces and lunar overlays where supported. At night, during polar conditions or close to the horizon, shadow readings may be absent or extend beyond the canvas."
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lab.html#skyPanel",
+                  "text": [
+                    "打开天空与日影实验 →",
+                    "Open the sky and shadow experiment →"
+                  ]
+                }
+              ]
             }
           ],
           "aliases": [
@@ -2476,6 +2596,18 @@
                   "Rotate the axis view and use its legend to distinguish axis, equator, horizon, zenith and sunlight."
                 ]
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lab.html#contextPanel",
+                  "text": [
+                    "打开地球与昼夜图 →",
+                    "Open the Earth and day/night view →"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -2512,6 +2644,18 @@
                   "比较曲线峰值、过零、全天高于零或低于零的情况；重合曲线可能来自相同条件。",
                   "Compare peaks, zero crossings and curves wholly above or below zero. Identical conditions may produce overlapping curves."
                 ]
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lab.html#chartPanel",
+                  "text": [
+                    "打开全天高度曲线 →",
+                    "Open the daily altitude chart →"
+                  ]
+                }
               ]
             }
           ]
@@ -2556,6 +2700,18 @@
               "text": [
                 "没有当天事件时没有可拖端点。应先用日期和地点控制寻找有事件的条件。极点不赋予唯一升落方位。",
                 "No endpoint is draggable if that event is absent. Use date or location controls first. At a pole the model does not assign a unique bearing."
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lab.html#riseSetPanel",
+                  "text": [
+                    "打开升落方位图 →",
+                    "Open rise and set bearings →"
+                  ]
+                }
               ]
             }
           ]
@@ -2648,6 +2804,18 @@
                 "固定月面模式禁用绕月位置、高度和飞行播放等不适用控制。模型采用同步自转、球面月球与圆轨道，未模拟天平动和真实地形。",
                 "Fixed-surface mode disables inapplicable orbital angle, altitude and flight controls. The model uses synchronous rotation, a spherical Moon and a circular orbit without libration or terrain."
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lunar/index.html",
+                  "text": [
+                    "打开地升地落实验 →",
+                    "Open the Earthrise experiment →"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -2689,6 +2857,18 @@
                   "In the cause experiment, vary tilt and eccentricity independently, then return to real-date mode before interpreting the ephemeris."
                 ]
               ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "analemma.html",
+                  "text": [
+                    "打开日行迹实验 →",
+                    "Open the analemma experiment →"
+                  ]
+                }
+              ]
             }
           ],
           "aliases": [
@@ -2728,6 +2908,18 @@
                   "太阳低于地平线或光线与晷面无有效交点时，按提示判断可用性，不强求一个读数。",
                   "When the Sun is below the horizon or no valid ray–plane intersection exists, use the status instead of expecting a reading."
                 ]
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "sundial.html",
+                  "text": [
+                    "打开日晷实验 →",
+                    "Open the sundial experiment →"
+                  ]
+                }
               ]
             }
           ],
@@ -2875,6 +3067,13 @@
                 "实际工具按当前图、天体和模式筛选，不是每张图都有同一组工具。轨迹对象、快照和观察站的含义也以当前图的说明为准。",
                 "Tools are filtered by view, body and mode; not every plot offers the same set. Tracks, snapshots and observer stations have view-specific meanings."
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "“对象名称（列表）”与“图上标注文字”分别编辑和保存：前者只命名列表中的对象，后者决定图上显示的文字，互不覆盖。",
+                "Object name (list) and Plot annotation text are edited and saved separately: the first names the object in the list, while the second controls the text drawn on the plot. Changing one does not overwrite the other."
+              ]
             }
           ],
           "aliases": [
@@ -2925,6 +3124,18 @@
               "text": [
                 "独立的地点与时间对照场景还可一次显示当前与前后时刻，或当前与两个对照地点；时间间隔、参考地点和读数由该场景的观测条件管理。",
                 "The dedicated place/time scene can show the current and surrounding clocks or the baseline and two comparison locations, with interval, sites and readings in its observation controls."
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "lab.html#solarCompare",
+                  "text": [
+                    "打开组合对照视图 →",
+                    "Open the combined comparison view →"
+                  ]
+                }
               ]
             }
           ]
@@ -3202,6 +3413,18 @@
               "text": [
                 "实验台的三维对照可在保留当地科学图的同时打开关联三维场景；共享UTC，但相机独立。WebGL不可用时返回二维实验台继续使用。",
                 "Lab’s 3D comparison retains the local scientific view alongside a linked spatial scene. UTC is shared while cameras remain independent. If WebGL is unavailable, continue in the 2D Lab."
+              ]
+            },
+            {
+              "kind": "links",
+              "items": [
+                {
+                  "href": "space/index.html",
+                  "text": [
+                    "打开三维天空 →",
+                    "Open 3D Sky →"
+                  ]
+                }
               ]
             }
           ],

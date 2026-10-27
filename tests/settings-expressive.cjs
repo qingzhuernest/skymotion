@@ -9,7 +9,7 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
  try{
   await page.goto(base+'docs.html?lang=zh');await page.waitForSelector('html[data-fonts-ready]');await page.locator('.preferences-launch').click();
   assert.equal(await page.evaluate(()=>document.activeElement.id),'preferences-title');
-  await page.locator('.preferences-search').focus();await page.keyboard.press('Escape');await page.locator('.preferences-launch').click();assert.equal(await page.evaluate(()=>document.activeElement.id),'preferences-title');
+  assert.equal(await page.locator('input[type=search]').count(),0);await page.keyboard.press('Escape');await page.locator('.preferences-launch').click();assert.equal(await page.evaluate(()=>document.activeElement.id),'preferences-title');
   const controls=await page.locator('.preferences-dialog select').count();assert(controls>8);assert.equal(await page.locator('.preferences-dialog .preference-choices').count(),controls);assert.equal(await page.locator('.preferences-dialog [role=combobox]').count(),0);
   await page.locator('[data-category-link=layout]').click();await page.locator('[data-setting=density] [data-choice-value=compact]').click();assert.equal(await page.evaluate(()=>SkyPreferences.get().density),'compact');
   await page.locator('[data-setting=density] [data-choice-value=compact]').focus();await page.keyboard.press('Home');assert.equal(await page.evaluate(()=>SkyPreferences.get().density),'standard');assert.equal(await page.locator('[data-setting=density] [aria-pressed=true]').count(),1);

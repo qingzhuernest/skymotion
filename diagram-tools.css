@@ -305,7 +305,11 @@ body .dt-panel .dt-add button:hover {
 }
 .dt-list {
   display: grid;
-  margin: 0 0 18px;
+  gap: 8px;
+  padding: 10px;
+  background: var(--design-inset);
+  border-radius: 16px;
+  margin: 0 0 20px;
   max-height: 210px;
   overflow: auto;
   scrollbar-width: thin;
@@ -365,12 +369,15 @@ body .dt-panel .dt-row > :is(.dt-more, .dt-row-more):hover {
   background: var(--design-inset);
 }
 .dt-inspector {
-  padding-top: 4px;
+  padding: 16px 12px;
+  border: 1px solid var(--dt-line);
+  border-radius: 16px;
+  background: var(--design-surface);
 }
 .dt-fields {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 12px;
+  gap: 18px 12px;
 }
 .dt-fields label,
 .dt-city-picker {
@@ -423,7 +430,10 @@ body .dt-lock {
   display: none;
 }
 .dt-reference-help {
-  margin: 0 0 14px;
+  margin: 16px 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--design-inset);
 }
 .dt-object-actions {
   display: flex;
@@ -674,7 +684,7 @@ body .dt-panel[data-collapsed='true'] {
   .dt-inspector {
     overflow: auto;
     overscroll-behavior: contain;
-    padding-right: 3px;
+    padding: 16px 12px;
   }
 }
 @media (max-width: 760px) {

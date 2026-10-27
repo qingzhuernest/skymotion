@@ -253,6 +253,16 @@
   });
   document.addEventListener('skymotion:language', sync);
   document.addEventListener('skymotion:customization', sync);
+  document.addEventListener('DOMContentLoaded',()=>{
+    const params=new URLSearchParams(location.search),targetId=params.get('control');
+    const allowed=new Set(['conditionsMenu','coordinatesMenu','workbenchMore','modelMenu','displayMenu']);
+    if(!allowed.has(targetId))return;
+    window.SkyDiagramTools?.selectSidebar('conditions');
+    const target=document.getElementById(targetId);if(!target)return;
+    for(let node=target;node&&node!==rail;node=node.parentElement)if(node.tagName==='DETAILS')node.open=true;
+    if(matchMedia('(max-width:760px)').matches&&!document.getElementById('uiParameterDrawer').open)document.getElementById('uiParametersButton').click();
+    requestAnimationFrame(()=>{target.scrollIntoView({block:'nearest'});const focus=target.querySelector('summary,button,input:not(.md-choice-native)');focus?.focus({preventScroll:true});});
+  },{once:true});
   // The existing tabs remain the routing mechanism; the sidebar is the sole visible catalog.
   uiWorkspace.tabs.classList.add('workbench-route-tabs');
   sync();
