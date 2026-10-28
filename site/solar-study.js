@@ -144,7 +144,7 @@
     o.value = value;
     o.dataset.word = key;
   }
-  select.value = interval;
+  window.SkyMaterial.setValue(select, interval);
   select.onchange = () => {
     interval = Number(select.value);
     lastKey = '';
@@ -507,15 +507,14 @@
         customOption.textContent = t('customSite');
         city.append(...cityOptions.map(option => option.cloneNode(true)));
       }
-      city.value =
-        [...city.options].find((option) => {
+      window.SkyMaterial.setValue(city, [...city.options].find((option) => {
           const values = option.value.split(',').map(Number);
           return (
             values.length === 2 &&
             Math.abs(values[0] - locations[i + 1].lat) < 1e-6 &&
             Math.abs(values[1] - locations[i + 1].lon) < 1e-6
           );
-        })?.value || '';
+        })?.value || '');
     });
     cityOptionsKey = nextCityOptionsKey;
     fields.forEach((pair, i) =>

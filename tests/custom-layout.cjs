@@ -118,6 +118,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     assert.deepEqual((await stored()).views, ['contextPanel', 'chartPanel']);
     assert.deepEqual(await science(), initial);
     await p.reload();
+    await p.evaluate(()=>{window.retainedLayoutCards=[...document.querySelectorAll('.ui-plot > [data-diagram-card]')];});
     await p.waitForFunction(() => !document.querySelector('.layout-launch').disabled);
     assert.equal(await p.evaluate(() => SkyCustomization.active), false);
     await p.locator('.layout-launch').click();
@@ -147,11 +148,10 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
       2,
       'Finishing customization retains the selected arrangement',
     );
-    assert.equal(
-      await p.locator('.ui-plot > [data-diagram-card]').count(),
-      6,
-      'Views share one retained canvas instance',
-    );
+    assert(await p.evaluate(()=>{
+      const current=[...document.querySelectorAll('.ui-plot > [data-diagram-card]')];
+      return current.length===retainedLayoutCards.length&&current.every(card=>retainedLayoutCards.includes(card));
+    }), 'Finishing customization retains each original diagram card');
     await require('./diagram-test-helpers.cjs').selectDiagram(p, 'chartPanel');
     assert(await p.locator('#chart').isVisible());
     await p.setViewportSize({ width: 390, height: 844 });
@@ -200,7 +200,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     assert(await p.locator('#phaseContent').isVisible());
     assert.equal(await p.locator('.layout-launch').getAttribute('aria-pressed'), 'true');
     await p.locator('.layout-launch').click();
-    assert.equal(await p.locator('.ui-plot > [data-diagram-card]').count(), 6);
+    assert(await p.evaluate(()=>{const cards=[...document.querySelectorAll('.ui-plot > [data-diagram-card]')];return cards.length===retainedLayoutCards.length&&cards.every(card=>retainedLayoutCards.includes(card));}), 'Body and locale changes retain the original diagram cards');
     assert(await p.locator('#phaseContent').isVisible());
     assert.deepEqual(errors, []);
     await c.close();

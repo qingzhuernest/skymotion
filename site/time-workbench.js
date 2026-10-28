@@ -109,7 +109,7 @@ function renderTimeWorkbench() {
       : basis === 'date'
         ? '太阳 · 日期变化'
         : '太阳 · 一天内的时间变化';
-  $('workbenchBasis').value = basis;
+  window.SkyMaterial.setValue($('workbenchBasis'), basis);
   $('workbenchBasis').querySelector('[value="date"]').disabled = ideal;
   const analemmaPage = workbenchIsAnalemmaEntry(),
     clock = analemmaPage ? state.analemmaClock : state.time;
@@ -181,8 +181,7 @@ function renderTimeWorkbench() {
     );
     rate.dataset.key = rateKey;
   }
-  rate.value =
-    basis === 'day' ? state.speed : moon ? state.daysRate : state.solarDateRate;
+  window.SkyMaterial.setValue(rate, basis === 'day' ? state.speed : moon ? state.daysRate : state.solarDateRate);
   $('workbenchLoop').checked =
     basis === 'day' ? state.loop : moon ? state.monthLoop : state.solarDateLoop;
   $('workbenchLoopLabel').textContent =

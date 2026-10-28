@@ -72,7 +72,7 @@ The verifier uses an isolated temporary port and discovers `.cjs` tests at the `
 
 Session restoration validates dates, numerical ranges, types and choices; unknown versions are ignored. When storage is unavailable, an in-memory backup supports only the current page and cannot guarantee persistence after closing the page or switching devices. Save objects locally or export JSON for backup.
 
-Only `page-boot.js` blocks parsing to choose the language; other scripts use `defer` in dependency order. The welcome constellation waits for activation. Document introductions respect visit scope and reduced-motion preferences. Font or language-resource failures offer a retry that preserves the experiment settings. Background preloading is not offline installation.
+`theme-colors.js`, `preferences.js` and `page-boot.js` restore theme and locale before painting. Shared controls load before their page controllers; remaining scripts use `defer` in dependency order. The welcome constellation waits for activation. Document introductions respect visit scope and reduced-motion preferences. Font or language-resource failures offer a retry that preserves the experiment settings. Background preloading is not offline installation.
 
 ## Deploy and restore
 

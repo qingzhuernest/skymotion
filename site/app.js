@@ -942,9 +942,9 @@ function renderGlobeOptions() {
       : '拖动观察点可联动各张太阳图解；拖动球面其他位置只旋转视角。';
   if (state.manual && state.observerTimeBasis === 'utc')
     state.observerTimeBasis = 'solar';
-  $('observerTimeBasis').value = state.observerTimeBasis || 'solar';
+  window.SkyMaterial.setValue($('observerTimeBasis'), state.observerTimeBasis || 'solar');
   $('observerTimeBasis').querySelector('[value=utc]').disabled = state.manual;
-  $('observerConstraint').value = state.observerConstraint || 'free';
+  window.SkyMaterial.setValue($('observerConstraint'), state.observerConstraint || 'free');
   const utc = instantUTC().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
   $('observerLinkReadout').textContent =
     (state.observerTimeBasis === 'utc'

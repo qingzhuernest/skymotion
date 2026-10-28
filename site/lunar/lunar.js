@@ -90,9 +90,9 @@
     $('seekRise').disabled = surface;
     $('orbitAngle').value = surface ? 0 : s.angle;
     $('phaseAngle').value = s.phase;
-    $('altitude').value = s.altitude;
-    $('lunarSpeed').value = s.seconds;
-    $('lens').value = s.fov;
+    window.SkyMaterial.setValue($('altitude'), s.altitude);
+    window.SkyMaterial.setValue($('lunarSpeed'), s.seconds);
+    window.SkyMaterial.setValue($('lens'), s.fov);
     window.SkyMaterial?.updateRanges();
     $('playOrbit').setAttribute('aria-pressed', String(s.playing));
     text('positionValue', (surface ? 0 : s.angle).toFixed(1) + '°');

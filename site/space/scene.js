@@ -768,7 +768,7 @@
     const longMoonOption = $('trailDays').querySelector('[value="365"]');
     longMoonOption.disabled = view === 'earthmoon';
     if (view === 'earthmoon' && $('trailDays').value === '365')
-      $('trailDays').value = '30';
+      window.SkyMaterial.setValue($('trailDays'), '30');
     updateHistory();
     updateInspection();
     const stamp = playing
@@ -883,11 +883,11 @@
 
   function updateInspection() {
     if (document.activeElement !== $('inspectBody'))
-      $('inspectBody').value = inspectingMoon
+      window.SkyMaterial.setValue($('inspectBody'), inspectingMoon
         ? 'moon'
         : view === 'overview'
           ? ''
-          : String(selected);
+          : String(selected));
     const current = SolarSpaceExploration.actualDistance(
       physical,
       inspectingMoon ? 'Moon' : selected,
@@ -1323,7 +1323,7 @@
         const node = $(id);
         if (!node || node.closest('.preferences-dialog')) continue;
         if (node.type === 'checkbox') node.checked = value;
-        else node.value = value;
+        else window.SkyMaterial.setValue(node, value);
       }
       view = 'overview';
       select(snapshot.selected);

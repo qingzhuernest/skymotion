@@ -446,11 +446,11 @@ function renderAnalemma() {
   const points = analemmaYear(),
     index = points.findIndex((p) => p.date === state.date),
     s = points[index];
-  $('analemmaBasis').value = state.analemmaBasis;
+  window.SkyMaterial.setValue($('analemmaBasis'), state.analemmaBasis);
   $('analemmaClock').value = hhmm(state.analemmaClock);
   $('analemmaOffset').value = state.analemmaOffset;
   $('analemmaZoneLabel').hidden = state.analemmaBasis !== 'clock';
-  $('analemmaView').value = state.analemmaView;
+  window.SkyMaterial.setValue($('analemmaView'), state.analemmaView);
   $('analemmaDay').max = points.length;
   $('analemmaDay').value = index + 1;
   $('analemmaDate').textContent = state.date;

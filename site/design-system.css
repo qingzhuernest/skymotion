@@ -174,9 +174,6 @@ body :is([role='menuitem'], .page-nav :is(a, .preferences-launch)) {
 body input:is([type='checkbox'], [type='radio'], [type='range']) {
   accent-color: var(--md-sys-color-primary);
 }
-body input[type='range'] {
-  min-height: var(--md-sys-size-target);
-}
 .md-checkbox-target {
   display: grid;
   place-items: center;
@@ -204,9 +201,6 @@ body input[type='range'] {
   width: 18px;
   height: 18px;
   margin: 0;
-}
-.document-page {
-  font-family: var(--design-reading-font);
 }
 @media (pointer: coarse), (max-width: 760px) {
   :root {

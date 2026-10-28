@@ -25,3 +25,6 @@ Shared state layers and350ms expressive shape transitions; short150ms color feed
 
 ## Ownership
 ui-palette.css defines color; design-system.css defines shared component tokens and skins; route CSS owns placement. material-controls.js owns slider fill and shared select presentation; native inputs retain values and events. interface-motion.css owns parameter rails, sticky headers and collapse/expand controls. workbench-menu.css owns the single navigation-row implementation. interface-motion.js handles reversible presentation transitions and installs shared choice classes. Route CSS does not override these component skins. No UI framework or astronomy rewrite is introduced.
+
+## Programmatic control values
+State owners commit native field values through `SkyMaterial.setValue(control, value)`; callers that directly change selection can use `syncChoices(select)`. These calls update presentation without generating input/change events. The shared library loads once, before page controllers. Native select/option prototypes remain unchanged; DOM observation handles added, moved and relabeled controls.

@@ -59,7 +59,7 @@ function renderCompanion() {
   $('companionEnabled').setAttribute('aria-expanded', String(state.companion));
   $('companionContent').hidden = !state.companion;
   if (!state.companion) return;
-  $('companionPlanet').value = state.planet;
+  window.SkyMaterial.setValue($('companionPlanet'), state.planet);
   const m = companionSnapshot(),
     name = companionPlanets[state.planet],
     atPole = Math.abs(state.lat) > 89.99999999;

@@ -231,7 +231,7 @@ function renderSolarDateUI() {
   $('solarDateDay').value = yearDay(state.date);
   $('solarDateDay').setAttribute('aria-valuetext', state.date);
   if (document.activeElement !== $('solarDateYear')) $('solarDateYear').value = year;
-  $('solarDateSpeed').value = state.solarDateRate;
+  window.SkyMaterial.setValue($('solarDateSpeed'), state.solarDateRate);
   $('solarDateLoop').checked = state.solarDateLoop;
   $('solarDateTrail').checked = state.solarDateTrail;
   $('solarDateLink').checked = state.solarDateLink;

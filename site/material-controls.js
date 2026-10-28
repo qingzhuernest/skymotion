@@ -37,6 +37,12 @@
     queueMicrotask(()=>{choiceTask=false;const batch=[...pending];pending.clear();for(const item of batch)enhanceChoices(item);});
   }
   function syncChoices(select) { choices.get(select)?.sync(); }
+  // State owners commit values explicitly; native prototypes are never modified.
+  function setValue(control, value) {
+    if (control.value === String(value)) return;
+    control.value = value;
+    if (control.matches('select')) queueChoice(control);
+  }
   function enhanceChoices(select) {
     if(!select?.matches?.('select'))return;
     if(choices.has(select)){syncChoices(select);return;}
@@ -65,7 +71,7 @@
       const label=select.labels?.[0]||select.parentElement.querySelector('label');
       return select.getAttribute('aria-label')||(label?[...label.childNodes].filter(n=>n!==select&&n!==field&&!n.contains?.(select)&&!n.contains?.(field)).map(n=>n.textContent).join(' ').trim():'')||(document.documentElement.lang==='en'?'Choose an option':'选择选项');
     }
-    function syncVisibility(){for(const button of buttons)button.hidden=button.skyOption.hidden;updateChoices(group);}
+    function syncVisibility(options){buttons.forEach((button,index)=>{button.hidden=options[index].hidden;});updateChoices(group);}
     summary.addEventListener('click',event=>{if(select.disabled)event.preventDefault();});
     details.addEventListener('keydown',event=>{if(event.key==='Escape'&&details.open){event.preventDefault();event.stopPropagation();closeChoice();summary.focus();}});
     function sync(){
@@ -77,8 +83,8 @@
         signature=next;const focused=document.activeElement?.closest('.md-choice-field')===field?document.activeElement.dataset.choiceValue:null;
         long=options.filter(o=>!o.hidden).length>4;field.classList.toggle('md-choice-many',long);group.dataset.choiceCount=options.length;
         group.replaceChildren();buttons=options.map((option,index)=>{
-          const button=document.createElement('button');button.type='button';button.id=key+'-choice-'+index;button.dataset.choiceValue=option.value;button.textContent=option.textContent;button.skyOption=option;
-          button.onclick=()=>{if(button.disabled)return;select.value=option.value;select.dispatchEvent(new Event('input',{bubbles:true}));select.dispatchEvent(new Event('change',{bubbles:true}));if(long){closeChoice();summary.focus({preventScroll:true});}};
+          const button=document.createElement('button');button.type='button';button.id=key+'-choice-'+index;button.dataset.choiceValue=option.value;button.textContent=option.textContent;
+          button.onclick=()=>{if(button.disabled)return;setValue(select,button.dataset.choiceValue);select.dispatchEvent(new Event('input',{bubbles:true}));select.dispatchEvent(new Event('change',{bubbles:true}));if(long){closeChoice();summary.focus({preventScroll:true});}};
           button.onkeydown=event=>{
             if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
             event.preventDefault();event.stopPropagation();const visible=buttons.filter(b=>!b.hidden&&!b.disabled),i=visible.indexOf(button);
@@ -92,22 +98,17 @@
       const label=caption();group.setAttribute('aria-label',label);summary.setAttribute('aria-label',label+': '+(select.selectedOptions[0]?.textContent||''));
       const text=select.selectedOptions[0]?.textContent||label;if(summary.textContent!==text)summary.textContent=text;
       summary.setAttribute('aria-disabled',String(select.disabled));
-      buttons.forEach((button,index)=>{const option=options[index],selected=option.selected;button.setAttribute('aria-pressed',String(selected));button.tabIndex=selected||long?0:-1;button.disabled=select.disabled||option.disabled;});syncVisibility();
+      buttons.forEach((button,index)=>{const option=options[index],selected=option.selected;button.setAttribute('aria-pressed',String(selected));button.tabIndex=selected||long?0:-1;button.disabled=select.disabled||option.disabled;});syncVisibility(options);
     }
     select.addEventListener('change',sync);select.addEventListener('focus',()=>{if(long)summary.focus({preventScroll:true});else buttons.find(b=>b.getAttribute('aria-pressed')==='true')?.focus({preventScroll:true});});
     choices.set(select,{sync});select.after(field);sync();
   }
   function enhanceAll(root=document){if(root.matches?.('select'))queueChoice(root);root.querySelectorAll?.('select').forEach(queueChoice);}
-  // Keep native property semantics while synchronizing programmatic selection changes.
-  for(const [prototype,key] of [[HTMLSelectElement.prototype,'value'],[HTMLSelectElement.prototype,'selectedIndex'],[HTMLOptionElement.prototype,'selected']]){
-    const descriptor=Object.getOwnPropertyDescriptor(prototype,key);
-    if(descriptor?.set)Object.defineProperty(prototype,key,{...descriptor,set(value){const before=descriptor.get.call(this);descriptor.set.call(this,value);if(before!==descriptor.get.call(this))queueChoice(this instanceof HTMLSelectElement?this:this.closest('select'));}});
-  }
   document.addEventListener('pointerdown',event=>{for(const popup of [...openChoosers])if(!popup.field.contains(event.target))popup.close();},true);
   document.addEventListener('scroll',()=>{for(const popup of openChoosers)popup.position();},true);
   addEventListener('resize',()=>{for(const popup of openChoosers)popup.position();});
   document.addEventListener('skymotion:language',()=>{for(const popup of [...openChoosers])popup.close();enhanceAll();});
-  window.SkyMaterial=Object.freeze({updateRange,updateRanges,updateChoices,enhanceChoices,syncChoices});
+  window.SkyMaterial=Object.freeze({setValue,updateRange,updateRanges,updateChoices,enhanceChoices,syncChoices});
   // Native pointer and keyboard input keep their own behavior.
   document.addEventListener('input', (event) => updateRange(event.target), true);
   document.addEventListener('change', (event) => updateRange(event.target), true);

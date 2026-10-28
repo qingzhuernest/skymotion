@@ -208,7 +208,7 @@
       goal.value === 'places' &&
       citySelect.value === [current.lat, current.lon].join(',')
     )
-      citySelect.value = current.lat === -33.9 ? '51.5,-0.1' : '-33.9,151.2';
+      window.SkyMaterial.setValue(citySelect, current.lat === -33.9 ? '51.5,-0.1' : '-33.9,151.2');
     goalHelp.textContent = tr(
       goalHints[goal.value] ||
         '选择实验目的，或展开下方“自由添加工具”逐个放置标记和说明。原图观测条件保持不变。|Choose an experiment, or expand Add individual tools below to place markers and notes one at a time. The original observation conditions stay unchanged.',
@@ -224,7 +224,7 @@
     if (copy.value === 'custom') continue;
     citySelect.append(copy);
   }
-  citySelect.value = document.querySelector('#place')?.value || '';
+  window.SkyMaterial.setValue(citySelect, document.querySelector('#place')?.value || '');
   const objectHeading = E('div', 'dt-object-heading', objects),
     objectTitle = E('h3', '', objectHeading),
     addAnother = E('button', 'dt-add-another', objectHeading);
@@ -791,7 +791,7 @@
       if (!coords.every(Number.isFinite)) return;
       const basis = document.querySelector('#observerTimeBasis');
       if (basis) {
-        basis.value = 'utc';
+        window.SkyMaterial.setValue(basis, 'utc');
         basis.dispatchEvent(new Event('change', { bubbles: true }));
       }
       const def = defs(current).find(
@@ -1092,8 +1092,7 @@
     }
     const cities = form.querySelector('[data-city-edit]');
     if (cities && selectedObject)
-      cities.value =
-        [...cities.options].find(
+      window.SkyMaterial.setValue(cities, [...cities.options].find(
           (option) =>
             option.value &&
             option.value
@@ -1103,7 +1102,7 @@
                 (value, index) =>
                   Math.abs(value - selectedObject[index ? 'lon' : 'lat']) < 1e-6,
               ),
-        )?.value || '';
+        )?.value || '');
     for (const input of form.querySelectorAll('[data-field]'))
       SkyParameterControls.sync(input);
     actionState();
@@ -1238,7 +1237,7 @@
   }
   function hide() {
     for (const input of form.querySelectorAll('[aria-invalid=true]')) {
-      input.value = input.dataset.committedValue;
+      window.SkyMaterial.setValue(input, input.dataset.committedValue);
       clearFieldError(input);
     }
     closeObjectMenu();
@@ -1558,7 +1557,7 @@
       option.value = value;
       option.textContent = tr(title);
     }
-    goal.value = choices.some(([key]) => key === previous) ? previous : '';
+    window.SkyMaterial.setValue(goal, choices.some(([key]) => key === previous) ? previous : '');
     goalLabel.hidden = choices.length === 1;
     const context = current.id + ':' + current.body + ':' + current.type;
     if (advanced.dataset.context !== context) {
@@ -1800,7 +1799,7 @@
       preview(value) {
         object[field.name] = value;
         if (['lat', 'lon'].includes(field.name)) referenceNameAtLocation(object);
-        input.value = displayValue(field.name, value);
+        window.SkyMaterial.setValue(input, displayValue(field.name, value));
         input.dataset.committedValue = input.value;
         clearFieldError(input);
         updateSmall();
@@ -1821,7 +1820,7 @@
         for (const key of Object.keys(object))
           if (!(key in before.object)) delete object[key];
         Object.assign(object, before.object);
-        input.value = displayValue(field.name, object[field.name]);
+        window.SkyMaterial.setValue(input, displayValue(field.name, object[field.name]));
         input.dataset.committedValue = input.value;
         draftStatus();
         updateSmall();
@@ -1867,7 +1866,7 @@
       );
       return;
     }
-    n.value = displayValue(f.name, v);
+    window.SkyMaterial.setValue(n, displayValue(f.name, v));
     clearFieldError(n);
     n.dataset.committedValue = n.value;
     mutate(() => {
@@ -1942,7 +1941,7 @@
       const label = E('label', 'dt-name-edit', form);
       label.append(document.createTextNode(tr('图上标注文字|Plot annotation text')));
       const input = E('input', '', label);
-      input.value = o.customLabel ? o.label : tr(o.label);
+      window.SkyMaterial.setValue(input, o.customLabel ? o.label : tr(o.label));
       input.maxLength = 60;
       input.dataset.field = 'label';
       input.dataset.committedValue = input.value;
@@ -1954,7 +1953,7 @@
           o.customLabel = !!value;
           if (!value) delete o.copyNumber;
         }, true);
-        input.value = value || tr(def.title);
+        window.SkyMaterial.setValue(input, value || tr(def.title));
         input.dataset.committedValue = input.value;
       };
       if (
@@ -1974,15 +1973,14 @@
         custom.value = '';
         custom.textContent = tr('自定义地点|Custom location');
         for (const option of citySelect.options) cities.append(option.cloneNode(true));
-        cities.value =
-          [...cities.options].find((option) => {
+        window.SkyMaterial.setValue(cities, [...cities.options].find((option) => {
             const values = option.value.split(',').map(Number);
             return (
               values.length === 2 &&
               Math.abs(values[0] - o.lat) < 1e-6 &&
               Math.abs(values[1] - o.lon) < 1e-6
             );
-          })?.value || '';
+          })?.value || '');
         cities.onchange = () => {
           if (!cities.value || !validInputs()) return;
           const [lat, lon] = cities.value.split(',').map(Number);
@@ -2028,7 +2026,7 @@
           n.maxLength = 5;
         }
         n.dataset.field = f.name;
-        n.value = displayValue(f.name, o[f.name]);
+        window.SkyMaterial.setValue(n, displayValue(f.name, o[f.name]));
         n.dataset.committedValue = n.value;
         if (
           current.type === 'analemma' &&
@@ -3511,7 +3509,7 @@
   function syncInputs(o) {
     for (const input of form.querySelectorAll('[data-field]'))
       if (input !== document.activeElement && input.dataset.field !== 'label') {
-        input.value = displayValue(input.dataset.field, o[input.dataset.field]);
+        window.SkyMaterial.setValue(input, displayValue(input.dataset.field, o[input.dataset.field]));
         input.dataset.committedValue = input.value;
       }
   }

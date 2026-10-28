@@ -441,7 +441,7 @@
         },
         preview(value) {
           if (current()) current()[key] = value;
-          input.value = value;
+          window.SkyMaterial.setValue(input, value);
           draw();
           status.textContent = t('preview');
         },
@@ -1263,7 +1263,7 @@
           (['tilt', 'azimuth'].includes(k) &&
             !['rod', 'circle', 'planeObject'].includes(o.kind)) ||
           (['lat', 'lon', 'heading'].includes(k) && o.kind !== 'observer');
-        if (document.activeElement !== input) input.value = k === 'name' ? name(o) : o[k];
+        if (document.activeElement !== input) window.SkyMaterial.setValue(input, k === 'name' ? name(o) : o[k]);
         input.disabled =
           (o.locked && ['x', 'z'].includes(k)) ||
           (k === 'tilt' &&

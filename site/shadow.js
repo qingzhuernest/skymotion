@@ -155,7 +155,7 @@ function drawCurrentShadow(c, project, position, radius) {
 }
 function updateShadowUI() {
   const sun = state.body === 'sun';
-  $('shadowZoom').value = String(state.shadowZoom || 4);
+  window.SkyMaterial.setValue($('shadowZoom'), String(state.shadowZoom || 4));
   $('shadowTrace').checked = !!state.shadowTrace;
   $('shadowTraceKey').hidden = !sun || !state.shadowTrace || state.view === 'horizon';
   $('shadowTraceNote').hidden = !sun || !state.shadowTrace;

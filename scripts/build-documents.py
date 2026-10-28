@@ -18,7 +18,7 @@ LINKS = [
     ("development-guide", "开发者文档", "Developer reference"),
 ]
 STYLES = ["ui-palette.css", "style.css", "pages.css", "documents.css", "interface-motion.css", "design-system.css", "language.css"]
-SCRIPTS = ["material-controls.js", "document-entrance.js", "document-navigation.js", "language-data.js", "language.js", "page-cache.js", "date-picker.js"]
+SCRIPTS = ["document-entrance.js", "document-navigation.js", "language-data.js", "language.js", "page-cache.js", "date-picker.js"]
 
 
 def escape(value):

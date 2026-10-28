@@ -161,7 +161,7 @@
         if (!node || !node.matches('input,select')) continue;
         if (node.type === 'checkbox' || node.type === 'radio') {
           if (typeof value === 'boolean') node.checked = value;
-        } else if (typeof value === 'string' || (typeof value === 'number' && Number.isFinite(value))) node.value = value;
+        } else if (typeof value === 'string' || (typeof value === 'number' && Number.isFinite(value))) window.SkyMaterial.setValue(node, value);
       }
       window.dispatchEvent(new Event('sky:history-restored'));
     } catch (error) {

@@ -130,6 +130,12 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
     ))
   )
     throw Error('3d view title or tabs stale after undo');
+  await p.waitForFunction(()=>[...document.querySelectorAll('select')].every(select=>{
+    const field=select.nextElementSibling;
+    if(!field?.matches('.md-choice-field'))return false;
+    const buttons=[...field.querySelectorAll('button[data-choice-value]')];
+    return buttons.length===select.options.length&&buttons.every((button,index)=>button.getAttribute('aria-pressed')===String(select.options[index].selected));
+  }));
   console.log('PASS 3d selected planet and date undo', errors);
   await p.goto(testBase + 'diagrams.html?compare=1');
   const frame = await p
@@ -139,7 +145,7 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
   await frame.waitForFunction(() => window.SolarSpaceView);
   await settle();
   const beforeMenu = await p.evaluate(() => history.length);
-  await frame.locator('#sceneTools summary').click();
+  await frame.locator('#sceneTools > summary').click();
   await settle();
   if ((await p.evaluate(() => history.length)) !== beforeMenu)
     throw Error('embedded disclosure creates history');
@@ -153,7 +159,7 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
   await settle();
   if ((await frame.evaluate(() => spaceState().cameraPreset)) !== 'top')
     throw Error('embedded camera selection redo');
-  await frame.locator('#sceneTools summary').click();
+  await frame.locator('#sceneTools > summary').click();
   const beforeDrag = await p.evaluate(() => history.length);
   const canvas = await frame.locator('#stage canvas:not(.dt-overlay)').boundingBox();
   await p.mouse.move(canvas.x + canvas.width * 0.5, canvas.y + canvas.height * 0.4);

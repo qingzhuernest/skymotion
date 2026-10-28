@@ -51,7 +51,7 @@ $('place').addEventListener('change', (e) => {
     Math.abs(values[1]) > 180
   ) {
     state.place = 'custom';
-    select.value = 'custom';
+    window.SkyMaterial.setValue(select, 'custom');
     schedule();
     return;
   }
@@ -61,7 +61,7 @@ $('place').addEventListener('change', (e) => {
   )
     return;
   state.place = selectedPlace;
-  select.value = selectedPlace;
+  window.SkyMaterial.setValue(select, selectedPlace);
   $('lat').value = state.lat;
   $('lon').value = state.lon;
   schedule();
@@ -447,9 +447,9 @@ $('observationBody').addEventListener('keydown', (event) => {
       value = e.target.value.trim() === '' ? state[k] : Number(e.target.value);
     state[k] = clamp(Number.isFinite(value) ? value : state[k], -limit, limit);
     e.target.value = state[k].toFixed(1);
-    $(k).value = state[k];
+    window.SkyMaterial.setValue($(k), state[k]);
     state.place = 'custom';
-    $('place').value = 'custom';
+    window.SkyMaterial.setValue($('place'), 'custom');
     schedule();
   }),
 );
@@ -498,15 +498,15 @@ function monthDays(date) {
   return new Date(Date.UTC(y, m, 0)).getUTCDate();
 }
 function syncControls() {
-  for (const k of ['lat', 'lon', 'height', 'date', 'speed']) $(k).value = state[k];
-  $('place').value = state.place;
+  for (const k of ['lat', 'lon', 'height', 'date', 'speed']) window.SkyMaterial.setValue($(k), state[k]);
+  window.SkyMaterial.setValue($('place'), state.place);
   if ($('place').selectedIndex < 0) {
     state.place = 'custom';
-    $('place').value = 'custom';
+    window.SkyMaterial.setValue($('place'), 'custom');
   }
   for (const k of ['track', 'shadow', 'compare', 'angles', 'loop'])
     $(k).checked = state[k];
-  $('moonSpeed').value = state.daysRate;
+  window.SkyMaterial.setValue($('moonSpeed'), state.daysRate);
   $('moonLoop').checked = state.monthLoop;
 }
 function updateSolarControls() {

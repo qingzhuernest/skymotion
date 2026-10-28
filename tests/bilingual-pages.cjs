@@ -26,6 +26,9 @@ for english in Path('site').resolve().rglob('*.en.html'):
     for name in ('theme-colors.js','preferences.js','page-boot.js'):
         assert sources.count(name)==1, f'Expected exactly one early bootstrap: {name}'
     assert sources.index('theme-colors.js') < sources.index('preferences.js') < sources.index('page-boot.js'), 'Restore theme before locale and visible parsing'
+    assert sources.count('material-controls.js')==1, 'Install shared controls once per page'
+    for consumer in ('app.js','lunar.js','scene.js','diagram-tools.js'):
+        if consumer in sources:assert sources.index('material-controls.js') < sources.index(consumer), 'Load shared controls before their consumers'
     def check_english_text(node, skip=False):
         # Explicit bilingual quotes and code samples retain their source language.
         skip=skip or node.tag in ('script','style','pre','code') or (node.attr('lang') or '').startswith('zh') or any(k=='data-i18n-skip' for k,v in node.attrs)

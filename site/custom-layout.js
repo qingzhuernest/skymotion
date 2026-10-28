@@ -1013,7 +1013,7 @@
         o.disabled = workspaceBody === 'moon' && o.value === 'analemmaPanel';
         o.hidden = o.disabled;
       }
-      c.select.value = id;
+      window.SkyMaterial.setValue(c.select, id);
       c.close.disabled = data.views.length === 1;
       c.focus.disabled = data.views.length === 1;
       c.focus.hidden = Boolean(focused);

@@ -934,7 +934,7 @@ function chooseMapObserver(location, options = {}) {
         : null,
     clock = instant === null ? null : observerClockAt(instant, lon);
   if (instant !== null && !clock) {
-    $('place').value = state.place;
+    window.SkyMaterial.setValue($('place'), state.place);
     const note = $('observerLinkReadout');
     if (note)
       note.textContent =
@@ -951,7 +951,7 @@ function chooseMapObserver(location, options = {}) {
     state.time = clock.time;
     state.dec = dateDec(state.date);
   }
-  $('place').value = 'custom';
+  window.SkyMaterial.setValue($('place'), 'custom');
   schedule();
   return true;
 }
