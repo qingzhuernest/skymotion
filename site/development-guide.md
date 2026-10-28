@@ -436,14 +436,14 @@ python3 scripts/prerender-pages.py --check
 
 ## 本地开发、验证与提交
 
-1. 克隆仓库，先看PRODUCT.md与DESIGN.md，再用静态服务器打开页面；无需为浏览器运行安装应用框架。
+1. 克隆仓库，先看docs/architecture/内的PRODUCT.md与DESIGN.md，再以site/为根目录启动静态服务器；无需安装应用框架。
 2. 浏览器测试依赖固定在tests/browser/package-lock.json，使用该目录安装，不把测试工具发布到网站。
-3. 根据改动先运行相关测试；发布工作流运行tests根目录全部.cjs回归，辅助文件除外。
+3. 根据改动先运行相关测试；发布默认只运行发布检查集。完整回归通过手动full_regression选择；同一次提交验证一次，再部署正式站和镜像。
 4. 界面改动核对桌面、平板和手机，模型改动同时检查时间标准、边界、坐标手性和无事件情形。
 5. 提交前重新生成双语内容，核对git diff，不把截图、临时服务器或调试凭据加入发布。
 
 ```bash
-python3 -m http.server 8000 --bind 127.0.0.1
+python3 -m http.server 8000 --bind 127.0.0.1 --directory site
 # Browser tests, from a separate terminal:
 npm ci --prefix tests/browser
 tests/browser/node_modules/.bin/playwright install chromium
@@ -457,7 +457,7 @@ SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" \
 
 ## 正式站、镜像与打包
 
-main推送触发Cloudflare Pages与GitHub Pages两个工作流，两边都先调用共享validate.yml。任一工作流的检查失败会阻止其部署；主站与镜像的部署结论分别核对，不能只看到一个绿色状态就声称两边都成功。
+main推送只执行一次共享validate.yml，通过后分别部署Cloudflare Pages与GitHub Pages。默认使用发布检查集，手动full_regression才执行完整回归。主站与镜像分别核对部署结论。
 
 ```bash
 python3 .github/scripts/prepare_site.py --output /tmp/skymotion-site
@@ -489,9 +489,9 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | 源码文件 | 职责 | 声明的函数 |
 | --- | --- | --- |
 | [app.js](https://github.com/qingzhuernest/skymotion/blob/main/app.js) | 共享状态、太阳几何、Canvas绘图与呈现前状态准备 | solar, daylight, hhmm, coord, heading, dateDec, selectedPlaceName, resize, poly, text, glow, skyTrackSegments, between, add, drawMoonDayEndpoints, drawSkyScene, drawTrack, drawSunAltitudeChart, line, createEarthGPU, shader, drawEarthGPU, globeCenter, globeGeometry, renderGlobeOptions, initGlobeOptions, labels, initEarthFallback, earthSurface, drawGlobe, proj, skyViewSelected, syncSkyViewControls, updateUI, drawSolarSky, drawLunarSky, renderSolarPipeline, renderLunarPipeline, prepareObservationState, render, schedule, monthPhaseSamples, drawLunarMonthChart, shiftDay, advanceLunarPlayback, paintLabReferences |
-| [moon.js](https://github.com/qingzhuernest/skymotion/blob/main/moon.js) | 真实日期星历、真太阳时与UTC换算、升落采样 | sunEquatorial, sunHourAngle, solarNoonUTC, instantUTC, skyRaw, moonRaw, refineExtremum, ephemerisDay, lunarDay, bodyPosition, bodyDay, sunContext, lunarPhase, seasonDate, lunarFaceTexture, drawMoon, drawPhasePanel, halfLit, initPhaseInteraction, pointerAngle, applyDrag, finish |
+| [moon.js](https://github.com/qingzhuernest/skymotion/blob/main/moon.js) | 真实日期星历、真太阳时与UTC换算、升落采样 | sunEquatorial, sunHourAngle, solarNoonUTC, instantUTC, skyRaw, refineExtremum, ephemerisDay, bodyPosition, bodyDay, sunContext, lunarPhase, seasonDate, lunarFaceTexture, drawMoon, drawPhasePanel, halfLit, initPhaseInteraction, pointerAngle, applyDrag, finish |
 | [astronomy.js](https://github.com/qingzhuernest/skymotion/blob/main/astronomy.js) | 随站分发的Astronomy Engine第三方计算库 | mb |
-| [coverage.js](https://github.com/qingzhuernest/skymotion/blob/main/coverage.js) | 地球昼夜、地图、升落方位和地轴图 | yearLength, yearDay, dateAtYearDay, updateYearSlider, illuminationAt, mapGeometry, mapLocation, worldNightLatitude, worldNightPath, drawWorldMap, updateEarthView, eventPosition, eventModel, updateEvents, drawEventCompass, eventBearingCandidates, eventBearingDate, initEventCompassInteraction, restore, adjust, finish, cancel, geometryModel, resetGeometryCamera, initGeometryCamera, redraw, drawEarthGeometry, ring, renderSolarCoverage, renderLunarCoverage, useReferenceObserver, observerClockAt, chooseMapObserver, initCoverage |
+| [coverage.js](https://github.com/qingzhuernest/skymotion/blob/main/coverage.js) | 地球昼夜、地图、升落方位和地轴图 | yearLength, yearDay, dateAtYearDay, updateYearSlider, mapGeometry, mapLocation, worldNightLatitude, worldNightPath, drawWorldMap, updateEarthView, eventPosition, eventModel, updateEvents, drawEventCompass, eventBearingCandidates, eventBearingDate, initEventCompassInteraction, restore, adjust, finish, cancel, geometryModel, resetGeometryCamera, initGeometryCamera, redraw, drawEarthGeometry, ring, renderSolarCoverage, renderLunarCoverage, useReferenceObserver, observerClockAt, chooseMapObserver, initCoverage |
 | [workspace.js](https://github.com/qingzhuernest/skymotion/blob/main/workspace.js) | 太阳/月球视图与原始模块的显隐协调 | isMoonOverlayActive, moonOverlayPosition, initWorkspace, updateWorkspaceLayout, updateWorkspaceUI |
 | [page-navigation.js](https://github.com/qingzhuernest/skymotion/blob/main/page-navigation.js) | 统一页面骨架、路由、画布挂载与参数抽屉 | uiViewHidden, uiViewText, uiViewAttribute, renderUIWorkspace, save, link, addPlace, selectDial, sundialGroup, animateDrawer, finishDrawerClose, closeParameters, openParameters, endDrawerSwipe, updateParameterPresentation |
 | [workbench-menu.js](https://github.com/qingzhuernest/skymotion/blob/main/workbench-menu.js) | 读取统一目录，呈现分层视图与布局入口 | select, sync |

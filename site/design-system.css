@@ -1015,7 +1015,7 @@ body[data-page='welcome'] :is(button, a) {
 }
 body[data-page='welcome'] .welcome-enter {
   background: var(--design-sun);
-  color: #302511;
+  color: var(--design-welcome-action-ink);
 }
 body[data-page='welcome'] .welcome-screen ::selection {
   background: var(--design-sun);

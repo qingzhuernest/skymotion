@@ -36,6 +36,15 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8986/').repla
       [540, 720, 900],
     );
     assert(data.samples[1].point.alt > data.samples[0].point.alt);
+    assert(await p.evaluate(() => {
+      const cities = [...document.querySelectorAll('#solarStudyControls select[id$="city"]')];
+      if (cities.length !== 2) return false;
+      const before = cities.map(city => [...city.options]);
+      const time = state.time;
+      for (let i = 1; i <= 5; i++) { state.time = time + i; SkySolarStudy.sync(); }
+      state.time = time; SkySolarStudy.sync();
+      return cities.every((city, i) => [...city.options].every((option, j) => option === before[i][j]));
+    }), 'Playing time must preserve city options and their connected controls');
     assert(
       data.samples[0].point.x > 0 && data.samples[2].point.x < 0,
       'morning is east, afternoon is west',

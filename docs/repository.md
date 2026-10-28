@@ -16,7 +16,7 @@
 | `scripts/theme-colors/` | 主题颜色依赖和构建入口 | 输出 `site/theme-colors.js` |
 | `tests/` | 单元与浏览器验证、公共辅助工具 | 验证器服务 `site/`；测试进程仍在仓库根运行 |
 | `tests/browser/` | 固定版本的测试依赖清单 | 不随网站发布 |
-| `.github/scripts/` | 打包与验证入口 | 两个部署目标共用 |
+| `.github/scripts/` | 打包与验证入口 | 两个部署目标共用；一次验证后分别部署 |
 | `.github/workflows/` | 发布和可复用验证工作流 | 只有 `main` 发布正式站 |
 | 根目录 README、许可、配置 | 仓库入口、版权和开发配置 | 保持精简 |
 
@@ -52,3 +52,5 @@ python3 .github/scripts/prepare_site.py --output dist
 三个完全合并的远端分支已清理：`impeccable-preview`、`preview/custom-workspace-2026-10-15`、`preview/unified-customization-20261021`。五个旧分支先推送同一 SHA 到归档名称，核对成功后才删除旧名称；没有丢弃独立提交。`companion-layout` 的独立提交与 main 补丁等价，仍保留归档以保全历史。
 
 其他工作树中正在检出的本地分支保持原状，避免打断已有工作；这些工作树不属于当前网站发布目录。未被工作树占用且已合并的本地旧分支可安全删除。远端默认分支和本地 `origin/HEAD` 均指向 `main`。
+
+代码精简与职责复核见 [2026-10-28 报告](reviews/CODE-SIMPLICITY-2026-10-28.md)。主题预设启动数据由 `scripts/site_sources.py` 从 `site/ui-palette.css` 生成，编辑颜色后应运行该生成器。

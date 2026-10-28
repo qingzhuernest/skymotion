@@ -169,9 +169,6 @@ function renderUIWorkspace() {
     $('studyMenu').hidden = true;
     $('seasonMenu').hidden = true; // The shared date slider already covers the full year.
     $('solarDateModeMenu').hidden = true; // Playback basis is set in the time workbench.
-    $('track').closest('label').hidden = true;
-    $('angles').closest('label').hidden = true;
-    $('shadowMenu').hidden = true;
     const skyVisible =
       (u.selected === 'skyPanel' || window.SkyPerspectives?.isSky(u.selected)) ||
       (comparing && [...(window.skyWorkspacePresentation?.visibleIds || [])].some(id=>id==='skyPanel'||window.SkyPerspectives?.isSky(id)));

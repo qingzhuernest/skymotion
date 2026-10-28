@@ -1831,5 +1831,8 @@
   "打开布局与保存面板 →": "Open layout and saving controls →",
   "打开时间控制 →": "Open time controls →",
   "打开文档中心 →": "Open documentation →",
-  "对应实验与功能": "Related experiments and features"
+  "对应实验与功能": "Related experiments and features",
+  "克隆仓库，先看docs/architecture/内的PRODUCT.md与DESIGN.md，再以site/为根目录启动静态服务器；无需安装应用框架。": "Clone the repository, read PRODUCT.md and DESIGN.md under docs/architecture/, then serve site/ as the web root; no application framework is required.",
+  "根据改动先运行相关测试；发布默认只运行发布检查集。完整回归通过手动full_regression选择；同一次提交验证一次，再部署正式站和镜像。": "Run checks for the changed paths first. Publication defaults to the release suite; full regression is a manual full_regression option. Validate each release once, then deploy production and its mirror.",
+  "main推送只执行一次共享validate.yml，通过后分别部署Cloudflare Pages与GitHub Pages。默认使用发布检查集，手动full_regression才执行完整回归。主站与镜像分别核对部署结论。": "A push to main validates once through shared validate.yml, then independently deploys Cloudflare Pages and GitHub Pages. The release suite is the default; only manual full_regression requests the complete suite. Verify both deployment outcomes."
 }

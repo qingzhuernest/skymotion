@@ -4,10 +4,14 @@
 /* Native disclosure sections and a modal mobile menu share the same controls. */
 let menuReturnFocus = null;
 function updateMenu() {
-  const moon = state.body === 'moon';
+  const moon = state.body === 'moon',
+    unified = document.body.dataset.page === 'diagrams';
   $('modelMenu').hidden = moon;
-  $('seasonMenu').hidden = moon;
-  $('shadowMenu').hidden = moon;
+  // The unified workspace owns view-dependent visibility and captions.
+  if (!unified) {
+    $('seasonMenu').hidden = moon;
+    $('shadowMenu').hidden = moon;
+  }
   $('geometryLink').hidden = moon;
   $('lifeDevicesMenu').hidden = moon;
   const name = selectedPlaceName();
@@ -19,19 +23,21 @@ function updateMenu() {
     : state.solarDateMode
       ? '固定时刻逐日观察'
       : '日期观测';
-  $('displaySummary').textContent =
-    [
-      state.track ? '轨迹' : null,
-      state.angles ? '辅助线' : null,
-      !moon && state.shadow ? '日影' : null,
-      !moon && state.shadowTrace ? '杆尖影迹' : null,
-    ]
-      .filter(Boolean)
-      .join(' · ') || '辅助显示已关闭';
+  if (!unified) {
+    $('displaySummary').textContent =
+      [
+        state.track ? '轨迹' : null,
+        state.angles ? '辅助线' : null,
+        !moon && state.shadow ? '日影' : null,
+        !moon && state.shadowTrace ? '杆尖影迹' : null,
+      ]
+        .filter(Boolean)
+        .join(' · ') || '辅助显示已关闭';
+  }
   $('chartLink').textContent = moon ? '逐日可见月面照明比例' : '全天太阳高度曲线';
   $('contextLink').textContent = moon ? '月相与日地月关系' : '太阳直射点与昼夜';
   $('eventsLink').textContent = moon ? '月出月落时刻与方位' : '日出日落时刻与方位';
-  $('reset').textContent = moon ? '重置当前月相实验' : '重置当前太阳实验';
+  if (!unified) $('reset').textContent = moon ? '重置当前月相实验' : '重置当前太阳实验';
   $('modelMenu').classList.toggle('ideal-active', !moon && state.manual);
   $('date').disabled = !moon && state.manual;
   $('idealDateHint').hidden = moon || !state.manual;

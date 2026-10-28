@@ -1,4 +1,4 @@
-name: Deploy SkyMotion to Cloudflare Pages
+name: Publish SkyMotion
 
 on:
   push:
@@ -55,3 +55,12 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=skymotion --branch=main
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  mirror:
+    needs: validate
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/github-pages.yml

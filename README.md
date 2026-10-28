@@ -55,7 +55,7 @@ python3 scripts/prerender-pages.py --check
 
 生成器同步英文 HTML、`language-data.js` 和资源预热清单，同时保留 DOM ID、表单值、数值属性与科学脚本。三份文档的中英文 Markdown 下载文件也须同步。内容按主题更新到原章节，不在文末叠加发布日志。
 
-界面颜色统一在 `site/ui-palette.css` 定义，控件通过 `--design-*` 变量调用；不要在页面模块里另写色号。对象菜单将撤销、重做并入操作行，帮助按需展开，给列表和属性保留空间。
+界面颜色统一在 `site/ui-palette.css` 定义；修改主色或预设色后运行 `python3 scripts/site_sources.py`，同步样式加载前的主题启动数据。控件通过 `--design-*` 变量调用；不要在页面模块里另写色号。对象菜单将撤销、重做并入操作行，帮助按需展开，给列表和属性保留空间。
 
 [界面集中审查记录](site/docs/ui-code-review.zh.md)列出已复现的问题、公共开关的职责与验证范围。
 
@@ -80,7 +80,7 @@ SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" SKY_MOTION_CH
 
 ## 部署与恢复
 
-推送 `main` 会触发 Cloudflare Pages 与 GitHub Pages 两个独立工作流。两者都先通过共享的 `validate.yml`，再打包同一份静态网站；其他分支不发布正式站。发布完成须分别核对两个工作流的部署结果。
+推送 `main` 运行一次共享的 `validate.yml` 验证，通过后分别部署 Cloudflare Pages 与 GitHub Pages。镜像工作流只负责部署，不重复安装浏览器和执行同一批检查。默认使用发布检查集；完整回归通过手动 `full_regression` 选择。其他分支不发布正式站。
 
 恢复版本时，从确认可用的提交创建恢复提交，保留 `main` 的历史，不强制推送。根路径及 GitHub 项目子路径由 `tests/deployment-paths.cjs` 检查。
 

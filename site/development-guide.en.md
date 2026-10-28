@@ -436,14 +436,14 @@ scripts/document_model.py validates paths, unique section IDs and aliases, bilin
 
 ## Local development, verification and commits
 
-1. Clone the repository, read PRODUCT.md and DESIGN.md, then use a static server; no application framework is required for runtime.
+1. Clone the repository, read PRODUCT.md and DESIGN.md under docs/architecture/, then serve site/ as the web root; no application framework is required.
 2. Browser-test dependencies are pinned in tests/browser/package-lock.json; install there and keep tools out of production.
-3. Run relevant checks first; release workflows run all root .cjs regressions except helper files.
+3. Run checks for the changed paths first. Publication defaults to the release suite; full regression is a manual full_regression option. Validate each release once, then deploy production and its mirror.
 4. For UI changes check desktop, tablet and phone; for models also check time basis, bounds, handedness and absent events.
 5. Regenerate bilingual content and review git diff before committing, excluding screenshots, temporary servers and debug credentials.
 
 ```bash
-python3 -m http.server 8000 --bind 127.0.0.1
+python3 -m http.server 8000 --bind 127.0.0.1 --directory site
 # Browser tests, from a separate terminal:
 npm ci --prefix tests/browser
 tests/browser/node_modules/.bin/playwright install chromium
@@ -457,7 +457,7 @@ Production publication keeps the latest main commit. A new commit cancels obsole
 
 ## Production, mirror and packaging
 
-A push to main triggers separate Cloudflare Pages and GitHub Pages workflows using shared validate.yml first. A failed validation blocks that deployment. Verify both outcomes rather than treating one green status as success for both.
+A push to main validates once through shared validate.yml, then independently deploys Cloudflare Pages and GitHub Pages. The release suite is the default; only manual full_regression requests the complete suite. Verify both deployment outcomes.
 
 ```bash
 python3 .github/scripts/prepare_site.py --output /tmp/skymotion-site
@@ -489,9 +489,9 @@ This index scans actual files. The right column lists explicit function declarat
 | Source file | Responsibility | Declared functions |
 | --- | --- | --- |
 | [app.js](https://github.com/qingzhuernest/skymotion/blob/main/app.js) | Shared state, solar geometry, Canvas rendering and observation preparation | solar, daylight, hhmm, coord, heading, dateDec, selectedPlaceName, resize, poly, text, glow, skyTrackSegments, between, add, drawMoonDayEndpoints, drawSkyScene, drawTrack, drawSunAltitudeChart, line, createEarthGPU, shader, drawEarthGPU, globeCenter, globeGeometry, renderGlobeOptions, initGlobeOptions, labels, initEarthFallback, earthSurface, drawGlobe, proj, skyViewSelected, syncSkyViewControls, updateUI, drawSolarSky, drawLunarSky, renderSolarPipeline, renderLunarPipeline, prepareObservationState, render, schedule, monthPhaseSamples, drawLunarMonthChart, shiftDay, advanceLunarPlayback, paintLabReferences |
-| [moon.js](https://github.com/qingzhuernest/skymotion/blob/main/moon.js) | Real-date ephemerides, solar-time/UTC conversion and event sampling | sunEquatorial, sunHourAngle, solarNoonUTC, instantUTC, skyRaw, moonRaw, refineExtremum, ephemerisDay, lunarDay, bodyPosition, bodyDay, sunContext, lunarPhase, seasonDate, lunarFaceTexture, drawMoon, drawPhasePanel, halfLit, initPhaseInteraction, pointerAngle, applyDrag, finish |
+| [moon.js](https://github.com/qingzhuernest/skymotion/blob/main/moon.js) | Real-date ephemerides, solar-time/UTC conversion and event sampling | sunEquatorial, sunHourAngle, solarNoonUTC, instantUTC, skyRaw, refineExtremum, ephemerisDay, bodyPosition, bodyDay, sunContext, lunarPhase, seasonDate, lunarFaceTexture, drawMoon, drawPhasePanel, halfLit, initPhaseInteraction, pointerAngle, applyDrag, finish |
 | [astronomy.js](https://github.com/qingzhuernest/skymotion/blob/main/astronomy.js) | Bundled third-party Astronomy Engine library | mb |
-| [coverage.js](https://github.com/qingzhuernest/skymotion/blob/main/coverage.js) | Globe/daylight, map, rise/set bearings and axis geometry | yearLength, yearDay, dateAtYearDay, updateYearSlider, illuminationAt, mapGeometry, mapLocation, worldNightLatitude, worldNightPath, drawWorldMap, updateEarthView, eventPosition, eventModel, updateEvents, drawEventCompass, eventBearingCandidates, eventBearingDate, initEventCompassInteraction, restore, adjust, finish, cancel, geometryModel, resetGeometryCamera, initGeometryCamera, redraw, drawEarthGeometry, ring, renderSolarCoverage, renderLunarCoverage, useReferenceObserver, observerClockAt, chooseMapObserver, initCoverage |
+| [coverage.js](https://github.com/qingzhuernest/skymotion/blob/main/coverage.js) | Globe/daylight, map, rise/set bearings and axis geometry | yearLength, yearDay, dateAtYearDay, updateYearSlider, mapGeometry, mapLocation, worldNightLatitude, worldNightPath, drawWorldMap, updateEarthView, eventPosition, eventModel, updateEvents, drawEventCompass, eventBearingCandidates, eventBearingDate, initEventCompassInteraction, restore, adjust, finish, cancel, geometryModel, resetGeometryCamera, initGeometryCamera, redraw, drawEarthGeometry, ring, renderSolarCoverage, renderLunarCoverage, useReferenceObserver, observerClockAt, chooseMapObserver, initCoverage |
 | [workspace.js](https://github.com/qingzhuernest/skymotion/blob/main/workspace.js) | Visibility coordination for solar/lunar views and original modules | isMoonOverlayActive, moonOverlayPosition, initWorkspace, updateWorkspaceLayout, updateWorkspaceUI |
 | [page-navigation.js](https://github.com/qingzhuernest/skymotion/blob/main/page-navigation.js) | Unified shell, routing, canvas mounting and parameter drawer | uiViewHidden, uiViewText, uiViewAttribute, renderUIWorkspace, save, link, addPlace, selectDial, sundialGroup, animateDrawer, finishDrawerClose, closeParameters, openParameters, endDrawerSwipe, updateParameterPresentation |
 | [workbench-menu.js](https://github.com/qingzhuernest/skymotion/blob/main/workbench-menu.js) | Present hierarchical view and layout entries from the canonical catalog | select, sync |

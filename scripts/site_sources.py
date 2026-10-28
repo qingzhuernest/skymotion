@@ -112,7 +112,15 @@ def generated_sources(root=ROOT):
     storage = replace_region(storage, "STATE SCHEMA", declarations({
         "ranges": state["ranges"], "choices": state["choices"], "cameraFields": state["cameraFields"],
     }, "  "))
-    result = {"page-boot.js": boot, "app.js": app, "experiment-storage.js": storage}
+    palette_css = (root / "ui-palette.css").read_text()
+    palettes = {}
+    for name, role in {"sage": "accent", "blue": "palette-blue", "gray": "palette-gray"}.items():
+        value = re.findall(r"--design-" + role + r":\s*(#[0-9a-fA-F]{6})\s*;", palette_css)
+        if len(value) != 1:
+            raise ValueError("Palette seed must have one literal definition: " + role)
+        palettes[name] = value[0]
+    preferences = replace_region((root / "preferences.js").read_text(), "UI PALETTE", declarations({"palettes": palettes}, "  "))
+    result = {"page-boot.js": boot, "app.js": app, "experiment-storage.js": storage, "preferences.js": preferences}
     for page in catalog['pages']:
         path = root / page['path']
         if path.is_file():

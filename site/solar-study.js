@@ -162,6 +162,7 @@
   );
   const primary = el('p', 'solar-study-primary', siteControls);
   const cityPickers = [];
+  let cityOptionsKey = null;
   const fields = [0, 1].map((index) => {
     const group = el('fieldset', '', siteControls),
       legend = el('legend', '', group);
@@ -491,13 +492,20 @@
     siteControls.hidden = mode !== 'place';
     text(primary, `${t('current')} · ${locationText(state.lat, state.lon)}`);
     const locations = sites();
+    const cityOptions = [...document.querySelectorAll('#place option')].filter(
+      option => option.value.split(',').length === 2,
+    );
+    const nextCityOptionsKey = JSON.stringify([
+      t('customSite'),
+      ...cityOptions.map(option => [option.value, option.textContent, option.disabled, option.hidden]),
+    ]);
     cityPickers.forEach((city, i) => {
-      city.replaceChildren();
-      const customOption = el('option', '', city);
-      customOption.value = '';
-      customOption.textContent = t('customSite');
-      for (const option of document.querySelectorAll('#place option')) {
-        if (option.value.split(',').length === 2) city.append(option.cloneNode(true));
+      if (cityOptionsKey !== nextCityOptionsKey) {
+        city.replaceChildren();
+        const customOption = el('option', '', city);
+        customOption.value = '';
+        customOption.textContent = t('customSite');
+        city.append(...cityOptions.map(option => option.cloneNode(true)));
       }
       city.value =
         [...city.options].find((option) => {
@@ -509,6 +517,7 @@
           );
         })?.value || '';
     });
+    cityOptionsKey = nextCityOptionsKey;
     fields.forEach((pair, i) =>
       pair.forEach((n, j) => {
         if (document.activeElement !== n && !n.hasAttribute('aria-invalid'))

@@ -23,7 +23,7 @@
 - [.github/workflows/github-pages.yml](../.github/workflows/github-pages.yml)
 - [.github/workflows/validate.yml](../.github/workflows/validate.yml)
 
-## docs (8)
+## docs (9)
 
 - [docs/architecture/DESIGN.md](../docs/architecture/DESIGN.md)
 - [docs/architecture/PRODUCT.md](../docs/architecture/PRODUCT.md)
@@ -33,8 +33,9 @@
 - [docs/repository.md](../docs/repository.md)
 - [docs/reviews/BUG-AUDIT-2026-10-10.md](../docs/reviews/BUG-AUDIT-2026-10-10.md)
 - [docs/reviews/BUG-AUDIT-2026-10-15.md](../docs/reviews/BUG-AUDIT-2026-10-15.md)
+- [docs/reviews/CODE-SIMPLICITY-2026-10-28.md](../docs/reviews/CODE-SIMPLICITY-2026-10-28.md)
 
-## scripts (15)
+## scripts (14)
 
 - [scripts/build-documents.py](../scripts/build-documents.py)
 - [scripts/build-population-data.py](../scripts/build-population-data.py)
@@ -45,7 +46,6 @@
 - [scripts/optimize-reading-fonts.py](../scripts/optimize-reading-fonts.py)
 - [scripts/prerender-pages.py](../scripts/prerender-pages.py)
 - [scripts/repository-index.py](../scripts/repository-index.py)
-- [scripts/review-regressions.cjs](../scripts/review-regressions.cjs)
 - [scripts/site_sources.py](../scripts/site_sources.py)
 - [scripts/supplement-reading-fonts.py](../scripts/supplement-reading-fonts.py)
 - [scripts/theme-colors/package-lock.json](../scripts/theme-colors/package-lock.json)

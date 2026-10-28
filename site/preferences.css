@@ -60,7 +60,6 @@ html :is(input,select,textarea) {color-scheme:var(--interface-color-scheme,norma
 @media print {.preferences-launch,body dialog.preferences-dialog {display:none!important}}
 /* Printing remains legible when the saved screen theme is dark. */
 @media print {
- :root {--design-paper:#ffffff!important;--design-surface:#ffffff!important;--design-inset:#ffffff!important;--design-surface-low:#ffffff!important;--design-surface-high:#ffffff!important;--design-ink:#000000!important;--design-muted:#333333!important;--design-accent:#174d35!important;--design-line:#777777!important;--design-selected:#ffffff!important;--design-on-selected:#000000!important}
  .language-actions {display:none!important}
  html body .document-page {width:100%;max-width:none;margin:0;padding:0;border:0}
 }

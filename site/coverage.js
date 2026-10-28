@@ -51,12 +51,6 @@ function updateYearSlider() {
       ),
     );
 }
-function illuminationAt(lat, lon, context = sunContext()) {
-  const p = lat * rad,
-    d = context.dec * rad,
-    h = (lon - context.lon) * rad;
-  return Math.sin(p) * Math.sin(d) + Math.cos(p) * Math.cos(d) * Math.cos(h);
-}
 function mapGeometry(w, h) {
   return { left: 34, right: w - 15, top: 26, bottom: h - 28 };
 }

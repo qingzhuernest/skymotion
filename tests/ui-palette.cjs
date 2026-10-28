@@ -5,6 +5,7 @@ const assert = require('node:assert/strict'),
 const root = path.resolve(__dirname, '../site');
 const shared = [
   'design-system.css',
+  'preferences.css',
   'controls.css',
   'time-workbench.css',
   'diagram-tools.css',

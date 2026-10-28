@@ -9,8 +9,12 @@
   --design-welcome-quote: #c8b99f;
   --design-welcome-answer: #eee9df;
   --design-welcome-final: #e9cc9b;
+  --design-welcome-action-ink: #302511;
   --design-reading-final: #685844;
 
+  /* Preset seeds also generate the early preference bootstrap. */
+  --design-palette-blue: #385e78;
+  --design-palette-gray: #625b52;
   --design-accent: #255c43;
   --design-accent-hover: #174d35;
   --design-paper: #e2e9de;
@@ -87,4 +91,9 @@ body[data-page='space'].space-immersive {
   --design-hover: var(--design-night-hover);
   --design-selected: var(--design-night-selected);
   --design-on-selected: var(--design-night-ink);
+}
+
+/* Print roles remain centralized with the screen palette. */
+@media print {
+ :root {--design-paper:#ffffff!important;--design-surface:#ffffff!important;--design-inset:#ffffff!important;--design-surface-low:#ffffff!important;--design-surface-high:#ffffff!important;--design-ink:#000000!important;--design-muted:#333333!important;--design-accent:#174d35!important;--design-line:#777777!important;--design-selected:#ffffff!important;--design-on-selected:#000000!important}
 }

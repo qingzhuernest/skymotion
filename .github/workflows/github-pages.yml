@@ -1,14 +1,7 @@
 name: Sync SkyMotion to GitHub Pages
 
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-    inputs:
-      full_regression:
-        description: Run the full regression suite before publishing
-        type: boolean
-        default: false
+  workflow_call:
 
 permissions:
   contents: read
@@ -20,13 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate:
-    if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/validate.yml
-    with:
-      full_regression: ${{ github.event_name == 'workflow_dispatch' && inputs.full_regression == true }}
   deploy:
-    needs: validate
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:

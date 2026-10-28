@@ -52,10 +52,6 @@ function skyRaw(body, time, date, lat, lon) {
     az: h.azimuth,
   };
 }
-function moonRaw(time, noon, lat, lon) {
-  const date = new Date(noon + lon * 4 * 60000).toISOString().slice(0, 10);
-  return skyRaw('Moon', time, date, lat, lon);
-}
 function refineExtremum(body, left, right, max) {
   for (let i = 0; i < 24; i++) {
     const a = left + (right - left) / 3,
@@ -152,9 +148,6 @@ function ephemerisDay(body) {
   if (lunarCache.size > 16) lunarCache.delete(lunarCache.keys().next().value);
   lunarCache.set(key, result);
   return result;
-}
-function lunarDay() {
-  return ephemerisDay('Moon');
 }
 let currentPositionCache = null;
 function bodyPosition(time = state.time) {

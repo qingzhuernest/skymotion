@@ -1,58 +1,37 @@
-# SkyMotion
+# SkyMotion · 产品目标与实现约束
 
-<!-- impeccable:product-schema 1 -->
+## 目的
 
-## Platform
-web
+服务地理课堂、学生自主探究和天空观察。使用者应能调整地点、日期和时刻，立即看到太阳、月球、日影、日晷与日行迹的变化，并用多图对照解释现象。科学读数、图形和参数必须对应同一个实验条件。
 
-## Product Purpose
-中文天体视运动实验室。用地点、日期与时刻联动科学图解，让使用者控制变量、读取结果并进行多图对照。
+## 使用环境
 
-## Users
-已有项目介绍面向地理课堂、学生自主观察和天空爱好者。当前任务是统一整个网站 UI。
+桌面、iPad 和手机浏览器；中英文页面。原生 HTML、CSS、JavaScript、Canvas 和 WebGL，不引入 UI 框架。保留现有天文模型、星历、物理时刻、历史恢复和存档兼容。
 
-## Operating Context
-桌面、平板与手机浏览器；独立专题页和三份文档。已有侧栏、大屏收起、窄屏抽屉与沉浸模式。
+## 用户已确认的界面约定
 
-## Capabilities and Constraints
-保留太阳、月球、关联图解、日晷、日行迹、三维太阳系、浏览器历史、播放与星空互动。
-2026年10月13日用户授权正式发布：main 推送部署 Cloudflare 与 GitHub Pages；GPT Site 保留同版预览。
-天文模型、星历数据、计算语义与物理时刻不改变。
-原应用是原生 HTML/CSS/JavaScript、Canvas 与 WebGL，不引入 UI 框架。
+- 全站采用 Material 3 Expressive；保留中文 SkyMotion Reading/宋体和英文 SkyMotion Charter，不更换字体。
+- 主导航为欢迎页、实验台、文档中心、三维天空、设置。语言切换放进设置，保留太阳/月球切换和进入自定义。
+- 实验台、关联图解和日行迹共用工作区；旧网址继续打开对应内容。
+- 侧栏按视图与布局、观测条件、图中对象分工；观测参数在普通和自定义模式都可使用。
+- 所有分类选择使用共享按钮或选项浮层；不添加搜索框。浮层不能挤压图形或把选项文字压成竖排。
+- 设置打开时不自动聚焦输入框；支持夜间、独立页面/科学画布背景、连续字号/行距/宽度、动画和显示设置。调整立即生效并保存。
+- 对象的列表名称与图上标注文字独立编辑；列表、属性和说明分区清楚。
+- 文档目录跳到对应章节；章节操作链接打开对应实验和控件，不用上一章/下一章代替实际功能入口。
+- 阅读开场保留定时问答；继续阅读固定在右下角，预留边距和设备安全区。
+- 不牺牲触控目标、键盘操作、焦点恢复、禁用状态和减少动态效果设置。
 
-## Brand Commitments
-保留项目名称、中文文案、深色科学画布、欢迎页星空与手写句子。五个欢迎页小按钮位于右下角；文档职责不混淆。
-用户要求全站字体、排版、颜色、控件一致，使用 Impeccable。
+## 代码应该满足的标准
 
-## Evidence on Hand
-源版本 4390ab1，既有实际页面、三份文档、六组模型与浏览器回归。没有新的科学精度或真实设备性能认证。
+- 实验状态、布局、对象、偏好各有一个明确的所有者；视图读取状态，不额外保存相同科学量。
+- 同一种控件只有一套呈现和事件逻辑；原生输入继续负责值和事件，共享样式负责外观。
+- CSS 定义界面颜色；需要在样式加载前恢复主题的数据由生成器同步，不手工另维护一份色号。
+- 直接修改所属模块；移除已被替代的代码，避免用文件末尾覆盖和全局拦截继续补洞。
+- 不在播放循环中反复创建不变的菜单选项；只在内容、语言或可用性变化时重建。
+- 文档原稿、生成文件、第三方库、素材和测试分开计量。行数是审查线索，不能代替正确性、可维护性和实际性能。
 
-## Product Principles
-- 数值与交互状态必须可读。
-- 同一种控件在不同页面具有相同形状和反馈。
-- 画布、时间条、参数区保留独立空间。
-- 减少动态效果、键盘操作与禁用状态不得退化。
+## 验证与发布
 
+小改动验证受影响路径；完整回归由手动 `full_regression` 选择，不作为每次发布的默认。一次提交只验证一次，再独立部署 Cloudflare 正式站与 GitHub Pages 镜像；GPTsite 同步同一份发布包。发布只来自 `main`，归档分支保留独立历史。
 
-## 预览 68：实验台共用自定义 / Preview 68: Lab customization
-
-实验台在语言旁提供统一自定义开关，保留四个原视角、地点参数与共享时间栏。城市自动参与天空和关联图解对照；天空／高度图的时间标记跨原图显示，同地不同时间不必另开页面。内部导航一次延续编辑状态，会话草稿跨页保留，刷新默认正常模式。实验台添加工具可进入摆放实验物体，点击原视角返回。对象行“···”提供保存、复制、删除。此功能现已纳入正式版；当前工作台规则见最新统一自定义说明。
-
-Lab shares the customization switch beside language while retaining native viewpoints, observation controls and timeline. Cities appear in sky and related comparisons; pinned times compare within the original diagrams. Internal navigation transfers edit intent once and retains session drafts; refresh starts normally. Lab can open construction from its Add tools and return through a native viewpoint. Row ellipsis contains Save, Duplicate and Delete. GPT Site preview only; official hosting is unchanged.
-
-当前交互约定 / Current interaction rules: [中文](docs/customization-interaction.zh.md) · [English](docs/customization-interaction.en.md).
-
-
-预览 69 / Preview 69：修复 GPT Site 将 `.html` 跳转为简洁地址时，跨页自定义状态无法延续的问题；中英文两套路由均有重定向回归检查。 Clean-URL redirects now retain one-use customization intent in both languages; refresh still starts normally.
-
-2026-10-21: 用户批准统一自定义交互，并明确要求直接发布正式网站、同步中英文文档和学习指南中的实际用法。保留顶部主菜单与原观测控制。
-
-统一实验台：实验台、关联图解、日行迹共享工作区与状态。左栏固定“视图与布局／观测条件／图中对象”，按内容分类展开选择；布局与收藏内嵌侧栏。旧网址保留为内容入口。原有绿色主题、天文模型和顶部主菜单稳定。
-
-当前用户要求：全站应用控件统一Material Design 3语言，保留绿色主题和科学图语义配色。顶栏左侧为标题/地点，太阳月球使用并列分段按钮直接切换，四个天空视角移入左侧天空与日影分组；主菜单保持稳定。
-
-字体约束：所有交互控件、菜单、标题与正文保持原来的中文 SkyMotion Reading/宋体和英文 SkyMotion Charter。Material Design 的组件语言不得覆盖这一字体要求。修复重叠应调整真实容器、间距与控件类型选择器，不通过新增全局覆盖补丁掩盖。
-
-
-## Current redesign authorization
-The user requests strict Material 3 Expressive across the whole website, explicitly allowing all appearance and layout changes except font replacement. This supersedes earlier palette and shape restrictions. Retain SkyMotion Reading and SkyMotion Charter; use the Material 3 Expressive system rather than Impeccable aesthetics. Preserve experimental capabilities, scientific state semantics and working navigation.
+当前目录职责见 [仓库维护说明](../repository.md)，审查结果见 [2026-10-28 代码精简复核](../reviews/CODE-SIMPLICITY-2026-10-28.md)。历史约定保留在 Git 历史和原审查记录中，不继续堆叠到现行规则里。

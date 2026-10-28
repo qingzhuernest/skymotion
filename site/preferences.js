@@ -1,9 +1,17 @@
 /** One preference owner for all pages; no experiment data is stored here. */
 (() => {
   'use strict';
+  // BEGIN GENERATED UI PALETTE
+  // prettier-ignore
+  const palettes = {
+    "sage": "#255c43",
+    "blue": "#385e78",
+    "gray": "#625b52"
+  };
+  // END GENERATED UI PALETTE
   const key = 'skymotion-preferences', root = document.documentElement;
   const defaults = Object.freeze({theme:'system', nightStart:'22:00', nightEnd:'07:00', pureBlack:false,
-    palette:'sage', primary:'#255c43',surfaceMode:'theme',surfaceColor:'#e2e9de',canvasMode:'theme',canvasColor:'#132438', contrast:'standard', uiScale:1, readingScale:1,
+    palette:'sage', primary:palettes.sage,surfaceMode:'theme',surfaceColor:'#e2e9de',canvasMode:'theme',canvasColor:'#132438', contrast:'standard', uiScale:1, readingScale:1,
     leading:1.85, width:100, density:'standard', motion:'system', welcomeMotion:true,
     smoothScroll:true, orbits:true, names:true, stars:true, quality:'standard', zoom:'standard', rememberRail:true});
   const options = {theme:['light','dark','system','schedule'],palette:['sage','blue','gray','custom'],
@@ -76,7 +84,7 @@
   function apply() {
     const isDark=dark(), nativeSage=state.palette==='sage' && !isDark && state.contrast==='standard';
     root.dataset.theme = isDark?'dark':'light'; root.style.colorScheme=isDark?'dark':'light';
-    const color = {sage:'#255c43',blue:'#385e78',gray:'#625b52',custom:state.primary}[state.palette];
+    const color = {...palettes,custom:state.primary}[state.palette];
     const colors=window.SkyThemeColors(color,isDark,state.contrast==='high'?1:0);
     for(const [role, source] of Object.entries(roles)) {
       if(nativeSage) root.style.removeProperty('--design-'+role);

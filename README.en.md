@@ -76,7 +76,7 @@ Only `page-boot.js` blocks parsing to choose the language; other scripts use `de
 
 ## Deploy and restore
 
-Pushing `main` triggers separate Cloudflare Pages and GitHub Pages workflows. Both pass the shared `validate.yml` gate before packaging the same static website. Other branches do not publish production. Check both deployment results before declaring a release complete.
+Pushing `main` runs shared `validate.yml` once, then deploys the same static site to Cloudflare Pages and GitHub Pages independently. The mirror reuses the successful validation instead of repeating browser setup and checks. The default is the release suite; full regression is a manual `full_regression` option. Other branches do not publish production. Verify both deployment results.
 
 Restore a known good version through a restoration commit that preserves `main` history; do not force-push. `tests/deployment-paths.cjs` checks root and GitHub project-path packaging.
 

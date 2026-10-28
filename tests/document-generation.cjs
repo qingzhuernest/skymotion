@@ -47,6 +47,16 @@ versions=re.findall(r'(?:src|href)="[^"]+\.(?:js|css)\?v=([^"]+)',page)
 assert versions and set(versions)=={'next-release-test'},versions
 assert {p['path'] for p in load_catalog(root)['pages']}==set(json.loads((root/'page-cache-manifest.json').read_text())['pages'])-set(p for p in json.loads((root/'page-cache-manifest.json').read_text())['pages'] if '.en.html' in p)
 for name,content in generated_sources(root).items():assert (root/name).read_text()==content,name
+with tempfile.TemporaryDirectory() as directory:
+    target=Path(directory)
+    for name in ['site-catalog.json','lab-state.json','page-boot.js','app.js','experiment-storage.js','ui-palette.css','preferences.js']:
+        shutil.copy(root/name,target/name)
+    palette=(target/'ui-palette.css').read_text().replace('--design-accent: #255c43;', '--design-accent: #8b4259;')
+    (target/'ui-palette.css').write_text(palette)
+    output=generated_sources(target)['preferences.js']
+    assert '"sage": "#8b4259"' in output, 'One palette edit must update the bootstrap used by dark and preset themes'
+    assert 'primary:palettes.sage' in output
+
 print('PASS duplicate IDs, unknown blocks, escaping paths, table dimensions, missing anchors and state coverage are rejected; canonical state inventory ignores JS whitespace; runtime metadata is current')
 `,
   ],
