@@ -8,6 +8,8 @@ const fallback = [
   'document-action-links.cjs', 'confirmed-review-fixes.cjs', 'deployment-paths.cjs',
 ];
 const groups = [
+  [/^site\/language\.css$/,
+    ['mobile-appbar.cjs', 'shared-ui-lifecycle.cjs', 'material-components.cjs']],
   [/^scripts\/material-web\/|^site\/material-web(?:\.|\/)/,
     ['settings-center.cjs', 'settings-expressive.cjs', 'shared-choice-fields.cjs', 'narrow-workspace-controls.cjs']],
   [/^(docs\/document-content\.json|scripts\/(build-documents\.py|document_model\.py|document-page\.html))$/,

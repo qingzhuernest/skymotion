@@ -160,42 +160,71 @@ html:lang(en) body[data-page='contact'] .reading-page > .dialog-head h2 {
 }
 /* Material single-select segmented buttons preserve the original direct switch. */
 @media (max-width: 760px) {
+  /* Identity, full primary navigation, then observation/customization actions. */
+  .language-nav .page-nav {
+    height: auto;
+    padding: 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 4px;
+    overflow: visible;
+    white-space: normal;
+  }
+  .language-nav .page-nav > :is(a, .preferences-launch) {
+    flex: 1 0 auto;
+    min-width: 0;
+    padding-inline: 4px;
+    font-size: calc(12px * var(--ui-font-scale, 1));
+    white-space: nowrap;
+  }
   .language-nav.workbench-header {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0;
-    padding: 0 8px;
+    gap: 2px 8px;
+    padding: 4px 8px;
   }
-  .language-nav.workbench-header .page-nav {
-    grid-column: 1;
+  .language-nav.workbench-header .ui-heading { display: contents; }
+  .language-nav.workbench-header .ui-heading > div:first-child {
     grid-row: 1;
-    max-width: none;
-  }
-  .language-nav.workbench-header .language-actions {
-    grid-column: 2;
-    grid-row: 1;
-  }
-  .language-nav.workbench-header .ui-heading {
-    grid-row: 2;
     grid-column: 1;
-    gap: 8px;
-    padding: 4px 0;
+    padding-block: 4px;
   }
   .language-nav.workbench-header .ui-heading h1 {
-    font-size: calc(14px * var(--ui-font-scale, 1));
+    font-size: calc(13px * var(--ui-font-scale, 1));
+    white-space: normal;
+    text-wrap: wrap;
+    overflow: visible;
+  }
+  .language-nav.workbench-header .ui-heading :is(#uiPlaceText, p) {
+    margin: 2px 0 0;
+    font-size: calc(10px * var(--ui-font-scale, 1));
+  }
+  .language-nav.workbench-header .ui-heading #uiParametersButton {
+    grid-row: 1;
+    grid-column: 2;
+    align-self: center;
+    flex: none;
+  }
+  .language-nav.workbench-header .page-nav {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    max-width: none;
+  }
+  .language-nav.workbench-header > .ui-body-host {
+    grid-row: 3;
+    grid-column: 1;
+    justify-self: start;
   }
   .language-nav.workbench-header .ui-body-host,
   .language-nav.workbench-header .body-switch {
     min-width: 0;
     width: auto;
   }
-  .language-nav.workbench-header > .ui-body-host {
-    grid-row: 2;
+  .language-nav.workbench-header .language-actions {
+    grid-row: 3;
     grid-column: 2;
     justify-self: end;
-  }
-  .language-nav.workbench-header #uiParametersButton {
-    flex: none;
+    margin: 0;
   }
 }
 body.space-immersive .language-nav,
@@ -210,6 +239,9 @@ body[data-embedded='true'] .language-nav {
 /* Charter needs a readable body size, not the compact Chinese caption scale. */
 html:lang(en) .page-nav :is(a, .preferences-launch) {
   font-size: calc(13px * var(--ui-font-scale, 1));
+}
+@media (max-width: 760px) {
+  html:lang(en) .language-nav .page-nav :is(a, .preferences-launch) {font-size:calc(12px * var(--ui-font-scale,1));}
 }
 html:lang(en)
   .ui-parameters
@@ -339,18 +371,6 @@ body[data-page='space'].space-immersive
 @media (pointer: coarse) {
   .language-actions :is(.layout-launch, .language-toggle) {
     min-height: var(--md-sys-size-target, 40px);
-  }
-}
-
-@media (max-width: 360px) {
-  .language-nav.workbench-header #uiParametersButton {
-    width: var(--md-sys-size-target);
-    min-width: var(--md-sys-size-target);
-    padding: 0;
-    justify-content: center;
-  }
-  .language-nav.workbench-header #uiParametersButton span {
-    display: none;
   }
 }
 
