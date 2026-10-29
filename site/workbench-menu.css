@@ -48,7 +48,7 @@ body .ui-parameters .workbench-viewpoints {
   grid-template-columns: minmax(0, 1fr);
   position: static;
   gap: 2px;
-  padding: 4px 6px 12px;
+  padding: 4px 0 12px;
   margin: 0;
   background: transparent;
   border: 0;
