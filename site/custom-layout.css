@@ -271,21 +271,6 @@
   width: auto;
   min-width: 0;
 }
-.workspace-pane-tools .md-choice-disclosure > summary {
-  position: relative;
-  display: block;
-  box-sizing: border-box;
-  padding-inline: 12px 30px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.workspace-pane-tools .md-choice-disclosure > summary::after {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-}
 @container workspace-card (max-width: 420px) {
   .workspace-active .ui-diagram-card-head {
     flex-wrap: wrap;

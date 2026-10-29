@@ -8,6 +8,8 @@ const fallback = [
   'document-action-links.cjs', 'confirmed-review-fixes.cjs', 'deployment-paths.cjs',
 ];
 const groups = [
+  [/^scripts\/material-web\/|^site\/material-web(?:\.|\/)/,
+    ['settings-center.cjs', 'settings-expressive.cjs', 'shared-choice-fields.cjs', 'narrow-workspace-controls.cjs']],
   [/^(docs\/document-content\.json|scripts\/(build-documents\.py|document_model\.py|document-page\.html))$/,
     ['document-generation.cjs', 'document-action-links.cjs', 'bilingual-pages.cjs']],
   [/^site\/diagram-reference-store\.js$/,
@@ -19,7 +21,7 @@ const groups = [
   [/^site\/(style|pages|design-system|controls|interface-motion)\.css$/,
     ['material-components.cjs', 'shared-choice-fields.cjs', 'reported-layout.cjs']],
   [/^site\/(preferences|material-controls|ui-palette|theme-colors)\.(js|css)$/,
-    ['settings-center.cjs', 'settings-updates.cjs', 'settings-expressive.cjs', 'shared-choice-fields.cjs', 'ui-palette.cjs']],
+    ['settings-center.cjs', 'settings-updates.cjs', 'settings-expressive.cjs', 'shared-choice-fields.cjs', 'narrow-workspace-controls.cjs', 'ui-palette.cjs']],
   [/^site\/(page-navigation|interface-motion|workbench-menu)\.(js|css)$/,
     ['unified-workbench.cjs', 'shared-ui-lifecycle.cjs', 'reported-layout.cjs']],
   [/^site\/(language|page-boot)\.js$|^site\/i18n-(lab|space)\.json$/,

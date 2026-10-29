@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 304 个文件。目录职责见 [repository.md](repository.md)。
+共 310 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -36,7 +36,7 @@
 - [docs/reviews/BUG-AUDIT-2026-10-15.md](../docs/reviews/BUG-AUDIT-2026-10-15.md)
 - [docs/reviews/CODE-SIMPLICITY-2026-10-28.md](../docs/reviews/CODE-SIMPLICITY-2026-10-28.md)
 
-## scripts (14)
+## scripts (17)
 
 - [scripts/build-documents.py](../scripts/build-documents.py)
 - [scripts/build-population-data.py](../scripts/build-population-data.py)
@@ -44,6 +44,9 @@
 - [scripts/document-page.html](../scripts/document-page.html)
 - [scripts/document_model.py](../scripts/document_model.py)
 - [scripts/generate-welcome-lettering.py](../scripts/generate-welcome-lettering.py)
+- [scripts/material-web/package-lock.json](../scripts/material-web/package-lock.json)
+- [scripts/material-web/package.json](../scripts/material-web/package.json)
+- [scripts/material-web/source.js](../scripts/material-web/source.js)
 - [scripts/optimize-reading-fonts.py](../scripts/optimize-reading-fonts.py)
 - [scripts/prerender-pages.py](../scripts/prerender-pages.py)
 - [scripts/repository-index.py](../scripts/repository-index.py)
@@ -53,7 +56,7 @@
 - [scripts/theme-colors/package.json](../scripts/theme-colors/package.json)
 - [scripts/theme-colors/source.js](../scripts/theme-colors/source.js)
 
-## site (184)
+## site (187)
 
 - [site/.nojekyll](../site/.nojekyll)
 - [site/404.en.html](../site/404.en.html)
@@ -159,6 +162,9 @@
 - [site/lunar/lunar.js](../site/lunar/lunar.js)
 - [site/lunar/model.js](../site/lunar/model.js)
 - [site/material-controls.js](../site/material-controls.js)
+- [site/material-web.LICENSE](../site/material-web.LICENSE)
+- [site/material-web.js](../site/material-web.js)
+- [site/material-web.js.LEGAL.txt](../site/material-web.js.LEGAL.txt)
 - [site/menu.js](../site/menu.js)
 - [site/moon.js](../site/moon.js)
 - [site/motion.js](../site/motion.js)

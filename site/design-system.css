@@ -2437,21 +2437,63 @@ body .md-choice-native {position:absolute!important;inset:0 auto auto 0;width:1p
 body .md-range-step {position:relative;isolation:isolate;flex:none;width:32px;min-width:32px;min-height:44px;padding:0;border:0;background:transparent;color:var(--design-accent);font:inherit;font-size:16px;cursor:pointer}
 body .md-range-step::before {content:'';position:absolute;z-index:-1;width:26px;height:28px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:8px;background:var(--design-inset)}
 body .md-range-step::after {content:'';position:absolute;inset:0 -6px;background:transparent}
-/* Every native select uses the same button choices; long lists expand in place. */
+/* Native values are presented by bundled Google Material Web components. */
 body .md-choice-field {display:inline-flex;flex-direction:column;gap:6px;min-width:0;max-width:100%;width:100%;vertical-align:middle}
 body .md-choice-buttons {display:grid;grid-template-columns:repeat(var(--choice-count,2),minmax(0,1fr));gap:4px;width:100%;min-width:0}
 body .md-choice-buttons[data-choice-count='1'] {--choice-count:1}
 body .md-choice-buttons[data-choice-count='3'] {--choice-count:3}
 body .md-choice-buttons[data-choice-count='4'] {--choice-count:4}
-body .md-choice-buttons > button {box-sizing:border-box;width:100%;height:auto;min-height:var(--md-sys-size-target);min-width:0;padding:6px 10px;overflow-wrap:anywhere}
-body .md-choice-disclosure {width:100%;min-width:0;margin:0;border:0;background:transparent}
-body .md-choice-disclosure > summary {display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;list-style:none;padding:8px 12px;border:1px solid var(--design-line);border-radius:var(--design-radius-control);color:var(--design-action);background:var(--design-surface);cursor:pointer;white-space:normal;overflow-wrap:anywhere}
-body .md-choice-disclosure > summary::-webkit-details-marker {display:none}
-body .md-choice-disclosure > summary::after {content:'⌄';flex:none;position:static;transform:none}
-body .md-choice-disclosure[open] > summary::after {content:'⌃'}
-body .md-choice-many .md-choice-buttons {grid-template-columns:repeat(2,minmax(0,1fr));max-height:280px;overflow:auto;overscroll-behavior:contain;padding:4px;box-sizing:border-box}
 @media(max-width:480px) {body .md-choice-buttons[data-choice-count='4'] {--choice-count:2}}
 
-/* Expanded choices live outside pane layout and clipping, retaining the shared buttons. */
-body .md-choice-panel {position:fixed;inset:auto;margin:0;padding:12px;box-sizing:border-box;overflow:auto;overscroll-behavior:contain;background:var(--design-surface);color:var(--design-ink);border:1px solid var(--design-line);border-radius:20px;box-shadow:0 8px 24px var(--design-shadow-dialog);font:inherit;z-index:1000}
-body .md-choice-panel .md-choice-buttons > button {width:100%;height:auto;min-height:44px;white-space:normal;word-break:normal;overflow-wrap:break-word}
+/* Official components consume the existing palette and fonts through public tokens. */
+:root {
+  --md-ref-typeface-plain: var(--design-font);
+  --md-ref-typeface-brand: var(--design-font);
+  --md-sys-typescale-label-large-font: var(--design-font);
+  --md-sys-typescale-label-large-size: calc(14px * var(--ui-font-scale, 1));
+  --md-sys-typescale-body-large-font: var(--design-font);
+  --md-sys-typescale-body-large-size: calc(14px * var(--ui-font-scale, 1));
+}
+body .md-choice-select {
+  width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+  --md-outlined-select-text-field-container-shape: var(--design-radius-control);
+  --md-outlined-select-text-field-container-height: 48px;
+  --md-menu-container-color: var(--design-surface);
+}
+body .md-choice-buttons > md-filter-chip {
+  min-width: 0;
+  width: 100%;
+  --md-filter-chip-container-height: var(--md-sys-size-target);
+  --md-filter-chip-label-text-color: var(--md-sys-color-on-primary-container);
+  --md-filter-chip-container-shape: var(--md-comp-connected-button-inner-corner);
+  --md-filter-chip-leading-space: 8px;
+  --md-filter-chip-trailing-space: 8px;
+  --md-filter-chip-label-text-font: var(--design-font);
+  --md-filter-chip-label-text-size: calc(14px * var(--ui-font-scale, 1));
+}
+body .md-choice-buttons > md-filter-chip[data-choice-edge='first'] {
+  --md-filter-chip-container-shape-start-start: var(--md-comp-connected-button-outer-corner);
+  --md-filter-chip-container-shape-end-start: var(--md-comp-connected-button-outer-corner);
+}
+body .md-choice-buttons > md-filter-chip[data-choice-edge='last'] {
+  --md-filter-chip-container-shape-start-end: var(--md-comp-connected-button-outer-corner);
+  --md-filter-chip-container-shape-end-end: var(--md-comp-connected-button-outer-corner);
+}
+body .md-choice-buttons > md-filter-chip:is([selected],[data-choice-edge='only']) {
+  --md-filter-chip-container-shape: var(--md-sys-shape-corner-full);
+  --md-filter-chip-container-shape-start-start: var(--md-sys-shape-corner-full);
+  --md-filter-chip-container-shape-start-end: var(--md-sys-shape-corner-full);
+  --md-filter-chip-container-shape-end-start: var(--md-sys-shape-corner-full);
+  --md-filter-chip-container-shape-end-end: var(--md-sys-shape-corner-full);
+}
+body .md-choice-buttons > md-filter-chip[selected] {
+  --md-filter-chip-selected-container-color: var(--md-sys-color-primary);
+  --md-filter-chip-selected-label-text-color: var(--md-sys-color-on-primary);
+  --md-filter-chip-selected-leading-icon-color: var(--md-sys-color-on-primary);
+  --md-filter-chip-selected-focus-label-text-color: var(--md-sys-color-on-primary);
+  --md-filter-chip-selected-hover-label-text-color: var(--md-sys-color-on-primary);
+  --md-filter-chip-selected-pressed-label-text-color: var(--md-sys-color-on-primary);
+  --md-filter-chip-label-text-color: var(--md-sys-color-on-primary);
+}

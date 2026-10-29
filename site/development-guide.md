@@ -38,7 +38,7 @@
 
 页面路径、主导航、视图名称、分组和可用条件统一定义在site-catalog.json；lab-state.json统一定义状态初值、范围、枚举和相机字段。scripts/site_sources.py校验这些数据并生成启动脚本和状态模块的标记区段，禁止直接修改生成区段。
 
-preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、export 与 parseImport。版本 2 记录使用 skymotion-preferences，兼容版本 1；语言兼容原存储键。主题颜色由 theme-colors.js 中的 Material Color Utilities 0.3.0 生成，并映射到现有 design 颜色角色。第三方代码为 Apache-2.0，许可见 theme-colors.LICENSE；科学状态不属于偏好记录。
+preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、export 与 parseImport。版本 2 记录使用 skymotion-preferences，兼容版本 1；语言兼容原存储键。通用选择器和选择芯片，以及设置中的滑条、开关和操作按钮使用 Google Material Web 2.5.0，组件在 material-web.js 本地打包，许可见 material-web.LICENSE。主题颜色由 theme-colors.js 中的 Material Color Utilities 0.3.0 生成，并映射到现有 design 颜色角色。第三方代码为 Apache-2.0，许可见 theme-colors.LICENSE；科学状态不属于偏好记录。
 
 [打开对应实验台 →](lab.html#skyPanel)
 
@@ -549,7 +549,8 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [space/nebulae.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/nebulae.js) | 星云目录、影像显示与资源管理 | create, choose, load |
 | [lab-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/site/lab-controls.js) | 观测输入事件、地点日期与表单展示 | setDate, stop, globeLocationAt, globeObserverPoint, selectObservationBody, selectChartDateOrTime, monthDays, syncControls, updateSolarControls, updateLunarControls, selectMonth, installSkyTrackScrub |
 | [document-navigation.js](https://github.com/qingzhuernest/skymotion/blob/main/site/document-navigation.js) | 文档常显目录、章节定位与返回顶部；原生锚点作为无脚本后备 | update |
-| [material-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/site/material-controls.js) | Material 3 Expressive共享控件呈现与显式原生值同步；实验状态仍由原模块管理 | updateRange, updateRanges, updateChoices, queueChoice, syncChoices, setValue, enhanceChoices, positionPanel, closeChoice, caption, syncVisibility, sync, enhanceAll, install |
+| [material-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/site/material-controls.js) | 官方选择组件与原生值、事件适配；科学滑条进度显示 | updateRange, updateRanges, updateChoices, queueChoice, syncChoices, setValue, enhanceChoices, caption, commit, sync, enhanceAll, install |
 | [preferences.js](https://github.com/qingzhuernest/skymotion/blob/main/site/preferences.js) | 全站偏好、主题、设置保存与恢复；与科学实验状态独立 | migrate, validate, load, language, dark, apply, save, set, reset, parseImport, notify, showConfirmation, field, refresh, showCategory, build, mount |
 | [diagram-reference-store.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-store.js) | 参考对象状态、草稿、存档、复制与历史；不依赖界面 | create, persist, stateFor, clean, createReference, duplicateReference, saveReferences, travelReferences, record, checkpoint |
 | [diagram-reference-renderer.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-renderer.js) | 参考对象绘图、文字定位和命中几何；只读实验与对象状态 | create, textLayout, helper, drawObject, anchor, hitAnchor |
+| [material-web.js](https://github.com/qingzhuernest/skymotion/blob/main/site/material-web.js) | Google Material Web 2.5.0 的本地打包组件；构建入口 scripts/material-web/source.js | 模块内部方法，参见源码 |

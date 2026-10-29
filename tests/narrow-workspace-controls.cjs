@@ -23,7 +23,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
         await page.setViewportSize(viewport);
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
         const sizes = await page.locator('.ui-diagram-card:visible').evaluateAll(cards => cards.map(card => {
-          const head = card.querySelector('.ui-diagram-card-head'), chooser = head.querySelector('.md-choice-disclosure > summary');
+          const head = card.querySelector('.ui-diagram-card-head'), chooser = head.querySelector('md-outlined-select');
           const h = head.getBoundingClientRect(), c = chooser.getBoundingClientRect();
           return { id: card.dataset.diagramCard, width: c.width, height: c.height, headHeight: h.height, nowrap: getComputedStyle(chooser).whiteSpace, inside: c.left >= h.left && c.right <= h.right + 1 };
         }));
@@ -41,8 +41,8 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
       const card = page.locator('[data-diagram-card=solarGeometryPanel]');
       await card.waitFor({ state: 'visible' });
       const before = await card.locator('.ui-diagram-surface').boundingBox();
-      await card.locator('.md-choice-disclosure > summary').click();
-      const popup = card.locator('.md-choice-panel');
+      await card.locator('md-outlined-select').click();
+      const popup = card.locator('md-menu .menu');
       await popup.waitFor({ state: 'visible' });
       const after = await card.locator('.ui-diagram-surface').boundingBox();
       assert(Math.abs(before.height - after.height) < 1, 'opening choices does not resize the plot');

@@ -11,7 +11,7 @@
       }
     };
     const actionable = (target) =>
-      target?.nodeType === 1 && !target.closest('.preferences-dialog,.preferences-launch') && target.closest('button,input,select,canvas');
+      target?.nodeType === 1 && !target.closest('.preferences-dialog,.preferences-launch') && target.closest('button,input,select,canvas,md-filter-chip,md-outlined-select');
     let pointerStart = null,
       skipClick = false;
     document.addEventListener(
@@ -200,7 +200,7 @@
     !target.closest(
       '.preferences-dialog,.preferences-launch,.diagram-tools,.scene-builder,.motion-menu-grip,.motion-menu-edge,#uiParametersButton,#spaceParameters,#uiDrawerClose,#spaceDrawerClose',
     ) &&
-    target.closest('button,input,select,a,canvas');
+    target.closest('button,input,select,a,canvas,md-filter-chip,md-outlined-select');
   document.addEventListener(
     'pointerdown',
     (event) => {

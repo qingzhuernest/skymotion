@@ -1503,6 +1503,7 @@
     'keydown',
     (e) => {
       if (e.key === 'Escape') {
+        if(e.composedPath().some(node=>node.localName==='md-outlined-select'&&node.shadowRoot?.querySelector('md-menu')?.open))return;
         if (gesture) {
           e.preventDefault();
           e.stopImmediatePropagation();

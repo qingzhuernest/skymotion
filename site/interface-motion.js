@@ -36,7 +36,7 @@
           targetOpen = details.open,
           generation = 0;
         summary.addEventListener('click', (event) => {
-          if (event.target.closest('a,button,input,select')) return;
+          if (event.target.closest('a,button,input,select,md-filter-chip,md-outlined-select')) return;
           event.preventDefault();
           const from = details.getBoundingClientRect().height;
           animation?.cancel();

@@ -132,9 +132,10 @@ def generated_sources(root=ROOT):
             assets = '\n'.join([
                 '<script src="' + prefix + 'theme-colors.js?v=' + catalog['resourceVersion'] + '"></script>',
                 '<script src="' + prefix + 'preferences.js?v=' + catalog['resourceVersion'] + '"></script>',
+                '<script src="' + prefix + 'material-web.js?v=' + catalog['resourceVersion'] + '" defer></script>',
                 '<script src="' + prefix + 'material-controls.js?v=' + catalog['resourceVersion'] + '" defer></script>',
             ])
-            source = re.sub(r'\n?[ \t]*(?:<script src="[^"\n]*(?:theme-colors|preferences|material-controls)\.js[^"\n]*"(?: defer)?></script>|<link rel="stylesheet" href="[^"\n]*preferences\.css[^"\n]*">)', '', source)
+            source = re.sub(r'\n?[ \t]*(?:<script src="[^"\n]*(?:theme-colors|preferences|material-web|material-controls)\.js[^"\n]*"(?: defer)?></script>|<link rel="stylesheet" href="[^"\n]*preferences\.css[^"\n]*">)', '', source)
             source = re.sub(r'(<meta\s+charset=[^>]+>)', lambda match: match[1] + '\n' + assets, source, count=1, flags=re.I)
             if page['path'] == '404.html':
                 source = source.replace('href="controls.css?', 'href="/controls.css?')

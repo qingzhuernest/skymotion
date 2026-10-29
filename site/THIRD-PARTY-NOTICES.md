@@ -37,3 +37,7 @@ The bilingual production release distributes the same original astronomy librari
 ## Material Color Utilities
 
 Theme generation bundles `@material/material-color-utilities` 0.3.0 under Apache-2.0. The license is retained in `theme-colors.LICENSE`. Rebuild with `npm ci --prefix scripts/theme-colors` and `npm run build --prefix scripts/theme-colors`. Build tools are excluded from the published static package.
+
+## Google Material Web
+
+UI controls bundle `@material/web` 2.5.0 (Google, Apache-2.0), with Lit (BSD-3-Clause) and tslib (0BSD). Only the select, select-option, filter-chip, slider, switch and outlined-button components are imported. Full dependency licenses are retained in `material-web.LICENSE`; per-module notices are in `material-web.js.LEGAL.txt`. The pinned build is reproducible with `npm ci --prefix scripts/material-web` and `npm run build --prefix scripts/material-web`. Components are served locally; no runtime CDN or external font dependency is required.

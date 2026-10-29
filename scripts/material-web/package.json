@@ -1,0 +1,12 @@
+{
+  "name": "skymotion-material-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild source.js --bundle --minify --format=iife --target=es2022 --supported:template-literal=false --legal-comments=external --outfile=../../site/material-web.js"
+  },
+  "devDependencies": {
+    "@material/web": "2.5.0",
+    "esbuild": "0.25.12"
+  }
+}

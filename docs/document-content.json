@@ -3696,8 +3696,8 @@
             {
               "kind": "paragraph",
               "text": [
-                "preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、export 与 parseImport。版本 2 记录使用 skymotion-preferences，兼容版本 1；语言兼容原存储键。主题颜色由 theme-colors.js 中的 Material Color Utilities 0.3.0 生成，并映射到现有 design 颜色角色。第三方代码为 Apache-2.0，许可见 theme-colors.LICENSE；科学状态不属于偏好记录。",
-                "preferences.js is the single preference owner, exposing get, set, subscribe, reset, export and parseImport. Version 2 records use skymotion-preferences and accept version 1 records; language remains compatible with its existing storage key. Material Color Utilities 0.3.0 in theme-colors.js generates palettes mapped to the existing design color roles. The bundled library is Apache-2.0; see theme-colors.LICENSE. Scientific state is excluded from preference records."
+                "preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、export 与 parseImport。版本 2 记录使用 skymotion-preferences，兼容版本 1；语言兼容原存储键。通用选择器和选择芯片，以及设置中的滑条、开关和操作按钮使用 Google Material Web 2.5.0，组件在 material-web.js 本地打包，许可见 material-web.LICENSE。主题颜色由 theme-colors.js 中的 Material Color Utilities 0.3.0 生成，并映射到现有 design 颜色角色。第三方代码为 Apache-2.0，许可见 theme-colors.LICENSE；科学状态不属于偏好记录。",
+                "preferences.js is the single preference owner, exposing get, set, subscribe, reset, export and parseImport. Version 2 records use skymotion-preferences and accept version 1 records; language remains compatible with its existing storage key. Shared selects and selection chips, plus settings sliders, switches and action buttons use Google Material Web 2.5.0, bundled locally in material-web.js; see material-web.LICENSE. Material Color Utilities 0.3.0 in theme-colors.js generates palettes mapped to the existing design color roles. The bundled library is Apache-2.0; see theme-colors.LICENSE. Scientific state is excluded from preference records."
               ]
             }
           ],
@@ -6766,8 +6766,8 @@
       "Always-visible contents, current chapter and Back to top; native anchors provide a no-script fallback"
     ],
     "material-controls.js": [
-      "Material 3 Expressive共享控件呈现与显式原生值同步；实验状态仍由原模块管理",
-      "Material 3 Expressive shared controls and explicit native-value presentation; experiment state stays with its owner"
+      "官方选择组件与原生值、事件适配；科学滑条进度显示",
+      "Official selection component adaptation to native values/events; scientific slider progress"
     ],
     "preferences.js": [
       "全站偏好、主题、设置保存与恢复；与科学实验状态独立",
@@ -6780,6 +6780,10 @@
     "diagram-reference-renderer.js": [
       "参考对象绘图、文字定位和命中几何；只读实验与对象状态",
       "Reference drawing, text placement and hit geometry; reads observation and reference state"
+    ],
+    "material-web.js": [
+      "Google Material Web 2.5.0 的本地打包组件；构建入口 scripts/material-web/source.js",
+      "Locally bundled Google Material Web 2.5.0; build entry scripts/material-web/source.js"
     ]
   }
 }

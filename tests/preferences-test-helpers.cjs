@@ -4,7 +4,7 @@ exports.toggleLanguage = async (page) => {
   await page.locator('.preferences-launch').click();
   await page.locator('[data-category-link=reading]').click();
   await page.locator('#pref-language').selectOption(next);
-  await page.locator('.preferences-heading button').click();
+  await page.locator('.preferences-heading md-outlined-button').click();
   await page.locator('.preferences-dialog').waitFor({state:'hidden'});
 };
 exports.setRange = async (page,name,value) => {

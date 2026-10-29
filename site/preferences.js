@@ -190,18 +190,18 @@
     const row=node('div',{class:'preference-row','data-setting':name});
     const id='pref-'+name,label=node('label',{for:id},copy(labels[name]));row.append(label);
     let control;
-    if(ranges[name]) {control=node('input',{id,type:'range',...ranges[name]});}
+    if(ranges[name]) {control=node('md-slider',{id,...ranges[name],'aria-label':copy(labels[name])});}
     else if(name==='language'||options[name]) {
       control=node('select',{id});
       for(const value of name==='language'?['zh','en']:options[name])control.append(node('option',{value},typeof value==='number'?Math.round(value*100)+'%':copy(({quality:{low:['省电','Power saving'],standard:['标准','Standard'],high:['清晰','Clear']},contrast:{standard:['标准','Standard'],high:['增强','Enhanced']},zoom:{low:['低','Low'],standard:['标准','Standard'],high:['高','High']}}[name]?.[value]) || values[value])));
-    }else if(typeof defaults[name]==='boolean')control=node('input',{id,type:'checkbox',role:'switch'});
+    }else if(typeof defaults[name]==='boolean')control=node('md-switch',{id,'aria-label':copy(labels[name])});
     else control=node('input',{id,type:['primary','surfaceColor','canvasColor'].includes(name)?'color':'time'});
     if(ranges[name]) {
       const container=node('div',{class:'preference-range'});
       const value=node('output',{for:id,id:id+'-value','aria-live':'off'});
       const stepper = (direction) => {
         const button=node('button',{type:'button',class:'md-range-step','aria-label':t(direction<0?'减小':'增大',direction<0?'Decrease ':'Increase ')+copy(labels[name])},direction<0?'−':'+');
-        button.onclick=()=>{direction<0?control.stepDown():control.stepUp();control.dispatchEvent(new Event('input',{bubbles:true}));};
+        button.onclick=()=>{const {min,max,step}=ranges[name];control.value=Math.max(min,Math.min(max,Number((Number(control.value)+direction*step).toFixed(2))));control.dispatchEvent(new Event('input',{bubbles:true}));};
         return button;
       };
       container.append(stepper(-1),control,stepper(1),value);row.append(container);
@@ -214,7 +214,7 @@
     control.addEventListener(ranges[name]?'input':'change',async()=>{
       try{
         if(name==='language')await window.skySetLanguage(control.value);
-        else set({[name]:control.type==='checkbox'?control.checked:typeof defaults[name]==='number'?Number(control.value):control.value,...(colorMode||{})});
+        else set({[name]:control.matches('md-switch')?control.selected:typeof defaults[name]==='number'?Number(control.value):control.value,...(colorMode||{})});
         notify(storageOK?t('已保存','Saved'):t('当前浏览器无法保存设置，仅本页有效','Storage is unavailable; changes apply to this page only'));
       }catch{notify(t('无法应用。夜间开始和结束需不同；颜色需有效。','Could not apply. Night times must differ and colors must be valid.'));refresh();}
     });
@@ -226,12 +226,12 @@
     for(const name of Object.keys(labels)) {
       const input=dialog.querySelector('#pref-'+name);if(!input)continue;
       const value=name==='language'?language():state[name];
-      if(input.type==='checkbox')input.checked=value;else input.value=value;
+      if(input.matches('md-switch'))input.selected=value;else input.value=value;
       if(input.tagName==='SELECT')window.SkyMaterial?.syncChoices(input);
       if(ranges[name]) {
         const text=name==='leading'?Number(value).toFixed(2)+t(' 倍','×'):Math.round(Number(value)*(name==='width'?1:100))+'%';
         dialog.querySelector('#pref-'+name+'-value').textContent=text;
-        input.setAttribute('aria-valuetext',text);window.SkyMaterial?.updateRange(input);
+        input.setAttribute('aria-valuetext',text);input.valueLabel=text;
       }
     }
     for(const name of ['primary','surfaceColor','canvasColor'])dialog.querySelector('#pref-'+name+'-hex').value=state[name];
@@ -250,7 +250,7 @@
   function build() {
     dialog=node('dialog',{class:'preferences-dialog','data-i18n-skip':'','aria-labelledby':'preferences-title'});
     const header=node('header',{class:'preferences-heading'});header.append(node('h2',{id:'preferences-title',tabindex:'-1',autofocus:''},t('设置','Settings')));
-    const close=node('button',{type:'button',class:'md-outlined-action','aria-label':t('关闭设置','Close settings')},t('关闭','Close'));
+    const close=node('md-outlined-button',{type:'button',class:'md-outlined-action','aria-label':t('关闭设置','Close settings')},t('关闭','Close'));
     close.onclick=()=>dialog.close();header.append(close);dialog.append(header);
     const layout=node('div',{class:'preferences-layout'}),nav=node('nav',{class:'preferences-categories','aria-label':t('设置分类','Settings categories')}),content=node('div',{class:'preferences-content'});
     for(const [category,fields] of Object.entries(groups)) {
@@ -267,21 +267,21 @@
         help.append(node('p',{},inSpace?t('三维画布获得焦点后：方向键旋转，＋／－缩放，R 重置视角。鼠标拖动旋转，滚轮缩放；触屏单指旋转、双指缩放。','With the 3D canvas focused: arrows rotate, +/− zoom, R resets. Drag to rotate and scroll to zoom; touch uses one-finger rotation and pinch zoom.'):t('实验台：拖动画面调整视角；可组合图双击进入专注，Esc 返回。三维天空支持方向键、＋／－和 R；进入该页查看手势说明。文档：使用目录和返回顶部；设置中可用 Tab 导航、Esc 关闭。','Lab: drag the scene to adjust its view; double-click a composable pane to focus, Esc to return. 3D Sky supports arrows, +/− and R; see that page for gestures. Documents: use contents and Back to top. Settings support Tab and Esc.')));section.append(help);
       }
       if(category==='data') {
-        const exportBtn=node('button',{type:'button',class:'md-outlined-action'},t('导出设置','Export settings'));
+        const exportBtn=node('md-outlined-button',{type:'button',class:'md-outlined-action'},t('导出设置','Export settings'));
         exportBtn.onclick=()=>{const url=URL.createObjectURL(new Blob([window.SkyPreferences.export()],{type:'application/json'}));const a=node('a',{href:url,download:'skymotion-settings.json'});a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
-        const importBtn=node('button',{type:'button',class:'md-outlined-action'},t('导入设置','Import settings'));
+        const importBtn=node('md-outlined-button',{type:'button',class:'md-outlined-action'},t('导入设置','Import settings'));
         const file=node('input',{type:'file',accept:'.json,application/json',hidden:''});
         importBtn.onclick=()=>file.click();file.onchange=async()=>{try{if(!file.files[0])return;if(file.files[0].size>65536)throw Error('size');pendingImport=parseImport(await file.files[0].text());showConfirmation(t('导入将覆盖文件包含的偏好与语言，不修改实验或收藏。是否应用？','Import overwrites the preferences and language included in the file, without changing experiments or favorites. Apply?'),()=>{set(pendingImport.preferences);if(pendingImport.language)window.skySetLanguage(pendingImport.language).catch(()=>notify(t('语言切换未完成，请重试','Language change failed; please retry')));});}catch{notify(t('无法导入：请使用有效的设置文件（版本 1 或 2，最大 64 KB）。','Import failed: use a valid version 1 or 2 settings file, up to 64 KB.'));}finally{file.value='';}};
         section.append(node('p',{},t('设置保存在当前浏览器和站点。导出文件不含实验、收藏或布局。','Settings stay in this browser and site. Exports exclude experiments, favorites and layouts.')),exportBtn,importBtn,file);
-        const all=node('button',{type:'button',class:'md-outlined-action'},t('恢复全部设置','Reset all settings'));all.onclick=()=>showConfirmation(t('恢复全部偏好和中文语言。保留实验、收藏和布局存档。','Reset all preferences and switch to Chinese. Experiments, favorites and layouts are preserved.'),()=>reset());section.append(all);
+        const all=node('md-outlined-button',{type:'button',class:'md-outlined-action'},t('恢复全部设置','Reset all settings'));all.onclick=()=>showConfirmation(t('恢复全部偏好和中文语言。保留实验、收藏和布局存档。','Reset all preferences and switch to Chinese. Experiments, favorites and layouts are preserved.'),()=>reset());section.append(all);
       }else {
-        const resetBtn=node('button',{type:'button',class:'md-outlined-action preference-reset'},t('恢复本分类默认值','Reset this category'));
+        const resetBtn=node('md-outlined-button',{type:'button',class:'md-outlined-action preference-reset'},t('恢复本分类默认值','Reset this category'));
         resetBtn.onclick=()=>{pendingReset=category;showConfirmation(t('仅恢复本分类偏好，保留实验和收藏。','Reset only this category; experiments and favorites are preserved.'),()=>reset(pendingReset));};section.append(resetBtn);
       }
       content.append(section);
     }
     layout.append(nav,content);dialog.append(layout);
-    confirmation=node('div',{class:'preferences-confirm',hidden:'',role:'group','aria-label':t('确认设置操作','Confirm settings change')});confirmation.append(node('p'),node('button',{type:'button',class:'md-outlined-action','data-cancel':''},t('取消','Cancel')),node('button',{type:'button',class:'md-outlined-action','data-confirm':''},t('确认','Confirm')));dialog.append(confirmation);
+    confirmation=node('div',{class:'preferences-confirm',hidden:'',role:'group','aria-label':t('确认设置操作','Confirm settings change')});confirmation.append(node('p'),node('md-outlined-button',{type:'button',class:'md-outlined-action','data-cancel':''},t('取消','Cancel')),node('md-outlined-button',{type:'button',class:'md-outlined-action','data-confirm':''},t('确认','Confirm')));dialog.append(confirmation);
     message=node('p',{class:'preferences-message',role:'status','aria-live':'polite'});dialog.append(message);
     dialog.addEventListener('close',()=>{confirmation.hidden=true;pendingImport=null;pendingReset=null;launcher?.focus({preventScroll:true});});
     dialog.addEventListener('cancel',event=>{if(!confirmation.hidden){event.preventDefault();confirmation.hidden=true;pendingImport=null;pendingReset=null;}});
@@ -312,6 +312,7 @@
   // Registered before experiment shortcuts: a modal owns Escape even in a focused pane.
   addEventListener('keydown',event=>{
     if(!dialog?.open||event.key!=='Escape'||event.isComposing)return;
+    if([...dialog.querySelectorAll('md-outlined-select')].some(select=>select.shadowRoot?.querySelector('md-menu')?.open))return;
     event.preventDefault();event.stopImmediatePropagation();
     if(!confirmation.hidden){confirmation.hidden=true;pendingImport=null;pendingReset=null;confirmTrigger?.focus();}
     else dialog.close();

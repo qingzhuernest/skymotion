@@ -133,8 +133,9 @@ const { chromium } = require(process.env.SKY_MOTION_PLAYWRIGHT || 'playwright');
   await p.waitForFunction(()=>[...document.querySelectorAll('select')].every(select=>{
     const field=select.nextElementSibling;
     if(!field?.matches('.md-choice-field'))return false;
-    const buttons=[...field.querySelectorAll('button[data-choice-value]')];
-    return buttons.length===select.options.length&&buttons.every((button,index)=>button.getAttribute('aria-pressed')===String(select.options[index].selected));
+    const widget=field.querySelector('md-outlined-select');if(widget)return widget.value===select.value;
+    const buttons=[...field.querySelectorAll('md-filter-chip[data-choice-value]')];
+    return buttons.length===select.options.length&&buttons.every((button,index)=>button.selected===select.options[index].selected);
   }));
   console.log('PASS 3d selected planet and date undo', errors);
   await p.goto(testBase + 'diagrams.html?compare=1');

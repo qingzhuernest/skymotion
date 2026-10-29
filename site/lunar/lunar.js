@@ -573,12 +573,12 @@
   const lessonHistory = () => embedded ? parent.SkyMotionHistory : null;
   // Frame-local controls do not bubble to the parent's history listeners.
   for (const type of ['pointerdown', 'keydown']) document.addEventListener(type, e => {
-    if (e.target.closest?.('button,input,select') && (type === 'pointerdown' ? e.button === 0 :
+    if (e.target.closest?.('button,input,select,md-filter-chip,md-outlined-select') && (type === 'pointerdown' ? e.button === 0 :
         e.key !== 'Tab' && !e.altKey && !e.ctrlKey && !e.metaKey))
       lessonHistory()?.beginExternal();
   }, true);
   for (const type of ['click', 'input', 'change']) document.addEventListener(type, e => {
-    if (e.target.closest?.('button,input,select')) lessonHistory()?.endExternal();
+    if (e.target.closest?.('button,input,select,md-filter-chip,md-outlined-select')) lessonHistory()?.endExternal();
   }, true);
   for (const id of ['orbitView', 'astronautView']) {
     $(id).addEventListener('keydown', e => {

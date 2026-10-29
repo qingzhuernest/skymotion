@@ -14,7 +14,7 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   assert.equal(await page.evaluate(()=>SkyPreferences.get().leading),2.15);assert.equal(await page.evaluate(()=>SkyPreferences.get().width),80);
   const before=await page.evaluate(()=>[state.lat,state.lon,state.time,state.date,state.view]);
   await page.locator('.preferences-launch').click();await page.locator('[data-category-link=reading]').click();
-  assert.equal(await page.locator('.preference-section[data-category=reading] input[type=range]').count(),4);
+  assert.equal(await page.locator('.preference-section[data-category=reading] md-slider').count(),4);
   await setRange(page,'uiScale',1.17);await setRange(page,'readingScale',1.23);await setRange(page,'leading',1.97);await setRange(page,'width',93);
   assert.equal(await page.locator('#pref-uiScale-value').textContent(),'117%');assert.equal(await page.locator('#pref-leading-value').textContent(),'1.97 倍');
   await page.locator('#pref-uiScale').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.evaluate(()=>SkyPreferences.get().uiScale),1.18);
@@ -47,6 +47,6 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   for(const width of [960,390,320]){
    await page.setViewportSize({width,height:1000});await page.locator('.preferences-launch').click();await page.locator('[data-category-link=reading]').click();assert(await page.locator('.preferences-dialog').evaluate(e=>e.scrollWidth<=e.clientWidth+1));await page.screenshot({path:'/tmp/settings117-reading-'+width+'.png'});await page.keyboard.press('Escape');await page.locator('.preferences-dialog').waitFor({state:'hidden'});
   }
-  assert.deepEqual(errors,[]);console.log('PASS navigation settings and hidden language; continuous native reading sliders; v1 migration; independent UI/canvas backgrounds; four simultaneous sky perspectives; independent camera, persistence, retained custom glyphs, phone layout and unchanged science');
+  assert.deepEqual(errors,[]);console.log('PASS navigation settings and hidden language; official reading sliders; v1 migration; independent UI/canvas backgrounds; four simultaneous sky perspectives; independent camera, persistence, retained custom glyphs, phone layout and unchanged science');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

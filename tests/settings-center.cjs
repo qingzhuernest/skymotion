@@ -15,7 +15,7 @@ const base=(process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:38716/').replac
   await page.waitForFunction(()=>Math.abs(document.querySelector('dialog.preferences-dialog').getBoundingClientRect().width-920)<1);
   await page.selectOption('#pref-theme','dark');
   assert.equal(await page.getAttribute('html','data-theme'),'dark');
-  await page.check('#pref-pureBlack');
+  await page.locator('#pref-pureBlack input').check();
   assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--design-paper')),'#000000');
   await page.selectOption('#pref-palette','custom');await page.locator('#pref-primary-hex').fill('#ffffff');await page.locator('#pref-primary-hex').dispatchEvent('change');
   await page.selectOption('#pref-contrast','high');
@@ -30,7 +30,7 @@ const base=(process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:38716/').replac
   await page.selectOption('#pref-theme','system');await page.emulateMedia({colorScheme:'dark'});await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');
   await category(page,'reading');await require('./preferences-test-helpers.cjs').setRange(page,'uiScale',1.25);assert.equal(await page.locator('.document-links a').first().evaluate(e=>getComputedStyle(e).fontSize),'17.5px');await require('./preferences-test-helpers.cjs').setRange(page,'readingScale',1.5);await require('./preferences-test-helpers.cjs').setRange(page,'leading',2.15);await require('./preferences-test-helpers.cjs').setRange(page,'width',120);
   assert.equal(await page.locator('.document-content p').first().evaluate(e=>getComputedStyle(e).fontSize),'24px');
-  await category(page,'animation');await page.selectOption('#pref-motion','reduce');assert.equal(await page.getAttribute('html','data-reduced-motion'),'true');assert(await page.locator('#pref-smoothScroll').isDisabled());
+  await category(page,'animation');await page.selectOption('#pref-motion','reduce');assert.equal(await page.getAttribute('html','data-reduced-motion'),'true');assert(await page.locator('#pref-smoothScroll input').isDisabled());
   await page.selectOption('#pref-motion','system');await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>document.documentElement.dataset.reducedMotion==='true');
   const second=await context.newPage();await second.goto(base+'lab.html');await second.waitForSelector('html[data-fonts-ready]');await second.evaluate(()=>SkyPreferences.set({palette:'blue',theme:'light',uiScale:1}));await page.waitForFunction(()=>SkyPreferences.get().palette==='blue');
   await second.close();
@@ -48,7 +48,7 @@ const base=(process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:38716/').replac
   await page.reload();await page.waitForFunction(()=>window.SkyPreferences);assert.equal(await page.evaluate(()=>SkyPreferences.get().uiScale),1.1);
   console.log('PASS themes, schedule, contrast, reading, motion, categories, storage, safe import and keyboard close');
   await page.emulateMedia({reducedMotion:'no-preference',colorScheme:'light'});await page.evaluate(()=>SkyPreferences.reset());
-  await open(page,'space/');await category(page,'space');await page.uncheck('#pref-orbits');await page.uncheck('#pref-names');await page.uncheck('#pref-stars');await page.selectOption('#pref-quality','low');
+  await open(page,'space/');await category(page,'space');await page.locator('#pref-orbits input').uncheck();await page.locator('#pref-names input').uncheck();await page.locator('#pref-stars input').uncheck();await page.selectOption('#pref-quality','low');
   assert.equal(await page.locator('#orbits').isChecked(),false);assert.equal(await page.locator('#names').isChecked(),false);
   await page.keyboard.press('Escape');await page.check('#orbits');assert.equal(await page.evaluate(()=>SkyPreferences.get().orbits),true);
   await page.waitForFunction(()=>window.SolarSpaceView);await page.evaluate(()=>{const s=SolarSpaceView.readSelection();s.fields=s.fields.map(([k,v])=>[k,k==='names'?true:v]);SolarSpaceView.restoreSelection(s);});assert.equal(await page.evaluate(()=>SkyPreferences.get().names),true);

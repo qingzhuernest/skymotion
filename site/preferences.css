@@ -4,7 +4,7 @@ html[data-smooth-scroll='true'] {scroll-behavior:smooth}
 body .preferences-launch {flex:none;margin:0}
 body .page-nav .preferences-launch {border:0;background:transparent;display:flex;align-items:center;justify-content:center;white-space:nowrap}
 .preference-range {display:flex;align-items:center;gap:16px;flex:1 1 250px;max-width:100%;min-width:0}
-.preference-range input[type='range'] {flex:1;min-width:80px;width:auto;margin:0}
+.preference-range md-slider {flex:1;min-width:80px;width:auto;margin:0}
 .preference-range output {min-width:4.5em;text-align:end;font-variant-numeric:tabular-nums}
 .welcome-brand .language-actions {margin-inline-start:auto}
 body dialog.preferences-dialog {box-sizing:border-box;width:min(920px,calc(100vw - 48px));max-width:920px;max-height:calc(100dvh - 48px);padding:24px;border:1px solid var(--design-line);border-radius:28px;background:var(--design-surface);color:var(--design-ink);font:inherit;overflow:auto;box-shadow:0 24px 80px var(--design-shadow-dialog)}
@@ -53,10 +53,10 @@ html :is(input,select,textarea) {color-scheme:var(--interface-color-scheme,norma
  .preferences-content {max-height:none;overflow:visible;padding:0}
  .preferences-heading {position:sticky;top:-20px;background:var(--design-surface);padding-block:12px;z-index:2}
  .preferences-dialog :is(button,select,input:not([type='checkbox']):not([type='range'])) {min-height:48px}
- .preference-row:has(input[type='checkbox']) {min-height:68px}
+ .preference-row:has(md-switch) {min-height:68px}
  html body .document-page {width:calc(100% - 24px);padding-inline:16px}
 }
-@media (pointer:coarse) {.preference-row:has(input[type='checkbox']) {min-height:68px}.preferences-dialog button {min-height:48px}}
+@media (pointer:coarse) {.preference-row:has(md-switch) {min-height:68px}.preferences-dialog button {min-height:48px}}
 @media print {.preferences-launch,body dialog.preferences-dialog {display:none!important}}
 /* Printing remains legible when the saved screen theme is dark. */
 @media print {
@@ -73,16 +73,22 @@ html[data-custom-canvas='true'] body[data-page='space'] .label {background:var(-
 html[data-custom-canvas='true'] body #stage {background:var(--canvas-background)}
 /* Range hit areas remain native; steppers offer precise touch adjustments. */
 .preferences-dialog .preference-range {gap:6px;display:grid;grid-template-columns:32px minmax(60px,1fr) 32px 4.5em;flex-basis:320px;--md-range-surface:var(--design-surface)}
-.preferences-dialog .preference-range input[type='range'] {width:100%;min-width:0;touch-action:pan-y}
+.preferences-dialog .preference-range md-slider {width:100%;min-width:0;touch-action:pan-y}
 @media(max-width:480px) {
  .preferences-dialog .preference-range {grid-template-columns:32px minmax(60px,1fr) 32px;flex-basis:100%}
  .preference-range output {grid-column:1/-1;min-width:0}
 }
 
-.preferences-dialog .preference-choices {display:grid;grid-template-columns:repeat(var(--choice-count,2),minmax(0,1fr));width:min(360px,100%);gap:4px}
-.preferences-dialog .preference-choices[data-choice-count='3'] {--choice-count:3}
-.preferences-dialog .preference-choices[data-choice-count='4'] {--choice-count:4}
-.preferences-dialog .preference-choices > button {min-width:0;padding:6px 12px;overflow-wrap:anywhere}
-@media(max-width:480px) {.preferences-dialog .preference-choices[data-choice-count='4'] {--choice-count:2}}
+.preferences-dialog .preference-choices {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(calc(140px * var(--ui-font-scale,1)),100%),1fr));width:min(360px,100%);gap:4px}
 .preferences-dialog .preference-row > .md-choice-field {width:min(360px,100%);flex:0 1 360px}
 .preferences-dialog .md-choice-field .preference-choices {width:100%}
+
+.preferences-dialog md-switch {flex:none}
+.preferences-dialog md-outlined-button.md-outlined-action {
+  --md-outlined-button-container-height: 44px;
+  --md-outlined-button-container-shape: var(--design-radius-control);
+  --md-outlined-button-label-text-font: var(--design-font);
+  --md-outlined-button-label-text-size: calc(14px * var(--ui-font-scale, 1));
+  --md-outlined-button-label-text-line-height: calc(20px * var(--ui-font-scale, 1));
+}
+.preferences-confirm md-outlined-button {margin-inline-end:8px}

@@ -10,6 +10,9 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   await page.goto(base+'docs.html?lang=zh');await page.waitForSelector('html[data-fonts-ready]');await page.locator('.preferences-launch').click();
   assert.equal(await page.evaluate(()=>document.activeElement.id),'preferences-title');
   assert.equal(await page.locator('input[type=search]').count(),0);await page.keyboard.press('Escape');await page.locator('.preferences-launch').click();assert.equal(await page.evaluate(()=>document.activeElement.id),'preferences-title');
+  assert(await page.evaluate(()=>['md-outlined-select','md-filter-chip','md-slider','md-switch','md-outlined-button'].every(tag=>!!customElements.get(tag))), 'Official Material Web components are registered');
+  assert.equal(await page.locator('.preferences-dialog md-slider').count(),4);
+  assert(await page.locator('.preferences-dialog md-switch').count()>4);
   const controls=await page.locator('.preferences-dialog select').count();assert(controls>8);assert.equal(await page.locator('.preferences-dialog .preference-choices').count(),controls);assert.equal(await page.locator('.preferences-dialog [role=combobox]').count(),0);
   await page.locator('[data-category-link=layout]').click();await page.locator('[data-setting=density] [data-choice-value=compact]').click();assert.equal(await page.evaluate(()=>SkyPreferences.get().density),'compact');
   await page.locator('[data-setting=density] [data-choice-value=compact]').focus();await page.keyboard.press('Home');assert.equal(await page.evaluate(()=>SkyPreferences.get().density),'standard');assert.equal(await page.locator('[data-setting=density] [aria-pressed=true]').count(),1);
@@ -27,8 +30,8 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   for(const width of [960,390,320]){await page.setViewportSize({width,height:1000});assert(await page.locator('.preferences-dialog').evaluate(e=>e.scrollWidth<=e.clientWidth+1));}
   await page.setViewportSize({width:960,height:1000});await page.locator('[data-category-link=appearance]').click();await page.locator('[data-setting=theme] [data-choice-value=dark]').click();assert.equal(await page.evaluate(()=>document.documentElement.dataset.theme),'dark');
   await page.screenshot({path:'/tmp/settings121-connected-dark.png'});
-  await page.locator('[data-category-link=reading]').click();await page.locator('[data-setting=language] [data-choice-value=en]').click();await page.waitForFunction(()=>document.documentElement.lang==='en');assert.equal(await page.locator('[data-setting=language] [data-choice-value=en]').getAttribute('aria-pressed'),'true');
+  await page.locator('[data-category-link=reading]').click();await page.locator('[data-setting=language] [data-choice-value=en]').click();await page.waitForFunction(()=>document.documentElement.lang==='en');assert.equal(await page.locator('[data-setting=language] [data-choice-value=en]').evaluate(item=>item.selected),true);
   await page.keyboard.press('Escape');await page.locator('.preferences-dialog').waitFor({state:'hidden'});await page.reload();await page.waitForSelector('html[data-fonts-ready]');assert.equal(await page.evaluate(()=>SkyPreferences.get().uiScale),1.5);assert.equal(await page.evaluate(()=>SkyPreferences.get().readingScale),2);
-  assert.deepEqual(errors,[]);console.log('PASS connected choices for every categorical setting, no search autofocus on opening or reopening, keyboard selection, real slider drag/touch, actual 150% interface and 200% document text, responsive layout and persistence');
+  assert.deepEqual(errors,[]);console.log('PASS official Material Web settings sliders, switches, buttons and connected choices for every categorical setting, no search autofocus on opening or reopening, keyboard selection, real slider drag/touch, actual 150% interface and 200% document text, responsive layout and persistence');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
