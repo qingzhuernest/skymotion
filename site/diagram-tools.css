@@ -430,6 +430,7 @@ body .dt-lock {
   font-size: calc(12px * var(--ui-font-scale, 1));
 }
 .dt-result {
+  grid-column: 1 / -1;
   margin: 12px 0;
   font-variant-numeric: tabular-nums;
 }

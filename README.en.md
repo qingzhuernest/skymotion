@@ -10,7 +10,7 @@ A browser laboratory for geography teaching and independent observation. Control
 
 Lab, related diagrams and analemma share one workspace. Existing URLs still select their corresponding views, and the top navigation stays stable. In the left sidebar choose Views & layout, expand Sky & shadows, Related diagrams or Compare & build, and select a named view. Observation controls retains location, date, time and the original experiment settings.
 
-To show sky, Earth, altitude and analemma together, start with Space view, enter customization beside language, then use the add controls beside the view names in Views & layout. An included view offers removal; selecting its name still displays it or replaces the selected pane. Additional views extend below the fold after four panes.
+To show sky, Earth, altitude and analemma together, start with Space view, choose Customize in the top bar, then use the add controls beside the view names in Views & layout. An included view offers removal; selecting its name still displays it or replaces the selected pane. Additional views extend below the fold after four panes.
 
 The interface uses shared Material Design 3 color, shape, state and target-size roles while preserving the requested Chinese Song and English Charter fonts. Edit actions in combined views live in their pane headers instead of covering the scientific content. Observation identity starts the app bar; direct segmented buttons switch Sun/Moon. All four sky viewpoints live under Views & layout → Sky & shadows, without duplicate controls above the canvas.
 
@@ -24,7 +24,7 @@ The compact playback panel groups the exact clock and slider; Moon puts dates fi
 - [Development guide](site/development-guide.en.md): code responsibilities, state, calculations, rendering, checks and deployment.
 - [Customization instructions](site/docs/customization-interaction.en.md): add cities, time markers, reference lines and physical objects, edit their properties and save plans.
 
-Customize is beside the language button. Observation controls continues to set the baseline experiment; Plot objects adds and adjusts comparisons. Cities and times remain linked across relevant diagrams. Rods, spheres and circles are placed on the experiment ground. See the [customization examples](site/guide.en.html#customization).
+Customize is at the top right; language switching is in Settings. Observation controls continues to set the baseline experiment; Plot objects adds and adjusts comparisons. Cities and times remain linked across relevant diagrams. Rods, spheres and circles are placed on the experiment ground. See the [customization examples](site/guide.en.html#customization).
 
 Related Diagrams → Moon → Earthrise and Earthset links a lunar-orbit overview with an astronaut view. This independent illustrative orbit retains the left explanation, parameters and bottom controls. It is not a spacecraft trajectory prediction for a real date.
 
@@ -76,7 +76,7 @@ Session restoration validates dates, numerical ranges, types and choices; unknow
 
 ## Deploy and restore
 
-Pushing `main` runs shared `validate.yml` once, then deploys the same static site to Cloudflare Pages and GitHub Pages independently. The mirror reuses the successful validation instead of repeating browser setup and checks. The default is the release suite; full regression is a manual `full_regression` option. Other branches do not publish production. Verify both deployment results.
+Pushing `main` runs shared `validate.yml` once, then deploys the same static site to Cloudflare Pages and GitHub Pages independently. The mirror reuses the successful validation instead of repeating browser setup and checks. Checks are selected by changed paths. Documentation-only changes skip browser installation; unknown changes use the short release suite. Full regression is a manual `full_regression` option. Other branches do not publish production. Verify both deployment results.
 
 Restore a known good version through a restoration commit that preserves `main` history; do not force-push. `tests/deployment-paths.cjs` checks root and GitHub project-path packaging.
 

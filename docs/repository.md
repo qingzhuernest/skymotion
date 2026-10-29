@@ -53,4 +53,6 @@ python3 .github/scripts/prepare_site.py --output dist
 
 其他工作树中正在检出的本地分支保持原状，避免打断已有工作；这些工作树不属于当前网站发布目录。未被工作树占用且已合并的本地旧分支可安全删除。远端默认分支和本地 `origin/HEAD` 均指向 `main`。
 
+发布验证由 `.github/scripts/select-checks.cjs` 按路径选择；不确定影响范围时保留短检查集，完整回归仍由手动选择。纯说明文件不安装浏览器。
+
 代码精简与职责复核见 [2026-10-28 报告](reviews/CODE-SIMPLICITY-2026-10-28.md)。主题预设启动数据由 `scripts/site_sources.py` 从 `site/ui-palette.css` 生成，编辑颜色后应运行该生成器。

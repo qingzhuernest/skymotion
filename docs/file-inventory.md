@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 300 个文件。目录职责见 [repository.md](repository.md)。
+共 303 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -15,9 +15,10 @@
 - [README.md](../README.md)
 - [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md)
 
-## .github (5)
+## .github (6)
 
 - [.github/scripts/prepare_site.py](../.github/scripts/prepare_site.py)
+- [.github/scripts/select-checks.cjs](../.github/scripts/select-checks.cjs)
 - [.github/scripts/verify-site.cjs](../.github/scripts/verify-site.cjs)
 - [.github/workflows/deploy.yml](../.github/workflows/deploy.yml)
 - [.github/workflows/github-pages.yml](../.github/workflows/github-pages.yml)
@@ -52,7 +53,7 @@
 - [scripts/theme-colors/package.json](../scripts/theme-colors/package.json)
 - [scripts/theme-colors/source.js](../scripts/theme-colors/source.js)
 
-## site (183)
+## site (184)
 
 - [site/.nojekyll](../site/.nojekyll)
 - [site/404.en.html](../site/404.en.html)
@@ -81,6 +82,7 @@
 - [site/development-guide.en.md](../site/development-guide.en.md)
 - [site/development-guide.html](../site/development-guide.html)
 - [site/development-guide.md](../site/development-guide.md)
+- [site/diagram-reference-renderer.js](../site/diagram-reference-renderer.js)
 - [site/diagram-reference-store.js](../site/diagram-reference-store.js)
 - [site/diagram-sampling.js](../site/diagram-sampling.js)
 - [site/diagram-tool-definitions.js](../site/diagram-tool-definitions.js)
@@ -238,7 +240,7 @@
 - [site/workbench-menu.js](../site/workbench-menu.js)
 - [site/workspace.js](../site/workspace.js)
 
-## tests (81)
+## tests (82)
 
 - [tests/analemma-references.cjs](../tests/analemma-references.cjs)
 - [tests/bilingual-pages.cjs](../tests/bilingual-pages.cjs)
@@ -288,6 +290,7 @@
 - [tests/multiview-interaction.cjs](../tests/multiview-interaction.cjs)
 - [tests/parameter-controls.cjs](../tests/parameter-controls.cjs)
 - [tests/preferences-test-helpers.cjs](../tests/preferences-test-helpers.cjs)
+- [tests/release-selection.cjs](../tests/release-selection.cjs)
 - [tests/reported-layout.cjs](../tests/reported-layout.cjs)
 - [tests/reported-ui.cjs](../tests/reported-ui.cjs)
 - [tests/review-followup.cjs](../tests/review-followup.cjs)

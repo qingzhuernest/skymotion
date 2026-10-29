@@ -7,33 +7,6 @@
   --ui-control-radius: 12px;
   --ui-control-height: var(--md-sys-size-target, 40px);
 }
-.page-nav {
-  height: var(--ui-nav-height);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 20px;
-  border-bottom: 1px solid var(--ui-border);
-  background: var(--design-surface);
-  overflow-x: auto;
-  white-space: nowrap;
-}
-.page-nav a,
-.page-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 36px;
-  padding: 6px 12px;
-  font-size: calc(13px * var(--ui-font-scale, 1));
-  color: var(--design-primary);
-  text-decoration: none;
-  border-radius: var(--design-radius-control, 12px);
-}
-.page-nav a:hover,
-.page-link:hover {
-  background: var(--design-inset);
-}
 a:focus-visible {
   outline: 2px solid var(--md-sys-color-focus, var(--design-primary));
   outline-offset: 2px;
@@ -58,12 +31,6 @@ a:focus-visible {
   text-decoration: none;
   align-items: center;
   justify-content: center;
-}
-.page-action {
-  padding: 10px 20px;
-  background: var(--design-primary);
-  color: var(--design-surface);
-  border-radius: 24px;
 }
 .welcome-footer {
   align-items: center;
@@ -597,13 +564,6 @@ body[data-page='analemma'] .workbench-events {
     --ui-nav-height: 42px;
     --ui-gap: 8px;
   }
-  .page-nav {
-    padding: 5px 8px;
-  }
-  .page-nav a {
-    font-size: calc(12px * var(--ui-font-scale, 1));
-    padding: 5px 9px;
-  }
   .reading-page {
     padding: 18px;
     margin: 12px;
@@ -1116,11 +1076,6 @@ body[data-page='analemma'] .workbench-events {
 }
 .ui-parameters .menu-divider {
   margin: 12px 0;
-}
-.page-nav a[aria-current='page'] {
-  background: var(--md-primary-container);
-  color: var(--md-on-primary-container);
-  font-weight: 600;
 }
 /* Legacy miniature canvas widths must not constrain the shared plotting area. */
 .ui-plot > canvas {

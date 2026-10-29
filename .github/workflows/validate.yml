@@ -14,33 +14,39 @@ jobs:
   regressions:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      SKY_CHECK_PLAN: /tmp/skymotion-checks.json
     steps:
       - name: Checkout
         uses: actions/checkout@v6
         with:
           persist-credentials: false
+          fetch-depth: 3
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
           cache-dependency-path: tests/browser/package-lock.json
+      - name: Select checks for changed files
+        id: scope
+        env:
+          SKY_BASE_SHA: ${{ github.event.before }}
+          FULL_REGRESSION: ${{ inputs.full_regression }}
+        run: node .github/scripts/select-checks.cjs --plan
       - name: Install pinned browser test tools
+        if: steps.scope.outputs.browser == 'true'
         run: npm ci --prefix tests/browser
       - name: Install Chromium and system dependencies
+        if: steps.scope.outputs.browser == 'true'
         run: tests/browser/node_modules/.bin/playwright install --with-deps chromium
       - name: Configure test browser
+        if: steps.scope.outputs.browser == 'true'
         run: |
           echo "SKY_MOTION_PLAYWRIGHT=$GITHUB_WORKSPACE/tests/browser/node_modules/playwright" >> "$GITHUB_ENV"
           node -e "console.log('SKY_MOTION_CHROMIUM='+require('./tests/browser/node_modules/playwright').chromium.executablePath())" >> "$GITHUB_ENV"
       - name: Run release checks
-        env:
-          FULL_REGRESSION: ${{ inputs.full_regression }}
         run: |
           python3 scripts/repository-index.py --check
           python3 scripts/site_sources.py --check
-          if [ "$FULL_REGRESSION" = "true" ]; then
-            node .github/scripts/verify-site.cjs
-          else
-            node .github/scripts/verify-site.cjs settings-center.cjs shared-ui-lifecycle.cjs settings-updates.cjs settings-expressive.cjs shared-choice-fields.cjs reported-layout.cjs document-action-links.cjs confirmed-review-fixes.cjs deployment-paths.cjs
-          fi
+          node .github/scripts/select-checks.cjs --run

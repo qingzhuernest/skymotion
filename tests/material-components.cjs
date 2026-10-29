@@ -117,12 +117,12 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8000/').repla
         if (width < 760) await require('./diagram-test-helpers.cjs').openDrawer(page);
         await page.locator('[data-rail-section=views]').click();
         assert.equal(await page.locator('.workbench-viewpoints [data-view]').count(), 4);
-        assert.match(
+        assert.equal(
           await page.locator('[data-view=top]').innerText(),
-          route.includes('.en') ? /Azimuth plan view/ : /俯视方位/,
+          require('../site/site-catalog.json').views.find(view => view.skyView === 'top').labels.moon[route.includes('.en') ? 1 : 0],
         );
         const geometry = await page
-          .locator('.workbench-viewpoints button')
+          .locator('.workbench-viewpoints button[data-view]')
           .evaluateAll((nodes) =>
             nodes.map((n) => ({
               x: n.getBoundingClientRect().x,

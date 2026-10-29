@@ -31,6 +31,8 @@ for english in Path('site').resolve().rglob('*.en.html'):
         if consumer in sources:assert sources.index('material-controls.js') < sources.index(consumer), 'Load shared controls before their consumers'
     if 'diagram-tools.js' in sources:
         assert sources.count('diagram-reference-store.js') == 1, 'Load one reference state module'
+        assert sources.count('diagram-reference-renderer.js') == 1, 'Load one reference renderer'
+        assert sources.index('diagram-reference-renderer.js') < sources.index('diagram-tools.js'), 'Load projection and rendering before the editor'
         assert sources.index('diagram-tool-definitions.js') < sources.index('diagram-reference-store.js') < sources.index('diagram-tools.js'), 'Load reference schema and store before the editor'
     def check_english_text(node, skip=False):
         # Explicit bilingual quotes and code samples retain their source language.

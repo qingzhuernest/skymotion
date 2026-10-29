@@ -32,6 +32,6 @@
 
 ## 验证与发布
 
-小改动验证受影响路径；完整回归由手动 `full_regression` 选择，不作为每次发布的默认。一次提交只验证一次，再独立部署 Cloudflare 正式站与 GitHub Pages 镜像；GPTsite 同步同一份发布包。发布只来自 `main`，归档分支保留独立历史。
+`.github/scripts/select-checks.cjs` 按路径选择受影响检查；纯说明文件跳过浏览器安装，未知范围回退到短检查集。完整回归由手动 `full_regression` 选择，不作为每次发布的默认。一次提交只验证一次，再独立部署 Cloudflare 正式站与 GitHub Pages 镜像；GPTsite 同步同一份发布包。发布只来自 `main`，归档分支保留独立历史。
 
 当前目录职责见 [仓库维护说明](../repository.md)，审查结果见 [2026-10-28 代码精简复核](../reviews/CODE-SIMPLICITY-2026-10-28.md)。历史约定保留在 Git 历史和原审查记录中，不继续堆叠到现行规则里。

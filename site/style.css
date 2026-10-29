@@ -228,14 +228,6 @@ h2 {
   font-size: calc(14px * var(--ui-font-scale, 1));
   margin: 4px 0 0;
 }
-.view-tabs {
-  display: flex;
-}
-.view-tabs button {
-  background: transparent;
-  border: none;
-  padding: 7px 13px;
-}
 .stage {
   position: relative;
   background: radial-gradient(ellipse at 50% 50%, #182b3d 0%, #0d1a28 74%);
@@ -492,12 +484,6 @@ dialog .play-button {
     flex-direction: column;
     gap: 12px;
   }
-  .view-tabs {
-    width: 100%;
-  }
-  .view-tabs button {
-    flex: 1;
-  }
   .globe-content {
     gap: 10px;
   }
@@ -546,9 +532,6 @@ dialog .play-button {
   }
   .view-head {
     gap: 10px;
-  }
-  .view-tabs button {
-    font-size: calc(13px * var(--ui-font-scale, 1));
   }
   .view-head h1 {
     font-size: calc(24px * var(--ui-font-scale, 1));
@@ -684,20 +667,6 @@ button:hover {
   border: 0;
   border-radius: 24px;
   color: var(--design-night-ink);
-}
-.view-tabs {
-  background: var(--design-inset);
-  border: 0;
-  border-radius: 24px;
-  padding: 4px;
-}
-.view-tabs button {
-  border-radius: 20px;
-  color: var(--design-muted);
-}
-.view-tabs .active {
-  background: var(--design-inset);
-  color: var(--design-primary);
 }
 .timeline {
   border: 0;
@@ -901,9 +870,6 @@ canvas:focus-visible {
   }
   #globe {
     width: 160px;
-  }
-  .view-tabs {
-    width: 100%;
   }
   .header-end .tag {
     display: none;
@@ -2269,7 +2235,6 @@ button:not(:disabled):active {
 .play-button:hover {
   box-shadow: 0 5px 15px var(--design-shadow);
 }
-.view-tabs button,
 .context-view-switch button {
   transition:
     background 200ms var(--motion-ease),
@@ -3330,12 +3295,6 @@ canvas,
   font-size: calc(12px * var(--ui-font-scale, 1));
   padding: 8px 12px;
 }
-.view-tabs {
-  flex-wrap: wrap;
-}
-.view-tabs button {
-  white-space: nowrap;
-}
 .stage:has(+ .model-explanation #observerControls:not([hidden])) .stage-key {
   display: none;
 }
@@ -3343,14 +3302,6 @@ body[data-sky-view='observer'] .stage-key {
   display: none;
 }
 @media (max-width: 760px) {
-  .view-tabs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-radius: 22px !important;
-  }
-  .view-tabs button {
-    border-radius: 20px;
-  }
   .sundial-time-label {
     font-size: calc(12px * var(--ui-font-scale, 1));
   }

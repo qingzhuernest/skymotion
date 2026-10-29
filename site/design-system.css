@@ -248,11 +248,41 @@ body
   ) {
   font-family: var(--design-font);
 }
+.page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: calc(13px * var(--ui-font-scale, 1));
+  color: var(--design-primary);
+  text-decoration: none;
+  border-radius: var(--design-radius-control, 12px);
+}
+.page-link:hover {
+  background: var(--design-inset);
+}
+.page-action {
+  padding: 10px 20px;
+}
 .page-nav {
-  background: var(--design-paper);
-  border-color: transparent;
+  height: var(--ui-nav-height);
+  display: flex;
+  align-items: center;
   gap: 4px;
-  padding-inline: 16px;
+  padding: 6px 16px;
+  border-bottom: 1px solid transparent;
+  border-color: transparent;
+  background: var(--design-paper);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.page-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 6px;
+  text-decoration: none;
 }
 .page-nav :is(a, .preferences-launch) {
   position: relative;
@@ -291,6 +321,39 @@ body
   color: var(--design-muted);
   font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.7;
+}
+.view-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  background: var(--design-inset);
+  border: 0;
+  border-radius: 24px;
+  padding: 4px;
+}
+.view-tabs button {
+  background: transparent;
+  border: none;
+  padding: 7px 13px;
+  border-radius: 20px;
+  color: var(--design-muted);
+  transition: background 200ms var(--motion-ease), color 160ms ease;
+  white-space: nowrap;
+}
+.view-tabs .active {
+  background: var(--design-inset);
+  color: var(--design-primary);
+}
+@media (max-width: 1100px) {
+  .view-tabs { width: 100%; }
+  .view-tabs button { flex: 1; }
+}
+@media (max-width: 760px) {
+  .view-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: 22px !important;
+  }
+  .view-tabs button { font-size: calc(13px * var(--ui-font-scale, 1)); }
 }
 /* Shared connected single-choice component, following Material 3 Expressive. */
 .md-connected-choice {
@@ -1019,6 +1082,10 @@ body[data-page='welcome'] .welcome-screen ::selection {
 @media (max-width: 760px) {
   .page-nav {
     padding-inline: 12px;
+    padding-block: 5px;
+  }
+  .page-nav a {
+    padding-block: 5px;
   }
   .page-nav :is(a, .preferences-launch) {
     padding-inline: 10px;

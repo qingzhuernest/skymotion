@@ -438,7 +438,7 @@ python3 scripts/prerender-pages.py --check
 
 1. 克隆仓库，先看docs/architecture/内的PRODUCT.md与DESIGN.md，再以site/为根目录启动静态服务器；无需安装应用框架。
 2. 浏览器测试依赖固定在tests/browser/package-lock.json，使用该目录安装，不把测试工具发布到网站。
-3. 根据改动先运行相关测试；发布默认只运行发布检查集。完整回归通过手动full_regression选择；同一次提交验证一次，再部署正式站和镜像。
+3. 发布按改动路径选择相关测试；纯说明文件跳过浏览器安装，未知范围使用短检查集。完整回归通过手动full_regression选择；同一次提交验证一次，再部署正式站和镜像。
 4. 界面改动核对桌面、平板和手机，模型改动同时检查时间标准、边界、坐标手性和无事件情形。
 5. 提交前重新生成双语内容，核对git diff，不把截图、临时服务器或调试凭据加入发布。
 
@@ -457,7 +457,7 @@ SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" \
 
 ## 正式站、镜像与打包
 
-main推送只执行一次共享validate.yml，通过后分别部署Cloudflare Pages与GitHub Pages。默认使用发布检查集，手动full_regression才执行完整回归。主站与镜像分别核对部署结论。
+main推送只执行一次共享validate.yml，通过后分别部署Cloudflare Pages与GitHub Pages。按改动路径选择检查，手动full_regression才执行完整回归。主站与镜像分别核对部署结论。
 
 ```bash
 python3 .github/scripts/prepare_site.py --output /tmp/skymotion-site
@@ -498,7 +498,7 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [custom-layout.js](https://github.com/qingzhuernest/skymotion/blob/main/site/custom-layout.js) | 多图排列、拖放、比例、收藏和完整实验协调 | sanitize, load, loadProfiles, button, travel, section, captureExperiment, applyProfile, persistProfiles, mutateProfiles, undoProfiles, leaveFocusedView, focusView, placeCards, markActive, activate, save, announce, change, move, labelButtons, labels, renderOrder, focusProfile, finishEditing, renderProfiles, apply, closeOptions, toggleOptions, start, cancel, targetAt, ratioAt |
 | [customization-mode.js](https://github.com/qingzhuernest/skymotion/blob/main/site/customization-mode.js) | 顶部自定义开关的共用生命周期 | refresh, change |
 | [customization-session.js](https://github.com/qingzhuernest/skymotion/blob/main/site/customization-session.js) | 一次性编辑意图与跨入口会话延续 | 模块内部方法，参见源码 |
-| [diagram-tools.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-tools.js) | 对象存储、属性、放置、选择、导入与验证 | updateFold, updateMode, setEditing, selectedOwner, selectedKey, entries, switchView, revealField, revealWithin, placementUI, contextualHelp, arm, placeAt, menuOpen, closeObjectMenu, reorder, updateFiles, readImport, cityLabel, makeObject, startExperiment, repaint, draftStatus, record, restoreBasis, updateLocation, actionState, validInputs, fieldError, clearFieldError, referenceName, updateSmall, mutate, travel, commitActive, save, create, showInspector, rememberContext, hide, open, parameterRail, persistentRailMode, visibleModels, chooseRail, ensureRailNavigation, syncRailNavigation, syncRailShell, unmountPanel, placePanel, renderToolLibrary, renderObjectList, referenceNameAtLocation, attachReferenceControl, commitReferenceField, renderInspector, update, selectedRow, focusSelectedRow, selectReference, textLayout, helper, drawObject, anchor, movementOrigin, hitAnchor, pointAt, beginDrag, moveDrag, finishDrag, cancelDrag, wireCanvas, paint, customizationOn, syncLaunchers, checkCurrentVisibility, syncVisibility, comparisonModel, comparisonList, comparisonChange, comparisonValid, syncInputs, finishNudge, nudge |
+| [diagram-tools.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-tools.js) | 对象编辑、属性、放置、选择与导入；协调共享状态和绘图 | updateFold, updateMode, setEditing, selectedOwner, selectedKey, entries, switchView, revealField, revealWithin, placementUI, contextualHelp, arm, placeAt, menuOpen, closeObjectMenu, reorder, updateFiles, readImport, cityLabel, makeObject, startExperiment, repaint, draftStatus, record, restoreBasis, updateLocation, actionState, validInputs, fieldError, clearFieldError, referenceName, updateSmall, mutate, travel, commitActive, save, create, showInspector, rememberContext, hide, open, parameterRail, persistentRailMode, visibleModels, chooseRail, ensureRailNavigation, syncRailNavigation, syncRailShell, unmountPanel, placePanel, renderToolLibrary, renderObjectList, referenceNameAtLocation, attachReferenceControl, commitReferenceField, renderInspector, update, selectedRow, focusSelectedRow, selectReference, movementOrigin, pointAt, beginDrag, moveDrag, finishDrag, cancelDrag, wireCanvas, paint, customizationOn, syncLaunchers, checkCurrentVisibility, syncVisibility, comparisonModel, comparisonList, comparisonChange, comparisonValid, syncInputs, finishNudge, nudge |
 | [diagram-tool-definitions.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-tool-definitions.js) | 对象类型、字段与纯数据校验，不绑定DOM | forModel, normalize |
 | [diagram-sampling.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-sampling.js) | 有界缓存、几何过零和年度参考采样 | crossings |
 | [observer-comparison.js](https://github.com/qingzhuernest/skymotion/blob/main/site/observer-comparison.js) | 同源城市/时刻的跨图投影和选中突出 | memo, at, basis, sample, color, name, enabled, sites, times, points, events, stroke, dot, label, geometryRay, paint |
@@ -552,3 +552,4 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [material-controls.js](https://github.com/qingzhuernest/skymotion/blob/main/site/material-controls.js) | Material 3 Expressive共享控件呈现与显式原生值同步；实验状态仍由原模块管理 | updateRange, updateRanges, updateChoices, queueChoice, syncChoices, setValue, enhanceChoices, positionPanel, closeChoice, caption, syncVisibility, sync, enhanceAll, install |
 | [preferences.js](https://github.com/qingzhuernest/skymotion/blob/main/site/preferences.js) | 全站偏好、主题、设置保存与恢复；与科学实验状态独立 | migrate, validate, load, language, dark, apply, save, set, reset, parseImport, notify, showConfirmation, field, refresh, showCategory, build, mount |
 | [diagram-reference-store.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-store.js) | 参考对象状态、草稿、存档、复制与历史；不依赖界面 | create, persist, stateFor, clean, createReference, duplicateReference, saveReferences, travelReferences, record, checkpoint |
+| [diagram-reference-renderer.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-renderer.js) | 参考对象绘图、文字定位和命中几何；只读实验与对象状态 | create, textLayout, helper, drawObject, anchor, hitAnchor |

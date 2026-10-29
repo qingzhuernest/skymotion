@@ -140,9 +140,10 @@ def generated_sources(root=ROOT):
                 source = source.replace('href="controls.css?', 'href="/controls.css?')
             extra = '' if 'controls.css?' in source else '<link rel="stylesheet" href="' + prefix + 'controls.css?v=' + catalog['resourceVersion'] + '">\n'
             source = source.replace('</head>', extra + '<link rel="stylesheet" href="' + prefix + 'preferences.css?v=' + catalog['resourceVersion'] + '">\n</head>', 1)
-            if 'diagram-tools.js?' in source and 'diagram-reference-store.js?' not in source:
-                source = re.sub(r'(<script src="([^"\n]*)diagram-tools\.js[^>]+></script>)',
-                    lambda match: '<script src="' + match[2] + 'diagram-reference-store.js?v=' + catalog['resourceVersion'] + '" defer></script>\n' + match[1], source)
+            for dependency in ('diagram-reference-store', 'diagram-reference-renderer'):
+                if 'diagram-tools.js?' in source and dependency + '.js?' not in source:
+                    source = re.sub(r'(<script src="([^"\n]*)diagram-tools\.js[^>]+></script>)',
+                        lambda match: '<script src="' + match[2] + dependency + '.js?v=' + catalog['resourceVersion'] + '" defer></script>\n' + match[1], source)
             if page['path'] in ('lab.html','diagrams.html','analemma.html','sundial.html') and 'sky-perspectives.js?' not in source:
                 source = re.sub(r'(<script src="custom-layout\.js[^>]+></script>)', '<script src="sky-perspectives.js?v=' + catalog['resourceVersion'] + '" defer></script>\n' + r'\1', source)
             result[page['path']] = re.sub(r'<nav\b[^>]*class="page-nav"[\s\S]*?</nav>', lambda _: navigation_html(catalog, page['path']), source)

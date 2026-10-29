@@ -5774,8 +5774,8 @@
                   "Browser-test dependencies are pinned in tests/browser/package-lock.json; install there and keep tools out of production."
                 ],
                 [
-                  "根据改动先运行相关测试；发布默认只运行发布检查集。完整回归通过手动full_regression选择；同一次提交验证一次，再部署正式站和镜像。",
-                  "Run checks for the changed paths first. Publication defaults to the release suite; full regression is a manual full_regression option. Validate each release once, then deploy production and its mirror."
+                  "发布按改动路径选择相关测试；纯说明文件跳过浏览器安装，未知范围使用短检查集。完整回归通过手动full_regression选择；同一次提交验证一次，再部署正式站和镜像。",
+                  "Publication selects checks by changed paths. Documentation-only changes skip browser installation; unknown changes use the short release suite; full regression is a manual full_regression option. Validate each release once, then deploy production and its mirror."
                 ],
                 [
                   "界面改动核对桌面、平板和手机，模型改动同时检查时间标准、边界、坐标手性和无事件情形。",
@@ -5823,8 +5823,8 @@
             {
               "kind": "paragraph",
               "text": [
-                "main推送只执行一次共享validate.yml，通过后分别部署Cloudflare Pages与GitHub Pages。默认使用发布检查集，手动full_regression才执行完整回归。主站与镜像分别核对部署结论。",
-                "A push to main validates once through shared validate.yml, then independently deploys Cloudflare Pages and GitHub Pages. The release suite is the default; only manual full_regression requests the complete suite. Verify both deployment outcomes."
+                "main推送只执行一次共享validate.yml，通过后分别部署Cloudflare Pages与GitHub Pages。按改动路径选择检查，手动full_regression才执行完整回归。主站与镜像分别核对部署结论。",
+                "A push to main validates once through shared validate.yml, then independently deploys Cloudflare Pages and GitHub Pages. Checks are selected by changed paths; only manual full_regression requests the complete suite. Verify both deployment outcomes."
               ]
             },
             {
@@ -6562,8 +6562,8 @@
       "One-use edit intent and session continuity across entries"
     ],
     "diagram-tools.js": [
-      "对象存储、属性、放置、选择、导入与验证",
-      "Reference stores, properties, placement, selection, imports and validation"
+      "对象编辑、属性、放置、选择与导入；协调共享状态和绘图",
+      "Reference editing, properties, placement, selection and imports; coordinates shared state and rendering"
     ],
     "diagram-tool-definitions.js": [
       "对象类型、字段与纯数据校验，不绑定DOM",
@@ -6776,6 +6776,10 @@
     "diagram-reference-store.js": [
       "参考对象状态、草稿、存档、复制与历史；不依赖界面",
       "Reference state, drafts, persistence, duplication and history; independent of the UI"
+    ],
+    "diagram-reference-renderer.js": [
+      "参考对象绘图、文字定位和命中几何；只读实验与对象状态",
+      "Reference drawing, text placement and hit geometry; reads observation and reference state"
     ]
   }
 }
