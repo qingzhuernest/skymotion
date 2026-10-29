@@ -162,7 +162,7 @@ body[data-entry-view] .dt-rail-navigation {
   gap: 4px;
 }
 body[data-entry-view] .dt-rail-navigation button {
-  padding-inline: 5px;
+  padding-inline: 2px;
   font-size: calc(12px * var(--ui-font-scale, 1));
 }
 #eventCompass {

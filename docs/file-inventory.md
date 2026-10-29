@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 303 个文件。目录职责见 [repository.md](repository.md)。
+共 304 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -240,7 +240,7 @@
 - [site/workbench-menu.js](../site/workbench-menu.js)
 - [site/workspace.js](../site/workspace.js)
 
-## tests (82)
+## tests (83)
 
 - [tests/analemma-references.cjs](../tests/analemma-references.cjs)
 - [tests/bilingual-pages.cjs](../tests/bilingual-pages.cjs)
@@ -288,6 +288,7 @@
 - [tests/material-test-helpers.cjs](../tests/material-test-helpers.cjs)
 - [tests/menu-simplicity.cjs](../tests/menu-simplicity.cjs)
 - [tests/multiview-interaction.cjs](../tests/multiview-interaction.cjs)
+- [tests/narrow-workspace-controls.cjs](../tests/narrow-workspace-controls.cjs)
 - [tests/parameter-controls.cjs](../tests/parameter-controls.cjs)
 - [tests/preferences-test-helpers.cjs](../tests/preferences-test-helpers.cjs)
 - [tests/release-selection.cjs](../tests/release-selection.cjs)

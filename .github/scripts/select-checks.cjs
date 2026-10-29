@@ -15,7 +15,7 @@ const groups = [
   [/^site\/diagram-(tools|tool-definitions|reference-renderer)\.(js|css)$/,
     ['diagram-tools.cjs', 'diagram-editing.cjs', 'reported-layout.cjs']],
   [/^site\/(custom-layout|sky-perspectives|customization-mode)\.(js|css)$/,
-    ['custom-layout.cjs', 'experiment-save.cjs', 'reported-layout.cjs']],
+    ['custom-layout.cjs', 'experiment-save.cjs', 'reported-layout.cjs', 'narrow-workspace-controls.cjs']],
   [/^site\/(style|pages|design-system|controls|interface-motion)\.css$/,
     ['material-components.cjs', 'shared-choice-fields.cjs', 'reported-layout.cjs']],
   [/^site\/(preferences|material-controls|ui-palette|theme-colors)\.(js|css)$/,

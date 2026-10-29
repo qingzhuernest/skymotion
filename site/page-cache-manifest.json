@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261029-menu131",
+  "resourceVersion": "20261029-pane132",
   "readingFontVersion": "20261016-font41",
   "pages": [
     "404.en.html",
@@ -200,5 +200,5 @@
     "sundial.html": 72149
   },
   "totalBytes": 1399788,
-  "assetBytes": 8058040
+  "assetBytes": 8059220
 }

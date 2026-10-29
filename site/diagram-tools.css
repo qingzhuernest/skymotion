@@ -92,12 +92,11 @@ body .dt-head h2 {
   min-width: 0;
   margin: 0;
   color: var(--dt-ink);
-  font-size: calc(16px * var(--ui-font-scale, 1));
+  font-size: calc(14px * var(--ui-font-scale, 1));
   font-weight: 500;
   line-height: 1.5;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 body .dt-head button {
   flex: none;
@@ -159,15 +158,15 @@ body .dt-panel .dt-history button {
 .dt-history .dt-redo::before {
   transform: scaleX(-1);
 }
-body .dt-head .dt-help-toggle::after {
+body .dt-history .dt-help-toggle::before {
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='black' stroke-width='1.5'/%3E%3Cpath d='M8 7a2 2 0 0 1 4 0c0 2-2 2-2 4m0 2v.1' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
 }
-body .dt-head .dt-help-toggle[aria-expanded='true'] {
+body .dt-history .dt-help-toggle[aria-expanded='true'] {
   background: var(--design-selected);
 }
 .dt-tabs {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   gap: 8px;
   align-items: center;
   min-height: var(--md-sys-size-target, 40px);
@@ -175,12 +174,18 @@ body .dt-head .dt-help-toggle[aria-expanded='true'] {
   border: 0;
 }
 body .dt-panel .dt-tabs > [data-dt-view] {
-  min-width: 0;
-  flex: 1;
+  min-width: var(--md-sys-size-target);
   padding: 6px;
   font-size: calc(12px * var(--ui-font-scale, 1));
   border-radius: var(--design-radius-control);
+  white-space: nowrap;
 }
+.dt-tabs > .dt-history {
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  margin: 0;
+}
+.dt-history .dt-help-toggle { margin-right: auto; }
 body .dt-tabs [data-dt-view='library'] {
   background: var(--design-surface);
   color: var(--design-ink);
@@ -189,11 +194,7 @@ body .dt-tabs [aria-expanded='true'] {
   background: var(--design-inset);
   border-color: var(--design-muted);
 }
-body .dt-tabs [data-dt-view='files'] {
-  flex: 0 0 auto;
-}
 body .dt-panel .dt-tabs > [data-dt-view='objects'] {
-  flex: 0 0 var(--md-sys-size-target);
   width: var(--md-sys-size-target);
   font-size: 0;
   padding: 8px;

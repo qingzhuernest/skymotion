@@ -385,7 +385,6 @@
   undo.classList.add('dt-undo');
   redo.classList.add('dt-redo');
   historyActions.append(undo, redo);
-  head.insertBefore(help, fold);
   const duplicate = action('复制', 'Duplicate', () => {
     if (!validInputs()) return;
     mutate((s) => {

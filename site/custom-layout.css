@@ -142,6 +142,8 @@
   flex-direction: column;
   grid-column: auto;
   grid-row: auto;
+  container-type: inline-size;
+  container-name: workspace-card;
 }
 .workspace-active .ui-diagram-card[hidden] {
   display: none !important;
@@ -263,6 +265,49 @@
   border-color: transparent;
   min-height: var(--md-sys-size-target);
   flex-shrink: 0;
+}
+.workspace-pane-tools > .md-choice-field {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+}
+.workspace-pane-tools .md-choice-disclosure > summary {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  padding-inline: 12px 30px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.workspace-pane-tools .md-choice-disclosure > summary::after {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+@container workspace-card (max-width: 420px) {
+  .workspace-active .ui-diagram-card-head {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 4px 6px;
+  }
+  .workspace-active .workspace-pane-tools {
+    display: contents !important;
+  }
+  .workspace-pane-tools > .workspace-grip {
+    order: 0;
+    margin: 0;
+  }
+  .workspace-pane-tools > .md-choice-field {
+    order: 0;
+    flex: 1 1 calc(100% - var(--md-sys-size-target) - 6px);
+  }
+  .workspace-pane-tools > button:not(.workspace-grip),
+  .workspace-active .ui-diagram-card-head > button {
+    order: 1;
+    margin: 0;
+  }
 }
 .workspace-pane-tools select {
   font-size: calc(12px * var(--ui-font-scale, 1));
