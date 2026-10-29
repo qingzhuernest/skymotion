@@ -68,7 +68,7 @@ class DocumentRenderer:
         for path, description, names in self.sources:
             label = self.text(description, language)
             functions = ", ".join(names) or self.text(["模块内部方法，参见源码", "Module methods; see source"], language)
-            url = "https://github.com/qingzhuernest/skymotion/blob/main/" + path
+            url = "https://github.com/qingzhuernest/skymotion/blob/main/site/" + path
             if markdown:
                 rows.append(f"| [{path}]({url}) | {label} | {functions} |")
             else:

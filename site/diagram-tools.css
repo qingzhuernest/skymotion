@@ -379,6 +379,13 @@ body .dt-panel .dt-row > :is(.dt-more, .dt-row-more):hover {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 18px 12px;
 }
+.dt-inspector-section {
+  grid-column: 1 / -1;
+  margin: 8px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--dt-line);
+  font-size: inherit;
+}
 .dt-fields label,
 .dt-city-picker {
   display: grid;

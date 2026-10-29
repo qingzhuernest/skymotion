@@ -232,6 +232,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
     await r.addInitScript(() => {
       if (!localStorage.getItem('migration-test')) {
         localStorage.setItem('migration-test', '1');
+        localStorage.setItem('skymotion-workspace-v3-wide', '{broken');
         localStorage.setItem(
           'skymotion-workspace-v2-wide',
           JSON.stringify({
@@ -266,7 +267,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:8905/').repla
       if (await r.evaluate(() => matchMedia('(max-width:760px)').matches))
         await require('./diagram-test-helpers.cjs').openDrawer(r);
     };
-    assert.equal(await r.locator('.ui-diagram-card:visible').count(), 2, 'Old v2 layouts migrate');
+    assert.equal(await r.locator('.ui-diagram-card:visible').count(), 2, 'A damaged v3 record still permits valid v2 migration');
     assert.equal(
       await r.locator('.ui-diagram-card:visible').first().getAttribute('data-diagram-card'),
       'chartPanel',

@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 298 个文件。目录职责见 [repository.md](repository.md)。
+共 300 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -52,7 +52,7 @@
 - [scripts/theme-colors/package.json](../scripts/theme-colors/package.json)
 - [scripts/theme-colors/source.js](../scripts/theme-colors/source.js)
 
-## site (182)
+## site (183)
 
 - [site/.nojekyll](../site/.nojekyll)
 - [site/404.en.html](../site/404.en.html)
@@ -81,6 +81,7 @@
 - [site/development-guide.en.md](../site/development-guide.en.md)
 - [site/development-guide.html](../site/development-guide.html)
 - [site/development-guide.md](../site/development-guide.md)
+- [site/diagram-reference-store.js](../site/diagram-reference-store.js)
 - [site/diagram-sampling.js](../site/diagram-sampling.js)
 - [site/diagram-tool-definitions.js](../site/diagram-tool-definitions.js)
 - [site/diagram-tools.css](../site/diagram-tools.css)
@@ -237,7 +238,7 @@
 - [site/workbench-menu.js](../site/workbench-menu.js)
 - [site/workspace.js](../site/workspace.js)
 
-## tests (80)
+## tests (81)
 
 - [tests/analemma-references.cjs](../tests/analemma-references.cjs)
 - [tests/bilingual-pages.cjs](../tests/bilingual-pages.cjs)
@@ -262,6 +263,7 @@
 - [tests/diagram-modes.cjs](../tests/diagram-modes.cjs)
 - [tests/diagram-observer-link.cjs](../tests/diagram-observer-link.cjs)
 - [tests/diagram-overlay-gestures.cjs](../tests/diagram-overlay-gestures.cjs)
+- [tests/diagram-reference-store.cjs](../tests/diagram-reference-store.cjs)
 - [tests/diagram-release-candidate.cjs](../tests/diagram-release-candidate.cjs)
 - [tests/diagram-test-helpers.cjs](../tests/diagram-test-helpers.cjs)
 - [tests/diagram-tools.cjs](../tests/diagram-tools.cjs)

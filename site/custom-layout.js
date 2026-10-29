@@ -185,15 +185,13 @@
     };
   }
   function load() {
-    try {
-      return (
-        sanitize(JSON.parse(localStorage.getItem(key()))) ||
-        sanitize(JSON.parse(localStorage.getItem(key(2)))) ||
-        fresh()
-      );
-    } catch {
-      return fresh();
+    for (const version of [3, 2]) {
+      try {
+        const saved = sanitize(JSON.parse(localStorage.getItem(key(version))));
+        if (saved) return saved;
+      } catch {}
     }
+    return fresh();
   }
   const profileKey = () =>
     'skymotion-saved-layouts-v1' + (workspaceBody === 'moon' ? '-moon' : '');
@@ -201,27 +199,21 @@
     try {
       const saved = JSON.parse(localStorage.getItem(profileKey()));
       if (saved?.version !== 1 || !Array.isArray(saved.items)) return [];
-      const names = new Set();
-      return saved.items
-        .filter((p) => {
-          if (
-            !p ||
-            typeof p.name !== 'string' ||
-            !p.name.trim() ||
-            p.name.length > 40 ||
-            names.has(p.name) ||
-            !sanitize(p.layout)
-          )
-            return false;
-          names.add(p.name);
-          return true;
-        })
-        .slice(0, 5)
-        .map((p) => ({
-          name: p.name,
-          layout: sanitize(p.layout),
-          ...(p.experiment ? { experiment: copy(p.experiment) } : {}),
-        }));
+      const names = new Set(), profiles = [];
+      for (const profile of saved.items) {
+        if (!profile || typeof profile.name !== 'string' || !profile.name.trim() ||
+            profile.name.length > 40 || names.has(profile.name)) continue;
+        const layout = sanitize(profile.layout);
+        if (!layout) continue;
+        names.add(profile.name);
+        profiles.push({
+          name: profile.name,
+          layout,
+          ...(profile.experiment ? { experiment: copy(profile.experiment) } : {}),
+        });
+        if (profiles.length === 5) break;
+      }
+      return profiles;
     } catch {
       return [];
     }

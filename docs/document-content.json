@@ -6772,6 +6772,10 @@
     "preferences.js": [
       "全站偏好、主题、设置保存与恢复；与科学实验状态独立",
       "Site-wide preferences, themes, settings persistence and recovery, independent of experiment state"
+    ],
+    "diagram-reference-store.js": [
+      "参考对象状态、草稿、存档、复制与历史；不依赖界面",
+      "Reference state, drafts, persistence, duplication and history; independent of the UI"
     ]
   }
 }

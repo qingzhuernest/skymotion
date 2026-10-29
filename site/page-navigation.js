@@ -812,6 +812,7 @@ function renderUIWorkspace() {
   let drawerAnimation = null,
     drawerClosing = false,
     drawerReturnFocus = null,
+    drawerContentFocus = null,
     drawerGeneration = 0,
     previousDrawerMobile = drawerMedia.matches;
   const lowMotion = matchMedia('(prefers-reduced-motion:reduce)');
@@ -930,6 +931,8 @@ function renderUIWorkspace() {
         rail.contains(document.activeElement) ||
         drawer.contains(document.activeElement) ||
         document.activeElement === parameterButton;
+    if (changed && rail.contains(document.activeElement))
+      drawerContentFocus = document.activeElement;
     previousDrawerMobile = mobile;
     const atDestination = drawerMedia.matches
       ? rail.parentElement === drawer
@@ -943,7 +946,9 @@ function renderUIWorkspace() {
       requestAnimationFrame(() => {
         const target = mobile
           ? parameterButton
-          : document.querySelector('.motion-menu-edge:not([hidden])') ||
+          : (drawerContentFocus?.isConnected && !drawerContentFocus.closest('[inert]') &&
+              drawerContentFocus.getClientRects().length ? drawerContentFocus : null) ||
+            document.querySelector('.motion-menu-edge:not([hidden])') ||
             document.querySelector('.motion-menu-grip:not([hidden])');
         if (
           target?.isConnected &&

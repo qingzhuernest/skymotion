@@ -1,20 +1,13 @@
 /** Scientific reference objects for the existing plots. Does not mutate their experiment. */
 (() => {
   const models = new Map(),
-    states = new Map(),
     portals = new Map();
   const R = Math.PI / 180,
-    copy = (x) => JSON.parse(JSON.stringify(x)),
-    stableJSON = (value) =>
-      JSON.stringify(value, (key, item) => {
-        if (!item || Array.isArray(item) || typeof item !== 'object') return item;
-        return Object.fromEntries(
-          Object.keys(item)
-            .sort()
-            .map((name) => [name, item[name]]),
-        );
-      });
+    copy = (x) => JSON.parse(JSON.stringify(x));
   const validDate = (value) => window.SkyMotionSession.validDate(value);
+  const references = window.SkyReferenceStore.create({ schema: window.SkyDiagramDefinitions, validDate });
+  const { stateFor, clean, persist, nextId, duplicate: duplicateReference,
+    save: saveReferences, travel: travelReferences } = references;
   const en = () => document.documentElement.lang === 'en';
   const tr = (x) =>
     typeof x === 'string' ? x.split('|')[en() ? 1 : 0] || x.split('|')[0] : String(x);
@@ -24,11 +17,10 @@
     if (parent) parent.append(e);
     return e;
   };
-  const { definitions, common, titles } = window.SkyDiagramDefinitions;
+  const { definitions, common, titles, forModel: defs } = window.SkyDiagramDefinitions;
   let current = null,
     selected = null,
     armed = null,
-    serial = 0,
     drag = null,
     editing = true,
     nudging = null,
@@ -244,6 +236,7 @@
     result = E('p', 'dt-result', inspector),
     actions = E('div', 'dt-actions dt-footer', panel),
     status = E('p', 'dt-status', panel);
+  form.addEventListener('focusin', (event) => revealField(event.target));
   const mobileBack = E('button', 'dt-back-list', objects);
   mobileBack.type = 'button';
   mobileBack.onclick = () => {
@@ -381,8 +374,8 @@
     b.onclick = fn;
     return b;
   };
-  const undo = action('撤销', 'Undo', () => travel('undo', 'redo')),
-    redo = action('重做', 'Redo', () => travel('redo', 'undo'));
+  const undo = action('撤销', 'Undo', () => travel('undo')),
+    redo = action('重做', 'Redo', () => travel('redo'));
   undo.classList.add('dt-undo');
   redo.classList.add('dt-redo');
   historyActions.append(undo, redo);
@@ -392,28 +385,7 @@
     mutate((s) => {
       const o = s.objects.find((x) => x.id === selected);
       if (!o || s.objects.length >= 40) return;
-      const q = copy(o);
-      q.locked = false;
-      q.id = 'd' + Date.now() + ++serial;
-      if(o.name){let n=2;while(s.objects.some(x=>x.name===o.name+' '+n))n++;q.name=o.name+' '+n;}
-      if (o.customLabel) {
-        let n = 2;
-        while (s.objects.some((x) => x.label === o.label + ' ' + n)) n++;
-        q.label = o.label + ' ' + n;
-      } else {
-        q.copyNumber =
-          Math.max(
-            1,
-            ...s.objects
-              .filter((x) => x.type === o.type && !x.customLabel)
-              .map((x) => x.copyNumber || 1),
-          ) + 1;
-        const title = defs(selectedOwner()).find((d) => d.id === o.type).title;
-        q.label = title
-          .split('|')
-          .map((x) => x + ' ' + q.copyNumber)
-          .join('|');
-      }
+      const q = duplicateReference(s, o, selectedOwner());
       if (['note', 'emphasis'].includes(q.type)) {
         let placed = false;
         for (let ring = 1; ring <= 10 && !placed; ring++)
@@ -458,13 +430,6 @@
             placed = true;
             break;
           }
-      }
-      if (o.autoLabel && !o.customLabel) {
-        q.autoLabel = o.autoLabel
-          .split('|')
-          .map((x) => x.replace(/ \d+$/, '') + ' ' + q.copyNumber)
-          .join('|');
-        q.label = q.autoLabel;
       }
       s.objects.push(q);
       selected = q.id;
@@ -658,7 +623,7 @@
         throw Error('schema');
       const accepted = clean(data.objects, model);
       if (!accepted.length && data.objects.length) throw Error('empty');
-      pendingImport = accepted.map((o) => ({ ...o, id: 'd' + Date.now() + ++serial }));
+      pendingImport = accepted.map((o) => ({ ...o, id: nextId() }));
       importReview.replaceChildren();
       const message = E('p', 'dt-caption', importReview);
       message.textContent =
@@ -723,54 +688,10 @@
     return zh + '|' + (dict[zh] || text);
   }
   function makeObject(def, point) {
-    const o = {
-      id: 'd' + Date.now() + ++serial,
-      type: def.id,
-      label: def.title,
-      visible: true,
-      locked: false,
-      customLabel: false,
-    };
-    for (const f of def.fields) {
-      const v =
-        typeof f.value === 'string' && ['date', 'time', 'lat', 'lon'].includes(f.value)
-          ? current[f.value]
-          : f.value;
-      o[f.name] = v ?? f.value;
-    }
-    const siblings = stateFor(selectedOwner()).objects.filter(
-      (v) => v.type === def.id && !v.customLabel,
-    );
-    if (siblings.length) {
-      o.copyNumber = Math.max(...siblings.map((v) => v.copyNumber || 1)) + 1;
-      o.label = def.title
-        .split('|')
-        .map((v) => v + ' ' + o.copyNumber)
-        .join('|');
-    }
-    if (current.type === 'analemma' && def.id === 'track') {
-      o.clock = current.clock ?? 720;
-      o.basis = current.basis || 'clock';
-      o.offset = current.offset ?? 8;
-    }
-    if (def.id === 'camera') o.camera = current.captureCamera?.();
-    if (point) Object.assign(o, point);
-    if (o.autoLabel) {
-      const base = o.autoLabel;
-      let n = 1,
-        candidate = base;
-      while (
-        stateFor(current).objects.some((q) => (q.autoLabel || q.label) === candidate)
-      ) {
-        n++;
-        candidate = base
-          .split('|')
-          .map((x) => x + ' ' + n)
-          .join('|');
-      }
-      o.label = o.autoLabel = candidate;
-    }
-    return o;
+    return references.create(def, current, stateFor(selectedOwner()).objects, {
+      ...(def.id === 'camera' ? { camera: current.captureCamera?.() } : {}),
+      ...point,
+    });
   }
   function startExperiment() {
     commitActive();
@@ -852,56 +773,6 @@
     );
   }
 
-  const draftKey = (m) => 'sky-diagram-draft-v2:' + m.id + ':' + (m.body || 'shared');
-  function persist(m, s) {
-    try {
-      sessionStorage.setItem(
-        draftKey(m),
-        JSON.stringify({ version: 1, objects: s.objects }),
-      );
-    } catch {}
-  }
-  function stateFor(m) {
-    const key = m.id + ':' + (m.body || 'shared');
-    if (!states.has(key)) {
-      let objects = [],
-        stored = false,
-        repairNeeded = false;
-      try {
-        const raw = localStorage.getItem('sky-diagram-tools-v1:' + key);
-        if (raw !== null) {
-          try {
-            const v = JSON.parse(raw);
-            if (v?.version === 1 && Array.isArray(v.objects)) {
-              objects = clean(v.objects, m);
-              stored = true;
-              repairNeeded = stableJSON(objects) !== stableJSON(v.objects);
-            } else repairNeeded = true;
-          } catch {
-            repairNeeded = true;
-          }
-        }
-      } catch {}
-      const saved = JSON.stringify(objects);
-      try {
-        const v = JSON.parse(sessionStorage.getItem(draftKey(m)));
-        if (v?.version === 1 && Array.isArray(v.objects)) objects = clean(v.objects, m);
-      } catch {}
-      states.set(key, { objects, undo: [], redo: [], stored, saved, repairNeeded });
-    }
-    const entry = states.get(key);
-    entry.model = { id: m.id, type: m.type, body: m.body || 'shared' };
-    return entry;
-  }
-  function defs(model) {
-    return window.SkyDiagramDefinitions.forModel(model);
-  }
-  function clean(objects, model) {
-    return window.SkyDiagramDefinitions.normalize(objects, model, {
-      validDate,
-      nextId: () => 'd' + Date.now() + ++serial,
-    });
-  }
   function repaint() {
     if (!current) return;
     if (current.redraw) current.redraw();
@@ -926,11 +797,7 @@
     );
   }
   function record(s, before, beforeSelected = selected, model = selectedOwner()) {
-    if (JSON.stringify(before) === JSON.stringify(s.objects)) return;
-    s.undo.push({ objects: before, selected: beforeSelected });
-    if (s.undo.length > 30) s.undo.shift();
-    s.redo = [];
-    persist(model, s);
+    if (!references.record(s, before, beforeSelected, model)) return;
     draftStatus();
     document.dispatchEvent(new Event('skymotion:references'));
   }
@@ -1121,19 +988,13 @@
     keepFields ? updateSmall() : update();
     repaint();
   }
-  function travel(from, to) {
+  function travel(from) {
     finishNudge();
     cancelDrag();
     if (!current) return;
-    const s = stateFor(selectedOwner());
-    if (!s[from].length) return;
-    s[to].push({ objects: copy(s.objects), selected });
-    const snapshot = s[from].pop();
-    s.objects = snapshot.objects;
-    persist(selectedOwner(), s);
-    selected = s.objects.some((o) => o.id === snapshot.selected)
-      ? snapshot.selected
-      : null;
+    const owner = selectedOwner();
+    if (!travelReferences(owner, from, selected)) return;
+    selected = stateFor(owner).lastSelected;
     draftStatus();
     update();
     repaint();
@@ -1154,15 +1015,7 @@
     if (!current || !validInputs()) return;
     cancelDrag();
     try {
-      const owner = selectedOwner(),
-        s = stateFor(owner);
-      localStorage.setItem(
-        'sky-diagram-tools-v1:' + owner.id + ':' + (owner.body || 'shared'),
-        JSON.stringify({ version: 1, objects: s.objects }),
-      );
-      s.saved = JSON.stringify(s.objects);
-      s.stored = true;
-      s.repairNeeded = false;
+      saveReferences(selectedOwner());
       status.textContent = tr('已保存到此设备|Saved to this device');
     } catch {
       status.textContent = tr(
@@ -1525,8 +1378,12 @@
     if (focused && document.activeElement !== focused)
       focused.focus({ preventScroll: true });
   }
-  // Tool creation, object navigation and properties render independently.
+  // Object edits reuse the library; only a change of available tools or language rebuilds it.
+  let libraryContext = '';
   function renderToolLibrary() {
+    const key = [current.id, current.body, current.type, current.view, en(), !!window.SkySceneBuilder].join(':');
+    if (key === libraryContext) { goal.onchange(); return; }
+    libraryContext = key;
     const available = defs(current),
       previous = goal.value;
     goal.replaceChildren();
@@ -1787,7 +1644,7 @@
       max: field.max,
       step: field.step,
       save,
-      undo: (redo) => travel(redo ? 'redo' : 'undo', redo ? 'undo' : 'redo'),
+      undo: (redo) => travel(redo ? 'redo' : 'undo'),
       read: () => object[field.name],
       format: (value) => String(displayValue(field.name, value)),
       begin() {
@@ -1935,9 +1792,19 @@
     }
     if (o) {
       const def = defs(selectedOwner()).find((d) => d.id === o.type);
-      const nameLabel=E('label','dt-name-edit',form);nameLabel.append(document.createTextNode(tr('对象名称（列表）|Object name (list)')));
-      const nameInput=E('input','',nameLabel);nameInput.value=referenceName(o,selectedOwner());nameInput.maxLength=60;nameInput.dataset.field='name';nameInput.dataset.committedValue=nameInput.value;
-      nameInput.onchange=()=>{const value=nameInput.value.trim();mutate(()=>{if(value)o.name=value;else delete o.name;},true);nameInput.value=referenceName(o,selectedOwner());nameInput.dataset.committedValue=nameInput.value;};
+      const nameLabel = E('label', 'dt-name-edit', form);
+      nameLabel.append(document.createTextNode(tr('对象名称（列表）|Object name (list)')));
+      const nameInput = E('input', '', nameLabel);
+      nameInput.value = referenceName(o, selectedOwner());
+      nameInput.maxLength = 60;
+      nameInput.dataset.field = 'name';
+      nameInput.dataset.committedValue = nameInput.value;
+      nameInput.onchange = () => {
+        const value = nameInput.value.trim();
+        mutate(() => { o.name = value; }, true);
+        nameInput.value = referenceName(o, selectedOwner());
+        nameInput.dataset.committedValue = nameInput.value;
+      };
       const label = E('label', 'dt-name-edit', form);
       label.append(document.createTextNode(tr('图上标注文字|Plot annotation text')));
       const input = E('input', '', label);
@@ -1948,7 +1815,7 @@
       input.onchange = () => {
         const value = input.value.trim();
         mutate(() => {
-          if(!o.name)o.name=referenceName(o,selectedOwner());
+          if (!o.name) o.name = referenceName(o, selectedOwner());
           o.label = value || def.title;
           o.customLabel = !!value;
           if (!value) delete o.copyNumber;
@@ -2061,6 +1928,9 @@
           }
         };
       }
+      const identityTitle = E('h4', 'dt-inspector-section', form);
+      identityTitle.textContent = tr('名称与标注|Name and annotation');
+      form.append(identityTitle, nameLabel, label);
       if (o.type === 'camera') {
         const b = E('button', '', form);
         b.type = 'button';
@@ -3169,27 +3039,10 @@
       const ok = comparisonChange('lab-sky', (s, m) => {
         if (s.objects.length >= 40 || !['observer', 'time'].includes(kind)) return false;
         const def = defs(m).find((d) => d.id === kind),
-          n = s.objects.filter((o) => o.type === kind).length + 1,
-          o = {
-            id: 'd' + Date.now() + ++serial,
-            type: kind,
-            label: def.title,
-            visible: true,
-            locked: false,
-            customLabel: false,
-            ...(kind === 'observer'
-              ? { lat: state.lat, lon: state.lon }
-              : { time: state.time }),
+          o = references.create(def, m, s.objects, {
             ...values,
-          };
-        if (values.label !== undefined) o.customLabel = values.customLabel !== false;
-        else if (n > 1) {
-          o.copyNumber = n;
-          o.label = def.title
-            .split('|')
-            .map((x) => x + ' ' + n)
-            .join('|');
-        }
+            customLabel: values.label !== undefined && values.customLabel !== false,
+          });
         if (!comparisonValid(o)) return false;
         s.objects.push(o);
         s.lastSelected = o.id;
@@ -3209,7 +3062,10 @@
           ],
           next = { ...o };
         for (const key of allowed) if (key in patch) next[key] = patch[key];
-        if ('label' in patch) next.customLabel = true;
+        if ('label' in patch) {
+          next.name ||= referenceName(o, comparisonModel(source));
+          next.customLabel = true;
+        }
         if (!comparisonValid(next) || typeof next.visible !== 'boolean') return false;
         Object.assign(o, next);
         s.lastSelected = id;
@@ -3226,28 +3082,7 @@
       return comparisonChange(source, (s) => {
         const o = s.objects.find((o) => o.id === id);
         if (!o || s.objects.length >= 40) return false;
-        const q = copy(o);
-        q.id = 'd' + Date.now() + ++serial;
-        q.locked = false;
-        if(o.name){let n=2;while(s.objects.some(x=>x.name===o.name+' '+n))n++;q.name=o.name+' '+n;}
-        if (q.customLabel) {
-          let n = 2;
-          while (s.objects.some((x) => x.label === o.label + ' ' + n)) n++;
-          q.label = o.label + ' ' + n;
-        } else {
-          q.copyNumber =
-            Math.max(
-              1,
-              ...s.objects.filter((x) => x.type === o.type).map((x) => x.copyNumber || 1),
-            ) + 1;
-          const title = definitions[comparisonSources[source]].find(
-            (d) => d.id === o.type,
-          ).title;
-          q.label = title
-            .split('|')
-            .map((x) => x + ' ' + q.copyNumber)
-            .join('|');
-        }
+        const q = duplicateReference(s, o, comparisonModel(source));
         s.objects.push(q);
         s.lastSelected = q.id;
       });
@@ -3256,13 +3091,7 @@
       const m = comparisonModel(source);
       if (!m) return false;
       try {
-        const s = stateFor(m);
-        localStorage.setItem(
-          'sky-diagram-tools-v1:' + source + ':sun',
-          JSON.stringify({ version: 1, objects: s.objects }),
-        );
-        s.saved = JSON.stringify(s.objects);
-        s.stored = true;
+        saveReferences(m);
         draftStatus();
         return true;
       } catch {
@@ -3275,19 +3104,13 @@
       return { undo: !!s.undo.length, redo: !!s.redo.length };
     },
     travel(from) {
-      const to = from === 'undo' ? 'redo' : 'undo';
       commitActive();
       if (!validInputs()) return false;
       finishNudge();
       cancelDrag();
       const m = comparisonModel(comparisonSource),
         s = stateFor(m);
-      if (!s[from].length) return false;
-      s[to].push({ objects: copy(s.objects), selected: s.lastSelected });
-      const snapshot = s[from].pop();
-      s.objects = snapshot.objects;
-      s.lastSelected = snapshot.selected;
-      persist(m, s);
+      if (!travelReferences(m, from, s.lastSelected)) return false;
       draftStatus();
       if (current?.id === m.id) {
         selected = s.lastSelected;
@@ -3301,22 +3124,11 @@
   };
   window.SkyDiagramTools = {
     checkpoint() {
-      const previous = copy([...states]);
-      const selection = { selected, selectedSource, serial };
+      const restore = references.checkpoint();
+      const selection = { selected, selectedSource };
       return () => {
-        const keys = new Set(previous.map(([key]) => key));
-        for (const [key, saved] of states)
-          if (!keys.has(key)) {
-            try {
-              sessionStorage.removeItem(draftKey(saved.model));
-            } catch {}
-          }
-        states.clear();
-        for (const [key, saved] of previous) {
-          states.set(key, saved);
-          persist(saved.model, saved);
-        }
-        ({ selected, selectedSource, serial } = selection);
+        restore();
+        ({ selected, selectedSource } = selection);
         update();
         repaint();
       };
@@ -3332,7 +3144,7 @@
     snapshotExperiment() {
       commitActive();
       if (!validInputs()) return null;
-      return [...states.values()]
+      return [...references.values()]
         .filter((s) => s.model?.body === state.body)
         .map((s) => ({ ...s.model, objects: copy(s.objects) }));
     },
@@ -3364,7 +3176,7 @@
       if (!prepared) return false;
       hide();
       const incoming = new Map(prepared.map((item) => [item.id, item]));
-      for (const s of states.values())
+      for (const s of references.values())
         if (s.model?.body === state.body && !incoming.has(s.model.id))
           incoming.set(s.model.id, { ...s.model, objects: [] });
       for (const item of incoming.values()) {
@@ -3651,7 +3463,7 @@
         e.preventDefault();
         e.stopImmediatePropagation();
         const fromList = list.contains(e.target);
-        travel(e.shiftKey ? 'redo' : 'undo', e.shiftKey ? 'undo' : 'redo');
+        travel(e.shiftKey ? 'redo' : 'undo');
         if (fromList) focusSelectedRow();
         return;
       }

@@ -272,11 +272,11 @@
     // A legacy or hand-edited save may exceed the current limit. Keep its
     // oldest supported objects so one bad record cannot erase the whole plot.
     const out = [];
-    const ids = new Set();
+    const ids = new Set(), available = forModel(m);
     for (const raw of objects) {
       if (out.length === 40) break;
       if (!raw || typeof raw !== 'object') continue;
-      const def = forModel(m).find((d) => d.id === raw.type);
+      const def = available.find((d) => d.id === raw.type);
       if (!def || typeof raw.id !== 'string') continue;
       let id = raw.id.slice(0, 80);
       if (!id || ids.has(id)) {
@@ -292,7 +292,7 @@
         visible: raw.visible !== false,
         locked: raw.locked === true,
       };
-      if(typeof raw.name==='string'&&raw.name.trim())o.name=raw.name.trim().slice(0,60);
+      if(typeof raw.name==='string')o.name=raw.name.trim().slice(0,60);
       else if(raw.customLabel===true&&typeof raw.label==='string')o.name=raw.label.trim().slice(0,60);
       if (!o.customLabel) {
         const n = Number.isInteger(raw.copyNumber)
