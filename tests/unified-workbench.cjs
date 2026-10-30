@@ -31,6 +31,7 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44125/').repl
       assert(await page.locator('#sky').isVisible());
     }
     await page.locator('[data-rail-section=views]').click();
+    const menuButtonsBefore = await page.locator('#workbenchViews button').count();
     await page.locator('[data-diagram=solarCompare]').click();
     await page.waitForFunction(() => skyWorkspacePresentation.active);
     assert.equal(await page.evaluate(() => SkyCustomization.active), false);
@@ -38,6 +39,19 @@ const base = (process.env.SKY_MOTION_TEST_URL || 'http://127.0.0.1:44125/').repl
       (await page.locator('.ui-diagram-card:visible').count()) >= 2,
       'Combined views works before customization',
     );
+    // The existing combined-view entry toggles back to the active plot, preserving its layout.
+    const layoutBefore = await page.evaluate(() => skyWorkspacePresentation.views);
+    await page.locator('.ui-diagram-card:visible').nth(1).locator('h2').click();
+    const activeBefore = await page.evaluate(() => skyWorkspacePresentation.activeView);
+    await page.locator('[data-diagram=solarCompare]').click();
+    await page.waitForFunction(() => !skyWorkspacePresentation.active);
+    assert.equal(await page.evaluate(() => uiWorkspace.selected), activeBefore);
+    assert.equal(await page.locator('.ui-diagram-card:visible').count(), 1);
+    assert.equal(await page.locator('#workbenchViews button').count(), menuButtonsBefore);
+    assert.deepEqual(await page.evaluate(() => skyWorkspacePresentation.views), layoutBefore);
+    await page.locator('[data-diagram=solarCompare]').click();
+    await page.waitForFunction(() => skyWorkspacePresentation.active);
+    assert.deepEqual(await page.evaluate(() => skyWorkspacePresentation.views), layoutBefore);
     // Return to a single view for the following composition gesture.
     await page.goto(base + 'lab.en.html');
     await page.waitForFunction(() => !!window.SkyWorkbenchMenu);

@@ -41,7 +41,7 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('skymotion-workspace-v3-wide')));assert.equal(saved.skyCameras.observer.observerAz,185);
   const cdp=await context.newCDPSession(page);await cdp.send('DOM.enable');await cdp.send('CSS.enable');const{root}=await cdp.send('DOM.getDocument',{depth:-1});const{nodeId}=await cdp.send('DOM.querySelector',{nodeId:root.nodeId,selector:'[data-workbench-view=sceneBuilder]'});const font=await cdp.send('CSS.getPlatformFontsForNode',{nodeId});assert(font.fonts.every(f=>f.isCustomFont));
   await page.screenshot({path:'/tmp/settings117-combination.png'});
-  await page.reload();await page.waitForSelector('html[data-fonts-ready]');await page.locator('.layout-launch').click();await page.locator('[data-rail-section=views]').click();await page.locator('[data-workbench-view=solarCompare]').click();await page.waitForFunction(()=>skyWorkspacePresentation.active);
+  await page.reload();await page.waitForSelector('html[data-fonts-ready]');await page.locator('.layout-launch').click();await page.locator('[data-rail-section=views]').click();await require('./diagram-test-helpers.cjs').selectDiagram(page,'solarCompare');await page.waitForFunction(()=>skyWorkspacePresentation.active);
   assert.equal(await page.evaluate(()=>SkyPerspectives.snapshot().observer.observerAz),185);
   assert.equal(await page.evaluate(()=>SkyPreferences.get().uiScale),1.18);
   for(const width of [960,390,320]){

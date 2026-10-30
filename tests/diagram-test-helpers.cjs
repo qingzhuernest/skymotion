@@ -17,7 +17,9 @@ exports.selectDiagram = async (page, id) => {
       const group = node.closest('details');
       if (group) group.open = true;
     });
-    await entry.click();
+    // Selecting an already-open combination must not activate its return action.
+    if (id !== 'solarCompare' || !(await page.evaluate(() => window.skyWorkspacePresentation?.active)))
+      await entry.click();
     await page.evaluate(
       () =>
         new Promise((resolve) =>

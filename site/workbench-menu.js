@@ -24,10 +24,12 @@
       .map((view) => [view.id, ...(view.labels.sun || view.labels.moon)]),
     catalog.groupIds[group],
   ]);
-  function select(id) {
+  function select(id, { toggleOverview = false } = {}) {
     if (id === 'solarCompare') {
-      window.skyWorkspacePresentation.openOverview();
-      uiWorkspace.tabs.querySelector('[data-route-diagram=solarCompare]').click();
+      const api = window.skyWorkspacePresentation;
+      const target = toggleOverview && api.active ? api.activeView : 'solarCompare';
+      if (target === 'solarCompare') api.openOverview();
+      uiWorkspace.tabs.querySelector(`[data-route-diagram="${target}"]`).click();
       schedule();
       return;
     }
@@ -58,7 +60,7 @@
       button.type = 'button';
       button.dataset.workbenchView = id;
       button.dataset.diagram = id;
-      button.onclick = () => select(id);
+      button.onclick = () => select(id, { toggleOverview: true });
       row.append(button);
       const add = document.createElement('button');
       add.type = 'button';
@@ -147,7 +149,11 @@
       );
       uiViewHidden(entry.row, !available || available.hidden);
       const label = catalog.label(entry.id, state.body);
-      const name = entry.perspective==='orbit'?tr('空间视图','Spatial view'):tr(...(label || [entry.name, entry.translation]));
+      const name = entry.id === 'solarCompare' && api?.active
+        ? tr('返回单图', 'Back to single view')
+        : entry.perspective === 'orbit'
+          ? tr('空间视图', 'Spatial view')
+          : tr(...(label || [entry.name, entry.translation]));
       const layoutId = catalog.layoutId(entry.id, state.body);
       uiViewText(entry.button, name);
       uiViewAttribute(
