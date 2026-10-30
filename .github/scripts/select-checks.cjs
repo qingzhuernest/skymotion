@@ -8,6 +8,7 @@ const fallback = [
   'document-action-links.cjs', 'confirmed-review-fixes.cjs', 'deployment-paths.cjs',
 ];
 const groups = [
+  [/^site\/observer\.js$/, ['observer-heading.cjs']],
   [/^site\/language\.css$/,
     ['mobile-appbar.cjs', 'shared-ui-lifecycle.cjs', 'material-components.cjs']],
   [/^scripts\/material-web\/|^site\/material-web(?:\.|\/)/,
