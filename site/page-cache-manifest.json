@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261030-heading137",
+  "resourceVersion": "20261031-compass138",
   "readingFontVersion": "20261016-font41",
   "pages": [
     "404.en.html",
@@ -201,5 +201,5 @@
     "sundial.html": 72331
   },
   "totalBytes": 1405770,
-  "assetBytes": 8273943
+  "assetBytes": 8274035
 }

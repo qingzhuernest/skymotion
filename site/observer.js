@@ -130,39 +130,44 @@ function drawObserverTrack(c, body, frame, color) {
     color,
   );
 }
-/* The heading ribbon shares the sky projection, avoiding an ambiguous spinning disk. */
+/* Forward lies on the far (upper) half of the ground, beneath the visible sky. */
 function drawObserverGround(c, w, h, frame, bearing = state.observerAz ?? 180) {
-  const depth = h - frame.base;
-  const center = { x: w / 2, y: frame.base + depth * 0.56 };
-  poly(c, [{ x: w * 0.04, y: center.y }, { x: w * 0.96, y: center.y }], "#b5dfcf55", 1);
-  for (let az = 0; az < 360; az += 45) {
-    const a = az * rad;
-    const direction = { x: Math.sin(a), y: 0, z: Math.cos(a) };
-    if (frame.front(direction) < -1e-8) continue;
-    // Identical world directions occupy identical horizontal positions in both bands.
-    const x = frame.project(direction).x;
-    const cardinal = az % 90 === 0;
-    poly(c, [{ x, y: center.y - (cardinal ? 5 : 3) }, { x, y: center.y + 3 }], "#b5dfcf55", 1);
-    if (cardinal && depth >= 76 && w >= 500) {
+  const depth = h - frame.base,
+    center = { x: w / 2, y: frame.base + depth * 0.53 },
+    radius = frame.Rx * 0.7,
+    rise = depth * 0.25;
+  const project = (az) => {
+    const a = az * rad,
+      direction = { x: Math.sin(a), y: 0, z: Math.cos(a) };
+    return {
+      x: center.x + (frame.project(direction).x - center.x) * 0.7,
+      y: center.y - frame.front(direction) * rise,
+    };
+  };
+  for (const scale of [0.5, 1]) {
+    c.beginPath();
+    c.ellipse(center.x, center.y, radius * scale, rise * scale, 0, 0, Math.PI * 2);
+    c.strokeStyle = "#b5dfcf44";
+    c.lineWidth = 1;
+    c.stroke();
+  }
+  for (let az = 0; az < 360; az += 90) {
+    const end = project(az);
+    poly(c, [center, end], "#b5dfcf44", 1);
+    if (depth >= 76 && w >= 500) {
       text(c, (Math.abs(state.lat) > 89.99 ? "参考" : "") + heading(az),
-        x, center.y - 12, az === 0 ? "#86d7f5" : "#d5e9dc", w < 500 ? 10 : 11);
+        end.x, end.y - 7, az === 0 ? "#86d7f5" : "#d5e9dc", 11);
     }
   }
-  // A stationary observer and forward marker make the reference frame explicit.
-  const tip = { x: center.x, y: center.y - 7 };
+  // The viewer stays still; the ground and sky share the same world orientation.
+  const tip = { x: center.x, y: center.y - rise * 0.65 };
+  poly(c, [center, tip], "#e7c783", 1.5);
   poly(c, [{ x: tip.x - 4, y: tip.y + 5 }, tip, { x: tip.x + 4, y: tip.y + 5 }], "#e7c783", 1.5);
   c.beginPath();
   c.arc(center.x, center.y, 3, 0, Math.PI * 2);
   c.fillStyle = "#91d8f4";
   c.fill();
-  text(
-    c,
-    "地面方位参考 · 面向 " + heading(bearing),
-    w / 2,
-    h - 5,
-    "#c6ddd0",
-    10,
-  );
+  text(c, "地面方位参考 · 面向 " + heading(bearing), w / 2, h - 5, "#c6ddd0", 10);
 }
 function drawObserverSky(canvas=$('sky'),display=null) {
   const bearing=display?.observerAz ?? state.observerAz ?? 180;
