@@ -24,7 +24,7 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   assert.match(await page.locator('.assistant-log').innerText(),/UTC/);
   assert(requests.some(url=>url.includes('worker.js')),'Worker starts before the first search');
   await ask('怎么保存？');await page.waitForFunction(id=>[...document.querySelectorAll('.assistant-turn')].at(-1)?.dataset.cardId===id,'site:SAVE-002');
-  for(const [question,id,word] of [['太阳是什么','science:BASIC-001','恒星'],['太阳的颜色','science:BASIC-002','白色'],['太阳系的行星','science:BASIC-004','海王星']]){
+  for(const [question,id,word] of [['太阳是什么','science:BASIC-001','恒星'],['我想了解太阳到底是什么','science:BASIC-001','恒星'],['太阳的颜色','science:BASIC-002','白色'],['太阳系的行星','science:BASIC-004','海王星']]){
    await ask(question);await page.waitForFunction(id=>document.querySelector('.assistant-turn:last-child')?.dataset.cardId===id,id);
    const turn=page.locator('.assistant-turn').last();assert((await turn.innerText()).includes(word));
    await turn.locator('summary').click();
@@ -60,6 +60,9 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   await fallback.goto(base+'lab.en.html');await fallback.locator('.assistant-launch').click();
   await fallback.locator('#assistant-question').fill('unclear unfamiliar technical detail');await fallback.locator('.assistant-submit').click();
   await fallback.getByText('Only related entries are available',{exact:false}).waitFor();
+  await fallback.locator('#assistant-question').fill('What kind of object is the Sun?');await fallback.locator('.assistant-submit').click();
+  await fallback.waitForFunction(id=>document.querySelector('.assistant-turn:last-child')?.dataset.cardId===id,'science:BASIC-001');
+  assert.match(await fallback.locator('.assistant-turn').last().innerText(),/nearest star/);
   await fallback.locator('#assistant-question').fill('Why are there seasons?');await fallback.locator('.assistant-submit').click();
   await fallback.waitForFunction(id=>[...document.querySelectorAll('.assistant-turn')].at(-1)?.dataset.cardId===id,'science:EARTH-004');
   assert.match(await fallback.locator('.assistant-turn').last().innerText(),/tilted/);

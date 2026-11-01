@@ -99,10 +99,12 @@ checks same-origin requests, failure fallback and unchanged scientific state.
 
 ## Science coverage
 
-Release 146 adds eight sourced basics: the Sun, its color and energy, the Solar
+Releases 146–147 add eight sourced basics: the Sun, its color and energy, the Solar
 System, its eight planets, the Moon, planets and stars. Factual questions no longer
 enter the feature-topic shortcut; exact scientific concepts can match a science
 entry even when several related manuals are also relevant. “Solar System planets”
 returns science, while “how to open the Solar System” still returns site guidance.
 External references stay collapsed with the existing sources, without extra
 implementation notes. These eight additions do not constitute an encyclopedia.
+
+Question cores remove polite wrappers and emphasis words. English retrieval uses separate words and English answer text rather than an unbroken normalized sentence; science questions about planet ordering bypass the operation shortcut.

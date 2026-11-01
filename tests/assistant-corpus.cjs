@@ -16,7 +16,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
   rows.push({source:card.id,question,selected:result.card.id,reason:result.reason,reviewStatus:result.card.status});
  }
  const basics=[
-  ['太阳是什么','science:BASIC-001'],['请问太阳是啥','science:BASIC-001'],
+  ['太阳是什么','science:BASIC-001'],['我想了解太阳到底是什么','science:BASIC-001'],['请简单解释什么是恒星','science:BASIC-008'],['介绍一下行星的定义','science:BASIC-007'],['What kind of object is the Sun?','science:BASIC-001'],['请问太阳是啥','science:BASIC-001'],
   ['太阳的颜色','science:BASIC-002'],['太阳到底什么颜色','science:BASIC-002'],
   ['太阳为什么会发光','science:BASIC-003'],['太阳系的行星','science:BASIC-004'],
   ['太阳系有多少颗行星','science:BASIC-004'],['八大行星的顺序','science:BASIC-004'],
@@ -32,6 +32,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
   assert.equal(answer.intent,'science');assert(answer.references?.length,q);
  }
  assert.equal(guard('你好'),'greeting');
+ assert.notEqual(selectAnswer('太阳系行星从里往外怎么排列',search('太阳系行星从里往外怎么排列'),records).card?.intent,'howto');
  for(const q of ['如何打开太阳系','怎么使用三维天空'])assert.notEqual(selectAnswer(q,search(q),records).card?.intent,'science',q);
  const fixtures=[
   ['如何更改杆的高度','site:SUN-010'],['怎么调节界面字号','site:PREF-010'],
