@@ -6,9 +6,12 @@ only in page memory; all retrieval and inference runs on the same origin/device.
 
 ## Implemented
 
-- 625 namespaced units: 355 updated website cards, 144 science cards, 60 public
+- 633 namespaced units: 355 updated website cards, 152 science cards, 60 public
   manual chapters and 66 current source-file descriptors. The update snapshots are
   in `sources/update142/`; the original science snapshot remains in `sources/`.
+  Eight foundational science entries in `science-basics.json` have bilingual
+  explanations and linked NASA, IAU and Stanford references, checked on 2026-11-01.
+  The original 625 units are preserved.
   28 common cards have curated instructions and English answers. The remaining
   original cards keep their draft status; published chapters are sourced directly
   from the current structured bilingual manuals, not blanket-certified as UI-tested.
@@ -93,3 +96,13 @@ The visible name is 搜索 / Search. Automatic preparation replaces the old on-d
 policy described in historical UPDATE142/143 reports. The browser regression now
 requires model downloads and a ready Worker before opening the dialog, and still
 checks same-origin requests, failure fallback and unchanged scientific state.
+
+## Science coverage
+
+Release 146 adds eight sourced basics: the Sun, its color and energy, the Solar
+System, its eight planets, the Moon, planets and stars. Factual questions no longer
+enter the feature-topic shortcut; exact scientific concepts can match a science
+entry even when several related manuals are also relevant. “Solar System planets”
+returns science, while “how to open the Solar System” still returns site guidance.
+External references stay collapsed with the existing sources, without extra
+implementation notes. These eight additions do not constitute an encyclopedia.

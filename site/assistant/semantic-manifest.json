@@ -1,5 +1,5 @@
 {
-  "version": "a5ea32c3ac7662cc",
+  "version": "cc07ba52bd97a072",
   "dimensions": 512,
   "records": [
     "site:SITE-001",
@@ -785,9 +785,17 @@
     "DEV:FILE-063",
     "DEV:FILE-064",
     "DEV:FILE-065",
-    "DEV:FILE-066"
+    "DEV:FILE-066",
+    "science:BASIC-001",
+    "science:BASIC-002",
+    "science:BASIC-003",
+    "science:BASIC-004",
+    "science:BASIC-005",
+    "science:BASIC-006",
+    "science:BASIC-007",
+    "science:BASIC-008"
   ],
-  "knowledgeRecords": 625,
+  "knowledgeRecords": 633,
   "documentChunkChars": 320,
   "model": "Xenova/bge-small-zh-v1.5",
   "revision": "75c43b069aac4d136ba6bc1122f995fedcfd2781",
@@ -795,6 +803,6 @@
   "pooling": "cls",
   "normalize": true,
   "queryPrefix": "",
-  "indexSha256": "787a2b0ed6af3fea69ebe13fdbfb02e31ad791c9ce7c98ff7fdb8100ff63044a",
+  "indexSha256": "c1e0a9e67644b67ef04993e73d88599cd2e592735b292c2c334961e53bfc126d",
   "transformers": "3.8.1"
 }

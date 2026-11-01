@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "resourceVersion": "20261101-preload145",
+  "resourceVersion": "20261101-science146",
   "readingFontVersion": "20261016-font41",
   "pages": [
     "404.en.html",
@@ -181,25 +181,25 @@
     "development-guide.html": 73219,
     "diagrams.en.html": 122595,
     "diagrams.html": 74355,
-    "docs.en.html": 12705,
-    "docs.html": 5792,
+    "docs.en.html": 13109,
+    "docs.html": 5922,
     "geography-review.en.html": 2200,
     "geography-review.html": 1692,
-    "guide.en.html": 92972,
-    "guide.html": 30010,
+    "guide.en.html": 93376,
+    "guide.html": 30140,
     "index.en.html": 9321,
     "index.html": 7398,
     "lab.en.html": 122591,
     "lab.html": 74351,
     "lunar/index.en.html": 15394,
     "lunar/index.html": 9245,
-    "project-guide.en.html": 96177,
-    "project-guide.html": 33225,
+    "project-guide.en.html": 96581,
+    "project-guide.html": 33355,
     "space/index.en.html": 32734,
     "space/index.html": 21127,
     "sundial.en.html": 120741,
     "sundial.html": 72476
   },
-  "totalBytes": 1417358,
-  "assetBytes": 8285043
+  "totalBytes": 1418960,
+  "assetBytes": 8290274
 }

@@ -61,6 +61,12 @@
     references.append(node('summary',tr('参考资料','References')));
     if(card.status==='draft')references.append(node('p',tr('来自知识原文，尚未逐项交互核验。','Source text; not individually interaction-tested.'),'assistant-caution'));
     references.append(node('p',(card.sourceIds||[card.id]).join(' · '),'assistant-source'));
+    for(const reference of card.references||[]){
+      const url=new URL(reference.url);
+      if(url.protocol!=='https:')continue;
+      const link=node('a',reference.title);link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';
+      const paragraph=node('p');paragraph.append(link);references.append(paragraph);
+    }
     const url=target(card);
     if(url){const link=node('a',tr('对应使用手册 →','Relevant guide →'));link.href=url;references.append(link);}
     const copy=node('button',tr('复制答案','Copy answer'),'assistant-copy');copy.type='button';
@@ -147,6 +153,7 @@
       if(blocked&&blocked!=='action'){
         diagnostic.decision='refuse';diagnostic.reason=blocked;
         const messages={
+          greeting:['你好！可以搜索天文、地理知识，也可以描述你想在实验台完成的操作。','Hello! Search astronomy, geography, or describe a task you want to perform in the Lab.'],
           dynamic:['我暂时不能可靠计算这个数值。请在实验台设置地点、日期和时刻，读取对应图解。','I cannot reliably calculate this value. Set the location, date and time in the Lab and read the diagram.'],
           outside:['暂未找到对应内容。可以搜索本站操作及相关的地理、天文知识。','No matching content was found. Search for site controls or related geography and astronomy.'],
           action:['这里只提供操作说明，不会代为操作网页。','Search provides instructions and does not operate the page.']};

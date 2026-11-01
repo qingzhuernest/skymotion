@@ -13,6 +13,7 @@ function tokens(text) {
 }
 export function guard(query) {
   const plain=query.replace(/<[^>]*>/g,'').trim();
+  if(/^(你好|您好|嗨|hello|hi)[！!。.，, ]*$/i.test(plain))return 'greeting';
   if(/应怎样回答|该怎样答|怎样回复|如何回答|怎么答/.test(query))return null;
   if(/公式|原理|计算方法|如何计算|怎么计算/.test(query)&&!/几点|多少度|具体数值/.test(query))return null;
   const guidance=/如何|怎么|怎样|哪里|观察|查看|how.*(observe|view|use)|where/i.test(query);
@@ -43,6 +44,7 @@ export function operation(value){
 export function queryKind(value){
   if(/源码|代码|开发|函数|接口|\.js|\.css|state|api|source|code|architecture/i.test(value))return 'developer';
   if(/为什么|为何|原理|定义|公式|区别|关系|成因|原因|什么是|是什么|如何计算|怎么计算|怎样计算|计算公式|whatis|why|definition|formula|difference/.test(normalize(value))||(/解释|含义|概念/.test(value)&&!/如何|怎样|怎么/.test(value)))return 'science';
+  if(!/如何|怎么|怎样|操作|使用|打开|开启|设置|调节|查看|观察|how|open|enable|show|use|set/i.test(value)&&/颜色|组成|有哪些|多少颗|八大行星|恒星|太阳系.*行星|color|composition|whichplanets/.test(normalize(value)))return 'science';
   if(/教学|课堂|学生|一节课|教学任务|lesson|teaching/i.test(value))return 'teaching';
   return 'howto';
 }
@@ -129,7 +131,8 @@ export function selectAnswer(query,hits,records) {
   const top=hits[0];
   if(top?.exact)return {card:top.card,reason:top.card.status==='draft'?'attributed_exact_source':'strong_reviewed_lexical_match'};
   const text=normalize(query);
-  if(!/是什么|什么是|为什么|原理|定义|公式|区别|关系|成因|原因|如何计算|怎么计算|怎样计算|计算公式|whatis|why|definition|formula|difference/.test(text)){
+  if(top?.coreExact&&top.card.intent==='science'&&queryKind(query)==='science')return {card:top.card,reason:'corpus_science_match'};
+  if(queryKind(query)==='howto'){
     const topics=records.filter(card=>card.status!=='draft').flatMap(card=>(card.taskTerms||[])
       .filter(term=>text.includes(normalize(term)))
       .filter(()=>!operation(query)||operation(card.title)===operation(query))

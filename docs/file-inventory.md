@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 364 个文件。目录职责见 [repository.md](repository.md)。
+共 365 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -24,7 +24,7 @@
 - [.github/workflows/github-pages.yml](../.github/workflows/github-pages.yml)
 - [.github/workflows/validate.yml](../.github/workflows/validate.yml)
 
-## docs (25)
+## docs (26)
 
 - [docs/architecture/DESIGN.md](../docs/architecture/DESIGN.md)
 - [docs/architecture/PRODUCT.md](../docs/architecture/PRODUCT.md)
@@ -37,6 +37,7 @@
 - [docs/assistant/reported-after.json](../docs/assistant/reported-after.json)
 - [docs/assistant/reported-before.json](../docs/assistant/reported-before.json)
 - [docs/assistant/reviewed.json](../docs/assistant/reviewed.json)
+- [docs/assistant/science-basics.json](../docs/assistant/science-basics.json)
 - [docs/assistant/sources/science.txt](../docs/assistant/sources/science.txt)
 - [docs/assistant/sources/update142/developer.txt](../docs/assistant/sources/update142/developer.txt)
 - [docs/assistant/sources/update142/learning.txt](../docs/assistant/sources/update142/learning.txt)

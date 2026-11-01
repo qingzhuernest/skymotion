@@ -84,8 +84,8 @@
             {
               "kind": "paragraph",
               "text": [
-                "需要查找网站操作或天文、地理知识时，可使用顶部“搜索”；答案附相关资料与使用手册入口。",
-                "Use Search in the navigation for site instructions, astronomy and geography; answers include sources and relevant manual links."
+                "需要查找网站操作或天文、地理知识时，可使用顶部“搜索”；答案附相关资料与使用手册入口。 也可以直接问“太阳是什么”“太阳的颜色”或“太阳系的行星”，在参考资料中查看科学来源。",
+                "Use Search in the navigation for site instructions, astronomy and geography; answers include sources and relevant manual links. You can also ask what the Sun is, its color, or which planets are in the Solar System, and open the scientific sources under References."
               ]
             }
           ]
@@ -287,8 +287,8 @@
             {
               "kind": "paragraph",
               "text": [
-                "遇到操作问题可在“搜索”中描述目标，例如怎样比较两个城市的太阳轨迹。搜索给出资料与步骤，不会替你改变实验条件；先核对来源，再用观察验证解释。",
-                "Describe a goal in Search, such as comparing the Sun’s paths in two cities. Search provides sources and instructions without changing experiment conditions. Check sources and test explanations through observation."
+                "遇到操作问题可在“搜索”中描述目标，例如怎样比较两个城市的太阳轨迹。搜索给出资料与步骤，不会替你改变实验条件；先核对来源，再用观察验证解释。 也可以直接问“太阳是什么”“太阳的颜色”或“太阳系的行星”，在参考资料中查看科学来源。",
+                "Describe a goal in Search, such as comparing the Sun’s paths in two cities. Search provides sources and instructions without changing experiment conditions. Check sources and test explanations through observation. You can also ask what the Sun is, its color, or which planets are in the Solar System, and open the scientific sources under References."
               ]
             }
           ],
@@ -2311,8 +2311,8 @@
             {
               "kind": "paragraph",
               "text": [
-                "顶部“搜索”可查网站操作、天文与地理资料。进入网页后即自动下载知识库、模型与运行资源并在后台准备，不必先打开搜索；首次约49 MB（未压缩），耗时随网络和设备变化。输入问题后可查看步骤和参考资料，搜索不会代为操作实验。",
-                "Search in the navigation finds site instructions, astronomy and geography sources. Page entry automatically downloads the knowledge, model and runtime and prepares them in the background, before Search is opened. First-time assets total about 49 MB before compression; timing varies with network and device. Results include instructions and references; Search does not operate the experiment."
+                "顶部“搜索”可查网站操作、天文与地理资料。进入网页后即自动下载知识库、模型与运行资源并在后台准备，不必先打开搜索；首次约49 MB（未压缩），耗时随网络和设备变化。输入问题后可查看步骤和参考资料，搜索不会代为操作实验。 也可以直接问“太阳是什么”“太阳的颜色”或“太阳系的行星”，在参考资料中查看科学来源。",
+                "Search in the navigation finds site instructions, astronomy and geography sources. Page entry automatically downloads the knowledge, model and runtime and prepares them in the background, before Search is opened. First-time assets total about 49 MB before compression; timing varies with network and device. Results include instructions and references; Search does not operate the experiment. You can also ask what the Sun is, its color, or which planets are in the Solar System, and open the scientific sources under References."
               ]
             }
           ],

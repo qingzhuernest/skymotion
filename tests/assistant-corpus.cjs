@@ -15,6 +15,24 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
   const group=card.id.split(':')[0];groups[group]=(groups[group]||0)+1;
   rows.push({source:card.id,question,selected:result.card.id,reason:result.reason,reviewStatus:result.card.status});
  }
+ const basics=[
+  ['太阳是什么','science:BASIC-001'],['请问太阳是啥','science:BASIC-001'],
+  ['太阳的颜色','science:BASIC-002'],['太阳到底什么颜色','science:BASIC-002'],
+  ['太阳为什么会发光','science:BASIC-003'],['太阳系的行星','science:BASIC-004'],
+  ['太阳系有多少颗行星','science:BASIC-004'],['八大行星的顺序','science:BASIC-004'],
+  ['太阳系是什么','science:BASIC-005'],['月亮是什么','science:BASIC-006'],
+  ['什么是行星','science:BASIC-007'],['什么是恒星','science:BASIC-008'],
+  ['What is the Sun?','science:BASIC-001'],['What color is the Sun?','science:BASIC-002'],
+  ['Why does the Sun shine?','science:BASIC-003'],['Solar System planets','science:BASIC-004'],
+  ['What is the Solar System?','science:BASIC-005'],['What is the Moon?','science:BASIC-006'],
+  ['What is a planet?','science:BASIC-007'],['What is a star?','science:BASIC-008']
+ ];
+ for(const [q,id] of basics){
+  const answer=selectAnswer(q,search(q),records).card;assert.equal(answer?.id,id,q);
+  assert.equal(answer.intent,'science');assert(answer.references?.length,q);
+ }
+ assert.equal(guard('你好'),'greeting');
+ for(const q of ['如何打开太阳系','怎么使用三维天空'])assert.notEqual(selectAnswer(q,search(q),records).card?.intent,'science',q);
  const fixtures=[
   ['如何更改杆的高度','site:SUN-010'],['怎么调节界面字号','site:PREF-010'],
   ['如何选择观察城市','site:STATE-001'],['如何改变观测日期','site:STATE-002'],
@@ -36,5 +54,5 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
  for(const q of ['现在上海太阳高度多少','明天北京几点日落','天气预报','写一篇小说'])assert(guard(q),q);
  assert(!selectAnswer('如何控制火山爆发',search('如何控制火山爆发'),records).card);
  fs.writeFileSync('/tmp/assistant143-corpus-results.json',JSON.stringify({kind:'Source-derived coverage probes; not an independent accuracy evaluation',groups,total:rows.length,rows,extraFixtures:fixtures.length,oppositeActions:3},null,2));
- console.log('PASS all 625 source-derived rephrasings across website/science/teaching/manual/developer categories; 14 cross-feature questions, opposite actions, unknown topics and dynamic-value boundaries');
+ console.log(`PASS all ${records.length} source-derived rephrasings across website/science/teaching/manual/developer categories; 14 cross-feature questions, opposite actions, unknown topics and dynamic-value boundaries`);
 })().catch(e=>{console.error(e);process.exitCode=1;});

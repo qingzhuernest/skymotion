@@ -24,6 +24,13 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   assert.match(await page.locator('.assistant-log').innerText(),/UTC/);
   assert(requests.some(url=>url.includes('worker.js')),'Worker starts before the first search');
   await ask('怎么保存？');await page.waitForFunction(id=>[...document.querySelectorAll('.assistant-turn')].at(-1)?.dataset.cardId===id,'site:SAVE-002');
+  for(const [question,id,word] of [['太阳是什么','science:BASIC-001','恒星'],['太阳的颜色','science:BASIC-002','白色'],['太阳系的行星','science:BASIC-004','海王星']]){
+   await ask(question);await page.waitForFunction(id=>document.querySelector('.assistant-turn:last-child')?.dataset.cardId===id,id);
+   const turn=page.locator('.assistant-turn').last();assert((await turn.innerText()).includes(word));
+   await turn.locator('summary').click();
+   assert.match(await turn.locator('.assistant-references a[target=_blank]').first().getAttribute('href'),/^https:\/\/(science.nasa.gov|solar-center.stanford.edu)\//);
+  }
+  await ask('你好');await page.locator('.assistant-turn').last().getByText('你好！可以搜索',{exact:false}).waitFor();
   await ask('现在上海太阳高度多少？');await page.locator('.assistant-turn').last().getByText('我暂时不能可靠计算',{exact:false}).waitFor();
   await ask('<img src=x onerror=alert(1)> 天气');
   await page.locator('.assistant-turn').last().getByText('暂未找到对应内容',{exact:false}).waitFor();

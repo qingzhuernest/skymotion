@@ -32,7 +32,7 @@ File responsibilities, data flow, state fields, units, equations, interfaces, te
 
 [Read the developer reference](development-guide.en.html)
 
-Use Search in the navigation for site instructions, astronomy and geography; answers include sources and relevant manual links.
+Use Search in the navigation for site instructions, astronomy and geography; answers include sources and relevant manual links. You can also ask what the Sun is, its color, or which planets are in the Solar System, and open the scientific sources under References.
 
 ## Find an answer directly
 

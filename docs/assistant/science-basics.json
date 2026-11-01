@@ -1,0 +1,310 @@
+[
+  {
+    "id": "science:BASIC-001",
+    "title": "太阳是什么？",
+    "answer": "太阳是离地球最近的恒星，主要由氢和氦组成。它自身发光，是太阳系的主要光与热来源；地球等行星围绕太阳运动。太阳不是行星，也不是固体火球。",
+    "steps": [],
+    "warnings": [],
+    "aliases": [
+      "太阳",
+      "什么是太阳",
+      "太阳是啥",
+      "太阳简介",
+      "太阳是恒星吗",
+      "太阳是行星还是恒星",
+      "介绍太阳",
+      "What is the Sun?",
+      "Sun"
+    ],
+    "en": {
+      "title": "What is the Sun?",
+      "answer": "The Sun is our nearest star, made mainly of hydrogen and helium. It emits its own light and supplies most of the Solar System’s light and heat. Earth and the other planets orbit it; it is not a planet or a solid burning ball.",
+      "steps": [],
+      "warnings": []
+    },
+    "intent": "science",
+    "language": "zh",
+    "status": "source-checked",
+    "target": "project-guide.html#sun",
+    "sourceRefs": [
+      "https://science.nasa.gov/sun/facts/"
+    ],
+    "references": [
+      {
+        "title": "NASA · Sun Facts",
+        "url": "https://science.nasa.gov/sun/facts/"
+      }
+    ],
+    "checkedOn": "2026-11-01"
+  },
+  {
+    "id": "science:BASIC-002",
+    "title": "太阳是什么颜色？",
+    "answer": "太阳发出的多种可见光混合后接近白色。在地球上，阳光穿过大气后，日出日落时的太阳常显黄色、橙色或红色。科学图像也可能经过着色，因此图片中的颜色不一定等同于人眼看到的颜色。",
+    "steps": [],
+    "warnings": [],
+    "aliases": [
+      "太阳的颜色",
+      "太阳颜色",
+      "太阳为什么是黄色的",
+      "太阳为什么是红色的",
+      "太阳是白色的吗",
+      "太阳到底什么颜色",
+      "What color is the Sun?",
+      "Sun color",
+      "Why is the Sun yellow?"
+    ],
+    "en": {
+      "title": "What color is the Sun?",
+      "answer": "The Sun’s visible wavelengths combine to appear approximately white. Earth’s atmosphere can make the low Sun look yellow, orange or red. Scientific images may also use assigned colors, which need not match visual appearance.",
+      "steps": [],
+      "warnings": []
+    },
+    "intent": "science",
+    "language": "zh",
+    "status": "source-checked",
+    "target": "project-guide.html#sun",
+    "sourceRefs": [
+      "https://solar-center.stanford.edu/FAQ/Qsuncolor.html"
+    ],
+    "references": [
+      {
+        "title": "Stanford Solar Center · Sun Color",
+        "url": "https://solar-center.stanford.edu/FAQ/Qsuncolor.html"
+      },
+      {
+        "title": "Stanford Solar Center · Solar Images",
+        "url": "https://solar-center.stanford.edu/observe/observe.html"
+      }
+    ],
+    "checkedOn": "2026-11-01"
+  },
+  {
+    "id": "science:BASIC-003",
+    "title": "太阳为什么会发光发热？",
+    "answer": "太阳的能量主要来自核心中的核聚变：氢原子核经过一系列反应形成氦，并释放能量。这些能量最终以辐射等形式向外传递。它不是依靠氧气燃烧的普通火焰。",
+    "steps": [],
+    "warnings": [],
+    "aliases": [
+      "太阳的能量",
+      "太阳怎么发光",
+      "太阳为什么发光",
+      "太阳为什么会发热",
+      "太阳靠什么燃烧",
+      "太阳的光从哪里来",
+      "Why does the Sun shine?",
+      "Sun energy",
+      "How does the Sun make energy?"
+    ],
+    "en": {
+      "title": "Why does the Sun shine?",
+      "answer": "Fusion in the Sun’s core converts hydrogen nuclei into helium and releases energy. Energy travels outward and is eventually emitted as radiation. This differs from a flame sustained by chemical combustion with oxygen.",
+      "steps": [],
+      "warnings": []
+    },
+    "intent": "science",
+    "language": "zh",
+    "status": "source-checked",
+    "target": "project-guide.html#sun",
+    "sourceRefs": [
+      "https://science.nasa.gov/sun/facts/"
+    ],
+    "references": [
+      {
+        "title": "NASA · Sun Facts",
+        "url": "https://science.nasa.gov/sun/facts/"
+      }
+    ],
+    "checkedOn": "2026-11-01"
+  },
+  {
+    "id": "science:BASIC-004",
+    "title": "太阳系有哪些行星？",
+    "answer": "按离太阳由近到远的顺序，八大行星是水星、金星、地球、火星、木星、土星、天王星、海王星。太阳是恒星，月球是地球的天然卫星，都不列入八大行星；冥王星属于矮行星。",
+    "steps": [],
+    "warnings": [],
+    "aliases": [
+      "太阳系的行星",
+      "太阳系行星",
+      "八大行星",
+      "太阳系有几个行星",
+      "太阳系有多少颗行星",
+      "八大行星的顺序",
+      "行星顺序",
+      "太阳系中的行星",
+      "Solar System planets",
+      "What are the eight planets?",
+      "How many planets are in the Solar System?"
+    ],
+    "en": {
+      "title": "Which planets are in the Solar System?",
+      "answer": "From the Sun outward, the eight planets are Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune. The Sun is a star, the Moon is Earth’s natural satellite, and Pluto is a dwarf planet.",
+      "steps": [],
+      "warnings": []
+    },
+    "intent": "science",
+    "language": "zh",
+    "status": "source-checked",
+    "target": "project-guide.html#space",
+    "sourceRefs": [
+      "https://science.nasa.gov/solar-system/planets/"
+    ],
+    "references": [
+      {
+        "title": "NASA · About Planets",
+        "url": "https://science.nasa.gov/solar-system/planets/"
+      }
+    ],
+    "checkedOn": "2026-11-01"
+  },
+  {
+    "id": "science:BASIC-005",
+    "title": "太阳系是什么？",
+    "answer": "太阳系由太阳和受其引力主导、围绕它运动的天体组成，包括八大行星、它们的卫星、矮行星、小行星、彗星和其他小天体。太阳系是银河系的一部分，不等同于整个宇宙。",
+    "steps": [],
+    "warnings": [],
+    "aliases": [
+      "什么是太阳系",
+      "太阳系",
+      "太阳系包括什么",
+      "太阳系组成",
+      "太阳系里有什么",
+      "What is the Solar System?",
+      "Solar System"
+    ],
+    "en": {
+      "title": "What is the Solar System?",
+      "answer": "The Solar System comprises the Sun and the bodies gravitationally bound to it, including eight planets, their moons, dwarf planets, asteroids, comets and smaller bodies. It is part of the Milky Way, rather than the entire Universe.",
+      "steps": [],
+      "warnings": []
+    },
+    "intent": "science",
+    "language": "zh",
+    "status": "source-checked",
+    "target": "project-guide.html#space",
+    "sourceRefs": [
+      "https://science.nasa.gov/solar-system/solar-system-facts/"
+    ],
+    "references": [
+      {
+        "title": "NASA · Solar System Facts",
+        "url": "https://science.nasa.gov/solar-system/solar-system-facts/"
+      }
+    ],
+    "checkedOn": "2026-11-01"
+  },
+  {
+    "id": "science:BASIC-006",
+    "title": "月球是什么？",
+    "answer": "月球是地球的天然卫星，具有岩石表面，围绕地球运动。我们看到的月光主要是它反射的太阳光。月球不是恒星，也不是太阳系八大行星之一。",
+    "steps": [],
+    "warnings": [],
+    "aliases": [
+      "月球",
+      "月亮是什么",
+      "什么是月球",
+      "介绍月亮",
+      "月亮是行星吗",
+      "What is the Moon?",
+      "Moon"
+    ],
+    "en": {
+      "title": "What is the Moon?",
+      "answer": "The Moon is Earth’s natural satellite, with a rocky surface, orbiting Earth. Its visible light is mainly reflected sunlight. It is neither a star nor one of the eight Solar System planets.",
+      "steps": [],
+      "warnings": []
+    },
+    "intent": "science",
+    "language": "zh",
+    "status": "source-checked",
+    "target": "project-guide.html#moon",
+    "sourceRefs": [
+      "https://science.nasa.gov/moon/facts/"
+    ],
+    "references": [
+      {
+        "title": "NASA · Moon Facts",
+        "url": "https://science.nasa.gov/moon/facts/"
+      },
+      {
+        "title": "NASA · Moon Phases",
+        "url": "https://science.nasa.gov/moon/moon-phases/"
+      }
+    ],
+    "checkedOn": "2026-11-01"
+  },
+  {
+    "id": "science:BASIC-007",
+    "title": "行星是什么？",
+    "answer": "以太阳系为例，行星围绕太阳运行，有足够质量使自身接近球形，并在其轨道邻域占据主导地位。太阳系有八大行星。太阳系外也发现了许多行星；“围绕太阳”这一分类条件针对太阳系。",
+    "steps": [],
+    "warnings": [],
+    "aliases": [
+      "什么是行星",
+      "行星",
+      "行星定义",
+      "行星和恒星的区别",
+      "What is a planet?",
+      "Planet"
+    ],
+    "en": {
+      "title": "What is a planet?",
+      "answer": "For Solar System classification, a planet orbits the Sun, has enough gravity to become nearly round, and dominates its orbital neighborhood. Eight bodies meet these criteria. Planets have also been discovered beyond our Solar System; the Sun-specific definition applies to Solar System classification.",
+      "steps": [],
+      "warnings": []
+    },
+    "intent": "science",
+    "language": "zh",
+    "status": "source-checked",
+    "target": "project-guide.html#space",
+    "sourceRefs": [
+      "https://science.nasa.gov/solar-system/planets/"
+    ],
+    "references": [
+      {
+        "title": "NASA · About Planets",
+        "url": "https://science.nasa.gov/solar-system/planets/"
+      },
+      {
+        "title": "IAU · Definition of a Planet",
+        "url": "https://www.iau.org/IAU/IAU/Astronomy-FAQs/Pluto.aspx?hkey=c12789d9-1fd1-45db-9ca5-b7ad2bbdc2cd"
+      }
+    ],
+    "checkedOn": "2026-11-01"
+  },
+  {
+    "id": "science:BASIC-008",
+    "title": "恒星是什么？",
+    "answer": "恒星是由自身引力维系的炽热天体。像太阳这样的主序恒星，核心把氢聚变成氦并释放能量，从而持续发光。恒星也有形成、演化和衰老的过程，并不是永远不变。",
+    "steps": [],
+    "warnings": [],
+    "aliases": [
+      "什么是恒星",
+      "恒星",
+      "恒星为什么发光",
+      "恒星简介",
+      "What is a star?",
+      "Star"
+    ],
+    "en": {
+      "title": "What is a star?",
+      "answer": "Stars are hot bodies held together by their own gravity. Main-sequence stars such as the Sun release energy by fusing hydrogen into helium in their cores. Stars form and evolve over time; they are not unchanging objects.",
+      "steps": [],
+      "warnings": []
+    },
+    "intent": "science",
+    "language": "zh",
+    "status": "source-checked",
+    "target": "project-guide.html#space",
+    "sourceRefs": [
+      "https://science.nasa.gov/universe/stars/"
+    ],
+    "references": [
+      {
+        "title": "NASA · Stars",
+        "url": "https://science.nasa.gov/universe/stars/"
+      }
+    ],
+    "checkedOn": "2026-11-01"
+  }
+]

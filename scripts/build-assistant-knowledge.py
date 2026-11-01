@@ -66,9 +66,19 @@ def build(check=False):
                 fullText=text,language='zh',intent='developer' if name=='developer' else 'howto',
                 status='published-document',target=path+'#'+anchor,sourceRefs=['site/'+documents[path]['markdown']],
                 documentSha256=hashlib.sha256(json.dumps(section,ensure_ascii=False,sort_keys=True).encode()).hexdigest()))
+    assert len(records)==625, 'Original author corpus must retain all 625 units'
+    basics=json.loads((ROOT/'docs/assistant/science-basics.json').read_text())
+    for card in basics:
+        assert card['id'].startswith('science:BASIC-') and card['intent']=='science'
+        assert card['status']=='source-checked' and card['answer'] and card['en']['answer']
+        assert card['references'],card['id']
+        for reference in card['references']:
+            url=urlsplit(reference['url'])
+            assert url.scheme=='https' and url.hostname in {'science.nasa.gov','solar-center.stanford.edu','www.iau.org'}
+    records.extend(basics)
     patches = json.loads((ROOT / 'docs/assistant/reviewed.json').read_text())
     by_id = {r['id']: r for r in records}
-    assert len(by_id) == len(records) == 625
+    assert len(by_id)==len(records)
     for id, patch in patches.items():
         assert id in by_id, id
         by_id[id].update(patch)
@@ -103,7 +113,7 @@ def build(check=False):
     OUT.mkdir(exist_ok=True)
     outputs={'knowledge.json':json.dumps({'schema':1,'version':version,'records':records},ensure_ascii=False,separators=(',',':'))+'\n',
         'knowledge-version.json':json.dumps({'version':version,'records':len(records),'sourceChecked':len(patches),
-            'publishedChapters':60,'sourceFiles':66},indent=2)+'\n'}
+            'publishedChapters':60,'sourceFiles':66,'supplementalScience':len(basics),'scienceRecords':sum(r['id'].startswith('science:') for r in records)},indent=2)+'\n'}
     for name,value in outputs.items():
         if check:assert (OUT/name).read_text()==value,'Knowledge source drift: rebuild '+name
         else:(OUT/name).write_text(value)

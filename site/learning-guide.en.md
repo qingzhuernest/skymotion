@@ -35,7 +35,7 @@ This guide supports classroom teaching and independent inquiry. Start with a tes
 
 - [First use: read interface and control instructions](project-guide.en.html#controls)
 
-Describe a goal in Search, such as comparing the Sun’s paths in two cities. Search provides sources and instructions without changing experiment conditions. Check sources and test explanations through observation.
+Describe a goal in Search, such as comparing the Sun’s paths in two cities. Search provides sources and instructions without changing experiment conditions. Check sources and test explanations through observation. You can also ask what the Sun is, its color, or which planets are in the Solar System, and open the scientific sources under References.
 
 [Open the corresponding experiment →](lab.en.html#skyPanel)
 
