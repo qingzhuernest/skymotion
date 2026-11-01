@@ -134,13 +134,16 @@ def generated_sources(root=ROOT):
                 '<script src="' + prefix + 'preferences.js?v=' + catalog['resourceVersion'] + '"></script>',
                 '<script src="' + prefix + 'material-web.js?v=' + catalog['resourceVersion'] + '" defer></script>',
                 '<script src="' + prefix + 'material-controls.js?v=' + catalog['resourceVersion'] + '" defer></script>',
+                '<script src="' + prefix + 'assistant/ui.js?v=' + catalog['resourceVersion'] + '" defer></script>',
             ])
             source = re.sub(r'\n?[ \t]*(?:<script src="[^"\n]*(?:theme-colors|preferences|material-web|material-controls)\.js[^"\n]*"(?: defer)?></script>|<link rel="stylesheet" href="[^"\n]*preferences\.css[^"\n]*">)', '', source)
+            source = re.sub(r'\n?[ \t]*(?:<script src="[^"\n]*assistant/ui\.js[^"\n]*" defer></script>|<link rel="stylesheet" href="[^"\n]*assistant/assistant\.css[^"\n]*">)', '', source)
             source = re.sub(r'(<meta\s+charset=[^>]+>)', lambda match: match[1] + '\n' + assets, source, count=1, flags=re.I)
             if page['path'] == '404.html':
                 source = source.replace('href="controls.css?', 'href="/controls.css?')
             extra = '' if 'controls.css?' in source else '<link rel="stylesheet" href="' + prefix + 'controls.css?v=' + catalog['resourceVersion'] + '">\n'
             source = source.replace('</head>', extra + '<link rel="stylesheet" href="' + prefix + 'preferences.css?v=' + catalog['resourceVersion'] + '">\n</head>', 1)
+            source = source.replace('</head>', '<link rel="stylesheet" href="' + prefix + 'assistant/assistant.css?v=' + catalog['resourceVersion'] + '">\n</head>', 1)
             for dependency in ('diagram-reference-store', 'diagram-reference-renderer'):
                 if 'diagram-tools.js?' in source and dependency + '.js?' not in source:
                     source = re.sub(r'(<script src="([^"\n]*)diagram-tools\.js[^>]+></script>)',

@@ -335,6 +335,7 @@ def main() -> None:
                       '.svg', '.woff', '.woff2', '.ttf', '.md'}
     assets = sorted(p.relative_to(dist).as_posix() for p in dist.rglob('*')
                     if p.is_file() and is_site_file(p, dist) and p.suffix in asset_suffixes
+                    and 'assistant' not in p.relative_to(dist).parts
                     and p.name != 'page-cache-manifest.json'
                     and p.relative_to(dist).as_posix() not in legacy_fonts)
     manifest = {'version': 2, 'resourceVersion': catalog['resourceVersion'], 'readingFontVersion': '20261016-font41', 'pages': all_paths, 'assets': assets, 'sizes': sizes, 'totalBytes': sum(sizes.values()), 'assetBytes': sum((dist / p).stat().st_size for p in assets)}

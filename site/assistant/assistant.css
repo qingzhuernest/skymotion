@@ -1,0 +1,39 @@
+.sky-assistant {font:inherit;color:var(--design-ink);font-size:calc(14px * var(--ui-font-scale,1))}
+.sky-assistant * {box-sizing:border-box}
+.sky-assistant button,.sky-assistant textarea {font:inherit}
+.sky-assistant button {cursor:pointer;min-height:40px;border:1px solid var(--design-line);border-radius:20px;padding:8px 14px;background:var(--design-surface);color:var(--design-ink);white-space:normal}
+.sky-assistant .assistant-launch {position:fixed;right:max(var(--assistant-right,160px),env(safe-area-inset-right));bottom:var(--assistant-bottom,20px);z-index:45;background:var(--design-accent);color:var(--design-on-action);box-shadow:0 3px 12px var(--design-shadow-dialog);font-weight:700}
+body .sky-assistant .assistant-dialog {position:fixed;inset:16px 16px 16px auto;margin:0;width:min(460px,calc(100vw - 32px));height:calc(100dvh - 32px);max-width:none;max-height:none;padding:22px;border:1px solid var(--design-line);border-radius:28px;background:var(--design-surface);color:var(--design-ink);font:inherit;overflow:hidden}
+.assistant-dialog[open] {display:flex;flex-direction:column;gap:14px}
+.assistant-dialog::backdrop {background:var(--design-scrim);backdrop-filter:none}
+.sky-assistant .assistant-header {display:flex;align-items:center;justify-content:space-between;gap:12px;background:none;height:auto;padding:0;margin:0;width:100%;max-width:none;flex:none}
+.assistant-header h2 {margin:0;font-size:1.35em}
+.assistant-intro,.assistant-status {font-size:.85em;color:var(--design-muted);line-height:1.6;margin:0}
+.assistant-status {min-height:1.6em;flex:none}
+.assistant-examples {display:flex;flex-wrap:wrap;gap:6px;flex:none}
+.assistant-examples button {text-align:start;font-size:.86em;background:var(--design-inset)}
+.assistant-log {flex:1;min-height:60px;overflow:auto;overscroll-behavior:contain;scroll-behavior:auto;padding:2px 5px 2px 0}
+.assistant-turn {padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid var(--design-line);line-height:1.7;overflow-wrap:anywhere}
+.assistant-turn h3 {font-size:1.1em;line-height:1.45;margin:12px 0}
+.assistant-turn p {margin:10px 0}
+.assistant-turn .assistant-user {background:var(--design-inset);padding:10px 14px;border-radius:16px;white-space:pre-wrap}
+.assistant-turn .assistant-source {font-size:.8em;color:var(--design-muted);font-variant-numeric:tabular-nums}
+.assistant-turn .assistant-caution {font-size:.9em;border-inline-start:2px solid var(--design-accent);padding-inline-start:10px;color:var(--design-muted)}
+.assistant-turn ol {padding-inline-start:24px}
+.assistant-turn li {margin:8px 0}
+.assistant-turn a {color:var(--design-accent);text-decoration:underline;text-underline-offset:3px;display:block;margin:14px 0}
+.assistant-copy {font-size:.85em!important}
+.assistant-candidates {display:grid;gap:8px}
+.assistant-candidates button {text-align:start;border-radius:12px}
+.assistant-form {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;flex:none;border-top:1px solid var(--design-line);padding-top:14px;margin:0}
+.assistant-form label {grid-column:1/-1;font-weight:700}
+.sky-assistant textarea {min-width:0;resize:none;padding:10px 12px;border:1px solid var(--design-line);border-radius:14px;background:var(--design-inset);color:var(--design-ink);line-height:1.5}
+.sky-assistant .assistant-submit {background:var(--design-accent);color:var(--design-on-action);align-self:end}
+.sky-assistant :focus-visible {outline:3px solid var(--design-accent);outline-offset:3px}
+@media(max-width:600px) {
+ body .sky-assistant .assistant-dialog {inset:0;width:100%;height:100dvh;border:0;border-radius:0;padding:16px 16px max(16px,env(safe-area-inset-bottom))}
+ .assistant-examples {display:none}
+ .assistant-intro {font-size:.8em}
+ .sky-assistant .assistant-launch {padding:8px 12px;font-size:12px}
+}
+@media print {.sky-assistant {display:none}}

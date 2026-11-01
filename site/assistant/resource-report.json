@@ -1,0 +1,113 @@
+{
+  "scope": "Assistant additions only; excludes existing site fonts, images and scientific assets",
+  "compression": "gzip estimate computed locally; not a measured production transfer",
+  "rawBytes": 48280424,
+  "gzipBytes": 20699976,
+  "files": {
+    "assistant.css": {
+      "bytes": 3832,
+      "gzipBytes": 1223,
+      "sha256": "7a60b1981bb54526b2bf467be832415dbac38f1fff2a831623dad71d4587e299"
+    },
+    "index.bin": {
+      "bytes": 1021952,
+      "gzipBytes": 948338,
+      "sha256": "67890fca9a68c07ac312d90cbdc71a815e023656ee517e1843fdf098a7b3d162"
+    },
+    "knowledge-version.json": {
+      "bytes": 77,
+      "gzipBytes": 89,
+      "sha256": "6bf78f7d23218c4aee74bdc2dcd237a4c9f266d2eda92a8e00fdbc8df956f77a"
+    },
+    "knowledge.json": {
+      "bytes": 219465,
+      "gzipBytes": 54111,
+      "sha256": "d73fd0adec9b44e6ad09fdc8550fc0a961de3bbd4d48cbec9d34877dd2e3b141"
+    },
+    "licenses/bge-MIT.txt": {
+      "bytes": 1065,
+      "gzipBytes": 643,
+      "sha256": "587a673933425dbc36ec61268d3b954051b2d3ef3c9b322ede357976055ffdd5"
+    },
+    "licenses/onnxruntime-MIT.txt": {
+      "bytes": 1073,
+      "gzipBytes": 644,
+      "sha256": "2f07c72751aed99790b8a4869cf2311df85a860b22ded05fa22803587a48922c"
+    },
+    "licenses/transformers-Apache-2.0.txt": {
+      "bytes": 11358,
+      "gzipBytes": 3968,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    "models/bge-small-zh-v1.5/README.md": {
+      "bytes": 1057,
+      "gzipBytes": 576,
+      "sha256": "cb22054df1a98f7ee9d5b281d023e67c27cc316e1733baf03fc994d95c3048ab"
+    },
+    "models/bge-small-zh-v1.5/config.json": {
+      "bytes": 716,
+      "gzipBytes": 399,
+      "sha256": "d4193ead3a810fd694fa8a31d7fc72fbaebc0668b603e398734bf2f6538ff42f"
+    },
+    "models/bge-small-zh-v1.5/onnx/model_int8.onnx": {
+      "bytes": 23903394,
+      "gzipBytes": 14262402,
+      "sha256": "b9837c19ce154ff0726d398ee77abbc03a7faf0476c6f93016c84e531be7ebb5"
+    },
+    "models/bge-small-zh-v1.5/special_tokens_map.json": {
+      "bytes": 125,
+      "gzipBytes": 90,
+      "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3"
+    },
+    "models/bge-small-zh-v1.5/tokenizer.json": {
+      "bytes": 439125,
+      "gzipBytes": 105455,
+      "sha256": "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26"
+    },
+    "models/bge-small-zh-v1.5/tokenizer_config.json": {
+      "bytes": 367,
+      "gzipBytes": 223,
+      "sha256": "e6f3b96db926a37d4039995fbf5ad17de158dfb8f6343d607e4dbaad18d75f5a"
+    },
+    "models/bge-small-zh-v1.5/vocab.txt": {
+      "bytes": 109540,
+      "gzipBytes": 54711,
+      "sha256": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c"
+    },
+    "runtime/ort-wasm-simd-threaded.jsep.mjs": {
+      "bytes": 44008,
+      "gzipBytes": 15030,
+      "sha256": "bef4ae97e04982b23082b8a36c9237d502798003d20e0aa6ecebdca11f74f228"
+    },
+    "runtime/ort-wasm-simd-threaded.jsep.wasm": {
+      "bytes": 21596019,
+      "gzipBytes": 5014520,
+      "sha256": "c46655e8a94afc45338d4cb2b840475f88e5012d524509916e505079c00bfa39"
+    },
+    "search.js": {
+      "bytes": 2851,
+      "gzipBytes": 1449,
+      "sha256": "5fc50a78dd43305e1fa630643c2beca986ec1ec2f0c5e428391c709fed3e52ca"
+    },
+    "semantic-manifest.json": {
+      "bytes": 11281,
+      "gzipBytes": 1584,
+      "sha256": "cb17e61d874ee9a389a2600858995ec6e28302c6489e860009a019707f340f8b"
+    },
+    "ui.js": {
+      "bytes": 12565,
+      "gzipBytes": 5163,
+      "sha256": "b8a97f8dbef3e20631c62c1256fcac1347a2d3aa536bed850875cf241cd53fc3"
+    },
+    "worker.js": {
+      "bytes": 897907,
+      "gzipBytes": 228736,
+      "sha256": "9eaaa26a9e4066b661a4ac33435fcbcdffac97246f628cbdd8ad7b50879d66df"
+    },
+    "worker.js.LEGAL.txt": {
+      "bytes": 2647,
+      "gzipBytes": 622,
+      "sha256": "7e4add40aa2a5a3a5b1a92efc70cfffd37a253d144a08e4a2a6c303b1e7543e8"
+    }
+  }
+}

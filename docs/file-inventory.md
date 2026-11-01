@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 312 个文件。目录职责见 [repository.md](repository.md)。
+共 346 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -24,10 +24,14 @@
 - [.github/workflows/github-pages.yml](../.github/workflows/github-pages.yml)
 - [.github/workflows/validate.yml](../.github/workflows/validate.yml)
 
-## docs (9)
+## docs (13)
 
 - [docs/architecture/DESIGN.md](../docs/architecture/DESIGN.md)
 - [docs/architecture/PRODUCT.md](../docs/architecture/PRODUCT.md)
+- [docs/assistant/README.md](../docs/assistant/README.md)
+- [docs/assistant/reviewed.json](../docs/assistant/reviewed.json)
+- [docs/assistant/sources/science.txt](../docs/assistant/sources/science.txt)
+- [docs/assistant/sources/website.txt](../docs/assistant/sources/website.txt)
 - [docs/branches.json](../docs/branches.json)
 - [docs/document-content.json](../docs/document-content.json)
 - [docs/file-inventory.md](../docs/file-inventory.md)
@@ -36,8 +40,15 @@
 - [docs/reviews/BUG-AUDIT-2026-10-15.md](../docs/reviews/BUG-AUDIT-2026-10-15.md)
 - [docs/reviews/CODE-SIMPLICITY-2026-10-28.md](../docs/reviews/CODE-SIMPLICITY-2026-10-28.md)
 
-## scripts (17)
+## scripts (24)
 
+- [scripts/assistant/build.mjs](../scripts/assistant/build.mjs)
+- [scripts/assistant/download-model.py](../scripts/assistant/download-model.py)
+- [scripts/assistant/package-lock.json](../scripts/assistant/package-lock.json)
+- [scripts/assistant/package.json](../scripts/assistant/package.json)
+- [scripts/assistant/resource-report.py](../scripts/assistant/resource-report.py)
+- [scripts/assistant/worker-source.js](../scripts/assistant/worker-source.js)
+- [scripts/build-assistant-knowledge.py](../scripts/build-assistant-knowledge.py)
 - [scripts/build-documents.py](../scripts/build-documents.py)
 - [scripts/build-population-data.py](../scripts/build-population-data.py)
 - [scripts/build-star-catalog.py](../scripts/build-star-catalog.py)
@@ -56,7 +67,7 @@
 - [scripts/theme-colors/package.json](../scripts/theme-colors/package.json)
 - [scripts/theme-colors/source.js](../scripts/theme-colors/source.js)
 
-## site (187)
+## site (209)
 
 - [site/.nojekyll](../site/.nojekyll)
 - [site/404.en.html](../site/404.en.html)
@@ -68,6 +79,28 @@
 - [site/analemma.html](../site/analemma.html)
 - [site/analemma.js](../site/analemma.js)
 - [site/app.js](../site/app.js)
+- [site/assistant/assistant.css](../site/assistant/assistant.css)
+- [site/assistant/index.bin](../site/assistant/index.bin)
+- [site/assistant/knowledge-version.json](../site/assistant/knowledge-version.json)
+- [site/assistant/knowledge.json](../site/assistant/knowledge.json)
+- [site/assistant/licenses/bge-MIT.txt](../site/assistant/licenses/bge-MIT.txt)
+- [site/assistant/licenses/onnxruntime-MIT.txt](../site/assistant/licenses/onnxruntime-MIT.txt)
+- [site/assistant/licenses/transformers-Apache-2.0.txt](../site/assistant/licenses/transformers-Apache-2.0.txt)
+- [site/assistant/models/bge-small-zh-v1.5/README.md](../site/assistant/models/bge-small-zh-v1.5/README.md)
+- [site/assistant/models/bge-small-zh-v1.5/config.json](../site/assistant/models/bge-small-zh-v1.5/config.json)
+- [site/assistant/models/bge-small-zh-v1.5/onnx/model_int8.onnx](../site/assistant/models/bge-small-zh-v1.5/onnx/model_int8.onnx)
+- [site/assistant/models/bge-small-zh-v1.5/special_tokens_map.json](../site/assistant/models/bge-small-zh-v1.5/special_tokens_map.json)
+- [site/assistant/models/bge-small-zh-v1.5/tokenizer.json](../site/assistant/models/bge-small-zh-v1.5/tokenizer.json)
+- [site/assistant/models/bge-small-zh-v1.5/tokenizer_config.json](../site/assistant/models/bge-small-zh-v1.5/tokenizer_config.json)
+- [site/assistant/models/bge-small-zh-v1.5/vocab.txt](../site/assistant/models/bge-small-zh-v1.5/vocab.txt)
+- [site/assistant/resource-report.json](../site/assistant/resource-report.json)
+- [site/assistant/runtime/ort-wasm-simd-threaded.jsep.mjs](../site/assistant/runtime/ort-wasm-simd-threaded.jsep.mjs)
+- [site/assistant/runtime/ort-wasm-simd-threaded.jsep.wasm](../site/assistant/runtime/ort-wasm-simd-threaded.jsep.wasm)
+- [site/assistant/search.js](../site/assistant/search.js)
+- [site/assistant/semantic-manifest.json](../site/assistant/semantic-manifest.json)
+- [site/assistant/ui.js](../site/assistant/ui.js)
+- [site/assistant/worker.js](../site/assistant/worker.js)
+- [site/assistant/worker.js.LEGAL.txt](../site/assistant/worker.js.LEGAL.txt)
 - [site/astronomy.js](../site/astronomy.js)
 - [site/companion.js](../site/companion.js)
 - [site/contact.en.html](../site/contact.en.html)
@@ -246,9 +279,10 @@
 - [site/workbench-menu.js](../site/workbench-menu.js)
 - [site/workspace.js](../site/workspace.js)
 
-## tests (85)
+## tests (86)
 
 - [tests/analemma-references.cjs](../tests/analemma-references.cjs)
+- [tests/assistant-prototype.cjs](../tests/assistant-prototype.cjs)
 - [tests/bilingual-pages.cjs](../tests/bilingual-pages.cjs)
 - [tests/browser/package-lock.json](../tests/browser/package-lock.json)
 - [tests/browser/package.json](../tests/browser/package.json)

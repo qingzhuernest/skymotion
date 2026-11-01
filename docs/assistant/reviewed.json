@@ -1,0 +1,386 @@
+{
+  "site:EDIT-002": {
+    "title": "如何在同一张图比较两个城市的太阳轨迹？",
+    "answer": "可以添加不同地点的参考对象，将基准城市与另一个城市放在同一张太阳图中比较。添加参考城市不会自动改变基准观测地点。",
+    "steps": [
+      "在实验台顶部选择「太阳」，打开「天空与日影」的空间视图。",
+      "在「观测条件」设置第一个城市，例如上海。",
+      "点击「进入自定义」，打开「图中对象」→「添加对象」→「同一时间 · 不同地点」。",
+      "选择第二个城市，例如北京，点击「开始这个实验」。"
+    ],
+    "warnings": [
+      "默认比较同一个 UTC 瞬间，各城市的当地真太阳时可以不同。切换到「固定当地真太阳时」后，比较的实际瞬间可能不同。",
+      "本助手只提供步骤，没有替你添加城市或修改实验。"
+    ],
+    "aliases": [
+      "同屏看北京上海的太阳",
+      "叠加两个城市的日轨迹",
+      "两个地方太阳画在一起",
+      "多城市比较",
+      "同一图对比不同纬度",
+      "不同地点太阳视运动",
+      "同一张图显示两个地点的太阳",
+      "compare two cities",
+      "Beijing Shanghai sun paths",
+      "overlay solar tracks",
+      "different latitudes same chart",
+      "怎样比较两个城市的太阳轨迹"
+    ],
+    "target": "project-guide.html#comparisons",
+    "en": {
+      "title": "Compare the Sun's paths for two cities",
+      "answer": "Add a reference city to compare it with the base location in the same Sun diagram. Adding a reference does not change the base observer.",
+      "steps": [
+        "Choose Sun in the Lab and open the Spatial view under Sky & shadows.",
+        "Set the first city in Observation controls.",
+        "Choose Customize, then Diagram objects → Add object → Same instant · different places.",
+        "Choose the second city and select Start this experiment."
+      ],
+      "warnings": [
+        "The default comparison uses one UTC instant. Fixed local apparent solar time compares the same solar time at each place, which can represent different instants.",
+        "These are instructions; the assistant has not changed your experiment."
+      ]
+    }
+  },
+  "site:SAVE-002": {
+    "aliases": [
+      "两个城市保存在完整实验",
+      "保存城市和日期",
+      "保存所有实验条件",
+      "save complete experiment",
+      "save both cities",
+      "save locations and date"
+    ],
+    "target": "project-guide.html#saving",
+    "en": {
+      "title": "Save a complete experiment",
+      "answer": "Use the complete-experiment save in Arrangement & saved items to retain the experiment's conditions, layout and supported reference objects. A layout favorite alone does not store all scientific conditions.",
+      "steps": [
+        "Open Arrangement & saved items.",
+        "Use Save complete experiment and give the record a name."
+      ],
+      "warnings": [
+        "Browser storage belongs to this browser and site. Export a backup if you need to move it to another device."
+      ]
+    }
+  },
+  "site:EDIT-010": {
+    "aliases": [
+      "布局收藏与完整实验区别",
+      "草稿收藏存档",
+      "layout favorite versus full experiment",
+      "difference between draft and saved experiment"
+    ],
+    "target": "project-guide.html#saving",
+    "en": {
+      "title": "Draft, layout favorite and complete experiment",
+      "answer": "A session draft preserves ongoing work; a layout favorite saves the arrangement of views; a complete experiment includes the supported scientific conditions and reference data. Use a complete experiment when you need to preserve a comparison, rather than only its layout.",
+      "steps": [],
+      "warnings": [
+        "Local storage is not automatic cloud synchronization. Export important work."
+      ]
+    }
+  },
+  "site:STATE-001": {
+    "aliases": [
+      "修改观测位置",
+      "换城市",
+      "设置经纬度",
+      "change observation location",
+      "set latitude longitude",
+      "choose a city"
+    ],
+    "target": "project-guide.html#conditions",
+    "en": {
+      "title": "Change the observation location",
+      "answer": "Open Observation controls and select a city preset, or enter latitude and longitude. North and east are positive; south and west are negative. Turning the camera does not change the location.",
+      "steps": [],
+      "warnings": [
+        "Latitude ranges from −90° to 90°; longitude from −180° to 180°."
+      ]
+    }
+  },
+  "site:STATE-003": {
+    "aliases": [
+      "底下时间是北京时间吗",
+      "时间栏显示的什么时间",
+      "is the time Beijing time",
+      "what time does the clock show"
+    ],
+    "target": "project-guide.html#conditions",
+    "en": {
+      "title": "What does the Lab clock mean?",
+      "answer": "The shared Lab clock represents local apparent solar time. It is not automatically Beijing time or your device's time zone. Analemma sampling and the 3D sky can use different time bases; check the label for the active view.",
+      "steps": [],
+      "warnings": [
+        "Do not treat equal local solar times at different longitudes as the same UTC instant."
+      ]
+    }
+  },
+  "site:VIEW-014": {
+    "aliases": [
+      "打开日行迹",
+      "在哪里看八字图",
+      "open analemma view"
+    ],
+    "target": "project-guide.html#analemma",
+    "en": {
+      "title": "Open the analemma view",
+      "answer": "In the Lab, open Views & layout and select Analemma in Related diagrams. It samples the Sun at a specified daily time over a year; the chosen clock basis matters.",
+      "steps": [],
+      "warnings": [
+        "A daily solar path and an annual analemma are different observations."
+      ]
+    }
+  },
+  "site:VIEW-013": {
+    "aliases": [
+      "在哪里看地升",
+      "地升实验怎么打开",
+      "open earthrise"
+    ],
+    "target": "project-guide.html#earthrise",
+    "en": {
+      "title": "Open the Earthrise experiment",
+      "answer": "Choose Moon mode, then Earthrise in Related diagrams. This is an illustrative lunar-orbit experiment with its own orbit controls.",
+      "steps": [],
+      "warnings": [
+        "It does not reconstruct a real spacecraft trajectory from the Lab calendar."
+      ]
+    }
+  },
+  "site:SITE-008": {
+    "aliases": [
+      "切换中文英文",
+      "修改主题",
+      "change language",
+      "switch to English",
+      "change theme"
+    ],
+    "target": "project-guide.html#controls",
+    "en": {
+      "title": "Change language and appearance",
+      "answer": "Open Settings in the main navigation. Reading & language contains language choices; Appearance & night contains the theme and colors. These preferences do not change the scientific observation conditions.",
+      "steps": [],
+      "warnings": []
+    }
+  },
+  "science:EARTH-004": {
+    "aliases": [
+      "为什么有四季",
+      "地球离太阳远近造成季节吗",
+      "夏天为什么热",
+      "why are there seasons",
+      "seasons caused by distance",
+      "why summer is warmer"
+    ],
+    "target": "project-guide.html#earth",
+    "en": {
+      "title": "Why are there seasons?",
+      "answer": "Earth's tilted rotation axis, together with its orbit around the Sun, changes solar altitude and daylight duration over the year. Opposite hemispheres receive their strongest sunlight in opposite seasons.",
+      "steps": [],
+      "warnings": [
+        "Changing Earth–Sun distance is not the main cause of the seasons. Seasonal climate also depends on the atmosphere, oceans and land."
+      ]
+    }
+  },
+  "science:ANA-001": {
+    "aliases": [
+      "什么是日行迹",
+      "八字和一天轨迹区别",
+      "日行迹和太阳日轨迹有什么不同",
+      "what is an analemma",
+      "analemma versus daily path",
+      "日行迹是什么"
+    ],
+    "target": "project-guide.html#analemma",
+    "en": {
+      "title": "What is an analemma?",
+      "answer": "An analemma records the Sun's direction at one location at the same specified daily time throughout a year. A daily path instead follows the Sun through different times of one day.",
+      "steps": [],
+      "warnings": [
+        "Specify whether the sampling uses fixed civil/mean clock time or fixed apparent solar time; they produce different patterns."
+      ]
+    }
+  },
+  "science:ANA-002": {
+    "aliases": [
+      "日行迹为什么是8字",
+      "八字成因",
+      "why analemma figure eight"
+    ],
+    "target": "project-guide.html#analemma",
+    "en": {
+      "title": "Why can an analemma form a figure eight?",
+      "answer": "The yearly change in solar declination moves the Sun north and south, while the equation of time shifts its direction relative to a fixed clock. Axial tilt and orbital eccentricity together shape the pattern.",
+      "steps": [],
+      "warnings": [
+        "The pattern depends on the sampling time basis and projection. It is not the shape of the Sun's physical orbit around Earth."
+      ]
+    }
+  },
+  "science:MOON-001": {
+    "aliases": [
+      "月相怎么形成",
+      "月亮为什么有阴晴圆缺",
+      "月相是地球影子吗",
+      "why moon phases",
+      "phases caused by earth shadow"
+    ],
+    "target": "project-guide.html#moon",
+    "en": {
+      "title": "Why does the Moon have phases?",
+      "answer": "Sunlight illuminates roughly half of the Moon. As the Moon orbits Earth, we see different fractions of that illuminated half.",
+      "steps": [],
+      "warnings": [
+        "Ordinary phases are not caused by Earth's shadow; that shadow is involved in a lunar eclipse."
+      ]
+    }
+  },
+  "science:PLANET-001": {
+    "aliases": [
+      "伴月是不是距离近",
+      "行星和月亮挨得很近",
+      "planet moon conjunction physical distance",
+      "what is a planet near the moon"
+    ],
+    "target": "project-guide.html#moon",
+    "en": {
+      "title": "What does a planet near the Moon mean?",
+      "answer": "It describes a small apparent angular separation in the sky as seen by an observer. The two bodies can still be very far apart in physical space.",
+      "steps": [],
+      "warnings": [
+        "Small angular separation does not guarantee naked-eye visibility; altitude, twilight, weather and terrain also matter."
+      ]
+    }
+  },
+  "science:GEO-009": {
+    "aliases": [
+      "转镜头会改变地点吗",
+      "拖动画面太阳真的移动吗",
+      "rotate camera versus observer location",
+      "camera rotation changes sun"
+    ],
+    "target": "project-guide.html#sun",
+    "en": {
+      "title": "Camera rotation and observation location",
+      "answer": "Turning a camera changes the view of the same scene. Changing the observer location, date or time changes the physical observation conditions. They are different operations.",
+      "steps": [],
+      "warnings": []
+    }
+  },
+  "science:SHADOW-012": {
+    "aliases": [
+      "缩放影子会改变实际影长吗",
+      "放大与杆高区别",
+      "zoom versus actual shadow length",
+      "zoom changes gnomon height"
+    ],
+    "target": "project-guide.html#sun",
+    "en": {
+      "title": "Does zoom change the real shadow length?",
+      "answer": "Camera zoom changes the display scale. It does not change the physical gnomon height or the computed shadow length.",
+      "steps": [],
+      "warnings": [
+        "Changing the physical gnomon height is a separate experiment parameter."
+      ]
+    }
+  },
+  "science:TIME-007": {
+    "aliases": [
+      "同UTC和同太阳时区别",
+      "同时刻比较两地",
+      "same UTC versus same solar time",
+      "compare the same instant"
+    ],
+    "target": "project-guide.html#comparisons",
+    "en": {
+      "title": "Same UTC instant or same solar time?",
+      "answer": "One UTC instant represents the same physical moment at every location, but the local apparent solar times differ. Equal apparent solar times at different places can represent different physical moments.",
+      "steps": [],
+      "warnings": [
+        "Keep the chosen time basis consistent when interpreting comparisons."
+      ]
+    }
+  },
+  "science:TIME-002": {
+    "aliases": [
+      "什么是真太阳时",
+      "当地太阳时定义",
+      "what is apparent solar time"
+    ],
+    "target": "project-guide.html#conditions",
+    "en": {
+      "title": "What is local apparent solar time?",
+      "answer": "Local apparent solar time follows the apparent Sun. Local solar noon corresponds to the Sun crossing the local meridian.",
+      "steps": [],
+      "warnings": [
+        "It differs from civil time because of longitude, time-zone conventions and the equation of time."
+      ]
+    }
+  },
+  "science:DAY-012": {
+    "aliases": [
+      "为什么没有日出点",
+      "日落按钮没数字",
+      "极昼没有日落",
+      "missing sunrise point",
+      "no sunset reading"
+    ],
+    "target": "project-guide.html#bearings",
+    "en": {
+      "title": "Why can a sunrise or sunset reading be absent?",
+      "answer": "At high latitudes in some seasons, the Sun may stay above or below the ideal horizon all day. There is then no ordinary horizon crossing to display.",
+      "steps": [],
+      "warnings": [
+        "Check the selected location, date and body first. A missing event is not a zero-degree event, and does not by itself indicate a software error."
+      ]
+    }
+  },
+  "science:GEO-001": {
+    "aliases": [
+      "纬度是什么意思",
+      "what is latitude"
+    ],
+    "target": "project-guide.html#conditions",
+    "en": {
+      "title": "What is latitude?",
+      "answer": "Latitude measures a location's angular position north or south of the equator. The equator is 0°, and the poles are 90° north and south.",
+      "steps": [],
+      "warnings": [
+        "The Lab uses positive north and negative south."
+      ]
+    }
+  },
+  "science:GEO-002": {
+    "aliases": [
+      "经度是什么意思",
+      "what is longitude"
+    ],
+    "target": "project-guide.html#conditions",
+    "en": {
+      "title": "What is longitude?",
+      "answer": "Longitude measures angular position east or west of the prime meridian, up to 180° in either direction.",
+      "steps": [],
+      "warnings": [
+        "The Lab uses positive east and negative west. Longitude affects local solar time at a given UTC instant."
+      ]
+    }
+  },
+  "science:DAY-004": {
+    "aliases": [
+      "什么是极昼",
+      "what is midnight sun",
+      "what is polar day"
+    ],
+    "target": "project-guide.html#bearings",
+    "en": {
+      "title": "What is polar day?",
+      "answer": "Geometric polar day occurs when the Sun's center stays above the ideal horizon throughout a full day at a high-latitude location.",
+      "steps": [],
+      "warnings": [
+        "Terrain, refraction and the solar disk affect real visibility; the Lab uses a geometric horizon."
+      ]
+    }
+  }
+}
