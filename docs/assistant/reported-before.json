@@ -1,0 +1,260 @@
+[
+  {
+    "query": "如何观察太阳视运动？",
+    "normalized": "如何观察太阳视运动",
+    "top5": [
+      {
+        "id": "site:SITE-001",
+        "score": 12.928577206175405,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.625
+      },
+      {
+        "id": "site:EDIT-002",
+        "score": 11.1437182961406,
+        "status": "source-checked",
+        "exact": false,
+        "coverage": 0.625
+      },
+      {
+        "id": "site:SUN-014",
+        "score": 9.555916381646949,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.375
+      },
+      {
+        "id": "site:SUN-001",
+        "score": 8.63235167444669,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.375
+      },
+      {
+        "id": "science:TIME-003",
+        "score": 7.260837857898718,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.25
+      }
+    ],
+    "decision": "semantic_suggestions_only",
+    "reason": "draft_and_non_exact_or_low_margin"
+  },
+  {
+    "query": "如何观察月球和火星的相对位置？",
+    "normalized": "如何观察月球和火星的相对位置",
+    "top5": [
+      {
+        "id": "science:MODEL-002",
+        "score": 16.16801581476967,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.3076923076923077
+      },
+      {
+        "id": "science:PLANET-004",
+        "score": 15.664616508648203,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.3076923076923077
+      },
+      {
+        "id": "site:MOON-003",
+        "score": 14.334195909854726,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.3076923076923077
+      },
+      {
+        "id": "site:MOON-012",
+        "score": 12.513270046528485,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.23076923076923078
+      },
+      {
+        "id": "site:SCI-010",
+        "score": 8.762777645872621,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.23076923076923078
+      }
+    ],
+    "decision": "semantic_suggestions_only",
+    "reason": "draft_and_non_exact_or_low_margin"
+  },
+  {
+    "query": "如何使用行星伴月？",
+    "normalized": "如何使用行星伴月",
+    "top5": [
+      {
+        "id": "site:MOON-011",
+        "score": 17.896258454760385,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.42857142857142855
+      },
+      {
+        "id": "site:MOON-014",
+        "score": 17.11929021782174,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.42857142857142855
+      },
+      {
+        "id": "site:MOON-012",
+        "score": 16.407917473240822,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.42857142857142855
+      },
+      {
+        "id": "science:PLANET-001",
+        "score": 15.326770786439015,
+        "status": "source-checked",
+        "exact": false,
+        "coverage": 0.42857142857142855
+      },
+      {
+        "id": "science:PLANET-003",
+        "score": 14.746755189927729,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.42857142857142855
+      }
+    ],
+    "decision": "semantic_suggestions_only",
+    "reason": "draft_and_non_exact_or_low_margin"
+  },
+  {
+    "query": "打开行星伴月",
+    "normalized": "打开行星伴月",
+    "top5": [
+      {
+        "id": "site:MOON-011",
+        "score": 17.896258454760385,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.6
+      },
+      {
+        "id": "site:MOON-014",
+        "score": 17.11929021782174,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.6
+      },
+      {
+        "id": "site:MOON-012",
+        "score": 16.407917473240822,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.6
+      },
+      {
+        "id": "science:PLANET-001",
+        "score": 15.326770786439015,
+        "status": "source-checked",
+        "exact": false,
+        "coverage": 0.6
+      },
+      {
+        "id": "science:PLANET-003",
+        "score": 14.746755189927729,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.6
+      }
+    ],
+    "decision": "semantic_suggestions_only",
+    "reason": "draft_and_non_exact_or_low_margin"
+  },
+  {
+    "query": "开启行星伴月",
+    "normalized": "开启行星伴月",
+    "top5": [
+      {
+        "id": "site:MOON-011",
+        "score": 1033.0183979169192,
+        "status": "draft",
+        "exact": true,
+        "coverage": 1
+      },
+      {
+        "id": "site:MOON-014",
+        "score": 17.11929021782174,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.6
+      },
+      {
+        "id": "site:MOON-012",
+        "score": 16.407917473240822,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.6
+      },
+      {
+        "id": "science:PLANET-001",
+        "score": 15.326770786439015,
+        "status": "source-checked",
+        "exact": false,
+        "coverage": 0.6
+      },
+      {
+        "id": "science:PLANET-003",
+        "score": 14.746755189927729,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.6
+      }
+    ],
+    "decision": "exact_card_lookup",
+    "reason": "draft_and_non_exact_or_low_margin"
+  },
+  {
+    "query": "开启行星半月",
+    "normalized": "开启行星半月",
+    "top5": [
+      {
+        "id": "site:MOON-011",
+        "score": 20.427575151631338,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.6
+      },
+      {
+        "id": "site:SPACE-038",
+        "score": 7.063504251394102,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.2
+      },
+      {
+        "id": "site:SPACE-036",
+        "score": 6.891190438220989,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.2
+      },
+      {
+        "id": "site:YEAR-011",
+        "score": 6.495073029389842,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.2
+      },
+      {
+        "id": "site:SUN-014",
+        "score": 6.349090400670184,
+        "status": "draft",
+        "exact": false,
+        "coverage": 0.2
+      }
+    ],
+    "decision": "semantic_suggestions_only",
+    "reason": "draft_and_non_exact_or_low_margin"
+  }
+]

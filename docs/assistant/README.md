@@ -8,8 +8,8 @@ only in page memory; all retrieval and inference runs on the same origin/device.
 ## Implemented
 
 - 499 namespaced cards imported from the author's two Drive documents (snapshots in
-  `sources/`). 21 common cards have source-checked instructions/conditions, validated
-  handbook anchors and authored English answers in `reviewed.json`. The other 478
+  `sources/`). 24 common cards have source-checked instructions/conditions, validated
+  handbook anchors and authored English answers in `reviewed.json`. The other 475
   entries are explicitly labeled source drafts, with Chinese-only content.
 - BM25-style weighted local text retrieval and aliases; a limited save-after-city-
   comparison follow-up. Arbitrary conversational memory is not implemented.
@@ -60,7 +60,7 @@ accuracy percentage. In particular, the phrase “地球绕太阳走动的时候
 retrieved poor candidates in the initial BGE test. The explicit-seasons paraphrase
 “一年四季为什么会轮流变换呢” retrieved the relevant seasons entries. More semantic
 coverage, disambiguation, independent human evaluation and complete English content
-remain work before a production release. The 21 source-checked cards have not all
+remain work before a production release. The source-checked cards have not all
 been independently click-tested from scratch. Source draft labels are intentional.
 
 The current English path relies mostly on authored English aliases; a Chinese BGE
@@ -68,3 +68,6 @@ model is not evidence of high-quality multilingual retrieval. Cached/offline use
 depends on browser storage availability; there is no offline-install guarantee.
 Memory, frame-rate impact and Safari/iPad performance are not yet measured. Browser
 tests run in Chromium on the development host, not on the user's iPad.
+
+The reported-query follow-up, task routing, compact chat layout and local-only
+diagnostics are documented in [REPORTED-FIXES.md](REPORTED-FIXES.md).

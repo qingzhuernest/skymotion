@@ -37,6 +37,7 @@ def build():
         by_id[id].update(patch)
         by_id[id]['status'] = 'source-checked'
     for r in records:
+        assert all(id in by_id for id in r.get('sourceIds', [])), r['id']
         if r['target']:
             path, _, anchor = r['target'].partition('#')
             html = (ROOT / 'site' / path).read_text()

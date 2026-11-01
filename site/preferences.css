@@ -1,8 +1,8 @@
 /* Shared settings surface; component colors come only from the global role palette. */
 html {scroll-behavior:auto}
 html[data-smooth-scroll='true'] {scroll-behavior:smooth}
-body .preferences-launch {flex:none;margin:0}
-body .page-nav .preferences-launch {border:0;background:transparent;display:flex;align-items:center;justify-content:center;white-space:nowrap}
+body :is(.preferences-launch,.assistant-launch) {flex:none;margin:0}
+body .page-nav :is(.preferences-launch,.assistant-launch) {border:0;background:transparent;display:flex;align-items:center;justify-content:center;white-space:nowrap}
 .preference-range {display:flex;align-items:center;gap:16px;flex:1 1 250px;max-width:100%;min-width:0}
 .preference-range md-slider {flex:1;min-width:80px;width:auto;margin:0}
 .preference-range output {min-width:4.5em;text-align:end;font-variant-numeric:tabular-nums}

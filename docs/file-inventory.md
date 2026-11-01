@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 346 个文件。目录职责见 [repository.md](repository.md)。
+共 350 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -24,11 +24,14 @@
 - [.github/workflows/github-pages.yml](../.github/workflows/github-pages.yml)
 - [.github/workflows/validate.yml](../.github/workflows/validate.yml)
 
-## docs (13)
+## docs (16)
 
 - [docs/architecture/DESIGN.md](../docs/architecture/DESIGN.md)
 - [docs/architecture/PRODUCT.md](../docs/architecture/PRODUCT.md)
 - [docs/assistant/README.md](../docs/assistant/README.md)
+- [docs/assistant/REPORTED-FIXES.md](../docs/assistant/REPORTED-FIXES.md)
+- [docs/assistant/reported-after.json](../docs/assistant/reported-after.json)
+- [docs/assistant/reported-before.json](../docs/assistant/reported-before.json)
 - [docs/assistant/reviewed.json](../docs/assistant/reviewed.json)
 - [docs/assistant/sources/science.txt](../docs/assistant/sources/science.txt)
 - [docs/assistant/sources/website.txt](../docs/assistant/sources/website.txt)
@@ -279,10 +282,11 @@
 - [site/workbench-menu.js](../site/workbench-menu.js)
 - [site/workspace.js](../site/workspace.js)
 
-## tests (86)
+## tests (87)
 
 - [tests/analemma-references.cjs](../tests/analemma-references.cjs)
 - [tests/assistant-prototype.cjs](../tests/assistant-prototype.cjs)
+- [tests/assistant-reported.cjs](../tests/assistant-reported.cjs)
 - [tests/bilingual-pages.cjs](../tests/bilingual-pages.cjs)
 - [tests/browser/package-lock.json](../tests/browser/package-lock.json)
 - [tests/browser/package.json](../tests/browser/package.json)

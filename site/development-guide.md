@@ -554,6 +554,6 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [diagram-reference-store.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-store.js) | 参考对象状态、草稿、存档、复制与历史；不依赖界面 | create, persist, stateFor, clean, createReference, duplicateReference, saveReferences, travelReferences, record, checkpoint |
 | [diagram-reference-renderer.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-renderer.js) | 参考对象绘图、文字定位和命中几何；只读实验与对象状态 | create, textLayout, helper, drawObject, anchor, hitAnchor |
 | [material-web.js](https://github.com/qingzhuernest/skymotion/blob/main/site/material-web.js) | Google Material Web 2.5.0 的本地打包组件；构建入口 scripts/material-web/source.js | 模块内部方法，参见源码 |
-| [assistant/ui.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/ui.js) | 浏览器端只读问答助手、懒加载和双语面板 | loading, target, showCard, render, finish, semantic |
-| [assistant/search.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/search.js) | 本地文本检索与动态请求边界 | tokens |
+| [assistant/ui.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/ui.js) | 浏览器端只读问答助手、懒加载和双语面板 | loading, target, showCard, render, finish, semantic, mountLauncher |
+| [assistant/search.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/search.js) | 本地文本检索与动态请求边界 | canonical, tokens |
 | [assistant/worker.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/worker.js) | 固定版本BGE与ONNX运行库生成的语义检索Worker | 模块内部方法，参见源码 |

@@ -15,19 +15,19 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   assert.equal(await page.locator('#assistant-question').evaluate(el=>el===document.activeElement),false,'Opening does not summon keyboard');
   const ask=async(question)=>{console.log('Ask:',question);await page.locator('#assistant-question').fill(question);await page.locator('.assistant-submit').click();};
   await ask('怎样比较两个城市的太阳轨迹？');
-  await page.locator('.assistant-turn').last().getByText('site:EDIT-002',{exact:false}).waitFor();
+  await page.waitForFunction(id=>[...document.querySelectorAll('.assistant-turn')].at(-1)?.dataset.cardId===id,'site:EDIT-002');
   assert.match(await page.locator('.assistant-log').innerText(),/UTC/);
   assert(!requests.some(url=>/assistant\/(models|runtime|worker)/.test(url)),'Known task does not load model');
-  await ask('怎么保存？');await page.locator('.assistant-turn').last().getByText('site:SAVE-002',{exact:false}).waitFor();
-  await ask('现在上海太阳高度多少？');await page.locator('.assistant-turn').last().getByText('本原型没有接入动态计算接口',{exact:false}).waitFor();
+  await ask('怎么保存？');await page.waitForFunction(id=>[...document.querySelectorAll('.assistant-turn')].at(-1)?.dataset.cardId===id,'site:SAVE-002');
+  await ask('现在上海太阳高度多少？');await page.locator('.assistant-turn').last().getByText('我暂时不能可靠计算',{exact:false}).waitFor();
   await ask('<img src=x onerror=alert(1)> 天气');
   await page.locator('.assistant-turn').last().getByText('超出本站',{exact:false}).waitFor();
   assert.equal(await page.locator('.assistant-log img').count(),0);
   await ask('一年四季为什么会轮流变换呢？');
-  await page.waitForFunction(()=>document.querySelector('.assistant-status').textContent.includes('本地 BGE'),null,{timeout:90000});
+  await page.waitForFunction(()=>SkyAssistantDebug.getLast()?.method==='semantic'&&SkyAssistantDebug.getLast()?.decision==='suggestions',null,{timeout:90000});
   assert(requests.some(url=>url.includes('model_int8.onnx')),'Real model requested');
   const semanticText=await page.locator('.assistant-turn').last().innerText();
-  assert.match(semanticText,/EARTH-004|SCI-001|CASE-005/,'Semantic candidates include seasons');
+  assert((await page.evaluate(()=>SkyAssistantDebug.getLast().semanticTop5)).some(hit=>/EARTH-004|SCI-001|CASE-005/.test(hit.id)),'Semantic candidates include seasons');
   const external=requests.filter(url=>new URL(url).origin!==new URL(base).origin);
   assert.deepEqual(external,[],'Questions/resources stay on this origin');
   assert.equal(await page.evaluate(()=>JSON.stringify(state)),before,'Asking does not alter scientific state');
@@ -47,9 +47,9 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   await fallback.route('**/assistant/worker.js',route=>route.abort());
   await fallback.goto(base+'lab.en.html');await fallback.locator('.assistant-launch').click();
   await fallback.locator('#assistant-question').fill('unclear unfamiliar technical detail');await fallback.locator('.assistant-submit').click();
-  await fallback.getByText('Advanced semantic search is unavailable',{exact:false}).waitFor();
+  await fallback.getByText('Only related entries are available',{exact:false}).waitFor();
   await fallback.locator('#assistant-question').fill('Why are there seasons?');await fallback.locator('.assistant-submit').click();
-  await fallback.locator('.assistant-turn').last().getByText('science:EARTH-004',{exact:false}).waitFor();
+  await fallback.waitForFunction(id=>[...document.querySelectorAll('.assistant-turn')].at(-1)?.dataset.cardId===id,'science:EARTH-004');
   assert.match(await fallback.locator('.assistant-turn').last().innerText(),/tilted/);
   const href=await fallback.locator('.assistant-turn').last().locator('a').getAttribute('href');assert.match(href,/project-guide.en.html#earth$/);
   await fallback.screenshot({path:'/tmp/assistant-english.png'});
@@ -58,7 +58,7 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   await nested.route('**/skymotion/**',async route=>{const response=await route.fetch({url:route.request().url().replace('/skymotion/','/')});await route.fulfill({response});});
   await nested.goto(base+'skymotion/lab.en.html');await nested.locator('.assistant-launch').click();
   await nested.locator('#assistant-question').fill('compare two cities');await nested.locator('.assistant-submit').click();
-  await nested.locator('.assistant-turn').last().getByText('site:EDIT-002',{exact:false}).waitFor();
+  await nested.waitForFunction(id=>[...document.querySelectorAll('.assistant-turn')].at(-1)?.dataset.cardId===id,'site:EDIT-002');
   assert.match(await nested.locator('.assistant-turn').last().locator('a').getAttribute('href'),/\/skymotion\/project-guide.en.html#comparisons$/);
   console.log('PASS assistant: lexical task and follow-up, real BGE inference, same-origin privacy, safe DOM, numeric refusal, state isolation, mobile, English, failed-worker fallback, subpath links');
  }finally{await browser.close();}

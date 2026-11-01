@@ -1,0 +1,294 @@
+{
+  "queries": [
+    {
+      "query": "如何观察太阳视运动？",
+      "normalized": "如何观察太阳视运动",
+      "method": "lexical",
+      "decision": "answer",
+      "reason": "reviewed_task_plan",
+      "top5": [
+        {
+          "id": "site:LAB-001",
+          "score": 1036.2342606258799,
+          "status": "source-checked",
+          "exact": true,
+          "coverage": 1
+        },
+        {
+          "id": "site:SITE-001",
+          "score": 12.571701428160548,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.625
+        },
+        {
+          "id": "site:MOON-012",
+          "score": 10.955104784721122,
+          "status": "source-checked",
+          "exact": false,
+          "coverage": 0.375
+        },
+        {
+          "id": "site:EDIT-002",
+          "score": 10.863857996392031,
+          "status": "source-checked",
+          "exact": false,
+          "coverage": 0.625
+        },
+        {
+          "id": "site:SUN-014",
+          "score": 9.33083616497408,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.375
+        }
+      ],
+      "intent": "observe",
+      "selectedId": "site:LAB-001",
+      "result": "passed"
+    },
+    {
+      "query": "打开行星伴月",
+      "normalized": "打开行星伴月",
+      "method": "lexical",
+      "decision": "answer",
+      "reason": "reviewed_task_plan",
+      "top5": [
+        {
+          "id": "site:MOON-011",
+          "score": 1024.7799837608707,
+          "status": "source-checked",
+          "exact": true,
+          "coverage": 1
+        },
+        {
+          "id": "site:MOON-014",
+          "score": 17.206526401591162,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.6
+        },
+        {
+          "id": "science:PLANET-001",
+          "score": 15.441409806162437,
+          "status": "source-checked",
+          "exact": false,
+          "coverage": 0.6
+        },
+        {
+          "id": "science:PLANET-003",
+          "score": 14.850134741079515,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.6
+        },
+        {
+          "id": "site:REF-032",
+          "score": 14.25494617040639,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.6
+        }
+      ],
+      "intent": "open",
+      "selectedId": "site:MOON-011",
+      "result": "passed"
+    },
+    {
+      "query": "开启行星伴月",
+      "normalized": "开启行星伴月",
+      "method": "lexical",
+      "decision": "answer",
+      "reason": "reviewed_task_plan",
+      "top5": [
+        {
+          "id": "site:MOON-011",
+          "score": 1024.2871338217738,
+          "status": "source-checked",
+          "exact": true,
+          "coverage": 1
+        },
+        {
+          "id": "site:MOON-014",
+          "score": 17.206526401591162,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.6
+        },
+        {
+          "id": "science:PLANET-001",
+          "score": 15.441409806162437,
+          "status": "source-checked",
+          "exact": false,
+          "coverage": 0.6
+        },
+        {
+          "id": "science:PLANET-003",
+          "score": 14.850134741079515,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.6
+        },
+        {
+          "id": "site:REF-032",
+          "score": 14.25494617040639,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.6
+        }
+      ],
+      "intent": "enable",
+      "selectedId": "site:MOON-011",
+      "result": "passed"
+    },
+    {
+      "query": "如何使用行星伴月？",
+      "normalized": "如何使用行星伴月",
+      "method": "lexical",
+      "decision": "answer",
+      "reason": "reviewed_task_plan",
+      "top5": [
+        {
+          "id": "site:MOON-011",
+          "score": 1035.008737314766,
+          "status": "source-checked",
+          "exact": true,
+          "coverage": 1
+        },
+        {
+          "id": "site:MOON-014",
+          "score": 17.206526401591162,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.42857142857142855
+        },
+        {
+          "id": "science:PLANET-001",
+          "score": 15.441409806162437,
+          "status": "source-checked",
+          "exact": false,
+          "coverage": 0.42857142857142855
+        },
+        {
+          "id": "site:MOON-012",
+          "score": 15.130622236562616,
+          "status": "source-checked",
+          "exact": false,
+          "coverage": 0.5714285714285714
+        },
+        {
+          "id": "science:PLANET-003",
+          "score": 14.850134741079515,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.42857142857142855
+        }
+      ],
+      "intent": "howto",
+      "selectedId": "site:MOON-011",
+      "result": "passed"
+    },
+    {
+      "query": "如何观察月球和火星的相对位置？",
+      "normalized": "如何观察月球和火星的相对位置",
+      "method": "lexical",
+      "decision": "answer",
+      "reason": "reviewed_task_plan",
+      "top5": [
+        {
+          "id": "site:MOON-012",
+          "score": 1055.3383381537408,
+          "status": "source-checked",
+          "exact": true,
+          "coverage": 1
+        },
+        {
+          "id": "science:MODEL-002",
+          "score": 15.550421255082345,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.3076923076923077
+        },
+        {
+          "id": "science:PLANET-004",
+          "score": 14.720477217013928,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.3076923076923077
+        },
+        {
+          "id": "site:MOON-003",
+          "score": 14.024243035950661,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.3076923076923077
+        },
+        {
+          "id": "site:LAB-001",
+          "score": 12.914864594219758,
+          "status": "source-checked",
+          "exact": false,
+          "coverage": 0.3076923076923077
+        }
+      ],
+      "intent": "compare",
+      "selectedId": "site:MOON-012",
+      "result": "passed"
+    },
+    {
+      "query": "开启行星半月",
+      "normalized": "开启行星伴月",
+      "method": "lexical",
+      "decision": "answer",
+      "reason": "reviewed_task_plan",
+      "top5": [
+        {
+          "id": "site:MOON-011",
+          "score": 1024.2871338217738,
+          "status": "source-checked",
+          "exact": true,
+          "coverage": 1
+        },
+        {
+          "id": "site:MOON-014",
+          "score": 17.206526401591162,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.6
+        },
+        {
+          "id": "science:PLANET-001",
+          "score": 15.441409806162437,
+          "status": "source-checked",
+          "exact": false,
+          "coverage": 0.6
+        },
+        {
+          "id": "science:PLANET-003",
+          "score": 14.850134741079515,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.6
+        },
+        {
+          "id": "site:REF-032",
+          "score": 14.25494617040639,
+          "status": "draft",
+          "exact": false,
+          "coverage": 0.6
+        }
+      ],
+      "intent": "enable",
+      "selectedId": "site:MOON-011",
+      "result": "passed"
+    }
+  ],
+  "mobile": {
+    "height": 706.941650390625,
+    "viewport": 844,
+    "form": 56.99530029296875,
+    "intro": true,
+    "status": "none"
+  },
+  "controls": "Moon mode, route auto-enable, demonstration switch, Mars selection, angle readout, Sun mode, track switch passed"
+}

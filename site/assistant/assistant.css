@@ -1,8 +1,10 @@
-.sky-assistant {font:inherit;color:var(--design-ink);font-size:calc(14px * var(--ui-font-scale,1))}
+.sky-assistant {font-family:var(--design-font);color:var(--design-ink);font-size:calc(14px * var(--ui-font-scale,1))}
 .sky-assistant * {box-sizing:border-box}
 .sky-assistant button,.sky-assistant textarea {font:inherit}
 .sky-assistant button {cursor:pointer;min-height:40px;border:1px solid var(--design-line);border-radius:20px;padding:8px 14px;background:var(--design-surface);color:var(--design-ink);white-space:normal}
-.sky-assistant .assistant-launch {position:fixed;right:max(var(--assistant-right,160px),env(safe-area-inset-right));bottom:var(--assistant-bottom,20px);z-index:45;background:var(--design-accent);color:var(--design-on-action);box-shadow:0 3px 12px var(--design-shadow-dialog);font-weight:700}
+.assistant-launch {font-family:var(--design-font);cursor:pointer}
+.welcome-brand .assistant-launch,.head-actions .assistant-launch {font:inherit;color:inherit;background:transparent;border:1px solid var(--design-line);border-radius:var(--design-radius-control,20px);min-height:40px;padding:7px 12px;box-shadow:none}
+.assistant-launch:focus-visible {outline:2px solid var(--design-accent);outline-offset:3px}
 body .sky-assistant .assistant-dialog {position:fixed;inset:16px 16px 16px auto;margin:0;width:min(460px,calc(100vw - 32px));height:calc(100dvh - 32px);max-width:none;max-height:none;padding:22px;border:1px solid var(--design-line);border-radius:28px;background:var(--design-surface);color:var(--design-ink);font:inherit;overflow:hidden}
 .assistant-dialog[open] {display:flex;flex-direction:column;gap:14px}
 .assistant-dialog::backdrop {background:var(--design-scrim);backdrop-filter:none}
@@ -10,6 +12,12 @@ body .sky-assistant .assistant-dialog {position:fixed;inset:16px 16px 16px auto;
 .assistant-header h2 {margin:0;font-size:1.35em}
 .assistant-intro,.assistant-status {font-size:.85em;color:var(--design-muted);line-height:1.6;margin:0}
 .assistant-status {min-height:1.6em;flex:none}
+.assistant-status:empty {display:none}
+.assistant-answer-actions {display:flex;align-items:start;justify-content:space-between;gap:12px;margin:12px 0}
+.assistant-references {flex:1;min-width:0;margin:0;color:var(--design-muted);font-size:.85em;background:transparent;border:0;padding:0}
+.assistant-references summary {cursor:pointer;min-height:40px;display:flex;align-items:center;background:transparent;border:0;border-radius:0;padding:0;font-weight:400}
+.assistant-answer-actions .assistant-copy {flex:none;margin:0}
+.assistant-references p {overflow-wrap:anywhere}
 .assistant-examples {display:flex;flex-wrap:wrap;gap:6px;flex:none}
 .assistant-examples button {text-align:start;font-size:.86em;background:var(--design-inset)}
 .assistant-log {flex:1;min-height:60px;overflow:auto;overscroll-behavior:contain;scroll-behavior:auto;padding:2px 5px 2px 0}
@@ -30,10 +38,18 @@ body .sky-assistant .assistant-dialog {position:fixed;inset:16px 16px 16px auto;
 .sky-assistant textarea {min-width:0;resize:none;padding:10px 12px;border:1px solid var(--design-line);border-radius:14px;background:var(--design-inset);color:var(--design-ink);line-height:1.5}
 .sky-assistant .assistant-submit {background:var(--design-accent);color:var(--design-on-action);align-self:end}
 .sky-assistant :focus-visible {outline:3px solid var(--design-accent);outline-offset:3px}
+.assistant-header h2:focus {outline:0}
 @media(max-width:600px) {
- body .sky-assistant .assistant-dialog {inset:0;width:100%;height:100dvh;border:0;border-radius:0;padding:16px 16px max(16px,env(safe-area-inset-bottom))}
+ body .sky-assistant .assistant-dialog {inset:0;width:100%;height:100dvh;border:0;border-radius:0;padding:8px 12px max(8px,env(safe-area-inset-bottom));gap:8px}
+ .assistant-header {min-height:40px}
+ .assistant-header h2 {font-size:16px;font-weight:500}
+ .sky-assistant .assistant-close {min-height:36px;padding:4px 10px;font-size:13px;border-color:transparent;background:transparent}
  .assistant-examples {display:none}
  .assistant-intro {font-size:.8em}
- .sky-assistant .assistant-launch {padding:8px 12px;font-size:12px}
+ .assistant-form {gap:6px;padding-top:8px;align-items:end}
+ .assistant-form label {position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ .sky-assistant .assistant-form textarea {height:44px;min-height:44px;max-height:96px;padding:10px;line-height:22px}
+ .sky-assistant .assistant-submit {height:44px;min-height:44px;padding:6px 12px}
+ .assistant-status {font-size:12px;line-height:1.4;min-height:0}
 }
-@media print {.sky-assistant {display:none}}
+@media print {.sky-assistant,.assistant-launch {display:none}}

@@ -1,28 +1,28 @@
 {
   "scope": "Assistant additions only; excludes existing site fonts, images and scientific assets",
   "compression": "gzip estimate computed locally; not a measured production transfer",
-  "rawBytes": 48280424,
-  "gzipBytes": 20699976,
+  "rawBytes": 48292306,
+  "gzipBytes": 20703635,
   "files": {
     "assistant.css": {
-      "bytes": 3832,
-      "gzipBytes": 1223,
-      "sha256": "7a60b1981bb54526b2bf467be832415dbac38f1fff2a831623dad71d4587e299"
+      "bytes": 5175,
+      "gzipBytes": 1497,
+      "sha256": "f44aa551149f2ee29fe9e8eebc99903cc5c907baf4aeddd3cf90498d42e19604"
     },
     "index.bin": {
       "bytes": 1021952,
-      "gzipBytes": 948338,
-      "sha256": "67890fca9a68c07ac312d90cbdc71a815e023656ee517e1843fdf098a7b3d162"
+      "gzipBytes": 948325,
+      "sha256": "646dc6434d19f1d247aa6f0eed383d045d09631ad609cdbc9b286e3a6ce5d330"
     },
     "knowledge-version.json": {
       "bytes": 77,
       "gzipBytes": 89,
-      "sha256": "6bf78f7d23218c4aee74bdc2dcd237a4c9f266d2eda92a8e00fdbc8df956f77a"
+      "sha256": "3b0e546412aadf2c3bbf1241068156b4b5bb8f8e594ab780db43a16293254b99"
     },
     "knowledge.json": {
-      "bytes": 219465,
-      "gzipBytes": 54111,
-      "sha256": "d73fd0adec9b44e6ad09fdc8550fc0a961de3bbd4d48cbec9d34877dd2e3b141"
+      "bytes": 226729,
+      "gzipBytes": 56418,
+      "sha256": "3d62852d9cf706a31c2fac5d82566bfaa12e5d6b00672b3260762b5f788fd486"
     },
     "licenses/bge-MIT.txt": {
       "bytes": 1065,
@@ -85,19 +85,19 @@
       "sha256": "c46655e8a94afc45338d4cb2b840475f88e5012d524509916e505079c00bfa39"
     },
     "search.js": {
-      "bytes": 2851,
-      "gzipBytes": 1449,
-      "sha256": "5fc50a78dd43305e1fa630643c2beca986ec1ec2f0c5e428391c709fed3e52ca"
+      "bytes": 5441,
+      "gzipBytes": 2525,
+      "sha256": "b1ccdc20e14ff3deb95791bb6bf7388e0f13283920ae7b55487f42c8e1a9d85a"
     },
     "semantic-manifest.json": {
       "bytes": 11281,
       "gzipBytes": 1584,
-      "sha256": "cb17e61d874ee9a389a2600858995ec6e28302c6489e860009a019707f340f8b"
+      "sha256": "d224628208406a8f41d9bfa849737b7afb5ee8ec96e5f466d8e24a60f7c93ba9"
     },
     "ui.js": {
-      "bytes": 12565,
-      "gzipBytes": 5163,
-      "sha256": "b8a97f8dbef3e20631c62c1256fcac1347a2d3aa536bed850875cf241cd53fc3"
+      "bytes": 13250,
+      "gzipBytes": 5178,
+      "sha256": "fd76be391f5b8d1f1112e0c5053dd525b398bb60379fbdae7528bf0886cdf497"
     },
     "worker.js": {
       "bytes": 897907,

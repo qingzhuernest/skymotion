@@ -382,5 +382,191 @@
         "Terrain, refraction and the solar disk affect real visibility; the Lab uses a geometric horizon."
       ]
     }
+  },
+  "site:LAB-001": {
+    "title": "如何观察太阳视运动？",
+    "answer": "先设定观测地点和日期，再沿一天中的时刻观察太阳的高度、方位和轨迹变化。",
+    "steps": [
+      "在实验台顶部选择「太阳」。",
+      "打开「视图与布局」→「天空与日影」，选择「空间视图」；也可切换到「地平视角」或「仰望天空」。",
+      "打开「观测条件」→「日期与地点」，选择城市或设置经纬度。",
+      "设置要观察的公历日期。",
+      "在「观测条件」→「显示辅助」确认「轨迹」已打开。",
+      "拖动底部时刻滑条，或输入时刻；需要连续观察时点击「播放时刻」，对照太阳高度、方位和日影。"
+    ],
+    "warnings": [
+      "公共时刻以当地真太阳时表示，不能直接当作北京时间；理想实验与真实日期观测应区分。",
+      "这些是操作说明，助手没有修改你的实验。"
+    ],
+    "aliases": [
+      "如何观察太阳视运动",
+      "太阳视运动怎么观察",
+      "怎么看一天太阳的位置变化",
+      "观察太阳日轨迹",
+      "how to observe apparent solar motion",
+      "observe the Sun through a day"
+    ],
+    "target": "project-guide.html#sun",
+    "sourceIds": [
+      "site:LAB-001",
+      "site:LAB-003",
+      "site:LAB-004",
+      "site:LAB-005",
+      "site:LAB-008",
+      "site:LAB-011",
+      "site:SUN-007"
+    ],
+    "en": {
+      "title": "Observe the apparent daily motion of the Sun",
+      "answer": "Set a location and date, then follow how the Sun’s altitude, azimuth and path change through one day.",
+      "steps": [
+        "Choose Sun at the top of the Lab.",
+        "In Views & layout → Sky & shadows, choose Spatial view, Horizon view or Look up.",
+        "In Observation controls → Date and location, choose a city or enter latitude and longitude.",
+        "Set a calendar date.",
+        "In Display aids, turn on the path display.",
+        "Move the bottom time slider or enter a time; use Play time for continuous observation. Compare altitude, azimuth and the shadow."
+      ],
+      "warnings": [
+        "The shared clock uses local apparent solar time, not automatically civil time. Distinguish ideal geometry from real-date observation.",
+        "These instructions do not change your experiment."
+      ]
+    }
+  },
+  "site:MOON-011": {
+    "title": "如何使用行星伴月？",
+    "answer": "在月球模式进入行星伴月图，选择行星，再用相同地点、日期和时刻比较它与月球的天空方向。",
+    "steps": [
+      "在实验台顶部选择「月球」。",
+      "打开「视图与布局」→「关联图解」→「行星伴月」。当前版本进入这张图时会自动启用演示。",
+      "若你手动关闭过演示，在「观测条件」的行星伴月一栏打开「演示」开关。",
+      "打开「观测条件」，在行星伴月一栏的「选择行星」中选择水星、金星、火星、木星或土星。",
+      "在观测条件设置地点、日期，用底部时刻栏调整时间；读取「月球与行星的角距」、双方高度和方位。",
+      "可用「找未来30天最靠近日」比较每天固定时刻的角距；它不是精确合相时刻搜索。"
+    ],
+    "warnings": [
+      "角距小表示天空中看起来靠近，不代表真实空间距离近。是否肉眼可见还受地平线、暮光、天气和地形等影响。",
+      "助手只解释步骤，不会替你打开功能或改动参数。"
+    ],
+    "aliases": [
+      "如何使用行星伴月",
+      "打开行星伴月",
+      "开启行星伴月",
+      "进入行星伴月",
+      "行星伴月怎么用",
+      "enable planet moon comparison",
+      "open planet near moon",
+      "how to use planet moon comparison"
+    ],
+    "target": "project-guide.html#moon",
+    "sourceIds": [
+      "site:MOON-011",
+      "site:MOON-012",
+      "site:MOON-013",
+      "site:MOON-014",
+      "science:PLANET-001"
+    ],
+    "en": {
+      "title": "Use the planet–Moon comparison",
+      "answer": "In Moon mode, compare a selected planet with the Moon at the same location, date and time.",
+      "steps": [
+        "Choose Moon in the Lab.",
+        "Open Views & layout → Related diagrams → Moon & planets. Entering this view enables the demonstration automatically in the current version.",
+        "If you have turned the demonstration off, enable the Demonstration switch in Observation controls.",
+        "In Observation controls, select Mercury, Venus, Mars, Jupiter or Saturn.",
+        "Set location, date and time, then read angular separation and both bodies’ altitudes and azimuths.",
+        "The next-30-days search compares one fixed time per day; it does not solve an exact conjunction time."
+      ],
+      "warnings": [
+        "Small angular separation does not mean physical proximity or guaranteed naked-eye visibility.",
+        "The assistant only gives instructions; it does not change the page."
+      ]
+    },
+    "variants": {
+      "open": {
+        "title": "如何打开行星伴月图？",
+        "answer": "先选择月球模式，再在关联图解中进入行星伴月；当前版本进入时就会自动启用演示。",
+        "steps": [
+          "实验台顶部选择「月球」。",
+          "打开「视图与布局」→「关联图解」→「行星伴月」。",
+          "进入后打开「观测条件」选择行星，查看角距、高度和方位。"
+        ],
+        "en": {
+          "title": "Open the planet–Moon comparison",
+          "answer": "Choose Moon mode and enter the comparison from Related diagrams. The current version enables its demonstration when you enter.",
+          "steps": [
+            "Choose Moon.",
+            "Open Views & layout → Related diagrams → Moon & planets.",
+            "Open Observation controls, select a planet and read separation, altitude and azimuth."
+          ],
+          "warnings": [
+            "These are instructions; the assistant has not opened the view for you."
+          ]
+        }
+      },
+      "enable": {
+        "title": "如何开启行星伴月演示？",
+        "answer": "进入行星伴月图通常已经自动开启演示。如果你关掉过它，需要将「观测条件」中的「演示」开关重新打开。",
+        "steps": [
+          "先选择「月球」，再从「视图与布局」→「关联图解」进入「行星伴月」。",
+          "检查「观测条件」中的「演示」开关；如果关闭，点击使其开启。",
+          "打开「观测条件」，在行星伴月一栏的「选择行星」中选择要比较的天体。"
+        ],
+        "en": {
+          "title": "Enable the planet–Moon demonstration",
+          "answer": "Entering this view normally enables the demonstration automatically. If you switched it off, turn the Demonstration switch in Observation controls back on.",
+          "steps": [
+            "Choose Moon and enter the comparison from Views & layout → Related diagrams.",
+            "If the Demonstration switch in Observation controls is off, enable it.",
+            "Choose the planet to compare."
+          ],
+          "warnings": [
+            "The assistant does not toggle the switch for you."
+          ]
+        }
+      }
+    }
+  },
+  "site:MOON-012": {
+    "title": "如何观察月球与目标行星的相对位置？",
+    "answer": "在行星伴月图选择目标行星，与月球比较同一地点、同一时刻的天空方向。",
+    "steps": [
+      "在实验台顶部选择「月球」。",
+      "从「视图与布局」→「关联图解」进入「行星伴月」；若演示已关闭，在「观测条件」打开「演示」开关。",
+      "打开「观测条件」，在行星伴月一栏的「选择行星」中选择目标行星。",
+      "设置观测地点、日期和时刻，读取「月球与行星的角距」，并比较双方的高度、方位和图中位置。"
+    ],
+    "warnings": [
+      "角距离不等于物理距离；在地平线下或暮光较亮时，几何接近也不代表肉眼可见。",
+      "这些是指导步骤，助手没有替你选择行星。"
+    ],
+    "aliases": [
+      "如何观察月球和火星的相对位置",
+      "月球与火星怎么比较",
+      "月亮与行星的夹角怎么看",
+      "Moon Mars relative position",
+      "compare Moon and Mars angular separation"
+    ],
+    "target": "project-guide.html#moon",
+    "sourceIds": [
+      "site:MOON-011",
+      "site:MOON-012",
+      "site:MOON-014",
+      "science:PLANET-001"
+    ],
+    "en": {
+      "title": "Compare the Moon with the target planet",
+      "answer": "Choose the target planet in the planet–Moon comparison to compare their directions at the same place and time.",
+      "steps": [
+        "Choose Moon in the Lab.",
+        "Open Views & layout → Related diagrams → Moon & planets. Enable the Demonstration switch in Observation controls if you turned it off.",
+        "In Observation controls → Select planet, choose the target planet.",
+        "Set the location, date and time; read angular separation and compare altitude, azimuth and plotted positions."
+      ],
+      "warnings": [
+        "Angular separation is not physical distance and does not guarantee naked-eye visibility.",
+        "The assistant has not selected a planet for you."
+      ]
+    }
   }
 }

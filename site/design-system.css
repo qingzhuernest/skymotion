@@ -122,13 +122,13 @@ body :is(button, .page-action, .language-toggle, .layout-launch) {
       var(--md-sys-motion-easing-expressive);
 }
 body
-  :is(button, .page-action, .document-download, .document-links a, .page-nav :is(a, .preferences-launch)):not(
+  :is(button, .page-action, .document-download, .document-links a, .page-nav :is(a, .preferences-launch, .assistant-launch)):not(
     :disabled
   ):hover {
   box-shadow: inset 0 0 0 999px var(--md-sys-state-hover);
 }
 body
-  :is(button, .page-action, .document-download, .document-links a, .page-nav :is(a, .preferences-launch)):not(
+  :is(button, .page-action, .document-download, .document-links a, .page-nav :is(a, .preferences-launch, .assistant-launch)):not(
     :disabled
   ):active {
   box-shadow: inset 0 0 0 999px var(--md-sys-state-pressed);
@@ -166,7 +166,7 @@ body :is([role='menu'], .dt-object-menu, .sb-object-menu) {
   color: var(--md-sys-color-on-surface);
   background-color: var(--md-sys-color-surface-container);
 }
-body :is([role='menuitem'], .page-nav :is(a, .preferences-launch)) {
+body :is([role='menuitem'], .page-nav :is(a, .preferences-launch, .assistant-launch)) {
   min-height: 40px;
   display: flex;
   align-items: center;
@@ -206,7 +206,7 @@ body input:is([type='checkbox'], [type='radio'], [type='range']) {
   :root {
     --md-sys-size-target: 48px;
   }
-  body :is(button, .page-nav :is(a, .preferences-launch), .page-action, select) {
+  body :is(button, .page-nav :is(a, .preferences-launch, .assistant-launch), .page-action, select) {
     min-height: 48px;
   }
 }
@@ -284,7 +284,7 @@ body
   padding-block: 6px;
   text-decoration: none;
 }
-.page-nav :is(a, .preferences-launch) {
+.page-nav :is(a, .preferences-launch, .assistant-launch) {
   position: relative;
   border-radius: var(--md-sys-shape-corner-small);
   min-height: 40px;
@@ -293,16 +293,16 @@ body
   font-size: calc(13px * var(--ui-font-scale, 1));
   font-weight: 500;
 }
-.page-nav :is(a, .preferences-launch):hover {
+.page-nav :is(a, .preferences-launch, .assistant-launch):hover {
   color: var(--design-primary);
   background: var(--design-selected);
 }
-.page-nav :is(a, .preferences-launch)[aria-current='page'] {
+.page-nav :is(a, .preferences-launch, .assistant-launch)[aria-current='page'] {
   color: var(--design-primary);
   background: transparent;
   font-weight: 600;
 }
-.page-nav :is(a, .preferences-launch)[aria-current='page']::after {
+.page-nav :is(a, .preferences-launch, .assistant-launch)[aria-current='page']::after {
   content: '';
   position: absolute;
   inset: auto 12px 0;
@@ -1087,7 +1087,7 @@ body[data-page='welcome'] .welcome-screen ::selection {
   .page-nav a {
     padding-block: 5px;
   }
-  .page-nav :is(a, .preferences-launch) {
+  .page-nav :is(a, .preferences-launch, .assistant-launch) {
     padding-inline: 10px;
     font-size: calc(11px * var(--ui-font-scale, 1));
   }
