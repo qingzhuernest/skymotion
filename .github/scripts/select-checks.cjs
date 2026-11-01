@@ -8,7 +8,7 @@ const fallback = [
   'document-action-links.cjs', 'confirmed-review-fixes.cjs', 'deployment-paths.cjs',
 ];
 const groups = [
-  [/^site\/assistant\/|^scripts\/(assistant\/|build-assistant-knowledge\.py)/, ['assistant-prototype.cjs', 'assistant-reported.cjs', 'assistant-coverage.cjs', 'assistant-short-queries.cjs', 'assistant-welcome.cjs']],
+  [/^site\/assistant\/|^scripts\/(assistant\/|build-assistant-knowledge\.py)/, ['assistant-prototype.cjs', 'assistant-reported.cjs', 'assistant-coverage.cjs', 'assistant-short-queries.cjs', 'assistant-welcome.cjs', 'assistant-corpus.cjs', 'assistant-systematic.cjs']],
   [/^site\/observer\.js$/, ['observer-heading.cjs']],
   [/^site\/language\.css$/,
     ['mobile-appbar.cjs', 'shared-ui-lifecycle.cjs', 'material-components.cjs']],

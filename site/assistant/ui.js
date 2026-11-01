@@ -52,13 +52,14 @@
   function showCard(card,container){
     const content=en()&&card.en?card.en:card;
     container.dataset.cardId=card.id;
-    if(card.status==='draft')container.append(node('p',tr('这条资料尚未核实。','This entry has not yet been checked.'),'assistant-caution'));
+
     if(en()&&!card.en)container.append(node('p','This source entry is currently available in Chinese.','assistant-caution'));
     container.append(node('h3',content.title),node('p',content.answer));
     if(content.steps?.length){const list=node('ol');for(const step of content.steps)list.append(node('li',step));container.append(list);}
     for(const warning of content.warnings||[])if(!/助手|这些是|These (instructions|are)|assistant (does|has)/i.test(warning))container.append(node('p',warning,'assistant-caution'));
     const references=node('details',undefined,'assistant-references');
     references.append(node('summary',tr('参考资料','References')));
+    if(card.status==='draft')references.append(node('p',tr('来自知识原文，尚未逐项交互核验。','Source text; not individually interaction-tested.'),'assistant-caution'));
     references.append(node('p',(card.sourceIds||[card.id]).join(' · '),'assistant-source'));
     const url=target(card);
     if(url){const link=node('a',tr('对应使用手册 →','Relevant guide →'));link.href=url;references.append(link);}
@@ -121,7 +122,8 @@
         top5:engine(question).map(hit=>({id:hit.card.id,score:hit.score,status:hit.card.status,exact:hit.exact,coverage:hit.coverage}))};
       lastDiagnostic=diagnostic;
       const blocked=searchModule.guard(question);
-      if(blocked){
+      diagnostic.actionRequested=blocked==='action';
+      if(blocked&&blocked!=='action'){
         diagnostic.decision='refuse';diagnostic.reason=blocked;
         const messages={
           dynamic:['我暂时不能可靠计算这个数值。请在实验台设置地点、日期和时刻，读取对应图解。','I cannot reliably calculate this value. Set the location, date and time in the Lab and read the diagram.'],

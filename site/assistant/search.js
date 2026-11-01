@@ -1,9 +1,9 @@
 /* Local lexical retrieval; no scientific state reads, writes, or generated facts. */
 function canonical(value) {
-  return String(value).normalize('NFKC').toLowerCase()
+  return String(value).normalize('NFKC').toLowerCase().replace(/的/g,'')
     .replace(/太样/g,'太阳').replace(/軌/g,'轨').replace(/兩/g,'两').replace(/陽/g,'阳')
     .replace(/比較/g,'比较').replace(/緯/g,'纬').replace(/顯示/g,'显示')
-    .replace(/行星半月/g,'行星伴月');
+    .replace(/行星半月/g,'行星伴月').replace(/太阳高度角/g,'太阳高度').replace(/观察城市|观测城市|预设城市|观测地点|观察地点/g,'地点').replace(/竖直立杆高度|立杆高度|杆高度/g,'杆高').replace(/新增|增加/g,'添加');
 }
 export function normalize(value) {return canonical(value).replace(/[^\p{L}\p{N}]/gu,'');}
 function tokens(text) {
@@ -12,39 +12,73 @@ function tokens(text) {
     ? Array.from({length:Math.max(1,word.length-1)},(_,i)=>word.slice(i,i+2)) : [word.replace(/(ing|es|s)$/,'')]);
 }
 export function guard(query) {
+  const plain=query.replace(/<[^>]*>/g,'').trim();
+  if(/应怎样回答|该怎样答|怎样回复|如何回答|怎么答/.test(query))return null;
+  if(/公式|原理|计算方法|如何计算|怎么计算/.test(query)&&!/几点|多少度|具体数值/.test(query))return null;
   const guidance=/如何|怎么|怎样|哪里|观察|查看|how.*(observe|view|use)|where/i.test(query);
-  if (/(天气|新闻|股票|写小说|写代码|weather|stock price|latest news|write (a )?(story|code))/i.test(query)) return 'outside';
-  if ((!guidance||/几点|多少|几时|what time|how high/i.test(query)) && /(今天|明天|现在|此刻|today|tomorrow|right now|current)/i.test(query) &&
+  if (/^(天气|weather)$|天气预报|明天.*(下雨|晴天)|新闻|股票|写.{0,4}小说|weather forecast|stock price|latest news|write (a )?story/i.test(plain)) return 'outside';
+  if (/太阳|月球|月亮|行星|火星|金星|土星|木星|影长|高度|方位|升落|日出|日落|sun|moon|planet|shadow|altitude|azimuth/i.test(query) && (!guidance||/几点|多少|几时|what time|how high/i.test(query)) && /(今天|明天|现在|此刻|today|tomorrow|right now|current)/i.test(query) &&
       /(几点|多少|几时|高度|方位|日出|日落|时刻|sunset|sunrise|altitude|azimuth|what time|how (high|long))/i.test(query)) return 'dynamic';
   if (/(日出|日落|月出|月落|太阳高度|月球高度|sunrise|sunset|solar altitude|moonrise|moonset)/i.test(query) &&
       /(几点|几时|多少度|是多少|精确时刻|what time|exact time|how high|calculate)/i.test(query)) return 'dynamic';
   if (/(帮我|替我|直接|please|can you).*(设置|添加|保存|点击|set |add |save |click )/i.test(query)) return 'action';
   return null;
 }
+export function questionCore(value){
+  let text=normalize(value),previous;
+  do{
+    previous=text;
+    text=text.replace(/^(请问|请|我想知道|我想|我应该|请解释|解释一下|解释|告诉我|能不能|可不可以|可以|能否|能|帮我|替我|如何|怎样|怎么样|怎么才能|怎么|什么是|什么叫|何为|在哪里|哪里|查看|观察|观测|使用|显示|打开|开启|启用|进入|选择|调节|调整|设置|更改|修改|改变|切换|了解|看看)/,'')
+      .replace(/(取决于哪些量|由哪些量决定|怎样快速计算|如何计算|怎么计算|怎样计算|计算方法|如何求|怎么求|应该怎么操作|该怎么操作|怎么操作|怎样操作|如何使用|怎么使用|怎么用|是什么|是什么意思|怎么理解|如何理解|是怎么回事|怎样观察|怎么看|怎么调|怎么设置|在哪里|源码|代码|函数说明|吗|呢)$/,'');
+  }while(text!==previous);
+  return text;
+}
+export function operation(value){
+  const text=normalize(value);
+  return [['delete',/删除|移除|清空|delete|remove/],['import',/导入|import/],['export',/导出|export/],
+    ['rename',/重命名|改名|更名|rename/],['restore',/恢复|重置|restore|reset/],['copy',/复制|copy/],
+    ['save',/保存|存档|save/],['disable',/关闭|隐藏|关掉|停止|暂停|disable|turnoff|hide/]]
+    .find(([,pattern])=>pattern.test(text))?.[0]||null;
+}
+export function queryKind(value){
+  if(/源码|代码|开发|函数|接口|\.js|\.css|state|api|source|code|architecture/i.test(value))return 'developer';
+  if(/为什么|为何|原理|定义|公式|区别|关系|成因|原因|什么是|是什么|如何计算|怎么计算|怎样计算|计算公式|whatis|why|definition|formula|difference/.test(normalize(value))||(/解释|含义|概念/.test(value)&&!/如何|怎样|怎么/.test(value)))return 'science';
+  if(/教学|课堂|学生|一节课|教学任务|lesson|teaching/i.test(value))return 'teaching';
+  return 'howto';
+}
 export function createSearch(records) {
-  const documents = records.map(card=>{
+  const documents=records.map(card=>{
     const fields=[card.title,...card.aliases,card.en?.title||''];
-    return {card,forms:fields.map(normalize),terms:tokens([...fields,...fields,card.answer,...card.steps,card.fullText||''].join(' '))};
+    const terms=tokens([...fields,...fields,card.answer,...card.steps,card.fullText||''].join(' '));
+    const counts=new Map();for(const term of terms)counts.set(term,(counts.get(term)||0)+1);
+    return {card,forms:fields.map(normalize),cores:fields.map(questionCore),counts,length:terms.length};
   });
   const frequency=new Map();
-  for (const doc of documents) for (const token of new Set(doc.terms)) frequency.set(token,(frequency.get(token)||0)+1);
-  const average=documents.reduce((n,d)=>n+d.terms.length,0)/documents.length;
+  for(const doc of documents)for(const term of doc.counts.keys())frequency.set(term,(frequency.get(term)||0)+1);
+  const average=documents.reduce((n,d)=>n+d.length,0)/documents.length;
   return query=>{
-    const cleaned=normalize(query), terms=[...new Set(tokens(query))];
-    if (!cleaned || !terms.length) return [];
-    return documents.map(({card,forms,terms:document})=>{
-      if(card.intent==='developer'&&!/源码|代码|开发|函数|接口|\.js|\.css|state|api|source|code|architecture/i.test(query))return {card,score:0};
-      let score=0, matched=0;
+    const cleaned=normalize(query),core=questionCore(query),kind=queryKind(query),requested=operation(query),terms=[...new Set(tokens(core.length>=2?core:query))];
+    if(!cleaned||!terms.length)return [];
+    return documents.map(({card,forms,cores,counts,length})=>{
+      if(card.intent==='developer'&&kind!=='developer')return {card,score:0};
+      let score=0,matched=0;
       for(const term of terms){
-        const count=document.filter(t=>t===term).length;
-        if(!count)continue;
-        matched++;
+        const count=counts.get(term)||0;if(!count)continue;matched++;
         const idf=Math.log(1+(records.length-(frequency.get(term)||0)+0.5)/((frequency.get(term)||0)+0.5));
-        score+=idf*count*2.2/(count+1.2*(0.25+0.75*document.length/average));
+        score+=idf*count*2.2/(count+1.2*(0.25+0.75*length/average));
       }
-      const exact=forms.some(form=>form===cleaned || (form.length>=6&&cleaned.includes(form)));
-      const coverage=matched/terms.length;
-      return {card,score:score+(exact?1000:0),exact,coverage};
+      const titleExact=forms[0]===cleaned,aliasExact=forms.slice(1).includes(cleaned);
+      const coreExact=core.length>=2&&cores.includes(core);
+      const contained=forms.some(form=>form.length>=6&&cleaned.includes(form));
+      const titleOperation=operation(card.title);
+      const opposite=requested&&titleOperation&&requested!==titleOperation;
+      const exact=!opposite&&(titleExact||aliasExact||contained);
+      if(!opposite)score+=titleExact?2000:aliasExact?1800:contained?1000:coreExact?800:0;
+      if((exact||coreExact)&&card.status!=='draft')score+=250;
+      if(kind==='science'&&card.intent==='science')score+=matched?12:0;
+      if(kind==='teaching'&&card.id.startsWith('GUIDE:'))score+=matched?12:0;
+      if(opposite)score*=0.1;
+      return {card,score,exact,coreExact:coreExact&&!opposite,coverage:matched/terms.length};
     }).filter(hit=>hit.score>0).sort((a,b)=>b.score-a.score).slice(0,5);
   };
 }
@@ -58,7 +92,7 @@ export function interpretTask(query) {
   if(planet&&/月球|月亮|moon/.test(text)&&/相对|位置|角距|夹角|伴月|比较|relative|position|separation|compare/.test(text))
     return {id:'site:MOON-012',intent:'compare',planet};
   if(/行星伴月|planetmoon|planetnearmoon/.test(text)){
-    const intent=/开启|启用|开关|enable|turnon/.test(text)?'enable':/打开|进入|open/.test(text)?'open':'howto';
+    const intent=/关闭|禁用|关掉|disable|turnoff/.test(text)?'disable':/开启|启用|开关|enable|turnon/.test(text)?'enable':/打开|进入|open/.test(text)?'open':'howto';
     return {id:'site:MOON-011',intent,variant:intent==='howto'?null:intent};
   }
   if(/太阳.{0,2}视运动|太阳日轨迹|apparentsolarmotion|observethesun/.test(text)
@@ -69,6 +103,13 @@ export function interpretTask(query) {
 }
 
 export function selectAnswer(query,hits,records) {
+  if(operation(query)==='disable'){
+    const text=normalize(query);
+    const toggle=records.filter(card=>card.variants?.disable).flatMap(card=>(card.disableTerms||[])
+      .filter(term=>normalize(term).length>=2&&text.includes(normalize(term))).map(term=>({card,length:normalize(term).length})))
+      .sort((a,b)=>b.length-a.length)[0];
+    if(toggle)return {card:{...toggle.card,...toggle.card.variants.disable},reason:'documented_toggle_off',intent:'disable'};
+  }
   const task=interpretTask(query);
   if(task){
     const card=records.find(card=>card.id===task.id);
@@ -86,16 +127,20 @@ export function selectAnswer(query,hits,records) {
     return {reason:'task_not_reviewed',intent:task.intent};
   }
   const top=hits[0];
-  if(top?.exact&&top.card.status!=='draft')return {card:top.card,reason:'strong_reviewed_lexical_match'};
+  if(top?.exact)return {card:top.card,reason:top.card.status==='draft'?'attributed_exact_source':'strong_reviewed_lexical_match'};
   const text=normalize(query);
-  if(!/是什么|什么是|为什么|原理|定义|公式|区别|关系|成因|原因|whatis|why|definition|formula|difference/.test(text)){
+  if(!/是什么|什么是|为什么|原理|定义|公式|区别|关系|成因|原因|如何计算|怎么计算|怎样计算|计算公式|whatis|why|definition|formula|difference/.test(text)){
     const topics=records.filter(card=>card.status!=='draft').flatMap(card=>(card.taskTerms||[])
-      .filter(term=>text.includes(normalize(term))).map(term=>({card,length:normalize(term).length})))
+      .filter(term=>text.includes(normalize(term)))
+      .filter(()=>!operation(query)||operation(card.title)===operation(query))
+      .map(term=>({card,length:normalize(term).length})))
       .sort((a,b)=>b.length-a.length);
     if(topics.length)return {card:topics[0].card,reason:'documented_feature_topic',intent:'howto'};
   }
+  if(top?.coreExact&&top.score-(hits[1]?.score||0)>20)return {card:top.card,reason:'corpus_question_match'};
+  if(top&&operation(query)&&operation(top.card.title)===operation(query)&&top.coverage>=0.6&&top.score>=10&&top.score>(hits[1]?.score||0)*1.5)return {card:top.card,reason:'source_action_match'};
   const strong=top&&(top.exact||(top.coverage>=0.72&&top.score>=12&&top.score>(hits[1]?.score||0)*1.28));
-  if(strong&&top.card.status!=='draft')return {card:top.card,reason:'strong_reviewed_lexical_match'};
+  if(strong)return {card:top.card,reason:top.card.status==='draft'?'attributed_source_match':'strong_reviewed_lexical_match'};
   if(top?.exact)return {card:top.card,reason:'explicit_draft_lookup'};
   return {reason:top?.card.status==='draft'?'draft_or_weak_match':'weak_or_ambiguous_match'};
 }
@@ -104,6 +149,7 @@ export function selectSemanticAnswer(query,matches,hits,records){
   const top=matches[0],next=matches[1];
   if(!top||top.score<0.7||top.score-(next?.score||0)<0.07)return null;
   const card=records.find(card=>card.id===top.id),lexical=hits.find(hit=>hit.card.id===top.id);
-  if(!card||card.status==='draft'||!lexical||lexical.coverage<0.5)return null;
+  if(!card||!lexical||lexical.coverage<0.5)return null;
+  if(operation(query)&&operation(card.title)!==operation(query))return null;
   return card;
 }

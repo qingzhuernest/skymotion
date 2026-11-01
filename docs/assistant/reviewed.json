@@ -24,7 +24,10 @@
       "Beijing Shanghai sun paths",
       "overlay solar tracks",
       "different latitudes same chart",
-      "怎样比较两个城市的太阳轨迹"
+      "怎样比较两个城市的太阳轨迹",
+      "添加城市",
+      "增加对照城市",
+      "新增城市"
     ],
     "target": "project-guide.html#comparisons",
     "en": {
@@ -56,14 +59,19 @@
       "title": "Save a complete experiment",
       "answer": "Use the complete-experiment save in Arrangement & saved items to retain the experiment's conditions, layout and supported reference objects. A layout favorite alone does not store all scientific conditions.",
       "steps": [
-        "Open Arrangement & saved items.",
-        "Use Save complete experiment and give the record a name."
+        "Open Arrangement & saved items in Views & layout.",
+        "Select Include conditions and objects, enter a name, then choose Save layout.",
+        "Export a backup if you need the complete experiment in another browser or device."
       ],
       "warnings": [
         "Browser storage belongs to this browser and site. Export a backup if you need to move it to another device."
       ]
     },
-    "steps": []
+    "steps": [
+      "打开「视图与布局」中的「排列与收藏」。",
+      "勾选「连同观测与对象保存」，输入收藏名称，再点击「保存组合」。",
+      "需要换浏览器或设备使用时，另外导出完整实验，保存备份。"
+    ]
   },
   "site:EDIT-010": {
     "aliases": [
@@ -80,8 +88,7 @@
       "warnings": [
         "Local storage is not automatic cloud synchronization. Export important work."
       ]
-    },
-    "steps": []
+    }
   },
   "site:STATE-001": {
     "aliases": [
@@ -100,8 +107,7 @@
       "warnings": [
         "Latitude ranges from −90° to 90°; longitude from −180° to 180°."
       ]
-    },
-    "steps": []
+    }
   },
   "site:STATE-003": {
     "aliases": [
@@ -118,8 +124,7 @@
       "warnings": [
         "Do not treat equal local solar times at different longitudes as the same UTC instant."
       ]
-    },
-    "steps": []
+    }
   },
   "site:VIEW-014": {
     "aliases": [
@@ -135,8 +140,7 @@
       "warnings": [
         "A daily solar path and an annual analemma are different observations."
       ]
-    },
-    "steps": []
+    }
   },
   "site:VIEW-013": {
     "aliases": [
@@ -152,8 +156,7 @@
       "warnings": [
         "It does not reconstruct a real spacecraft trajectory from the Lab calendar."
       ]
-    },
-    "steps": []
+    }
   },
   "site:SITE-008": {
     "aliases": [
@@ -169,8 +172,7 @@
       "answer": "Open Settings in the main navigation. Reading & language contains language choices; Appearance & night contains the theme and colors. These preferences do not change the scientific observation conditions.",
       "steps": [],
       "warnings": []
-    },
-    "steps": []
+    }
   },
   "science:EARTH-004": {
     "aliases": [
@@ -189,8 +191,7 @@
       "warnings": [
         "Changing Earth–Sun distance is not the main cause of the seasons. Seasonal climate also depends on the atmosphere, oceans and land."
       ]
-    },
-    "steps": []
+    }
   },
   "science:ANA-001": {
     "aliases": [
@@ -209,8 +210,7 @@
       "warnings": [
         "Specify whether the sampling uses fixed civil/mean clock time or fixed apparent solar time; they produce different patterns."
       ]
-    },
-    "steps": []
+    }
   },
   "science:ANA-002": {
     "aliases": [
@@ -226,8 +226,7 @@
       "warnings": [
         "The pattern depends on the sampling time basis and projection. It is not the shape of the Sun's physical orbit around Earth."
       ]
-    },
-    "steps": []
+    }
   },
   "science:MOON-001": {
     "aliases": [
@@ -245,8 +244,7 @@
       "warnings": [
         "Ordinary phases are not caused by Earth's shadow; that shadow is involved in a lunar eclipse."
       ]
-    },
-    "steps": []
+    }
   },
   "science:PLANET-001": {
     "aliases": [
@@ -263,8 +261,7 @@
       "warnings": [
         "Small angular separation does not guarantee naked-eye visibility; altitude, twilight, weather and terrain also matter."
       ]
-    },
-    "steps": []
+    }
   },
   "science:GEO-009": {
     "aliases": [
@@ -279,8 +276,7 @@
       "answer": "Turning a camera changes the view of the same scene. Changing the observer location, date or time changes the physical observation conditions. They are different operations.",
       "steps": [],
       "warnings": []
-    },
-    "steps": []
+    }
   },
   "science:SHADOW-012": {
     "aliases": [
@@ -297,8 +293,7 @@
       "warnings": [
         "Changing the physical gnomon height is a separate experiment parameter."
       ]
-    },
-    "steps": []
+    }
   },
   "science:TIME-007": {
     "aliases": [
@@ -315,8 +310,7 @@
       "warnings": [
         "Keep the chosen time basis consistent when interpreting comparisons."
       ]
-    },
-    "steps": []
+    }
   },
   "science:TIME-002": {
     "aliases": [
@@ -332,8 +326,7 @@
       "warnings": [
         "It differs from civil time because of longitude, time-zone conventions and the equation of time."
       ]
-    },
-    "steps": []
+    }
   },
   "science:DAY-012": {
     "aliases": [
@@ -351,8 +344,7 @@
       "warnings": [
         "Check the selected location, date and body first. A missing event is not a zero-degree event, and does not by itself indicate a software error."
       ]
-    },
-    "steps": []
+    }
   },
   "science:GEO-001": {
     "aliases": [
@@ -367,8 +359,7 @@
       "warnings": [
         "The Lab uses positive north and negative south."
       ]
-    },
-    "steps": []
+    }
   },
   "science:GEO-002": {
     "aliases": [
@@ -383,8 +374,7 @@
       "warnings": [
         "The Lab uses positive east and negative west. Longitude affects local solar time at a given UTC instant."
       ]
-    },
-    "steps": []
+    }
   },
   "science:DAY-004": {
     "aliases": [
@@ -400,8 +390,7 @@
       "warnings": [
         "Terrain, refraction and the solar disk affect real visibility; the Lab uses a geometric horizon."
       ]
-    },
-    "steps": []
+    }
   },
   "site:LAB-001": {
     "title": "如何观察太阳视运动？",
@@ -548,8 +537,34 @@
             "The assistant does not toggle the switch for you."
           ]
         }
+      },
+      "disable": {
+        "title": "怎样关闭行星伴月演示？",
+        "answer": "在「观测条件」的行星伴月一栏关闭「演示」开关。",
+        "steps": [
+          "打开「观测条件」，找到「行星伴月」。",
+          "关闭「演示」开关。"
+        ],
+        "warnings": [
+          "之后如果从视图目录重新进入行星伴月，当前版本会自动启用演示。"
+        ],
+        "en": {
+          "title": "Turn off the planet–Moon demonstration",
+          "answer": "Turn off Demonstration in the planet–Moon section of Observation controls.",
+          "steps": [
+            "Open Observation controls for the companion view.",
+            "Turn off Demonstration."
+          ],
+          "warnings": [
+            "Entering this view again currently enables the demonstration."
+          ]
+        }
       }
-    }
+    },
+    "disableTerms": [
+      "行星伴月",
+      "伴月演示"
+    ]
   },
   "site:MOON-012": {
     "title": "如何观察月球与目标行星的相对位置？",
@@ -635,7 +650,31 @@
       "warnings": [
         "A daily path differs from an annual analemma sampled at a fixed daily time."
       ]
-    }
+    },
+    "variants": {
+      "disable": {
+        "title": "怎样隐藏天体轨迹？",
+        "answer": "在天空图的显示辅助中关闭「天体轨迹」，即可隐藏轨迹线。",
+        "steps": [
+          "打开要操作的天空视图。",
+          "打开「观测条件」→「显示辅助」，关闭「天体轨迹」。"
+        ],
+        "en": {
+          "title": "Hide the celestial path",
+          "answer": "Turn off Celestial path in Display aids for the sky view.",
+          "steps": [
+            "Open the sky view you want to adjust.",
+            "In Observation controls → Display aids, turn off Celestial path."
+          ],
+          "warnings": []
+        }
+      }
+    },
+    "disableTerms": [
+      "太阳轨迹",
+      "天体轨迹",
+      "轨迹线"
+    ]
   },
   "site:VIEW-003": {
     "title": "怎样观察杆影长度？",
@@ -681,7 +720,31 @@
       "warnings": [
         "There is no direct-sunlight shadow below the horizon; near the horizon the ideal shadow can exceed the frame."
       ]
-    }
+    },
+    "variants": {
+      "disable": {
+        "title": "怎样隐藏地面影子？",
+        "answer": "在太阳模式下关闭「地面影子」，即可隐藏地面日影。",
+        "steps": [
+          "打开「观测条件」→「显示辅助」→「日影与杆尖影迹」。",
+          "关闭「地面影子」。"
+        ],
+        "en": {
+          "title": "Hide the ground shadow",
+          "answer": "Turn off Ground shadow in Sun mode.",
+          "steps": [
+            "Open Observation controls → Display aids → shadow controls.",
+            "Turn off Ground shadow."
+          ],
+          "warnings": []
+        }
+      }
+    },
+    "disableTerms": [
+      "地面影子",
+      "地面日影",
+      "日影"
+    ]
   },
   "site:SUN-025": {
     "title": "怎样观察日出日落方位？",
@@ -725,6 +788,46 @@
       ],
       "warnings": [
         "Polar day/night may have no crossing. The model uses the geometric horizon without terrain, refraction or solar-radius corrections."
+      ]
+    }
+  },
+  "site:MOON-001": {
+    "title": "怎样观察月球轨迹？",
+    "answer": "切到月球模式后，在天空视图显示「天体轨迹」，用日期与时刻观察月球的位置变化。",
+    "steps": [
+      "在实验台顶部选择「月球」。",
+      "在「视图与布局」选择空间、地平或仰望视角。",
+      "在「观测条件」设置城市和日期，展开「显示辅助」并打开「天体轨迹」。",
+      "调整底部时刻或日期，对照月球高度、方位和轨迹。"
+    ],
+    "warnings": [
+      "月球一天中的轨迹不一定形成闭合圆；地平线下的部分不表示实际可见。"
+    ],
+    "aliases": [
+      "月球轨迹",
+      "月亮轨迹",
+      "怎么查看月球轨迹",
+      "moon path",
+      "show the Moon track"
+    ],
+    "target": "project-guide.html#sun",
+    "sourceIds": [
+      "site:MOON-001",
+      "site:MOON-002",
+      "site:MOON-007",
+      "MANUAL:005"
+    ],
+    "en": {
+      "title": "Observe the Moon’s path",
+      "answer": "Choose Moon mode, enable Celestial path in a sky view, and change the date and time.",
+      "steps": [
+        "Choose Moon in the Lab.",
+        "Choose Spatial view, Horizon view or Look up.",
+        "Set the city and date in Observation controls, and enable Celestial path in Display aids.",
+        "Change the observation time or date and compare lunar altitude, azimuth and the plotted path."
+      ],
+      "warnings": [
+        "A one-day lunar path need not close. A path below the horizon does not imply visibility."
       ]
     }
   }

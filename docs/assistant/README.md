@@ -10,7 +10,7 @@ only in page memory; all retrieval and inference runs on the same origin/device.
 - 625 namespaced units: 355 updated website cards, 144 science cards, 60 public
   manual chapters and 66 current source-file descriptors. The update snapshots are
   in `sources/update142/`; the original science snapshot remains in `sources/`.
-  27 common cards have curated instructions and English answers. The remaining
+  28 common cards have curated instructions and English answers. The remaining
   original cards keep their draft status; published chapters are sourced directly
   from the current structured bilingual manuals, not blanket-certified as UI-tested.
   All 13 revisions in the updated website document are imported.
@@ -19,7 +19,7 @@ only in page memory; all retrieval and inference runs on the same origin/device.
 - A real BGE-small-zh-v1.5 INT8 ONNX model, fixed revision, 512-dimensional CLS unit
   vectors. All document vectors are generated offline. Long documents are chunked with overlapping windows before embedding. One lazy WASM Worker computes
   queries. No cloud LLM, API key, GPU or third-party CDN is required.
-- Uncalibrated semantic results are **candidate entries**, not automatic answers.
+- Semantic matches require a documented source, lexical support and a clear margin; otherwise they remain candidate entries.
   Direct answers require a sufficiently strong text match; dynamic-value and
   automatic-action requests receive explicit limitations instead of fabricated data.
 - Model/worker failure falls back to text retrieval; dialog keyboard/focus handling,
@@ -77,3 +77,6 @@ The reported-query follow-up, task routing, compact chat layout and local-only
 diagnostics are documented in [REPORTED-FIXES.md](REPORTED-FIXES.md).
 
 The 625-unit update and short-question coverage are documented in [UPDATE142.md](UPDATE142.md).
+
+Corpus-wide matching, source-status handling and full coverage evidence are described
+in [UPDATE143.md](UPDATE143.md).

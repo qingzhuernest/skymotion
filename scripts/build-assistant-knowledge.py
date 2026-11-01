@@ -32,6 +32,7 @@ def build(check=False):
             records.append(dict(id=f'{namespace}:{match[1]}', title=match[2].strip(), answer=answer,
                 steps=steps, warnings=warnings, aliases=[], language='zh', intent='science' if namespace == 'science' else 'howto',
                 status='draft', target=None, sourceRefs=[fields.get('参考', fields.get('源码／文档', 'Author science knowledge snapshot'))]))
+            if namespace=='site' and match[1].startswith('SCI-'):records[-1]['intent']='science'
     content = json.loads((ROOT / 'docs/document-content.json').read_text())
     documents = {d['page']+'.html':d for d in content['documents']}
     for name, expected in [('learning',18),('manual',20),('developer',88)]:
@@ -76,6 +77,21 @@ def build(check=False):
     for id,terms in topics.items():
         assert id in by_id and by_id[id]['status']!='draft',id
         by_id[id]['taskTerms']=terms
+    # Every source lookup has a real handbook destination. This is a citation,
+    # not a blanket upgrade of the source's review status.
+    for r in records:
+        if r['target']:continue
+        prefix=r['id'].split(':')[-1].split('-')[0]
+        if r['intent']=='science':
+            anchor={'GEO':'conditions','EARTH':'earth','SUN':'sun','DAY':'bearings','TIME':'conditions',
+                'SHADOW':'sun','MOON':'moon','PLANET':'moon','ANA':'analemma','EARTHRISE':'earthrise'}.get(prefix,'help')
+        else:
+            anchor={'SITE':'overview','STATE':'conditions','VIEW':'views','EDIT':'customization','RULE':'help',
+                'UI':'controls','LAB':'conditions','SUN':'sun','MOON':'moon','YEAR':'analemma','LAY':'layout',
+                'REF':'customization','BUILD':'builder','SAVE':'saving','PREF':'controls','SPACE':'space'}.get(prefix,'help')
+            if '日晷' in r['title']:anchor='sundial'
+            if '地升' in r['title']:anchor='earthrise'
+        r['target']='project-guide.html#'+anchor
     for r in records:
         assert all(id in by_id for id in r.get('sourceIds', [])), r['id']
         if r['target']:

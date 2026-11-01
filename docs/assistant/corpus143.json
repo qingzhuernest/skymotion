@@ -1,0 +1,4390 @@
+{
+  "kind": "Source-derived coverage probes; not an independent accuracy evaluation",
+  "groups": {
+    "site": 355,
+    "science": 144,
+    "GUIDE": 18,
+    "MANUAL": 20,
+    "DEV": 88
+  },
+  "total": 625,
+  "rows": [
+    {
+      "source": "site:SITE-001",
+      "question": "我想知道怎么skymotion呢",
+      "selected": "site:SITE-001",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SITE-002",
+      "question": "我想知道怎么网站有哪些主入口呢",
+      "selected": "MANUAL:001",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:SITE-003",
+      "question": "我想知道怎么实验台关联图解日行迹是否是不同实验呢",
+      "selected": "site:SITE-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SITE-004",
+      "question": "我想知道怎么普通用户如何开始呢",
+      "selected": "site:SITE-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SITE-005",
+      "question": "我想知道怎么太阳与月球呢",
+      "selected": "site:SITE-005",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SITE-006",
+      "question": "我想知道怎么在手机上操作呢",
+      "selected": "site:SITE-006",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SITE-007",
+      "question": "我想知道怎么找帮助和教学任务呢",
+      "selected": "site:SITE-007",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SITE-008",
+      "question": "我想知道怎么中文或英文主题和阅读偏好呢",
+      "selected": "site:SITE-008",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:STATE-001",
+      "question": "我想知道怎么地点呢",
+      "selected": "site:STATE-001",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:STATE-002",
+      "question": "我想知道怎么日期呢",
+      "selected": "site:STATE-002",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:STATE-003",
+      "question": "我想知道怎么底部时间表示北京时间呢",
+      "selected": "site:STATE-003",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:STATE-004",
+      "question": "我想知道怎么微调一天中时刻呢",
+      "selected": "site:STATE-004",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:STATE-005",
+      "question": "我想知道怎么逐日播放和日内播放有何区别呢",
+      "selected": "site:STATE-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:STATE-006",
+      "question": "我想知道怎么理想实验与真实日期观测呢",
+      "selected": "site:STATE-006",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:STATE-007",
+      "question": "我想知道怎么真实位置数据来自实时网络呢",
+      "selected": "site:STATE-007",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:STATE-008",
+      "question": "我想知道怎么固定同一utc瞬间和固定当地真太阳时有何差别呢",
+      "selected": "site:STATE-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:STATE-009",
+      "question": "我想知道怎么哪些调节只改变画面不改变科学结果呢",
+      "selected": "site:STATE-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:STATE-010",
+      "question": "我想知道怎么日出日落为什么有时没有数值呢",
+      "selected": "site:STATE-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:VIEW-001",
+      "question": "我想知道怎么太阳天空有哪四种视角呢",
+      "selected": "site:VIEW-001",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:VIEW-002",
+      "question": "我想知道怎么空间视图可以看什么呢",
+      "selected": "site:VIEW-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:VIEW-003",
+      "question": "我想知道怎么杆影长度呢",
+      "selected": "site:VIEW-003",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:VIEW-004",
+      "question": "我想知道怎么地平视角与仰望天空有何不同呢",
+      "selected": "site:VIEW-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:VIEW-005",
+      "question": "我想知道怎么地球与昼夜图能解释什么呢",
+      "selected": "site:VIEW-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:VIEW-006",
+      "question": "我想知道怎么地轴与地平面图用来做什么呢",
+      "selected": "site:VIEW-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:VIEW-007",
+      "question": "我想知道怎么全天高度曲线呢",
+      "selected": "MANUAL:007",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:VIEW-008",
+      "question": "我想知道怎么日出日落方位图如何操作呢",
+      "selected": "site:VIEW-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:VIEW-009",
+      "question": "我想知道怎么日出日落结果是否考虑山地大气折射呢",
+      "selected": "site:VIEW-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:VIEW-010",
+      "question": "我想知道怎么月相与关系图展示什么呢",
+      "selected": "site:VIEW-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:VIEW-011",
+      "question": "我想知道怎么逐日照明比例图回答什么问题呢",
+      "selected": "site:VIEW-011",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:VIEW-012",
+      "question": "我想知道怎么行星伴月表示什么呢",
+      "selected": "site:MOON-011",
+      "reason": "reviewed_task_plan",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:VIEW-013",
+      "question": "我想知道怎么地升地落呢",
+      "selected": "MANUAL:010",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:VIEW-014",
+      "question": "我想知道怎么日行迹呢",
+      "selected": "MANUAL:011",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:VIEW-015",
+      "question": "我想知道怎么日晷实验能做什么呢",
+      "selected": "site:VIEW-015",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EDIT-001",
+      "question": "我想知道怎么自定义呢",
+      "selected": "MANUAL:013",
+      "reason": "corpus_question_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:EDIT-002",
+      "question": "我想知道怎么在同一张图比较两个城市太阳轨迹呢",
+      "selected": "site:EDIT-002",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:EDIT-003",
+      "question": "我想知道怎么跨图选中城市呢",
+      "selected": "site:EDIT-003",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EDIT-004",
+      "question": "我想知道怎么进行同地不同时刻或异地同瞬间对照呢",
+      "selected": "site:EDIT-004",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EDIT-005",
+      "question": "我想知道怎么图中还能添加哪些参考呢",
+      "selected": "site:EDIT-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EDIT-006",
+      "question": "我想知道怎么组合多张图呢",
+      "selected": "MANUAL:004",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:EDIT-007",
+      "question": "我想知道怎么放大某张图又不破坏组合呢",
+      "selected": "site:EDIT-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EDIT-008",
+      "question": "我想知道怎么搭建自己影子实验呢",
+      "selected": "site:EDIT-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EDIT-009",
+      "question": "我想知道怎么撤销或重做呢",
+      "selected": "site:EDIT-009",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EDIT-010",
+      "question": "我想知道怎么会话草稿收藏与完整实验有什么区别呢",
+      "selected": "site:EDIT-010",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:EDIT-011",
+      "question": "我想知道怎么刷新或换设备后保存东西还在呢",
+      "selected": "site:EDIT-011",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-001",
+      "question": "我想知道怎么三维天空与实验台是什么关系呢",
+      "selected": "site:SPACE-001",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-002",
+      "question": "我想知道怎么在三维太阳系中选择行星呢",
+      "selected": "site:SPACE-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-003",
+      "question": "我想知道怎么三维视图距离和大小是真实比例呢",
+      "selected": "site:SPACE-003",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-004",
+      "question": "我想知道怎么三维天空为什么使用webgl呢",
+      "selected": "site:SPACE-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-005",
+      "question": "我想知道怎么网站经纬度方位角高度角如何定义呢",
+      "selected": "site:SPACE-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-006",
+      "question": "我想知道怎么网站是否适合航天导航或真实观测预报呢",
+      "selected": "site:SPACE-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-007",
+      "question": "我想知道怎么网站为何可以在静态托管上工作呢",
+      "selected": "site:SPACE-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-008",
+      "question": "我想知道怎么现有程序关键状态怎样流动呢",
+      "selected": "site:SPACE-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SCI-001",
+      "question": "请解释一下为什么有四季",
+      "selected": "science:EARTH-004",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:SCI-002",
+      "question": "请解释一下为什么太阳高度会随时刻变化",
+      "selected": "site:SCI-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SCI-003",
+      "question": "请解释一下为什么南北方看到太阳轨迹不同",
+      "selected": "site:SCI-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SCI-004",
+      "question": "请解释一下为什么日影和太阳方向相反",
+      "selected": "site:SCI-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SCI-005",
+      "question": "请解释一下极昼和极夜意味着什么",
+      "selected": "site:SCI-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SCI-006",
+      "question": "请解释一下月相为什么变化",
+      "selected": "site:SCI-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SCI-007",
+      "question": "请解释一下日行迹8字形",
+      "selected": "MANUAL:011",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:SCI-008",
+      "question": "请解释一下真太阳时和法定钟表时间有什么区别",
+      "selected": "site:SCI-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SCI-009",
+      "question": "请解释一下太阳升落方位为什么随季节变化",
+      "selected": "site:SCI-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SCI-010",
+      "question": "请解释一下为什么月球和行星靠得很近并不代表真靠近",
+      "selected": "site:SCI-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:RULE-001",
+      "question": "我想知道怎么提问分类呢",
+      "selected": "site:RULE-001",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:RULE-002",
+      "question": "我想知道怎么不执行未开发操作呢",
+      "selected": "site:RULE-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:RULE-003",
+      "question": "我想知道怎么不能混淆五组概念呢",
+      "selected": "site:RULE-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:RULE-004",
+      "question": "我想知道怎么遇到条件缺失怎样回答呢",
+      "selected": "site:RULE-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:RULE-005",
+      "question": "我想知道怎么版本和可信度呢",
+      "selected": "site:RULE-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:RULE-006",
+      "question": "我想知道怎么知识来源索引呢",
+      "selected": "site:RULE-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-001",
+      "question": "我想知道怎么欢迎页进入实验台呢",
+      "selected": "site:UI-001",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-002",
+      "question": "我想知道怎么欢迎页星空连线呢",
+      "selected": "site:UI-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-003",
+      "question": "我想知道怎么欢迎页召唤流星呢",
+      "selected": "site:UI-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-004",
+      "question": "我想知道怎么顶部进入实验台呢",
+      "selected": "site:UI-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-005",
+      "question": "我想知道怎么顶部进入三维天空呢",
+      "selected": "site:UI-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-006",
+      "question": "我想知道怎么文档中心呢",
+      "selected": "site:UI-006",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-007",
+      "question": "我想知道怎么查找学习指南呢",
+      "selected": "site:UI-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-008",
+      "question": "我想知道怎么查找操作手册呢",
+      "selected": "site:UI-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-009",
+      "question": "我想知道怎么查找开发说明呢",
+      "selected": "site:UI-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-010",
+      "question": "我想知道怎么文档章节导航呢",
+      "selected": "site:UI-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-011",
+      "question": "我想知道怎么中英文页面呢",
+      "selected": "site:UI-011",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-012",
+      "question": "我想知道怎么全站联系反馈呢",
+      "selected": "site:UI-012",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:UI-013",
+      "question": "我想知道怎么专题旧链接呢",
+      "selected": "site:UI-013",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-001",
+      "question": "我想知道怎么太阳视运动呢",
+      "selected": "site:LAB-001",
+      "reason": "reviewed_task_plan",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:LAB-002",
+      "question": "我想知道怎么月球模式呢",
+      "selected": "site:LAB-002",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-003",
+      "question": "我想知道怎么视图与布局呢",
+      "selected": "site:LAB-003",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-004",
+      "question": "我想知道怎么条件呢",
+      "selected": "site:LAB-004",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-005",
+      "question": "我想知道怎么选地点呢",
+      "selected": "site:STATE-001",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:LAB-006",
+      "question": "我想知道怎么纬度呢",
+      "selected": "science:GEO-001",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:LAB-007",
+      "question": "我想知道怎么经度呢",
+      "selected": "science:GEO-002",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:LAB-008",
+      "question": "我想知道怎么具体公历日期呢",
+      "selected": "site:LAB-008",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-009",
+      "question": "我想知道怎么日期前后一天呢",
+      "selected": "site:LAB-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-010",
+      "question": "我想知道怎么日期快捷季节呢",
+      "selected": "site:LAB-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-011",
+      "question": "我想知道怎么真太阳时滑条呢",
+      "selected": "site:LAB-011",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-012",
+      "question": "我想知道怎么精确输入时刻呢",
+      "selected": "site:LAB-012",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-013",
+      "question": "我想知道怎么时间微调五分钟呢",
+      "selected": "site:LAB-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-014",
+      "question": "我想知道怎么日出最高日落快捷呢",
+      "selected": "site:LAB-014",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-015",
+      "question": "我想知道怎么播放或暂停时间呢",
+      "selected": "site:LAB-015",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-016",
+      "question": "我想知道怎么播放时间基准呢",
+      "selected": "site:LAB-016",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-017",
+      "question": "我想知道怎么播放速率呢",
+      "selected": "site:LAB-017",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-018",
+      "question": "我想知道怎么循环播放呢",
+      "selected": "site:LAB-018",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-019",
+      "question": "我想知道怎么真实日期计算呢",
+      "selected": "site:LAB-019",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-020",
+      "question": "我想知道怎么手动理想赤纬呢",
+      "selected": "site:LAB-020",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-021",
+      "question": "我想知道怎么重置实验条件呢",
+      "selected": "site:LAB-021",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAB-022",
+      "question": "我想知道怎么收起与恢复左菜单呢",
+      "selected": "site:LAB-022",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-001",
+      "question": "我想知道怎么空间日影图呢",
+      "selected": "site:VIEW-003",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:SUN-002",
+      "question": "我想知道怎么俯视日影呢",
+      "selected": "site:VIEW-003",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:SUN-003",
+      "question": "我想知道怎么地平视角呢",
+      "selected": "MANUAL:005",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:SUN-004",
+      "question": "我想知道怎么仰望天空呢",
+      "selected": "MANUAL:005",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:SUN-005",
+      "question": "我想知道怎么旋转天空相机呢",
+      "selected": "site:SUN-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-006",
+      "question": "我想知道怎么缩放或复位天空相机呢",
+      "selected": "site:SUN-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-007",
+      "question": "我想知道怎么太阳轨迹呢",
+      "selected": "site:SUN-007",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:SUN-008",
+      "question": "我想知道怎么辅助角度线呢",
+      "selected": "site:SUN-008",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-009",
+      "question": "我想知道怎么立杆和影子呢",
+      "selected": "site:SUN-009",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-010",
+      "question": "我想知道怎么杆高呢",
+      "selected": "site:SUN-010",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-011",
+      "question": "我想知道怎么影子显示倍率呢",
+      "selected": "site:SUN-011",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-012",
+      "question": "我想知道怎么影尖轨迹记录呢",
+      "selected": "site:SUN-012",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-013",
+      "question": "我想知道怎么月球位置叠加太阳天空呢",
+      "selected": "site:SUN-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-014",
+      "question": "我想知道怎么全年逐日观察呢",
+      "selected": "site:SUN-014",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-015",
+      "question": "我想知道怎么逐日播放速率呢",
+      "selected": "site:SUN-015",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-016",
+      "question": "我想知道怎么全年太阳与影尖轨迹呢",
+      "selected": "site:SUN-016",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-017",
+      "question": "我想知道怎么全年轨迹联动日行迹呢",
+      "selected": "site:SUN-017",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-018",
+      "question": "我想知道怎么全天太阳高度曲线呢",
+      "selected": "site:SUN-018",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-019",
+      "question": "我想知道怎么高度曲线点选时刻呢",
+      "selected": "site:SUN-019",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-020",
+      "question": "我想知道怎么地球昼夜球面地图呢",
+      "selected": "site:SUN-020",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-021",
+      "question": "我想知道怎么地球球面拖动模式呢",
+      "selected": "site:SUN-021",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-022",
+      "question": "我想知道怎么地球观察位置约束呢",
+      "selected": "site:SUN-022",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-023",
+      "question": "我想知道怎么地球异地时间依据呢",
+      "selected": "site:SUN-023",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-024",
+      "question": "我想知道怎么地轴与地平面图呢",
+      "selected": "site:SUN-024",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-025",
+      "question": "我想知道怎么日出日落方位呢",
+      "selected": "site:SUN-025",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:SUN-026",
+      "question": "我想知道怎么点击升落点呢",
+      "selected": "site:SUN-026",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-027",
+      "question": "我想知道怎么拖动升落点反求日期呢",
+      "selected": "site:SUN-027",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SUN-028",
+      "question": "我想知道怎么方位图键鼠操作呢",
+      "selected": "site:SUN-028",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-001",
+      "question": "我想知道怎么月球轨迹呢",
+      "selected": "site:MOON-001",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:MOON-002",
+      "question": "我想知道怎么月球天空不同视角呢",
+      "selected": "site:MOON-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-003",
+      "question": "我想知道怎么月相与关系呢",
+      "selected": "MANUAL:009",
+      "reason": "corpus_question_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:MOON-004",
+      "question": "我想知道怎么月相轨道交互呢",
+      "selected": "site:MOON-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-005",
+      "question": "我想知道怎么逐日照明比例呢",
+      "selected": "site:MOON-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-006",
+      "question": "我想知道怎么月球前后一天一月呢",
+      "selected": "site:MOON-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-007",
+      "question": "我想知道怎么月球日内观测呢",
+      "selected": "site:MOON-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-008",
+      "question": "我想知道怎么月球当天事件快捷呢",
+      "selected": "site:MOON-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-009",
+      "question": "我想知道怎么月出月落方位呢",
+      "selected": "MANUAL:008",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:MOON-010",
+      "question": "我想知道怎么月升落端点反求日期呢",
+      "selected": "site:MOON-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-011",
+      "question": "我想知道怎么行星伴月呢",
+      "selected": "site:MOON-011",
+      "reason": "reviewed_task_plan",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:MOON-012",
+      "question": "我想知道怎么月球与目标行星相对位置呢",
+      "selected": "site:MOON-012",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:MOON-013",
+      "question": "我想知道怎么未来30天角距搜索呢",
+      "selected": "site:MOON-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-014",
+      "question": "我想知道怎么行星伴月可见性提示呢",
+      "selected": "site:MOON-011",
+      "reason": "reviewed_task_plan",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:MOON-015",
+      "question": "我想知道怎么地升地落呢",
+      "selected": "MANUAL:010",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:MOON-016",
+      "question": "我想知道怎么绕月飞行与月面固定呢",
+      "selected": "site:MOON-016",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-017",
+      "question": "我想知道怎么轨道示意与宇航员视角呢",
+      "selected": "site:MOON-017",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-018",
+      "question": "我想知道怎么绕月位置角呢",
+      "selected": "site:MOON-018",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-019",
+      "question": "我想知道怎么绕月高度呢",
+      "selected": "site:MOON-019",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-020",
+      "question": "我想知道怎么日地月构型呢",
+      "selected": "site:MOON-020",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-021",
+      "question": "我想知道怎么播放绕月飞行呢",
+      "selected": "site:MOON-021",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-022",
+      "question": "我想知道怎么看地升呢",
+      "selected": "MANUAL:010",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:MOON-023",
+      "question": "我想知道怎么朝向地球或复位视角呢",
+      "selected": "site:MOON-023",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:MOON-024",
+      "question": "我想知道怎么宇航员视场呢",
+      "selected": "site:MOON-024",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-001",
+      "question": "我想知道怎么日行迹呢",
+      "selected": "MANUAL:011",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:YEAR-002",
+      "question": "我想知道怎么开关日行迹图层呢",
+      "selected": "site:YEAR-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-003",
+      "question": "我想知道怎么全年采样时刻呢",
+      "selected": "site:YEAR-003",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-004",
+      "question": "我想知道怎么日行迹时间依据呢",
+      "selected": "MANUAL:011",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:YEAR-005",
+      "question": "我想知道怎么固定utc偏移呢",
+      "selected": "site:YEAR-005",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-006",
+      "question": "我想知道怎么日行迹图解投影呢",
+      "selected": "site:YEAR-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-007",
+      "question": "我想知道怎么日行迹比较时刻呢",
+      "selected": "site:YEAR-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-008",
+      "question": "我想知道怎么日行迹视角拖动与复位呢",
+      "selected": "site:YEAR-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-009",
+      "question": "我想知道怎么日行迹逐日播放呢",
+      "selected": "site:YEAR-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-010",
+      "question": "我想知道怎么联动公共真太阳时呢",
+      "selected": "site:YEAR-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-011",
+      "question": "我想知道怎么理想成因实验呢",
+      "selected": "site:YEAR-011",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-012",
+      "question": "我想知道怎么调地轴倾角呢",
+      "selected": "site:YEAR-012",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-013",
+      "question": "我想知道怎么调轨道偏心率呢",
+      "selected": "site:YEAR-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-014",
+      "question": "我想知道怎么恢复地球参考参数呢",
+      "selected": "site:YEAR-014",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-015",
+      "question": "我想知道怎么日晷呢",
+      "selected": "MANUAL:012",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:YEAR-016",
+      "question": "我想知道怎么日晷装置视图呢",
+      "selected": "site:YEAR-016",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-017",
+      "question": "我想知道怎么日晷盘面读时呢",
+      "selected": "site:YEAR-017",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-018",
+      "question": "我想知道怎么同屏观察水平与赤道日晷呢",
+      "selected": "site:YEAR-018",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-019",
+      "question": "我想知道怎么日晷日期时刻呢",
+      "selected": "MANUAL:012",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:YEAR-020",
+      "question": "我想知道怎么晷针长度呢",
+      "selected": "site:YEAR-020",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:YEAR-021",
+      "question": "我想知道怎么日晷utc偏移呢",
+      "selected": "MANUAL:012",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:YEAR-022",
+      "question": "我想知道怎么日晷几何无解提示呢",
+      "selected": "site:YEAR-022",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-001",
+      "question": "我想知道怎么普通模式打开组合视图呢",
+      "selected": "site:LAY-001",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-002",
+      "question": "我想知道怎么自定义模式呢",
+      "selected": "site:LAY-002",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-003",
+      "question": "我想知道怎么完成自定义模式呢",
+      "selected": "site:LAY-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-004",
+      "question": "我想知道怎么从菜单选择单图呢",
+      "selected": "site:LAY-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-005",
+      "question": "我想知道怎么通过右侧加入控件添加图位呢",
+      "selected": "site:LAY-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-006",
+      "question": "我想知道怎么移除已加入图位呢",
+      "selected": "site:LAY-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-007",
+      "question": "我想知道怎么选中组合图位呢",
+      "selected": "site:LAY-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-008",
+      "question": "我想知道怎么替换当前图位呢",
+      "selected": "site:LAY-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-009",
+      "question": "我想知道怎么展开排列与收藏呢",
+      "selected": "site:LAY-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-010",
+      "question": "我想知道怎么一至四图快捷布局呢",
+      "selected": "site:LAY-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-011",
+      "question": "我想知道怎么双图左右上下呢",
+      "selected": "site:LAY-011",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-012",
+      "question": "我想知道怎么三图均衡或主辅呢",
+      "selected": "site:LAY-012",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-013",
+      "question": "我想知道怎么拖动分隔线改比例呢",
+      "selected": "site:LAY-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-014",
+      "question": "我想知道怎么拖动交换顺序呢",
+      "selected": "site:LAY-014",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-015",
+      "question": "我想知道怎么专注某一张图呢",
+      "selected": "site:LAY-015",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-016",
+      "question": "我想知道怎么退出专注图呢",
+      "selected": "site:LAY-016",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-017",
+      "question": "我想知道怎么手机组合图切换呢",
+      "selected": "site:LAY-017",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-018",
+      "question": "我想知道怎么嵌入三维对照呢",
+      "selected": "site:LAY-018",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:LAY-019",
+      "question": "我想知道怎么切到地点与时间对照呢",
+      "selected": "site:LAY-019",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-001",
+      "question": "我想知道怎么图中对象呢",
+      "selected": "MANUAL:013",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:REF-002",
+      "question": "我想知道怎么快捷任务添加呢",
+      "selected": "site:REF-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-003",
+      "question": "我想知道怎么自由添加工具呢",
+      "selected": "site:REF-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-004",
+      "question": "我想知道怎么图上点击放置参考呢",
+      "selected": "site:REF-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-005",
+      "question": "我想知道怎么对象与编辑属性呢",
+      "selected": "site:REF-005",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-006",
+      "question": "我想知道怎么滑块预览与精确输入呢",
+      "selected": "site:REF-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-007",
+      "question": "我想知道怎么隐藏参考对象呢",
+      "selected": "site:REF-007",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-008",
+      "question": "我想知道怎么锁定解锁参考对象呢",
+      "selected": "site:REF-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-009",
+      "question": "我想知道怎么列表名称与图上标注呢",
+      "selected": "site:REF-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-010",
+      "question": "我想知道怎么添加说明文字呢",
+      "selected": "site:REF-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-011",
+      "question": "我想知道怎么添加重点圈呢",
+      "selected": "site:REF-011",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-012",
+      "question": "我想知道怎么天空地点呢",
+      "selected": "site:STATE-001",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:REF-013",
+      "question": "我想知道怎么天空日期曲线呢",
+      "selected": "site:REF-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-014",
+      "question": "我想知道怎么天空时间标记呢",
+      "selected": "site:REF-014",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-015",
+      "question": "我想知道怎么地球图纬线参考呢",
+      "selected": "site:REF-015",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-016",
+      "question": "我想知道怎么地球图经线参考呢",
+      "selected": "site:REF-016",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-017",
+      "question": "我想知道怎么地球图太阳方向呢",
+      "selected": "site:REF-017",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-018",
+      "question": "我想知道怎么高度图日期对照曲线呢",
+      "selected": "site:REF-018",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-019",
+      "question": "我想知道怎么高度参考线呢",
+      "selected": "site:REF-019",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-020",
+      "question": "我想知道怎么高度图两点差呢",
+      "selected": "site:REF-020",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-021",
+      "question": "我想知道怎么月球照明月份曲线呢",
+      "selected": "site:REF-021",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-022",
+      "question": "我想知道怎么月球照明基准与差值呢",
+      "selected": "site:REF-022",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-023",
+      "question": "我想知道怎么升落方位方向与参考圈呢",
+      "selected": "site:REF-023",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-024",
+      "question": "我想知道怎么升落日期遮挡角对照呢",
+      "selected": "site:REF-024",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-025",
+      "question": "我想知道怎么地轴图观察者与当地竖杆呢",
+      "selected": "site:REF-025",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-026",
+      "question": "我想知道怎么地轴图空间参考圈呢",
+      "selected": "site:REF-026",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-027",
+      "question": "我想知道怎么地轴图原图开关呢",
+      "selected": "site:REF-027",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-028",
+      "question": "我想知道怎么地轴图空间夹角与方向箭头呢",
+      "selected": "site:REF-028",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-029",
+      "question": "我想知道怎么月相日期快照呢",
+      "selected": "site:REF-029",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-030",
+      "question": "我想知道怎么月相相位及光线工具呢",
+      "selected": "site:REF-030",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-031",
+      "question": "我想知道怎么伴月指定日期位置呢",
+      "selected": "site:REF-031",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-032",
+      "question": "我想知道怎么伴月连续轨迹呢",
+      "selected": "site:REF-032",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-033",
+      "question": "我想知道怎么日行迹跨地点跨时刻轨迹呢",
+      "selected": "site:REF-033",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-034",
+      "question": "我想知道怎么日行迹日期与高度参考呢",
+      "selected": "site:REF-034",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-035",
+      "question": "我想知道怎么地升图月面站参考轨道呢",
+      "selected": "site:REF-035",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-036",
+      "question": "我想知道怎么三维太阳系参考工具呢",
+      "selected": "site:REF-036",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-037",
+      "question": "我想知道怎么跨图选择关联城市呢",
+      "selected": "site:REF-037",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-038",
+      "question": "我想知道怎么同瞬间与同太阳时呢",
+      "selected": "site:REF-038",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-039",
+      "question": "我想知道怎么对照城市为基准呢",
+      "selected": "site:REF-039",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-040",
+      "question": "我想知道怎么同地不同时刻快捷任务呢",
+      "selected": "site:REF-040",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:REF-041",
+      "question": "我想知道怎么同地不同日期快捷任务呢",
+      "selected": "site:REF-041",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-001",
+      "question": "我想知道怎么搭建实验呢",
+      "selected": "MANUAL:015",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:BUILD-002",
+      "question": "我想知道怎么空白或示例地面呢",
+      "selected": "site:BUILD-002",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-003",
+      "question": "我想知道怎么添加竖杆呢",
+      "selected": "site:BUILD-003",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-004",
+      "question": "我想知道怎么添加球体呢",
+      "selected": "site:BUILD-004",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-005",
+      "question": "我想知道怎么添加参考圈呢",
+      "selected": "site:BUILD-005",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-006",
+      "question": "我想知道怎么添加参考平面呢",
+      "selected": "site:BUILD-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-007",
+      "question": "我想知道怎么添加刻度盘呢",
+      "selected": "site:BUILD-007",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-008",
+      "question": "我想知道怎么添加观察站呢",
+      "selected": "site:BUILD-008",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-009",
+      "question": "我想知道怎么添加标记点呢",
+      "selected": "site:BUILD-009",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-010",
+      "question": "我想知道怎么添加文字记录呢",
+      "selected": "site:BUILD-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-011",
+      "question": "我想知道怎么一次添加多个呢",
+      "selected": "site:BUILD-011",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-012",
+      "question": "我想知道怎么拖动物体底座呢",
+      "selected": "site:BUILD-012",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-013",
+      "question": "我想知道怎么放置中央或取消呢",
+      "selected": "site:BUILD-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-014",
+      "question": "我想知道怎么编辑高度尺寸及位置呢",
+      "selected": "site:BUILD-014",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-015",
+      "question": "我想知道怎么编辑倾斜与方向呢",
+      "selected": "site:BUILD-015",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-016",
+      "question": "我想知道怎么竖直与贴地约束呢",
+      "selected": "site:BUILD-016",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-017",
+      "question": "我想知道怎么锁定与网格吸附呢",
+      "selected": "site:BUILD-017",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-018",
+      "question": "我想知道怎么地面相机拖动缩放呢",
+      "selected": "site:BUILD-018",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-019",
+      "question": "我想知道怎么多选物体呢",
+      "selected": "site:BUILD-019",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-020",
+      "question": "我想知道怎么沿圈或等距排列呢",
+      "selected": "site:BUILD-020",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-021",
+      "question": "我想知道怎么对齐等距约束呢",
+      "selected": "site:BUILD-021",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-022",
+      "question": "我想知道怎么创建距离角度影长测量呢",
+      "selected": "site:BUILD-022",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-023",
+      "question": "我想知道怎么记录运动轨迹呢",
+      "selected": "site:BUILD-023",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-024",
+      "question": "我想知道怎么清除测量与轨迹呢",
+      "selected": "site:BUILD-024",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-025",
+      "question": "我想知道怎么冻结对照a呢",
+      "selected": "site:BUILD-025",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-026",
+      "question": "我想知道怎么关闭对照实验呢",
+      "selected": "site:BUILD-026",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-027",
+      "question": "我想知道怎么保存地面方案呢",
+      "selected": "site:BUILD-027",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-028",
+      "question": "我想知道怎么清空地面呢",
+      "selected": "site:BUILD-028",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:BUILD-029",
+      "question": "我想知道怎么保存个人记录呢",
+      "selected": "site:BUILD-029",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-009",
+      "question": "我想知道怎么太阳系总览呢",
+      "selected": "MANUAL:018",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "site:SPACE-010",
+      "question": "我想知道怎么日地月关系呢",
+      "selected": "site:SPACE-010",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-011",
+      "question": "我想知道怎么天体近景呢",
+      "selected": "site:SPACE-011",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-012",
+      "question": "我想知道怎么靠近地球观察呢",
+      "selected": "site:SPACE-012",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-013",
+      "question": "我想知道怎么返回太阳系总览呢",
+      "selected": "site:SPACE-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-014",
+      "question": "我想知道怎么三维相机方向预设呢",
+      "selected": "site:SPACE-014",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-015",
+      "question": "我想知道怎么拖动和缩放相机呢",
+      "selected": "site:SPACE-015",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-016",
+      "question": "我想知道怎么复位三维视角呢",
+      "selected": "site:SPACE-016",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-017",
+      "question": "我想知道怎么三维参照呢",
+      "selected": "site:SPACE-017",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-018",
+      "question": "我想知道怎么参照空间俯视呢",
+      "selected": "site:SPACE-018",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-019",
+      "question": "我想知道怎么参照本地天空呢",
+      "selected": "site:SPACE-019",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-020",
+      "question": "我想知道怎么本地天空经纬度呢",
+      "selected": "site:STATE-001",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:SPACE-021",
+      "question": "我想知道怎么三维utc日期呢",
+      "selected": "site:SPACE-021",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-022",
+      "question": "我想知道怎么三维日期播放暂停呢",
+      "selected": "site:SPACE-022",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-023",
+      "question": "我想知道怎么三维播放速度呢",
+      "selected": "site:SPACE-023",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-024",
+      "question": "我想知道怎么三维循环本年呢",
+      "selected": "site:SPACE-024",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-025",
+      "question": "我想知道怎么显隐轨道线呢",
+      "selected": "site:SPACE-025",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-026",
+      "question": "我想知道怎么显隐天体名称呢",
+      "selected": "site:SPACE-026",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-027",
+      "question": "我想知道怎么三维显示真实读数呢",
+      "selected": "site:SPACE-027",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-028",
+      "question": "我想知道怎么地轴与赤道呢",
+      "selected": "site:SPACE-028",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-029",
+      "question": "我想知道怎么黄道参考面呢",
+      "selected": "site:SPACE-029",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-030",
+      "question": "我想知道怎么历史轨迹呢",
+      "selected": "site:SPACE-030",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-031",
+      "question": "我想知道怎么轨迹回看天数呢",
+      "selected": "site:SPACE-031",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-032",
+      "question": "我想知道怎么卫星群呢",
+      "selected": "site:SPACE-032",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-033",
+      "question": "我想知道怎么小行星呢",
+      "selected": "site:SPACE-033",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-034",
+      "question": "我想知道怎么周期彗星呢",
+      "selected": "site:SPACE-034",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-035",
+      "question": "我想知道怎么星空背景呢",
+      "selected": "site:SPACE-035",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-036",
+      "question": "我想知道怎么星云影像背景呢",
+      "selected": "site:SPACE-036",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-037",
+      "question": "我想知道怎么星云影像和来源呢",
+      "selected": "site:SPACE-037",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-038",
+      "question": "我想知道怎么沉浸观察呢",
+      "selected": "site:SPACE-038",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-039",
+      "question": "我想知道怎么沉浸模式退出呢",
+      "selected": "site:SPACE-039",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SPACE-040",
+      "question": "我想知道怎么三维画面故障回退呢",
+      "selected": "site:SPACE-040",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-001",
+      "question": "我想知道怎么保存纯布局组合呢",
+      "selected": "site:SAVE-001",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-002",
+      "question": "我想知道怎么保存完整实验呢",
+      "selected": "site:SAVE-002",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "site:SAVE-003",
+      "question": "我想知道怎么恢复已保存布局呢",
+      "selected": "site:SAVE-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-004",
+      "question": "我想知道怎么恢复完整实验呢",
+      "selected": "site:SAVE-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-005",
+      "question": "我想知道怎么收藏更名更新删除呢",
+      "selected": "site:SAVE-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-006",
+      "question": "我想知道怎么保存本图参考对象呢",
+      "selected": "site:SAVE-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-007",
+      "question": "我想知道怎么复制或删除参考对象呢",
+      "selected": "site:SAVE-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-008",
+      "question": "我想知道怎么导出参考对象json呢",
+      "selected": "site:SAVE-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-009",
+      "question": "我想知道怎么导入参考对象json呢",
+      "selected": "site:SAVE-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-010",
+      "question": "我想知道怎么清空参考对象呢",
+      "selected": "site:SAVE-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-011",
+      "question": "我想知道怎么保存地面物体呢",
+      "selected": "site:SAVE-011",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-012",
+      "question": "我想知道怎么会话草稿恢复呢",
+      "selected": "site:SAVE-012",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-013",
+      "question": "我想知道怎么浏览器前进后退呢",
+      "selected": "site:SAVE-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-014",
+      "question": "我想知道怎么对象撤销与重做呢",
+      "selected": "site:SAVE-014",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-015",
+      "question": "我想知道怎么布局撤销与重做呢",
+      "selected": "site:SAVE-015",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-016",
+      "question": "我想知道怎么escape取消未完成交互呢",
+      "selected": "site:SAVE-016",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-017",
+      "question": "我想知道怎么存储不可用处理呢",
+      "selected": "site:SAVE-017",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:SAVE-018",
+      "question": "我想知道怎么恢复旧存档无效记录呢",
+      "selected": "site:SAVE-018",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-001",
+      "question": "我想知道怎么关闭设置呢",
+      "selected": "site:PREF-001",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-002",
+      "question": "我想知道怎么浅色深色跟随系统呢",
+      "selected": "site:PREF-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-003",
+      "question": "我想知道怎么定时夜间模式呢",
+      "selected": "site:PREF-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-004",
+      "question": "我想知道怎么纯黑模式呢",
+      "selected": "site:PREF-004",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-005",
+      "question": "我想知道怎么预设配色呢",
+      "selected": "site:PREF-005",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-006",
+      "question": "我想知道怎么自定义主色呢",
+      "selected": "site:PREF-006",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-007",
+      "question": "我想知道怎么自定义页面背景呢",
+      "selected": "site:PREF-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-008",
+      "question": "我想知道怎么自定义科学画布背景呢",
+      "selected": "site:PREF-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-009",
+      "question": "我想知道怎么高对比度呢",
+      "selected": "site:PREF-009",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-010",
+      "question": "我想知道怎么界面字号呢",
+      "selected": "site:PREF-010",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-011",
+      "question": "我想知道怎么文档字号与行距呢",
+      "selected": "site:PREF-011",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-012",
+      "question": "我想知道怎么阅读宽度呢",
+      "selected": "site:PREF-012",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-013",
+      "question": "我想知道怎么界面密度呢",
+      "selected": "site:PREF-013",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-014",
+      "question": "我想知道怎么减少动画呢",
+      "selected": "site:PREF-014",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-015",
+      "question": "我想知道怎么欢迎动画设置呢",
+      "selected": "site:PREF-015",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-016",
+      "question": "我想知道怎么平滑滚动开关呢",
+      "selected": "site:PREF-016",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-017",
+      "question": "我想知道怎么三维轨道与天体标签偏好呢",
+      "selected": "site:PREF-017",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-018",
+      "question": "我想知道怎么三维背景星空开关呢",
+      "selected": "site:PREF-018",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-019",
+      "question": "我想知道怎么三维画质选项呢",
+      "selected": "site:PREF-019",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-020",
+      "question": "我想知道怎么缩放档位偏好呢",
+      "selected": "site:PREF-020",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-021",
+      "question": "我想知道怎么记忆菜单偏好呢",
+      "selected": "site:PREF-021",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-022",
+      "question": "我想知道怎么导出设置文件呢",
+      "selected": "site:PREF-022",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-023",
+      "question": "我想知道怎么导入设置文件呢",
+      "selected": "site:PREF-023",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-024",
+      "question": "我想知道怎么恢复本分类默认设置呢",
+      "selected": "site:PREF-024",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-025",
+      "question": "我想知道怎么恢复全部设置呢",
+      "selected": "site:PREF-025",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-026",
+      "question": "我想知道怎么手机参数抽屉呢",
+      "selected": "site:PREF-026",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-027",
+      "question": "我想知道怎么阅读图解全屏呢",
+      "selected": "site:PREF-027",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:PREF-028",
+      "question": "我想知道怎么键盘与触屏导航呢",
+      "selected": "site:PREF-028",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EXTRA-001",
+      "question": "我想知道怎么文档下载markdown呢",
+      "selected": "site:EXTRA-001",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EXTRA-002",
+      "question": "我想知道怎么文档快捷问题跳转呢",
+      "selected": "site:EXTRA-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EXTRA-003",
+      "question": "我想知道怎么已有地理复核旧入口呢",
+      "selected": "site:EXTRA-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EXTRA-004",
+      "question": "我想知道怎么天空图快捷打开搭建呢",
+      "selected": "site:EXTRA-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EXTRA-005",
+      "question": "我想知道怎么自定义图中对象数目上限呢",
+      "selected": "site:EXTRA-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EXTRA-006",
+      "question": "我想知道怎么实验地面物体上限呢",
+      "selected": "site:EXTRA-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EXTRA-007",
+      "question": "我想知道怎么三维卫星点开关呢",
+      "selected": "site:EXTRA-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EXTRA-008",
+      "question": "我想知道怎么三维天体资源未加载呢",
+      "selected": "site:EXTRA-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EXTRA-009",
+      "question": "我想知道怎么三维参数抽屉呢",
+      "selected": "site:EXTRA-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EXTRA-010",
+      "question": "我想知道怎么模式切换后工具消失呢",
+      "selected": "site:EXTRA-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "site:EXTRA-011",
+      "question": "我想知道怎么三维行星示意纹理呢",
+      "selected": "site:EXTRA-011",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:GEO-001",
+      "question": "请解释一下纬度",
+      "selected": "science:GEO-001",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:GEO-002",
+      "question": "请解释一下经度",
+      "selected": "science:GEO-002",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:GEO-003",
+      "question": "请解释一下经线与纬线有何不同",
+      "selected": "science:GEO-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:GEO-004",
+      "question": "请解释一下地轴",
+      "selected": "science:GEO-004",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:GEO-005",
+      "question": "请解释一下地平面和地平线",
+      "selected": "science:GEO-005",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:GEO-006",
+      "question": "请解释一下天顶和天底",
+      "selected": "science:GEO-006",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:GEO-007",
+      "question": "请解释一下高度角怎样定义",
+      "selected": "science:GEO-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:GEO-008",
+      "question": "请解释一下方位角怎样定义",
+      "selected": "science:GEO-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:GEO-009",
+      "question": "请解释一下为何不能靠改变相机视角改变太阳方位",
+      "selected": "science:GEO-009",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:GEO-010",
+      "question": "请解释一下当地东西南北如何与三维坐标对应",
+      "selected": "science:GEO-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:GEO-011",
+      "question": "请解释一下子午线",
+      "selected": "science:GEO-011",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:GEO-012",
+      "question": "请解释一下赤纬",
+      "selected": "science:GEO-012",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:GEO-013",
+      "question": "请解释一下赤经",
+      "selected": "science:GEO-013",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:GEO-014",
+      "question": "请解释一下黄道与黄赤交角",
+      "selected": "science:GEO-014",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-001",
+      "question": "请解释一下地球为什么有昼夜交替",
+      "selected": "science:EARTH-001",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-002",
+      "question": "请解释一下太阳为什么看起来从东向西移动",
+      "selected": "science:EARTH-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-003",
+      "question": "请解释一下自转一周为何不恰好等于一个太阳日",
+      "selected": "science:EARTH-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-004",
+      "question": "请解释一下四季主要成因",
+      "selected": "science:EARTH-004",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:EARTH-005",
+      "question": "请解释一下为什么南北半球季节相反",
+      "selected": "science:EARTH-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-006",
+      "question": "请解释一下春分与秋分",
+      "selected": "science:EARTH-006",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-007",
+      "question": "请解释一下夏至与冬至",
+      "selected": "science:EARTH-007",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-008",
+      "question": "请解释一下太阳直射点",
+      "selected": "science:EARTH-008",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-009",
+      "question": "请解释一下南北回归线为何约在234",
+      "selected": "science:EARTH-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-010",
+      "question": "请解释一下极圈为何约在666",
+      "selected": "science:EARTH-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-011",
+      "question": "请解释一下地球公转轨道是正圆",
+      "selected": "science:EARTH-011",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-012",
+      "question": "请解释一下近日点是不是北半球夏季",
+      "selected": "science:EARTH-012",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-013",
+      "question": "请解释一下同一天不同纬度太阳轨迹为何不同",
+      "selected": "science:EARTH-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTH-014",
+      "question": "请解释一下赤道附近与极地昼夜变化有什么区别",
+      "selected": "science:EARTH-014",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-001",
+      "question": "请解释一下太阳高度",
+      "selected": "science:SUN-001",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-002",
+      "question": "请解释一下正午太阳高度",
+      "selected": "science:SUN-002",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-003",
+      "question": "请解释一下太阳每天一定从正东升起正西落下",
+      "selected": "science:SUN-003",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-004",
+      "question": "请解释一下北半球夏季太阳从哪边升起",
+      "selected": "science:SUN-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-005",
+      "question": "请解释一下北半球冬季太阳从哪边升起",
+      "selected": "science:SUN-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-006",
+      "question": "请解释一下正午太阳一定在正南",
+      "selected": "science:SUN-006",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-007",
+      "question": "请解释一下太阳高度最高是否总在1200",
+      "selected": "science:SUN-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-008",
+      "question": "请解释一下为什么太阳高度曲线通常呈拱形",
+      "selected": "science:SUN-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-009",
+      "question": "请解释一下高度曲线过0意味着什么",
+      "selected": "science:SUN-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-010",
+      "question": "请解释一下一天中太阳方位变化是不是匀速",
+      "selected": "science:SUN-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-011",
+      "question": "请解释一下纬度正午太阳高度一定降低",
+      "selected": "science:SUN-011",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-012",
+      "question": "请解释一下同纬度不同经度太阳轨迹完全一样",
+      "selected": "site:SUN-007",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:SUN-013",
+      "question": "请解释一下太阳时角",
+      "selected": "science:SUN-013",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SUN-014",
+      "question": "请解释一下太阳方向向量有什么用",
+      "selected": "science:SUN-014",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:DAY-001",
+      "question": "请解释一下白昼时长由什么决定",
+      "selected": "science:DAY-001",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:DAY-002",
+      "question": "请解释一下理想模型中昼长怎样算",
+      "selected": "science:DAY-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:DAY-003",
+      "question": "请解释一下夏至是不是北半球所有地方最长白昼",
+      "selected": "science:DAY-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:DAY-004",
+      "question": "请解释一下极昼",
+      "selected": "science:DAY-004",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:DAY-005",
+      "question": "请解释一下极夜",
+      "selected": "science:DAY-005",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:DAY-006",
+      "question": "请解释一下北极点一天之内会正常日出日落各一次",
+      "selected": "science:DAY-006",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:DAY-007",
+      "question": "请解释一下为什么春秋分白昼未必恰好12小时",
+      "selected": "science:DAY-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:DAY-008",
+      "question": "请解释一下大气折射",
+      "selected": "science:DAY-008",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:DAY-009",
+      "question": "请解释一下天文日出和实际看到日出为何可不同",
+      "selected": "science:DAY-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:DAY-010",
+      "question": "请解释一下晨昏圈",
+      "selected": "science:DAY-010",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:DAY-011",
+      "question": "请解释一下曙暮光",
+      "selected": "science:DAY-011",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:DAY-012",
+      "question": "请解释一下为什么极昼没有日落按钮读数",
+      "selected": "science:DAY-012",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:TIME-001",
+      "question": "请解释一下utc",
+      "selected": "science:TIME-001",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:TIME-002",
+      "question": "请解释一下当地真太阳时",
+      "selected": "science:TIME-002",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:TIME-003",
+      "question": "请解释一下当地平太阳时",
+      "selected": "science:TIME-003",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:TIME-004",
+      "question": "请解释一下均时差",
+      "selected": "science:TIME-004",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:TIME-005",
+      "question": "请解释一下为什么太阳正午未必在北京时间12点",
+      "selected": "science:TIME-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:TIME-006",
+      "question": "请解释一下经度相差1地方时相差多久",
+      "selected": "science:TIME-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:TIME-007",
+      "question": "请解释一下同一utc与同一真太阳时有什么不同",
+      "selected": "science:TIME-007",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:TIME-008",
+      "question": "请解释一下时区夏令时和经度是一回事",
+      "selected": "science:TIME-008",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:TIME-009",
+      "question": "请解释一下为什么改变地点会出现日期变化",
+      "selected": "science:TIME-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:TIME-010",
+      "question": "请解释一下日行迹里固定钟表时和固定真太阳时为何不同",
+      "selected": "science:TIME-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:TIME-011",
+      "question": "请解释一下日晷是不是能直接读出手机时间",
+      "selected": "science:TIME-011",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:TIME-012",
+      "question": "请解释一下一天中2400代表什么",
+      "selected": "science:TIME-012",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-001",
+      "question": "请解释一下影子为什么背向太阳",
+      "selected": "science:SHADOW-001",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-002",
+      "question": "请解释一下竖直杆影长怎样求",
+      "selected": "science:SHADOW-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-003",
+      "question": "请解释一下太阳高度30时1米杆影长约多少",
+      "selected": "science:SHADOW-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-004",
+      "question": "请解释一下太阳高度45时影长有什么特点",
+      "selected": "science:SHADOW-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-005",
+      "question": "请解释一下杆高翻倍影长一定翻倍",
+      "selected": "site:VIEW-003",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:SHADOW-006",
+      "question": "请解释一下为什么影子早晚较长",
+      "selected": "science:SHADOW-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-007",
+      "question": "请解释一下最短影子是否必朝正北",
+      "selected": "science:SHADOW-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-008",
+      "question": "请解释一下影尖轨迹是一条直线",
+      "selected": "science:SHADOW-008",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-009",
+      "question": "请解释一下地面是斜坡时还能用ltanh",
+      "selected": "science:SHADOW-009",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-010",
+      "question": "请解释一下日晷怎样计时",
+      "selected": "science:SHADOW-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-011",
+      "question": "请解释一下赤道式日晷与水平式有何不同",
+      "selected": "science:SHADOW-011",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-012",
+      "question": "请解释一下相机缩放会改变真实影长",
+      "selected": "site:VIEW-003",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:SHADOW-013",
+      "question": "请解释一下太阳在地平线下方为什么不画直射影子",
+      "selected": "science:SHADOW-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:SHADOW-014",
+      "question": "请解释一下凭影长反推太阳高度",
+      "selected": "site:VIEW-003",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:MOON-001",
+      "question": "请解释一下月亮为什么有月相",
+      "selected": "science:MOON-001",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:MOON-002",
+      "question": "请解释一下月相依次有哪些",
+      "selected": "science:MOON-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-003",
+      "question": "请解释一下朔月",
+      "selected": "science:MOON-003",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-004",
+      "question": "请解释一下满月",
+      "selected": "science:MOON-004",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-005",
+      "question": "请解释一下上弦月与下弦月有什么区别",
+      "selected": "science:MOON-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-006",
+      "question": "请解释一下朔望月和恒星月分别多长",
+      "selected": "science:MOON-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-007",
+      "question": "请解释一下月球为什么每天大约晚升起",
+      "selected": "science:MOON-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-008",
+      "question": "请解释一下新月一定清晨升傍晚落",
+      "selected": "science:MOON-008",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-009",
+      "question": "请解释一下满月通常什么时候升起",
+      "selected": "science:MOON-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-010",
+      "question": "请解释一下上弦月一般什么时候比较容易看到",
+      "selected": "science:MOON-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-011",
+      "question": "请解释一下月相照明比例是不是地球上任何地点都一样",
+      "selected": "science:MOON-011",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-012",
+      "question": "请解释一下为什么月球总是几乎同一面对着地球",
+      "selected": "science:MOON-012",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-013",
+      "question": "请解释一下月球背面是否永远没有阳光",
+      "selected": "science:MOON-013",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-014",
+      "question": "请解释一下为什么不是每个月都有日食和月食",
+      "selected": "science:MOON-014",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-015",
+      "question": "请解释一下月球轨道为什么不是简单圆形",
+      "selected": "science:MOON-015",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MOON-016",
+      "question": "请解释一下月出月落方位为什么比太阳更复杂",
+      "selected": "MANUAL:008",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "science:PLANET-001",
+      "question": "请解释一下行星伴月",
+      "selected": "site:MOON-011",
+      "reason": "reviewed_task_plan",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:PLANET-002",
+      "question": "请解释一下天球角距离",
+      "selected": "science:PLANET-002",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:PLANET-003",
+      "question": "请解释一下行星伴月一定肉眼能看到",
+      "selected": "site:MOON-011",
+      "reason": "reviewed_task_plan",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:PLANET-004",
+      "question": "请解释一下为什么行星有时顺行有时逆行",
+      "selected": "science:PLANET-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:PLANET-005",
+      "question": "请解释一下金星为什么常在晨昏附近看到",
+      "selected": "science:PLANET-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:PLANET-006",
+      "question": "请解释一下恒星和行星在天空中有何区别",
+      "selected": "science:PLANET-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:PLANET-007",
+      "question": "请解释一下行星大小可否直接从三维画面比较",
+      "selected": "science:PLANET-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:PLANET-008",
+      "question": "请解释一下用伴月日期推断当晚天空一定晴朗",
+      "selected": "science:PLANET-008",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:ANA-001",
+      "question": "请解释一下日行迹",
+      "selected": "MANUAL:011",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "science:ANA-002",
+      "question": "请解释一下日行迹为什么可能是8字形",
+      "selected": "science:ANA-002",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "science:ANA-003",
+      "question": "请解释一下日行迹上下方向主要表示什么",
+      "selected": "science:ANA-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:ANA-004",
+      "question": "请解释一下日行迹左右方向主要表示什么",
+      "selected": "science:ANA-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:ANA-005",
+      "question": "请解释一下如果地轴倾角设成0会怎样",
+      "selected": "science:ANA-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:ANA-006",
+      "question": "请解释一下如果公转轨道偏心率设成0会怎样",
+      "selected": "science:ANA-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:ANA-007",
+      "question": "请解释一下倾角与偏心率都设成00会怎样",
+      "selected": "science:ANA-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:ANA-008",
+      "question": "请解释一下为什么日行迹不同月份间隔不均",
+      "selected": "science:ANA-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:ANA-009",
+      "question": "请解释一下不同城市日行迹是否一样",
+      "selected": "science:ANA-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:ANA-010",
+      "question": "请解释一下固定真太阳时采样是否仍有均时差",
+      "selected": "science:ANA-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:ANA-011",
+      "question": "请解释一下日行迹上点能否解释为太阳真实轨道形状",
+      "selected": "science:ANA-011",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:ANA-012",
+      "question": "请解释一下为什么全年采样不能随便把日期时区混用",
+      "selected": "science:ANA-012",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTHRISE-001",
+      "question": "请解释一下月面上能看到地球升起",
+      "selected": "science:EARTHRISE-001",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTHRISE-002",
+      "question": "请解释一下为什么地球在月面上看起来大体不动",
+      "selected": "science:EARTHRISE-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTHRISE-003",
+      "question": "请解释一下为什么绕月飞船会看到地升地落",
+      "selected": "science:EARTHRISE-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTHRISE-004",
+      "question": "请解释一下月球背面是否能直接看到地球",
+      "selected": "science:EARTHRISE-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTHRISE-005",
+      "question": "请解释一下看不到地球是被遮挡还是没朝向",
+      "selected": "science:EARTHRISE-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTHRISE-006",
+      "question": "请解释一下地球视角半径",
+      "selected": "science:EARTHRISE-006",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTHRISE-007",
+      "question": "请解释一下绕月轨道高度变大对地球视角通常有何影响",
+      "selected": "science:EARTHRISE-007",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTHRISE-008",
+      "question": "请解释一下圆轨道物理周期如何估算",
+      "selected": "science:EARTHRISE-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:EARTHRISE-009",
+      "question": "请解释一下地升实验是否等于重现阿波罗8号真实轨道",
+      "selected": "science:EARTHRISE-009",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MODEL-001",
+      "question": "请解释一下三维天空中天体距离是真实比例",
+      "selected": "MANUAL:018",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "science:MODEL-002",
+      "question": "请解释一下为什么月球显示得比现实比例大",
+      "selected": "science:MODEL-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MODEL-003",
+      "question": "请解释一下au是什么单位",
+      "selected": "science:MODEL-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MODEL-004",
+      "question": "请解释一下为什么可以同时显示太阳和远处行星",
+      "selected": "science:MODEL-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MODEL-005",
+      "question": "请解释一下轨道动画速度能否当作真实运动速度",
+      "selected": "science:MODEL-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MODEL-006",
+      "question": "请解释一下理想模型",
+      "selected": "science:MODEL-006",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MODEL-007",
+      "question": "请解释一下真实日期星历模式",
+      "selected": "science:MODEL-007",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MODEL-008",
+      "question": "请解释一下为什么三维画面与当地太阳图不能直接比较角度",
+      "selected": "science:MODEL-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:MODEL-009",
+      "question": "请解释一下本网站可以做精密航海天文导航或日食实测预报",
+      "selected": "science:MODEL-009",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:CASE-001",
+      "question": "请解释一下上海今天几点日落应怎样回答",
+      "selected": "science:CASE-001",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:CASE-002",
+      "question": "请解释一下我现在影子几米应怎样回答",
+      "selected": "science:CASE-002",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:CASE-003",
+      "question": "请解释一下北极夏至太阳几点落山该怎样答",
+      "selected": "science:CASE-003",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:CASE-004",
+      "question": "请解释一下赤道正午太阳都在天顶吗该怎样答",
+      "selected": "science:CASE-004",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:CASE-005",
+      "question": "请解释一下四季由地球离太阳远近造成该怎样答",
+      "selected": "science:CASE-005",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:CASE-006",
+      "question": "请解释一下这张图上月亮和金星挨得很近怎样解释",
+      "selected": "science:CASE-006",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:CASE-007",
+      "question": "请解释一下缩放后太阳是不是更远了怎样答",
+      "selected": "science:CASE-007",
+      "reason": "corpus_question_match",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:CASE-008",
+      "question": "请解释一下给我2027年日食发生具体时刻怎样答",
+      "selected": "science:CASE-008",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "science:CASE-009",
+      "question": "请解释一下看到地升就是月球每天也自转一次吗怎样答",
+      "selected": "MANUAL:010",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "science:CASE-010",
+      "question": "请解释一下对比北京与伦敦现在太阳高度怎样答",
+      "selected": "science:CASE-010",
+      "reason": "attributed_exact_source",
+      "reviewStatus": "draft"
+    },
+    {
+      "source": "GUIDE:001",
+      "question": "我想知道怎么教学起点与预备知识呢",
+      "selected": "GUIDE:001",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:002",
+      "question": "我想知道怎么实验前必须说清四个约定呢",
+      "selected": "GUIDE:002",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:003",
+      "question": "我想知道怎么安排一节课呢",
+      "selected": "GUIDE:003",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:004",
+      "question": "我想知道怎么把自定义用作教学工具呢",
+      "selected": "GUIDE:004",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:005",
+      "question": "我想知道怎么任务一太阳一天怎样运动呢",
+      "selected": "GUIDE:005",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:006",
+      "question": "我想知道怎么任务二同一地点季节差异呢",
+      "selected": "GUIDE:006",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:007",
+      "question": "我想知道怎么任务三纬度与昼夜分布呢",
+      "selected": "GUIDE:007",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:008",
+      "question": "我想知道怎么任务四同一时刻与同一瞬间呢",
+      "selected": "GUIDE:008",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:009",
+      "question": "我想知道怎么任务五杆高影长与影尖轨迹呢",
+      "selected": "GUIDE:009",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:010",
+      "question": "我想知道怎么任务六日晷为什么可以计时呢",
+      "selected": "GUIDE:010",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:011",
+      "question": "我想知道怎么任务七月相与月球升落呢",
+      "selected": "GUIDE:011",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:012",
+      "question": "我想知道怎么任务八行星伴月与角距离呢",
+      "selected": "site:MOON-011",
+      "reason": "reviewed_task_plan",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "GUIDE:013",
+      "question": "我想知道怎么任务九日行迹为什么像8字呢",
+      "selected": "GUIDE:013",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:014",
+      "question": "我想知道怎么任务十月球上为什么有地升地落呢",
+      "selected": "GUIDE:014",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:015",
+      "question": "我想知道怎么任务十一用空间模型解释天空视运动呢",
+      "selected": "GUIDE:015",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:016",
+      "question": "我想知道怎么可复用实验记录表呢",
+      "selected": "GUIDE:016",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:017",
+      "question": "我想知道怎么评价学生解释呢",
+      "selected": "GUIDE:017",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "GUIDE:018",
+      "question": "我想知道怎么常见误解与纠正呢",
+      "selected": "GUIDE:018",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:001",
+      "question": "我想知道怎么项目定位与页面入口呢",
+      "selected": "MANUAL:001",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:002",
+      "question": "我想知道怎么先读懂界面与控制呢",
+      "selected": "MANUAL:002",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:003",
+      "question": "我想知道怎么地点日期与时间怎样设置呢",
+      "selected": "MANUAL:003",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:004",
+      "question": "我想知道怎么替换和组合图呢",
+      "selected": "MANUAL:004",
+      "reason": "documented_feature_topic",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:005",
+      "question": "我想知道怎么太阳与日影四个视角呢",
+      "selected": "MANUAL:005",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:006",
+      "question": "我想知道怎么地球与昼夜地图和地轴图呢",
+      "selected": "MANUAL:006",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:007",
+      "question": "我想知道怎么全天高度曲线呢",
+      "selected": "MANUAL:007",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:008",
+      "question": "我想知道怎么日出日落与月出月落方位呢",
+      "selected": "MANUAL:008",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:009",
+      "question": "我想知道怎么月相照明比例和行星伴月呢",
+      "selected": "site:MOON-011",
+      "reason": "reviewed_task_plan",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "MANUAL:010",
+      "question": "我想知道怎么地升地落独立控制呢",
+      "selected": "MANUAL:010",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:011",
+      "question": "我想知道怎么日行迹与成因实验呢",
+      "selected": "MANUAL:011",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:012",
+      "question": "我想知道怎么日晷装置与太阳日影呢",
+      "selected": "MANUAL:012",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:013",
+      "question": "我想知道怎么自定义与对象编辑呢",
+      "selected": "MANUAL:013",
+      "reason": "corpus_question_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:014",
+      "question": "我想知道怎么城市日期与时刻对照呢",
+      "selected": "MANUAL:014",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:015",
+      "question": "我想知道怎么搭建杆球圈与测量呢",
+      "selected": "MANUAL:015",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:016",
+      "question": "我想知道怎么布局顺序与专注观察呢",
+      "selected": "MANUAL:016",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:017",
+      "question": "我想知道怎么草稿收藏和完整实验呢",
+      "selected": "MANUAL:017",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:018",
+      "question": "我想知道怎么三维天空与太阳系呢",
+      "selected": "MANUAL:018",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:019",
+      "question": "我想知道怎么撤回键盘与触屏呢",
+      "selected": "MANUAL:019",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "MANUAL:020",
+      "question": "我想知道怎么操作问题排查与模型边界呢",
+      "selected": "MANUAL:020",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:001",
+      "question": "请问 整体实现与阅读顺序 源码",
+      "selected": "DEV:001",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:002",
+      "question": "请问 从输入到图形的数据流 源码",
+      "selected": "DEV:002",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:003",
+      "question": "请问 共享科学状态的完整变量表 源码",
+      "selected": "DEV:003",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:004",
+      "question": "请问 单位、角度与空值约定 源码",
+      "selected": "DEV:004",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:005",
+      "question": "请问 时间管线与日期换算 源码",
+      "selected": "DEV:005",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:006",
+      "question": "请问 当地坐标、太阳公式与地轴关系 源码",
+      "selected": "DEV:006",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:007",
+      "question": "请问 升落、昼长与反求日期 源码",
+      "selected": "DEV:007",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:008",
+      "question": "请问 日影、平面相交与日晷 源码",
+      "selected": "DEV:008",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:009",
+      "question": "请问 日行迹数据结构与理想模型 源码",
+      "selected": "DEV:009",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:010",
+      "question": "请问 月球星历、月相与独立地升模型 源码",
+      "selected": "DEV:010",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:011",
+      "question": "请问 三维物理向量、显示尺度与相机 源码",
+      "selected": "DEV:011",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:012",
+      "question": "请问 工作区、布局与菜单状态 源码",
+      "selected": "DEV:012",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:013",
+      "question": "请问 参考对象、身份与跨图选中 源码",
+      "selected": "DEV:013",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:014",
+      "question": "请问 地面场景与物体变量 源码",
+      "selected": "DEV:014",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:015",
+      "question": "请问 存储格式、完整实验与恢复 源码",
+      "selected": "DEV:015",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:016",
+      "question": "请问 历史、手势与异步任务 源码",
+      "selected": "DEV:016",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:017",
+      "question": "请问 设计变量、可访问性与多端 源码",
+      "selected": "DEV:017",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:018",
+      "question": "请问 文档与语言生成管线 源码",
+      "selected": "DEV:018",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:019",
+      "question": "请问 本地开发、验证与提交 源码",
+      "selected": "DEV:019",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:020",
+      "question": "请问 正式站、镜像与打包 源码",
+      "selected": "DEV:020",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:021",
+      "question": "请问 数据、影像、库与许可 源码",
+      "selected": "DEV:021",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:022",
+      "question": "请问 源码职责与函数索引 源码",
+      "selected": "DEV:022",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "published-document"
+    },
+    {
+      "source": "DEV:FILE-001",
+      "question": "请问 app.js 源码",
+      "selected": "DEV:FILE-001",
+      "reason": "corpus_question_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-002",
+      "question": "请问 moon.js 源码",
+      "selected": "DEV:FILE-002",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-003",
+      "question": "请问 astronomy.js 源码",
+      "selected": "DEV:FILE-003",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-004",
+      "question": "请问 coverage.js 源码",
+      "selected": "DEV:FILE-004",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-005",
+      "question": "请问 workspace.js 源码",
+      "selected": "DEV:FILE-005",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-006",
+      "question": "请问 page-navigation.js 源码",
+      "selected": "DEV:FILE-006",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-007",
+      "question": "请问 workbench-menu.js 源码",
+      "selected": "DEV:FILE-007",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-008",
+      "question": "请问 custom-layout.js 源码",
+      "selected": "DEV:FILE-008",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-009",
+      "question": "请问 customization-mode.js 源码",
+      "selected": "DEV:FILE-009",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-010",
+      "question": "请问 customization-session.js 源码",
+      "selected": "DEV:FILE-010",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-011",
+      "question": "请问 diagram-tools.js 源码",
+      "selected": "DEV:FILE-011",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-012",
+      "question": "请问 diagram-tool-definitions.js 源码",
+      "selected": "DEV:FILE-012",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-013",
+      "question": "请问 diagram-sampling.js 源码",
+      "selected": "DEV:FILE-013",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-014",
+      "question": "请问 observer-comparison.js 源码",
+      "selected": "DEV:FILE-014",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-015",
+      "question": "请问 parameter-controls.js 源码",
+      "selected": "DEV:FILE-015",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-016",
+      "question": "请问 solar-study.js 源码",
+      "selected": "DEV:FILE-016",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-017",
+      "question": "请问 scene-builder.js 源码",
+      "selected": "DEV:FILE-017",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-018",
+      "question": "请问 analemma.js 源码",
+      "selected": "DEV:FILE-018",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-019",
+      "question": "请问 solar-date.js 源码",
+      "selected": "DEV:FILE-019",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-020",
+      "question": "请问 shadow.js 源码",
+      "selected": "DEV:FILE-020",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-021",
+      "question": "请问 sundial.js 源码",
+      "selected": "DEV:FILE-021",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-022",
+      "question": "请问 sundial-device.js 源码",
+      "selected": "DEV:FILE-022",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-023",
+      "question": "请问 observer.js 源码",
+      "selected": "DEV:FILE-023",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-024",
+      "question": "请问 companion.js 源码",
+      "selected": "DEV:FILE-024",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-025",
+      "question": "请问 motion.js 源码",
+      "selected": "DEV:FILE-025",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-026",
+      "question": "请问 menu.js 源码",
+      "selected": "DEV:FILE-026",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-027",
+      "question": "请问 time-workbench.js 源码",
+      "selected": "DEV:FILE-027",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-028",
+      "question": "请问 experiment-storage.js 源码",
+      "selected": "DEV:FILE-028",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-029",
+      "question": "请问 interaction-history.js 源码",
+      "selected": "DEV:FILE-029",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-030",
+      "question": "请问 lab-history.js 源码",
+      "selected": "DEV:FILE-030",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-031",
+      "question": "请问 lab-customization.js 源码",
+      "selected": "DEV:FILE-031",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-032",
+      "question": "请问 lab-comparison-controls.js 源码",
+      "selected": "DEV:FILE-032",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-033",
+      "question": "请问 interface-motion.js 源码",
+      "selected": "DEV:FILE-025",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-034",
+      "question": "请问 language.js 源码",
+      "selected": "DEV:FILE-034",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-035",
+      "question": "请问 language-data.js 源码",
+      "selected": "DEV:FILE-035",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-036",
+      "question": "请问 page-boot.js 源码",
+      "selected": "DEV:FILE-036",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-037",
+      "question": "请问 page-cache.js 源码",
+      "selected": "DEV:FILE-037",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-038",
+      "question": "请问 date-picker.js 源码",
+      "selected": "DEV:FILE-038",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-039",
+      "question": "请问 observer-explanation.js 源码",
+      "selected": "DEV:FILE-039",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-040",
+      "question": "请问 document-entrance.js 源码",
+      "selected": "DEV:FILE-040",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-041",
+      "question": "请问 welcome.js 源码",
+      "selected": "DEV:FILE-041",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-042",
+      "question": "请问 lunar/model.js 源码",
+      "selected": "DEV:FILE-042",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-043",
+      "question": "请问 lunar/lunar.js 源码",
+      "selected": "DEV:FILE-043",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-044",
+      "question": "请问 space/model.js 源码",
+      "selected": "DEV:FILE-044",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-045",
+      "question": "请问 space/scene.js 源码",
+      "selected": "DEV:FILE-045",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-046",
+      "question": "请问 space/earth-frame.js 源码",
+      "selected": "DEV:FILE-046",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-047",
+      "question": "请问 space/appearance.js 源码",
+      "selected": "DEV:FILE-047",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-048",
+      "question": "请问 space/compare.js 源码",
+      "selected": "DEV:FILE-048",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-049",
+      "question": "请问 space/observer.js 源码",
+      "selected": "DEV:FILE-023",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-050",
+      "question": "请问 space/lab-compare.js 源码",
+      "selected": "DEV:FILE-050",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-051",
+      "question": "请问 space/embed.js 源码",
+      "selected": "DEV:FILE-051",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-052",
+      "question": "请问 space/ui.js 源码",
+      "selected": "DEV:FILE-052",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-053",
+      "question": "请问 space/history.js 源码",
+      "selected": "DEV:FILE-053",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-054",
+      "question": "请问 space/immersive.js 源码",
+      "selected": "DEV:FILE-054",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-055",
+      "question": "请问 space/exploration.js 源码",
+      "selected": "DEV:FILE-055",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-056",
+      "question": "请问 space/customization.js 源码",
+      "selected": "DEV:FILE-056",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-057",
+      "question": "请问 space/population.js 源码",
+      "selected": "DEV:FILE-057",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-058",
+      "question": "请问 space/stars.js 源码",
+      "selected": "DEV:FILE-058",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-059",
+      "question": "请问 space/nebulae.js 源码",
+      "selected": "DEV:FILE-059",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-060",
+      "question": "请问 lab-controls.js 源码",
+      "selected": "DEV:FILE-060",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-061",
+      "question": "请问 document-navigation.js 源码",
+      "selected": "DEV:FILE-061",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-062",
+      "question": "请问 material-controls.js 源码",
+      "selected": "DEV:FILE-062",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-063",
+      "question": "请问 preferences.js 源码",
+      "selected": "DEV:FILE-063",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-064",
+      "question": "请问 diagram-reference-store.js 源码",
+      "selected": "DEV:FILE-064",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-065",
+      "question": "请问 diagram-reference-renderer.js 源码",
+      "selected": "DEV:FILE-065",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    },
+    {
+      "source": "DEV:FILE-066",
+      "question": "请问 material-web.js 源码",
+      "selected": "DEV:FILE-066",
+      "reason": "strong_reviewed_lexical_match",
+      "reviewStatus": "source-checked"
+    }
+  ],
+  "extraFixtures": 14,
+  "oppositeActions": 3
+}

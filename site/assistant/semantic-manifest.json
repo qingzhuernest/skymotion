@@ -1,5 +1,5 @@
 {
-  "version": "932b3eff3e0bfbf3",
+  "version": "7c805c41e6c5c5dc",
   "dimensions": 512,
   "records": [
     "site:SITE-001",
@@ -795,6 +795,6 @@
   "pooling": "cls",
   "normalize": true,
   "queryPrefix": "",
-  "indexSha256": "edeffb5e65bb19a952b7e8e35c30aa27fc52fc8d4dc3646e93a601ea71507b9d",
+  "indexSha256": "787a2b0ed6af3fea69ebe13fdbfb02e31ad791c9ce7c98ff7fdb8100ff63044a",
   "transformers": "3.8.1"
 }
