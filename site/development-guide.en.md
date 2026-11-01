@@ -40,6 +40,8 @@ site-catalog.json defines page paths, main navigation, view names, groups and av
 
 preferences.js is the single preference owner, exposing get, set, subscribe, reset, export and parseImport. Version 2 records use skymotion-preferences and accept version 1 records; language remains compatible with its existing storage key. Shared selects and selection chips, plus settings sliders, switches and action buttons use Google Material Web 2.5.0, bundled locally in material-web.js; see material-web.LICENSE. Material Color Utilities 0.3.0 in theme-colors.js generates palettes mapped to the existing design color roles. The bundled library is Apache-2.0; see theme-colors.LICENSE. Scientific state is excluded from preference records.
 
+The Search UI lives in assistant/ui.js and lexical retrieval in assistant/search.js. scripts/assistant/worker-source.js builds the local BGE semantic Worker. Page entry loads knowledge and sends prepare; the Worker loads the index, tokenizer, model and WASM, then runs warm-up inference before reporting ready. A later search can retry a failed preparation. One shared promise coordinates preparation without reading or writing scientific state. The dedicated loader owns assistant assets so general page warming does not request them again. See docs/assistant/README.md for pinned dependencies, build order, sizes and validation limits.
+
 [Open the corresponding experiment →](lab.en.html#skyPanel)
 
 ## Data flow from input to drawing
@@ -554,6 +556,6 @@ This index scans actual files. The right column lists explicit function declarat
 | [diagram-reference-store.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-store.js) | Reference state, drafts, persistence, duplication and history; independent of the UI | create, persist, stateFor, clean, createReference, duplicateReference, saveReferences, travelReferences, record, checkpoint |
 | [diagram-reference-renderer.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-renderer.js) | Reference drawing, text placement and hit geometry; reads observation and reference state | create, textLayout, helper, drawObject, anchor, hitAnchor |
 | [material-web.js](https://github.com/qingzhuernest/skymotion/blob/main/site/material-web.js) | Locally bundled Google Material Web 2.5.0; build entry scripts/material-web/source.js | Module methods; see source |
-| [assistant/ui.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/ui.js) | Read-only assistant UI, lazy retrieval and bilingual panel | loading, target, showCard, render, finish, semantic, mountLauncher |
+| [assistant/ui.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/ui.js) | Read-only assistant UI, lazy retrieval and bilingual panel | loading, target, showCard, render, finish, prepareWorker, semantic, mountLauncher |
 | [assistant/search.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/search.js) | Local lexical retrieval and dynamic-request boundaries | canonical, tokens |
 | [assistant/worker.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/worker.js) | Bundled pinned BGE/ONNX semantic retrieval Worker | Module methods; see source |

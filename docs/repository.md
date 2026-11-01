@@ -56,3 +56,5 @@ python3 .github/scripts/prepare_site.py --output dist
 发布验证由 `.github/scripts/select-checks.cjs` 按路径选择；不确定影响范围时保留短检查集，完整回归仍由手动选择。纯说明文件不安装浏览器。
 
 代码精简与职责复核见 [2026-10-28 报告](reviews/CODE-SIMPLICITY-2026-10-28.md)。主题预设启动数据由 `scripts/site_sources.py` 从 `site/ui-palette.css` 生成，编辑颜色后应运行该生成器。
+
+“搜索”源码与本地模型资源统一保存在 `site/assistant/`，构建依赖在 `scripts/assistant/`，资料原稿和说明在 `docs/assistant/`。搜索随 `main` 正式发布；`preview/local-assistant-v1` 保留为预览开发分支，早期报告中的“仅预览”和按需下载描述属于历史状态。当前进入网页即自动下载并准备搜索资源。

@@ -80,6 +80,13 @@
                   "href": "development-guide.html"
                 }
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "需要查找网站操作或天文、地理知识时，可使用顶部“搜索”；答案附相关资料与使用手册入口。",
+                "Use Search in the navigation for site instructions, astronomy and geography; answers include sources and relevant manual links."
+              ]
             }
           ]
         },
@@ -275,6 +282,13 @@
                   ],
                   "href": "project-guide.html#controls"
                 }
+              ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "遇到操作问题可在“搜索”中描述目标，例如怎样比较两个城市的太阳轨迹。搜索给出资料与步骤，不会替你改变实验条件；先核对来源，再用观察验证解释。",
+                "Describe a goal in Search, such as comparing the Sun’s paths in two cities. Search provides sources and instructions without changing experiment conditions. Check sources and test explanations through observation."
               ]
             }
           ],
@@ -2293,6 +2307,13 @@
                 "太阳与月球使用顶部并列按钮直接切换，也可聚焦后使用左右方向键。底部时间栏把精确时刻与滑块放在一起，两侧按钮每次调整五分钟；月球优先呈现日期控制。观测条件先显示当前模式、地点和日期，计算与比例说明按需展开。",
                 "Switch Sun and Moon directly with the top segmented buttons, or focus them and use the left/right arrow keys. The compact playback panel groups the exact clock with its slider; the flanking buttons step by five minutes. Moon puts date controls first. Observation settings begin with mode, place and date; calculation and scale notes expand on demand."
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "顶部“搜索”可查网站操作、天文与地理资料。进入网页后即自动下载知识库、模型与运行资源并在后台准备，不必先打开搜索；首次约49 MB（未压缩），耗时随网络和设备变化。输入问题后可查看步骤和参考资料，搜索不会代为操作实验。",
+                "Search in the navigation finds site instructions, astronomy and geography sources. Page entry automatically downloads the knowledge, model and runtime and prepares them in the background, before Search is opened. First-time assets total about 49 MB before compression; timing varies with network and device. Results include instructions and references; Search does not operate the experiment."
+              ]
             }
           ],
           "aliases": [
@@ -3698,6 +3719,13 @@
               "text": [
                 "preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、export 与 parseImport。版本 2 记录使用 skymotion-preferences，兼容版本 1；语言兼容原存储键。通用选择器和选择芯片，以及设置中的滑条、开关和操作按钮使用 Google Material Web 2.5.0，组件在 material-web.js 本地打包，许可见 material-web.LICENSE。主题颜色由 theme-colors.js 中的 Material Color Utilities 0.3.0 生成，并映射到现有 design 颜色角色。第三方代码为 Apache-2.0，许可见 theme-colors.LICENSE；科学状态不属于偏好记录。",
                 "preferences.js is the single preference owner, exposing get, set, subscribe, reset, export and parseImport. Version 2 records use skymotion-preferences and accept version 1 records; language remains compatible with its existing storage key. Shared selects and selection chips, plus settings sliders, switches and action buttons use Google Material Web 2.5.0, bundled locally in material-web.js; see material-web.LICENSE. Material Color Utilities 0.3.0 in theme-colors.js generates palettes mapped to the existing design color roles. The bundled library is Apache-2.0; see theme-colors.LICENSE. Scientific state is excluded from preference records."
+              ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "搜索界面位于assistant/ui.js，规则检索位于assistant/search.js；scripts/assistant/worker-source.js打包生成本地BGE语义检索Worker。页面进入即加载知识库并发送prepare消息，Worker加载索引、分词器、模型及WASM，执行一次预热推理后报告ready；后台失败可在后续检索重试。共用准备Promise，检索与预加载不读写科学state。assistant资源由此专属加载器负责，通用页面预热不再重复请求。源码与锁定依赖、生成顺序、体积及验证边界见仓库docs/assistant/README.md。",
+                "The Search UI lives in assistant/ui.js and lexical retrieval in assistant/search.js. scripts/assistant/worker-source.js builds the local BGE semantic Worker. Page entry loads knowledge and sends prepare; the Worker loads the index, tokenizer, model and WASM, then runs warm-up inference before reporting ready. A later search can retry a failed preparation. One shared promise coordinates preparation without reading or writing scientific state. The dedicated loader owns assistant assets so general page warming does not request them again. See docs/assistant/README.md for pinned dependencies, build order, sizes and validation limits."
               ]
             }
           ],

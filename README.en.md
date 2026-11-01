@@ -16,6 +16,9 @@ The interface uses shared Material Design 3 color, shape, state and target-size 
 
 The compact playback panel groups the exact clock and slider; Moon puts dates first. Calculation notes expand on demand. The opening retains direct sky and Enter activation, and manuals offer chapter navigation and reading progress.
 
+
+Search in the navigation finds site instructions, astronomy and geography sources. Opening a page automatically downloads the knowledge, model and runtime and prepares them in the background, before Search is opened. First-time assets total approximately 49 MB before compression; timing depends on the network and device. Search runs locally and provides instructions without operating the experiment. Check sources against observations.
+
 ## Using the lab and its documentation
 
 - [Documentation center](site/docs.en.html): one top-menu entry for teaching, feature usage and development.

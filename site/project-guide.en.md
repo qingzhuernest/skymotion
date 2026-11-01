@@ -42,6 +42,8 @@ The original Lab, Diagrams and Analemma URLs still open their corresponding cont
 
 Switch Sun and Moon directly with the top segmented buttons, or focus them and use the left/right arrow keys. The compact playback panel groups the exact clock with its slider; the flanking buttons step by five minutes. Moon puts date controls first. Observation settings begin with mode, place and date; calculation and scale notes expand on demand.
 
+Search in the navigation finds site instructions, astronomy and geography sources. Page entry automatically downloads the knowledge, model and runtime and prepares them in the background, before Search is opened. First-time assets total about 49 MB before compression; timing varies with network and device. Results include instructions and references; Search does not operate the experiment.
+
 [Open the corresponding experiment →](lab.en.html#skyPanel)
 
 ## Interface and controls

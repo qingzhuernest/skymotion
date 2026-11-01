@@ -16,6 +16,8 @@ async function load() {
   const embed = await pipeline('feature-extraction','bge-small-zh-v1.5', {dtype:'int8',device:'wasm',
     progress_callback:event=>{if(event.status==='progress')self.postMessage({type:'progress',progress:event.progress});}
   });
+  // Compile and run once now, before the visitor submits a query.
+  await embed('太阳',{pooling:'cls',normalize:true});
   return {metadata,vectors:new Float32Array(data),embed};
 }
 // One queue prevents concurrent inference. The UI discards obsolete request IDs.
@@ -26,6 +28,7 @@ self.onmessage = ({data}) => {
       session ||= load();
       const {metadata,vectors,embed} = await session;
       if(metadata.version !== data.version) throw Error('knowledge version mismatch');
+      if(data.type==='prepare'){self.postMessage({type:'ready'});return;}
       const start = performance.now();
       const tensor = await embed(data.query.slice(0,500),{pooling:'cls',normalize:true});
       if(tensor.data.length!==512)throw Error('embedding dimensions');

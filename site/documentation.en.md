@@ -32,6 +32,8 @@ File responsibilities, data flow, state fields, units, equations, interfaces, te
 
 [Read the developer reference](development-guide.en.html)
 
+Use Search in the navigation for site instructions, astronomy and geography; answers include sources and relevant manual links.
+
 ## Find an answer directly
 
 - [How do I plan a lesson?](guide.en.html#lesson)

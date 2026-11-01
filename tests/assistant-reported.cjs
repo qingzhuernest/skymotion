@@ -33,7 +33,7 @@ const cases=[
     assert.equal(diagnostic.reason,'reviewed_task_plan');assert.equal(diagnostic.decision,'answer');
     report.push({...diagnostic,result:'passed'});
   }
-  assert(!requests.some(url=>/assistant\/(worker|models|runtime)/.test(url)),'These supported tasks do not need a model download');
+  assert(report.every(row=>row.method==='lexical'),'Supported task answers remain independent of background model preparation');
   assert.equal(await page.evaluate(()=>JSON.stringify(state)),original,'Instructions do not perform actions');
   await page.keyboard.press('Escape');
   for(const width of [390,320]){

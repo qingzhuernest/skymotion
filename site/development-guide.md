@@ -40,6 +40,8 @@
 
 preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、export 与 parseImport。版本 2 记录使用 skymotion-preferences，兼容版本 1；语言兼容原存储键。通用选择器和选择芯片，以及设置中的滑条、开关和操作按钮使用 Google Material Web 2.5.0，组件在 material-web.js 本地打包，许可见 material-web.LICENSE。主题颜色由 theme-colors.js 中的 Material Color Utilities 0.3.0 生成，并映射到现有 design 颜色角色。第三方代码为 Apache-2.0，许可见 theme-colors.LICENSE；科学状态不属于偏好记录。
 
+搜索界面位于assistant/ui.js，规则检索位于assistant/search.js；scripts/assistant/worker-source.js打包生成本地BGE语义检索Worker。页面进入即加载知识库并发送prepare消息，Worker加载索引、分词器、模型及WASM，执行一次预热推理后报告ready；后台失败可在后续检索重试。共用准备Promise，检索与预加载不读写科学state。assistant资源由此专属加载器负责，通用页面预热不再重复请求。源码与锁定依赖、生成顺序、体积及验证边界见仓库docs/assistant/README.md。
+
 [打开对应实验台 →](lab.html#skyPanel)
 
 ## 从输入到图形的数据流
@@ -554,6 +556,6 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [diagram-reference-store.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-store.js) | 参考对象状态、草稿、存档、复制与历史；不依赖界面 | create, persist, stateFor, clean, createReference, duplicateReference, saveReferences, travelReferences, record, checkpoint |
 | [diagram-reference-renderer.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-renderer.js) | 参考对象绘图、文字定位和命中几何；只读实验与对象状态 | create, textLayout, helper, drawObject, anchor, hitAnchor |
 | [material-web.js](https://github.com/qingzhuernest/skymotion/blob/main/site/material-web.js) | Google Material Web 2.5.0 的本地打包组件；构建入口 scripts/material-web/source.js | 模块内部方法，参见源码 |
-| [assistant/ui.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/ui.js) | 浏览器端只读问答助手、懒加载和双语面板 | loading, target, showCard, render, finish, semantic, mountLauncher |
+| [assistant/ui.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/ui.js) | 浏览器端只读问答助手、懒加载和双语面板 | loading, target, showCard, render, finish, prepareWorker, semantic, mountLauncher |
 | [assistant/search.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/search.js) | 本地文本检索与动态请求边界 | canonical, tokens |
 | [assistant/worker.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/worker.js) | 固定版本BGE与ONNX运行库生成的语义检索Worker | 模块内部方法，参见源码 |

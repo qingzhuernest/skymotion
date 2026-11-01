@@ -6,10 +6,15 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
  const browser=await chromium.launch({executablePath:process.env.SKY_MOTION_CHROMIUM||'/usr/bin/chromium',args:['--no-sandbox','--use-angle=swiftshader']});
  try{
   const page=await browser.newPage({viewport:{width:1280,height:960}}),requests=[],errors=[];
+  await page.addInitScript(()=>{const Native=window.Worker;window.Worker=class extends Native{constructor(...args){super(...args);this.addEventListener('message',({data})=>{if(data.type==='ready')window.searchPrepared=true;});}};});
   page.on('request',r=>requests.push(r.url()));page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'lab.html');await page.waitForSelector('html[data-fonts-ready]');
   await page.waitForTimeout(1200);
-  assert(!requests.some(url=>/assistant\/(models|runtime|worker|knowledge|index)/.test(url)),'No knowledge/model downloads before a question');
+  await page.waitForRequest(r=>r.url().includes('model_int8.onnx'),{timeout:30000}).catch(()=>assert(requests.some(url=>url.includes('model_int8.onnx'))));
+  assert(requests.some(url=>url.includes('knowledge.json')),'Knowledge downloads before opening Search');
+  assert.equal(await page.locator('.assistant-dialog').evaluate(el=>el.open),false);
+  await page.waitForFunction(()=>window.searchPrepared===true,null,{timeout:120000});
+  assert(requests.some(url=>url.includes('index.bin')),'Index downloads before opening Search');
   const before=await page.evaluate(()=>JSON.stringify(state));
   await page.locator('.assistant-launch').click();
   assert.equal(await page.locator('#assistant-question').evaluate(el=>el===document.activeElement),false,'Opening does not summon keyboard');
@@ -17,11 +22,11 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   await ask('怎样比较两个城市的太阳轨迹？');
   await page.waitForFunction(id=>[...document.querySelectorAll('.assistant-turn')].at(-1)?.dataset.cardId===id,'site:EDIT-002');
   assert.match(await page.locator('.assistant-log').innerText(),/UTC/);
-  assert(!requests.some(url=>/assistant\/(models|runtime|worker)/.test(url)),'Known task does not load model');
+  assert(requests.some(url=>url.includes('worker.js')),'Worker starts before the first search');
   await ask('怎么保存？');await page.waitForFunction(id=>[...document.querySelectorAll('.assistant-turn')].at(-1)?.dataset.cardId===id,'site:SAVE-002');
   await ask('现在上海太阳高度多少？');await page.locator('.assistant-turn').last().getByText('我暂时不能可靠计算',{exact:false}).waitFor();
   await ask('<img src=x onerror=alert(1)> 天气');
-  await page.locator('.assistant-turn').last().getByText('超出本站',{exact:false}).waitFor();
+  await page.locator('.assistant-turn').last().getByText('暂未找到对应内容',{exact:false}).waitFor();
   assert.equal(await page.locator('.assistant-log img').count(),0);
   await ask('一年四季为什么会轮流变换呢？');
   await page.waitForFunction(()=>SkyAssistantDebug.getLast()?.method==='semantic'&&['suggestions','answer'].includes(SkyAssistantDebug.getLast()?.decision),null,{timeout:90000});

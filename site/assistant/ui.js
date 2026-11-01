@@ -1,4 +1,4 @@
-/* One shared, lazy, read-only assistant. Questions stay in this page's memory. */
+/* One shared, preloaded, read-only search. Questions stay in this page's memory. */
 (() => {
   if (document.body?.dataset.embedded==='true'||new URLSearchParams(location.search).get('embed')==='1') return;
   const script = document.currentScript;
@@ -27,7 +27,7 @@
   form.append(label,input,submit);
   dialog.append(header,intro,examples,log,status,form);host.append(launch,dialog);document.body.append(host);
   let knowledge, engine, searchModule, worker, request=0, pending, history=[], previousId;
-  let loadPromise, lastDiagnostic=null, pendingQuestion='';
+  let workerReady, loadPromise, lastDiagnostic=null, pendingQuestion='';
   // Opt-in developer inspection only; no questions are logged or persisted.
   window.SkyAssistantDebug=Object.freeze({getLast:()=>structuredClone(lastDiagnostic)});
   function loading(){
@@ -94,27 +94,48 @@
     if(pendingQuestion){const article=node('article',undefined,'assistant-turn');article.append(node('p',pendingQuestion,'assistant-user'));log.append(article);}
   }
   function finish(turn){pendingQuestion='';history.push(turn);if(history.length>12)history.shift();render();log.scrollTop=log.scrollHeight;}
-  function semantic(query,id){
-    return new Promise((resolve,reject)=>{
+  function prepareWorker(){
+    if(workerReady)return workerReady;
+    workerReady=new Promise((resolve,reject)=>{
+      let timer;
+      const fail=error=>{
+        clearTimeout(timer);worker?.terminate();worker=null;workerReady=null;
+        reject(error);if(pending)pending(null,error);
+      };
       try{
-        worker ||= new Worker(new URL('worker.js',base),{type:'module'});
-        const timeout=setTimeout(()=>{worker?.terminate();worker=null;pending=null;reject(Error('timeout'));},90000);
-        const complete=(value,error)=>{clearTimeout(timeout);pending=null;error?reject(error):resolve(value);};
-        pending=complete;
+        worker=new Worker(new URL('worker.js',base),{type:'module'});
+        timer=setTimeout(()=>fail(Error('preparation timeout')),120000);
         worker.onmessage=({data})=>{
-          if(data.type==='progress'){if(id===request)status.textContent=tr('首次准备可能需要一点时间…','Getting ready for the first time…');return;}
-          if(data.id!==id)return;
-          if(data.type==='error'){worker.terminate();worker=null;complete(null,Error('model'));}else complete(data.matches);
+          if(data.type==='ready'){clearTimeout(timer);resolve();return;}
+          if(data.type==='progress')return;
+          if(data.type==='error'){fail(Error(data.reason||'model'));return;}
+          if(data.id===request&&pending)pending(data.matches);
         };
-        worker.onerror=()=>{worker?.terminate();worker=null;complete(null,Error('worker'));};
-        worker.postMessage({query,id,version:knowledge.version});
-      }catch(error){reject(error);}
+        worker.onerror=()=>fail(Error('worker'));
+        worker.postMessage({type:'prepare',version:knowledge.version});
+      }catch(error){fail(error);}
+    });
+    // Allow a later search to retry a failed background preparation.
+    workerReady=workerReady.catch(error=>{workerReady=null;throw error;});
+    return workerReady;
+  }
+  async function semantic(query,id){
+    await prepareWorker();
+    if(id!==request)throw Error('superseded');
+    return new Promise((resolve,reject)=>{
+      const timeout=setTimeout(()=>{
+        worker?.terminate();worker=null;workerReady=null;
+        complete(null,Error('timeout'));
+      },90000);
+      const complete=(value,error)=>{clearTimeout(timeout);pending=null;error?reject(error):resolve(value);};
+      pending=complete;
+      worker.postMessage({query,id,version:knowledge.version});
     });
   }
   form.onsubmit=async event=>{
     event.preventDefault();const question=input.value.trim();if(!question)return;
     const id=++request;
-    if(pending){worker?.terminate();worker=null;pending(null,Error('superseded'));}
+    if(pending)pending(null,Error('superseded'));
     input.value='';input.style.height='';pendingQuestion=question;render();status.textContent=tr('正在查找…','Looking it up…');
     try{
       await loading();if(id!==request)return;
@@ -174,4 +195,5 @@
   document.addEventListener('skymotion:header-ready',mountLauncher);
   addEventListener('space:layout',mountLauncher);
   mountLauncher();render();
+  loading().then(prepareWorker).catch(()=>{});
 })();

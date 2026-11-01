@@ -21,7 +21,7 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
    for(const word of words)assert(text.includes(word),question+': '+word);
    assert(!/没有足够可靠|哪一项/.test(text),question);
   }
-  assert(!requests.some(url=>/assistant\/(worker|models|runtime)/.test(url)));
+  assert.equal(await page.evaluate(()=>SkyAssistantDebug.getLast().method),'lexical','Short queries use text retrieval while the model prepares in the background');
   assert.equal(await page.evaluate(()=>JSON.stringify(state)),original);
   await page.screenshot({path:'/tmp/assistant142-short-queries.png'});
   await page.keyboard.press('Escape');
@@ -34,6 +34,6 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   await selectDiagram(page,'riseSetPanel');
   await page.waitForFunction(()=>uiWorkspace.selected==='riseSetPanel');
   assert(await page.locator('#eventCompass').isVisible());
-  console.log('PASS screenshot questions answer directly without downloading model; real shadow controls, metric and rise/set view exist; state unchanged by assistant');
+  console.log('PASS screenshot questions answer directly with background model preparation; real shadow controls, metric and rise/set view exist; state unchanged by assistant');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
