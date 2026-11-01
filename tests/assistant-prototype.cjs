@@ -24,10 +24,10 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   await page.locator('.assistant-turn').last().getByText('超出本站',{exact:false}).waitFor();
   assert.equal(await page.locator('.assistant-log img').count(),0);
   await ask('一年四季为什么会轮流变换呢？');
-  await page.waitForFunction(()=>SkyAssistantDebug.getLast()?.method==='semantic'&&SkyAssistantDebug.getLast()?.decision==='suggestions',null,{timeout:90000});
+  await page.waitForFunction(()=>SkyAssistantDebug.getLast()?.method==='semantic'&&['suggestions','answer'].includes(SkyAssistantDebug.getLast()?.decision),null,{timeout:90000});
   assert(requests.some(url=>url.includes('model_int8.onnx')),'Real model requested');
   const semanticText=await page.locator('.assistant-turn').last().innerText();
-  assert((await page.evaluate(()=>SkyAssistantDebug.getLast().semanticTop5)).some(hit=>/EARTH-004|SCI-001|CASE-005/.test(hit.id)),'Semantic candidates include seasons');
+  assert((await page.evaluate(()=>SkyAssistantDebug.getLast().semanticTop5)).some(hit=>/EARTH-004|SCI-001|CASE-005|GUIDE:006/.test(hit.id)),'Semantic candidates include seasons');
   const external=requests.filter(url=>new URL(url).origin!==new URL(base).origin);
   assert.deepEqual(external,[],'Questions/resources stay on this origin');
   assert.equal(await page.evaluate(()=>JSON.stringify(state)),before,'Asking does not alter scientific state');

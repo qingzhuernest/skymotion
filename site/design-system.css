@@ -1251,7 +1251,7 @@ body[data-page='space'] .stage-reset svg {
 
 /* Welcome actions use the same control radius as the rest of the site. */
 body[data-page='welcome']
-  :is(.welcome-enter, .welcome-sky-actions button, .welcome-corner-links > a) {
+  :is(.welcome-enter, .welcome-sky-actions button, .welcome-corner-links > :is(a,button)) {
   border-radius: var(--design-radius-control);
 }
 
@@ -2172,15 +2172,15 @@ html:lang(en) body[data-page='welcome'] .welcome-quote {
   body[data-page='welcome']
     :is(
       .welcome-sky-actions button,
-      .welcome-corner-links > a,
-      .welcome-corner-links > a:visited
+      .welcome-corner-links > :is(a,button),
+      .welcome-corner-links > :is(a,button):visited
     ),
   html:lang(en)
     body[data-page='welcome']
     :is(
       .welcome-sky-actions button,
-      .welcome-corner-links > a,
-      .welcome-corner-links > a:visited
+      .welcome-corner-links > :is(a,button),
+      .welcome-corner-links > :is(a,button):visited
     ) {
     min-height: var(--md-sys-size-target, 40px);
     padding: 3px 8px;

@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 350 个文件。目录职责见 [repository.md](repository.md)。
+共 360 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -24,17 +24,24 @@
 - [.github/workflows/github-pages.yml](../.github/workflows/github-pages.yml)
 - [.github/workflows/validate.yml](../.github/workflows/validate.yml)
 
-## docs (16)
+## docs (23)
 
 - [docs/architecture/DESIGN.md](../docs/architecture/DESIGN.md)
 - [docs/architecture/PRODUCT.md](../docs/architecture/PRODUCT.md)
 - [docs/assistant/README.md](../docs/assistant/README.md)
 - [docs/assistant/REPORTED-FIXES.md](../docs/assistant/REPORTED-FIXES.md)
+- [docs/assistant/UPDATE142.md](../docs/assistant/UPDATE142.md)
+- [docs/assistant/coverage142.json](../docs/assistant/coverage142.json)
 - [docs/assistant/reported-after.json](../docs/assistant/reported-after.json)
 - [docs/assistant/reported-before.json](../docs/assistant/reported-before.json)
 - [docs/assistant/reviewed.json](../docs/assistant/reviewed.json)
 - [docs/assistant/sources/science.txt](../docs/assistant/sources/science.txt)
+- [docs/assistant/sources/update142/developer.txt](../docs/assistant/sources/update142/developer.txt)
+- [docs/assistant/sources/update142/learning.txt](../docs/assistant/sources/update142/learning.txt)
+- [docs/assistant/sources/update142/manual.txt](../docs/assistant/sources/update142/manual.txt)
+- [docs/assistant/sources/update142/website.txt](../docs/assistant/sources/update142/website.txt)
 - [docs/assistant/sources/website.txt](../docs/assistant/sources/website.txt)
+- [docs/assistant/topics.json](../docs/assistant/topics.json)
 - [docs/branches.json](../docs/branches.json)
 - [docs/document-content.json](../docs/document-content.json)
 - [docs/file-inventory.md](../docs/file-inventory.md)
@@ -282,11 +289,14 @@
 - [site/workbench-menu.js](../site/workbench-menu.js)
 - [site/workspace.js](../site/workspace.js)
 
-## tests (87)
+## tests (90)
 
 - [tests/analemma-references.cjs](../tests/analemma-references.cjs)
+- [tests/assistant-coverage.cjs](../tests/assistant-coverage.cjs)
 - [tests/assistant-prototype.cjs](../tests/assistant-prototype.cjs)
 - [tests/assistant-reported.cjs](../tests/assistant-reported.cjs)
+- [tests/assistant-short-queries.cjs](../tests/assistant-short-queries.cjs)
+- [tests/assistant-welcome.cjs](../tests/assistant-welcome.cjs)
 - [tests/bilingual-pages.cjs](../tests/bilingual-pages.cjs)
 - [tests/browser/package-lock.json](../tests/browser/package-lock.json)
 - [tests/browser/package.json](../tests/browser/package.json)

@@ -45,7 +45,7 @@ a:focus-visible {
   width: min(660px, 100%);
   margin-left: auto;
 }
-.welcome-corner-links > a {
+.welcome-corner-links > :is(a,button) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +60,7 @@ a:focus-visible {
   border-radius: 14px;
   white-space: normal;
 }
-.welcome-corner-links > a:hover {
+.welcome-corner-links > :is(a,button):hover {
   background: #2b426355;
   color: var(--design-surface);
 }
@@ -637,7 +637,7 @@ body[data-page='analemma'] .workbench-events {
   .welcome-corner-links {
     gap: 6px;
   }
-  .welcome-corner-links > a {
+  .welcome-corner-links > :is(a,button) {
     padding: 8px 6px;
     font-size: calc(11px * var(--ui-font-scale, 1)) !important;
   }
@@ -1204,13 +1204,13 @@ body:is(
   overflow: hidden;
 }
 
-.welcome-corner-links > a,
-.welcome-corner-links > a:hover,
-.welcome-corner-links > a:visited {
+.welcome-corner-links > :is(a,button),
+.welcome-corner-links > :is(a,button):hover,
+.welcome-corner-links > :is(a,button):visited {
   text-decoration: none !important;
   border-bottom: 1px solid #89a8d044;
 }
-.welcome-corner-links > a::after {
+.welcome-corner-links > :is(a,button)::after {
   content: none !important;
 }
 
@@ -2154,8 +2154,8 @@ body[data-page='welcome'] .welcome-corner-links {
 body[data-page='welcome']
   :is(
     .welcome-sky-actions button,
-    .welcome-corner-links > a,
-    .welcome-corner-links > a:visited
+    .welcome-corner-links > :is(a,button),
+    .welcome-corner-links > :is(a,button):visited
   ) {
   display: flex;
   align-items: center;
@@ -2174,7 +2174,7 @@ body[data-page='welcome']
   white-space: nowrap;
 }
 body[data-page='welcome']
-  :is(.welcome-sky-actions button, .welcome-corner-links > a):hover {
+  :is(.welcome-sky-actions button, .welcome-corner-links > :is(a,button)):hover {
   background: #23354b;
   color: var(--design-on-action);
 }
@@ -2228,8 +2228,8 @@ body[data-page='welcome'] .welcome-quote {
   body[data-page='welcome']
     :is(
       .welcome-sky-actions button,
-      .welcome-corner-links > a,
-      .welcome-corner-links > a:visited
+      .welcome-corner-links > :is(a,button),
+      .welcome-corner-links > :is(a,button):visited
     ) {
     min-height: var(--md-sys-size-target, 40px);
     font-size: calc(11px * var(--ui-font-scale, 1)) !important;
@@ -2290,7 +2290,7 @@ body[data-page='welcome'] .welcome-enter svg {
   width: 18px;
   height: 18px;
 }
-body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links > a) {
+body[data-page='welcome'] :is(.welcome-sky-actions button, .welcome-corner-links > :is(a,button)) {
   font-family: inherit;
 }
 @media (max-width: 600px) and (min-height: 501px) {

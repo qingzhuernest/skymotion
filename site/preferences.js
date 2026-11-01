@@ -292,13 +292,14 @@
     const bar=document.querySelector('.language-nav,.welcome-brand');if(!bar)return;
     const nav=bar.querySelector('.page-nav');
     const immersive=document.body.classList.contains('space-immersive');
-    let host=immersive?document.querySelector('.head-actions'):nav;
+    const welcome=document.querySelector('.welcome-corner-links');
+    let host=welcome||(immersive?document.querySelector('.head-actions'):nav);
     if(!host){host=bar.querySelector('.language-actions');if(!host){host=node('div',{class:'language-actions'});bar.append(host);}}
     if(!launcher){
       launcher=node('button',{type:'button',class:'preferences-launch','data-i18n-skip':'','aria-haspopup':'dialog'},t('设置','Settings'));
       launcher.onclick=()=>{if(!dialog)build();dialog.showModal();dialog.querySelector('#preferences-title').focus({preventScroll:true});};
     }
-    launcher.classList.toggle('md-outlined-action',host!==nav);
+    launcher.classList.toggle('md-outlined-action',host!==nav&&!welcome);
     launcher.textContent=t('设置','Settings');launcher.setAttribute('aria-label',t('设置','Settings'));
     if(launcher.parentElement!==host)host.append(launcher);
   }

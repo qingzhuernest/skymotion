@@ -311,7 +311,7 @@ body[data-page='welcome'] .welcome-brand .language-toggle {
 /* English resource labels wrap within the compact welcome action column. */
 html:lang(en)
   body[data-page='welcome']
-  :is(.welcome-sky-actions button, .welcome-corner-links > a) {
+  :is(.welcome-sky-actions button, .welcome-corner-links > :is(a,button)) {
   white-space: normal;
   text-align: center;
   text-wrap: balance;
@@ -322,7 +322,7 @@ html:lang(en)
 @media (max-height: 700px) {
   html:lang(en)
     body[data-page='welcome']
-    :is(.welcome-sky-actions button, .welcome-corner-links > a) {
+    :is(.welcome-sky-actions button, .welcome-corner-links > :is(a,button)) {
     min-height: var(--md-sys-size-target, 40px);
   }
 }

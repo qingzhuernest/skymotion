@@ -8,14 +8,14 @@ const fallback = [
   'document-action-links.cjs', 'confirmed-review-fixes.cjs', 'deployment-paths.cjs',
 ];
 const groups = [
-  [/^site\/assistant\/|^scripts\/(assistant\/|build-assistant-knowledge\.py)/, ['assistant-prototype.cjs', 'assistant-reported.cjs']],
+  [/^site\/assistant\/|^scripts\/(assistant\/|build-assistant-knowledge\.py)/, ['assistant-prototype.cjs', 'assistant-reported.cjs', 'assistant-coverage.cjs', 'assistant-short-queries.cjs', 'assistant-welcome.cjs']],
   [/^site\/observer\.js$/, ['observer-heading.cjs']],
   [/^site\/language\.css$/,
     ['mobile-appbar.cjs', 'shared-ui-lifecycle.cjs', 'material-components.cjs']],
   [/^scripts\/material-web\/|^site\/material-web(?:\.|\/)/,
     ['settings-center.cjs', 'settings-expressive.cjs', 'shared-choice-fields.cjs', 'narrow-workspace-controls.cjs']],
   [/^(docs\/document-content\.json|scripts\/(build-documents\.py|document_model\.py|document-page\.html))$/,
-    ['document-generation.cjs', 'document-action-links.cjs', 'bilingual-pages.cjs']],
+    ['document-generation.cjs', 'document-action-links.cjs', 'bilingual-pages.cjs', 'assistant-coverage.cjs']],
   [/^site\/diagram-reference-store\.js$/,
     ['diagram-reference-store.cjs', 'lab-inline-comparisons.cjs', 'experiment-save.cjs']],
   [/^site\/diagram-(tools|tool-definitions|reference-renderer)\.(js|css)$/,

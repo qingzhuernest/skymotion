@@ -143,13 +143,16 @@
       try{
         const semanticMatches=await semantic(question,id);if(id!==request)return;
         diagnostic.semanticTop5=semanticMatches;
+        const answer=searchModule.selectSemanticAnswer(question,semanticMatches,matches,knowledge.records);
+        if(answer){diagnostic.decision='answer';diagnostic.reason='supported_semantic_match';diagnostic.selectedId=answer.id;
+          previousId=answer.id;finish({question,card:answer});status.textContent='';return;}
         const byId=new Map(knowledge.records.map(card=>[card.id,card]));
         // Prototype semantic matches are suggestions, never uncalibrated factual answers.
         candidates=semanticMatches.filter(hit=>hit.score>=0.5).slice(0,3).map(hit=>byId.get(hit.id)).filter(Boolean);
       }catch{failed=true;diagnostic.method='lexical-fallback';diagnostic.failure='semantic_unavailable';}
       if(id!==request)return;
       diagnostic.decision='suggestions';
-      finish({question,message:['我暂时没有足够可靠的信息直接回答。你可能在找以下条目；也可以补充具体图解或操作目的。','I do not have a reliable direct answer yet. These entries may help; you can also specify the view or task.'],candidates});
+      finish({question,message:candidates.length?['你想了解哪一项？','Which of these would you like to explore?']:['暂时没有找到对应内容，可以补充图解名称或你想做的操作。','I could not find a matching entry. Add the view name or describe the task.'],candidates});
       status.textContent=failed?tr('暂时只能查找相近条目，你也可以换个说法。','Only related entries are available right now. You can also rephrase.') : '';
     }catch{if(id===request){finish({question,message:['暂时无法查找，请联网后重试。','Unable to look this up. Reconnect and try again.']});status.textContent='';}}
   };
@@ -162,7 +165,7 @@
   document.addEventListener('skymotion:language',render);
   function mountLauncher(){
     const target=(document.body.classList.contains('space-immersive')&&document.querySelector('.head-actions'))
-      ||document.querySelector('.page-nav')||document.querySelector('.welcome-brand .language-actions,.welcome-brand');
+      ||document.querySelector('.welcome-corner-links')||document.querySelector('.page-nav')||document.querySelector('.welcome-brand .language-actions,.welcome-brand');
     if(target&&launch.parentElement!==target)target.append(launch);
   }
   document.addEventListener('DOMContentLoaded',mountLauncher,{once:true});

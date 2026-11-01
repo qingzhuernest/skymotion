@@ -29,10 +29,12 @@ self.onmessage = ({data}) => {
       const start = performance.now();
       const tensor = await embed(data.query.slice(0,500),{pooling:'cls',normalize:true});
       if(tensor.data.length!==512)throw Error('embedding dimensions');
-      const matches = metadata.records.map((id,i)=>{
+      const scores=new Map();
+      metadata.records.forEach((id,i)=>{
         let score=0;for(let d=0;d<512;d++)score+=tensor.data[d]*vectors[i*512+d];
-        return {id,score};
-      }).sort((a,b)=>b.score-a.score).slice(0,5);
+        scores.set(id,Math.max(scores.get(id)||-Infinity,score));
+      });
+      const matches=Array.from(scores,([id,score])=>({id,score})).sort((a,b)=>b.score-a.score).slice(0,5);
       self.postMessage({type:'result',id:data.id,matches,ms:performance.now()-start});
     }catch(error){session=null;self.postMessage({type:'error',id:data.id,reason:String(error?.message||error).slice(0,240)});}
   });

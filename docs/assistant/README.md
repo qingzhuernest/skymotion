@@ -7,14 +7,17 @@ only in page memory; all retrieval and inference runs on the same origin/device.
 
 ## Implemented
 
-- 499 namespaced cards imported from the author's two Drive documents (snapshots in
-  `sources/`). 24 common cards have source-checked instructions/conditions, validated
-  handbook anchors and authored English answers in `reviewed.json`. The other 475
-  entries are explicitly labeled source drafts, with Chinese-only content.
+- 625 namespaced units: 355 updated website cards, 144 science cards, 60 public
+  manual chapters and 66 current source-file descriptors. The update snapshots are
+  in `sources/update142/`; the original science snapshot remains in `sources/`.
+  27 common cards have curated instructions and English answers. The remaining
+  original cards keep their draft status; published chapters are sourced directly
+  from the current structured bilingual manuals, not blanket-certified as UI-tested.
+  All 13 revisions in the updated website document are imported.
 - BM25-style weighted local text retrieval and aliases; a limited save-after-city-
   comparison follow-up. Arbitrary conversational memory is not implemented.
 - A real BGE-small-zh-v1.5 INT8 ONNX model, fixed revision, 512-dimensional CLS unit
-  vectors. All document vectors are generated offline. One lazy WASM Worker computes
+  vectors. All document vectors are generated offline. Long documents are chunked with overlapping windows before embedding. One lazy WASM Worker computes
   queries. No cloud LLM, API key, GPU or third-party CDN is required.
 - Uncalibrated semantic results are **candidate entries**, not automatic answers.
   Direct answers require a sufficiently strong text match; dynamic-value and
@@ -28,14 +31,15 @@ only in page memory; all retrieval and inference runs on the same origin/device.
 ## Rebuild
 
 ```sh
-python3 scripts/build-assistant-knowledge.py
 ONNXRUNTIME_NODE_INSTALL_CUDA=skip npm ci --prefix scripts/assistant
 python3 scripts/assistant/download-model.py
-node scripts/assistant/build.mjs
-python3 scripts/assistant/resource-report.py
 python3 scripts/site_sources.py
 python3 scripts/build-documents.py
+python3 scripts/build-assistant-knowledge.py
+node scripts/assistant/build.mjs
+python3 scripts/assistant/resource-report.py
 python3 scripts/prerender-pages.py
+python3 scripts/build-assistant-knowledge.py --check
 ```
 
 The download script checks pinned SHA-256 values; never use a mutable model revision
@@ -71,3 +75,5 @@ tests run in Chromium on the development host, not on the user's iPad.
 
 The reported-query follow-up, task routing, compact chat layout and local-only
 diagnostics are documented in [REPORTED-FIXES.md](REPORTED-FIXES.md).
+
+The 625-unit update and short-question coverage are documented in [UPDATE142.md](UPDATE142.md).

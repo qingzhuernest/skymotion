@@ -1,0 +1,216 @@
+{
+  "fixtures": [
+    {
+      "query": "太阳轨迹",
+      "id": "site:SUN-007",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    },
+    {
+      "query": "看看太阳路径",
+      "id": "site:SUN-007",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "怎么显示太阳运行轨迹",
+      "id": "site:SUN-007",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    },
+    {
+      "query": "如何观察杆影长度",
+      "id": "site:VIEW-003",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    },
+    {
+      "query": "影长怎么看",
+      "id": "site:VIEW-003",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "查看日影",
+      "id": "site:VIEW-003",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "如何观察日出方位",
+      "id": "site:SUN-025",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    },
+    {
+      "query": "日出方向",
+      "id": "site:SUN-025",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "日落方位怎么看",
+      "id": "site:SUN-025",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "如何观察今天的太阳轨迹",
+      "id": "site:SUN-007",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "如何查看今天的日出方向",
+      "id": "site:SUN-025",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "如何观察太阳视运动",
+      "id": "site:LAB-001",
+      "decision": "answer",
+      "reason": "reviewed_task_plan"
+    },
+    {
+      "query": "打开行星伴月",
+      "id": "site:MOON-011",
+      "decision": "answer",
+      "reason": "reviewed_task_plan"
+    },
+    {
+      "query": "开启行星半月",
+      "id": "site:MOON-011",
+      "decision": "answer",
+      "reason": "reviewed_task_plan"
+    },
+    {
+      "query": "如何观察月球和火星的相对位置",
+      "id": "site:MOON-012",
+      "decision": "answer",
+      "reason": "reviewed_task_plan"
+    },
+    {
+      "query": "全球地图",
+      "id": "MANUAL:006",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    },
+    {
+      "query": "地轴与地平面",
+      "id": "MANUAL:006",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "怎么打开全天高度曲线",
+      "id": "MANUAL:007",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    },
+    {
+      "query": "看看月相",
+      "id": "MANUAL:009",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "月出方位",
+      "id": "MANUAL:008",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "我想看日晷",
+      "id": "MANUAL:012",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "添加标注",
+      "id": "MANUAL:013",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "搭建实验",
+      "id": "MANUAL:015",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "排列图窗",
+      "id": "MANUAL:016",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "布局收藏",
+      "id": "MANUAL:017",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "行星卫星群",
+      "id": "MANUAL:018",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "键盘快捷键",
+      "id": "MANUAL:019",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "实验记录表",
+      "id": "GUIDE:016",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "怎么评价学生",
+      "id": "GUIDE:017",
+      "decision": "answer",
+      "reason": "documented_feature_topic"
+    },
+    {
+      "query": "什么是日行迹",
+      "id": "science:ANA-001",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    },
+    {
+      "query": "为什么有四季",
+      "id": "science:EARTH-004",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    },
+    {
+      "query": "两个城市保存在完整实验",
+      "id": "site:SAVE-002",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    },
+    {
+      "query": "sun path",
+      "id": "site:SUN-007",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    },
+    {
+      "query": "observe shadow length",
+      "id": "site:VIEW-003",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    },
+    {
+      "query": "sunrise bearing",
+      "id": "site:SUN-025",
+      "decision": "answer",
+      "reason": "strong_reviewed_lexical_match"
+    }
+  ],
+  "guardChecks": 4,
+  "knowledgeCount": 625
+}

@@ -62,7 +62,8 @@
       "warnings": [
         "Browser storage belongs to this browser and site. Export a backup if you need to move it to another device."
       ]
-    }
+    },
+    "steps": []
   },
   "site:EDIT-010": {
     "aliases": [
@@ -79,7 +80,8 @@
       "warnings": [
         "Local storage is not automatic cloud synchronization. Export important work."
       ]
-    }
+    },
+    "steps": []
   },
   "site:STATE-001": {
     "aliases": [
@@ -98,7 +100,8 @@
       "warnings": [
         "Latitude ranges from −90° to 90°; longitude from −180° to 180°."
       ]
-    }
+    },
+    "steps": []
   },
   "site:STATE-003": {
     "aliases": [
@@ -115,7 +118,8 @@
       "warnings": [
         "Do not treat equal local solar times at different longitudes as the same UTC instant."
       ]
-    }
+    },
+    "steps": []
   },
   "site:VIEW-014": {
     "aliases": [
@@ -131,7 +135,8 @@
       "warnings": [
         "A daily solar path and an annual analemma are different observations."
       ]
-    }
+    },
+    "steps": []
   },
   "site:VIEW-013": {
     "aliases": [
@@ -147,7 +152,8 @@
       "warnings": [
         "It does not reconstruct a real spacecraft trajectory from the Lab calendar."
       ]
-    }
+    },
+    "steps": []
   },
   "site:SITE-008": {
     "aliases": [
@@ -163,7 +169,8 @@
       "answer": "Open Settings in the main navigation. Reading & language contains language choices; Appearance & night contains the theme and colors. These preferences do not change the scientific observation conditions.",
       "steps": [],
       "warnings": []
-    }
+    },
+    "steps": []
   },
   "science:EARTH-004": {
     "aliases": [
@@ -182,7 +189,8 @@
       "warnings": [
         "Changing Earth–Sun distance is not the main cause of the seasons. Seasonal climate also depends on the atmosphere, oceans and land."
       ]
-    }
+    },
+    "steps": []
   },
   "science:ANA-001": {
     "aliases": [
@@ -201,7 +209,8 @@
       "warnings": [
         "Specify whether the sampling uses fixed civil/mean clock time or fixed apparent solar time; they produce different patterns."
       ]
-    }
+    },
+    "steps": []
   },
   "science:ANA-002": {
     "aliases": [
@@ -217,7 +226,8 @@
       "warnings": [
         "The pattern depends on the sampling time basis and projection. It is not the shape of the Sun's physical orbit around Earth."
       ]
-    }
+    },
+    "steps": []
   },
   "science:MOON-001": {
     "aliases": [
@@ -235,7 +245,8 @@
       "warnings": [
         "Ordinary phases are not caused by Earth's shadow; that shadow is involved in a lunar eclipse."
       ]
-    }
+    },
+    "steps": []
   },
   "science:PLANET-001": {
     "aliases": [
@@ -252,7 +263,8 @@
       "warnings": [
         "Small angular separation does not guarantee naked-eye visibility; altitude, twilight, weather and terrain also matter."
       ]
-    }
+    },
+    "steps": []
   },
   "science:GEO-009": {
     "aliases": [
@@ -267,7 +279,8 @@
       "answer": "Turning a camera changes the view of the same scene. Changing the observer location, date or time changes the physical observation conditions. They are different operations.",
       "steps": [],
       "warnings": []
-    }
+    },
+    "steps": []
   },
   "science:SHADOW-012": {
     "aliases": [
@@ -284,7 +297,8 @@
       "warnings": [
         "Changing the physical gnomon height is a separate experiment parameter."
       ]
-    }
+    },
+    "steps": []
   },
   "science:TIME-007": {
     "aliases": [
@@ -301,7 +315,8 @@
       "warnings": [
         "Keep the chosen time basis consistent when interpreting comparisons."
       ]
-    }
+    },
+    "steps": []
   },
   "science:TIME-002": {
     "aliases": [
@@ -317,7 +332,8 @@
       "warnings": [
         "It differs from civil time because of longitude, time-zone conventions and the equation of time."
       ]
-    }
+    },
+    "steps": []
   },
   "science:DAY-012": {
     "aliases": [
@@ -335,7 +351,8 @@
       "warnings": [
         "Check the selected location, date and body first. A missing event is not a zero-degree event, and does not by itself indicate a software error."
       ]
-    }
+    },
+    "steps": []
   },
   "science:GEO-001": {
     "aliases": [
@@ -350,7 +367,8 @@
       "warnings": [
         "The Lab uses positive north and negative south."
       ]
-    }
+    },
+    "steps": []
   },
   "science:GEO-002": {
     "aliases": [
@@ -365,7 +383,8 @@
       "warnings": [
         "The Lab uses positive east and negative west. Longitude affects local solar time at a given UTC instant."
       ]
-    }
+    },
+    "steps": []
   },
   "science:DAY-004": {
     "aliases": [
@@ -381,7 +400,8 @@
       "warnings": [
         "Terrain, refraction and the solar disk affect real visibility; the Lab uses a geometric horizon."
       ]
-    }
+    },
+    "steps": []
   },
   "site:LAB-001": {
     "title": "如何观察太阳视运动？",
@@ -391,7 +411,7 @@
       "打开「视图与布局」→「天空与日影」，选择「空间视图」；也可切换到「地平视角」或「仰望天空」。",
       "打开「观测条件」→「日期与地点」，选择城市或设置经纬度。",
       "设置要观察的公历日期。",
-      "在「观测条件」→「显示辅助」确认「轨迹」已打开。",
+      "在「观测条件」→「显示辅助」确认「天体轨迹」已打开。",
       "拖动底部时刻滑条，或输入时刻；需要连续观察时点击「播放时刻」，对照太阳高度、方位和日影。"
     ],
     "warnings": [
@@ -414,7 +434,9 @@
       "site:LAB-005",
       "site:LAB-008",
       "site:LAB-011",
-      "site:SUN-007"
+      "site:SUN-007",
+      "GUIDE:005",
+      "MANUAL:005"
     ],
     "en": {
       "title": "Observe the apparent daily motion of the Sun",
@@ -464,7 +486,9 @@
       "site:MOON-012",
       "site:MOON-013",
       "site:MOON-014",
-      "science:PLANET-001"
+      "science:PLANET-001",
+      "GUIDE:012",
+      "MANUAL:009"
     ],
     "en": {
       "title": "Use the planet–Moon comparison",
@@ -552,7 +576,9 @@
       "site:MOON-011",
       "site:MOON-012",
       "site:MOON-014",
-      "science:PLANET-001"
+      "science:PLANET-001",
+      "GUIDE:012",
+      "MANUAL:009"
     ],
     "en": {
       "title": "Compare the Moon with the target planet",
@@ -566,6 +592,139 @@
       "warnings": [
         "Angular separation is not physical distance and does not guarantee naked-eye visibility.",
         "The assistant has not selected a planet for you."
+      ]
+    }
+  },
+  "site:SUN-007": {
+    "title": "怎样观察太阳轨迹？",
+    "answer": "在太阳模式打开天空图，并在显示辅助中开启「天体轨迹」，再调整时刻观察太阳沿日轨迹的位置变化。",
+    "steps": [
+      "顶部选择「太阳」，从「视图与布局」→「天空与日影」打开「空间视图」或「地平视角」。",
+      "打开「观测条件」，在「日期与地点」设置城市和日期。",
+      "展开「显示辅助」，打开「天体轨迹」。",
+      "拖动底部时刻滑条，或点击「播放时刻」；需要对照读数时暂停，查看太阳高度和方位。"
+    ],
+    "warnings": [
+      "日轨迹表示一天中太阳在当地天空的视运动；全年固定时刻形成的日行迹是另一种观察。"
+    ],
+    "aliases": [
+      "太阳轨迹",
+      "观察太阳轨迹",
+      "太阳路径",
+      "怎么显示太阳运行轨迹",
+      "sun path",
+      "solar trajectory",
+      "show solar track"
+    ],
+    "target": "project-guide.html#sun",
+    "sourceIds": [
+      "site:SUN-007",
+      "site:LAB-001",
+      "GUIDE:005",
+      "MANUAL:005"
+    ],
+    "en": {
+      "title": "Observe the Sun’s daily path",
+      "answer": "Open a Sun sky view, enable Celestial path in Display aids, and change the daily clock.",
+      "steps": [
+        "Choose Sun, then Spatial view or Horizon view under Views & layout → Sky & shadows.",
+        "Set the city and date in Observation controls.",
+        "Open Display aids and enable Celestial path.",
+        "Move the daily time slider or use Play time. Pause to compare altitude and azimuth."
+      ],
+      "warnings": [
+        "A daily path differs from an annual analemma sampled at a fixed daily time."
+      ]
+    }
+  },
+  "site:VIEW-003": {
+    "title": "怎样观察杆影长度？",
+    "answer": "用「俯视日影」比较竖直杆的影长和方向，在「观测条件」读取以米为单位的「地面影长」。",
+    "steps": [
+      "顶部选择「太阳」，从「视图与布局」→「天空与日影」选择「俯视日影」。",
+      "在「观测条件」设置地点和日期。",
+      "展开「显示辅助」→「日影与杆尖影迹」，打开「地面影子」，设置「竖直立杆高度」。",
+      "保持杆高不变，拖动底部时刻滑条；观察影子并读取「地面影长」。",
+      "影子过短或过长时调整「日影地面放大」；它只改显示比例，不改变影长读数。"
+    ],
+    "warnings": [
+      "太阳在地平线下不产生直射日影；靠近地平线时理想影长可能超出画幅。"
+    ],
+    "aliases": [
+      "如何观察杆影长度",
+      "杆影长度",
+      "影长",
+      "查看影子长度",
+      "日影",
+      "俯视日影",
+      "gnomon shadow length",
+      "observe shadow length"
+    ],
+    "target": "guide.html#shadow",
+    "sourceIds": [
+      "site:VIEW-003",
+      "site:SUN-009",
+      "site:SUN-010",
+      "GUIDE:009",
+      "MANUAL:005"
+    ],
+    "en": {
+      "title": "Observe the length of a gnomon’s shadow",
+      "answer": "Use Top-down shadows and read Ground shadow length in metres in Observation controls.",
+      "steps": [
+        "Choose Sun, then Views & layout → Sky & shadows → Top-down shadows.",
+        "Set the location and date.",
+        "In Observation controls → Display aids, expand shadow controls, enable the ground shadow and set the vertical gnomon height.",
+        "Keep height fixed and move the daily clock. Compare the drawn shadow and Ground shadow length.",
+        "Change the ground display magnification if needed; this does not change the physical reading."
+      ],
+      "warnings": [
+        "There is no direct-sunlight shadow below the horizon; near the horizon the ideal shadow can exceed the frame."
+      ]
+    }
+  },
+  "site:SUN-025": {
+    "title": "怎样观察日出日落方位？",
+    "answer": "在「日出日落方位」图中查看日出、日落事件端点的方向；点击端点可以跳到对应观测时刻。",
+    "steps": [
+      "顶部选择「太阳」。",
+      "打开「视图与布局」→「关联图解」→「日出日落方位」。",
+      "在「观测条件」设置观测地点和日期。",
+      "读取日出、日落端点的方向或方位角；方位从北起顺时针，东为90°、南为180°、西为270°。",
+      "点击日出端点跳到日出时刻，或拖动端点寻找接近目标升落方位的日期。"
+    ],
+    "warnings": [
+      "极昼、极夜等情况下可能没有对应升落事件；本站采用几何地平线，不含山体、大气折射和太阳半径修正。"
+    ],
+    "aliases": [
+      "如何观察日出方位",
+      "日出方位",
+      "日落方向",
+      "日出日落方向",
+      "升落方位图",
+      "sunrise bearing",
+      "sunset direction",
+      "observe sunrise azimuth"
+    ],
+    "target": "project-guide.html#bearings",
+    "sourceIds": [
+      "site:SUN-025",
+      "site:SUN-026",
+      "site:SUN-027",
+      "MANUAL:008"
+    ],
+    "en": {
+      "title": "Observe sunrise and sunset bearings",
+      "answer": "Read the event markers in Rise/set bearings. Clicking a marker jumps to its observation time.",
+      "steps": [
+        "Choose Sun.",
+        "Open Views & layout → Related diagrams → Rise/set bearings.",
+        "Set the location and date in Observation controls.",
+        "Read the event direction: bearings run clockwise from north, with east 90°, south 180° and west 270°.",
+        "Click the sunrise marker to visit the event, or drag an endpoint to look for a date near the requested bearing."
+      ],
+      "warnings": [
+        "Polar day/night may have no crossing. The model uses the geometric horizon without terrain, refraction or solar-radius corrections."
       ]
     }
   }
