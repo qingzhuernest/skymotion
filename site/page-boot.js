@@ -5,7 +5,7 @@
   // BEGIN GENERATED CATALOG
   // prettier-ignore
   const catalog = {
-    "resourceVersion": "20261101-assistant-corpus143",
+    "resourceVersion": "20261101-search144",
     "pages": [
       {
         "path": "index.html",

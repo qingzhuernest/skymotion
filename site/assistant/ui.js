@@ -70,9 +70,9 @@
     };const actions=node('div',undefined,'assistant-answer-actions');actions.append(references,copy);container.append(actions);
   }
   function render(){
-    launch.textContent=tr('助手','Assistant');title.textContent=tr('Sky 助手','Sky assistant');
-    close.textContent=tr('关闭','Close');intro.textContent=tr('可以问网站操作，也可以问天文与地理问题。','Ask about site controls, astronomy or geography.');intro.hidden=history.length>0||!!pendingQuestion;
-    label.textContent=tr('你想了解什么？','What would you like to know?');input.placeholder=tr('例如：怎样比较两个城市的太阳轨迹？','For example: compare the Sun’s paths for two cities');submit.textContent=tr('提问','Ask');
+    launch.textContent=tr('搜索','Search');title.textContent=tr('搜索','Search');
+    close.textContent=tr('关闭','Close');intro.textContent=tr('搜索网站操作、天文与地理知识。','Search site controls, astronomy and geography.');intro.hidden=history.length>0||!!pendingQuestion;
+    label.textContent=tr('你想搜索什么？','What would you like to search for?');input.placeholder=tr('例如：怎样比较两个城市的太阳轨迹？','For example: compare the Sun’s paths for two cities');submit.textContent=tr('搜索','Search');
     examples.replaceChildren();examples.hidden=history.length>0||!!pendingQuestion;
     for(const question of [tr('怎样比较两个城市的太阳轨迹？','How do I compare two cities?'),tr('为什么有四季？','Why are there seasons?'),tr('日行迹是什么？','What is an analemma?')]){
       const button=node('button',question);button.type='button';button.onclick=()=>{input.value=question;form.requestSubmit();};examples.append(button);
@@ -127,8 +127,8 @@
         diagnostic.decision='refuse';diagnostic.reason=blocked;
         const messages={
           dynamic:['我暂时不能可靠计算这个数值。请在实验台设置地点、日期和时刻，读取对应图解。','I cannot reliably calculate this value. Set the location, date and time in the Lab and read the diagram.'],
-          outside:['这个问题超出本站知识助手的范围。我可以说明网站操作和有关的地理、天文原理。','That is outside this assistant’s scope. I can explain site controls and related geography or astronomy.'],
-          action:['本助手不会替你操作网页。请问“如何操作”，我可以提供步骤。','This assistant does not operate the page. Ask how to do it and I can provide instructions.']};
+          outside:['暂未找到对应内容。可以搜索本站操作及相关的地理、天文知识。','No matching content was found. Search for site controls or related geography and astronomy.'],
+          action:['这里只提供操作说明，不会代为操作网页。','Search provides instructions and does not operate the page.']};
         finish({question,message:messages[blocked]});status.textContent='';return;
       }
       let query=question;
