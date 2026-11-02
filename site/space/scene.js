@@ -30,8 +30,8 @@
   }
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, ({low:1,standard:1.5,high:2}[window.SkyPreferences?.get().quality] || 1.5)));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
+  renderer.toneMapping = THREE.NeutralToneMapping;
+  renderer.toneMappingExposure = 1.0;
   renderer.domElement.tabIndex = 0;
   renderer.domElement.setAttribute(
     'aria-label',
@@ -40,9 +40,9 @@
   stage.prepend(renderer.domElement);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(43, 1, 0.05, 800);
-  const ambient = new THREE.AmbientLight(0x9ebce8, 0.48);
-  const solarLight = new THREE.PointLight(0xfff0de, 2.1, 0, 0);
-  const earthLight = new THREE.DirectionalLight(0xfff0de, 2.1);
+  const ambient = new THREE.AmbientLight(0xffffff, 0.045);
+  const solarLight = new THREE.PointLight(0xffffff, 3.0, 0, 0);
+  const earthLight = new THREE.DirectionalLight(0xffffff, 3.0);
   camera.layers.enable(1);
   ambient.layers.enable(1);
   earthLight.layers.set(1);
@@ -253,7 +253,7 @@
   );
   sunGlow.scale.set(9, 9, 1);
   scene.add(sunGlow);
-  const lunarAppearance = SolarSpaceAppearance.moon(THREE, renderer, 0.16);
+  const lunarAppearance = SolarSpaceAppearance.moon(THREE, renderer, 0.16, invalidate);
   const moon = new THREE.Mesh(lunarAppearance.geometry, lunarAppearance.material);
   moon.layers.set(1);
   const lunarOrbit = line([], 0xa4bddb, 0.4);

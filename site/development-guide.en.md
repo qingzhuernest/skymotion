@@ -484,6 +484,8 @@ Project code uses AGPLv3 as specified by LICENSE. Astronomy Engine, Three.js, fo
 
 Nebula images can be scientifically processed. Lunar/Earth textures and catalog samples are not live cameras or a complete sky database. Approximate orbits, ideal circular orbits and real-date ephemerides must remain labeled by module.
 
+Planetary and lunar maps in space/textures are by Solar System Scope / INOVE under CC BY 4.0. Download URLs, file hashes and display adjustments are documented in sources.json and THIRD-PARTY-NOTICES.md. appearance.js owns asynchronous maps, materials, oblateness, atmosphere and approximate ring shading without writing dates or ephemerides; failed images retain base materials.
+
 ## Source responsibilities and function index
 
 This index scans actual files. The right column lists explicit function declarations; follow each file for IIFEs, object methods and closures. Variable meaning is defined in the state and structure tables above.
@@ -536,7 +538,7 @@ This index scans actual files. The right column lists explicit function declarat
 | [space/model.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/model.js) | Physical vectors, coordinate rotation and teaching-distance compression | sceneVector, compress, snapshot, orbitalPath |
 | [space/scene.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/scene.js) | 3D rendering, selection, camera, clock and exposed state | comparisonLayout, invalidate, utcDate, line, select, focus, focusMoon, syncViewPresentation, pause, updateScience, lunarPath, updateObjects, updateHistory, updateInspection, placeLabel, overviewDistance, planetDistance, earthMoonDistance, moonDistance, obliqueElevation, fittedDistance, minimumDistance, resize, frame |
 | [space/earth-frame.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/earth-frame.js) | Earth orientation and local observer frame | dot, frame, toScene |
-| [space/appearance.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/appearance.js) | Materials, imagery and visual appearance | clamp, noiseField, random, canvasPixels, texture, mix, craters, lunarMaria, makeSurface, ring, atmosphericEdge, create, moon, sun |
+| [space/appearance.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/appearance.js) | Materials, imagery and visual appearance | loadMap, colorResponse, photoMaterial, ring, atmosphericEdge, create, moon, sun |
 | [space/compare.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/compare.js) | Spatial reference-plane comparison | create, resize, disc, text, arrow, render, project, label, path |
 | [space/observer.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/observer.js) | Local-sky comparison for the spatial scene | create, select, calculate, updateReadouts, draw, resize, render |
 | [space/lab-compare.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/lab-compare.js) | Shared-UTC link between Lab and 3D scenes | blockReason, redrawAfterLayout, setEnabled, sync |

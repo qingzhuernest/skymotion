@@ -484,6 +484,8 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 
 星云图片可能经过科学可视化处理；月球纹理、地球纹理和目录样本的展示不能被描述成实时摄像或全部天空对象的完整数据库。近似轨道、理想圆轨道和真实日期星历应在各自模块标明。
 
+space/textures中的行星与月球图像来自Solar System Scope / INOVE，以CC BY 4.0分发；来源、逐文件哈希及显示调色说明见sources.json与THIRD-PARTY-NOTICES.md。appearance.js只负责异步贴图、材质、球体扁率、光环与环的显示阴影，不写入日期或星历；贴图失败保留基础材质。
+
 ## 源码职责与函数索引
 
 此表由实际文件扫描生成。显式function声明列在右栏；IIFE、对象方法和模块内闭包请从该文件继续追踪。变量解释以上方状态与结构表为准。
@@ -536,7 +538,7 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 | [space/model.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/model.js) | 物理向量、坐标旋转和教学距离压缩 | sceneVector, compress, snapshot, orbitalPath |
 | [space/scene.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/scene.js) | 三维渲染、天体选择、相机、时钟与公开状态 | comparisonLayout, invalidate, utcDate, line, select, focus, focusMoon, syncViewPresentation, pause, updateScience, lunarPath, updateObjects, updateHistory, updateInspection, placeLabel, overviewDistance, planetDistance, earthMoonDistance, moonDistance, obliqueElevation, fittedDistance, minimumDistance, resize, frame |
 | [space/earth-frame.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/earth-frame.js) | 地球姿态与当地观察坐标 | dot, frame, toScene |
-| [space/appearance.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/appearance.js) | 材质、影像和显示外观 | clamp, noiseField, random, canvasPixels, texture, mix, craters, lunarMaria, makeSurface, ring, atmosphericEdge, create, moon, sun |
+| [space/appearance.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/appearance.js) | 材质、影像和显示外观 | loadMap, colorResponse, photoMaterial, ring, atmosphericEdge, create, moon, sun |
 | [space/compare.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/compare.js) | 空间参考平面对照 | create, resize, disc, text, arrow, render, project, label, path |
 | [space/observer.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/observer.js) | 三维场景的当地天空对照 | create, select, calculate, updateReadouts, draw, resize, render |
 | [space/lab-compare.js](https://github.com/qingzhuernest/skymotion/blob/main/site/space/lab-compare.js) | 实验台与三维场景的同UTC联动 | blockReason, redrawAfterLayout, setEnabled, sync |

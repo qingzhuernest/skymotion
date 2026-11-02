@@ -45,3 +45,18 @@ UI controls bundle `@material/web` 2.5.0 (Google, Apache-2.0), with Lit (BSD-3-C
 ## Sky assistant preview
 
 The preview assistant self-hosts Transformers.js 3.8.1 (Apache-2.0), ONNX Runtime Web 1.21.0 (MIT), and Xenova's ONNX adaptation of BAAI's BGE-small-zh-v1.5 (model card declares MIT). Model revision: `75c43b069aac4d136ba6bc1122f995fedcfd2781`. The BGE upstream license is retained from FlagOpen/FlagEmbedding; the model adaptation card is included beside its weights. Full notices are in `assistant/licenses/` and `assistant/worker.js.LEGAL.txt`. Third-party licenses apply independently of the original site's AGPLv3 license. No visitor queries are sent to these upstream services.
+
+## Planetary surface and ring maps
+
+The nine original files in `space/textures/` are by Solar System Scope / INOVE,
+https://www.solarsystemscope.com/textures/, licensed under CC BY 4.0:
+https://creativecommons.org/licenses/by/4.0/. They combine NASA imagery/elevation
+data; the source enhances colors and may reconstruct unmapped gaps.
+`sources.json` records each download URL and SHA-256. Original image bytes are
+retained. Display shaders reduce saturation, soften Venus cloud contrast, and tune
+Uranus/Neptune to pale cyan with reference to the 2024 Oxford color reassessment:
+https://www.ox.ac.uk/news/2024-01-05-new-images-reveal-what-neptune-and-uranus-really-look-0.
+These adjustments approximate visible appearance; they are not calibrated
+spectrophotometry, live cloud maps or dated surface orientations. Saturn's ring
+lighting approximates two-sided scattering and the body's shadow. Maps and their
+CC license are separate from the original application's AGPLv3 license.

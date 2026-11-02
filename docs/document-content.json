@@ -3510,6 +3510,13 @@
                 "实验台的三维对照可在保留当地科学图的同时打开关联三维场景；共享UTC，但相机独立。WebGL不可用时返回二维实验台继续使用。",
                 "Lab’s 3D comparison retains the local scientific view alongside a linked spatial scene. UTC is shared while cameras remain independent. If WebGL is unavailable, continue in the 2D Lab."
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "近景使用基于观测影像拼接的行星表面、云层和月面贴图，土星环保留分带与透明间隙，并用中性光照呈现昼夜。图像经过拼接和显示调色，不是所选日期的实时影像；气态行星云层随时间变化，其他天体姿态仍为示意。",
+                "Close views use observation-derived surface, cloud and lunar mosaics. Saturn’s rings retain bands and transparent gaps, with neutral lighting for day and night. Mosaics and display color adjustments are not live images for the selected date; cloud patterns evolve, and orientations other than Earth remain illustrative."
+              ]
             }
           ],
           "aliases": [
@@ -5957,6 +5964,13 @@
               "text": [
                 "星云图片可能经过科学可视化处理；月球纹理、地球纹理和目录样本的展示不能被描述成实时摄像或全部天空对象的完整数据库。近似轨道、理想圆轨道和真实日期星历应在各自模块标明。",
                 "Nebula images can be scientifically processed. Lunar/Earth textures and catalog samples are not live cameras or a complete sky database. Approximate orbits, ideal circular orbits and real-date ephemerides must remain labeled by module."
+              ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "space/textures中的行星与月球图像来自Solar System Scope / INOVE，以CC BY 4.0分发；来源、逐文件哈希及显示调色说明见sources.json与THIRD-PARTY-NOTICES.md。appearance.js只负责异步贴图、材质、球体扁率、光环与环的显示阴影，不写入日期或星历；贴图失败保留基础材质。",
+                "Planetary and lunar maps in space/textures are by Solar System Scope / INOVE under CC BY 4.0. Download URLs, file hashes and display adjustments are documented in sources.json and THIRD-PARTY-NOTICES.md. appearance.js owns asynchronous maps, materials, oblateness, atmosphere and approximate ring shading without writing dates or ephemerides; failed images retain base materials."
               ]
             }
           ]

@@ -1,235 +1,102 @@
-/**
- * Planet appearance only. Textures are original, deterministic visual illustrations;
- * this module never reads dates, alters ephemerides, rotates bodies or starts an animation.
- * Coordinates of clouds, craters and ring texture are not a geographical dataset.
- */
-(function (global) {
+/** Observation-derived surface maps; display appearance never alters ephemerides. */
+(function(global){
   'use strict';
-  const WIDTH = 1024;
-  const HEIGHT = 512;
-  const TAU = Math.PI * 2;
-  const cached = new Map();
-  let field;
-  let fineField;
-  let rockyField;
-
-  function clamp(value, low = 0, high = 1) {
-    return Math.min(high, Math.max(low, value));
-  }
-  function noiseField() {
-    if (field) return field;
-    field = new Float32Array(WIDTH * HEIGHT);
-    fineField = new Float32Array(WIDTH * HEIGHT);
-    rockyField = new Float32Array(WIDTH * HEIGHT);
-    // Integer longitudinal frequencies make the texture continuous across its UV seam.
-    for (let y = 0; y < HEIGHT; y++) {
-      const latitude = (y / (HEIGHT - 1) - 0.5) * Math.PI;
-      for (let x = 0; x < WIDTH; x++) {
-        const longitude = (x / WIDTH) * TAU;
-        // Sample in Cartesian sphere coordinates so rocky terrain has no latitude bands or UV seam.
-        const sx = Math.cos(latitude)*Math.cos(longitude), sy = Math.sin(latitude),
-          sz = Math.cos(latitude)*Math.sin(longitude);
-        rockyField[y*WIDTH+x] = (Math.sin(sx*11+sy*7+sz*13) +
-          Math.sin(sx*19-sy*17+sz*9)*.5 + Math.sin(sx*43+sy*31-sz*37)*.25)/1.75;
-        let sum = 0;
-        for (let octave = 0; octave < 5; octave++) {
-          const frequency = 2 ** octave;
-          sum +=
-            (Math.sin(longitude * frequency + 2.3 * Math.sin(latitude * frequency * 1.7)) *
-              Math.cos(latitude * frequency * 2.9 + octave * 1.91)) /
-            frequency;
-        }
-        field[y * WIDTH + x] = sum / 1.9375;
-        fineField[y * WIDTH + x] =
-          Math.sin(longitude * 177 + Math.sin(latitude * 111) * 4) *
-          Math.cos(latitude * 169 + Math.sin(longitude * 63)) *
-          0.024;
-      }
+  const base=new URL('textures/',document.currentScript.src);
+  const cached=new Map();
+  const surfaces={
+    Mercury:{file:'mercury.jpg',saturation:.85},
+    Venus:{file:'venus_atmosphere.jpg',saturation:.25,contrast:.35,mean:.5563},
+    Mars:{file:'mars.jpg',saturation:.72},
+    Jupiter:{file:'jupiter.jpg',saturation:.85,polarRatio:.935},
+    Saturn:{file:'saturn.jpg',saturation:.8,polarRatio:.902,tilt:.47},
+    Uranus:{file:'uranus.jpg',tint:0xa7bcba,mean:.5646,polarRatio:.977},
+    Neptune:{file:'neptune.jpg',tint:0x9bb4bb,mean:.1230,polarRatio:.983},
+    Moon:{file:'moon.jpg',saturation:1},
+  };
+  function loadMap(file,THREE,renderer){
+    if(!cached.has(file)){
+      const loading=new Promise((resolve,reject)=>new THREE.TextureLoader().load(new URL(file,base).href,map=>{
+        map.colorSpace=THREE.SRGBColorSpace;
+        map.wrapS=THREE.RepeatWrapping;
+        map.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+        resolve(map);
+      },undefined,reject));
+      cached.set(file,loading);
+      loading.catch(()=>cached.delete(file));
     }
-    return field;
+    return cached.get(file);
   }
-  function random(seed) {
-    let value = seed >>> 0;
-    return () => {
-      value = (Math.imul(value, 1664525) + 1013904223) >>> 0;
-      return value / 4294967296;
+  function colorResponse(material,surface,THREE){
+    // The source maps enhance colors. Preserve observed structure, reduce the enhancement.
+    // Ice-giant hues follow the 2024 visible-color reassessment; this is display tuning,
+    // not a spectrophotometric reconstruction or a real-time cloud forecast.
+    material.onBeforeCompile=shader=>{
+      const saturation=surface.saturation??1;
+      const response=surface.tint
+        ? `diffuseColor.rgb=surfaceTint*surfaceLuma/${surface.mean.toFixed(4)};`
+        : `diffuseColor.rgb=mix(vec3(surfaceLuma),diffuseColor.rgb,${saturation.toFixed(2)});`;
+      if(surface.tint)shader.uniforms.surfaceTint={value:new THREE.Color(surface.tint)};
+      shader.fragmentShader=(surface.tint?'uniform vec3 surfaceTint;\n':'')+shader.fragmentShader;
+      shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+        float surfaceLuma=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
+        ${response}
+        ${surface.contrast?`diffuseColor.rgb=mix(vec3(${surface.mean}),diffuseColor.rgb,${surface.contrast});`:''}
+      `);
     };
+    material.customProgramCacheKey=()=>JSON.stringify(surface);
   }
-  function canvasPixels(width = WIDTH, height = HEIGHT) {
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext('2d');
-    return { canvas, context, image: context.createImageData(width, height) };
+  function photoMaterial(surface,fallback,THREE,renderer,invalidate){
+    const material=new THREE.MeshStandardMaterial({color:fallback,roughness:1,metalness:0});
+    colorResponse(material,surface,THREE);
+    loadMap(surface.file,THREE,renderer).then(map=>{
+      material.map=map;material.color.set(0xffffff);material.needsUpdate=true;invalidate?.();
+    }).catch(()=>invalidate?.()); // A failed image retains the usable, neutral base material.
+    return material;
   }
-  function texture(canvas, THREE, renderer, color = true) {
-    const result = new THREE.CanvasTexture(canvas);
-    result.colorSpace = color ? THREE.SRGBColorSpace : THREE.NoColorSpace;
-    result.wrapS = THREE.RepeatWrapping;
-    result.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-    return result;
-  }
-  function mix(a, b, fraction) {
-    return a.map((value, index) => value + (b[index] - value) * clamp(fraction));
-  }
-  function craters(height, seed) {
-    const next = random(seed);
-    for (let crater = 0; crater < 320; crater++) {
-      const cx = next() * WIDTH;
-      const cy = (0.08 + next() * 0.84) * HEIGHT;
-      const radius = 2 + next() ** 3 * 24;
-      const flatten = Math.max(0.35, Math.cos((cy / HEIGHT - 0.5) * Math.PI));
-      const rx = radius / flatten;
-      for (let dy = -Math.ceil(radius * 1.25); dy <= radius * 1.25; dy++) {
-        const y = Math.round(cy + dy);
-        if (y < 0 || y >= HEIGHT) continue;
-        for (let dx = -Math.ceil(rx * 1.25); dx <= rx * 1.25; dx++) {
-          const distance = Math.hypot(dx * flatten, dy) / radius;
-          if (distance > 1.25) continue;
-          const x = ((Math.round(cx + dx) % WIDTH) + WIDTH) % WIDTH;
-          const rim = Math.exp(-(((distance - 0.94) / 0.11) ** 2)) * 0.14;
-          const basin = -Math.exp(-((distance / 0.72) ** 4)) * 0.18;
-          height[y * WIDTH + x] += rim + basin;
-        }
-      }
-    }
-  }
-  // Soft localized plains rather than periodic noise bands. These are illustrative locations.
-  function lunarMaria(longitude, latitude) {
-    let shade = 0;
-    for (const [lon, lat, rx, ry] of [[3.0,.35,.42,.27],[3.55,.55,.34,.24],
-      [3.8,.15,.3,.42],[2.7,-.03,.28,.34],[3.3,-.17,.3,.23],[.8,.1,.23,.2]]) {
-      const dx = Math.atan2(Math.sin(longitude-lon),Math.cos(longitude-lon)) * Math.cos(latitude);
-      const distance = (dx/rx)**2 + ((latitude-lat)/ry)**2;
-      shade = Math.max(shade, Math.exp(-distance*1.8));
-    }
-    return shade;
-  }
-  function makeSurface(id, THREE, renderer) {
-    if (cached.has(id)) return cached.get(id);
-    const noise = noiseField();
-    const rockyTerrain = id === 'Mars' || id === 'Mercury';
-    const relief = new Float32Array(rockyTerrain ? rockyField : noise);
-    if (id === 'Moon') for (let i=0;i<relief.length;i++) relief[i] *= .08;
-    if (id === 'Moon' || id === 'Mercury') craters(relief, id === 'Moon' ? 2105 : 1021);
-    const color = canvasPixels();
-    const bump = canvasPixels();
-    for (let y = 0; y < HEIGHT; y++) {
-      const latitude = (y / (HEIGHT - 1) - 0.5) * Math.PI;
-      for (let x = 0; x < WIDTH; x++) {
-        const index = y * WIDTH + x;
-        const longitude = (x / WIDTH) * TAU;
-        const n = rockyTerrain ? rockyField[index] : noise[index];
-        const fine = fineField[index];
-        let rgb;
-        if (id === 'Mercury') {
-          rgb = mix([91, 85, 79], [180, 170, 156], 0.49 + relief[index] * 0.46 + fine);
-        } else if (id === 'Moon') {
-          // Broad dark basaltic maria are illustrative, not an identified lunar map.
-          const maria = lunarMaria(longitude, latitude);
-          rgb = mix([177, 176, 168], [73, 78, 78], maria);
-          rgb = rgb.map((value) => value + (relief[index] - n * .08) * 65 + n * 5 + fine * 120);
-        } else if (id === 'Mars') {
-          rgb = mix([82, 51, 38], [205, 137, 92], 0.63 + n * 0.6 + fine * 1.7);
-          const cap = clamp((Math.abs(latitude) - 1.33 + n * 0.04) * 14);
-          rgb = mix(rgb, [226, 220, 200], cap);
-        } else if (id === 'Venus') {
-          const cloud = 0.55 + 0.24 * Math.sin(latitude * 7 + n * 2.6) + n * 0.3;
-          rgb = mix([162, 143, 109], [246, 231, 189], cloud);
-        } else if (id === 'Jupiter' || id === 'Saturn') {
-          const jupiter = id === 'Jupiter';
-          const turbulence =
-            Math.sin(longitude * 13 + Math.sin(latitude * 29) * 2.2) *
-            Math.cos(latitude * 23 + Math.sin(longitude * 9)) *
-            0.2;
-          const warp = latitude * (jupiter ? 27 : 36) + n * (jupiter ? 1.8 : 0.8) + turbulence;
-
-          const band = Math.sin(warp) * 0.25 + Math.sin(warp * 2.7 + n) * 0.1;
-          rgb = jupiter
-            ? mix([137, 100, 77], [232, 221, 196], 0.56 + band * 0.77 + n * 0.12 + fine * 1.8)
-            : mix([168, 146, 103], [230, 217, 178], 0.66 + band * 0.65 + n * 0.1 + fine * 0.8);
-          if (jupiter) {
-            const dx = Math.atan2(Math.sin(longitude - 4.85), Math.cos(longitude - 4.85));
-            const dy = latitude + 0.37;
-            const storm = Math.hypot(
-              (dx + Math.sin(dy * 39) * 0.013) / 0.26,
-              (dy + Math.sin(dx * 31) * 0.007) / 0.115,
-            );
-            const edge = clamp((1.13 - storm + turbulence * 0.25) * 3.2);
-            const swirl = Math.sin(storm * 17 + Math.atan2(dy, dx) * 3 + turbulence * 3) * 0.18;
-            rgb = mix(rgb, mix([173, 104, 77], [210, 154, 110], 0.4 + swirl), edge);
-          }
-        } else if (id === 'Uranus' || id === 'Neptune') {
-          const uranus = id === 'Uranus';
-          const haze = 0.57 + Math.sin(latitude * 12 + n * 0.8) * 0.055 + n * 0.035;
-          rgb = uranus
-            ? mix([100, 164, 173], [173, 212, 212], haze)
-            : mix([66, 111, 148], [136, 172, 189], haze);
-          if (!uranus) {
-            const clouds = clamp((n + Math.sin(latitude * 26) * 0.08 - 0.57) * 2) * 0.28;
-            rgb = mix(rgb, [211, 226, 229], clouds);
-          }
-        } else {
-          rgb = mix([239, 164, 56], [255, 234, 174], 0.62 + n * 0.18 + fine * 2);
-        }
-        const offset = index * 4;
-        for (let channel = 0; channel < 3; channel++) {
-          color.image.data[offset + channel] = clamp(rgb[channel], 0, 255);
-          bump.image.data[offset + channel] = clamp(128 + relief[index] * 66 + fine * 220, 0, 255);
-        }
-        color.image.data[offset + 3] = bump.image.data[offset + 3] = 255;
-      }
-    }
-    color.context.putImageData(color.image, 0, 0);
-    bump.context.putImageData(bump.image, 0, 0);
-    const rocky = ['Mercury', 'Mars', 'Moon'].includes(id);
-    const result = {
-      map: texture(color.canvas, THREE, renderer),
-      bumpMap: rocky ? texture(bump.canvas, THREE, renderer, false) : null,
+  function ring(radius,THREE,renderer,invalidate){
+    const inner=radius*1.11,outer=radius*2.33;
+    const geometry=new THREE.RingGeometry(inner,outer,192);
+    const position=geometry.attributes.position,uv=geometry.attributes.uv;
+    for(let i=0;i<position.count;i++)uv.setXY(i,(Math.hypot(position.getX(i),position.getY(i))-inner)/(outer-inner),.5);
+    const material=new THREE.MeshStandardMaterial({color:0xbeb6a5,transparent:true,opacity:.92,side:THREE.DoubleSide,roughness:1,depthWrite:false});
+    const mesh=new THREE.Mesh(geometry,material);
+    mesh.rotation.x=-Math.PI/2+.47;
+    const center=new THREE.Vector3();
+    material.onBeforeCompile=shader=>{
+      shader.uniforms.planetCenterView={value:center};
+      shader.fragmentShader='uniform vec3 planetCenterView;varying vec3 ringPositionView;\n'+shader.fragmentShader;
+      shader.vertexShader='varying vec3 ringPositionView;\n'+shader.vertexShader;
+      shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\nringPositionView=mvPosition.xyz;');
+      // A thin ice-particle ring scatters light on both sides; opaque double-sided
+      // Lambert lighting would incorrectly make the whole backlit ring black.
+      shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_begin>',`#include <normal_fragment_begin>
+        #if NUM_POINT_LIGHTS > 0
+          if(dot(normal,normalize(pointLights[0].position-ringPositionView))<0.0)normal=-normal;
+        #endif
+      `).replace('#include <map_fragment>',`#include <map_fragment>
+        float ringLuma=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
+        diffuseColor.rgb=mix(vec3(ringLuma),diffuseColor.rgb,.3)*2.4;
+      `);
+      shader.fragmentShader=shader.fragmentShader.replace('#include <lights_fragment_end>',`#include <lights_fragment_end>
+        #if NUM_POINT_LIGHTS > 0
+          vec3 toSun=normalize(pointLights[0].position-ringPositionView);
+          vec3 toPlanet=planetCenterView-ringPositionView;
+          float ahead=dot(toPlanet,toSun);
+          float clearance=length(toPlanet-toSun*ahead);
+          float occultation=step(0.0,ahead)*(1.0-smoothstep(${(radius*.97).toFixed(5)},${(radius*1.01).toFixed(5)},clearance));
+          reflectedLight.directDiffuse*=1.0-occultation;
+          reflectedLight.directSpecular*=1.0-occultation;
+        #endif
+      `);
     };
-    cached.set(id, result);
-    return result;
-  }
-
-  function ring(THREE, renderer) {
-    const strip = canvasPixels(1024, 1);
-    const next = random(6221);
-    for (let x = 0; x < 1024; x++) {
-      const r = x / 1023;
-      const density = 0.6 + Math.sin(r * 176) * 0.13 + Math.sin(r * 721) * 0.07 + next() * 0.1;
-      const gap = r > 0.785 && r < 0.827;
-      const edge = clamp(r * 25) * clamp((1 - r) * 25);
-      const shade = r < 0.31 ? 0.67 : r > 0.827 ? 0.82 : 1;
-      strip.image.data.set(
-        [208 * shade, 195 * shade, 160 * shade, gap ? 7 : density * edge * 255],
-        x * 4,
-      );
-    }
-    strip.context.putImageData(strip.image, 0, 0);
-    const geometry = new THREE.RingGeometry(1.08, 1.85, 160);
-    const position = geometry.attributes.position;
-    const uv = geometry.attributes.uv;
-    for (let i = 0; i < position.count; i++) {
-      uv.setXY(i, (Math.hypot(position.getX(i), position.getY(i)) - 1.08) / 0.77, 0.5);
-    }
-    const ringTexture = texture(strip.canvas, THREE, renderer);
-    ringTexture.wrapS = THREE.ClampToEdgeWrapping;
-    const mesh = new THREE.Mesh(
-      geometry,
-      new THREE.MeshStandardMaterial({
-        map: ringTexture,
-        transparent: true,
-        opacity: 0.94,
-        side: THREE.DoubleSide,
-        roughness: 1,
-        depthWrite: false,
-      }),
-    );
-    // Preserve the existing illustrative ring orientation. No physical pole claim.
-    mesh.rotation.x = -Math.PI / 2 + 0.47;
+    mesh.onBeforeRender=(_renderer,_scene,camera)=>{
+      if(mesh.parent)mesh.parent.getWorldPosition(center).applyMatrix4(camera.matrixWorldInverse);
+    };
+    loadMap('saturn_ring_alpha.png',THREE,renderer).then(map=>{
+      map.wrapS=THREE.ClampToEdgeWrapping;material.map=map;material.color.set(0xffffff);material.opacity=1;material.needsUpdate=true;invalidate?.();
+    }).catch(()=>invalidate?.());
     return mesh;
   }
-
   function atmosphericEdge(radius, THREE) {
     // A thin visual shell only: Earth geometry, picking and illumination remain intact.
     // The same active scene lights gate the effect to the lit side. Ambient light is
@@ -291,50 +158,29 @@
     return edge;
   }
 
-  function create(spec, THREE, renderer, invalidate) {
-    let maps;
-    if (spec.id === 'Earth') {
-      const map = new THREE.TextureLoader().load('../earth.jpg', invalidate);
-      map.colorSpace = THREE.SRGBColorSpace;
-      map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-      maps = { map };
-    } else {
-      maps = makeSurface(spec.id, THREE, renderer);
-    }
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      ...maps,
-      roughness: spec.id === 'Earth' ? 0.82 : 0.97,
-      bumpScale: spec.size * 0.004,
-      metalness: 0,
-    });
-    return {
-      material,
-      geometry: new THREE.SphereGeometry(spec.size, 72, 48),
-      decorate(mesh) {
-        if (spec.id === 'Saturn') mesh.add(ring(THREE, renderer));
-        if (spec.id === 'Earth') mesh.add(atmosphericEdge(spec.size, THREE));
-      },
-    };
+  function create(spec,THREE,renderer,invalidate){
+    const surface=surfaces[spec.id];
+    let material;
+    if(spec.id==='Earth'){
+      material=new THREE.MeshStandardMaterial({color:0x729bd8,roughness:.82,metalness:0});
+      loadMap('../../earth.jpg',THREE,renderer).then(map=>{
+        material.map=map;material.color.set(0xffffff);material.needsUpdate=true;invalidate?.();
+      }).catch(()=>invalidate?.());
+    }else material=photoMaterial(surface,spec.color,THREE,renderer,invalidate);
+    const geometry=new THREE.SphereGeometry(spec.size,72,48);
+    if(surface?.polarRatio)geometry.scale(1,surface.polarRatio,1);
+    if(surface?.tilt)geometry.rotateX(surface.tilt);
+    return {material,geometry,decorate(mesh){
+      if(spec.id==='Saturn')mesh.add(ring(spec.size,THREE,renderer,invalidate));
+      if(spec.id==='Earth')mesh.add(atmosphericEdge(spec.size,THREE));
+    }};
   }
-  function moon(THREE, renderer, radius = 0.12) {
-    return {
-      geometry: new THREE.SphereGeometry(radius, 72, 48),
-      material: new THREE.MeshStandardMaterial({
-        ...makeSurface('Moon', THREE, renderer),
-        roughness: 1,
-        bumpScale: radius * 0.006,
-      }),
-    };
+  function moon(THREE,renderer,radius=.12,invalidate){
+    return {geometry:new THREE.SphereGeometry(radius,72,48),material:photoMaterial(surfaces.Moon,0xaaa9a3,THREE,renderer,invalidate)};
   }
-  function sun(THREE, renderer, radius = 1.05) {
-    return {
-      geometry: new THREE.SphereGeometry(radius, 72, 48),
-      material: new THREE.MeshBasicMaterial({
-        map: makeSurface('Sun', THREE, renderer).map,
-        toneMapped: false,
-      }),
-    };
+  function sun(THREE,_renderer,radius=1.05){
+    // The emitter remains a schematic light source, not a solar-observatory image.
+    return {geometry:new THREE.SphereGeometry(radius,72,48),material:new THREE.MeshBasicMaterial({color:0xfff2d6,toneMapped:false})};
   }
-  global.SolarSpaceAppearance = { create, moon, sun };
+  global.SolarSpaceAppearance={create,moon,sun};
 })(globalThis);

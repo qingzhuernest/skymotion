@@ -8,6 +8,7 @@ const fallback = [
   'document-action-links.cjs', 'confirmed-review-fixes.cjs', 'deployment-paths.cjs',
 ];
 const groups = [
+  [/^site\/space\/(appearance\.js|scene\.js|textures\/)/, ['space-appearance.cjs','space-model.cjs','space-earth-frame.cjs','space-exploration.cjs','space-immersive-escape.cjs']],
   [/^site\/assistant\/|^scripts\/(assistant\/|build-assistant-knowledge\.py)/, ['assistant-prototype.cjs', 'assistant-reported.cjs', 'assistant-coverage.cjs', 'assistant-short-queries.cjs', 'assistant-welcome.cjs', 'assistant-corpus.cjs', 'assistant-systematic.cjs']],
   [/^site\/observer\.js$/, ['observer-heading.cjs']],
   [/^site\/language\.css$/,

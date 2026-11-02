@@ -300,6 +300,8 @@ Available exploration controls cover stars, satellites, small bodies and nebulae
 
 Lab’s 3D comparison retains the local scientific view alongside a linked spatial scene. UTC is shared while cameras remain independent. If WebGL is unavailable, continue in the 2D Lab.
 
+Close views use observation-derived surface, cloud and lunar mosaics. Saturn’s rings retain bands and transparent gaps, with neutral lighting for day and night. Mosaics and display color adjustments are not live images for the selected date; cloud patterns evolve, and orientations other than Earth remain illustrative.
+
 [Open 3D Sky →](space/index.en.html)
 
 ## Undo, keyboard and touch

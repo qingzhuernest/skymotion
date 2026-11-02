@@ -1,21 +1,22 @@
 PLANET APPEARANCE
 
-space/appearance.js generates original deterministic 1024 x 512 illustrative
-surface textures locally. No external assets or runtime texture service is used.
-Mercury and Moon: illustrative crater relief; Moon includes localized generic dark maria; reduced periodic relief noise.
-Mars: illustrative iron-rich terrain and polar caps; not a measured Mars map.
-Venus: illustrative visible-light cloud palette; no visible surface features.
-Jupiter: illustrative cloud belts, turbulence and Great Red Spot appearance.
-Saturn: illustrative pale belts and radially textured rings with a dark division.
-Uranus / Neptune: muted blue-green atmospheric palettes with subtle cloud bands;
-these are visual illustrations, not calibrated multispectral spacecraft images.
-Sun: weak granular visual texture; not a solar observation or activity model.
+Mercury, Venus atmosphere, Mars, Jupiter, Saturn, Uranus, Neptune, Moon and Saturn
+ring maps: Solar System Scope / INOVE, based on NASA imagery/elevation data.
+Source: https://www.solarsystemscope.com/textures/
+License: CC BY 4.0 https://creativecommons.org/licenses/by/4.0/
+Download URLs, original byte hashes and adjustments: ../textures/sources.json.
 
-Earth reuses ../earth.jpg and its existing root credits. Latitude/longitude in
-generated textures do not identify real topography or current weather. Earth orientation is calibrated separately in earth-frame.js. Other generated
-surface orientations, polar caps and Saturn ring tilt are not dated pole/rotation models.
-No texture participates in ephemerides, lunar illumination or geometric sunlight
-calculations. Sphere radii and positions are unchanged.
+Original source image bytes are retained and served locally. The publisher
+enhances saturation and reconstructs some unmapped gaps. Display shaders reduce
+enhancement, soften Venus cloud contrast, and approximate pale cyan ice-giant
+colors with reference to the 2024 Oxford visible-color reassessment. These are
+stitched maps, not live weather, dated orientations or spectrophotometric calibration.
+Saturn ring lighting approximates two-sided scattering and planetary occlusion.
 
-Generated maps are original project material. Rendering uses the locally bundled
-Three.js under MIT; see ../vendor/THREE-LICENSE.txt.
+Earth reuses the original root earth.jpg with its existing credits. Sun is a
+schematic emitter. Earth orientation is calculated separately in earth-frame.js.
+Other poles and rotation phases remain illustrative. Oblateness and rings affect
+display geometry only; no appearance changes physical vectors or lunar illumination.
+
+Image licenses are separate from the application's AGPLv3 license. Three.js is
+locally bundled under MIT; see ../vendor/THREE-LICENSE.txt.

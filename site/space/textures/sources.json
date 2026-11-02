@@ -1,0 +1,74 @@
+{
+  "author": "Solar System Scope / INOVE",
+  "source": "https://www.solarsystemscope.com/textures/",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "basis": "NASA imagery and elevation data; globally stitched, source colors enhanced; unmapped gaps may be reconstructed.",
+  "displayChanges": "Original map files retained. Shader reduces saturation; pale cyan ice-giant display hues refer to the 2024 Oxford reassessment; not photometric calibration or live weather. Venus cloud contrast is reduced.",
+  "colorReference": "https://www.ox.ac.uk/news/2024-01-05-new-images-reveal-what-neptune-and-uranus-really-look-0",
+  "files": [
+    {
+      "name": "mercury",
+      "file": "mercury.jpg",
+      "url": "https://www.solarsystemscope.com/textures/download/2k_mercury.jpg",
+      "bytes": 872555,
+      "sha256": "5a5c80607f643496bac9a631e71957def35ed788895f18b678ac849c2b38e48a"
+    },
+    {
+      "name": "venus_atmosphere",
+      "file": "venus_atmosphere.jpg",
+      "url": "https://www.solarsystemscope.com/textures/download/2k_venus_atmosphere.jpg",
+      "bytes": 229696,
+      "sha256": "225012ad4911730605c4e189ca2a3bf674fce50cc48aab4102b936b47d6991ac"
+    },
+    {
+      "name": "mars",
+      "file": "mars.jpg",
+      "url": "https://www.solarsystemscope.com/textures/download/2k_mars.jpg",
+      "bytes": 750547,
+      "sha256": "2d187f3e77a98eaa8cea5f4cc722f633c122ef170b9e94ace6b5fb6cbc3f8e01"
+    },
+    {
+      "name": "jupiter",
+      "file": "jupiter.jpg",
+      "url": "https://www.solarsystemscope.com/textures/download/2k_jupiter.jpg",
+      "bytes": 498976,
+      "sha256": "b0f04d005350252636b0e3396fc592548cbd9e9126b269d32d5c6abd4b0e4f2b"
+    },
+    {
+      "name": "saturn",
+      "file": "saturn.jpg",
+      "url": "https://www.solarsystemscope.com/textures/download/2k_saturn.jpg",
+      "bytes": 199916,
+      "sha256": "54a900ca9bf7ab62e70f862852759abdf342e6d6436a95a2fe9ebdb6bcd3bbac"
+    },
+    {
+      "name": "saturn_ring_alpha",
+      "file": "saturn_ring_alpha.png",
+      "url": "https://www.solarsystemscope.com/textures/download/2k_saturn_ring_alpha.png",
+      "bytes": 12119,
+      "sha256": "4b0644b2f3ef259fd0bfaedd9dc52f9e7d9738f65f50363e8c4dd19f650d7334"
+    },
+    {
+      "name": "uranus",
+      "file": "uranus.jpg",
+      "url": "https://www.solarsystemscope.com/textures/download/2k_uranus.jpg",
+      "bytes": 77751,
+      "sha256": "d15239d46f82d3ea13d2b260b5b29b2a382f42f2916dae0694d0387b1204a09d"
+    },
+    {
+      "name": "neptune",
+      "file": "neptune.jpg",
+      "url": "https://www.solarsystemscope.com/textures/download/2k_neptune.jpg",
+      "bytes": 241580,
+      "sha256": "cb42ea82709741d28b0af44d8b283cbc6dbd0c521a7f0e1e1e010ade00977df6"
+    },
+    {
+      "name": "moon",
+      "file": "moon.jpg",
+      "url": "https://www.solarsystemscope.com/textures/download/2k_moon.jpg",
+      "bytes": 1053869,
+      "sha256": "2764ba6535ea0481a062846ee033cc7a909dae05b31a8fd13f3e98f3a7fd92bd"
+    }
+  ]
+}

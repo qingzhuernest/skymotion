@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 365 个文件。目录职责见 [repository.md](repository.md)。
+共 376 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -80,7 +80,7 @@
 - [scripts/theme-colors/package.json](../scripts/theme-colors/package.json)
 - [scripts/theme-colors/source.js](../scripts/theme-colors/source.js)
 
-## site (209)
+## site (219)
 
 - [site/.nojekyll](../site/.nojekyll)
 - [site/404.en.html](../site/404.en.html)
@@ -274,6 +274,16 @@
 - [site/space/scene.js](../site/space/scene.js)
 - [site/space/space.css](../site/space/space.css)
 - [site/space/stars.js](../site/space/stars.js)
+- [site/space/textures/jupiter.jpg](../site/space/textures/jupiter.jpg)
+- [site/space/textures/mars.jpg](../site/space/textures/mars.jpg)
+- [site/space/textures/mercury.jpg](../site/space/textures/mercury.jpg)
+- [site/space/textures/moon.jpg](../site/space/textures/moon.jpg)
+- [site/space/textures/neptune.jpg](../site/space/textures/neptune.jpg)
+- [site/space/textures/saturn.jpg](../site/space/textures/saturn.jpg)
+- [site/space/textures/saturn_ring_alpha.png](../site/space/textures/saturn_ring_alpha.png)
+- [site/space/textures/sources.json](../site/space/textures/sources.json)
+- [site/space/textures/uranus.jpg](../site/space/textures/uranus.jpg)
+- [site/space/textures/venus_atmosphere.jpg](../site/space/textures/venus_atmosphere.jpg)
 - [site/space/ui.js](../site/space/ui.js)
 - [site/space/vendor/THREE-LICENSE.txt](../site/space/vendor/THREE-LICENSE.txt)
 - [site/space/vendor/three.min.js](../site/space/vendor/three.min.js)
@@ -292,7 +302,7 @@
 - [site/workbench-menu.js](../site/workbench-menu.js)
 - [site/workspace.js](../site/workspace.js)
 
-## tests (92)
+## tests (93)
 
 - [tests/analemma-references.cjs](../tests/analemma-references.cjs)
 - [tests/assistant-corpus.cjs](../tests/assistant-corpus.cjs)
@@ -370,6 +380,7 @@
 - [tests/sidebar-surfaces.cjs](../tests/sidebar-surfaces.cjs)
 - [tests/solar-location-link.cjs](../tests/solar-location-link.cjs)
 - [tests/solar-study.cjs](../tests/solar-study.cjs)
+- [tests/space-appearance.cjs](../tests/space-appearance.cjs)
 - [tests/space-earth-frame.cjs](../tests/space-earth-frame.cjs)
 - [tests/space-exploration.cjs](../tests/space-exploration.cjs)
 - [tests/space-immersive-escape.cjs](../tests/space-immersive-escape.cjs)
