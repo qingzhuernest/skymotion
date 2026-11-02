@@ -112,3 +112,5 @@ Question cores remove polite wrappers and emphasis words. English retrieval uses
 ## Automatic intent selection
 
 Search keeps a single input and requires no category selection. Explicit requests to open, configure or save prefer usage instructions; scientific calculation questions remain knowledge queries. Both text and semantic selection apply the same compatibility rule, including suggested entries. Generic control nouns alone do not override a physical explanation (for example, a missing polar-day sunset reading). English Solar System usage terms point to the feature manual.
+
+The dynamically imported search module shares the UI resource version, so a browser cannot combine a newly deployed UI with a still-fresh older search module.

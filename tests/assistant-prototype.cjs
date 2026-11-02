@@ -12,6 +12,7 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   await page.waitForTimeout(1200);
   await page.waitForRequest(r=>r.url().includes('model_int8.onnx'),{timeout:30000}).catch(()=>assert(requests.some(url=>url.includes('model_int8.onnx'))));
   assert(requests.some(url=>url.includes('knowledge.json')),'Knowledge downloads before opening Search');
+  assert(requests.some(url=>{const u=new URL(url);return u.pathname.endsWith('/assistant/search.js')&&u.searchParams.get('v')===new URL(requests.find(url=>url.includes('/assistant/ui.js'))).searchParams.get('v');}),'Search module uses the same resource version as its UI');
   assert.equal(await page.locator('.assistant-dialog').evaluate(el=>el.open),false);
   await page.waitForFunction(()=>window.searchPrepared===true,null,{timeout:120000});
   assert(requests.some(url=>url.includes('index.bin')),'Index downloads before opening Search');

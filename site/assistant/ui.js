@@ -3,6 +3,7 @@
   if (document.body?.dataset.embedded==='true'||new URLSearchParams(location.search).get('embed')==='1') return;
   const script = document.currentScript;
   const base = new URL('.',script.src);
+  const searchUrl = new URL('search.js',base);searchUrl.search=new URL(script.src).search;
   const site = new URL('../',base);
   const en = ()=> (window.skyLanguage?.()||document.documentElement.lang)==='en';
   const tr=(zh,english)=>en()?english:zh;
@@ -34,7 +35,7 @@
     loadPromise ||= Promise.all([
       fetch(new URL('knowledge.json',base)).then(r=>{if(!r.ok)throw Error('knowledge');return r.json();}),
       fetch(new URL('knowledge-version.json',base)).then(r=>{if(!r.ok)throw Error('version');return r.json();}),
-      import(new URL('search.js',base).href)
+      import(searchUrl.href)
     ]).then(([data,version,module])=>{
       if(data.version!==version.version)throw Error('Knowledge version mismatch');
       knowledge={records:data.records,version:version.version};searchModule=module;engine=module.createSearch(data.records);
