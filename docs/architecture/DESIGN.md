@@ -30,3 +30,6 @@ ui-palette.css defines color; design-system.css defines shared component tokens 
 
 ## Programmatic control values
 State owners commit native field values through `SkyMaterial.setValue(control, value)`; callers that directly change selection can use `syncChoices(select)`. These calls update presentation without generating input/change events. The shared library loads once, before page controllers. Native select/option prototypes remain unchanged; DOM observation handles added, moved and relabeled controls.
+
+## Search and scientific imagery
+Search retains a single compact input with automatic intent selection, without category controls or implementation footnotes. References remain collapsed. Asset loading belongs to the runtime rather than UI layout. Planetary textures retain their own source and license; neutral scientific lighting and static mosaics do not redefine the interface palette or claim live cloud state.

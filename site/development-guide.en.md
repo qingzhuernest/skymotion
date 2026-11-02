@@ -42,6 +42,15 @@ preferences.js is the single preference owner, exposing get, set, subscribe, res
 
 The Search UI lives in assistant/ui.js and lexical retrieval in assistant/search.js. scripts/assistant/worker-source.js builds the local BGE semantic Worker. Page entry loads knowledge and sends prepare; the Worker loads the index, tokenizer, model and WASM, then runs warm-up inference before reporting ready. A later search can retry a failed preparation. One shared promise coordinates preparation without reading or writing scientific state. The dedicated loader owns assistant assets so general page warming does not request them again. See docs/assistant/README.md for pinned dependencies, build order, sizes and validation limits.
 
+| Owner | Responsibility | Boundary |
+| --- | --- | --- |
+| Science and ephemeris modules | app, moon, analemma, space/model and lunar/model own model state and calculations | Views and Search do not create competing copies of scientific values |
+| Workspace and editing | workspace, custom-layout, diagram-reference-store and scene-builder organize layout and objects | Preserve identity, ownership, undo and saving scope |
+| Shared UI and preferences | material-controls, preferences and language manage controls, preferences and language | Do not add competing control implementations at page ends |
+| Local Search | ui owns DOM; runtime owns assets and Worker lifetime; search owns retrieval and answer selection | Read sources without performing experiment actions; classify without manual category selection |
+
+scripts/repository-index.py generates the tracked-file inventory and docs/architecture/CODE-MAP.md, which classifies site code, styles, generators, tests and third-party code by ownership. docs/architecture/SEARCH.md specifies Search interfaces and states. Public URLs remain stable; third-party libraries, generated output and authored code are maintained separately.
+
 [Open the corresponding experiment →](lab.en.html#skyPanel)
 
 ## Data flow from input to drawing
@@ -434,6 +443,14 @@ Keep release diaries out of the manuals. Feature usage, teaching tasks and varia
 
 scripts/document_model.py validates paths, unique section IDs and aliases, bilingual text, block types, table dimensions, link targets and state documentation coverage before output. scripts/build-documents.py handles rendering and writing, using scripts/document-page.html for the shell. State tables read lab-state.json rather than inferring JavaScript declarations from indentation.
 
+| Source or tool | Output | Maintenance rule |
+| --- | --- | --- |
+| docs/document-content.json | Four bilingual HTML/Markdown documents and translation entries | Edit the source and regenerate rather than patch generated manuals |
+| scripts/document_model.py | Structure validation, shared function index and current section text | Rendering and Search use the same validated content |
+| scripts/build-assistant-knowledge.py | 633 knowledge records with stable IDs and version | Chapter full text comes from current manuals; review status is separate from retrievability |
+| scripts/assistant/build.mjs | Worker, pinned WASM and offline document vectors | Rebuild vectors when knowledge text changes; runtime-only checks apply to runtime-only edits |
+| scripts/check-sources.py | Parsing of all tracked JS/Python/JSON and HTML asset-reference checks | Do not execute scientific code or scan dependency caches |
+
 [Open documentation →](docs.en.html)
 
 ## Local development, verification and commits
@@ -457,6 +474,21 @@ Checks cover model consistency, real clicks/drags, corrupt-cache recovery, local
 
 Production publication keeps the latest main commit. A new commit cancels obsolete publication workflows for the same host; the latest commit still must pass the complete checks before deployment.
 
+Search precomputes term counts, inverse document frequency and an inverted candidate index. A query is analyzed once for intent, operation and normalized terms. Text and semantic paths share category compatibility; weak semantic results retain existing text candidates. Cancelling a query cancels its wait while retaining the prepared model; stale Worker events cannot complete a newer request.
+
+```sh
+python3 scripts/check-sources.py
+python3 scripts/site_sources.py
+python3 scripts/build-documents.py
+python3 scripts/prerender-pages.py
+python3 scripts/build-assistant-knowledge.py
+node scripts/assistant/build.mjs
+python3 scripts/assistant/resource-report.py
+python3 scripts/prerender-pages.py
+python3 scripts/build-assistant-knowledge.py --check
+python3 scripts/repository-index.py --check
+```
+
 ## Production, mirror and packaging
 
 A push to main validates once through shared validate.yml, then independently deploys Cloudflare Pages and GitHub Pages. Checks are selected by changed paths; only manual full_regression requests the complete suite. Verify both deployment outcomes.
@@ -471,6 +503,8 @@ prepare_site.py copies tracked static files while excluding tests, scripts, priv
 - [Source and workflows on GitHub](https://github.com/qingzhuernest/skymotion)
 - [Cloudflare production site](https://skymotion-5md.pages.dev/)
 - [GitHub Pages mirror](https://qingzhuernest.github.io/skymotion/)
+
+Stage new or moved files before regenerating the inventory and code map. check-sources examines tracked files, and packaging copies tracked site files only. Fix build order and rebuild on an index/version/hash mismatch rather than bypassing checks. After main validation, deploy Cloudflare and GitHub Pages; GPT preview uses the same frozen package.
 
 ## Data, imagery, libraries and licenses
 
@@ -558,6 +592,6 @@ This index scans actual files. The right column lists explicit function declarat
 | [diagram-reference-store.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-store.js) | Reference state, drafts, persistence, duplication and history; independent of the UI | create, persist, stateFor, clean, createReference, duplicateReference, saveReferences, travelReferences, record, checkpoint |
 | [diagram-reference-renderer.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-renderer.js) | Reference drawing, text placement and hit geometry; reads observation and reference state | create, textLayout, helper, drawObject, anchor, hitAnchor |
 | [material-web.js](https://github.com/qingzhuernest/skymotion/blob/main/site/material-web.js) | Locally bundled Google Material Web 2.5.0; build entry scripts/material-web/source.js | Module methods; see source |
-| [assistant/ui.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/ui.js) | Read-only assistant UI, lazy retrieval and bilingual panel | loading, target, showCard, render, finish, prepareWorker, semantic, mountLauncher |
-| [assistant/search.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/search.js) | Local lexical retrieval and dynamic-request boundaries | canonical, tokens, usageQuery |
+| [assistant/ui.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/ui.js) | Read-only assistant UI, lazy retrieval and bilingual panel | loading, target, showCard, render, finish, mountLauncher |
+| [assistant/search.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/search.js) | Local lexical retrieval and dynamic-request boundaries | canonical, stem, tokens, classify, analysis, corpus |
 | [assistant/worker.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/worker.js) | Bundled pinned BGE/ONNX semantic retrieval Worker | Module methods; see source |

@@ -34,6 +34,8 @@ File responsibilities, data flow, state fields, units, equations, interfaces, te
 
 Use Search in the navigation for site instructions, astronomy and geography; answers include sources and relevant manual links. You can also ask what the Sun is, its color, or which planets are in the Solar System, and open the scientific sources under References.
 
+Search uses one input and automatically distinguishes knowledge from usage. Ask what the Sun is for an explanation, or how to show its path for instructions. Use the guides below for a systematic reading of complete chapters.
+
 ## Find an answer directly
 
 - [How do I plan a lesson?](guide.en.html#lesson)

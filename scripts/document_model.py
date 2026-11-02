@@ -130,3 +130,36 @@ def validate(data, root):
 def load(root):
     data = json.loads((Path(__file__).resolve().parents[1] / "docs/document-content.json").read_text())
     return validate(data, root)
+
+
+def source_functions(path):
+    """Named declarations shown in both the public source index and search records."""
+    return re.findall(r"^[ \t]*(?:async )?function\s+(\w+)\s*\(", Path(path).read_text(), re.M)
+
+
+def section_text(section, language, data, root):
+    """Index the current canonical document, including tables and generated dictionaries."""
+    lines = [section['title'][language]]
+    for block in section['blocks']:
+        kind = block['kind']
+        if kind in {'paragraph', 'heading', 'note'}:
+            lines.append(block['text'][language])
+        elif kind == 'code':
+            lines.append(block['text'])
+        elif kind in {'list', 'steps'}:
+            lines.extend(item[language] for item in block['items'])
+        elif kind == 'table':
+            lines.extend(cell[language] for cell in block['headers'])
+            lines.extend(' | '.join(cell[language] for cell in row) for row in block['rows'])
+        elif kind in {'links', 'document-list'}:
+            for item in block['items']:
+                lines.extend(item[key][language] for key in ('title', 'audience', 'description', 'text') if key in item)
+        elif kind == 'state-table':
+            fields = state_fields(root)
+            for key, value in data['state_dictionary'].items():
+                initial = '; '.join(('Sun: ' if body == 'initialSun' else 'Moon: ') + initial for body, initial in fields[key].items())
+                lines.append(' | '.join([key, value['meaning'][language], value['unit'][language], initial]))
+        elif kind == 'source-index':
+            for name, description in data['source_files'].items():
+                lines.append(name + ': ' + description[language] + ' ' + ', '.join(source_functions(root / name)))
+    return '\n'.join(lines)

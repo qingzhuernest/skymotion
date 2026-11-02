@@ -1,41 +1,18 @@
 # SkyMotion · 天体视运动实验室
 
-自定义支持跨图选中城市联动；“排列与收藏”可选择连同观测条件、参考对象与搭建物体保存完整实验。
-
-面向地理课堂和自主观察的浏览器实验室。用地点、日期和时刻控制太阳、月球、日影、日晷与日行迹，通过关联图解和三维视图核对结果。原生 HTML、CSS 和 JavaScript，无需构建即可运行。
+面向地理课堂与自主探究的浏览器实验室。调整地点、日期和时刻，通过太阳、月球、日影、日晷、日行迹与三维图解解释现象，并记录可复现的证据。
 
 **简体中文** · [English](README.en.md)
 
-[打开正式站](https://skymotion-5md.pages.dev/) · [GitHub Pages 镜像](https://qingzhuernest.github.io/skymotion/)
+[正式站](https://skymotion-5md.pages.dev/) · [GitHub Pages镜像](https://qingzhuernest.github.io/skymotion/) · [文档导航](docs/README.md)
 
-实验台、关联图解和日行迹现共用一个工作区。原网址仍可打开对应视图；顶部主菜单保持稳定。左侧先选“视图与布局”，展开“天空与日影”“关联图解”或“对照与搭建”，点击具体图名查看；切到“观测条件”继续调地点、日期、时刻与原来的实验参数。
+## 使用
 
-要在实验台同屏显示天空、地球、高度曲线和日行迹：先打开空间视图，再点击顶部“进入自定义”，切到“视图与布局”，依次点击这些图名右侧的加入控件。已加入的控件表示移除；点击图名仍用于查看或替换当前画格。更多图可以继续加入，超过四图后向下滚动查看。
+顶部选择太阳或月球。左侧“视图与布局”选择图解，“观测条件”调整地点、日期、时间与参数；四个天空视角和关联图解共用工作区。进入自定义后，“图中对象”负责城市、日期、时刻和几何对照，“观测条件”继续控制原有实验。
 
-界面采用 Material Design 3 的共享颜色、形状、状态与控件尺寸，并保持原来的中文宋体和英文 Charter。组合图的编辑入口位于各图标题栏，避免遮挡图中内容。顶部左侧显示标题和地点；太阳／月球使用并列双按钮直接切换。四个天空视角统一位于“视图与布局 → 天空与日影”，画布上方不再重复显示。
+“排列与收藏”可连同观测条件、参考对象与搭建物体保存完整实验；也可导出JSON备份。浏览器内保存不自动跨设备同步。三维天空使用真实日期物理向量与单独的显示尺度，近景采用有来源的观测影像拼接贴图，不是实时云层。
 
-底部时间栏采用紧凑布局，精确时刻与滑块共用一组控制；月球优先显示日期。长篇计算说明按需展开。首页保持点击星空或按 Enter 进入，文档支持章节导航与阅读进度。
-
-
-顶部“搜索”提供网站操作、天文与地理资料。打开网页后会自动下载知识库、模型及运行资源，并在后台完成初始化；不必先打开搜索或提问。首次资源约49 MB（未压缩），耗时取决于网络与设备。搜索在本机运行，不代为操作实验；资料仍需结合原文与观察核对。
-
-“搜索”现收录633条资料，其中152条科学知识；基础天体知识提供 NASA、国际天文学联合会或斯坦福太阳中心的来源链接。
-
-## 使用与文档
-
-- [文档中心](site/docs.html)：顶部统一入口，按教学、功能使用和开发查阅。
-- [学习指南](site/learning-guide.md)：课程设计、探究任务、观察记录和评价。
-- [项目介绍与功能使用](site/project-guide.md)：全部模块、参数、对照、自定义、保存与操作方法。
-- [开发说明](site/development-guide.md)：源码职责、状态、计算、渲染、检查与部署。
-- [自定义操作](site/docs/customization-interaction.zh.md)：添加城市、时间标记、参考线和实验物体，编辑属性并保存方案。
-
-自定义入口位于右上角，语言切换在“设置”中。进入后，“观测条件”继续控制基准实验，“图中对象”负责添加和调整对照。城市与时刻在相关图中联动，杆、球和圆圈等在实验地面摆放。操作示例见[学习指南的自定义章节](site/guide.html#customization)。
-
-“实验台 → 月球 → 视图与布局 → 地升地落”提供绕月轨道与宇航员视角的联动演示。该演示使用独立的示意轨道，保留左侧说明、参数栏和底部控制；它不是按真实日期求得的航天器轨道预报。
-
-## 仓库结构
-
-网站源码和发布文件在 [`site/`](site/)，文档原稿在 [`docs/`](docs/)，生成工具在 [`scripts/`](scripts/)，验证在 [`tests/`](tests/)。目录职责、完整文件清单与分支保留依据见 [仓库维护说明](docs/repository.md)。正式发布只使用 `main`。
+“搜索”用同一个输入框自动判断知识与用法。先查明确来源，必要时补充本地语义检索；对话不读取或操作实验。资源在页面进入时自动准备，问题不上传到外部问答服务。
 
 ## 本地运行
 
@@ -43,57 +20,70 @@
 python3 -m http.server 8000 --directory site
 ```
 
-打开 `http://localhost:8000/`。英文使用独立页面，例如 `lab.en.html` 和 `space/index.en.html`。需要现代浏览器；三维视图需要 WebGL。
+打开 `http://localhost:8000/`；英文页面如 `lab.en.html` 和 `space/index.en.html`。科学应用使用原生HTML/CSS/JavaScript，无需运行时构建；三维页面需要WebGL。仅修改模型、主题依赖或搜索索引时才使用对应构建工具。
 
-## 修改文档与双语页面
+## 文档和代码入口
 
-文档中心与三份手册的双语原稿统一保存在 `docs/document-content.json`。先生成 HTML 和 Markdown，再生成英文页面与共享字典：
+| 入口 | 内容 |
+| --- | --- |
+| [功能手册](site/project-guide.md) | 控件、图解、自定义、搜索、保存与排错 |
+| [学习指南](site/learning-guide.md) | 探究任务、记录和评价 |
+| [开发者文档](site/development-guide.md) | 变量、公式、坐标、状态、存储和发布 |
+| [全仓库代码地图](docs/architecture/CODE-MAP.md) | 每个代码/数据文件的职责、生成件和依赖分类 |
+| [全部跟踪文件](docs/file-inventory.md) | 包含素材、许可和原稿的完整清单 |
+| [搜索维护](docs/assistant/README.md) · [接口约定](docs/architecture/SEARCH.md) | 检索、自动分类、缓存、Worker、取消与构建 |
+| [产品约定](docs/architecture/PRODUCT.md) · [设计约定](docs/architecture/DESIGN.md) | Material 3 Expressive、原有宋体/Charter及多端行为 |
+| [仓库维护](docs/repository.md) | 目录、分支、打包和恢复 |
 
-页面和视图目录统一在 `site/site-catalog.json`，观测初值与校验规则统一在 `site/lab-state.json`。修改这些数据后先运行 `python3 scripts/site_sources.py`；生成区段由检查核对，不再手工维护多份目录或枚举。
+## 修改与生成
+
+`site/` 是唯一发布根目录。修改所属模块，不用全局拦截或文件末尾覆盖制造第二套状态。观测初值和校验在 `site/lab-state.json`；页面目录和资源版本在 `site/site-catalog.json`；主题颜色在 `site/ui-palette.css`。
+
+四份双语手册的原稿统一在 `docs/document-content.json`。先生成页面和词典，再生成搜索知识与索引：
 
 ```sh
 python3 scripts/site_sources.py
 python3 scripts/build-documents.py
-python3 scripts/prerender-pages.py --dist site
-python3 scripts/prerender-pages.py --check
+python3 scripts/prerender-pages.py
+python3 scripts/build-assistant-knowledge.py
+node scripts/assistant/build.mjs
+python3 scripts/assistant/resource-report.py
+python3 scripts/prerender-pages.py
 ```
 
-生成器同步英文 HTML、`language-data.js` 和资源预热清单，同时保留 DOM ID、表单值、数值属性与科学脚本。三份文档的中英文 Markdown 下载文件也须同步。内容按主题更新到原章节，不在文末叠加发布日志。
+搜索构建依赖安装与固定模型下载见[搜索维护说明](docs/assistant/README.md)。不要直接修改生成的英文页面、手册、字典、向量或依赖包。新增或移动文件后先 `git add`，再运行 `python3 scripts/repository-index.py` 更新清单与代码地图。
 
-界面颜色统一在 `site/ui-palette.css` 定义；修改主色或预设色后运行 `python3 scripts/site_sources.py`，同步样式加载前的主题启动数据。控件通过 `--design-*` 变量调用；不要在页面模块里另写色号。对象菜单将撤销、重做并入操作行，帮助按需展开，给列表和属性保留空间。
-
-[界面集中审查记录](site/docs/ui-code-review.zh.md)列出已复现的问题、公共开关的职责与验证范围。
-
-## 自动检查
-
-使用 Node 22 或更新版本、Python 3 和 Chromium：
+## 验证
 
 ```sh
+python3 scripts/check-sources.py
+python3 scripts/site_sources.py --check
+python3 scripts/build-documents.py --check
+python3 scripts/prerender-pages.py --check
+python3 scripts/build-assistant-knowledge.py --check
+python3 scripts/repository-index.py --check
 npm ci --prefix tests/browser
-SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" SKY_MOTION_CHROMIUM=/usr/bin/chromium node .github/scripts/verify-site.cjs
 ```
 
-未安装 Chromium 时，可运行 `tests/browser/node_modules/.bin/playwright install --with-deps chromium`，并把 `SKY_MOTION_CHROMIUM` 指向安装后的浏览器。
+浏览器回归使用Node 22或更新版本、Python 3、Playwright和Chromium。安装浏览器后配置路径：
 
-检查使用独立临时端口，自动发现 `tests/` 根目录的 `.cjs` 测试，排除辅助模块；可在命令末尾指定文件名，如 `node .github/scripts/verify-site.cjs session-validation.cjs`。检查覆盖模型边界、常见交互、自定义、保存恢复、双语内容、字体加载和打包路径。浏览器工具不随网站发布。自动检查主要使用 Chromium，不能替代 Safari、Firefox 和实际触屏设备验证。
+```sh
+tests/browser/node_modules/.bin/playwright install --with-deps chromium
+export SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright"
+export SKY_MOTION_CHROMIUM="$(node -e "console.log(require('./tests/browser/node_modules/playwright').chromium.executablePath())")"
+node .github/scripts/verify-site.cjs assistant-runtime.cjs assistant-prototype.cjs
+```
 
-## 状态与资源加载
+验证器使用独立临时端口并清理进程；可以指定受影响的测试文件。不加文件名会运行全部回归。源码解析、生成一致性、模型验证和浏览器交互是不同检查；Chromium结果不能代替真实Safari/iPad性能验证。
 
-实验会话恢复前校验日期、数值范围、类型与选项；未知版本不应用。存储不可用时使用当前页面内的内存备份，不能保证关闭页面或换设备后保留。对象可保存到本机，也可导出 JSON 备份。
+## 发布与恢复
 
-`theme-colors.js`、`preferences.js` 和 `page-boot.js` 在绘制前恢复主题与语言；共享控件先于依赖它的页面脚本加载，其余脚本按顺序使用 `defer`。欢迎页星座等待点击后展开；文档开场按访问范围控制重播，并尊重减少动态效果。字体或语言资源失败时提供重试，重试保留实验设置。后台预加载不等于离线安装。
+`main` 是唯一正式发布分支。共享验证成功后分别部署Cloudflare Pages和GitHub Pages；GPT预览同步同一冻结发布包。路径变化按相关模块选择检查，完整回归由手动 `full_regression` 选择。
 
-## 部署与恢复
+打包命令 `python3 .github/scripts/prepare_site.py --output dist` 只复制Git跟踪的 `site/` 文件，不发布开发依赖、测试或原始工作目录。回退使用新的恢复提交，不强制改写 `main` 历史。
 
-推送 `main` 运行一次共享的 `validate.yml` 验证，通过后分别部署 Cloudflare Pages 与 GitHub Pages。镜像工作流只负责部署，不重复安装浏览器和执行同一批检查。按改动路径选择相关检查；纯说明文档不安装浏览器，未知改动回退到短检查集。完整回归通过手动 `full_regression` 选择。其他分支不发布正式站。
+## 资料、存储与许可
 
-恢复版本时，从确认可用的提交创建恢复提交，保留 `main` 的历史，不强制推送。根路径及 GitHub 项目子路径由 `tests/deployment-paths.cjs` 检查。
+科学读数来自明确的地点、时刻和模型；理想实验、独立地升模型与真实日期星历各有适用范围。搜索不是当前天空数值计算器，也不是通用百科。会话恢复会校验日期、范围、类型与版本；存储不可用时使用当前页内存回退。
 
-## 许可与反馈
-
-原创应用代码采用 [GNU AGPLv3](LICENSE)（AGPL-3.0-only），第三方库、字体、图片与数据保留各自许可，见 [NOTICE](NOTICE) 和[第三方声明](THIRD-PARTY-NOTICES.md)。
-
-问题反馈请附模块、地点、实验日期与时刻、复现步骤，以及设备和浏览器信息：[联系作者](https://skymotion-5md.pages.dev/contact.html) · [GitHub Issues](https://github.com/qingzhuernest/skymotion/issues)。
-
-
-自定义可按实验目的建立城市、时刻和日期对照，所选对象支持滑条预览、精确输入、整段撤销与取消；用法见[学习指南](site/learning-guide.md)。
+原创应用代码采用[AGPLv3](LICENSE)。天文库、Material Web、字体、模型与行星影像保留各自许可，详见[第三方声明](site/THIRD-PARTY-NOTICES.md)。

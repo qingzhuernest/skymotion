@@ -37,6 +37,8 @@ This guide supports classroom teaching and independent inquiry. Start with a tes
 
 Describe a goal in Search, such as comparing the Sun’s paths in two cities. Search provides sources and instructions without changing experiment conditions. Check sources and test explanations through observation. You can also ask what the Sun is, its color, or which planets are in the Solar System, and open the scientific sources under References.
 
+Separate the scientific question from the software task: why solar altitude changes calls for an explanation, while how to display the altitude curve calls for controls. Search distinguishes these automatically. Test the explanation in the Lab by fixing conditions, varying one quantity and recording evidence.
+
 [Open the corresponding experiment →](lab.en.html#skyPanel)
 
 ## Four conventions to state before an experiment
@@ -454,6 +456,8 @@ Identify one deliberately exaggerated display quantity and one quantity computed
 | Results and evidence | At least three observations and two mutually supporting views or readings |
 | Explanation and limitations | Explain the geometry or physics and name omitted conditions |
 | Reproduction | Save name, views, sampling basis, object settings and operating sequence |
+
+When citing Search, expand References and record the entry and manual chapter. Distinguish the source explanation, your observation and your conclusion. Take readings from an experiment with recorded location, date, time and mode; Search text is not a live measurement of the current view.
 
 ## Assessing an explanation
 

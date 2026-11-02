@@ -47,6 +47,7 @@ jobs:
           node -e "console.log('SKY_MOTION_CHROMIUM='+require('./tests/browser/node_modules/playwright').chromium.executablePath())" >> "$GITHUB_ENV"
       - name: Run release checks
         run: |
+          python3 scripts/check-sources.py
           python3 scripts/repository-index.py --check
           python3 scripts/site_sources.py --check
           node .github/scripts/select-checks.cjs --run

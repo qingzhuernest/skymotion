@@ -42,9 +42,9 @@ Theme generation bundles `@material/material-color-utilities` 0.3.0 under Apache
 
 UI controls bundle `@material/web` 2.5.0 (Google, Apache-2.0), with Lit (BSD-3-Clause) and tslib (0BSD). Only the select, select-option, filter-chip, slider, switch and outlined-button components are imported. Full dependency licenses are retained in `material-web.LICENSE`; per-module notices are in `material-web.js.LEGAL.txt`. The pinned build is reproducible with `npm ci --prefix scripts/material-web` and `npm run build --prefix scripts/material-web`. Components are served locally; no runtime CDN or external font dependency is required.
 
-## Sky assistant preview
+## SkyMotion Search
 
-The preview assistant self-hosts Transformers.js 3.8.1 (Apache-2.0), ONNX Runtime Web 1.21.0 (MIT), and Xenova's ONNX adaptation of BAAI's BGE-small-zh-v1.5 (model card declares MIT). Model revision: `75c43b069aac4d136ba6bc1122f995fedcfd2781`. The BGE upstream license is retained from FlagOpen/FlagEmbedding; the model adaptation card is included beside its weights. Full notices are in `assistant/licenses/` and `assistant/worker.js.LEGAL.txt`. Third-party licenses apply independently of the original site's AGPLv3 license. No visitor queries are sent to these upstream services.
+Search self-hosts Transformers.js 3.8.1 (Apache-2.0), ONNX Runtime Web 1.21.0 (MIT), and Xenova's ONNX adaptation of BAAI's BGE-small-zh-v1.5 (model card declares MIT). Model revision: `75c43b069aac4d136ba6bc1122f995fedcfd2781`. The BGE upstream license is retained from FlagOpen/FlagEmbedding; the model adaptation card is included beside its weights. Full notices are in `assistant/licenses/` and `assistant/worker.js.LEGAL.txt`. Third-party licenses apply independently of the original site's AGPLv3 license. No visitor queries are sent to these upstream services.
 
 ## Planetary surface and ring maps
 

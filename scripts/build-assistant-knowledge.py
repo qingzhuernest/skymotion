@@ -1,10 +1,11 @@
-"""Reproducible preview knowledge build from the author's two source snapshots."""
+"""Compile stable author IDs with current bilingual manuals and source-checked supplements."""
 from pathlib import Path
 import hashlib
 import json
 import re
 import argparse
 from urllib.parse import urlsplit
+from document_model import section_text, source_functions, validate
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'site/assistant'
@@ -34,6 +35,7 @@ def build(check=False):
                 status='draft', target=None, sourceRefs=[fields.get('参考', fields.get('源码／文档', 'Author science knowledge snapshot'))]))
             if namespace=='site' and match[1].startswith('SCI-'):records[-1]['intent']='science'
     content = json.loads((ROOT / 'docs/document-content.json').read_text())
+    validate(content, ROOT/'site')
     documents = {d['page']+'.html':d for d in content['documents']}
     for name, expected in [('learning',18),('manual',20),('developer',88)]:
         source = (ROOT / f'docs/assistant/sources/update142/{name}.txt').read_text()
@@ -46,7 +48,7 @@ def build(check=False):
             if ':FILE-' in match[1]:
                 file=match[2].strip();assert (ROOT/'site'/file).is_file(),file
                 role=content['source_files'][file]
-                functions=re.findall(r'^[ \t]*(?:async )?function\s+(\w+)\s*\(', (ROOT/'site'/file).read_text(),re.M)
+                functions=source_functions(ROOT/'site'/file)
                 records.append(dict(id=match[1],title=file,answer=role[0],steps=[],warnings=[],aliases=aliases+[file],
                     fullText=role[0]+' '+', '.join(functions),status='source-checked',intent='developer',language='zh',
                     target='development-guide.html#source-index',sourceRefs=['site/'+file],
@@ -61,9 +63,9 @@ def build(check=False):
                 steps=[item[lang] for b in section['blocks'] if b['kind']=='steps' for item in b['items']]
                 localized.append(dict(title=section['title'][lang],answer='\n\n'.join(paragraphs[:2]) or section['title'][lang],
                     steps=steps,warnings=[]))
-            text=body.split('原章节正文（保留完整主要内容）：',1)[-1]
+            text=section_text(section, 0, content, ROOT/'site')
             records.append(dict(id=match[1],**localized[0],en=localized[1],aliases=aliases,
-                fullText=text,language='zh',intent='developer' if name=='developer' else 'howto',
+                fullText=text,fullTextEn=section_text(section, 1, content, ROOT/'site'),language='zh',intent='developer' if name=='developer' else 'howto',
                 status='published-document',target=path+'#'+anchor,sourceRefs=['site/'+documents[path]['markdown']],
                 documentSha256=hashlib.sha256(json.dumps(section,ensure_ascii=False,sort_keys=True).encode()).hexdigest()))
     assert len(records)==625, 'Original author corpus must retain all 625 units'

@@ -42,6 +42,15 @@ preferences.js 是全站偏好的唯一入口：get、set、subscribe、reset、
 
 搜索界面位于assistant/ui.js，规则检索位于assistant/search.js；scripts/assistant/worker-source.js打包生成本地BGE语义检索Worker。页面进入即加载知识库并发送prepare消息，Worker加载索引、分词器、模型及WASM，执行一次预热推理后报告ready；后台失败可在后续检索重试。共用准备Promise，检索与预加载不读写科学state。assistant资源由此专属加载器负责，通用页面预热不再重复请求。源码与锁定依赖、生成顺序、体积及验证边界见仓库docs/assistant/README.md。
 
+| 所有者 | 职责 | 边界 |
+| --- | --- | --- |
+| 科学状态与星历模块 | app、moon、analemma、space/model、lunar/model提供模型状态与计算 | 视图与搜索不重新保存同一科学量 |
+| 工作区与编辑模块 | workspace、custom-layout、diagram-reference-store、scene-builder组织布局与对象 | 保持对象身份、所属源、撤销与保存范围一致 |
+| 共享界面与偏好 | material-controls、preferences、language管理控件、偏好与语言 | 不在页面末尾叠加同类控件实现 |
+| 本地搜索 | ui负责DOM；runtime负责资源与Worker；search负责检索与答案选择 | 只读资料，不执行实验动作；分类不需要用户手选 |
+
+完整跟踪文件清单由scripts/repository-index.py生成；同一工具生成docs/architecture/CODE-MAP.md，为网站源码、样式、生成器、测试与第三方代码标注职责。docs/architecture/SEARCH.md描述搜索接口和状态约定。公共URL保持稳定，第三方库、生成文件与手写源码分开维护。
+
 [打开对应实验台 →](lab.html#skyPanel)
 
 ## 从输入到图形的数据流
@@ -434,6 +443,14 @@ python3 scripts/prerender-pages.py --check
 
 文档输入由scripts/document_model.py先验证路径、章节与别名唯一性、双语文本、内容类型、表格列数、链接目标和状态说明覆盖率。scripts/build-documents.py只负责渲染与输出，页面外壳在scripts/document-page.html；变量表读取lab-state.json，不再靠正则猜测JavaScript源码的缩进。
 
+| 原稿或工具 | 生成内容 | 维护要求 |
+| --- | --- | --- |
+| docs/document-content.json | 四份双语HTML、Markdown及文档字典 | 修改原稿后生成；不手工改生成手册 |
+| scripts/document_model.py | 结构校验、共享函数索引、当前章节纯文本 | 渲染与搜索使用同一份已校验内容 |
+| scripts/build-assistant-knowledge.py | 保留稳定ID的633条知识及版本 | 章节全文来自当前手册；审核状态独立于是否可检索 |
+| scripts/assistant/build.mjs | Worker、固定版本WASM与离线文档向量 | 知识正文变化须重建向量；仅运行时代码可用runtime-only检查 |
+| scripts/check-sources.py | 全部跟踪JS/Python/JSON语法与HTML素材引用检查 | 不执行网站科学代码；不扫描依赖缓存 |
+
 [打开文档中心 →](docs.html)
 
 ## 本地开发、验证与提交
@@ -457,6 +474,21 @@ SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" \
 
 正式发布只保留最新 main 提交的流程。更新提交到达时会取消同一站点旧提交的发布流程；最新提交仍须完整通过检查，再部署网站。
 
+搜索模块采用预计算词频、逆文档频率和倒排候选集；一个查询只分析一次意图、操作和规范化词。文字与语义路径共用类别兼容规则，弱语义结果不会清空已有文字候选。查询取消只取消该次等待，保留后台准备好的模型；旧Worker的错误或迟到结果不能结束新请求。
+
+```sh
+python3 scripts/check-sources.py
+python3 scripts/site_sources.py
+python3 scripts/build-documents.py
+python3 scripts/prerender-pages.py
+python3 scripts/build-assistant-knowledge.py
+node scripts/assistant/build.mjs
+python3 scripts/assistant/resource-report.py
+python3 scripts/prerender-pages.py
+python3 scripts/build-assistant-knowledge.py --check
+python3 scripts/repository-index.py --check
+```
+
 ## 正式站、镜像与打包
 
 main推送只执行一次共享validate.yml，通过后分别部署Cloudflare Pages与GitHub Pages。按改动路径选择检查，手动full_regression才执行完整回归。主站与镜像分别核对部署结论。
@@ -471,6 +503,8 @@ prepare_site.py复制已跟踪的静态站文件，排除测试、脚本、私�
 - [GitHub源码与工作流](https://github.com/qingzhuernest/skymotion)
 - [Cloudflare正式网站](https://skymotion-5md.pages.dev/)
 - [GitHub Pages镜像](https://qingzhuernest.github.io/skymotion/)
+
+发布前暂存新增或移动文件，再生成完整清单与代码地图。check-sources只检查Git跟踪的文件，打包也只复制已跟踪site文件。索引与资料版本或哈希不匹配时，修复生成顺序并重新构建，不跳过校验。正式分支验证成功后分别部署Cloudflare与GitHub Pages，GPT预览使用同一份冻结发布包。
 
 ## 数据、影像、库与许可
 
@@ -558,6 +592,6 @@ space/textures中的行星与月球图像来自Solar System Scope / INOVE，以C
 | [diagram-reference-store.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-store.js) | 参考对象状态、草稿、存档、复制与历史；不依赖界面 | create, persist, stateFor, clean, createReference, duplicateReference, saveReferences, travelReferences, record, checkpoint |
 | [diagram-reference-renderer.js](https://github.com/qingzhuernest/skymotion/blob/main/site/diagram-reference-renderer.js) | 参考对象绘图、文字定位和命中几何；只读实验与对象状态 | create, textLayout, helper, drawObject, anchor, hitAnchor |
 | [material-web.js](https://github.com/qingzhuernest/skymotion/blob/main/site/material-web.js) | Google Material Web 2.5.0 的本地打包组件；构建入口 scripts/material-web/source.js | 模块内部方法，参见源码 |
-| [assistant/ui.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/ui.js) | 浏览器端只读问答助手、懒加载和双语面板 | loading, target, showCard, render, finish, prepareWorker, semantic, mountLauncher |
-| [assistant/search.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/search.js) | 本地文本检索与动态请求边界 | canonical, tokens, usageQuery |
+| [assistant/ui.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/ui.js) | 浏览器端只读问答助手、懒加载和双语面板 | loading, target, showCard, render, finish, mountLauncher |
+| [assistant/search.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/search.js) | 本地文本检索与动态请求边界 | canonical, stem, tokens, classify, analysis, corpus |
 | [assistant/worker.js](https://github.com/qingzhuernest/skymotion/blob/main/site/assistant/worker.js) | 固定版本BGE与ONNX运行库生成的语义检索Worker | 模块内部方法，参见源码 |

@@ -57,7 +57,7 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   require('node:fs').writeFileSync('/tmp/assistant-network.json',JSON.stringify(report,null,2));
   assert.deepEqual(errors,[]);
   const fallback=await browser.newPage({viewport:{width:390,height:844}});
-  await fallback.route('**/assistant/worker.js',route=>route.abort());
+  await fallback.route('**/assistant/worker.js*',route=>route.abort());
   await fallback.goto(base+'lab.en.html');await fallback.locator('.assistant-launch').click();
   await fallback.locator('#assistant-question').fill('unclear unfamiliar technical detail');await fallback.locator('.assistant-submit').click();
   await fallback.getByText('Only related entries are available',{exact:false}).waitFor();

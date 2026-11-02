@@ -7,7 +7,7 @@ import re
 from string import Template
 from urllib.parse import urlsplit, urlunsplit
 
-from document_model import load, state_fields, validate
+from document_model import load, state_fields, validate, source_functions
 from site_sources import load_catalog, navigation_html
 
 ROOT = (Path(__file__).resolve().parents[1] / "site")
@@ -43,8 +43,7 @@ class DocumentRenderer:
         self.template = Template((Path(__file__).resolve().parent / "document-page.html").read_text())
         self.sources = []
         for path, description in data["source_files"].items():
-            source = (root / path).read_text()
-            names = re.findall(r"^[ \t]*(?:async )?function\s+(\w+)\s*\(", source, re.M)
+            names = source_functions(root / path)
             self.sources.append((path, description, names))
 
     def text(self, value, language=0):

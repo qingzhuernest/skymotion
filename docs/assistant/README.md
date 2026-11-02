@@ -1,42 +1,33 @@
-# SkyMotion Search
+# SkyMotion 搜索维护说明
 
-Search is released with the main site. The search component is shared across site pages and
-does not read or mutate scientific state, records or preferences. It keeps questions
-only in page memory; all retrieval and inference runs on the same origin/device.
+搜索已随正式站发布，技术目录仍保留 `assistant/` 以兼容既有资源 URL。用户只看到“搜索 / Search”，无需手动选择知识或用法。详细接口与状态约定见 [SEARCH.md](../architecture/SEARCH.md)。
 
-## Implemented
+## 资料组成与原稿
 
-- 633 namespaced units: 355 updated website cards, 152 science cards, 60 public
-  manual chapters and 66 current source-file descriptors. The update snapshots are
-  in `sources/update142/`; the original science snapshot remains in `sources/`.
-  Eight foundational science entries in `science-basics.json` have bilingual
-  explanations and linked NASA, IAU and Stanford references, checked on 2026-11-01.
-  The original 625 units are preserved.
-  28 common cards have curated instructions and English answers. The remaining
-  original cards keep their draft status; published chapters are sourced directly
-  from the current structured bilingual manuals, not blanket-certified as UI-tested.
-  All 13 revisions in the updated website document are imported.
-- BM25-style weighted local text retrieval and aliases; a limited save-after-city-
-  comparison follow-up. Arbitrary conversational memory is not implemented.
-- A real BGE-small-zh-v1.5 INT8 ONNX model, fixed revision, 512-dimensional CLS unit
-  vectors. All document vectors are generated offline. Long documents are chunked with overlapping windows before embedding. One WASM Worker computes queries and starts preparing on page entry. No cloud LLM, API key, GPU or third-party CDN is required.
-- Semantic matches require a documented source, lexical support and a clear margin; otherwise they remain candidate entries.
-  Direct answers require a sufficiently strong text match; dynamic-value and
-  automatic-action requests return instructions rather than executing page controls.
-- Model/worker failure falls back to text retrieval; dialog keyboard/focus handling,
-  safe text rendering, bilingual shell, copy action and same-origin guide links.
-- Page entry immediately downloads the knowledge, search module, index, tokenizer,
-  model and WASM runtime, then initializes the model and runs a warm-up inference.
-  No dialog opening or question is required. A single shared preparation promise
-  prevents duplicate initialization; early text searches remain available while it
-  runs. Background failures stay silent and a later semantic search retries.
-  The general page warmer excludes `assistant/` because the search loader owns these
-  requests, avoiding an extra independently versioned download of the same assets.
-  Downloads total approximately 49 MB before compression; completion depends on
-  the network and device. Page visibility does not mean model readiness.
+| 来源 | 数量 | 当前原稿或规则 |
+| --- | ---: | --- |
+| 作者网站功能资料 | 355 | `sources/update142/website.txt` |
+| 作者科学资料 | 144 | `sources/science.txt` |
+| 学习、使用与开发章节 | 60 | ID来自作者快照，正文来自当前 `../document-content.json` |
+| 原有源码描述条目 | 66 | 当前源码职责、函数声明与源码哈希 |
+| 补充基础天文资料 | 8 | `science-basics.json`，附NASA、IAU或Stanford来源 |
+| 合计 | 633 | 原有625个ID完整保留 |
 
+`reviewed.json` 保存已按源码核对的操作步骤与28条英文答复；`topics.json` 保存功能主题同义表达。其余作者条目保留 `draft`，不能因为可以搜索就声称已完成全部交互核验。当前公共手册是章节全文的唯一发布依据；旧文档快照保留出处和稳定ID，不再覆盖现行说明。
 
-## Rebuild
+## 运行方式
+
+- 页面进入即加载资料、运行模块、索引、模型与WASM并预热；不等待用户打开搜索。
+- 一个查询只分析一次。预计算词频、IDF、长度惩罚和倒排候选，不在每次输入时扫描全部正文重建词频。
+- 先按文字来源回答；不够明确时再使用本地语义检索。直接答案与建议列表采用不同证据条件。
+- 知识、用法、教学与开发自动判断；关键的导入、导出、删除、保存、关闭保留区别。
+- 文字和语义建议按来源ID融合、去重、检查类别；弱语义结果不会清空已有文字候选。
+- 取消旧问题仅取消该次等待，保留已经准备好的模型。失败的Worker可重试，旧事件不能污染新请求。
+- “比较城市→怎么保存”支持有限的短追问，不是完整聊天记忆；搜索不读取或修改科学状态。
+
+## 完整重建
+
+从仓库根执行。先生成文档和双语词典，再编译知识，避免源码哈希落后于生成文件。
 
 ```sh
 ONNXRUNTIME_NODE_INSTALL_CUDA=skip npm ci --prefix scripts/assistant
@@ -51,66 +42,41 @@ python3 scripts/prerender-pages.py
 python3 scripts/build-assistant-knowledge.py --check
 ```
 
-The download script checks pinned SHA-256 values; never use a mutable model revision
-to rebuild an old index. Knowledge changes require rebuilding the index. The worker
-verifies the index hash, length and knowledge version before use. WASM is bundled
-from ONNX Runtime 1.21.0 via pinned Transformers.js 3.8.1; dependencies are locked.
-The runtime conservatively uses one WASM thread without requiring cross-origin
-isolation or WebGPU. Model weights (~23.9 MB) and WASM (~21.6 MB) each fit the current
-static hosting per-file size limit.
+只修改Worker运行代码、知识没有变化时，可执行 `node scripts/assistant/build.mjs --runtime-only`。该模式仍核对既有知识版本和向量哈希；不匹配就要求完整构建，不伪造元数据绕过检查。不要手工修改生成的知识、向量或版本文件。
 
-## Evidence and limitations
+BGE-small-zh-v1.5 INT8 固定修订为 `75c43b069aac4d136ba6bc1122f995fedcfd2781`，512维CLS归一化向量，正文以320字符窗口、280字符步长分块。依赖固定为Transformers.js 3.8.1、ONNX Runtime Web 1.21.0，默认一个WASM线程，不需要WebGPU、跨源隔离、云端LLM或API密钥。
 
-`tests/assistant-prototype.cjs` covers known questions, follow-up, numeric refusal,
-safe DOM insertion, real browser BGE inference, scientific state isolation, failed
-Worker fallback, English answers and guide links, mobile, and `/skymotion/` paths.
-`resource-report.json` reports raw sizes and local gzip estimates, excluding the
-existing website's assets. Worker resource timing is collected separately because
-page-only PerformanceResourceTiming misses Worker downloads.
+## 缓存和资源预算
 
-This is not a calibrated 200-query/95% release evaluation. Do not advertise a measured
-accuracy percentage. In particular, the phrase “地球绕太阳走动的时候怎么会让冷暖交替出现”
-retrieved poor candidates in the initial BGE test. The explicit-seasons paraphrase
-“一年四季为什么会轮流变换呢” retrieved the relevant seasons entries. More semantic
-coverage, disambiguation, independent human evaluation and complete English content
-remain known limitations of this release. The source-checked cards have not all
-been independently click-tested from scratch. Source draft labels are intentional.
+资料JSON、索引元数据和索引文件用 `no-cache` 重新验证；模块与Worker携带同一UI资源版本。固定路径的模型与WASM继续使用浏览器缓存。Worker核对知识版本、索引SHA-256与字节长度，拒绝混合版本。
 
-The current English path relies mostly on authored English aliases; a Chinese BGE
-model is not evidence of high-quality multilingual retrieval. Cached/offline use
-depends on browser storage availability; there is no offline-install guarantee.
-Memory, frame-rate impact and Safari/iPad performance are not yet measured. Browser
-tests run in Chromium on the development host, not on the user's iPad.
+模型权重约23.9 MB，WASM约21.6 MB。全部搜索资源约49 MB未压缩，具体数值以 `site/assistant/resource-report.json` 为准；gzip数值是本地估计，不是实际生产传输测量。后台预热不保证页面刚出现就已准备完成，也不等于离线安装。
 
-The reported-query follow-up, task routing, compact chat layout and local-only
-diagnostics are documented in [REPORTED-FIXES.md](REPORTED-FIXES.md).
+## 验证和故障处理
 
-The 625-unit update and short-question coverage are documented in [UPDATE142.md](UPDATE142.md).
+```sh
+python3 scripts/check-sources.py
+python3 scripts/build-assistant-knowledge.py --check
+node tests/assistant-corpus.cjs
+node tests/assistant-coverage.cjs
+node .github/scripts/verify-site.cjs assistant-runtime.cjs assistant-prototype.cjs assistant-reported.cjs assistant-short-queries.cjs assistant-systematic.cjs assistant-welcome.cjs
+```
 
-Corpus-wide matching, source-status handling and full coverage evidence are described
-in [UPDATE143.md](UPDATE143.md).
+浏览器检查需要按根README配置Playwright和Chromium。运行时契约检查使用可控Worker，覆盖共享准备、取消、迟到结果、失败、重试与释放；原型回归使用真实本地模型，覆盖实际推理、网络回退、DOM安全、双语、手机阅读空间和项目子路径。
 
-## Release 145
+| 现象 | 首先核对 |
+| --- | --- |
+| 正确条目被列出却未直接回答 | `SkyAssistantDebug.getLast()` 的选择原因、类别、来源、文字覆盖率和语义差值 |
+| 正确文字候选被弱语义结果淹没 | 候选融合、ID去重和类别兼容规则 |
+| 发布后资料与索引不一致 | 生成顺序、资源版本、JSON重新验证与索引哈希 |
+| 用户连续提问时结果串位 | 请求ID、AbortSignal、旧Worker事件和定时器清理 |
+| 基础概念根本没有资料 | 补充可靠资料与来源，再重建知识和向量，不盲目降低阈值 |
+| 英文问法不稳定 | 英文词形、已有英文答案/别名、中文BGE的跨语言限制 |
 
-The visible name is 搜索 / Search. Automatic preparation replaces the old on-demand
-policy described in historical UPDATE142/143 reports. The browser regression now
-requires model downloads and a ready Worker before opening the dialog, and still
-checks same-origin requests, failure fallback and unchanged scientific state.
+## 隐私、范围和证据
 
-## Science coverage
+问题仅保存在当前页内存；不上传、不记录到浏览器持久存储。调试接口主动调用才返回当前诊断，不额外显示在用户界面。引用中的资料审核状态与科学模型的适用边界保留。
 
-Releases 146–147 add eight sourced basics: the Sun, its color and energy, the Solar
-System, its eight planets, the Moon, planets and stars. Factual questions no longer
-enter the feature-topic shortcut; exact scientific concepts can match a science
-entry even when several related manuals are also relevant. “Solar System planets”
-returns science, while “how to open the Solar System” still returns site guidance.
-External references stay collapsed with the existing sources, without extra
-implementation notes. These eight additions do not constitute an encyclopedia.
+633条来源改写覆盖检查不等于独立自然语言准确率。8条基础资料与28条操作答复有专门内容，不能据此声称所有原始条目已有完整英文版。测试在开发机Chromium运行，不等同于真实iPad/Safari性能或全部自然问法验证。
 
-Question cores remove polite wrappers and emphasis words. English retrieval uses separate words and English answer text rather than an unbroken normalized sentence; science questions about planet ordering bypass the operation shortcut.
-
-## Automatic intent selection
-
-Search keeps a single input and requires no category selection. Explicit requests to open, configure or save prefer usage instructions; scientific calculation questions remain knowledge queries. Both text and semantic selection apply the same compatibility rule, including suggested entries. Generic control nouns alone do not override a physical explanation (for example, a missing polar-day sunset reading). English Solar System usage terms point to the feature manual.
-
-The dynamically imported search module shares the UI resource version, so a browser cannot combine a newly deployed UI with a still-fresh older search module.
+`UPDATE142.md`、`UPDATE143.md`、`REPORTED-FIXES.md` 及旧JSON报告保留历史证据；当前行为以本说明、SEARCH.md和实际源码为准。

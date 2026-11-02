@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 376 个文件。目录职责见 [repository.md](repository.md)。
+共 383 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -24,10 +24,13 @@
 - [.github/workflows/github-pages.yml](../.github/workflows/github-pages.yml)
 - [.github/workflows/validate.yml](../.github/workflows/validate.yml)
 
-## docs (26)
+## docs (30)
 
+- [docs/README.md](../docs/README.md)
+- [docs/architecture/CODE-MAP.md](../docs/architecture/CODE-MAP.md)
 - [docs/architecture/DESIGN.md](../docs/architecture/DESIGN.md)
 - [docs/architecture/PRODUCT.md](../docs/architecture/PRODUCT.md)
+- [docs/architecture/SEARCH.md](../docs/architecture/SEARCH.md)
 - [docs/assistant/README.md](../docs/assistant/README.md)
 - [docs/assistant/REPORTED-FIXES.md](../docs/assistant/REPORTED-FIXES.md)
 - [docs/assistant/UPDATE142.md](../docs/assistant/UPDATE142.md)
@@ -51,9 +54,10 @@
 - [docs/repository.md](../docs/repository.md)
 - [docs/reviews/BUG-AUDIT-2026-10-10.md](../docs/reviews/BUG-AUDIT-2026-10-10.md)
 - [docs/reviews/BUG-AUDIT-2026-10-15.md](../docs/reviews/BUG-AUDIT-2026-10-15.md)
+- [docs/reviews/CODE-ORGANIZATION-2026-11-02.md](../docs/reviews/CODE-ORGANIZATION-2026-11-02.md)
 - [docs/reviews/CODE-SIMPLICITY-2026-10-28.md](../docs/reviews/CODE-SIMPLICITY-2026-10-28.md)
 
-## scripts (24)
+## scripts (25)
 
 - [scripts/assistant/build.mjs](../scripts/assistant/build.mjs)
 - [scripts/assistant/download-model.py](../scripts/assistant/download-model.py)
@@ -65,6 +69,7 @@
 - [scripts/build-documents.py](../scripts/build-documents.py)
 - [scripts/build-population-data.py](../scripts/build-population-data.py)
 - [scripts/build-star-catalog.py](../scripts/build-star-catalog.py)
+- [scripts/check-sources.py](../scripts/check-sources.py)
 - [scripts/document-page.html](../scripts/document-page.html)
 - [scripts/document_model.py](../scripts/document_model.py)
 - [scripts/generate-welcome-lettering.py](../scripts/generate-welcome-lettering.py)
@@ -80,7 +85,7 @@
 - [scripts/theme-colors/package.json](../scripts/theme-colors/package.json)
 - [scripts/theme-colors/source.js](../scripts/theme-colors/source.js)
 
-## site (219)
+## site (220)
 
 - [site/.nojekyll](../site/.nojekyll)
 - [site/404.en.html](../site/404.en.html)
@@ -107,6 +112,7 @@
 - [site/assistant/models/bge-small-zh-v1.5/tokenizer_config.json](../site/assistant/models/bge-small-zh-v1.5/tokenizer_config.json)
 - [site/assistant/models/bge-small-zh-v1.5/vocab.txt](../site/assistant/models/bge-small-zh-v1.5/vocab.txt)
 - [site/assistant/resource-report.json](../site/assistant/resource-report.json)
+- [site/assistant/runtime.js](../site/assistant/runtime.js)
 - [site/assistant/runtime/ort-wasm-simd-threaded.jsep.mjs](../site/assistant/runtime/ort-wasm-simd-threaded.jsep.mjs)
 - [site/assistant/runtime/ort-wasm-simd-threaded.jsep.wasm](../site/assistant/runtime/ort-wasm-simd-threaded.jsep.wasm)
 - [site/assistant/search.js](../site/assistant/search.js)
@@ -302,13 +308,14 @@
 - [site/workbench-menu.js](../site/workbench-menu.js)
 - [site/workspace.js](../site/workspace.js)
 
-## tests (93)
+## tests (94)
 
 - [tests/analemma-references.cjs](../tests/analemma-references.cjs)
 - [tests/assistant-corpus.cjs](../tests/assistant-corpus.cjs)
 - [tests/assistant-coverage.cjs](../tests/assistant-coverage.cjs)
 - [tests/assistant-prototype.cjs](../tests/assistant-prototype.cjs)
 - [tests/assistant-reported.cjs](../tests/assistant-reported.cjs)
+- [tests/assistant-runtime.cjs](../tests/assistant-runtime.cjs)
 - [tests/assistant-short-queries.cjs](../tests/assistant-short-queries.cjs)
 - [tests/assistant-systematic.cjs](../tests/assistant-systematic.cjs)
 - [tests/assistant-welcome.cjs](../tests/assistant-welcome.cjs)

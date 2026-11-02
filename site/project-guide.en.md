@@ -44,6 +44,10 @@ Switch Sun and Moon directly with the top segmented buttons, or focus them and u
 
 Search in the navigation finds site instructions, astronomy and geography sources. Page entry automatically downloads the knowledge, model and runtime and prepares them in the background, before Search is opened. First-time assets total about 49 MB before compression; timing varies with network and device. Results include instructions and references; Search does not operate the experiment. You can also ask what the Sun is, its color, or which planets are in the Solar System, and open the scientific sources under References.
 
+Enter a goal directly in Search without choosing a category. Ask why seasons occur or what color the Sun is, or ask how to observe the Moon relative to Mars or export settings. A clear source produces an explanation or instructions; related entries are offered when several topics are plausible. Choose the closest one.
+
+References below an answer link to the relevant manual; foundational astronomy entries also link to scientific sources. Copy answer copies the explanation and steps. After comparing two cities, a short follow-up such as “how do I save?” uses that context; name a new task or object explicitly. Search does not operate the experiment or read its current observations.
+
 [Open the corresponding experiment →](lab.en.html#skyPanel)
 
 ## Interface and controls
@@ -330,3 +334,5 @@ This is not a weather, navigation, precision-survey or mission-guidance tool. Re
 
 - [Read variables, formulas and data sources](development-guide.en.html#coordinates)
 - [Read teaching investigations and worksheets](guide.en.html#record)
+
+Search prepares resources in the background on page entry, while text matches remain available. If the model or network is unavailable, text retrieval continues. Questions are not uploaded to an external answer service; the conversation exists only in the current page and is not guaranteed to survive reload or navigation. English uses authored English answers where available; untranslated source entries remain in Chinese with a notice.

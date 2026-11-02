@@ -5,7 +5,7 @@
   // BEGIN GENERATED CATALOG
   // prettier-ignore
   const catalog = {
-    "resourceVersion": "20261102-planets150",
+    "resourceVersion": "20261102-search151",
     "pages": [
       {
         "path": "index.html",

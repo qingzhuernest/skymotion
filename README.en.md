@@ -1,37 +1,18 @@
-# SkyMotion · Sky Motion Lab
+# SkyMotion · Apparent Motion Lab
 
-Customization highlights selected cities across views. Saved layouts can optionally include observation conditions, reference objects and constructed scenes as a full experiment.
-
-A browser laboratory for geography teaching and independent observation. Control location, date and time to explore the Sun, Moon, shadows, sundials and analemmas, then compare related diagrams and 3D views. Native HTML, CSS and JavaScript run without a build step.
+A browser laboratory for geography teaching and independent investigation. Change location, date and time, compare Sun, Moon, shadow, sundial, analemma and spatial diagrams, then record reproducible evidence.
 
 [简体中文](README.md) · **English**
 
-[Open the production site](https://skymotion-5md.pages.dev/index.en.html) · [GitHub Pages mirror](https://qingzhuernest.github.io/skymotion/index.en.html)
+[Production](https://skymotion-5md.pages.dev/) · [GitHub Pages mirror](https://qingzhuernest.github.io/skymotion/) · [Documentation map](docs/README.md)
 
-Lab, related diagrams and analemma share one workspace. Existing URLs still select their corresponding views, and the top navigation stays stable. In the left sidebar choose Views & layout, expand Sky & shadows, Related diagrams or Compare & build, and select a named view. Observation controls retains location, date, time and the original experiment settings.
+## Use
 
-To show sky, Earth, altitude and analemma together, start with Space view, choose Customize in the top bar, then use the add controls beside the view names in Views & layout. An included view offers removal; selecting its name still displays it or replaces the selected pane. Additional views extend below the fold after four panes.
+Choose Sun or Moon at the top. Views & layout selects diagrams; Observation controls changes place, date, time and model options. The sky viewpoints and related diagrams share one workspace. Customization enables reference objects and geometry while retaining the original observation controls.
 
-The interface uses shared Material Design 3 color, shape, state and target-size roles while preserving the requested Chinese Song and English Charter fonts. Edit actions in combined views live in their pane headers instead of covering the scientific content. Observation identity starts the app bar; direct segmented buttons switch Sun/Moon. All four sky viewpoints live under Views & layout → Sky & shadows, without duplicate controls above the canvas.
+Save layouts together with conditions, reference objects and constructed objects, or export a JSON backup. Browser storage does not synchronize across devices. 3D Sky separates physical vectors from display scales; close views use attributed observation-derived mosaics rather than live cloud imagery.
 
-The compact playback panel groups the exact clock and slider; Moon puts dates first. Calculation notes expand on demand. The opening retains direct sky and Enter activation, and manuals offer chapter navigation and reading progress.
-
-
-Search in the navigation finds site instructions, astronomy and geography sources. Opening a page automatically downloads the knowledge, model and runtime and prepares them in the background, before Search is opened. First-time assets total approximately 49 MB before compression; timing depends on the network and device. Search runs locally and provides instructions without operating the experiment. Check sources against observations.
-
-Search includes 633 entries, including 152 science entries. Foundational astronomy answers link to NASA, IAU or Stanford Solar Center sources.
-
-## Using the lab and its documentation
-
-- [Documentation center](site/docs.en.html): one top-menu entry for teaching, feature usage and development.
-- [Learning guide](site/learning-guide.en.md): lesson design, investigations, recording and assessment.
-- [Project & feature manual](site/project-guide.en.md): all modules, controls, comparisons, customization, saving and interaction.
-- [Development guide](site/development-guide.en.md): code responsibilities, state, calculations, rendering, checks and deployment.
-- [Customization instructions](site/docs/customization-interaction.en.md): add cities, time markers, reference lines and physical objects, edit their properties and save plans.
-
-Customize is at the top right; language switching is in Settings. Observation controls continues to set the baseline experiment; Plot objects adds and adjusts comparisons. Cities and times remain linked across relevant diagrams. Rods, spheres and circles are placed on the experiment ground. See the [customization examples](site/guide.en.html#customization).
-
-Related Diagrams → Moon → Earthrise and Earthset links a lunar-orbit overview with an astronaut view. This independent illustrative orbit retains the left explanation, parameters and bottom controls. It is not a spacecraft trajectory prediction for a real date.
+Search uses one input and automatically distinguishes knowledge from usage. It retrieves documented sources, adding local semantic retrieval when needed. It neither reads nor operates experiment state. Assets prepare automatically on page entry; questions are not sent to an external answer service.
 
 ## Run locally
 
@@ -39,61 +20,70 @@ Related Diagrams → Moon → Earthrise and Earthset links a lunar-orbit overvie
 python3 -m http.server 8000 --directory site
 ```
 
-Open `http://localhost:8000/`. English has separate pages, such as `lab.en.html` and `space/index.en.html`. A modern browser is required; 3D views require WebGL.
+Open `http://localhost:8000/`; English pages include `lab.en.html` and `space/index.en.html`. The scientific application uses native HTML/CSS/JavaScript without a runtime build. 3D requires WebGL. Dedicated builds are needed only for dependencies, theme tooling and the search index.
 
-## Edit documents and bilingual pages
+## Documentation and ownership
 
-The bilingual source for the documentation center and three manuals is `docs/document-content.json`. Generate HTML and Markdown first, then English pages and the shared dictionary:
+| Entry | Purpose |
+| --- | --- |
+| [Feature manual](site/project-guide.en.md) | Controls, diagrams, customization, Search, saving and troubleshooting |
+| [Learning guide](site/learning-guide.en.md) | Investigations, records and assessment |
+| [Developer reference](site/development-guide.en.md) | Variables, equations, frames, state, storage and publication |
+| [Repository code map](docs/architecture/CODE-MAP.md) | Ownership of code/data files, generated output and dependencies |
+| [Tracked-file inventory](docs/file-inventory.md) | All media, licenses, source documents and code |
+| [Search maintenance](docs/assistant/README.md) · [contracts](docs/architecture/SEARCH.md) | Retrieval, intent selection, cache, Worker, cancellation and builds |
+| [Product](docs/architecture/PRODUCT.md) · [design](docs/architecture/DESIGN.md) | Material 3 Expressive, existing Songti/Charter fonts and responsive behavior |
+| [Repository maintenance](docs/repository.md) | Directories, branches, packaging and recovery |
 
-Pages and views share `site/site-catalog.json`; observation defaults and validation rules share `site/lab-state.json`. After editing these sources, run `python3 scripts/site_sources.py`. Generated regions are checked, so routes and enums are no longer maintained by hand in multiple modules.
+## Edit and generate
+
+`site/` is the only publish root. Modify the owning module instead of introducing competing state or global overrides. Observation defaults and validation live in `site/lab-state.json`; pages and resource versions in `site/site-catalog.json`; theme colors in `site/ui-palette.css`.
+
+The four bilingual manuals share `docs/document-content.json`. Generate pages and dictionaries before rebuilding knowledge and vectors:
 
 ```sh
 python3 scripts/site_sources.py
 python3 scripts/build-documents.py
-python3 scripts/prerender-pages.py --dist site
-python3 scripts/prerender-pages.py --check
+python3 scripts/prerender-pages.py
+python3 scripts/build-assistant-knowledge.py
+node scripts/assistant/build.mjs
+python3 scripts/assistant/resource-report.py
+python3 scripts/prerender-pages.py
 ```
 
-The generator synchronizes English HTML, `language-data.js` and the preload manifest while preserving DOM IDs, form values, numerical attributes and scientific scripts. Keep the Chinese and English Markdown downloads of all three documents aligned. Update the relevant topic rather than appending release logs to the document.
+See Search maintenance for pinned dependencies and model downloads. Do not hand-edit generated English pages, manuals, dictionaries, vectors or dependency bundles. Stage new/moved files, then run `python3 scripts/repository-index.py` to regenerate the inventory and code map.
 
-Interface colors are defined in `site/ui-palette.css`; controls consume `--design-*` variables instead of defining page-specific colors. The compact object menu keeps history in the action row and expands help on demand, leaving more room for objects and properties.
-
-The [concentrated UI review](site/docs/ui-code-review.en.md) records reproduced defects, shared mode-switch ownership and validation scope.
-
-## Automated checks
-
-Use Node 22 or later, Python 3 and Chromium:
+## Verify
 
 ```sh
+python3 scripts/check-sources.py
+python3 scripts/site_sources.py --check
+python3 scripts/build-documents.py --check
+python3 scripts/prerender-pages.py --check
+python3 scripts/build-assistant-knowledge.py --check
+python3 scripts/repository-index.py --check
 npm ci --prefix tests/browser
-SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright" SKY_MOTION_CHROMIUM=/usr/bin/chromium node .github/scripts/verify-site.cjs
 ```
 
-If Chromium is not installed, run `tests/browser/node_modules/.bin/playwright install --with-deps chromium` and point `SKY_MOTION_CHROMIUM` to the installed executable.
+Use Node 22 or newer, Python 3, Playwright and Chromium for browser checks:
 
-The verifier uses an isolated temporary port and discovers `.cjs` tests at the `tests/` root, excluding helper modules. Append filenames for a focused run, such as `node .github/scripts/verify-site.cjs session-validation.cjs`. Checks cover model boundaries, common interactions, customization, save/restore behavior, bilingual content, font loading and deployment paths. Browser tools are not published with the website. Automation primarily uses Chromium and does not replace Safari, Firefox or real touch-device testing.
+```sh
+tests/browser/node_modules/.bin/playwright install --with-deps chromium
+export SKY_MOTION_PLAYWRIGHT="$PWD/tests/browser/node_modules/playwright"
+export SKY_MOTION_CHROMIUM="$(node -e "console.log(require('./tests/browser/node_modules/playwright').chromium.executablePath())")"
+node .github/scripts/verify-site.cjs assistant-runtime.cjs assistant-prototype.cjs
+```
 
-## State and resource loading
+The runner reserves an isolated port and cleans up processes. Pass relevant filenames; omitting them runs every regression. Source parsing, generated-output checks, model validation and browser interactions are distinct evidence. Chromium results do not establish real Safari/iPad performance.
 
-Session restoration validates dates, numerical ranges, types and choices; unknown versions are ignored. When storage is unavailable, an in-memory backup supports only the current page and cannot guarantee persistence after closing the page or switching devices. Save objects locally or export JSON for backup.
+## Publish and recover
 
-`theme-colors.js`, `preferences.js` and `page-boot.js` restore theme and locale before painting. Shared controls load before their page controllers; remaining scripts use `defer` in dependency order. The welcome constellation waits for activation. Document introductions respect visit scope and reduced-motion preferences. Font or language-resource failures offer a retry that preserves the experiment settings. Background preloading is not offline installation.
+`main` is the sole production branch. Shared validation precedes Cloudflare Pages and GitHub Pages deployments; GPT preview uses the same frozen package. Changes select related checks; `full_regression` explicitly opts into the complete suite.
 
-## Deploy and restore
+`python3 .github/scripts/prepare_site.py --output dist` copies tracked `site/` files only, excluding development dependencies, tests and work directories. Recover with a new commit rather than force-rewriting main.
 
-Pushing `main` runs shared `validate.yml` once, then deploys the same static site to Cloudflare Pages and GitHub Pages independently. The mirror reuses the successful validation instead of repeating browser setup and checks. Checks are selected by changed paths. Documentation-only changes skip browser installation; unknown changes use the short release suite. Full regression is a manual `full_regression` option. Other branches do not publish production. Verify both deployment results.
+## Data, storage and licenses
 
-Restore a known good version through a restoration commit that preserves `main` history; do not force-push. `tests/deployment-paths.cjs` checks root and GitHub project-path packaging.
+Readings require explicit place, time and model conditions. Ideal experiments, the independent Earthrise model and real-date ephemerides have distinct assumptions. Search is neither a current-sky calculator nor a general encyclopedia. Restored sessions validate date, range, type and version; unavailable storage falls back to current-page memory.
 
-## License and feedback
-
-Original application code uses [GNU AGPLv3](LICENSE) (AGPL-3.0-only). Third-party libraries, fonts, imagery and data retain their own licenses; see [NOTICE](NOTICE) and [Third-Party Notices](THIRD-PARTY-NOTICES.md).
-
-For an issue, include the module, location, experiment date and time, reproduction steps, device and browser: [Contact the author](https://skymotion-5md.pages.dev/contact.en.html) · [GitHub Issues](https://github.com/qingzhuernest/skymotion/issues).
-
-
-Customization starts from experiment goals for cities, times and dates. Selected references support slider previews, precise inputs, grouped undo and cancellation. See the [learning guide](site/learning-guide.en.md).
-
-## Repository layout
-
-`site/` contains the public website; `docs/` holds authoring and maintenance records; `scripts/` contains generators; `tests/` contains verification. See the [repository guide](docs/repository.md) for file ownership and branch policy. Only `main` publishes production.
+Original application code uses [AGPLv3](LICENSE). Astronomy libraries, Material Web, fonts, models and planetary imagery retain their own terms; see [third-party notices](site/THIRD-PARTY-NOTICES.md).
