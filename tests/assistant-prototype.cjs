@@ -60,6 +60,8 @@ const base=(process.env.SKY_MOTION_TEST_URL||'http://127.0.0.1:8000/').replace(/
   await fallback.goto(base+'lab.en.html');await fallback.locator('.assistant-launch').click();
   await fallback.locator('#assistant-question').fill('unclear unfamiliar technical detail');await fallback.locator('.assistant-submit').click();
   await fallback.getByText('Only related entries are available',{exact:false}).waitFor();
+  await fallback.locator('#assistant-question').fill('How do I open the Solar System?');await fallback.locator('.assistant-submit').click();
+  await fallback.waitForFunction(id=>document.querySelector('.assistant-turn:last-child')?.dataset.cardId===id,'MANUAL:018');
   await fallback.locator('#assistant-question').fill('What kind of object is the Sun?');await fallback.locator('.assistant-submit').click();
   await fallback.waitForFunction(id=>document.querySelector('.assistant-turn:last-child')?.dataset.cardId===id,'science:BASIC-001');
   assert.match(await fallback.locator('.assistant-turn').last().innerText(),/nearest star/);

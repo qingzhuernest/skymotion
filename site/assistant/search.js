@@ -29,8 +29,8 @@ export function questionCore(value){
   let text=normalize(value).replace(/到底|究竟/g,''),previous;
   do{
     previous=text;
-    text=text.replace(/^(请问|请|简单解释|介绍一下|介绍|我想知道|我想|我应该|请解释|解释一下|解释|告诉我|能不能|可不可以|可以|能否|能|帮我|替我|如何|怎样|怎么样|怎么才能|怎么|什么是|什么叫|何为|在哪里|哪里|查看|观察|观测|使用|显示|打开|开启|启用|进入|选择|调节|调整|设置|更改|修改|改变|切换|了解|看看|whatkindofobjectis|whatis|whatare|canyoutellme|pleaseexplain|explain|tellmeabout|the)/,'')
-      .replace(/(取决于哪些量|由哪些量决定|怎样快速计算|如何计算|怎么计算|怎样计算|计算方法|如何求|怎么求|应该怎么操作|该怎么操作|怎么操作|怎样操作|如何使用|怎么使用|怎么用|是什么|是什么意思|怎么理解|如何理解|是怎么回事|怎样观察|怎么看|怎么调|怎么设置|在哪里|源码|代码|函数说明|(?<!自)定义|吗|呢)$/,'');
+    text=text.replace(/^(请问|请|简单解释|介绍一下|介绍|我想知道|我想|我应该|请解释|解释一下|解释|告诉我|能不能|可不可以|可以|能否|能|帮我|替我|计算|如何|怎样|怎么样|怎么才能|怎么|什么是|什么叫|何为|在哪里|哪里|查看|观察|观测|使用|显示|打开|开启|启用|进入|选择|调节|调整|设置|更改|修改|改变|切换|了解|看看|whatkindofobjectis|whatis|whatare|canyoutellme|pleaseexplain|explain|tellmeabout|the)/,'')
+      .replace(/(取决于哪些量|由哪些量决定|怎样快速计算|如何计算|怎么计算|怎样计算|计算方法|怎么算|如何求|怎么求|应该怎么操作|该怎么操作|怎么操作|怎样操作|如何使用|怎么使用|怎么用|是什么|是什么意思|怎么理解|如何理解|是怎么回事|怎样观察|怎么看|怎么调|怎么设置|在哪里|源码|代码|函数说明|(?<!自)定义|吗|呢)$/,'');
   }while(text!==previous);
   return text;
 }
@@ -41,9 +41,17 @@ export function operation(value){
     ['save',/保存|存档|save/],['disable',/关闭|隐藏|关掉|停止|暂停|disable|turnoff|hide/]]
     .find(([,pattern])=>pattern.test(text))?.[0]||null;
 }
+function usageQuery(value){
+  return /打开|开启|启用|关闭|设置|调节|修改|更改|切换|保存|导入|导出|添加|删除|重置|操作|使用|用法|教程|怎么用|如何用|\b(usage|instructions|tutorial|open|enable|disable|configure|adjust|save|import|export|add|delete|reset|use)\b/i.test(value);
+}
+export function compatible(query,card){
+  return !(queryKind(query)==='howto'&&usageQuery(query)&&card.intent==='science');
+}
 export function queryKind(value){
   if(/源码|代码|开发|函数|接口|\.js|\.css|state|api|source|code|architecture/i.test(value))return 'developer';
-  if(/为什么|为何|原理|定义|公式|区别|关系|成因|原因|什么是|是什么|如何计算|怎么计算|怎样计算|计算公式|whatis|whatare|whatkindofobject|why|definition|formula|difference/.test(normalize(value))||(/解释|含义|概念/.test(value)&&!/如何|怎样|怎么/.test(value)))return 'science';
+  if(/公式|怎么算|如何计算|怎么计算|怎样计算|how.*calculate/i.test(value)&&!/按钮|菜单|开关|设置|切换|调节|修改|更改/.test(value))return 'science';
+  if(usageQuery(value))return 'howto';
+  if(/为什么|为何|原理|定义|公式|区别|关系|成因|原因|什么是|是什么|如何计算|怎么计算|怎么算|怎样计算|计算公式|howdoicalculate|howtocalculate|whatis|whatare|whatkindofobject|why|definition|formula|difference/.test(normalize(value))||(/解释|含义|概念/.test(value)&&!/如何|怎样|怎么/.test(value)))return 'science';
   if(!/如何|怎么|怎样|操作|使用|打开|开启|设置|调节|查看|观察|how|open|enable|show|use|set/i.test(value)&&/颜色|组成|有哪些|多少颗|八大行星|恒星|太阳系.*行星|color|composition|whichplanets/.test(normalize(value)))return 'science';
   if(!/图|自定义|界面|设置|调节|修改|更改|打开|切换|按钮/.test(value)&&/太阳系|八大行星/.test(value)&&/排列|顺序/.test(value))return 'science';
   if(/教学|课堂|学生|一节课|教学任务|lesson|teaching/i.test(value))return 'teaching';
@@ -64,7 +72,7 @@ export function createSearch(records) {
     const cleaned=normalize(query),core=questionCore(query),kind=queryKind(query),requested=operation(query),terms=[...new Set(/\p{Script=Han}/u.test(query)?tokens(core.length>=2?core:query):tokens(query).filter(word=>!englishStops.has(word)))];
     if(!cleaned||!terms.length)return [];
     return documents.map(({card,forms,cores,counts,length})=>{
-      if(card.intent==='developer'&&kind!=='developer')return {card,score:0};
+      if(!compatible(query,card)||(card.intent==='developer'&&kind!=='developer'))return {card,score:0};
       let score=0,matched=0;
       for(const term of terms){
         const count=counts.get(term)||0;if(!count)continue;matched++;
@@ -151,6 +159,7 @@ export function selectAnswer(query,hits,records) {
 }
 
 export function selectSemanticAnswer(query,matches,hits,records){
+  matches=matches.filter(hit=>{const card=records.find(card=>card.id===hit.id);return card&&compatible(query,card);});
   const top=matches[0],next=matches[1];
   if(!top||top.score<0.7||top.score-(next?.score||0)<0.07)return null;
   const card=records.find(card=>card.id===top.id),lexical=hits.find(hit=>hit.card.id===top.id);

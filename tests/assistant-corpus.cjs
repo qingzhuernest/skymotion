@@ -1,7 +1,7 @@
 /** Corpus-wide generated coverage probes, not an independent accuracy benchmark. */
 const assert=require('node:assert/strict'),fs=require('node:fs');
 (async()=>{
- const {createSearch,selectAnswer,questionCore,guard}=await import('../site/assistant/search.js');
+ const {createSearch,selectAnswer,questionCore,guard,queryKind,compatible,selectSemanticAnswer}=await import('../site/assistant/search.js');
  const {records}=JSON.parse(fs.readFileSync('site/assistant/knowledge.json'));
  const search=createSearch(records),groups={},rows=[];
  for(const card of records){
@@ -15,6 +15,12 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
   const group=card.id.split(':')[0];groups[group]=(groups[group]||0)+1;
   rows.push({source:card.id,question,selected:result.card.id,reason:result.reason,reviewStatus:result.card.status});
  }
+ for(const q of ['太阳是什么','太阳的颜色','太阳高度怎么算','How do I calculate solar altitude?','如何使用太阳高度公式'])assert.equal(queryKind(q),'science',q);
+ for(const q of ['如何打开太阳系','How do I open the Solar System?','为什么打开行星伴月后没有显示','什么是保存组合','在哪里设置日期','如何设置太阳计算方式','Solar System usage'])assert.equal(queryKind(q),'howto',q);
+ const scienceCard=records.find(card=>card.id==='science:BASIC-005');
+ assert(!compatible('How do I open the Solar System?',scienceCard));
+ assert(!selectSemanticAnswer('How do I open the Solar System?',[{id:scienceCard.id,score:.95}], [{card:scienceCard,coverage:1}],records));
+ assert.equal(selectAnswer('How do I open the Solar System?',search('How do I open the Solar System?'),records).card?.id,'MANUAL:018');
  const basics=[
   ['太阳是什么','science:BASIC-001'],['我想了解太阳到底是什么','science:BASIC-001'],['请简单解释什么是恒星','science:BASIC-008'],['介绍一下行星的定义','science:BASIC-007'],['What kind of object is the Sun?','science:BASIC-001'],['请问太阳是啥','science:BASIC-001'],
   ['太阳的颜色','science:BASIC-002'],['太阳到底什么颜色','science:BASIC-002'],

@@ -178,7 +178,7 @@
           previousId=answer.id;finish({question,card:answer});status.textContent='';return;}
         const byId=new Map(knowledge.records.map(card=>[card.id,card]));
         // Prototype semantic matches are suggestions, never uncalibrated factual answers.
-        candidates=semanticMatches.filter(hit=>hit.score>=0.5).slice(0,3).map(hit=>byId.get(hit.id)).filter(Boolean);
+        candidates=semanticMatches.filter(hit=>hit.score>=0.5).map(hit=>byId.get(hit.id)).filter(card=>card&&searchModule.compatible(question,card)).slice(0,3);
       }catch{failed=true;diagnostic.method='lexical-fallback';diagnostic.failure='semantic_unavailable';}
       if(id!==request)return;
       diagnostic.decision='suggestions';

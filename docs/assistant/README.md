@@ -108,3 +108,7 @@ External references stay collapsed with the existing sources, without extra
 implementation notes. These eight additions do not constitute an encyclopedia.
 
 Question cores remove polite wrappers and emphasis words. English retrieval uses separate words and English answer text rather than an unbroken normalized sentence; science questions about planet ordering bypass the operation shortcut.
+
+## Automatic intent selection
+
+Search keeps a single input and requires no category selection. Explicit requests to open, configure or save prefer usage instructions; scientific calculation questions remain knowledge queries. Both text and semantic selection apply the same compatibility rule, including suggested entries. Generic control nouns alone do not override a physical explanation (for example, a missing polar-day sunset reading). English Solar System usage terms point to the feature manual.
