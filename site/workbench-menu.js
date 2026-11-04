@@ -104,6 +104,7 @@
   const summary = document.createElement('summary');
   layout.append(summary);
   const options = document.getElementById('workspaceOptions');
+  if (window.skyWorkspacePresentation?.shareControl) layout.append(skyWorkspacePresentation.shareControl);
   if (options) layout.append(options);
   menu.append(layout);
   const annual = rail.querySelector('[data-for="analemmaPanel"]');
@@ -201,8 +202,9 @@
           (!setting || setting.hidden),
       );
     }
-    uiViewText(summary, tr('排列与收藏', 'Arrangement & saved layouts'));
-    uiViewHidden(layout, !editing);
+    uiViewText(summary, tr('排列、收藏与分享', 'Arrangement, saved layouts & sharing'));
+    uiViewHidden(layout, false);
+    if (!editing) uiViewHidden(options, true);
     follow.checked = uiWorkspace.analemmaClockLinked;
     uiViewText(
       followText,
@@ -232,7 +234,7 @@
       if (window.SkyDiagramTools?.selectSidebar('views') === false) return;
       layout.open = true;
       menu.hidden = false;
-      options.hidden = false;
+      options.hidden = !window.SkyCustomization?.active;
       const revealLayout = () => {
         const header = rail.querySelector('.motion-menu-header');
         rail.scrollTop +=

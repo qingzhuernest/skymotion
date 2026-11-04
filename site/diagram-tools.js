@@ -2644,7 +2644,7 @@
         .filter((s) => s.model?.body === state.body)
         .map((s) => ({ ...s.model, objects: copy(s.objects) }));
     },
-    prepareExperiment(raw) {
+    prepareExperiment(raw, targetBody = state.body) {
       if (!Array.isArray(raw) || raw.length > 30) return null;
       const keys = new Set(),
         result = [];
@@ -2653,7 +2653,7 @@
           !item ||
           typeof item.id !== 'string' ||
           !/^[a-zA-Z0-9-]{1,60}$/.test(item.id) ||
-          item.body !== state.body ||
+          item.body !== targetBody ||
           !Object.hasOwn(definitions, item.type) ||
           !Array.isArray(item.objects) ||
           item.objects.length > 40 ||

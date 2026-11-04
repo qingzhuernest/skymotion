@@ -21,6 +21,14 @@
       '保存本天体的地点、日期、时刻、布局、图中对象和实验物体；在此设备恢复。',
       'Save this body’s location, date, time, layout, references and ground objects on this device.',
     ],
+    share: ['复制当前实验分享链接', 'Copy experiment share link'],
+    shared: ['分享链接已复制。', 'Share link copied.'],
+    sharing: ['正在生成分享链接…', 'Preparing share link…'],
+    shareManual: ['链接已生成，请选中复制。', 'Select and copy the link below.'],
+    shareFailed: ['无法生成分享链接。内容过多或当前视图不支持时，请记录观测条件并导出对象 JSON。', 'Could not create a share link. For a large experiment or unsupported view, record its conditions and export object JSON.'],
+    shareInvalid: ['分享链接无效或当前浏览器无法读取，原实验未改变。请重新复制链接或导入 JSON。', 'This share link is invalid or unsupported in this browser. Your experiment is unchanged. Copy it again or import JSON.'],
+    shareRestored: ['已打开分享实验，播放已暂停。', 'Shared experiment opened with playback paused.'],
+    shareLink: ['实验分享链接', 'Experiment share link'],
     saveExperiment: ['保存实验', 'Save experiment'],
     updateExperiment: ['更新完整实验', 'Update full experiment'],
     restoreFailed: [
@@ -488,6 +496,57 @@
   panelStatus.id = 'workspaceSavedStatus';
   panelStatus.setAttribute('role', 'status');
   savedSection.append(panelStatus);
+  const shareControl = document.createElement('div');
+  shareControl.className = 'workspace-share';
+  shareControl.dataset.i18nSkip = '';
+  const shareButton = button(shareControl, 'share', copyShare);
+  shareButton.classList.add('workspace-share-button');
+  const shareField = document.createElement('textarea');
+  shareField.className = 'workspace-share-link';
+  shareField.readOnly = true;
+  shareField.hidden = true;
+  shareField.rows = 3;
+  const shareStatus = document.createElement('p');
+  shareStatus.className = 'workspace-share-status';
+  shareStatus.setAttribute('role', 'status');
+  shareControl.append(shareField, shareStatus);
+  let shareStatusKey = '';
+  const shareMessage = key => { shareStatusKey = key; shareStatus.textContent = t(key); };
+  shareControl.addEventListener('share-result', () => shareMessage(shareControl.dataset.shareResult === 'restored' ? 'shareRestored' : 'shareInvalid'));
+  async function copyShare() {
+    shareButton.disabled = true;
+    shareField.hidden = true;
+    shareMessage('sharing');
+    let pending;
+    try {
+      const allowed = SkySiteCatalog.availableViews(state.body, false).map(view => view.id);
+      const view = uiWorkspace.selected;
+      if (!api.active && (!allowed.includes(view) || view === 'lunarOrbit')) throw new Error('view');
+      const layout = api.active ? copy(data) : { ...fresh(), views: [ids.includes(view) ? view : 'contextPanel'], active: 0 };
+      if (layout.views.some(id => !allowed.includes(id))) throw new Error('view');
+      const experiment = captureExperiment();
+      if (!experiment) throw new Error('state');
+      experiment.conditions.selected = api.active ? 'solarCompare' : view;
+      // A shared lesson opens as a paused experiment, never as linked 3D navigation.
+      experiment.conditions.linked = false;
+      experiment.conditions.linkedSelection = null;
+      pending = SkyExperimentShare.link({ version: 1, layout, experiment, editing: SkyCustomization.active });
+      // Starting clipboard.write during the click retains Safari's user activation.
+      if (navigator.clipboard?.write && typeof ClipboardItem === 'function')
+        await navigator.clipboard.write([new ClipboardItem({ 'text/plain': pending.then(url => new Blob([url], { type: 'text/plain' })) })]);
+      else await navigator.clipboard.writeText(await pending);
+      shareMessage('shared');
+    } catch {
+      try {
+        if (!pending) throw new Error('state');
+        shareField.value = await pending;
+        shareField.hidden = false;
+        shareField.focus();
+        shareField.select();
+        shareMessage('shareManual');
+      } catch { shareMessage('shareFailed'); }
+    } finally { shareButton.disabled = false; }
+  }
   const panelFoot = document.createElement('div');
   panelFoot.className = 'workspace-options-foot';
   button(panelFoot, 'reset', () =>
@@ -521,30 +580,30 @@
   function captureExperiment() {
     return window.SkyLabExperiment?.captureComplete(workspaceBody) || null;
   }
-  function applyProfile(profile) {
+  function applyProfile(profile, shared = false, editing = false) {
+    const layout = sanitize(profile.layout);
+    if (!layout) return false;
     const experiment = profile.experiment
-      ? window.SkyLabExperiment.prepareComplete(profile.experiment, workspaceBody)
+      ? window.SkyLabExperiment.prepareComplete(profile.experiment, shared ? profile.experiment.body : workspaceBody)
       : null;
     if (profile.experiment && !experiment) {
       announce('invalidExperiment');
-      return;
+      return false;
     }
-    if (window.SkyDiagramTools?.leave() === false) return;
+    if (window.SkyDiagramTools?.leave() === false) return false;
     window.SkyMotionHistory?.beginExternal();
     let result;
     try {
       const steps = [
         {
           checkpoint() {
-            const previous = copy({ data, undo, redo, focused });
+            const previous = copy({ data, undo, redo, focused, workspaceBody, profiles, profileUndo, editingProfile, statusKey, normalSelection });
             return () => {
-              ({ data, undo, redo, focused } = previous);
-              save();
-              apply();
+              ({ data, undo, redo, focused, workspaceBody, profiles, profileUndo, editingProfile, statusKey, normalSelection } = previous);
             };
           },
           apply: () => {
-            const next = { ...copy(profile.layout), enabled: true };
+            const next = { ...layout, enabled: true };
             if (JSON.stringify(data) !== JSON.stringify(next)) {
               undo.push(copy(data));
               if (undo.length > 20) undo.shift();
@@ -572,15 +631,34 @@
             uiWorkspace.selected = 'solarCompare';
           },
         });
+      // Conditions may switch the body. Install its layout only after state owners restore.
+      steps.push(steps.shift());
+      if (shared) steps.push({
+        checkpoint() {
+          const before = SkyCustomization.active;
+          return () => SkyCustomization[before ? 'enter' : 'exit']();
+        },
+        apply: () => {
+          if (SkyCustomization[editing ? 'enter' : 'exit']() === false) return false;
+          uiWorkspace.selected = experiment.conditions.selected;
+          data.enabled = true;
+          return true;
+        },
+      });
       steps.push({ checkpoint: () => () => {}, apply });
       result = window.SkyMotionSession.transaction(steps);
       if (result.ok) {
         save();
         announce('applied');
-      } else announce(result.rollbackErrors.length ? 'recoveryFailed' : 'restoreFailed');
+      } else {
+        save();
+        apply();
+        announce(result.rollbackErrors.length ? 'recoveryFailed' : 'restoreFailed');
+      }
     } finally {
       window.SkyMotionHistory?.endExternal();
     }
+    return result.ok;
   }
   function persistProfiles(word) {
     const active = document.activeElement,
@@ -782,6 +860,16 @@
   note.append(noteTitle, noteShared, noteHelp);
   document.querySelector('.ui-diagram-details[data-for=solarCompare]').prepend(note);
   const api = (window.skyWorkspacePresentation = {
+    shareControl,
+    restoreShared(payload) {
+      const layout = sanitize(payload?.layout), body = payload?.experiment?.body;
+      const allowed = SkySiteCatalog.availableViews(body, false).map(view => view.id);
+      if (payload?.version !== 1 || !layout || layout.views.some(id => !allowed.includes(id)) ||
+          !['sun', 'moon'].includes(body) || !allowed.includes(payload.experiment.conditions?.selected) ||
+          payload.experiment.conditions.selected === 'lunarOrbit' ||
+          (payload.editing !== undefined && typeof payload.editing !== 'boolean')) return false;
+      return applyProfile({ layout, experiment: payload.experiment }, true, payload.editing === true);
+    },
     get activeView() {
       return data.views[data.active];
     },
@@ -994,6 +1082,9 @@
     labelButtons(bar);
     if (focused) labelButtons(cards[focused].querySelector('.ui-diagram-card-head'));
     labelButtons(panel);
+    labelButtons(shareControl);
+    shareField.setAttribute('aria-label', t('shareLink'));
+    if (shareStatusKey) shareStatus.textContent = t(shareStatusKey);
     for (const h of panel.querySelectorAll('[data-word-heading]'))
       h.textContent = t(h.dataset.wordHeading);
     for (const [id, c] of controls) {

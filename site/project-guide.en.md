@@ -259,7 +259,7 @@ Construction starts with empty ground or an explicitly restored scene. Sun and M
 
 The multi-view workspace reuses scientific canvases and one shared clock. Up to six composable views are supported; more than four scroll vertically, while phones switch through view tabs.
 
-1. Enter customization and add views from the catalog; use count presets or quick combinations in Arrangement & saved layouts.
+1. Enter customization and add views from the catalog; use count presets or quick combinations in Arrangement, saved layouts & sharing.
 2. Two views can be side by side or stacked, and three can be balanced or featured. Reorder by handles or order controls.
 3. Drag dividers to preview proportions and release to resize the canvases, or commit an exact proportion from 30% to 70%.
 4. Double-click a pane title, or choose “Focus this view” while customizing, to enlarge it temporarily. “Back to all views · Esc” remains beside the title. Click it, press Escape or double-click the title again to return.
@@ -273,11 +273,11 @@ The multi-view workspace reuses scientific canvases and one shared clock. Up to 
 
 Storage covers session drafts, individual reference/scene saves, layout collections and full experiments. Choose the scope before relying on refresh or another device.
 
-1. For layout only, leave Include conditions and objects off in Arrangement & saved layouts, enter a name and save.
+1. For layout only, leave Include conditions and objects off in Arrangement, saved layouts & sharing, enter a name and save.
 2. For a full experiment, select the option and save a name; this includes observation state, layout, current-body references and construction objects.
 3. Select a save marked Full experiment to restore it paused. Invalid full records are rejected without partially replacing the current experiment.
 4. Up to five saves can be renamed, updated or removed; reusing a name updates it. Individual reference and ground-scene saves remain available.
-5. For another device, provide written conditions and available object JSON exports rather than assuming cloud-account synchronization.
+5. Use Copy experiment share link to reproduce a lesson on another device, or export JSON for a large experiment. Changes made after copying do not update a shared link, and local saved items do not sync automatically.
 
 | Storage | Scope | Boundary |
 | --- | --- | --- |
@@ -287,6 +287,14 @@ Storage covers session drafts, individual reference/scene saves, layout collecti
 | Individual references/scenes | Current plot references or constructed scene | Separate from collections and scoped by the specific control |
 
 If storage is denied or full, the status explains visit-only availability. Check the result before closing the page rather than assuming persistence.
+
+### Share the current experiment with students
+
+1. Under Views & layout, expand Arrangement, saved layouts & sharing and select Copy experiment share link. It also works outside customization mode.
+2. Send the link, or turn it into a QR code using your school’s tool. Opening it restores Sun or Moon mode, location, date, time, time basis, view arrangement and supported reference and ground objects. The teacher’s ordinary or customization mode is retained, and playback stays paused.
+3. If automatic copying is unavailable, select and copy the displayed link. For large experiments or unsupported views, record conditions and use existing object or scene JSON export; the link does not silently omit content.
+
+A link is a snapshot at the time of copying. Later teacher edits do not change it, and opening it does not add a saved item to a student’s browser. Anyone with the link can read its location and object text, so avoid private information. Personal preferences, search conversations and independent 3D Sky or Earthrise scenes are excluded.
 
 [Open layout and saving controls →](lab.en.html?edit=1&control=layout#solarCompare)
 

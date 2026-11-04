@@ -87,3 +87,5 @@ node .github/scripts/verify-site.cjs assistant-runtime.cjs assistant-prototype.c
 科学读数来自明确的地点、时刻和模型；理想实验、独立地升模型与真实日期星历各有适用范围。搜索不是当前天空数值计算器，也不是通用百科。会话恢复会校验日期、范围、类型与版本；存储不可用时使用当前页内存回退。
 
 原创应用代码采用[AGPLv3](LICENSE)。天文库、Material Web、字体、模型与行星影像保留各自许可，详见[第三方声明](site/THIRD-PARTY-NOTICES.md)。
+
+实验台支持在“排列、收藏与分享”中复制当前实验链接，跨设备恢复观测条件、图位及可保存的对象；[协议与边界](docs/architecture/SHARING.md)。

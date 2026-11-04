@@ -543,13 +543,15 @@
   flex-shrink: 0;
 }
 .workspace-settings-hint,
-.workspace-settings-status {
+.workspace-settings-status,
+.workspace-share-status {
   margin: 8px 0 0;
   font-size: calc(12px * var(--ui-font-scale, 1));
   line-height: 1.7;
   color: var(--design-muted);
 }
-.workspace-settings-status:empty {
+.workspace-settings-status:empty,
+.workspace-share-status:empty {
   display: none;
 }
 .workspace-options-foot {
@@ -808,3 +810,11 @@ body .workspace-save-form .workspace-save-scope input {
     min-height: 44px;
   }
 }
+
+/* Sharing uses the existing disclosure in both ordinary and customization modes. */
+.workspace-share { padding: 12px; display: grid; gap: 8px; }
+.workspace-share-button { width: 100%; white-space: normal; }
+.workspace-share-link { box-sizing: border-box; width: 100%; resize: vertical; overflow-wrap: anywhere; }
+.workspace-share-link[hidden] { display: none; }
+.workspace-share .workspace-settings-status:empty,
+.workspace-share-status:empty { display: none; }

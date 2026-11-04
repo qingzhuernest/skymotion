@@ -106,7 +106,7 @@
           !raw ||
           raw.version !== 1 ||
           raw.body !== body ||
-          body !== state.body ||
+          !['sun', 'moon'].includes(body) ||
           JSON.stringify(raw).length > 600000 ||
           raw.conditions?.body !== body
         )
@@ -122,7 +122,7 @@
           )
             return null;
         }
-        const references = window.SkyDiagramTools?.prepareExperiment(raw.references);
+        const references = window.SkyDiagramTools?.prepareExperiment(raw.references, body);
         const ground = window.SkySceneBuilder?.prepareExperiment(raw.ground);
         return references && ground ? { ...raw, references, ground } : null;
       },

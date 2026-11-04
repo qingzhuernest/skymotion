@@ -498,7 +498,7 @@
                   "Name references and saves using conditions, such as 40N, near solstice and fixed apparent solar time."
                 ],
                 [
-                  "提交完整实验时，在排列与收藏勾选连同观测与对象保存；同时导出文字记录，说明设备本地保存的范围。",
+                  "提交完整实验时，在排列、收藏与分享勾选连同观测与对象保存；同时导出文字记录，说明设备本地保存的范围。",
                   "To keep a full experiment, include conditions and objects in the saved-layout form, and retain a written record describing local-device storage."
                 ]
               ]
@@ -633,26 +633,14 @@
                 "用高度曲线和空间图各提供一条证据；说明为何地平线下的虚线不表示地下有一条真实轨道。",
                 "Give one piece of evidence from each view and explain why the dashed path below the horizon is not a physical underground orbit."
               ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
-                  "text": [
-                    "进入实验台实践本节",
-                    "Practice this chapter in the laboratory"
-                  ],
-                  "href": "lab.html"
-                }
-              ]
             }
           ],
           "actions": [
             {
-              "href": "lab.html#skyPanel",
+              "href": "lab.html?body=sun&control=conditionsMenu#skyPanel",
               "text": [
-                "打开对应实验台 →",
-                "Open the corresponding experiment →"
+                "观察太阳视运动并设置条件 →",
+                "Observe solar motion and set conditions →"
               ]
             }
           ]
@@ -761,26 +749,14 @@
                 "解释地球与昼夜图中的直射点纬度如何与曲线峰值对应，并指出比较时必须固定哪些条件。",
                 "Connect the subsolar latitude to the curve peak and name the conditions that must remain fixed."
               ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
-                  "text": [
-                    "进入实验台实践本节",
-                    "Practice this chapter in the laboratory"
-                  ],
-                  "href": "diagrams.html#chartPanel"
-                }
-              ]
             }
           ],
           "actions": [
             {
-              "href": "lab.html?control=conditionsMenu#skyPanel",
+              "href": "lab.html?body=sun&control=conditionsMenu#chartPanel",
               "text": [
-                "在实验台设置观测条件 →",
-                "Set observation conditions in the Lab →"
+                "打开太阳高度曲线与日期设置 →",
+                "Open solar altitude and date controls →"
               ]
             }
           ]
@@ -889,26 +865,14 @@
                 "分别写出普通升落、极昼、极夜和相切的判据，并用曲线而非只凭一帧图像说明理由。",
                 "Describe ordinary crossings, continuous daylight, continuous darkness and tangency, using the curve rather than one image as evidence."
               ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
-                  "text": [
-                    "进入实验台实践本节",
-                    "Practice this chapter in the laboratory"
-                  ],
-                  "href": "diagrams.html#contextPanel"
-                }
-              ]
             }
           ],
           "actions": [
             {
-              "href": "lab.html?control=conditionsMenu#skyPanel",
+              "href": "lab.html?body=sun&control=conditionsMenu#contextPanel",
               "text": [
-                "在实验台设置观测条件 →",
-                "Set observation conditions in the Lab →"
+                "打开昼夜分布与地点设置 →",
+                "Open daylight distribution and location controls →"
               ]
             }
           ]
@@ -1017,26 +981,14 @@
                 "画出一个两列记录表，分别标记固定UTC和固定真太阳时，不能只写同一时间。",
                 "Make a two-column record explicitly labeled fixed UTC and fixed apparent solar time rather than simply same time."
               ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
-                  "text": [
-                    "进入实验台实践本节",
-                    "Practice this chapter in the laboratory"
-                  ],
-                  "href": "diagrams.html"
-                }
-              ]
             }
           ],
           "actions": [
             {
-              "href": "lab.html#solarCompare",
+              "href": "lab.html?body=sun&edit=1&sidebar=references#solarCompare",
               "text": [
-                "打开组合对照视图 →",
-                "Open combined comparisons →"
+                "打开地点与时刻对照 →",
+                "Open place and time comparisons →"
               ]
             }
           ]
@@ -1145,26 +1097,14 @@
                 "分别说明改变杆高、相机缩放、显示倍率会改变什么，并解释为什么不能用截断影子验证公式。",
                 "State what rod height, camera zoom and display magnification each change, and explain why a clipped shadow cannot validate the formula."
               ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
-                  "text": [
-                    "进入实验台实践本节",
-                    "Practice this chapter in the laboratory"
-                  ],
-                  "href": "lab.html"
-                }
-              ]
             }
           ],
           "actions": [
             {
-              "href": "lab.html#skyPanel",
+              "href": "lab.html?body=sun&control=workbenchMore#skyTopPanel",
               "text": [
-                "打开对应实验台 →",
-                "Open the corresponding experiment →"
+                "打开俯视日影与实验参数 →",
+                "Open top-down shadows and experiment controls →"
               ]
             }
           ]
@@ -1272,18 +1212,6 @@
               "text": [
                 "指出至少两个导致实物日晷读数与手机时间不同的原因。",
                 "Give at least two reasons why a physical sundial may disagree with a phone clock."
-              ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
-                  "text": [
-                    "进入实验台实践本节",
-                    "Practice this chapter in the laboratory"
-                  ],
-                  "href": "sundial.html"
-                }
               ]
             }
           ],
@@ -1401,26 +1329,14 @@
                 "用两组记录分别解释月相月周期和一天内高度变化，并指出二者各自应固定哪些条件。",
                 "Use separate records to explain monthly phase variation and daily altitude change, naming the controls held fixed in each."
               ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
-                  "text": [
-                    "进入实验台实践本节",
-                    "Practice this chapter in the laboratory"
-                  ],
-                  "href": "lab.html"
-                }
-              ]
             }
           ],
           "actions": [
             {
-              "href": "lab.html?body=moon#contextPanel",
+              "href": "lab.html?body=moon&control=conditionsMenu#contextPanel",
               "text": [
-                "打开月相与月球实验 →",
-                "Open Moon phases and lunar observations →"
+                "打开月相与观测条件 →",
+                "Open Moon phases and observation conditions →"
               ]
             }
           ]
@@ -1528,18 +1444,6 @@
               "text": [
                 "解释一次伴月搜索结果不能保证肉眼可见，并写出还需核对的观测条件。",
                 "Explain why a search result does not guarantee naked-eye visibility and list additional observing conditions to check."
-              ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
-                  "text": [
-                    "进入实验台实践本节",
-                    "Practice this chapter in the laboratory"
-                  ],
-                  "href": "diagrams.html#companionModule"
-                }
               ]
             }
           ],
@@ -1657,23 +1561,11 @@
                 "在记录表中明确写出采样依据、UTC偏移、采样时刻、地点与模型模式，缺一项就难以复现实验。",
                 "Record sampling basis, UTC offset, sample clock, location and model mode; omitting any of them makes reproduction difficult."
               ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
-                  "text": [
-                    "进入实验台实践本节",
-                    "Practice this chapter in the laboratory"
-                  ],
-                  "href": "analemma.html"
-                }
-              ]
             }
           ],
           "actions": [
             {
-              "href": "analemma.html",
+              "href": "lab.html?body=sun#analemmaPanel",
               "text": [
                 "打开日行迹实验 →",
                 "Open the analemma experiment →"
@@ -1785,26 +1677,14 @@
                 "画出观察者、月球边缘和地球的视线关系，并解释转头、绕月移动和改变光照构型分别改变什么。",
                 "Sketch the observer–limb–Earth sight line and distinguish turning the camera, moving in orbit and changing illumination geometry."
               ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
-                  "text": [
-                    "进入实验台实践本节",
-                    "Practice this chapter in the laboratory"
-                  ],
-                  "href": "lunar/index.html"
-                }
-              ]
             }
           ],
           "actions": [
             {
               "href": "lunar/index.html",
               "text": [
-                "打开地升地落实验 →",
-                "Open Earthrise →"
+                "打开地升地落观察器 →",
+                "Open the Earthrise observer →"
               ]
             }
           ]
@@ -1912,18 +1792,6 @@
               "text": [
                 "说明一个模型有意夸大的量和一个仍由真实星历计算的量，并说明用途不同。",
                 "Identify one deliberately exaggerated display quantity and one quantity computed from the ephemeris, explaining their different purposes."
-              ]
-            },
-            {
-              "kind": "links",
-              "items": [
-                {
-                  "text": [
-                    "进入实验台实践本节",
-                    "Practice this chapter in the laboratory"
-                  ],
-                  "href": "space/index.html"
-                }
               ]
             }
           ],
@@ -2106,8 +1974,8 @@
             {
               "kind": "paragraph",
               "text": [
-                "教师可以让学生交换完整实验和文字记录，互相复现实验后再讨论分歧。网页收藏不自动跨设备同步，因此共享时还要提供操作条件、截图或可用的对象导出文件。",
-                "Have students exchange written records and reproduce each other’s experiments before discussing discrepancies. Browser saves do not sync across devices, so sharing also requires conditions, screenshots or available reference export files."
+                "教师可在“视图与布局”的“排列、收藏与分享”中复制当前实验分享链接，发给学生或用二维码工具投屏。学生打开链接即可复现观测条件、图位与可保存的对象；播放暂停，方便开始记录。较大实验或不支持的视图请导出 JSON，文字记录和截图仍可作为讨论证据。浏览器收藏不自动跨设备同步。",
+                "Teachers can copy an experiment share link under Views & layout → Arrangement, saved layouts & sharing, send it to students or display it using a QR-code tool. Opening it restores conditions, views and supported saved objects with playback paused. Export JSON for large experiments or unsupported views; written records and screenshots remain useful evidence. Browser bookmarks do not sync automatically across devices."
               ]
             }
           ]
@@ -3319,8 +3187,8 @@
               "kind": "steps",
               "items": [
                 [
-                  "进入自定义后，从目录加入图；排列与收藏中选择一至四图的快捷数量或常用组合。",
-                  "Enter customization and add views from the catalog; use count presets or quick combinations in Arrangement & saved layouts."
+                  "进入自定义后，从目录加入图；排列、收藏与分享中选择一至四图的快捷数量或常用组合。",
+                  "Enter customization and add views from the catalog; use count presets or quick combinations in Arrangement, saved layouts & sharing."
                 ],
                 [
                   "两图可左右并排或上下排列；三图可均衡或主辅布局。拖动把手交换顺序，或使用顺序按钮。",
@@ -3379,8 +3247,8 @@
               "kind": "steps",
               "items": [
                 [
-                  "只收藏排列：打开排列与收藏，保持连同观测与对象保存未勾选，命名后保存组合。",
-                  "For layout only, leave Include conditions and objects off in Arrangement & saved layouts, enter a name and save."
+                  "只收藏排列：打开排列、收藏与分享，保持连同观测与对象保存未勾选，命名后保存组合。",
+                  "For layout only, leave Include conditions and objects off in Arrangement, saved layouts & sharing, enter a name and save."
                 ],
                 [
                   "保存完整实验：勾选该选项，命名后保存；它包括观测状态、布局、当前天体的图中对象和搭建物体。",
@@ -3395,8 +3263,8 @@
                   "Up to five saves can be renamed, updated or removed; reusing a name updates it. Individual reference and ground-scene saves remain available."
                 ],
                 [
-                  "跨设备分享时同时提供文字条件和可用的对象JSON导出；不要把浏览器本地收藏当作云账号同步。",
-                  "For another device, provide written conditions and available object JSON exports rather than assuming cloud-account synchronization."
+                  "跨设备复现可使用“复制当前实验分享链接”；大实验改用 JSON 导出。分享后修改原实验不会更新已发链接，本地收藏也不会自动同步。",
+                  "Use Copy experiment share link to reproduce a lesson on another device, or export JSON for a large experiment. Changes made after copying do not update a shared link, and local saved items do not sync automatically."
                 ]
               ]
             },
@@ -3480,6 +3348,37 @@
               "text": [
                 "浏览器拒绝存储或空间不足时，系统会提示仅本次访问可用。不要关闭页面后才检查是否保存成功；看到成功状态后再离开。",
                 "If storage is denied or full, the status explains visit-only availability. Check the result before closing the page rather than assuming persistence."
+              ]
+            },
+            {
+              "kind": "heading",
+              "text": [
+                "把当前实验发给学生",
+                "Share the current experiment with students"
+              ]
+            },
+            {
+              "kind": "steps",
+              "items": [
+                [
+                  "在“视图与布局”展开“排列、收藏与分享”，点击“复制当前实验分享链接”；普通模式也可以使用。",
+                  "Under Views & layout, expand Arrangement, saved layouts & sharing and select Copy experiment share link. It also works outside customization mode."
+                ],
+                [
+                  "发送链接，或用学校的二维码工具生成二维码。学生打开后恢复太阳或月球模式、地点、日期、时刻、时间依据、图位组合及可保存的对照和地面物体，并保留教师的普通或自定义模式，播放保持暂停。",
+                  "Send the link, or turn it into a QR code using your school’s tool. Opening it restores Sun or Moon mode, location, date, time, time basis, view arrangement and supported reference and ground objects. The teacher’s ordinary or customization mode is retained, and playback stays paused."
+                ],
+                [
+                  "如浏览器不允许自动复制，选中出现的链接手动复制。实验过大或视图不支持时，记录观测条件并使用原有对象或场景 JSON 导出；不会只分享部分内容。",
+                  "If automatic copying is unavailable, select and copy the displayed link. For large experiments or unsupported views, record conditions and use existing object or scene JSON export; the link does not silently omit content."
+                ]
+              ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "链接是复制时的快照，不会随教师后续修改而更新，也不自动保存到学生的收藏。链接包含地点和对象文字，收到链接的人都能读取；不要放入私密信息。分享不包含个人设置、搜索对话或三维天空和地升观察器的独立场景。",
+                "A link is a snapshot at the time of copying. Later teacher edits do not change it, and opening it does not add a saved item to a student’s browser. Anyone with the link can read its location and object text, so avoid private information. Personal preferences, search conversations and independent 3D Sky or Earthrise scenes are excluded."
               ]
             }
           ],
@@ -5176,6 +5075,13 @@
               "text": [
                 "workbench-content-group与观测设置共用menu-section组件，不再各自定义折叠标题外观。嵌套menu-subsection的标题圆角由外框圆角减去1px边框计算。md-connected-choice统一连接式单选组件，支持aria-pressed与aria-selected；全局导航固定在页面顶部。月相图使用图位容器查询，而非整页宽度，窄图位按轨道与月面读数上下布局；phaseOrbitLayout与新的画布尺寸同步，拖动仍改变同一真实观测时刻。",
                 "workbench-content-group and observation settings reuse menu-section instead of separate disclosure skins. Nested menu-subsection heading radii subtract the 1px border from the outer radius. md-connected-choice provides connected exclusive choices using aria-pressed or aria-selected, while global navigation stays at the top. Moon phase uses pane container queries rather than viewport width, stacking orbit and disk readouts in narrow panes. phaseOrbitLayout follows the resized canvas, and dragging still changes the same real observation instant."
+              ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "跨设备分享由experiment-share.js负责：版本化JSON经过浏览器deflate压缩与Base64url编码放进#state=，总URL上限2800字符；解压读取设600000字节上限。加载时先捕获分享片段，状态所有者就绪后验证布局、天体和实验，再复用事务恢复；失败回滚，不保存为收藏。不支持压缩时可读取或生成未压缩短链接，过长则使用JSON。章节深链接统一由lab.html的body、control、sidebar、edit参数与视图Hash表达；日晷、地升、三维天空保留独立入口。",
+                "Cross-device sharing belongs to experiment-share.js: versioned JSON uses browser deflate and Base64url in #state=, with a 2,800-character URL limit and a 600,000-byte decompression limit. Capture the fragment before routing, wait for state owners, validate body, layout and experiment, then reuse transactional restoration with rollback. Opening does not add a saved item. Without compression, short raw links remain supported; use JSON for longer experiments. Chapter deep links use lab.html body, control, sidebar and edit parameters with a view hash; sundial, Earthrise and 3D Sky keep independent entries."
               ]
             }
           ],
@@ -7070,6 +6976,10 @@
     "assistant/worker.js": [
       "固定版本BGE与ONNX运行库生成的语义检索Worker",
       "Bundled pinned BGE/ONNX semantic retrieval Worker"
+    ],
+    "experiment-share.js": [
+      "版本化分享链接、压缩、限长读取与启动恢复",
+      "Versioned share links, compression, bounded decoding and startup restoration"
     ]
   }
 }

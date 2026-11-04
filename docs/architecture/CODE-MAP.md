@@ -8,20 +8,20 @@
 | --- | ---: | ---: | ---: |
 | 三维天空 | 16 | 128,610 | 3,409 |
 | 依赖锁与构建配置 | 8 | 87,266 | 2,673 |
-| 共享界面、实验模型与页面 | 46 | 829,893 | 22,262 |
+| 共享界面、实验模型与页面 | 47 | 840,166 | 22,475 |
 | 地升地落 | 2 | 31,583 | 818 |
 | 本地搜索 | 3 | 40,123 | 1,061 |
-| 生成、数据维护与发布工具 | 25 | 109,775 | 2,192 |
-| 生成输出（修改原稿或构建入口） | 4 | 1,816,431 | 590 |
-| 生成页面（修改双语原稿） | 18 | 1,099,558 | 4,487 |
-| 界面样式（手写） | 27 | 407,037 | 16,074 |
+| 生成、数据维护与发布工具 | 25 | 110,300 | 2,196 |
+| 生成输出（修改原稿或构建入口） | 4 | 1,823,205 | 590 |
+| 生成页面（修改双语原稿） | 18 | 1,106,244 | 4,490 |
+| 界面样式（手写） | 27 | 407,557 | 16,084 |
 | 第三方运行库（保留原许可） | 3 | 903,285 | 4,487 |
-| 结构化资料、目录与生成元数据 | 28 | 4,655,938 | 39,914 |
-| 页面原稿（含目录生成区段） | 11 | 342,495 | 6,617 |
-| 验证与测试工具 | 92 | 565,229 | 8,606 |
+| 结构化资料、目录与生成元数据 | 28 | 4,669,009 | 39,849 |
+| 页面原稿（含目录生成区段） | 11 | 343,111 | 6,620 |
+| 验证与测试工具 | 93 | 577,693 | 8,867 |
 | 影像、字体与媒体 | 27 | 7,102,080 | — |
-| 文档、许可与其他说明 | 70 | 1,041,484 | — |
-| 模型、WASM与向量二进制 | 3 | 47,195,157 | — |
+| 文档、许可与其他说明 | 71 | 1,051,283 | — |
+| 模型、WASM与向量二进制 | 3 | 47,201,301 | — |
 
 素材、模型与说明单列，不计作手写实现。说明字节数不含本地图和文件清单自身，避免自引用统计。行数包含格式、注释与数据，不能用来推断计算复杂度、维护质量或测试覆盖。
 
@@ -78,6 +78,7 @@
 | [site/diagram-tools.js](../../site/diagram-tools.js) | 对象编辑、属性、放置、选择与导入；协调共享状态和绘图 |
 | [site/document-entrance.js](../../site/document-entrance.js) | 保留的三份文档入场对话 |
 | [site/document-navigation.js](../../site/document-navigation.js) | 文档常显目录、章节定位与返回顶部；原生锚点作为无脚本后备 |
+| [site/experiment-share.js](../../site/experiment-share.js) | 版本化分享链接、压缩、限长读取与启动恢复 |
 | [site/experiment-storage.js](../../site/experiment-storage.js) | 版本化会话校验、存储回退与恢复事务协调 |
 | [site/interaction-history.js](../../site/interaction-history.js) | 浏览器参数历史、手势分组与恢复锁 |
 | [site/interface-motion.js](../../site/interface-motion.js) | 折叠与选中反馈，尊重减少动态设置 |
@@ -320,6 +321,7 @@
 | [tests/document-generation.cjs](../../tests/document-generation.cjs) | 回归验证：Invalid authoring fails before generation; metadata comes from structured sources. |
 | [tests/documentation.cjs](../../tests/documentation.cjs) | 回归验证：Documentation roles, local references, downloads and the shared entrance. |
 | [tests/experiment-save.cjs](../../tests/experiment-save.cjs) | 回归验证：Restore the actual conditions, reference stores and ground scene through the saved-layout UI. |
+| [tests/experiment-share.cjs](../../tests/experiment-share.cjs) | 回归验证：Share a real classroom comparison into a fresh phone; invalid links cannot mutate state. |
 | [tests/expressive-controls.cjs](../../tests/expressive-controls.cjs) | 回归验证：Expressive range presentation stays in sync with real keyboard and state-owner updates. |
 | [tests/guided-experiments.cjs](../../tests/guided-experiments.cjs) | 回归验证：Goal-driven experiments, independent scrubbing, leap years and gesture history. |
 | [tests/interaction-audit.cjs](../../tests/interaction-audit.cjs) | 回归验证：Editor state must not trap native controls, modal dialogs, or responsive sidebars. |

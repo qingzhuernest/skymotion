@@ -111,9 +111,7 @@ The daily change mainly reflects Earth’s rotation. The path is apparent motion
 
 Give one piece of evidence from each view and explain why the dashed path below the horizon is not a physical underground orbit.
 
-- [Practice this chapter in the laboratory](lab.en.html)
-
-[Open the corresponding experiment →](lab.en.html#skyPanel)
+[Observe solar motion and set conditions →](lab.en.html?body=sun&control=conditionsMenu#skyPanel)
 
 ## Investigation 2: Seasonal changes at one place
 
@@ -144,9 +142,7 @@ Axial tilt produces changing solar declination through the orbit. Upper-culminat
 
 Connect the subsolar latitude to the curve peak and name the conditions that must remain fixed.
 
-- [Practice this chapter in the laboratory](diagrams.en.html#chartPanel)
-
-[Set observation conditions in the Lab →](lab.en.html?control=conditionsMenu#skyPanel)
+[Open solar altitude and date controls →](lab.en.html?body=sun&control=conditionsMenu#chartPanel)
 
 ## Investigation 3: Latitude and the day–night pattern
 
@@ -177,9 +173,7 @@ Altitude depends on latitude, declination and hour angle. Latitude changes the l
 
 Describe ordinary crossings, continuous daylight, continuous darkness and tangency, using the curve rather than one image as evidence.
 
-- [Practice this chapter in the laboratory](diagrams.en.html#contextPanel)
-
-[Set observation conditions in the Lab →](lab.en.html?control=conditionsMenu#skyPanel)
+[Open daylight distribution and location controls →](lab.en.html?body=sun&control=conditionsMenu#contextPanel)
 
 ## Investigation 4: The same clock reading versus the same instant
 
@@ -210,9 +204,7 @@ Longitude controls orientation relative to the solar meridian. Apparent solar ti
 
 Make a two-column record explicitly labeled fixed UTC and fixed apparent solar time rather than simply same time.
 
-- [Practice this chapter in the laboratory](diagrams.en.html)
-
-[Open combined comparisons →](lab.en.html#solarCompare)
+[Open place and time comparisons →](lab.en.html?body=sun&edit=1&sidebar=references#solarCompare)
 
 ## Investigation 5: Rod height, shadow length and shadow-tip paths
 
@@ -243,9 +235,7 @@ For altitude h and vertical height H, horizontal shadow length is L=H/tan(h). Th
 
 State what rod height, camera zoom and display magnification each change, and explain why a clipped shadow cannot validate the formula.
 
-- [Practice this chapter in the laboratory](lab.en.html)
-
-[Open the corresponding experiment →](lab.en.html#skyPanel)
+[Open top-down shadows and experiment controls →](lab.en.html?body=sun&control=workbenchMore#skyTopPanel)
 
 ## Investigation 6: Why can a sundial tell time?
 
@@ -275,8 +265,6 @@ The apparatus geometry determines ray–plane intersections. Solar time, civil t
 ### Check understanding
 
 Give at least two reasons why a physical sundial may disagree with a phone clock.
-
-- [Practice this chapter in the laboratory](sundial.en.html)
 
 [Open the sundial experiment →](sundial.en.html)
 
@@ -309,9 +297,7 @@ Bright-limb orientation also depends on local orientation and viewpoint. Teachin
 
 Use separate records to explain monthly phase variation and daily altitude change, naming the controls held fixed in each.
 
-- [Practice this chapter in the laboratory](lab.en.html)
-
-[Open Moon phases and lunar observations →](lab.en.html?body=moon#contextPanel)
+[Open Moon phases and observation conditions →](lab.en.html?body=moon&control=conditionsMenu#contextPanel)
 
 ## Investigation 8: Planet–Moon comparisons and angular separation
 
@@ -341,8 +327,6 @@ The local-sky display projects viewing directions, while the 3D Solar System is 
 ### Check understanding
 
 Explain why a search result does not guarantee naked-eye visibility and list additional observing conditions to check.
-
-- [Practice this chapter in the laboratory](diagrams.en.html#companionModule)
 
 [Open Moon and planet observations →](lab.en.html?body=moon#companionModule)
 
@@ -375,9 +359,7 @@ Axial tilt and a noncircular orbit affect the direction at a fixed civil clock t
 
 Record sampling basis, UTC offset, sample clock, location and model mode; omitting any of them makes reproduction difficult.
 
-- [Practice this chapter in the laboratory](analemma.en.html)
-
-[Open the analemma experiment →](analemma.en.html)
+[Open the analemma experiment →](lab.en.html?body=sun#analemmaPanel)
 
 ## Investigation 10: Why does Earth rise and set above the Moon?
 
@@ -408,9 +390,7 @@ The lesson omits lunar libration, terrain and precise mission trajectories. Anim
 
 Sketch the observer–limb–Earth sight line and distinguish turning the camera, moving in orbit and changing illumination geometry.
 
-- [Practice this chapter in the laboratory](lunar/index.en.html)
-
-[Open Earthrise →](lunar/index.en.html)
+[Open the Earthrise observer →](lunar/index.en.html)
 
 ## Investigation 11: Explain apparent motion using a spatial model
 
@@ -441,8 +421,6 @@ Converting spatial positions to local sky directions requires the observer, Eart
 
 Identify one deliberately exaggerated display quantity and one quantity computed from the ephemeris, explaining their different purposes.
 
-- [Practice this chapter in the laboratory](space/index.en.html)
-
 [Open 3D Sky →](space/index.en.html)
 
 ## Reusable experiment record
@@ -468,7 +446,7 @@ When citing Search, expand References and record the entry and manual chapter. D
 | Causal explanation | Trends are connected to rotation, tilt, sight lines or projection |
 | Model awareness | The learner can explain absent events, poles, clipping, teaching scales or omitted weather |
 
-Have students exchange written records and reproduce each other’s experiments before discussing discrepancies. Browser saves do not sync across devices, so sharing also requires conditions, screenshots or available reference export files.
+Teachers can copy an experiment share link under Views & layout → Arrangement, saved layouts & sharing, send it to students or display it using a QR-code tool. Opening it restores conditions, views and supported saved objects with playback paused. Export JSON for large experiments or unsupported views; written records and screenshots remain useful evidence. Browser bookmarks do not sync automatically across devices.
 
 ## Common misconceptions
 

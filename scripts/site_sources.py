@@ -150,6 +150,8 @@ def generated_sources(root=ROOT):
                         lambda match: '<script src="' + match[2] + dependency + '.js?v=' + catalog['resourceVersion'] + '" defer></script>\n' + match[1], source)
             if page['path'] in ('lab.html','diagrams.html','analemma.html','sundial.html') and 'sky-perspectives.js?' not in source:
                 source = re.sub(r'(<script src="custom-layout\.js[^>]+></script>)', '<script src="sky-perspectives.js?v=' + catalog['resourceVersion'] + '" defer></script>\n' + r'\1', source)
+            if 'custom-layout.js?' in source and 'experiment-share.js?' not in source:
+                source = source.replace('<script src="app.js', '<script src="experiment-share.js?v=' + catalog['resourceVersion'] + '" defer></script>\n<script src="app.js', 1)
             result[page['path']] = re.sub(r'<nav\b[^>]*class="page-nav"[\s\S]*?</nav>', lambda _: navigation_html(catalog, page['path']), source)
     return result
 

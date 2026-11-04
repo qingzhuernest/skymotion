@@ -1997,8 +1997,11 @@
         seq,
         pending,
       });
-      const selection = [...selectedMany];
+      const selection = [...selectedMany], previousBody = body, previousBuckets = clone([...buckets]);
       return () => {
+        body = previousBody;
+        buckets.clear();
+        for (const [key, value] of previousBuckets) buckets.set(key, value);
         ({ data, undo, redo, saved, selected, statusKey, seq, pending } = previous);
         selectedMany = new Set(selection);
         update();

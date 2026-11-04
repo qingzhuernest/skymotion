@@ -87,3 +87,5 @@ The runner reserves an isolated port and cleans up processes. Pass relevant file
 Readings require explicit place, time and model conditions. Ideal experiments, the independent Earthrise model and real-date ephemerides have distinct assumptions. Search is neither a current-sky calculator nor a general encyclopedia. Restored sessions validate date, range, type and version; unavailable storage falls back to current-page memory.
 
 Original application code uses [AGPLv3](LICENSE). Astronomy libraries, Material Web, fonts, models and planetary imagery retain their own terms; see [third-party notices](site/THIRD-PARTY-NOTICES.md).
+
+Copy an experiment link under Arrangement, saved layouts & sharing to restore conditions, views and supported objects on another device. See [sharing and deep links](docs/architecture/SHARING.md).

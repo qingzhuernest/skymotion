@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 383 个文件。目录职责见 [repository.md](repository.md)。
+共 386 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -24,13 +24,14 @@
 - [.github/workflows/github-pages.yml](../.github/workflows/github-pages.yml)
 - [.github/workflows/validate.yml](../.github/workflows/validate.yml)
 
-## docs (30)
+## docs (31)
 
 - [docs/README.md](../docs/README.md)
 - [docs/architecture/CODE-MAP.md](../docs/architecture/CODE-MAP.md)
 - [docs/architecture/DESIGN.md](../docs/architecture/DESIGN.md)
 - [docs/architecture/PRODUCT.md](../docs/architecture/PRODUCT.md)
 - [docs/architecture/SEARCH.md](../docs/architecture/SEARCH.md)
+- [docs/architecture/SHARING.md](../docs/architecture/SHARING.md)
 - [docs/assistant/README.md](../docs/assistant/README.md)
 - [docs/assistant/REPORTED-FIXES.md](../docs/assistant/REPORTED-FIXES.md)
 - [docs/assistant/UPDATE142.md](../docs/assistant/UPDATE142.md)
@@ -85,7 +86,7 @@
 - [scripts/theme-colors/package.json](../scripts/theme-colors/package.json)
 - [scripts/theme-colors/source.js](../scripts/theme-colors/source.js)
 
-## site (220)
+## site (221)
 
 - [site/.nojekyll](../site/.nojekyll)
 - [site/404.en.html](../site/404.en.html)
@@ -163,6 +164,7 @@
 - [site/documentation.md](../site/documentation.md)
 - [site/documents.css](../site/documents.css)
 - [site/earth.jpg](../site/earth.jpg)
+- [site/experiment-share.js](../site/experiment-share.js)
 - [site/experiment-storage.js](../site/experiment-storage.js)
 - [site/favicon.svg](../site/favicon.svg)
 - [site/fonts/LICENSE-Charter.txt](../site/fonts/LICENSE-Charter.txt)
@@ -308,7 +310,7 @@
 - [site/workbench-menu.js](../site/workbench-menu.js)
 - [site/workspace.js](../site/workspace.js)
 
-## tests (94)
+## tests (95)
 
 - [tests/analemma-references.cjs](../tests/analemma-references.cjs)
 - [tests/assistant-corpus.cjs](../tests/assistant-corpus.cjs)
@@ -352,6 +354,7 @@
 - [tests/document-generation.cjs](../tests/document-generation.cjs)
 - [tests/documentation.cjs](../tests/documentation.cjs)
 - [tests/experiment-save.cjs](../tests/experiment-save.cjs)
+- [tests/experiment-share.cjs](../tests/experiment-share.cjs)
 - [tests/expressive-controls.cjs](../tests/expressive-controls.cjs)
 - [tests/guided-experiments.cjs](../tests/guided-experiments.cjs)
 - [tests/interaction-audit.cjs](../tests/interaction-audit.cjs)

@@ -1,5 +1,5 @@
 {
-  "version": "e55d5f5e66bcf388",
+  "version": "d2784180622e181a",
   "dimensions": 512,
   "records": [
     "site:SITE-001",
@@ -595,6 +595,8 @@
     "MANUAL:017",
     "MANUAL:017",
     "MANUAL:017",
+    "MANUAL:017",
+    "MANUAL:017",
     "MANUAL:018",
     "MANUAL:018",
     "MANUAL:018",
@@ -704,6 +706,7 @@
     "DEV:021",
     "DEV:021",
     "DEV:021",
+    "DEV:022",
     "DEV:022",
     "DEV:022",
     "DEV:022",
@@ -839,6 +842,6 @@
   "pooling": "cls",
   "normalize": true,
   "queryPrefix": "",
-  "indexSha256": "1eeaa6ee43c1a8abc9a0a938a25ef69bdc11505c8b1e034020109132f0c0c535",
+  "indexSha256": "fb688a43b3017556b3a4838d89137420eafeee6f0d36d14b16c7556075d394af",
   "transformers": "3.8.1"
 }

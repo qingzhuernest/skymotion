@@ -224,6 +224,10 @@ function renderUIWorkspace() {
       sundialLength = saved.sundialLength;
     sundialView = saved.sundialView === 'plate' ? 'plate' : 'device';
   }
+  // Explicit deep-link mode takes precedence over the previous session before view validation.
+  const requestedBody = new URLSearchParams(location.search).get('body');
+  if (page === 'diagrams' && ['sun', 'moon'].includes(requestedBody))
+    state = modeStates[requestedBody];
   const returnBody = state.body;
   function save() {
     if (workbenchIsAnalemmaEntry() || page === 'sundial') {

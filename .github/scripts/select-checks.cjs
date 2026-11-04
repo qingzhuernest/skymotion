@@ -8,6 +8,8 @@ const fallback = [
   'document-action-links.cjs', 'confirmed-review-fixes.cjs', 'deployment-paths.cjs',
 ];
 const groups = [
+  [/^site\/scene-builder\.js$/, ['scene-builder-recovery.cjs', 'experiment-share.cjs', 'experiment-save.cjs']],
+  [/^site\/(experiment-share|lab-history)\.js$/, ['experiment-share.cjs', 'experiment-save.cjs', 'session-validation.cjs']],
   [/^site\/space\/(appearance\.js|scene\.js|textures\/)/, ['space-appearance.cjs','space-model.cjs','space-earth-frame.cjs','space-exploration.cjs','space-immersive-escape.cjs']],
   [/^site\/assistant\/|^scripts\/(assistant\/|build-assistant-knowledge\.py)/, ['assistant-runtime.cjs', 'assistant-prototype.cjs', 'assistant-reported.cjs', 'assistant-coverage.cjs', 'assistant-short-queries.cjs', 'assistant-welcome.cjs', 'assistant-corpus.cjs', 'assistant-systematic.cjs']],
   [/^site\/observer\.js$/, ['observer-heading.cjs']],
@@ -22,7 +24,7 @@ const groups = [
   [/^site\/diagram-(tools|tool-definitions|reference-renderer)\.(js|css)$/,
     ['diagram-tools.cjs', 'diagram-editing.cjs', 'reported-layout.cjs']],
   [/^site\/(custom-layout|sky-perspectives|customization-mode)\.(js|css)$/,
-    ['custom-layout.cjs', 'experiment-save.cjs', 'reported-layout.cjs', 'narrow-workspace-controls.cjs']],
+    ['custom-layout.cjs', 'experiment-share.cjs', 'experiment-save.cjs', 'reported-layout.cjs', 'narrow-workspace-controls.cjs']],
   [/^site\/(style|pages|design-system|controls|interface-motion)\.css$/,
     ['material-components.cjs', 'shared-choice-fields.cjs', 'reported-layout.cjs']],
   [/^site\/(preferences|material-controls|ui-palette|theme-colors)\.(js|css)$/,
