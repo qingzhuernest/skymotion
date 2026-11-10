@@ -10,6 +10,7 @@ let motionRAF = 0,
   motionTransition = null,
   motionCameraValue = null,
   motionFrameTime = 0;
+let motionVisibilityObserver = null;
 const visibleCanvases = new WeakMap(),
   companionViewMotion = { value: null, target: null };
 function elementVisible(node) {
@@ -19,6 +20,18 @@ function elementVisible(node) {
       ? node.checkVisibility({ contentVisibilityAuto: true })
       : node.getClientRects().length > 0)
   );
+}
+// Hidden/reparented panes may retain an old non-intersection until another layout event.
+// Forget only affected canvases and let the shared observer refresh their clipped bounds.
+function refreshMotionVisibility(root) {
+  const canvases = root?.localName === 'canvas' ? [root] : root?.querySelectorAll?.('canvas') || [];
+  for (const canvas of canvases) {
+    visibleCanvases.delete(canvas);
+    if (motionVisibilityObserver) {
+      motionVisibilityObserver.unobserve(canvas);
+      motionVisibilityObserver.observe(canvas);
+    }
+  }
 }
 function canPaint(canvas) {
   const known = visibleCanvases.get(canvas);
@@ -301,7 +314,7 @@ function motionFrame(now) {
   else motionLast = 0;
 }
 function initMotion() {
-  const observer = new IntersectionObserver(
+  const observer = motionVisibilityObserver = new IntersectionObserver(
     (entries) => {
       for (const e of entries) visibleCanvases.set(e.target, e.isIntersecting);
       schedule();

@@ -326,6 +326,8 @@ workbench-content-group与观测设置共用menu-section组件，不再各自定
 
 跨设备分享由experiment-share.js负责：版本化JSON经过浏览器deflate压缩与Base64url编码放进#state=，总URL上限2800字符；解压读取设600000字节上限。加载时先捕获分享片段，状态所有者就绪后验证布局、天体和实验，再复用事务恢复；失败回滚，不保存为收藏。不支持压缩时可读取或生成未压缩短链接，过长则使用JSON。章节深链接统一由lab.html的body、control、sidebar、edit参数与视图Hash表达；日晷、地升、三维天空保留独立入口。
 
+五、六图组合在宽屏采用三行网格，每行至少240像素；高度不足时仅绘图区纵向滚动，手机仍按标签切换单图。三行组合禁用两行比例和水平分隔手柄。界面同步只在文字或属性实际变化时写入，侧栏每次同步复用同一份图位快照；视角选中状态只属于按钮。画布被显示或重排后由motion.js刷新对应可见性缓存，复用同一个IntersectionObserver，避免旧屏幕外标记使可见画布空白。
+
 [打开布局与保存面板 →](lab.html?edit=1&control=layout#solarCompare)
 
 ## 参考对象、身份与跨图选中
@@ -552,7 +554,7 @@ space/textures中的行星与月球图像来自Solar System Scope / INOVE，以C
 | [sundial-device.js](https://github.com/qingzhuernest/skymotion/blob/main/site/sundial-device.js) | 日晷装置交互与相机 | openSundialDialog, sundialDeviceFrame, drawSundialDevice, sundialSetTime, sundialDragTime, sundialPlateDragTime, initSundialDevice, redrawCamera, pinchDistance, renderSundialDeviceControls |
 | [observer.js](https://github.com/qingzhuernest/skymotion/blob/main/site/observer.js) | 当地仰望天空的投影与交互 | observerPosition, observerFrame, moonBrightLimbAngle, observerBodies, observerDayPosition, drawObserverCurve, drawObserverTrack, drawObserverGround, drawObserverSky, arrangeObserverTime, renderObserverControls, initObserver |
 | [companion.js](https://github.com/qingzhuernest/skymotion/blob/main/site/companion.js) | 行星伴月、角距离与日期搜索 | companionSnapshot, futureCompanionDates, closestCompanionDay, renderCompanion, drawCompanionSky, initCompanion |
-| [motion.js](https://github.com/qingzhuernest/skymotion/blob/main/site/motion.js) | 按需帧调度、播放累计与相机平滑 | elementVisible, canPaint, requestMotionFrame, snapshotMotion, syncMotionTarget, motionProgress, mixDirection, visualPosition, visualPhase, visualTrackPosition, visualChartDay, motionCamera, easeCompanionView, settleMotion, revealMotion, drawMotionCanvases, motionFrame, initMotion, focusAfterReveal |
+| [motion.js](https://github.com/qingzhuernest/skymotion/blob/main/site/motion.js) | 按需帧调度、播放累计与相机平滑 | elementVisible, refreshMotionVisibility, canPaint, requestMotionFrame, snapshotMotion, syncMotionTarget, motionProgress, mixDirection, visualPosition, visualPhase, visualTrackPosition, visualChartDay, motionCamera, easeCompanionView, settleMotion, revealMotion, drawMotionCanvases, motionFrame, initMotion, focusAfterReveal |
 | [menu.js](https://github.com/qingzhuernest/skymotion/blob/main/site/menu.js) | 原参数菜单分组与折叠行为 | updateMenu, closeMenu, initMenu |
 | [time-workbench.js](https://github.com/qingzhuernest/skymotion/blob/main/site/time-workbench.js) | 公共时间条、日期条与播放控制 | workbenchIsAnalemmaEntry, workbenchBasis, workbenchTimeMax, workbenchSetTime, workbenchShiftDate, workbenchSetBasis, workbenchPlay, workbenchIsPlaying, renderTimeWorkbench, initTimeWorkbench |
 | [experiment-storage.js](https://github.com/qingzhuernest/skymotion/blob/main/site/experiment-storage.js) | 版本化会话校验、存储回退与恢复事务协调 | validDate, searchResult, sanitizeMode, read, write, transaction |

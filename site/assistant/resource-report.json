@@ -1,8 +1,8 @@
 {
   "scope": "Assistant additions only; excludes existing site fonts, images and scientific assets",
   "compression": "gzip estimate computed locally; not a measured production transfer",
-  "rawBytes": 49386290,
-  "gzipBytes": 21446063,
+  "rawBytes": 49389491,
+  "gzipBytes": 21448448,
   "files": {
     "assistant.css": {
       "bytes": 5175,
@@ -10,19 +10,19 @@
       "sha256": "f44aa551149f2ee29fe9e8eebc99903cc5c907baf4aeddd3cf90498d42e19604"
     },
     "index.bin": {
-      "bytes": 1701888,
-      "gzipBytes": 1579211,
-      "sha256": "fb688a43b3017556b3a4838d89137420eafeee6f0d36d14b16c7556075d394af"
+      "bytes": 1703936,
+      "gzipBytes": 1581084,
+      "sha256": "9454e01cbcd9add306deef535728603fe10069bef9d19d6ca890888a358ab349"
     },
     "knowledge-version.json": {
       "bytes": 178,
-      "gzipBytes": 146,
-      "sha256": "f3b80d29f4bb3c0ffbc8f7090acaa64a50440ccd2bcd55345c404043a4fb91c9"
+      "gzipBytes": 147,
+      "sha256": "518cb68694e25be92783e132df948b4f848b3acc492ce04e8996d8bd76724210"
     },
     "knowledge.json": {
-      "bytes": 612985,
-      "gzipBytes": 161117,
-      "sha256": "63de7d010f652c46403b8c9c1386aa363370f2d02530a7591acd92d8ed76a44f"
+      "bytes": 614123,
+      "gzipBytes": 161626,
+      "sha256": "c394cfd5615af410b01065c4c950bd38263e20ee9abcdb7d54d470a006b20555"
     },
     "licenses/bge-MIT.txt": {
       "bytes": 1065,
@@ -95,9 +95,9 @@
       "sha256": "7fbf7b525d526b7cc21c92ffcad9605754c94d294f9969cc03e3a920d0b318c9"
     },
     "semantic-manifest.json": {
-      "bytes": 17068,
-      "gzipBytes": 2014,
-      "sha256": "8a9f24e96bad64f6e35a343d7b0324c4c52d114616669867d0095921a8ab06f8"
+      "bytes": 17083,
+      "gzipBytes": 2016,
+      "sha256": "f5facd8704ec785c25bf596c16c16ff12d0451877e2cafb46f4c6ff7097bb910"
     },
     "ui.js": {
       "bytes": 15707,

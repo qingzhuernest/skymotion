@@ -2,7 +2,7 @@
 
 由 `scripts/repository-index.py` 按 Git 跟踪文件生成；不包含依赖、构建产物或缓存。
 
-共 386 个文件。目录职责见 [repository.md](repository.md)。
+共 388 个文件。目录职责见 [repository.md](repository.md)。
 
 ## (root) (8)
 
@@ -24,7 +24,7 @@
 - [.github/workflows/github-pages.yml](../.github/workflows/github-pages.yml)
 - [.github/workflows/validate.yml](../.github/workflows/validate.yml)
 
-## docs (31)
+## docs (32)
 
 - [docs/README.md](../docs/README.md)
 - [docs/architecture/CODE-MAP.md](../docs/architecture/CODE-MAP.md)
@@ -57,6 +57,7 @@
 - [docs/reviews/BUG-AUDIT-2026-10-15.md](../docs/reviews/BUG-AUDIT-2026-10-15.md)
 - [docs/reviews/CODE-ORGANIZATION-2026-11-02.md](../docs/reviews/CODE-ORGANIZATION-2026-11-02.md)
 - [docs/reviews/CODE-SIMPLICITY-2026-10-28.md](../docs/reviews/CODE-SIMPLICITY-2026-10-28.md)
+- [docs/reviews/UI-CODE-AUDIT-2026-11-10.md](../docs/reviews/UI-CODE-AUDIT-2026-11-10.md)
 
 ## scripts (25)
 
@@ -310,7 +311,7 @@
 - [site/workbench-menu.js](../site/workbench-menu.js)
 - [site/workspace.js](../site/workspace.js)
 
-## tests (95)
+## tests (96)
 
 - [tests/analemma-references.cjs](../tests/analemma-references.cjs)
 - [tests/assistant-corpus.cjs](../tests/assistant-corpus.cjs)
@@ -407,3 +408,4 @@
 - [tests/welcome-opening.cjs](../tests/welcome-opening.cjs)
 - [tests/workbench-header.cjs](../tests/workbench-header.cjs)
 - [tests/workbench-menu-link.cjs](../tests/workbench-menu-link.cjs)
+- [tests/workspace-rendering.cjs](../tests/workspace-rendering.cjs)

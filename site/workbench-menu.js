@@ -137,6 +137,8 @@
   function sync() {
     const api = window.skyWorkspacePresentation;
     const editing = window.SkyCustomization?.active === true;
+    const views = api?.views || [];
+    const includedViews = new Set(api?.active ? views : []);
     const visible = api?.active ? api.visibleIds : new Set([uiWorkspace.selected]);
     syncSkyViewControls();
 
@@ -180,7 +182,7 @@
         String(entry.id === 'lunarOrbit' && !!uiWorkspace.pendingLunar),
       );
       uiViewHidden(entry.add, !editing || !Object.hasOwn(uiWorkspace.cards, layoutId));
-      const included = api?.active && api.views.includes(layoutId);
+      const included = includedViews.has(layoutId);
       uiViewAttribute(
         entry.add,
         'aria-label',
@@ -190,7 +192,8 @@
         ) + name,
       );
       uiViewAttribute(entry.add, 'aria-pressed', String(!!included));
-      entry.add.disabled = !!included && api.views.length === 1 || !included && api?.active && api.views.length>=6;
+      const disabled = included ? views.length === 1 : api?.active && views.length >= 6;
+      if (entry.add.disabled !== Boolean(disabled)) entry.add.disabled = Boolean(disabled);
     }
     for (const group of tree.children) {
       const setting = group.querySelector('.workbench-setting-row');

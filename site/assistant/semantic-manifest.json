@@ -1,5 +1,5 @@
 {
-  "version": "d2784180622e181a",
+  "version": "da97c08ebfaeb931",
   "dimensions": 512,
   "records": [
     "site:SITE-001",
@@ -664,6 +664,7 @@
     "DEV:012",
     "DEV:012",
     "DEV:012",
+    "DEV:012",
     "DEV:013",
     "DEV:013",
     "DEV:013",
@@ -842,6 +843,6 @@
   "pooling": "cls",
   "normalize": true,
   "queryPrefix": "",
-  "indexSha256": "fb688a43b3017556b3a4838d89137420eafeee6f0d36d14b16c7556075d394af",
+  "indexSha256": "9454e01cbcd9add306deef535728603fe10069bef9d19d6ca890888a358ab349",
   "transformers": "3.8.1"
 }

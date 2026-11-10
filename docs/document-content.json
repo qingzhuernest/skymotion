@@ -5083,6 +5083,13 @@
                 "跨设备分享由experiment-share.js负责：版本化JSON经过浏览器deflate压缩与Base64url编码放进#state=，总URL上限2800字符；解压读取设600000字节上限。加载时先捕获分享片段，状态所有者就绪后验证布局、天体和实验，再复用事务恢复；失败回滚，不保存为收藏。不支持压缩时可读取或生成未压缩短链接，过长则使用JSON。章节深链接统一由lab.html的body、control、sidebar、edit参数与视图Hash表达；日晷、地升、三维天空保留独立入口。",
                 "Cross-device sharing belongs to experiment-share.js: versioned JSON uses browser deflate and Base64url in #state=, with a 2,800-character URL limit and a 600,000-byte decompression limit. Capture the fragment before routing, wait for state owners, validate body, layout and experiment, then reuse transactional restoration with rollback. Opening does not add a saved item. Without compression, short raw links remain supported; use JSON for longer experiments. Chapter deep links use lab.html body, control, sidebar and edit parameters with a view hash; sundial, Earthrise and 3D Sky keep independent entries."
               ]
+            },
+            {
+              "kind": "paragraph",
+              "text": [
+                "五、六图组合在宽屏采用三行网格，每行至少240像素；高度不足时仅绘图区纵向滚动，手机仍按标签切换单图。三行组合禁用两行比例和水平分隔手柄。界面同步只在文字或属性实际变化时写入，侧栏每次同步复用同一份图位快照；视角选中状态只属于按钮。画布被显示或重排后由motion.js刷新对应可见性缓存，复用同一个IntersectionObserver，避免旧屏幕外标记使可见画布空白。",
+                "Five/six-view combinations use three rows on wide screens, with at least 240 pixels per row. Only the plot scrolls when space is short; phones keep single-view tabs. Three-row layouts disable two-row proportions and the horizontal splitter. UI synchronization writes only changed text or attributes and reuses one view snapshot per sidebar update. Pressed view state belongs only to buttons. When a canvas is revealed or reordered, motion.js refreshes its visibility cache through the same IntersectionObserver so a stale off-screen result cannot leave it blank."
+              ]
             }
           ],
           "aliases": [

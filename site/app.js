@@ -1277,10 +1277,11 @@ function skyViewSelected(view) {
     : workspace.selected === id;
 }
 function syncSkyViewControls() {
-  document.querySelectorAll('[data-view]').forEach((button) => {
+  document.querySelectorAll('button[data-view]').forEach((button) => {
     const selected = skyViewSelected(button.dataset.view);
     button.classList.toggle('active', selected);
-    button.setAttribute('aria-pressed', String(selected));
+    if (button.getAttribute('aria-pressed') !== String(selected))
+      button.setAttribute('aria-pressed', String(selected));
   });
 }
 function updateUI() {
@@ -1436,7 +1437,8 @@ function updateUI() {
       seasonDate(Number(button.dataset.angle), Number(button.dataset.month)) ===
         state.date;
     button.classList.toggle('selected', selected);
-    button.setAttribute('aria-pressed', String(selected));
+    if (button.getAttribute('aria-pressed') !== String(selected))
+      button.setAttribute('aria-pressed', String(selected));
   });
   const context = sunContext();
   $('subsolar').textContent =

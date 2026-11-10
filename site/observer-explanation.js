@@ -101,7 +101,8 @@
           close();
       });
       function sync() {
-        button.hidden = state.view !== 'observer';
+        const hidden = state.view !== 'observer';
+        if (button.hidden !== hidden) button.hidden = hidden;
       }
       window.SkyObserverExplanation = { sync };
       const observer = new MutationObserver(sync);

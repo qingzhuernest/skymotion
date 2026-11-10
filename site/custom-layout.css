@@ -128,6 +128,13 @@
 .workspace-active .ui-plot:is([data-workspace-count='3'], [data-workspace-count='4']) {
   grid-template-rows: minmax(0, calc(var(--workspace-row-ratio) - 4px)) minmax(0, 1fr) !important;
 }
+/* Five/six panes need explicit rows; short workspaces scroll instead of clipping plots. */
+@media (min-width: 761px) {
+  .workspace-active .ui-plot[data-workspace-many='true']:not([data-workspace-focus='true']) {
+    grid-template-rows: repeat(3, minmax(240px, 1fr)) !important;
+    overflow-y: auto;
+  }
+}
 .workspace-active .ui-plot[data-workspace-count='2'][data-workspace-axis='rows'] {
   grid-template-columns: minmax(0, 1fr) !important;
   grid-template-rows: minmax(0, calc(var(--workspace-row-ratio) - 4px)) minmax(0, 1fr) !important;

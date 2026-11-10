@@ -5,7 +5,7 @@
   // BEGIN GENERATED CATALOG
   // prettier-ignore
   const catalog = {
-    "resourceVersion": "20261104-sharing152",
+    "resourceVersion": "20261110-ui153",
     "pages": [
       {
         "path": "index.html",

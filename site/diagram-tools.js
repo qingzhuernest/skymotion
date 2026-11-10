@@ -17,6 +17,16 @@
       skyPosition: (body, time, date, lat, lon) => body === 'Sun' && state.manual
         ? solar(lat, state.dec, time) : skyRaw(body, time, date, lat, lon),
     });
+  // Shared editor also runs in 3D/embedded pages without the Lab's DOM helpers.
+  const writeAttribute = (node, key, value) => {
+    if (node.getAttribute(key) !== value) node.setAttribute(key, value);
+  };
+  const writeText = (node, value) => {
+    if (node.textContent !== value) node.textContent = value;
+  };
+  const writeHidden = (node, hidden) => {
+    if (node.hidden !== hidden) node.hidden = hidden;
+  };
   const E = (tag, cls, parent) => {
     const e = document.createElement(tag);
     if (cls) e.className = cls;
@@ -1286,48 +1296,49 @@
   }
   function syncRailNavigation() {
     if (!railNavigation) return;
-    railNavigation.setAttribute('aria-label', tr('侧栏内容|Sidebar section'));
+    writeAttribute(railNavigation, 'aria-label', tr('侧栏内容|Sidebar section'));
     for (const b of railNavigation.children) {
-      b.hidden = b.dataset.railSection === 'references' && !customizationOn();
+      writeHidden(b, b.dataset.railSection === 'references' && !customizationOn());
       const chosen = b.dataset.railSection === railView;
-      b.textContent = tr(
+      writeText(b, tr(
         b.dataset.railSection === 'views'
           ? '视图与布局|Views & layout'
           : b.dataset.railSection === 'conditions'
             ? '观测条件|Observation controls'
             : '图中对象|Plot objects',
-      );
-      b.setAttribute('aria-selected', String(chosen));
-      b.tabIndex = chosen ? 0 : -1;
+      ));
+      writeAttribute(b, 'aria-selected', String(chosen));
+      if (b.tabIndex !== (chosen ? 0 : -1)) b.tabIndex = chosen ? 0 : -1;
     }
-    railNavigation.dataset.choiceCount = String(
+    writeAttribute(railNavigation, 'data-choice-count', String(
       [...railNavigation.children].filter((b) => !b.hidden).length,
-    );
+    ));
   }
   function syncRailShell() {
     const rail = parameterRail() || railNavigation?.closest('.ui-parameters, .side');
     if (!rail) return;
     if (railView === 'references' && !customizationOn()) railView = 'conditions';
     const viewMenu = document.getElementById('workbenchViews');
-    if (viewMenu) viewMenu.hidden = railView !== 'views';
+    if (viewMenu) writeHidden(viewMenu, railView !== 'views');
     const persistent = persistentRailMode();
     if (persistent) ensureRailNavigation(rail);
     rail.classList.toggle('dt-navigation-ready', persistent);
     if (railNavigation) {
-      railNavigation.hidden = !persistent && !mountedRail;
-      if (persistent || mountedRail) rail.dataset.editorView = railView;
+      writeHidden(railNavigation, !persistent && !mountedRail);
+      if (persistent || mountedRail) writeAttribute(rail, 'data-editor-view', railView);
       else delete rail.dataset.editorView;
     }
     if (emptyContext) {
-      emptyContext.hidden = !persistent || railView !== 'references' || !panel.hidden;
-      emptyContext.firstElementChild.textContent = tr(
-        visibleModels().length
+      writeHidden(emptyContext, !persistent || railView !== 'references' || !panel.hidden);
+      const hasModels = visibleModels().length > 0;
+      writeText(emptyContext.firstElementChild, tr(
+        hasModels
           ? '图中编辑已收起。选择“继续编辑当前图”恢复，或切换到观测条件。|Plot editing is closed. Continue editing this plot, or choose Observation controls.'
           : '当前视图没有图内参考工具；可切换到观测条件，或选择其他图解。|This view has no plot-reference tools. Choose Observation controls or another diagram.',
-      );
+      ));
       const b = emptyContext.lastElementChild;
-      b.textContent = tr('继续编辑当前图|Continue editing this plot');
-      b.disabled = !visibleModels().length;
+      writeText(b, tr('继续编辑当前图|Continue editing this plot'));
+      if (b.disabled !== !hasModels) b.disabled = !hasModels;
     }
     syncRailNavigation();
   }
@@ -2419,19 +2430,19 @@
       const fullLabel = tr('图内自定义|Customize plot');
       const label = header ? tr('编辑|Edit') : fullLabel;
       if (button.textContent !== label) button.textContent = label;
-      button.title = fullLabel;
-      button.setAttribute(
+      writeAttribute(button, 'title', fullLabel);
+      writeAttribute(button,
         'aria-label',
         tr(titles[model?.type] || model?.type || key) + ' · ' + fullLabel,
       );
-      button.hidden =
+      writeHidden(button,
         !customizationOn() ||
         active ||
         !source ||
         source.getBoundingClientRect().width < 1 ||
-        source.getBoundingClientRect().height < 1;
-      button.setAttribute('aria-expanded', String(active));
-      button.setAttribute('aria-controls', panel.id);
+        source.getBoundingClientRect().height < 1);
+      writeAttribute(button, 'aria-expanded', String(active));
+      writeAttribute(button, 'aria-controls', panel.id);
     }
   }
   // Responsive reparenting can briefly report a zero-sized canvas. Close only

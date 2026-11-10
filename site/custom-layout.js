@@ -847,7 +847,10 @@
     let next = splitters.x;
     for (let index = order.length - 1; index >= 0; index--) {
       const card = cards[order[index]];
-      if (card.nextSibling !== next) plot.insertBefore(card, next);
+      if (card.nextSibling !== next) {
+        plot.insertBefore(card, next);
+        refreshMotionVisibility(card);
+      }
       next = card;
     }
   }
@@ -1314,13 +1317,13 @@
     redoButton.disabled = !redo.length;
     quickLayout.hidden = Boolean(focused);
     arrange.hidden = mobile.matches || data.views.length === 1;
-    axisGroup.hidden = data.views.length === 4;
+    axisGroup.hidden = data.views.length >= 4;
     equalizeButton.disabled = data.ratio === 50 && data.rowRatio === 50;
     featuredGroup.hidden = data.views.length !== 3;
     proportionFields.forEach((input, i) => {
       const axis = i ? 'rows' : 'columns';
       input.value = data[i ? 'rowRatio' : 'ratio'];
-      input.disabled = data.views.length === 2 && data.axis !== axis;
+      input.disabled = (i === 1 && data.views.length > 4) || (data.views.length === 2 && data.axis !== axis);
     });
     axisButtons.forEach((b, i) => {
       b.setAttribute('aria-pressed', String(data.axis === ['columns', 'rows'][i]));
@@ -1346,6 +1349,7 @@
         mobile.matches ||
         Boolean(focused) ||
         data.views.length === 1 ||
+        (axis === 'y' && data.views.length > 4) ||
         (data.views.length === 2 && data.axis !== (axis === 'x' ? 'columns' : 'rows'));
     }
     if (tabs.dataset.order !== data.views.join(',')) {

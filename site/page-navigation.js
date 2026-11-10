@@ -4,7 +4,10 @@
 /* Shared experiment layout: plot, controls and timeline occupy separate grid cells. */
 let uiWorkspace = null;
 function uiViewHidden(node, value) {
-  if (node.hidden !== value) node.hidden = value;
+  if (node.hidden !== value) {
+    node.hidden = value;
+    if (!value) refreshMotionVisibility(node);
+  }
 }
 function uiViewText(node, value) {
   const translated = window.skyTranslate ? window.skyTranslate(value) : value;
@@ -157,36 +160,36 @@ function renderUIWorkspace() {
     }
     if (chosen) visibleNodes.add(chosen);
     u.nodes.forEach((n) => uiViewHidden(n, !visibleNodes.has(n)));
-    u.plot.dataset.kind = u.selected;
+    uiViewAttribute(u.plot, 'data-kind', u.selected);
     u.plot.closest('.ui-shell').classList.toggle('ui-solar-compare', comparing);
-    if ($('uiEarthSettings')) $('uiEarthSettings').hidden = moon;
-    u.details.forEach((n) => (n.hidden = n.dataset.for !== u.selected && !(n.dataset.for==='skyPanel' && window.SkyPerspectives?.isSky(u.selected))));
+    if ($('uiEarthSettings')) uiViewHidden($('uiEarthSettings'), moon);
+    u.details.forEach((n) => uiViewHidden(n, n.dataset.for !== u.selected && !(n.dataset.for==='skyPanel' && window.SkyPerspectives?.isSky(u.selected))));
     if ($('uiEarthSettings')) {
       const home = comparing ? $('uiCompareSettings') : $('contextPanel');
       if ($('uiEarthSettings').parentElement !== home) home.append($('uiEarthSettings'));
     }
     // This page has diagram-specific controls, rather than the sky laboratory's menu.
-    $('studyMenu').hidden = true;
-    $('seasonMenu').hidden = true; // The shared date slider already covers the full year.
-    $('solarDateModeMenu').hidden = true; // Playback basis is set in the time workbench.
+    uiViewHidden($('studyMenu'), true);
+    uiViewHidden($('seasonMenu'), true); // The shared date slider already covers the full year.
+    uiViewHidden($('solarDateModeMenu'), true); // Playback basis is set in the time workbench.
     const skyVisible =
       (u.selected === 'skyPanel' || window.SkyPerspectives?.isSky(u.selected)) ||
       (comparing && [...(window.skyWorkspacePresentation?.visibleIds || [])].some(id=>id==='skyPanel'||window.SkyPerspectives?.isSky(id)));
     const showOverlay = !moon && (skyVisible || u.selected === 'chartPanel' || comparing);
-    $('displayMenu').hidden = !showOverlay && !skyVisible;
-    $('track').closest('label').hidden = !skyVisible;
-    $('angles').closest('label').hidden = !skyVisible;
-    $('shadowMenu').hidden = moon || !skyVisible;
-    $('solarOverlayBar').hidden = !showOverlay;
-    $('displayContextNote').hidden = true;
+    uiViewHidden($('displayMenu'), !showOverlay && !skyVisible);
+    uiViewHidden($('track').closest('label'), !skyVisible);
+    uiViewHidden($('angles').closest('label'), !skyVisible);
+    uiViewHidden($('shadowMenu'), moon || !skyVisible);
+    uiViewHidden($('solarOverlayBar'), !showOverlay);
+    uiViewHidden($('displayContextNote'), true);
     uiViewText(
       $('displayMenu').querySelector('.menu-section-name'),
       skyVisible ? '显示辅助' : '曲线叠加',
     );
     uiViewText($('displaySummary'), '同一地点与时刻的太阳、月球');
     uiViewText($('modelMenu').querySelector('.menu-section-name'), '太阳计算方式');
-    $('compareControl').hidden = moon || !(u.selected === 'chartPanel' || comparing);
-    $('modelMenu').querySelector('.menu-divider').hidden = true;
+    uiViewHidden($('compareControl'), moon || !(u.selected === 'chartPanel' || comparing));
+    uiViewHidden($('modelMenu').querySelector('.menu-divider'), true);
     uiViewText($('reset'), '重置当前图解条件');
     uiViewText(u.title, (moon ? '月球' : '太阳') + ' · 实验台');
     window.SkyWorkbenchMenu?.sync();
@@ -569,18 +572,17 @@ function renderUIWorkspace() {
     uiWorkspace.updateLunarNotice = () => {
       const english = document.documentElement.lang === 'en';
       const failed = uiWorkspace.lunarError;
-      notice.hidden =
-        state.body !== 'moon' ||
-        !(uiWorkspace.pendingLunar || (failed && uiWorkspace.lunarRequested));
-      noticeText.textContent = failed
+      uiViewHidden(notice, state.body !== 'moon' ||
+        !(uiWorkspace.pendingLunar || (failed && uiWorkspace.lunarRequested)));
+      uiViewText(noticeText, failed
         ? english
           ? 'Earthrise could not load. Check your connection and retry.'
           : '地升地落未能加载，请检查网络后重试。'
         : english
           ? 'Preparing Earthrise… You can keep using the current diagram.'
-          : '正在准备地升地落，可继续操作当前图解。';
-      retry.hidden = !failed;
-      retry.textContent = english ? 'Retry' : '重试';
+          : '正在准备地升地落，可继续操作当前图解。');
+      uiViewHidden(retry, !failed);
+      uiViewText(retry, english ? 'Retry' : '重试');
     };
     const failLunar = (generation) => {
       if (generation !== loadGeneration || uiWorkspace.lunarReady) return;
